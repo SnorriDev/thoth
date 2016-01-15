@@ -21,8 +21,8 @@ public class Rule {
 		if (nodes.size() != specs.length)
 			return null;
 		for (int i = 0; i < nodes.size(); i++) {
-			if (nodes.get(i) instanceof Terminal) {
-				if (! nodes.get(i).equals(specs[i]))
+			if (nodes.get(i) instanceof Terminal && specs[i] instanceof String) {
+				if (! ((Terminal) nodes.get(i)).equals((String) specs[i]))
 					return null;
 			}
 			else if (! nodes.get(i).getClass().equals(specs[i]))

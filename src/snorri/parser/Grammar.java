@@ -23,7 +23,7 @@ public class Grammar {
 	}
 	
 	public static NonTerminal parseString(String input) {
-		List<String> raw = Arrays.asList(input.split(" "));
+		List<String> raw = Arrays.asList(input.split(" +|\\.|="));
 		List<Node> result = new ArrayList<Node>();
 		for (int i = 0; i < raw.size(); i++)
 			result.add(new Terminal(raw.get(i)));

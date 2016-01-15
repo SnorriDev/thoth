@@ -4,21 +4,28 @@ import snorri.semantics.Lexicon;
 
 public class Terminal implements Node {
 
-	private Object meaning;
+	private String orthography;
 	
 	public Terminal(String orthography) {
-		if (Lexicon.lookup(orthography) != null)
-			this.meaning = Lexicon.lookup(orthography).getMeaning();
-		else
-			this.meaning = null;
+		this.orthography = orthography;
 	}
 	
 	public boolean equals(Terminal other) {
-		return meaning == other.meaning || meaning.equals(other.meaning);
+		return orthography.equals(other.orthography);
+	}
+	
+	public boolean equals(String other) {
+		return orthography.equals(other);
+	}
+	
+	public Object getOrthography() {
+		return orthography;
 	}
 	
 	public Object getMeaning() {
-		return meaning;
+		if (Lexicon.lookup(orthography) != null)
+			return Lexicon.lookup(orthography).getMeaning();
+		return null;
 	}
 	
 }
