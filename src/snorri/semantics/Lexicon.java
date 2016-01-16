@@ -1,12 +1,11 @@
 package snorri.semantics;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
-import snorri.parser.Terminal;
+import snorri.nonterminals.Sentence;
 
 public class Lexicon {
 	
@@ -16,6 +15,9 @@ public class Lexicon {
 		
 		lexicon = new HashMap<String, Definition>();
 		
+		//not legit
+		lexicon.put("ka", new Definition(Sentence.class, null));
+		
 	}
 	
 	public static Definition lookup(String form) {
@@ -24,16 +26,8 @@ public class Lexicon {
 		return null;
 	}
 	
-	//could make an iterator maybe
-	@SuppressWarnings("rawtypes")
-	public static List<Terminal> getAllTerminals(Class c) {
-		List<Terminal> result = new ArrayList<Terminal>();
-		for (Entry<String, Definition> entry : lexicon.entrySet()) {
-			if (entry.getValue().getClass().equals(c)) {
-				result.add(new Terminal(entry.getKey()));
-			}
-		}
-		return result;
+	public static Set<Entry<String, Definition>> getAllTerminals() {
+		return lexicon.entrySet();
 	}
 	
 }

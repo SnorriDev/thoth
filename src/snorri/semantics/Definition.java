@@ -3,18 +3,18 @@ package snorri.semantics;
 public class Definition {
 
 	@SuppressWarnings("rawtypes")
-	private Class partOfSpeach;
+	private Class partOfSpeech;
 	private Object meaning;
 	
 	@SuppressWarnings("rawtypes")
-	public Definition(Class partOfSpeach, Object meaning) {
-		this.partOfSpeach = partOfSpeach;
+	public Definition(Class partOfSpeech, Object meaning) {
+		this.partOfSpeech = partOfSpeech;
 		this.meaning = meaning;
 	}
 	
 	@SuppressWarnings("rawtypes")
 	public Class getPOS() {
-		return partOfSpeach;
+		return partOfSpeech;
 	}
 	
 	public Object getMeaning() {

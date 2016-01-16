@@ -3,8 +3,23 @@ package snorri.parser;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map.Entry;
 
+import snorri.nonterminals.Command;
+import snorri.nonterminals.InflIntransVerb;
+import snorri.nonterminals.InflMorpheme;
+import snorri.nonterminals.InflTransVerb;
+import snorri.nonterminals.IntransVerb;
+import snorri.nonterminals.Noun;
+import snorri.nonterminals.NounPhrase;
+import snorri.nonterminals.Prep;
+import snorri.nonterminals.PrepPhrase;
 import snorri.nonterminals.Sentence;
+import snorri.nonterminals.Statement;
+import snorri.nonterminals.TransVerb;
+import snorri.nonterminals.VerbPhrase;
+import snorri.semantics.Definition;
+import snorri.semantics.Lexicon;
 
 public class Grammar {
 
@@ -13,12 +28,30 @@ public class Grammar {
 	static {
 		rules = new ArrayList<Rule>();
 		
-		rules.add(new Rule(new Object[] {"hello"}, Sentence.class));
-		rules.add(new Rule(new Object[] {Sentence.class, "world"}, Sentence.class));
+		rules.add(new Rule(new Object[] {Command.class}, Sentence.class));
+		rules.add(new Rule(new Object[] {Command.class, "jr", Statement.class}, Sentence.class));
+		rules.add(new Rule(new Object[] {Command.class, PrepPhrase.class}, Command.class));
+		rules.add(new Rule(new Object[] {TransVerb.class, NounPhrase.class}, Command.class));
+		rules.add(new Rule(new Object[] {IntransVerb.class}, Command.class));
+		rules.add(new Rule(new Object[] {Noun.class}, NounPhrase.class));
+		rules.add(new Rule(new Object[] {Noun.class, PrepPhrase.class}, NounPhrase.class));
+		rules.add(new Rule(new Object[] {Noun.class, NounPhrase.class}, NounPhrase.class));
+		rules.add(new Rule(new Object[] {Prep.class, NounPhrase.class}, PrepPhrase.class));
+		rules.add(new Rule(new Object[] {NounPhrase.class, VerbPhrase.class}, Statement.class));
+		rules.add(new Rule(new Object[] {VerbPhrase.class}, Statement.class));
+		rules.add(new Rule(new Object[] {InflTransVerb.class, NounPhrase.class}, VerbPhrase.class));
+		rules.add(new Rule(new Object[] {InflIntransVerb.class}, VerbPhrase.class));
+		rules.add(new Rule(new Object[] {VerbPhrase.class, PrepPhrase.class}, VerbPhrase.class));
+		rules.add(new Rule(new Object[] {TransVerb.class, InflMorpheme.class}, InflTransVerb.class));
+		rules.add(new Rule(new Object[] {IntransVerb.class, InflMorpheme.class}, InflIntransVerb.class));
 		
-		//Can actually add all terminals programmatically based on PoS
+		System.out.println("CFG with " + rules.size() + " high-level rules loaded");
 		
-		System.out.println("CFG with " + rules.size() + " rules loaded");
+		for (Entry<String, Definition> e : Lexicon.getAllTerminals()) {
+			rules.add(new Rule(new Object[] {e.getKey()}, e.getValue().getPOS()));
+		}
+		
+		System.out.println("Lexicon with " + Lexicon.getAllTerminals().size() + " definitions loaded");
 		
 	}
 	
@@ -44,7 +77,7 @@ public class Grammar {
 		if (nodes.size() == 1 && nodes.get(0) instanceof NonTerminal)
 			return (NonTerminal) nodes.get(0);
 		for (int i = 0; i < nodes.size(); i++) {
-			for (int j = i + 1; j <= nodes.size(); j++) {
+			for (int j = nodes.size(); j >= i + 1; j--) {
 				for (Rule rule : rules) { //can store rules by length to be more efficient and add argument
 					Class<NonTerminal> fit = rule.fits(nodes.subList(i, j));
 					if (fit != null) {
