@@ -14,6 +14,7 @@ import snorri.nonterminals.Noun;
 import snorri.nonterminals.NounPhrase;
 import snorri.nonterminals.Prep;
 import snorri.nonterminals.PrepPhrase;
+import snorri.nonterminals.Pronoun;
 import snorri.nonterminals.Sentence;
 import snorri.nonterminals.Statement;
 import snorri.nonterminals.TransVerb;
@@ -30,10 +31,10 @@ public class Grammar {
 		
 		rules.add(new Rule(new Object[] {Command.class}, Sentence.class));
 		rules.add(new Rule(new Object[] {Command.class, "jr", Statement.class}, Sentence.class));
-		rules.add(new Rule(new Object[] {Command.class, PrepPhrase.class}, Command.class));
 		rules.add(new Rule(new Object[] {TransVerb.class, NounPhrase.class}, Command.class));
 		rules.add(new Rule(new Object[] {IntransVerb.class}, Command.class));
 		rules.add(new Rule(new Object[] {Noun.class}, NounPhrase.class));
+		rules.add(new Rule(new Object[] {Pronoun.class}, NounPhrase.class));
 		rules.add(new Rule(new Object[] {Noun.class, PrepPhrase.class}, NounPhrase.class));
 		rules.add(new Rule(new Object[] {Noun.class, NounPhrase.class}, NounPhrase.class));
 		rules.add(new Rule(new Object[] {Prep.class, NounPhrase.class}, PrepPhrase.class));
@@ -41,9 +42,12 @@ public class Grammar {
 		rules.add(new Rule(new Object[] {VerbPhrase.class}, Statement.class));
 		rules.add(new Rule(new Object[] {InflTransVerb.class, NounPhrase.class}, VerbPhrase.class));
 		rules.add(new Rule(new Object[] {InflIntransVerb.class}, VerbPhrase.class));
-		rules.add(new Rule(new Object[] {VerbPhrase.class, PrepPhrase.class}, VerbPhrase.class));
 		rules.add(new Rule(new Object[] {TransVerb.class, InflMorpheme.class}, InflTransVerb.class));
 		rules.add(new Rule(new Object[] {IntransVerb.class, InflMorpheme.class}, InflIntransVerb.class));
+		rules.add(new Rule(new Object[] {PrepPhrase.class, TransVerb.class}, TransVerb.class));
+		rules.add(new Rule(new Object[] {PrepPhrase.class, IntransVerb.class}, TransVerb.class));
+		rules.add(new Rule(new Object[] {PrepPhrase.class, InflTransVerb.class}, TransVerb.class));
+		rules.add(new Rule(new Object[] {PrepPhrase.class, InflIntransVerb.class}, TransVerb.class));
 		
 		System.out.println("CFG with " + rules.size() + " high-level rules loaded");
 		
