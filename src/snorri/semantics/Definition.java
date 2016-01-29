@@ -1,19 +1,18 @@
 package snorri.semantics;
 
+import snorri.parser.NonTerminal;
+
 public class Definition {
 
-	@SuppressWarnings("rawtypes")
-	private Class partOfSpeech;
+	private Class<? extends NonTerminal> partOfSpeech;
 	private Object meaning;
 	
-	@SuppressWarnings("rawtypes")
-	public Definition(Class partOfSpeech, Object meaning) {
+	public Definition(Class<? extends NonTerminal> partOfSpeech, Object meaning) {
 		this.partOfSpeech = partOfSpeech;
 		this.meaning = meaning;
 	}
 	
-	@SuppressWarnings("rawtypes")
-	public Class getPOS() {
+	public Class<? extends NonTerminal> getPOS() {
 		return partOfSpeech;
 	}
 	

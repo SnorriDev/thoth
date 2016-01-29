@@ -7,7 +7,6 @@ import java.util.Set;
 
 import snorri.nonterminals.Noun;
 import snorri.nonterminals.Prep;
-import snorri.nonterminals.Sentence;
 import snorri.nonterminals.TransVerb;
 
 public class Lexicon {
