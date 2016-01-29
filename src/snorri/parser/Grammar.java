@@ -76,9 +76,9 @@ public class Grammar {
 	
 	//create tree of nonterminals recursively by matching ltr
 	//really not efficiently written
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked" })
 	public static NonTerminal parseRec(List<Node> nodes) throws InstantiationException, IllegalAccessException {
-		if (nodes.size() == 1 && nodes.get(0) instanceof NonTerminal)
+		if (nodes.size() == 1 && nodes.get(0) instanceof Sentence) //potentially rewrite to make more robust
 			return (NonTerminal) nodes.get(0);
 		for (int i = 0; i < nodes.size(); i++) {
 			for (int j = nodes.size(); j >= i + 1; j--) {

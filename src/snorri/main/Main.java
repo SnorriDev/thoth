@@ -13,7 +13,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		NonTerminal result = Grammar.parseString("ka");
+		NonTerminal result = Grammar.parseString("sDm jAm");
 		System.out.println("Parse found: " + result);
 		
 	}
