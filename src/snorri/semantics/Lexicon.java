@@ -17,15 +17,18 @@ public class Lexicon {
 		
 		lexicon = new HashMap<String, Definition>();
 		
+		//Prepositions
 		lexicon.put("r", new Definition(Prep.class, null)); //to (pos)
 		lexicon.put("n", new Definition(Prep.class, null)); //to (ent)
 		lexicon.put("m", new Definition(Prep.class, null)); //in/at
 		
+		//Nouns
 		lexicon.put("jAm", new Definition(Noun.class, null)); //tree
 		
+		//Verbs
 		lexicon.put("mAA", new Definition(TransVerb.class, null)); //see
 		lexicon.put("sDm", new Definition(TransVerb.class, null)); //hear
-		
+				
 	}
 	
 	public static Definition lookup(String form) {
