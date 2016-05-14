@@ -63,7 +63,8 @@ public class Grammar {
 		List<String> raw = Arrays.asList(input.split(" +|\\.|="));
 		List<Node> result = new ArrayList<Node>();
 		for (int i = 0; i < raw.size(); i++)
-			result.add(new Terminal(raw.get(i)));
+			if (! raw.get(i).equals(""))
+				result.add(new Terminal(raw.get(i)));
 		try {
 			return parseRec(result);
 		} catch (InstantiationException e) {
