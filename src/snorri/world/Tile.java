@@ -2,6 +2,8 @@ package snorri.world;
 
 import java.util.List;
 
+import snorri.entities.Entity;
+
 public class Tile {
 
 	private List<Entity> entities;
