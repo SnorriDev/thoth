@@ -2,6 +2,8 @@ package snorri.world;
 
 public class Position {
 
+	//TODO: extend Java Point
+	
 	public int x, y;
 	
 	public Position(int x, int y) {

@@ -1,6 +1,11 @@
 package snorri.main;
 
+import java.awt.BorderLayout;
+import java.awt.Graphics2D;
 import java.util.Arrays;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import snorri.entities.Entity;
 import snorri.entities.EntityGroup;
@@ -19,27 +24,23 @@ public class Main {
 		NonTerminal result = Grammar.parseString("sDm   jAm");
 		System.out.println("Parse found: " + result);
 		
-		EntityGroup world = new EntityGroup();
+		EntityGroup col = new EntityGroup();
+		col.insert(new Entity(new Position(100, 100), 2));
+		col.insert(new Entity(new Position(105, 130), 2));
+		col.insert(new Entity(new Position(115, 100), 2));
+		col.insert(new Entity(new Position(143, 133), 2));
+		col.insert(new Entity(new Position(100, 124), 2));
+		col.insert(new Entity(new Position(111, 130), 2));
+		col.insert(new Entity(new Position(300, 130), 4));
+					
+		JFrame frame = new JFrame("Spoken Word");
+		frame.getContentPane().add(new GameWindow(), BorderLayout.CENTER);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(500, 500);
+		frame.setVisible(true);
 		
-		Entity e1 = new Entity(new Position(20, 30), 10);
-		Entity e2 = new Entity(new Position(40, 30), 10);
-		Entity e3 = new Entity(new Position(25, 30), 10);
-		
-		System.out.println();
-		world.insert(e1);
-		world.traverse();
-		
-		System.out.println();
-		world.insert(e2);
-		world.traverse();
-		
-		System.out.println();
-		world.insert(e3);
-		world.traverse();
-		
-		System.out.println();
-		world.delete(e3);
-		world.traverse();
+		col.renderHitbox(frame.getGraphics());
+		col.traverse();
 		
 	}
 
