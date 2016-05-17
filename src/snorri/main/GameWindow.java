@@ -35,8 +35,6 @@ public class GameWindow extends JPanel implements KeyListener {
 		startAnimation();
 	}
 	
-	
-	
 	public void startAnimation() {
 		SwingWorker<Object, Object> sw = new SwingWorker<Object, Object>() {
 			@Override
@@ -71,13 +69,13 @@ public class GameWindow extends JPanel implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		states.set(e.getKeyCode(), true);
-		Main.log(e.getKeyCode() + ": " + states.get(e.getKeyCode()));
+		//Main.log(e.getKeyCode() + ": " + states.get(e.getKeyCode()));
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		states.set(e.getKeyCode(), false);
-		Main.log(e.getKeyCode() + ": " + states.get(e.getKeyCode()));
+		//Main.log(e.getKeyCode() + ": " + states.get(e.getKeyCode()));
 	}
 
 	@Override
