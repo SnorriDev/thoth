@@ -60,8 +60,8 @@ public class Entity {
 		System.out.println(indent + "r: " + r);
 	}
 	
-	public void renderHitbox(Graphics g) {
-		g.drawOval(pos.x - r, pos.y - r, 2 * r, 2 * r);
+	public void renderHitbox(Graphics g, Entity focus) {
+		renderAround(g, focus);
 	}
 	
 	//returns true if the two entities are spatially equal
@@ -77,6 +77,22 @@ public class Entity {
 	
 	public void traverse() {
 		this.traverse(0);
+	}
+	
+	public void walk(Position direction, EntityGroup world) {
+		Position dir = direction.copy();
+		
+		if (dir.equals(Position.ZERO)) {
+			return;
+		}
+		
+		dir.multiply(getSpeed());
+		world.move(this, dir);
+	}
+	
+	//override this for faster entities
+	protected int getSpeed() {
+		return 1;
 	}
 
 }

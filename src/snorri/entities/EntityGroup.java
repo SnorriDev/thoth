@@ -72,22 +72,10 @@ public class EntityGroup extends Entity {
 	//blind-remove an entity from group
 	//adjust average and return whether or not it is empty
 	private boolean remove(Entity n) {
-				
-		int num = entities.size();
-		
-		if (entities.remove(n)) {
 			
-			if (num == 1) {
-				return true;
-			}
-			
-			pos.multiply(num);
-			pos.sub(n.pos);
-			pos.divide(num - 1);
-			return true;
-		}
+		return entities.remove(n);
 		
-		return false;
+		//don't readjust size at all
 		
 	}
 	
@@ -110,10 +98,11 @@ public class EntityGroup extends Entity {
 			return;
 		}
 		
-		if (e instanceof EntityGroup) {
-			merge((EntityGroup) e);
-			return;
-		}
+		//TODO: maybe rewrite more elegantly in terms of merge?
+//		if (e instanceof EntityGroup) {
+//			merge((EntityGroup) e);
+//			return;
+//		}
 								
 		Iterator<Entity> iter = getChildren();
 		while (iter.hasNext()) {
@@ -180,10 +169,10 @@ public class EntityGroup extends Entity {
 	}
 	
 	@Override
-	public void renderHitbox(Graphics g) {
-		super.renderHitbox(g);
+	public void renderHitbox(Graphics g, Entity focus) {
+		super.renderHitbox(g, focus);
 		for (Entity e : entities) {
-			e.renderHitbox(g);
+			e.renderHitbox(g, focus);
 		}
 	}
 	

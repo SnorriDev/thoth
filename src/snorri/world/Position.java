@@ -2,7 +2,7 @@ package snorri.world;
 
 public class Position {
 
-	//TODO: extend Java Point
+	public static final Position ZERO = new Position(0, 0);
 	
 	public int x, y;
 	
