@@ -8,9 +8,9 @@ import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
-import keyboard.KeyStates;
 import snorri.entities.Entity;
 import snorri.entities.EntityGroup;
+import snorri.keyboard.KeyStates;
 
 public class GameWindow extends JPanel implements KeyListener {
 
@@ -53,7 +53,6 @@ public class GameWindow extends JPanel implements KeyListener {
 	
 	private void onFrame() {
 		focus.walk(states.getMovementVector(), col);
-		Main.log(states.getMovementVector());
 		repaint();
 	}
 	
@@ -61,7 +60,7 @@ public class GameWindow extends JPanel implements KeyListener {
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		setBackground(Color.WHITE);
-		col.renderHitbox(g, focus);
+		col.renderHitbox(this, g);
 		//TODO: function which renders everything intersecting a circle inscribing the screen
 	}
 	

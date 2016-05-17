@@ -2,6 +2,7 @@ package snorri.main;
 
 import java.awt.BorderLayout;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.util.Arrays;
 
 import javax.swing.JFrame;
@@ -21,6 +22,7 @@ import snorri.world.Position;
 public class Main {
 	
 	private static GameWindow window;
+	private static JFrame frame;
 	
 	public static void main(String[] args) {
 		
@@ -38,7 +40,7 @@ public class Main {
 		col.insert(new Entity(new Position(300, 130), 4));	
 		col.delete(e);
 					
-		JFrame frame = new JFrame("Spoken Word");
+		frame = new JFrame("Spoken Word");
 		window = new GameWindow(col, new Player(new Position(50, 50)));
 		
 		col.insert(window.getFocus()); //the player
@@ -50,6 +52,10 @@ public class Main {
 		
 		col.traverse();
 		
+	}
+	
+	public static Rectangle getBounds() {
+		return frame.getBounds();
 	}
 	
 	public static void log(String s) {

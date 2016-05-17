@@ -2,6 +2,7 @@ package snorri.entities;
 
 import java.awt.Graphics;
 
+import snorri.main.GameWindow;
 import snorri.world.Position;
 
 public class Entity {
@@ -60,8 +61,10 @@ public class Entity {
 		System.out.println(indent + "r: " + r);
 	}
 	
-	public void renderHitbox(Graphics g, Entity focus) {
-		renderAround(g, focus);
+	public void renderHitbox(GameWindow g, Graphics gr) {
+		Position rel = pos.copy();
+		rel.sub(g.getFocus().pos);
+		gr.drawOval(rel.x - r + g.getBounds().width / 2, rel.y - r + g.getBounds().height / 2, 2 * r, 2 * r);
 	}
 	
 	//returns true if the two entities are spatially equal
@@ -69,10 +72,8 @@ public class Entity {
 		return e.pos.equals(pos) && e.r == r;
 	}
 	
-	public void renderAround(Graphics g, Entity e) {
-		Position rel = pos.copy();
-		rel.sub(e.pos);
-		g.drawOval(rel.x - r, rel.y - r, 2 * r, 2 * r);
+	public void renderAround(GameWindow g, Graphics gr) {
+		renderAround(g, gr);
 	}
 	
 	public void traverse() {

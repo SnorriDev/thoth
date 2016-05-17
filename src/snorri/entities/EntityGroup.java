@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import snorri.main.GameWindow;
 import snorri.world.Position;
 
 public class EntityGroup extends Entity {
@@ -169,10 +170,10 @@ public class EntityGroup extends Entity {
 	}
 	
 	@Override
-	public void renderHitbox(Graphics g, Entity focus) {
-		super.renderHitbox(g, focus);
+	public void renderHitbox(GameWindow g, Graphics gr) {
+		super.renderHitbox(g, gr);
 		for (Entity e : entities) {
-			e.renderHitbox(g, focus);
+			e.renderHitbox(g, gr);
 		}
 	}
 	
