@@ -8,7 +8,7 @@ import snorri.world.Position;
 
 public class EntityGroup extends Entity {
 	
-	private static final int REACH = 2;
+	private static final int REACH = 0;
 	//TODO: adjust this based on density/radius of higher groups
 
 	ArrayList<Entity> entities;
@@ -39,7 +39,7 @@ public class EntityGroup extends Entity {
 			if (e instanceof EntityGroup) {
 				merge((EntityGroup) e);
 			} else {
-				insert(e);
+				add(e);
 			}
 		}
 		
@@ -48,13 +48,19 @@ public class EntityGroup extends Entity {
 	//blind-add an entity to the group
 	//adjust average
 	private void add(Entity n) {
-				
+		
 		Position oldPos = pos.copy();
 		
-		//set the new middle
-		pos.multiply(entities.size());
-		pos.add(n.pos);
-		pos.divide(entities.size() + 1);
+		if (! contains(n)) {
+		
+			//TODO: don't use average, just min/max
+			
+			//set the new middle
+			pos.multiply(entities.size());
+			pos.add(n.pos);
+			pos.divide(entities.size() + 1);
+		
+		}
 		
 		//upper bound on the new radius
 		r = Math.max(pos.distance(oldPos) + r, n.pos.distance(oldPos) + n.r);
@@ -100,7 +106,7 @@ public class EntityGroup extends Entity {
 			
 			EntityGroup group = new EntityGroup();
 			group.set(this);
-			set(new EntityGroup(group, new EntityGroup(e)));
+			set(new EntityGroup(group, e));
 			return;
 		}
 		
@@ -108,9 +114,7 @@ public class EntityGroup extends Entity {
 			merge((EntityGroup) e);
 			return;
 		}
-						
-		//all EntityGroups are disjoint
-		
+								
 		Iterator<Entity> iter = getChildren();
 		while (iter.hasNext()) {
 			Entity child = iter.next();
@@ -120,23 +124,21 @@ public class EntityGroup extends Entity {
 					remove(child);
 					((EntityGroup) child).insert(e);
 					add(child);
+					return;
 				} else if (child.intersects(e, REACH)) {
 					remove(child);
 					merge((EntityGroup) child);
 					add(e);
+					return;
 				}
-				
-				return;
-				
+								
 			}
 		}
 		
 		add(e);
 		
 	}
-	
-	//TODO: dont need to check if we aren't in group
-	
+		
 	public boolean delete(Entity e) {
 		
 		if (remove(e)) {
@@ -150,12 +152,19 @@ public class EntityGroup extends Entity {
 				if (((EntityGroup) child).isEmpty()) {
 					remove(child);
 				}
+				//TODO: change this stuff?
 				return true;
 			}
 		}
 		
 		return false;
 		
+	}
+	
+	public void move(Entity e, Position trans) {
+		delete(e);
+		e.pos.add(trans);
+		insert(e);
 	}
 	
 	//TODO

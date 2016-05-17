@@ -18,6 +18,10 @@ public class Entity {
 		this.pos = pos;
 		this.r = r;
 	}
+	
+	public Entity(Position pos) {
+		this(pos, 5);
+	}
 
 	public Position getPos() {
 		return pos;
@@ -58,6 +62,17 @@ public class Entity {
 	
 	public void renderHitbox(Graphics g) {
 		g.drawOval(pos.x - r, pos.y - r, 2 * r, 2 * r);
+	}
+	
+	//returns true if the two entities are spatially equal
+	public boolean equals(Entity e) {
+		return e.pos.equals(pos) && e.r == r;
+	}
+	
+	public void renderAround(Graphics g, Entity e) {
+		Position rel = pos.copy();
+		rel.sub(e.pos);
+		g.drawOval(rel.x - r, rel.y - r, 2 * r, 2 * r);
 	}
 	
 	public void traverse() {

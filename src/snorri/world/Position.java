@@ -43,4 +43,8 @@ public class Position {
 		return "x, y: " + x + ", " + y;
 	}
 	
+	public boolean equals(Position pos) {
+		return x == pos.x && y == pos.y;
+	}
+	
 }
