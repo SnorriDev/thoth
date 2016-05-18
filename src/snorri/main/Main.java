@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -27,30 +29,34 @@ public class Main {
 	public static void main(String[] args) {
 		
 		NonTerminal result = Grammar.parseString("sDm   jAm");
-		System.out.println("Parse found: " + result);
+		Main.log("Parse found: " + result);
+		
+		//TODO: move the EntityGroup stuff into GameWindow
 		
 		EntityGroup col = new EntityGroup();
-		col.insert(new Entity(new Position(100, 100), 2));
-		col.insert(new Entity(new Position(105, 130), 2));
-		Entity e = new Entity(new Position(115, 100), 2);
+		Entity a = new Entity(new Position(105, 130));
+		Entity b = new Entity(new Position(100, 100));
+		Entity c = new Entity(new Position(143, 133));
+		Entity d = new Entity(new Position(100, 124));
+		Entity e = new Entity(new Position(115, 100));
+		Entity f = new Entity(new Position(111, 130));
+		col.insert(a);
+		col.insert(b);
+		col.insert(c);
+		col.insert(d);
 		col.insert(e);
-		col.insert(new Entity(new Position(143, 133), 2));
-		col.insert(new Entity(new Position(100, 124), 2));
-		col.insert(new Entity(new Position(111, 130), 2));
-		col.insert(new Entity(new Position(300, 130), 4));	
-		col.delete(e);
-					
-		frame = new JFrame("Spoken Word");
+		col.insert(f);
+							
 		window = new GameWindow(col, new Player(new Position(50, 50)));
-		
 		col.insert(window.getFocus()); //the player
 		
+		col.traverse();
+		
+		frame = new JFrame("Spoken Word");
 		frame.getContentPane().add(window, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(500, 500);
 		frame.setVisible(true);
-		
-		col.traverse();
 		
 	}
 	

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import snorri.main.GameWindow;
+import snorri.main.Main;
 import snorri.world.Position;
 
 public class EntityGroup extends Entity {
@@ -20,9 +21,43 @@ public class EntityGroup extends Entity {
 		entities = new ArrayList<Entity>();
 		entities.add(root);
 	}
-	public EntityGroup(Entity root, Entity r2) {
-		this(root);
-		add(r2);
+	
+	public EntityGroup(Entity r1, Entity r2) {
+		
+		this(r1);
+		
+		//this is the problem; when inserting EntityGroups
+		
+		//need to check if the things intersect each other in the constructor
+		//could clean this up?
+		if (r1.intersects(r2)) {
+			if (r1 instanceof EntityGroup && r2 instanceof EntityGroup) {
+				((EntityGroup) r1).merge((EntityGroup) r2);
+				set(r1);
+				return;
+			} else if (r1 instanceof EntityGroup) {
+				((EntityGroup) r1).add(r2);
+				set(r1);
+				return;
+			} else if (r2 instanceof EntityGroup) {
+				set(r2);
+				return;
+			}
+		}
+		
+		entities.add(r2);
+		
+		//compute axis vector between the two centers
+		Position axis = r2.pos.copy();
+		axis.sub(r1.pos);
+		
+		//compute the new radius
+		r = (r1.pos.distance(r2.pos) + r1.r + r2.r) / 2;
+		
+		//scale the axis to the vector from r1 center to the new center
+		axis.scale(r - r1.r);	
+		pos.add(axis);
+		
 	}
 	
 	public EntityGroup() {
@@ -30,54 +65,111 @@ public class EntityGroup extends Entity {
 		entities = new ArrayList<Entity>();
 	}
 	
+	public EntityGroup(Position center, int rad) {
+		super(center, rad);
+		entities = new ArrayList<Entity>();
+	}
+	
+	public EntityGroup(Entity e1, Entity e2, Entity e3) {
+
+		//TODO: could potentially be made better if we don't treat entities as points
+		
+		this();
+		
+		//need to check if the things intersect each other in the constructor?
+		
+		entities.add(e1);
+		entities.add(e2);
+		entities.add(e3);
+		
+		Position p1 = e1.pos;
+		Position p2 = e2.pos;
+		Position p3 = e3.pos;
+		
+		int a = p2.x - p1.x;
+		int b = p2.y - p1.y;
+		int c = p3.y - p1.y;
+		int d = p3.y - p1.y;
+		double e = a * (p2.x + p1.x) * 0.5 + b * (p2.y + p1.y) * 0.5;
+		double f = c * (p3.x + p1.x) * 0.5 + d * (p3.y + p1.y) * 0.5;
+		int det = a * d - b * c;
+		
+		pos = new Position((int) ((d * e - b * f) / det), (int) ((-c * e + a * f) / det));
+		r = p1.distance(pos) + Integer.max(e3.r, Integer.max(e1.r, e2.r));
+		
+	}
 	private Iterator<Entity> getChildren() {
 		return entities.iterator();
 	}
 	
-	private void merge(EntityGroup group) {
-		
-		for (Entity e : group.entities) {
-			if (e instanceof EntityGroup) {
-				merge((EntityGroup) e);
-			} else {
-				add(e);
-			}
-		}
-		
-	}
-	
 	//blind-add an entity to the group
 	//adjust average
-	private void add(Entity n) {
-		
-		Position oldPos = pos.copy();
-		
-		if (! contains(n)) {
-		
-			//TODO: don't use average, just min/max
-			
-			//set the new middle
-			pos.multiply(entities.size());
-			pos.add(n.pos);
-			pos.divide(entities.size() + 1);
-		
-		}
-		
-		//upper bound on the new radius
-		r = Math.max(pos.distance(oldPos) + r, n.pos.distance(oldPos) + n.r);
-		
+	private void add(Entity n) {		
 			
 		entities.add(n);
+		
+		setEnclosing();
+		
 	}
 	
 	//blind-remove an entity from group
 	//adjust average and return whether or not it is empty
 	private boolean remove(Entity n) {
+					
+		if (entities.remove(n)) {
+			setEnclosing();
+			return true;
+		}
+		
+		return false;
+				
+	}
+		
+	public void setEnclosing() {
+		
+		Entity[] points = (Entity[]) entities.toArray(new Entity[] {});
+		Entity[] boundary = new Entity[3];
+		
+		EntityGroup enclosing = EntityGroup.getEnclosing(points, points.length, boundary, 0);
+		
+		pos = enclosing.pos.copy();
+		r = enclosing.r;
+		
+		if (entities.size() == 1 && equals(entities.get(0))) {
+			set(entities.get(0));
+		}
+		
+		//iterate through children and do this?
+		
+	}
+	
+	//linear time algorithm for getting enclosing entity
+	private static EntityGroup getEnclosing(Entity[] points, int n, Entity[] boundary, int b) {
+		
+		if (n == 0 && b == 2) {
+			return new EntityGroup(boundary[0], boundary[1]);
+		}
+		if (n == 1 && b == 0) {
+			return new EntityGroup(points[0]);
+		}
+		if (n == 1 && b == 1) {
+			return new EntityGroup(boundary[0], points[0]);
+		}
+		if (b == 3) {
+			return new EntityGroup(boundary[0], boundary[1], boundary[2]);
+		}
+		 
+		EntityGroup circle = getEnclosing(points, n - 1, boundary, b);
+				
+		if (! circle.intersects(points[n - 1])) {
 			
-		return entities.remove(n);
+			boundary[b++] = points[n - 1];
+			circle = getEnclosing(points, n - 1, boundary, b);
+			
+		}
 		
-		//don't readjust size at all
-		
+		return circle;
+					
 	}
 	
 	public boolean isEmpty() {
@@ -93,17 +185,15 @@ public class EntityGroup extends Entity {
 		
 		if (!intersects(e, REACH)) {
 			
+//			EntityGroup group = new EntityGroup(this);
+//			group.add(e);
+//			set(group);
+			
 			EntityGroup group = new EntityGroup();
 			group.set(this);
 			set(new EntityGroup(group, e));
 			return;
 		}
-		
-		//TODO: maybe rewrite more elegantly in terms of merge?
-//		if (e instanceof EntityGroup) {
-//			merge((EntityGroup) e);
-//			return;
-//		}
 								
 		Iterator<Entity> iter = getChildren();
 		while (iter.hasNext()) {
@@ -115,14 +205,23 @@ public class EntityGroup extends Entity {
 					((EntityGroup) child).insert(e);
 					add(child);
 					return;
-				} else if (child.intersects(e, REACH)) {
+				}
+				if (child.intersects(e, REACH)) {
 					remove(child);
 					merge((EntityGroup) child);
-					add(e);
+					insert(e);	
 					return;
 				}
 								
 			}
+			
+			if (child.intersects(e, REACH) && e instanceof EntityGroup) {
+				delete(child);
+				((EntityGroup) e).insert(child);
+				insert(e);
+				return;
+			}
+			
 		}
 		
 		add(e);
@@ -142,7 +241,6 @@ public class EntityGroup extends Entity {
 				if (((EntityGroup) child).isEmpty()) {
 					remove(child);
 				}
-				//TODO: change this stuff?
 				return true;
 			}
 		}
@@ -151,21 +249,43 @@ public class EntityGroup extends Entity {
 		
 	}
 	
+	private void merge(EntityGroup group) {
+		
+		Iterator<Entity> iter = group.getChildren();
+		
+		while (iter.hasNext()) {
+			insert(iter.next());
+			//nice version
+		}
+		
+	}
+	
 	public void move(Entity e, Position trans) {
+		
 		delete(e);
+		
 		e.pos.add(trans);
+		
+		Main.log(e);	
+		traverse();
+		
 		insert(e);
+		
+		traverse();
+				
 	}
 	
 	//TODO
 	//update method
 	//collides method
 	
-	private void set(EntityGroup e) {
+	private void set(Entity e) {
 		
 		pos = e.pos;
 		r = e.r;
-		entities = e.entities;
+		if (e instanceof EntityGroup) {
+			entities = ((EntityGroup) e).entities;
+		}
 		
 	}
 	
@@ -180,6 +300,11 @@ public class EntityGroup extends Entity {
 	@Override
 	protected void traverse(int depth) {
 		super.traverse(depth);
+		
+		if (entities == null) {
+			return;
+		}
+		
 		for (Entity e : entities) {
 			e.traverse(depth + 1);
 		}

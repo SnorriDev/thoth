@@ -3,9 +3,12 @@ package snorri.entities;
 import java.awt.Graphics;
 
 import snorri.main.GameWindow;
+import snorri.main.Main;
 import snorri.world.Position;
 
 public class Entity {
+	
+	private static final int BASE_SPEED = 2;
 	
 	protected Position pos;
 	protected int r;
@@ -21,7 +24,7 @@ public class Entity {
 	}
 	
 	public Entity(Position pos) {
-		this(pos, 5);
+		this(pos, 3);
 	}
 
 	public Position getPos() {
@@ -57,8 +60,15 @@ public class Entity {
 		for (int i = 0; i < depth; i++) {
 			indent += "  ";
 		}
-		System.out.println(indent + pos.toString());
-		System.out.println(indent + "r: " + r);
+		Main.log(indent + this.toString());
+	}
+	
+	public void traverse() {
+		traverse(0);
+	}
+	
+	public String toString() {
+		return this.getClass().getSimpleName() + "{pos: " + pos.toString() + ", r: " + r + "}";
 	}
 	
 	public void renderHitbox(GameWindow g, Graphics gr) {
@@ -76,10 +86,6 @@ public class Entity {
 		renderAround(g, gr);
 	}
 	
-	public void traverse() {
-		this.traverse(0);
-	}
-	
 	public void walk(Position direction, EntityGroup world) {
 		Position dir = direction.copy();
 		
@@ -93,7 +99,7 @@ public class Entity {
 	
 	//override this for faster entities
 	protected int getSpeed() {
-		return 1;
+		return BASE_SPEED;
 	}
 
 }
