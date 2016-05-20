@@ -11,6 +11,10 @@ public class Level {
 		map = new Tile[width][height];
 	}
 	
+	public void setTile(int x, int y, Tile t) {
+		map[x][y] = t;
+	}
+	
 	public Tile getTile(int x, int y) {
 		return map[x][y];
 	}

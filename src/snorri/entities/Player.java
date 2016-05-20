@@ -1,16 +1,16 @@
 package snorri.entities;
 
-import snorri.world.Position;
+import snorri.world.Vector;
 
 public class Player extends Entity {
 
-	public Player(Position pos) {
+	public Player(Vector pos) {
 		super(pos);
 	}
 	
-	@Override
-	public int getSpeed() {
-		return 2 * super.getSpeed();
-	}
+//	@Override
+//	public int getSpeed() {
+//		return 2 * super.getSpeed();
+//	}
 
 }

@@ -4,13 +4,13 @@ import java.awt.Graphics;
 
 import snorri.main.GameWindow;
 import snorri.main.Main;
-import snorri.world.Position;
+import snorri.world.Vector;
 
 public class Entity {
 	
 	private static final int BASE_SPEED = 2;
 	
-	protected Position pos;
+	protected Vector pos;
 	protected int r;
 	
 	public Entity(Entity e) {
@@ -18,16 +18,16 @@ public class Entity {
 		this.r = e.r;
 	}
 	
-	public Entity(Position pos, int r) {
+	public Entity(Vector pos, int r) {
 		this.pos = pos;
 		this.r = r;
 	}
 	
-	public Entity(Position pos) {
+	public Entity(Vector pos) {
 		this(pos, 3);
 	}
 
-	public Position getPos() {
+	public Vector getPos() {
 		return pos;
 	}
 	
@@ -35,7 +35,7 @@ public class Entity {
 		return r;
 	}
 
-	public boolean intersects(Position pos1) {
+	public boolean intersects(Vector pos1) {
 		return pos.distance(pos1) <= r;
 	}
 	
@@ -71,10 +71,13 @@ public class Entity {
 		return this.getClass().getSimpleName() + "{pos: " + pos.toString() + ", r: " + r + "}";
 	}
 	
+	public void update() {
+	}
+	
 	public void renderHitbox(GameWindow g, Graphics gr) {
-		Position rel = pos.copy();
+		Vector rel = pos.copy();
 		rel.sub(g.getFocus().pos);
-		gr.drawOval(rel.x - r + g.getBounds().width / 2, rel.y - r + g.getBounds().height / 2, 2 * r, 2 * r);
+		gr.drawOval(rel.getX() - r + g.getBounds().width / 2, rel.getY() - r + g.getBounds().height / 2, 2 * r, 2 * r);
 	}
 	
 	//returns true if the two entities are spatially equal
@@ -83,18 +86,18 @@ public class Entity {
 	}
 	
 	public void renderAround(GameWindow g, Graphics gr) {
-		renderAround(g, gr);
+		renderHitbox(g, gr);
 	}
 	
-	public void walk(Position direction, EntityGroup world) {
-		Position dir = direction.copy();
+	public void walk(Vector direction, EntityGroup col) {
+		Vector dir = direction.copy();
 		
-		if (dir.equals(Position.ZERO)) {
+		if (dir.equals(Vector.ZERO)) {
 			return;
 		}
 		
 		dir.multiply(getSpeed());
-		world.move(this, dir);
+		col.move(this, dir);
 	}
 	
 	//override this for faster entities

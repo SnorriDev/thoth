@@ -1,6 +1,6 @@
 package snorri.keyboard;
 
-import snorri.world.Position;
+import snorri.world.Vector;
 
 public class KeyStates {
 
@@ -26,8 +26,8 @@ public class KeyStates {
 		return get(key) ? 1 : 0;
 	}
 	
-	public Position getMovementVector() {
-		return new Position(getInt(Key.D) - getInt(Key.A), getInt(Key.S) - getInt(Key.W));
+	public Vector getMovementVector() {
+		return new Vector(getInt(Key.D) - getInt(Key.A), getInt(Key.S) - getInt(Key.W));
 	}
 	
 }

@@ -18,7 +18,8 @@ import snorri.parser.Grammar;
 import snorri.parser.Node;
 import snorri.parser.NonTerminal;
 import snorri.parser.Rule;
-import snorri.world.Position;
+import snorri.world.Vector;
+import snorri.world.World;
 
 @SuppressWarnings("unused")
 public class Main {
@@ -33,24 +34,25 @@ public class Main {
 		
 		//TODO: move the EntityGroup stuff into GameWindow
 		
-		EntityGroup col = new EntityGroup();
-		Entity a = new Entity(new Position(105, 130));
-		Entity b = new Entity(new Position(100, 100));
-		Entity c = new Entity(new Position(143, 133));
-		Entity d = new Entity(new Position(100, 124));
-		Entity e = new Entity(new Position(115, 100));
-		Entity f = new Entity(new Position(111, 130));
-		col.insert(a);
-		col.insert(b);
-		col.insert(c);
-		col.insert(d);
-		col.insert(e);
-		col.insert(f);
-							
-		window = new GameWindow(col, new Player(new Position(50, 50)));
-		col.insert(window.getFocus()); //the player
+		World world = new World();
 		
-		col.traverse();
+		Entity a = new Entity(new Vector(105, 130));
+		Entity b = new Entity(new Vector(100, 100));
+		Entity c = new Entity(new Vector(143, 133));
+		Entity d = new Entity(new Vector(100, 124));
+		Entity e = new Entity(new Vector(115, 100));
+		Entity f = new Entity(new Vector(111, 130));
+		world.add(a);
+		world.add(b);
+		world.add(c);
+		world.add(d);
+		world.add(e);
+		world.add(f);
+							
+		window = new GameWindow(world, new Player(new Vector(50, 50)));
+		world.add(window.getFocus()); //the player
+		
+		world.getEntityTree().traverse();
 		
 		frame = new JFrame("Spoken Word");
 		frame.getContentPane().add(window, BorderLayout.CENTER);

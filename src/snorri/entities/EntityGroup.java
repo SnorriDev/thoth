@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import snorri.main.GameWindow;
-import snorri.main.Main;
-import snorri.world.Position;
+import snorri.world.Vector;
 
 public class EntityGroup extends Entity {
 	
@@ -48,7 +47,7 @@ public class EntityGroup extends Entity {
 		entities.add(r2);
 		
 		//compute axis vector between the two centers
-		Position axis = r2.pos.copy();
+		Vector axis = r2.pos.copy();
 		axis.sub(r1.pos);
 		
 		//compute the new radius
@@ -65,7 +64,7 @@ public class EntityGroup extends Entity {
 		entities = new ArrayList<Entity>();
 	}
 	
-	public EntityGroup(Position center, int rad) {
+	public EntityGroup(Vector center, int rad) {
 		super(center, rad);
 		entities = new ArrayList<Entity>();
 	}
@@ -82,19 +81,19 @@ public class EntityGroup extends Entity {
 		entities.add(e2);
 		entities.add(e3);
 		
-		Position p1 = e1.pos;
-		Position p2 = e2.pos;
-		Position p3 = e3.pos;
+		Vector p1 = e1.pos;
+		Vector p2 = e2.pos;
+		Vector p3 = e3.pos;
 		
-		int a = p2.x - p1.x;
-		int b = p2.y - p1.y;
-		int c = p3.y - p1.y;
-		int d = p3.y - p1.y;
+		double a = p2.x - p1.x;
+		double b = p2.y - p1.y;
+		double c = p3.y - p1.y;
+		double d = p3.y - p1.y;
 		double e = a * (p2.x + p1.x) * 0.5 + b * (p2.y + p1.y) * 0.5;
 		double f = c * (p3.x + p1.x) * 0.5 + d * (p3.y + p1.y) * 0.5;
-		int det = a * d - b * c;
+		double det = a * d - b * c;
 		
-		pos = new Position((int) ((d * e - b * f) / det), (int) ((-c * e + a * f) / det));
+		pos = new Vector((int) ((d * e - b * f) / det), (int) ((-c * e + a * f) / det));
 		r = p1.distance(pos) + Integer.max(e3.r, Integer.max(e1.r, e2.r));
 		
 	}
@@ -260,18 +259,18 @@ public class EntityGroup extends Entity {
 		
 	}
 	
-	public void move(Entity e, Position trans) {
+	public void move(Entity e, Vector trans) {
 		
 		delete(e);
 		
 		e.pos.add(trans);
 		
-		Main.log(e);	
-		traverse();
+//		Main.log(e);	
+//		traverse();
 		
 		insert(e);
 		
-		traverse();
+//		traverse();
 				
 	}
 	

@@ -1,7 +1,13 @@
 package snorri.entities;
 
-public interface Collider {
+import snorri.world.Vector;
 
-	public void onCollision(CollisionEvent e);
-	
+public abstract class Collider extends Entity {
+
+	public Collider(Vector pos, int r) {
+		super(pos, r);
+	}
+
+	public abstract void onCollision(CollisionEvent e);
+		
 }

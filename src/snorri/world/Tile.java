@@ -1,19 +1,24 @@
 package snorri.world;
 
-public class Tile {
+public enum Tile {
 
-	private int type;
+	SAND(0, true),
+	WALL(1, false);
 	
-	public Tile(int type) {
-		this.type = type;
+	private int id;
+	private boolean pathable;
+	
+	Tile(int id, boolean pathable) {
+		this.id = id;
+		this.pathable = pathable;
 	}
 	
-	public int getType() {
-		return type;
+	public int getId() {
+		return id;
 	}
 	
-	public boolean isPassable() {
-		return true;
+	public boolean isPathable() {
+		return pathable;
 	}
 	
 }
