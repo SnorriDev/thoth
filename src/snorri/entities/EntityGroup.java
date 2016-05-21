@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import snorri.main.GameWindow;
-import snorri.main.Main;
 import snorri.world.Vector;
 
 public class EntityGroup extends Entity {
@@ -32,7 +31,7 @@ public class EntityGroup extends Entity {
 		//could clean this up?
 		if (r1.intersects(r2)) {
 			if (r1 instanceof EntityGroup && r2 instanceof EntityGroup) {
-				((EntityGroup) r1).merge((EntityGroup) r2);
+				((EntityGroup) r1).merge((EntityGroup) r2); //merge and insert don't quite do the same thing
 				set(r1);
 				return;
 			} else if (r1 instanceof EntityGroup) {
@@ -40,6 +39,7 @@ public class EntityGroup extends Entity {
 				set(r1);
 				return;
 			} else if (r2 instanceof EntityGroup) {
+				((EntityGroup) r2).add(r1);//this fix?
 				set(r2);
 				return;
 			}
@@ -107,7 +107,6 @@ public class EntityGroup extends Entity {
 	private void add(Entity n) {		
 			
 		entities.add(n);
-		
 		setEnclosing();
 		
 	}
@@ -130,16 +129,10 @@ public class EntityGroup extends Entity {
 		Entity[] points = (Entity[]) entities.toArray(new Entity[] {});
 		Entity[] boundary = new Entity[3];
 		
-		
-		
 		EntityGroup enclosing = EntityGroup.getEnclosing(points, points.length, boundary, 0);
 		
 		pos = enclosing.pos.copy();
-		r = enclosing.r + 3; //"MARGIN"
-		
-//		if (getMaxRadius(points) != 0) {
-//			Main.log(getMaxRadius(points));
-//		}
+		r = enclosing.r + REACH; //"MARGIN"
 		
 		r += getMaxRadius(points);
 				
@@ -234,15 +227,14 @@ public class EntityGroup extends Entity {
 				if (child.contains(e, REACH)) {					
 					remove(child);
 					((EntityGroup) child).insert(e);
-					add(child);
+					add(child); //some weird cases might make add not work here; change the behavior of insert?
 					return;
 				}
 				if (child.intersects(e, REACH)) {
 										
 					remove(child);					
-					((EntityGroup) child).insert(e);				
+					((EntityGroup) child).insert(e);
 					insert(child);
-					//merge((EntityGroup) child);
 					
 					return;
 				}
@@ -304,14 +296,34 @@ public class EntityGroup extends Entity {
 	}
 	
 	public void move(Entity e, Vector trans) {
-				
 		delete(e);
 		e.pos.add(trans);
-		insert(e);				
+		insert(e);
+	}
+	
+	public Entity getFirstCollision(Collider c) {
+		
+		for (Entity child : entities) { //TODO: use this iterator syntax elsewhere
+			
+			if (child instanceof EntityGroup) {
+				Entity result = ((EntityGroup) child).getFirstCollision(c);
+				if (result == null) {
+					continue;
+				}
+				return result;
+			}
+			
+			if (child.intersects(c)) {
+				return child;
+			}
+			
+		}
+		
+		return null;
+		
 	}
 	
 	//TODO
-	//update method
 	//collides method
 	
 	private void set(Entity e) {
