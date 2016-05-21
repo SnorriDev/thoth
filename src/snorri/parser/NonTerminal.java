@@ -12,8 +12,11 @@ public abstract class NonTerminal implements Node {
 	//TODO: probably remove lambdables and stuff
 	//save lambdables for the meaning of terminals, but just use functions here
 	
-	public String getString() {
-		return getClass().getName();
+	@Override
+	public String toString() {
+		//TODO: traverse full sentence
+		//java 8 makes this nice lol
+		return getClass().getSimpleName();
 	}
 
 	@Deprecated

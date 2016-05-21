@@ -2,7 +2,7 @@ package snorri.entities;
 
 import snorri.world.Vector;
 
-public class Player extends Entity {
+public class Player extends Unit {
 
 	public Player(Vector pos) {
 		super(pos);

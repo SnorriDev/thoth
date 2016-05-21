@@ -7,9 +7,7 @@ import snorri.main.Main;
 import snorri.world.Vector;
 
 public class Entity {
-	
-	private static final int BASE_SPEED = 2;
-	
+		
 	protected Vector pos;
 	protected int r;
 	
@@ -24,7 +22,7 @@ public class Entity {
 	}
 	
 	public Entity(Vector pos) {
-		this(pos, 3);
+		this(pos, 2);
 	}
 
 	public Vector getPos() {
@@ -87,22 +85,6 @@ public class Entity {
 	
 	public void renderAround(GameWindow g, Graphics gr) {
 		renderHitbox(g, gr);
-	}
-	
-	public void walk(Vector direction, EntityGroup col) {
-		Vector dir = direction.copy();
-		
-		if (dir.equals(Vector.ZERO)) {
-			return;
-		}
-		
-		dir.multiply(getSpeed());
-		col.move(this, dir);
-	}
-	
-	//override this for faster entities
-	protected int getSpeed() {
-		return BASE_SPEED;
 	}
 
 }

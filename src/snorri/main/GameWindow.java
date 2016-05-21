@@ -11,6 +11,7 @@ import javax.swing.SwingWorker;
 
 import snorri.entities.Entity;
 import snorri.entities.Projectile;
+import snorri.entities.Unit;
 import snorri.keyboard.Key;
 import snorri.keyboard.KeyStates;
 import snorri.world.Vector;
@@ -28,9 +29,9 @@ public class GameWindow extends JPanel implements KeyListener {
 	private KeyStates states;
 	
 	private World world;
-	private Entity focus;
+	private Unit focus;
 	
-	public GameWindow(World world, Entity focus) {
+	public GameWindow(World world, Unit focus) {
 		this.world = world;
 		this.focus = focus;
 		states = new KeyStates();
@@ -81,13 +82,11 @@ public class GameWindow extends JPanel implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		states.set(e.getKeyCode(), true);
-		//Main.log(e.getKeyCode() + ": " + states.get(e.getKeyCode()));
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		states.set(e.getKeyCode(), false);
-		//Main.log(e.getKeyCode() + ": " + states.get(e.getKeyCode()));
 	}
 
 	@Override

@@ -28,4 +28,8 @@ public class Terminal implements Node {
 		return null;
 	}
 	
+	public String toString() {
+		return "[" + orthography + "]";
+	}
+	
 }

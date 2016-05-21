@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import snorri.main.GameWindow;
+import snorri.main.Main;
 import snorri.world.Vector;
 
 public class EntityGroup extends Entity {
@@ -129,19 +130,37 @@ public class EntityGroup extends Entity {
 		Entity[] points = (Entity[]) entities.toArray(new Entity[] {});
 		Entity[] boundary = new Entity[3];
 		
+		
+		
 		EntityGroup enclosing = EntityGroup.getEnclosing(points, points.length, boundary, 0);
 		
 		pos = enclosing.pos.copy();
-		r = enclosing.r;
+		r = enclosing.r + 3; //"MARGIN"
 		
+//		if (getMaxRadius(points) != 0) {
+//			Main.log(getMaxRadius(points));
+//		}
+		
+		r += getMaxRadius(points);
+				
 		if (entities.size() == 1 && equals(entities.get(0))) {
 			set(entities.get(0));
 		}
 		
-		//iterate through children and do this?
+		//TODO: points getting deleted not related to this
 		
 	}
 	
+	private int getMaxRadius(Entity[] boundary) {
+		int max = 0;
+		for (int i = 0; i < boundary.length; i++) {
+			if (boundary[i] != null && ! contains(boundary[i]) && Double.isFinite(boundary[i].r)) {
+				max = boundary[i].r > max ? boundary[i].r : max;
+			}			
+		}
+		return max;
+	}
+
 	//linear time algorithm for getting enclosing entity
 	private static EntityGroup getEnclosing(Entity[] points, int n, Entity[] boundary, int b) {
 		
@@ -159,8 +178,10 @@ public class EntityGroup extends Entity {
 		}
 		 
 		EntityGroup circle = getEnclosing(points, n - 1, boundary, b);
-				
-		if (! circle.intersects(points[n - 1])) {
+		
+		//TODO: figure out what to do. contains?
+		//this is it
+		if (! circle.intersects(points[n - 1].pos)) {
 			
 			boundary[b++] = points[n - 1];
 			circle = getEnclosing(points, n - 1, boundary, b);
@@ -182,39 +203,56 @@ public class EntityGroup extends Entity {
 			return;
 		}
 		
+		if (entities.size() == 1) {
+			set(new EntityGroup(entities.get(0), e));
+			return;
+		}
+		
 		if (!intersects(e, REACH)) {
-			
-//			EntityGroup group = new EntityGroup(this);
-//			group.add(e);
-//			set(group);
-			
+						
 			EntityGroup group = new EntityGroup();
 			group.set(this);
 			set(new EntityGroup(group, e));
 			return;
 		}
+		
+		if (e instanceof EntityGroup) {
+			for (Entity child : ((EntityGroup) e).entities) {
+				insert(child);
+			}
+			return;
+		}
+		
+		//TODO MAJOR PROGRESS
+		//The issue is here, with intersects
 								
 		Iterator<Entity> iter = getChildren();
 		while (iter.hasNext()) {
 			Entity child = iter.next();
 			if (child instanceof EntityGroup) {
 				
-				if (child.contains(e, REACH)) {
+				if (child.contains(e, REACH)) {					
 					remove(child);
 					((EntityGroup) child).insert(e);
 					add(child);
 					return;
 				}
 				if (child.intersects(e, REACH)) {
-					remove(child);
-					merge((EntityGroup) child);
-					insert(e);	
+										
+					remove(child);					
+					((EntityGroup) child).insert(e);				
+					insert(child);
+					//merge((EntityGroup) child);
+					
 					return;
 				}
 								
 			}
 			
 			if (child.intersects(e, REACH) && e instanceof EntityGroup) {
+				
+				//Main.log(child + " fancy intersects " + e);
+				
 				delete(child);
 				((EntityGroup) e).insert(child);
 				insert(e);
@@ -253,25 +291,23 @@ public class EntityGroup extends Entity {
 		Iterator<Entity> iter = group.getChildren();
 		
 		while (iter.hasNext()) {
-			insert(iter.next());
-			//nice version
+			Entity next = iter.next();
+			
+			if (next instanceof EntityGroup) {
+				merge((EntityGroup) next);
+			} else {
+				insert(next);
+			}
+			
 		}
 		
 	}
 	
 	public void move(Entity e, Vector trans) {
-		
-		delete(e);
-		
-		e.pos.add(trans);
-		
-//		Main.log(e);	
-//		traverse();
-		
-		insert(e);
-		
-//		traverse();
 				
+		delete(e);
+		e.pos.add(trans);
+		insert(e);				
 	}
 	
 	//TODO

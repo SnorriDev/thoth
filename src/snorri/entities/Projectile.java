@@ -1,6 +1,5 @@
 package snorri.entities;
 
-import snorri.main.Main;
 import snorri.world.Vector;
 
 public class Projectile extends Collider {
@@ -25,12 +24,6 @@ public class Projectile extends Collider {
 	
 	@Override
 	public void update() {
-		
-		Main.log(velocity);
-		if (velocity.equals(Vector.ZERO)) {
-			Main.log(pos);
-		}
-		
 		pos.add(velocity);
 	}
 
