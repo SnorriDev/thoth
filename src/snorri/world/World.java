@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import snorri.entities.Collider;
+import snorri.entities.CollisionEvent;
 import snorri.entities.Entity;
 import snorri.entities.EntityGroup;
 import snorri.main.GameWindow;
@@ -27,6 +28,13 @@ public class World {
 		
 		for (Collider p : colliders) {
 			p.update();
+			
+			Entity hit = col.getFirstCollision(p);
+			if (hit != null) {
+				p.onCollision(new CollisionEvent(p, hit, this));
+				return;
+			}
+			
 		}
 		
 	}
@@ -41,7 +49,7 @@ public class World {
 		for (Collider p : colliders) {
 			p.renderHitbox(window, g);
 		}
-		
+				
 	}
 	
 	public EntityGroup getEntityTree() {
@@ -52,6 +60,12 @@ public class World {
 		return level;
 	}
 	
+	/**
+	 * Add an Entity to the World.
+	 * Detects whether Entity is a Collider or otherwise,
+	 * and handles it appropriately
+	 * 
+	 */
 	public void add(Entity e) {
 		
 		if (e instanceof Collider) {

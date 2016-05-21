@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.world.Vector;
+import snorri.world.World;
 
 public class Entity {
 		
@@ -70,6 +71,10 @@ public class Entity {
 	}
 	
 	public void update() {
+	}
+	
+	protected void removeFrom(World world) {
+		world.delete(this);
 	}
 	
 	public void renderHitbox(GameWindow g, Graphics gr) {

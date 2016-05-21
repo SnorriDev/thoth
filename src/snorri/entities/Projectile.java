@@ -29,6 +29,15 @@ public class Projectile extends Collider {
 
 	@Override
 	public void onCollision(CollisionEvent e) {
+		
+		if (e.getTarget().equals(root)) {
+			return;
+		}
+		
+		//TODO: "damage" root
+				
+		removeFrom(e.getWorld());
+				
 	}
 
 }
