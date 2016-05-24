@@ -23,5 +23,10 @@ public abstract class NonTerminal implements Node {
 	public List<Node> getChildren() {
 		return children;
 	}
+
+	public Object getMeaning() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

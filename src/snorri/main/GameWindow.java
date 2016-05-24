@@ -79,17 +79,14 @@ public class GameWindow extends JPanel implements KeyListener {
 		return (new Vector(MouseInfo.getPointerInfo().getLocation())).sub(origin);
 	}
 
-	@Override
 	public void keyPressed(KeyEvent e) {
 		states.set(e.getKeyCode(), true);
 	}
 
-	@Override
 	public void keyReleased(KeyEvent e) {
 		states.set(e.getKeyCode(), false);
 	}
 
-	@Override
 	public void keyTyped(KeyEvent e) {
 		
 		if (e.getKeyChar() == Key.SPACE.getChar()) {
