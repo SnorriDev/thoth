@@ -70,11 +70,7 @@ public class Entity {
 		return this.getClass().getSimpleName() + "{pos: " + pos.toString() + ", r: " + r + "}";
 	}
 	
-	public void update() {
-	}
-	
-	protected void removeFrom(World world) {
-		world.delete(this);
+	public void update(World world, float f) {
 	}
 	
 	public void renderHitbox(GameWindow g, Graphics gr) {

@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Date;
 
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
@@ -30,6 +31,7 @@ public class GameWindow extends JPanel implements KeyListener {
 	
 	private World world;
 	private Unit focus;
+	private long lastTime;
 	
 	public GameWindow(World world, Unit focus) {
 		this.world = world;
@@ -41,6 +43,7 @@ public class GameWindow extends JPanel implements KeyListener {
 	}
 	
 	public void startAnimation() {
+		
 		SwingWorker<Object, Object> sw = new SwingWorker<Object, Object>() {
 			@Override
 			protected Object doInBackground() throws Exception {
@@ -51,14 +54,22 @@ public class GameWindow extends JPanel implements KeyListener {
 			}
 		};
 
+		lastTime = getTimestamp();
 		sw.execute();
 	}
 	
 	//TODO: pass a timeDelta argument to update()
 	private void onFrame() {
-		focus.walk(states.getMovementVector(), world.getEntityTree());
-		world.update();
+		focus.walk(states.getMovementVector(), world.getEntityTree()); //TODO: move to update method of Player?
+		long time = getTimestamp();
+		world.update((time - lastTime) / 1000f);
+		lastTime = time;
 		repaint();
+	}
+	
+	private long getTimestamp() {
+		Date date = new Date();
+		return date.getTime();
 	}
 	
 	@Override

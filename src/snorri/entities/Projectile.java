@@ -1,12 +1,14 @@
 package snorri.entities;
 
 import snorri.world.Vector;
+import snorri.world.World;
 
 public class Projectile extends Collider {
 
-	private static final int PROJECTILE_SPEED = 5;
+	private static final int PROJECTILE_SPEED = 100;
 	
 	public static final int LIFE_SPAN = 4000; //number of milliseconds towards despawn
+	private long age;
 	
 	private Vector velocity;
 	
@@ -16,6 +18,7 @@ public class Projectile extends Collider {
 		super(root.getPos().copy(), 1); //radius of a projectile is 1
 		velocity = rootVelocity.copy().add(path.copy().multiply(PROJECTILE_SPEED));
 		this.root = root;
+		age = 0;
 	}
 
 	public Entity getRoot() {
@@ -23,8 +26,15 @@ public class Projectile extends Collider {
 	}
 	
 	@Override
-	public void update() {
-		pos.add(velocity);
+	public void update(World world, float deltaTime) {
+		
+		pos.add(velocity.copy().multiply(deltaTime));
+				
+		age += deltaTime;
+		if (age > LIFE_SPAN) {
+			world.deleteSoft(this);
+		}
+		
 	}
 
 	@Override
@@ -35,8 +45,8 @@ public class Projectile extends Collider {
 		}
 		
 		//TODO: "damage" root
-				
-		removeFrom(e.getWorld());
+		
+		e.getWorld().deleteHard(this); //could use removeFrom, but this is a little better
 				
 	}
 
