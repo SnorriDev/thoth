@@ -70,6 +70,7 @@ public class Entity {
 		return this.getClass().getSimpleName() + "{pos: " + pos.toString() + ", r: " + r + "}";
 	}
 	
+	//TODO: make this into a boolean so we can know whether or not to recalculate collision bubbles
 	public void update(World world, float f) {
 	}
 	

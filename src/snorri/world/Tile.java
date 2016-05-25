@@ -5,6 +5,8 @@ public enum Tile {
 	SAND(0, true),
 	WALL(1, false);
 	
+	public static final int WIDTH = 32;
+		
 	private int id;
 	private boolean pathable;
 	
