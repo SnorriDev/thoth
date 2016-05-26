@@ -1,5 +1,7 @@
-package snorri.entities;
+package snorri.events;
 
+import snorri.entities.Collider;
+import snorri.entities.Entity;
 import snorri.world.World;
 
 public class CollisionEvent {

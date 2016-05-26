@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Queue;
 
 import snorri.entities.Collider;
-import snorri.entities.CollisionEvent;
 import snorri.entities.Entity;
 import snorri.entities.EntityGroup;
+import snorri.events.CollisionEvent;
 import snorri.main.GameWindow;
 
 public class World {

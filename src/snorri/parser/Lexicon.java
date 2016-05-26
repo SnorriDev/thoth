@@ -1,4 +1,4 @@
-package snorri.semantics;
+package snorri.parser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +8,7 @@ import java.util.Set;
 import snorri.nonterminals.Noun;
 import snorri.nonterminals.Prep;
 import snorri.nonterminals.TransVerb;
+import snorri.semantics.StaticDef;
 
 public class Lexicon {
 	
@@ -18,16 +19,16 @@ public class Lexicon {
 		lexicon = new HashMap<String, Definition>();
 		
 		//Prepositions
-		lexicon.put("r", new Definition(Prep.class, null)); //to (pos)
-		lexicon.put("n", new Definition(Prep.class, null)); //to (ent)
-		lexicon.put("m", new Definition(Prep.class, null)); //in/at
+		lexicon.put("r", new StaticDef(Prep.class, null)); //to (pos)
+		lexicon.put("n", new StaticDef(Prep.class, null)); //to (ent)
+		lexicon.put("m", new StaticDef(Prep.class, null)); //in/at
 		
 		//Nouns
-		lexicon.put("jAm", new Definition(Noun.class, null)); //tree
+		lexicon.put("jAm", new StaticDef(Noun.class, null)); //tree
 		
 		//Verbs
-		lexicon.put("mAA", new Definition(TransVerb.class, null)); //see
-		lexicon.put("sDm", new Definition(TransVerb.class, null)); //hear
+		lexicon.put("mAA", new StaticDef(TransVerb.class, null)); //see
+		lexicon.put("sDm", new StaticDef(TransVerb.class, null)); //hear
 				
 	}
 	

@@ -1,5 +1,6 @@
 package snorri.entities;
 
+import snorri.events.CollisionEvent;
 import snorri.world.Vector;
 
 public abstract class Collider extends Entity {

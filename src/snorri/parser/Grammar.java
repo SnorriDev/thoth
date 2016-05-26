@@ -19,8 +19,6 @@ import snorri.nonterminals.Sentence;
 import snorri.nonterminals.Statement;
 import snorri.nonterminals.TransVerb;
 import snorri.nonterminals.VerbPhrase;
-import snorri.semantics.Definition;
-import snorri.semantics.Lexicon;
 
 public class Grammar {
 

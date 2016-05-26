@@ -1,6 +1,6 @@
 package snorri.parser;
 
-import snorri.semantics.Lexicon;
+import snorri.events.SpellEvent;
 
 public class Terminal implements Node {
 
@@ -22,9 +22,9 @@ public class Terminal implements Node {
 		return orthography;
 	}
 	
-	public Object getMeaning() {
+	public Object getMeaning(SpellEvent e) {
 		if (Lexicon.lookup(orthography) != null)
-			return Lexicon.lookup(orthography).getMeaning();
+			return Lexicon.lookup(orthography).getMeaning(e);
 		return null;
 	}
 	

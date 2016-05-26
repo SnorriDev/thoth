@@ -1,7 +1,9 @@
 package snorri.parser;
 
+import snorri.events.SpellEvent;
+
 public interface Node {
 
-	public Object getMeaning();
+	public Object getMeaning(SpellEvent e);
 		
 }
