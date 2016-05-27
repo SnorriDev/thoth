@@ -6,20 +6,16 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import snorri.nonterminals.Command;
-import snorri.nonterminals.InflIntransVerb;
-import snorri.nonterminals.InflMorpheme;
-import snorri.nonterminals.InflTransVerb;
 import snorri.nonterminals.IntransVerb;
 import snorri.nonterminals.NonTerminal;
 import snorri.nonterminals.Noun;
 import snorri.nonterminals.NounPhrase;
 import snorri.nonterminals.Prep;
 import snorri.nonterminals.PrepPhrase;
-import snorri.nonterminals.Pronoun;
-import snorri.nonterminals.Sentence;
+import snorri.nonterminals.ObjectPronoun;
 import snorri.nonterminals.Statement;
+import snorri.nonterminals.SuffixPronoun;
 import snorri.nonterminals.TransVerb;
-import snorri.nonterminals.VerbPhrase;
 import snorri.semantics.Definition;
 
 public class Grammar {
@@ -29,25 +25,25 @@ public class Grammar {
 	static {
 		rules = new ArrayList<Rule>();
 		
-		rules.add(new Rule(new Object[] {Command.class}, Sentence.class));
-		rules.add(new Rule(new Object[] {Command.class, "jr", Statement.class}, Sentence.class));
+		rules.add(new Rule(new Object[] {Command.class, "jr", Statement.class}, Command.class));
 		rules.add(new Rule(new Object[] {TransVerb.class, NounPhrase.class}, Command.class));
 		rules.add(new Rule(new Object[] {IntransVerb.class}, Command.class));
+
+		rules.add(new Rule(new Object[] {TransVerb.class, SuffixPronoun.class, NounPhrase.class}, Statement.class));
+		rules.add(new Rule(new Object[] {IntransVerb.class, SuffixPronoun.class}, Statement.class));
+		
 		rules.add(new Rule(new Object[] {Noun.class}, NounPhrase.class));
-		rules.add(new Rule(new Object[] {Pronoun.class}, NounPhrase.class));
-		rules.add(new Rule(new Object[] {Noun.class, PrepPhrase.class}, NounPhrase.class));
+		rules.add(new Rule(new Object[] {ObjectPronoun.class}, NounPhrase.class));
+		rules.add(new Rule(new Object[] {Noun.class, PrepPhrase.class}, NounPhrase.class)); //this rule is lowest priority
 		rules.add(new Rule(new Object[] {Noun.class, NounPhrase.class}, NounPhrase.class));
+		
 		rules.add(new Rule(new Object[] {Prep.class, NounPhrase.class}, PrepPhrase.class));
-		rules.add(new Rule(new Object[] {NounPhrase.class, VerbPhrase.class}, Statement.class));
-		rules.add(new Rule(new Object[] {VerbPhrase.class}, Statement.class));
-		rules.add(new Rule(new Object[] {InflTransVerb.class, NounPhrase.class}, VerbPhrase.class));
-		rules.add(new Rule(new Object[] {InflIntransVerb.class}, VerbPhrase.class));
-		rules.add(new Rule(new Object[] {TransVerb.class, InflMorpheme.class}, InflTransVerb.class));
-		rules.add(new Rule(new Object[] {IntransVerb.class, InflMorpheme.class}, InflIntransVerb.class));
-		rules.add(new Rule(new Object[] {PrepPhrase.class, TransVerb.class}, TransVerb.class));
-		rules.add(new Rule(new Object[] {PrepPhrase.class, IntransVerb.class}, TransVerb.class));
-		rules.add(new Rule(new Object[] {PrepPhrase.class, InflTransVerb.class}, TransVerb.class));
-		rules.add(new Rule(new Object[] {PrepPhrase.class, InflIntransVerb.class}, TransVerb.class));
+		
+//		TODO: figure out how to do this in a nice way? add information to the event?
+//		have a "location" associated with the SpellEvent
+		
+		rules.add(new Rule(new Object[] {PrepPhrase.class, Statement.class}, Statement.class));
+		rules.add(new Rule(new Object[] {PrepPhrase.class, Command.class}, Command.class));
 		
 		System.out.println("CFG with " + rules.size() + " high-level rules loaded");
 		
@@ -59,7 +55,7 @@ public class Grammar {
 		
 	}
 	
-	public static NonTerminal parseString(String input) {
+	public static Node parseString(String input) {
 		List<String> raw = Arrays.asList(input.split(" +|\\.|="));
 		List<Node> result = new ArrayList<Node>();
 		for (int i = 0; i < raw.size(); i++)
@@ -77,9 +73,9 @@ public class Grammar {
 	
 	//create tree of nonterminals recursively by matching ltr
 	//really not efficiently written
-	public static NonTerminal parseRec(List<Node> nodes) throws InstantiationException, IllegalAccessException {
-		if (nodes.size() == 1 && nodes.get(0) instanceof Sentence) //potentially rewrite to make more robust
-			return (NonTerminal) nodes.get(0);
+	public static Node parseRec(List<Node> nodes) throws InstantiationException, IllegalAccessException {
+		if (nodes.size() == 1) //parses all objects
+			return nodes.get(0);
 		for (int i = 0; i < nodes.size(); i++) {
 			for (int j = nodes.size(); j >= i + 1; j--) {
 				for (Rule rule : rules) { //can store rules by length to be more efficient and add argument

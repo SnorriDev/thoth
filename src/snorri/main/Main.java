@@ -14,7 +14,6 @@ import snorri.entities.Entity;
 import snorri.entities.EntityGroup;
 import snorri.entities.Player;
 import snorri.nonterminals.NonTerminal;
-import snorri.nonterminals.Sentence;
 import snorri.parser.Grammar;
 import snorri.parser.Node;
 import snorri.parser.Rule;
@@ -29,7 +28,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		NonTerminal result = Grammar.parseString("sDm   jAm");
+		Node result = Grammar.parseString("sDm   jAm");
 		Main.log("Parse found: " + result);
 		
 		//TODO: move the EntityGroup stuff into GameWindow
