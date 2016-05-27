@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import snorri.nonterminals.Command;
 import snorri.nonterminals.IntransVerb;
+import snorri.nonterminals.ModifiedSentence;
 import snorri.nonterminals.NonTerminal;
 import snorri.nonterminals.Noun;
 import snorri.nonterminals.NounPhrase;
@@ -32,17 +33,19 @@ public class Grammar {
 		rules.add(new Rule(new Object[] {IntransVerb.class, SuffixPronoun.class}, Statement.class));
 		
 		rules.add(new Rule(new Object[] {Noun.class}, NounPhrase.class));
-		rules.add(new Rule(new Object[] {Noun.class, PrepPhrase.class}, NounPhrase.class)); //this rule is lowest priority
 		rules.add(new Rule(new Object[] {Noun.class, NounPhrase.class}, NounPhrase.class));
+		rules.add(new Rule(new Object[] {Noun.class, SuffixPronoun.class}, NounPhrase.class));
 		
 		rules.add(new Rule(new Object[] {Prep.class, NounPhrase.class}, PrepPhrase.class));
 		rules.add(new Rule(new Object[] {Prep.class, SuffixPronoun.class}, PrepPhrase.class));
 		
 //		TODO: figure out how to do this in a nice way? add information to the event?
 //		have a "location" associated with the SpellEvent
+//		prepositional phrases are only adverbial
 		
-		rules.add(new Rule(new Object[] {PrepPhrase.class, Statement.class}, Statement.class));
-		rules.add(new Rule(new Object[] {PrepPhrase.class, Command.class}, Command.class));
+		rules.add(new Rule(new Object[] {Statement.class}, ModifiedSentence.class));
+		rules.add(new Rule(new Object[] {Command.class}, ModifiedSentence.class));
+		rules.add(new Rule(new Object[] {ModifiedSentence.class, PrepPhrase.class}, ModifiedSentence.class));
 		
 		System.out.println("CFG with " + rules.size() + " high-level rules loaded");
 		

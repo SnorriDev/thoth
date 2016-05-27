@@ -6,10 +6,6 @@ import snorri.nonterminals.TransVerb;
 
 public abstract class VerbDef extends Definition {
 	
-//	public enum Mood {
-//		INDICATIVE, IMPERATIVE;
-//	}
-	
 	public VerbDef(boolean trans) {
 		super(trans ? TransVerb.class : IntransVerb.class);
 	}
