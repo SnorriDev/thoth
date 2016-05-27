@@ -4,10 +4,11 @@ import java.awt.Graphics;
 
 import snorri.main.GameWindow;
 import snorri.main.Main;
+import snorri.semantics.Nominal;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Entity {
+public class Entity implements Nominal {
 		
 	protected Vector pos;
 	protected int r;
@@ -87,6 +88,11 @@ public class Entity {
 	
 	public void renderAround(GameWindow g, Graphics gr) {
 		renderHitbox(g, gr);
+	}
+
+	public Object get(AbstractSemantics attr) {
+		// TODO Implement genitive like behavior here
+		return null;
 	}
 
 }

@@ -31,10 +31,7 @@ public class World {
 		//TODO: update all the entities
 		
 		for (Collider p : colliders) {
-			
-			//handle the fact that colliders can be deleted here?
-			//or queue them for deletion.. (this is better)
-			
+						
 			p.update(this, f);
 			
 			Entity hit = col.getFirstCollision(p);

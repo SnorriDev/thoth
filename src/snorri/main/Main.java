@@ -50,9 +50,7 @@ public class Main {
 							
 		window = new GameWindow(world, new Player(new Vector(50, 50)));
 		world.add(window.getFocus()); //the player
-		
-		world.getEntityTree().traverse();
-		
+				
 		frame = new JFrame("Spoken Word");
 		frame.getContentPane().add(window, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

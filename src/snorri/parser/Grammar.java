@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
+import snorri.nonterminals.AbstractNoun;
 import snorri.nonterminals.Command;
 import snorri.nonterminals.IntransVerb;
 import snorri.nonterminals.ModifiedSentence;
@@ -23,6 +24,7 @@ public class Grammar {
 	private static ArrayList<Rule> rules;
 	
 	static {
+		
 		rules = new ArrayList<Rule>();
 		
 		rules.add(new Rule(new Object[] {Command.class, "jr", Statement.class}, Command.class));
@@ -32,16 +34,13 @@ public class Grammar {
 		rules.add(new Rule(new Object[] {TransVerb.class, SuffixPronoun.class, NounPhrase.class}, Statement.class));
 		rules.add(new Rule(new Object[] {IntransVerb.class, SuffixPronoun.class}, Statement.class));
 		
+		rules.add(new Rule(new Object[] {AbstractNoun.class}, NounPhrase.class));
 		rules.add(new Rule(new Object[] {Noun.class}, NounPhrase.class));
-		rules.add(new Rule(new Object[] {Noun.class, NounPhrase.class}, NounPhrase.class));
-		rules.add(new Rule(new Object[] {Noun.class, SuffixPronoun.class}, NounPhrase.class));
+		rules.add(new Rule(new Object[] {AbstractNoun.class, NounPhrase.class}, NounPhrase.class));
+		rules.add(new Rule(new Object[] {AbstractNoun.class, SuffixPronoun.class}, NounPhrase.class));
 		
 		rules.add(new Rule(new Object[] {Prep.class, NounPhrase.class}, PrepPhrase.class));
 		rules.add(new Rule(new Object[] {Prep.class, SuffixPronoun.class}, PrepPhrase.class));
-		
-//		TODO: figure out how to do this in a nice way? add information to the event?
-//		have a "location" associated with the SpellEvent
-//		prepositional phrases are only adverbial
 		
 		rules.add(new Rule(new Object[] {Statement.class}, ModifiedSentence.class));
 		rules.add(new Rule(new Object[] {Command.class}, ModifiedSentence.class));
