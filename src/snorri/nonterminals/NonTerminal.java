@@ -6,7 +6,8 @@ import snorri.parser.Node;
 
 public abstract class NonTerminal implements Node {
 
-	private List<Node> children;
+	protected List<Node> children;
+	
 	public void setChildren(List<Node> children) {
 		this.children = children;
 	}
