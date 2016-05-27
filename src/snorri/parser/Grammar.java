@@ -12,7 +12,6 @@ import snorri.nonterminals.Noun;
 import snorri.nonterminals.NounPhrase;
 import snorri.nonterminals.Prep;
 import snorri.nonterminals.PrepPhrase;
-import snorri.nonterminals.ObjectPronoun;
 import snorri.nonterminals.Statement;
 import snorri.nonterminals.SuffixPronoun;
 import snorri.nonterminals.TransVerb;
@@ -33,11 +32,11 @@ public class Grammar {
 		rules.add(new Rule(new Object[] {IntransVerb.class, SuffixPronoun.class}, Statement.class));
 		
 		rules.add(new Rule(new Object[] {Noun.class}, NounPhrase.class));
-		rules.add(new Rule(new Object[] {ObjectPronoun.class}, NounPhrase.class));
 		rules.add(new Rule(new Object[] {Noun.class, PrepPhrase.class}, NounPhrase.class)); //this rule is lowest priority
 		rules.add(new Rule(new Object[] {Noun.class, NounPhrase.class}, NounPhrase.class));
 		
 		rules.add(new Rule(new Object[] {Prep.class, NounPhrase.class}, PrepPhrase.class));
+		rules.add(new Rule(new Object[] {Prep.class, SuffixPronoun.class}, PrepPhrase.class));
 		
 //		TODO: figure out how to do this in a nice way? add information to the event?
 //		have a "location" associated with the SpellEvent
@@ -74,8 +73,11 @@ public class Grammar {
 	//create tree of nonterminals recursively by matching ltr
 	//really not efficiently written
 	public static Node parseRec(List<Node> nodes) throws InstantiationException, IllegalAccessException {
-		if (nodes.size() == 1) //parses all objects
+	
+		if (nodes.size() == 1) { //parses all objects
 			return nodes.get(0);
+		}
+		
 		for (int i = 0; i < nodes.size(); i++) {
 			for (int j = nodes.size(); j >= i + 1; j--) {
 				for (Rule rule : rules) { //can store rules by length to be more efficient and add argument
