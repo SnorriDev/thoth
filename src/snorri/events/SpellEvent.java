@@ -6,9 +6,9 @@ import snorri.world.World;
 
 public class SpellEvent {
 
-	private Entity firstPerson; //the player who is the source of the spell
-	private Entity secondPerson; //the entity who is the focus of the spell
-	private Entity thirdPerson; //the target of the spell
+	private Entity firstPerson; //the player
+	private Entity secondPerson; //the focus of the spell
+	private Entity thirdPerson; //the "target" of the spell
 	
 	private World world;
 	

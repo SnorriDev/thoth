@@ -6,12 +6,15 @@ import snorri.nonterminals.TransVerb;
 
 public abstract class VerbDef extends Definition {
 	
+	protected SpellEvent e;
+	
 	public VerbDef(boolean trans) {
 		super(trans ? TransVerb.class : IntransVerb.class);
 	}
 
 	@Override
 	public Object getMeaning(SpellEvent e) {
+		this.e = e;
 		return this;
 	}
 		

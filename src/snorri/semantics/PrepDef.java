@@ -5,8 +5,7 @@ import snorri.nonterminals.Prep;
 
 public abstract class PrepDef extends Definition {
 	
-	@SuppressWarnings("unused")
-	private SpellEvent unmodified;
+	protected SpellEvent e;
 	
 	public PrepDef() {
 		super(Prep.class);
@@ -14,7 +13,7 @@ public abstract class PrepDef extends Definition {
 
 	@Override
 	public Object getMeaning(SpellEvent e) {
-		unmodified = new SpellEvent(e);
+		this.e = new SpellEvent(e);
 		return this;
 	}
 		

@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import snorri.nonterminals.AbstractNoun;
 import snorri.nonterminals.Command;
 import snorri.nonterminals.IntransVerb;
-import snorri.nonterminals.ModifiedSentence;
+import snorri.nonterminals.Sentence;
 import snorri.nonterminals.NonTerminal;
 import snorri.nonterminals.Noun;
 import snorri.nonterminals.NounPhrase;
@@ -27,12 +27,12 @@ public class Grammar {
 		
 		rules = new ArrayList<Rule>();
 		
+		rules.add(new Rule(new Object[] {TransVerb.class, SuffixPronoun.class, NounPhrase.class}, Statement.class));
+		rules.add(new Rule(new Object[] {IntransVerb.class, SuffixPronoun.class}, Statement.class));
+		
 		rules.add(new Rule(new Object[] {Command.class, "jr", Statement.class}, Command.class));
 		rules.add(new Rule(new Object[] {TransVerb.class, NounPhrase.class}, Command.class));
 		rules.add(new Rule(new Object[] {IntransVerb.class}, Command.class));
-
-		rules.add(new Rule(new Object[] {TransVerb.class, SuffixPronoun.class, NounPhrase.class}, Statement.class));
-		rules.add(new Rule(new Object[] {IntransVerb.class, SuffixPronoun.class}, Statement.class));
 		
 		rules.add(new Rule(new Object[] {AbstractNoun.class}, NounPhrase.class));
 		rules.add(new Rule(new Object[] {Noun.class}, NounPhrase.class));
@@ -42,11 +42,15 @@ public class Grammar {
 		rules.add(new Rule(new Object[] {Prep.class, NounPhrase.class}, PrepPhrase.class));
 		rules.add(new Rule(new Object[] {Prep.class, SuffixPronoun.class}, PrepPhrase.class));
 		
-		rules.add(new Rule(new Object[] {Statement.class}, ModifiedSentence.class));
-		rules.add(new Rule(new Object[] {Command.class}, ModifiedSentence.class));
-		rules.add(new Rule(new Object[] {ModifiedSentence.class, PrepPhrase.class}, ModifiedSentence.class));
+		rules.add(new Rule(new Object[] {Statement.class}, Sentence.class));
+		rules.add(new Rule(new Object[] {Command.class}, Sentence.class));
+		rules.add(new Rule(new Object[] {Sentence.class, PrepPhrase.class}, Sentence.class));
 		
 		System.out.println("CFG with " + rules.size() + " high-level rules loaded");
+		
+	}
+	
+	public static void loadLexicon() {
 		
 		for (Entry<String, Definition> e : Lexicon.getAllTerminals()) {
 			rules.add(new Rule(new Object[] {e.getKey()}, e.getValue().getPOS()));
@@ -59,9 +63,11 @@ public class Grammar {
 	public static Node parseString(String input) {
 		List<String> raw = Arrays.asList(input.split(" +|\\.|="));
 		List<Node> result = new ArrayList<Node>();
-		for (int i = 0; i < raw.size(); i++)
-			if (! raw.get(i).equals(""))
+		for (int i = 0; i < raw.size(); i++) {
+			if (! raw.get(i).equals("")) {
 				result.add(new Terminal(raw.get(i)));
+			}
+		}
 		try {
 			return parseRec(result);
 		} catch (InstantiationException e) {
@@ -76,7 +82,7 @@ public class Grammar {
 	//really not efficiently written
 	public static Node parseRec(List<Node> nodes) throws InstantiationException, IllegalAccessException {
 	
-		if (nodes.size() == 1) { //parses all objects
+		if (nodes.size() == 1 && nodes.get(0) instanceof Sentence) {
 			return nodes.get(0);
 		}
 		
@@ -85,21 +91,29 @@ public class Grammar {
 				for (Rule rule : rules) { //can store rules by length to be more efficient and add argument
 					Class<? extends NonTerminal> fit = rule.fits(nodes.subList(i, j));
 					if (fit != null) {
-												
-						//some weird shit going on here with indices
-						//should be resolved with copying
+																		
 						int size = nodes.size();
 						NonTerminal nonTerm = fit.newInstance();
 						nonTerm.setChildren(nodes.subList(i, j));
 						List<Node> result = new ArrayList<Node>(nodes.subList(0, i));
 						result.add(nonTerm);
-						if (j < size)
-							result.addAll(new ArrayList<Node>(nodes.subList(j, size)));
-						return parseRec(result);
+						result.addAll(new ArrayList<Node>(nodes.subList(j, size)));
+						Node parse = parseRec(result);
+						
+						if (parse == null) {
+							continue;
+						}
+						
+						return parse;
 					}
 				}
 			}
 		}
+		
+		if (nodes.size() == 1) { //we have a sentence fragment
+			return nodes.get(0);
+		}
+		
 		return null;
 	}
 	

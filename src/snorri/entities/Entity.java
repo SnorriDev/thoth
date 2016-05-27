@@ -81,7 +81,7 @@ public class Entity implements Nominal {
 		gr.drawOval(rel.getX() - r + g.getBounds().width / 2, rel.getY() - r + g.getBounds().height / 2, 2 * r, 2 * r);
 	}
 	
-	//returns true if the two entities are spatially equal
+	//returns true if the two entities are spatially equivalent
 	public boolean equals(Entity e) {
 		return e.pos.equals(pos) && e.r == r;
 	}

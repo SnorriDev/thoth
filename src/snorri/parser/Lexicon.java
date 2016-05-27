@@ -5,23 +5,26 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import snorri.nonterminals.AbstractNoun;
 import snorri.nonterminals.Noun;
 import snorri.nonterminals.Prep;
-import snorri.nonterminals.TransVerb;
 import snorri.semantics.Definition;
 import snorri.semantics.FirstObjectPronoun;
 import snorri.semantics.FirstSuffixPronoun;
+import snorri.semantics.Move;
+import snorri.semantics.Nominal.AbstractSemantics;
 import snorri.semantics.SecondObjectPronoun;
 import snorri.semantics.SecondSuffixPronoun;
 import snorri.semantics.StaticDef;
 import snorri.semantics.ThirdObjectPronoun;
 import snorri.semantics.ThirdSuffixPronoun;
+import snorri.semantics.Walk;
 
 public class Lexicon {
 	
 	private static Map<String, Definition> lexicon;
 	
-	static {
+	public static void init() {
 		
 		lexicon = new HashMap<String, Definition>();
 		
@@ -47,12 +50,23 @@ public class Lexicon {
 		lexicon.put("sw", new ThirdObjectPronoun());
 		lexicon.put("sy", new ThirdObjectPronoun());
 		lexicon.put("s", new ThirdObjectPronoun());
-		lexicon.put("st", new ThirdObjectPronoun());
+		
+		//Abstract Nouns
+		lexicon.put("st", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
+		lexicon.put("iry", new StaticDef(AbstractNoun.class, AbstractSemantics.WEAPON));
+		lexicon.put("pr", new StaticDef(AbstractNoun.class, AbstractSemantics.TILE));
+		lexicon.put("rn", new StaticDef(AbstractNoun.class, AbstractSemantics.NAME));
 		
 		//Verbs
-		lexicon.put("mAA", new StaticDef(TransVerb.class, null)); //see
-		lexicon.put("sDm", new StaticDef(TransVerb.class, null)); //hear
-				
+		lexicon.put("in", new Move());
+		lexicon.put("ini", new Move());
+		lexicon.put("ms", new Move());
+		lexicon.put("xpi", new Walk());
+//		lexicon.put("mAA", new StaticDef(TransVerb.class, null)); //see
+//		lexicon.put("sDm", new StaticDef(TransVerb.class, null)); //hear
+		
+		Grammar.loadLexicon();
+		
 	}
 	
 	public static Definition lookup(String form) {

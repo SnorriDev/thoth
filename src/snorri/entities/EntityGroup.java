@@ -301,6 +301,12 @@ public class EntityGroup extends Entity {
 		insert(e);
 	}
 	
+	public void teleportTo(Entity e, Vector pos) {
+		delete(e);
+		e.pos = pos.copy();
+		insert(e);
+	}
+	
 	public Entity getFirstCollision(Collider c) {
 		
 		for (Entity child : entities) { //TODO: use this iterator syntax elsewhere
