@@ -1,11 +1,13 @@
 package snorri.semantics;
 
+import snorri.world.World;
+
 public interface Nominal {
 
 	public enum AbstractSemantics implements Nominal {
 		POSITION, WEAPON, TILE, NAME;
 
-		public Object get(AbstractSemantics attr) {
+		public Object get(World world, AbstractSemantics attr) {
 			
 			if (attr == NAME) {
 				return this.toString();
@@ -15,6 +17,6 @@ public interface Nominal {
 		}
 	}
 	
-	public Object get(AbstractSemantics attr);
+	public Object get(World world, AbstractSemantics attr);
 	
 }

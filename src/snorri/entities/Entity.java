@@ -90,8 +90,15 @@ public class Entity implements Nominal {
 		renderHitbox(g, gr);
 	}
 
-	public Object get(AbstractSemantics attr) {
-		// TODO Implement genitive like behavior here
+	public Object get(World world, AbstractSemantics attr) {
+		
+		if (attr == AbstractSemantics.POSITION) {
+			return pos;
+		}
+		if (attr == AbstractSemantics.TILE) {
+			return world.getLevel().getTile(pos);
+		}
+		
 		return null;
 	}
 

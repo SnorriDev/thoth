@@ -21,6 +21,10 @@ public class Level {
 		return map[x / Tile.WIDTH][y / Tile.WIDTH];
 	}
 	
+	public Tile getTile(Vector v) {
+		return getTile(v.getX(), v.getY());
+	}
+	
 	public Vector getDimensions() {
 		return dim;
 	}

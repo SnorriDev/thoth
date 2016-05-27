@@ -12,7 +12,7 @@ public class NounPhrase extends NonTerminal {
 			return children.get(0).getMeaning(e);
 		}
 		
-		return ((Nominal) children.get(1).getMeaning(e)).get((AbstractSemantics) children.get(0).getMeaning(e));
+		return ((Nominal) children.get(1).getMeaning(e)).get(e.getWorld(), (AbstractSemantics) children.get(0).getMeaning(e));
 		
 	}
 

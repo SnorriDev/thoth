@@ -2,6 +2,7 @@ package snorri.events;
 
 import snorri.entities.Entity;
 import snorri.world.Vector;
+import snorri.world.World;
 
 public class SpellEvent {
 
@@ -9,13 +10,16 @@ public class SpellEvent {
 	private Entity secondPerson; //the entity who is the focus of the spell
 	private Entity thirdPerson; //the target of the spell
 	
+	private World world;
+	
 	private Vector loc; //the position in which or at which the spell is occuring
 	private Vector dest; //the "target" position of the spell
 	
-	public SpellEvent(Entity firstPerson, Entity secondPerson, Entity thirdPerson) {
+	public SpellEvent(Entity firstPerson, Entity secondPerson, Entity thirdPerson, World world) {
 		this.firstPerson = firstPerson;
 		this.secondPerson = secondPerson;
 		this.thirdPerson = thirdPerson;
+		this.world = world;
 		loc = firstPerson.getPos().copy();
 		dest = thirdPerson.getPos().copy();
 	}
@@ -26,6 +30,10 @@ public class SpellEvent {
 		thirdPerson = e.thirdPerson;
 		loc = e.loc.copy();
 		dest = e.dest.copy();
+	}
+	
+	public World getWorld() {
+		return world;
 	}
 	
 	public Entity getFirstPerson() {
