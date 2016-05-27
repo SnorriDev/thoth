@@ -10,6 +10,7 @@ import snorri.nonterminals.InflIntransVerb;
 import snorri.nonterminals.InflMorpheme;
 import snorri.nonterminals.InflTransVerb;
 import snorri.nonterminals.IntransVerb;
+import snorri.nonterminals.NonTerminal;
 import snorri.nonterminals.Noun;
 import snorri.nonterminals.NounPhrase;
 import snorri.nonterminals.Prep;
@@ -19,6 +20,7 @@ import snorri.nonterminals.Sentence;
 import snorri.nonterminals.Statement;
 import snorri.nonterminals.TransVerb;
 import snorri.nonterminals.VerbPhrase;
+import snorri.semantics.Definition;
 
 public class Grammar {
 

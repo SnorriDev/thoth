@@ -1,7 +1,6 @@
 package snorri.nonterminals;
 
 import snorri.events.SpellEvent;
-import snorri.parser.NonTerminal;
 
 public class Sentence extends NonTerminal {
 

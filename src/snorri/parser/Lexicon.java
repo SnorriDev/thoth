@@ -8,6 +8,7 @@ import java.util.Set;
 import snorri.nonterminals.Noun;
 import snorri.nonterminals.Prep;
 import snorri.nonterminals.TransVerb;
+import snorri.semantics.Definition;
 import snorri.semantics.StaticDef;
 
 public class Lexicon {

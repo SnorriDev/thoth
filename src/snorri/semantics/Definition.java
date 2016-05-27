@@ -1,6 +1,7 @@
-package snorri.parser;
+package snorri.semantics;
 
 import snorri.events.SpellEvent;
+import snorri.nonterminals.NonTerminal;
 
 public abstract class Definition {
 

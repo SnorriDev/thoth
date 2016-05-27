@@ -1,6 +1,8 @@
-package snorri.parser;
+package snorri.nonterminals;
 
 import java.util.List;
+
+import snorri.parser.Node;
 
 public abstract class NonTerminal implements Node {
 

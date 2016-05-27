@@ -1,8 +1,7 @@
 package snorri.semantics;
 
 import snorri.events.SpellEvent;
-import snorri.parser.Definition;
-import snorri.parser.NonTerminal;
+import snorri.nonterminals.NonTerminal;
 
 public class StaticDef extends Definition {
 

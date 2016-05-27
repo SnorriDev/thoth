@@ -2,6 +2,8 @@ package snorri.parser;
 
 import java.util.List;
 
+import snorri.nonterminals.NonTerminal;
+
 public class Rule {
 
 	private Object[] specs;
