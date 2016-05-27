@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
+import snorri.main.Main;
 import snorri.nonterminals.AbstractNoun;
 import snorri.nonterminals.Command;
 import snorri.nonterminals.IntransVerb;
@@ -46,7 +47,7 @@ public class Grammar {
 		rules.add(new Rule(new Object[] {Command.class}, Sentence.class));
 		rules.add(new Rule(new Object[] {Sentence.class, PrepPhrase.class}, Sentence.class));
 		
-		System.out.println("CFG with " + rules.size() + " high-level rules loaded");
+		Main.log("CFG with " + rules.size() + " high-level rules loaded");
 		
 	}
 	
@@ -56,7 +57,7 @@ public class Grammar {
 			rules.add(new Rule(new Object[] {e.getKey()}, e.getValue().getPOS()));
 		}
 		
-		System.out.println("Lexicon with " + Lexicon.getAllTerminals().size() + " definitions loaded");
+		Main.log("Lexicon with " + Lexicon.getAllTerminals().size() + " definitions loaded");
 		
 	}
 	
@@ -79,7 +80,6 @@ public class Grammar {
 	}
 	
 	//create tree of nonterminals recursively by matching ltr
-	//really not efficiently written
 	public static Node parseRec(List<Node> nodes) throws InstantiationException, IllegalAccessException {
 	
 		if (nodes.size() == 1 && nodes.get(0) instanceof Sentence) {

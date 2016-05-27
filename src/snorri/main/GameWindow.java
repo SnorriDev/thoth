@@ -84,6 +84,10 @@ public class GameWindow extends JPanel implements KeyListener {
 		return focus;
 	}
 	
+	public World getWorld() {
+		return world;
+	}
+	
 	public Vector getMousePos() {
 		Vector origin = new Vector(getLocationOnScreen());
 		origin.add((new Vector(getBounds())).divide(2));		

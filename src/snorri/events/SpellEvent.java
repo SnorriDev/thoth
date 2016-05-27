@@ -1,43 +1,40 @@
 package snorri.events;
 
 import snorri.entities.Entity;
+import snorri.main.GameWindow;
 import snorri.world.Vector;
 import snorri.world.World;
 
 public class SpellEvent {
 
-	private Entity firstPerson; //the player
-	private Entity secondPerson; //the focus of the spell
-	private Entity thirdPerson; //the "target" of the spell
-	
-	private World world;
+	private GameWindow window; //used to retrieve first, third, and world
+	private Entity secondPerson; //the entity being affected by the spell
 	
 	private Vector loc; //the position in which or at which the spell is occuring
 	private Vector dest; //the "target" position of the spell
 	
-	public SpellEvent(Entity firstPerson, Entity secondPerson, Entity thirdPerson, World world) {
-		this.firstPerson = firstPerson;
+	public SpellEvent(GameWindow window, Entity secondPerson) {
 		this.secondPerson = secondPerson;
-		this.thirdPerson = thirdPerson;
-		this.world = world;
-		loc = firstPerson.getPos().copy();
-		dest = thirdPerson.getPos().copy();
+		this.window = window;
+		
+		loc = getFirstPerson().getPos().copy();
+		dest = getThirdPerson().getPos().copy();
 	}
 	
 	public SpellEvent(SpellEvent e) {
-		firstPerson = e.firstPerson;
 		secondPerson = e.secondPerson;
-		thirdPerson = e.thirdPerson;
+		window = e.window;
+		
 		loc = e.loc.copy();
 		dest = e.dest.copy();
 	}
 	
 	public World getWorld() {
-		return world;
+		return window.getWorld();
 	}
 	
 	public Entity getFirstPerson() {
-		return firstPerson;
+		return window.getFocus();
 	}
 	
 	public Entity getSecondPerson() {
@@ -45,7 +42,7 @@ public class SpellEvent {
 	}
 	
 	public Entity getThirdPerson() {
-		return thirdPerson;
+		return new Entity(window.getMousePos());
 	}
 	
 	public Vector getLocative() {

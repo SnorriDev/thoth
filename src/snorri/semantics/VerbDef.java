@@ -14,7 +14,7 @@ public abstract class VerbDef extends Definition {
 
 	@Override
 	public Object getMeaning(SpellEvent e) {
-		this.e = e;
+		this.e = e; //don't modify this
 		return this;
 	}
 		
