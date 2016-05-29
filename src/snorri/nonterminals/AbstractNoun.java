@@ -1,5 +1,5 @@
 package snorri.nonterminals;
 
-public class AbstractNoun extends LowNonTerminal {
+public class AbstractNoun extends SemiTerminal {
 	
 }

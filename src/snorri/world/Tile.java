@@ -1,22 +1,30 @@
 package snorri.world;
 
-public enum Tile {
+import snorri.semantics.Nominal;
 
-	SAND(0, true),
-	WALL(1, false);
+public enum Tile implements Nominal {
+
+	SAND(true),
+	WALL(false),
+	TREE(false),
+	LILY(true);
+	
+	//TODO: pass an array of textures for each one
 	
 	public static final int WIDTH = 32;
 		
-	private int id;
 	private boolean pathable;
 	
-	Tile(int id, boolean pathable) {
-		this.id = id;
+	Tile(boolean pathable) {
 		this.pathable = pathable;
 	}
 	
+	public static Tile byId(int id) {
+		return values()[id];
+	}
+	
 	public int getId() {
-		return id;
+		return this.ordinal();
 	}
 	
 	public boolean isPathable() {

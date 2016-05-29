@@ -98,17 +98,34 @@ public class EntityGroup extends Entity {
 		r = p1.distance(pos) + Integer.max(e3.r, Integer.max(e1.r, e2.r));
 		
 	}
+	
 	private Iterator<Entity> getChildren() {
 		return entities.iterator();
+	}
+	
+	public ArrayList<Entity> getAllEntities() {
+		ArrayList<Entity> res = new ArrayList<Entity>();
+		for (Entity e : entities) {
+			if (e instanceof EntityGroup) {
+				res.addAll(((EntityGroup) e).getAllEntities());
+				continue;
+			}
+			res.add(e);
+		}
+		return res;
+	}
+	
+	//sadly, doing it this inefficient way is the only way to ensure uniform distribution
+	public Entity getRandomEntity() {
+		ArrayList<Entity> all = getAllEntities();
+		return all.get((int) (Math.random() * all.size()));
 	}
 	
 	//blind-add an entity to the group
 	//adjust average
 	private void add(Entity n) {		
-			
 		entities.add(n);
 		setEnclosing();
-		
 	}
 	
 	//blind-remove an entity from group

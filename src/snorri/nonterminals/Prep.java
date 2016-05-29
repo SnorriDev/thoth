@@ -1,5 +1,5 @@
 package snorri.nonterminals;
 
-public class Prep extends LowNonTerminal {
+public class Prep extends SemiTerminal {
 
 }

@@ -1,5 +1,5 @@
 package snorri.nonterminals;
 
-public class IntransVerb extends LowNonTerminal {
+public class IntransVerb extends SemiTerminal {
 
 }

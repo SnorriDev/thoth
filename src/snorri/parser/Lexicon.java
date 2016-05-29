@@ -20,22 +20,33 @@ import snorri.semantics.StaticDef;
 import snorri.semantics.ThirdObjectPronoun;
 import snorri.semantics.ThirdSuffixPronoun;
 import snorri.semantics.Walk;
+import snorri.world.Tile;
 
 public class Lexicon {
 	
 	private static Map<String, Definition> lexicon;
+	
+	//TODO: allow duplicate definitions? hash by String, POS
+	//TODO: definitionSet
 	
 	public static void init() {
 		
 		lexicon = new HashMap<String, Definition>();
 		
 		//Prepositions
-		lexicon.put("r", new StaticDef(Prep.class, null)); //to (pos)
-		lexicon.put("n", new StaticDef(Prep.class, null)); //to (ent)
-		lexicon.put("m", new StaticDef(Prep.class, null)); //in/at
+		lexicon.put("r", new StaticDef(Prep.class, null)); //to
+		lexicon.put("m", new StaticDef(Prep.class, null)); //in
+		lexicon.put("Xr", new StaticDef(Prep.class, null)); //under
+		lexicon.put("tp", new StaticDef(Prep.class, null)); //above
+		lexicon.put("HA", new StaticDef(Prep.class, null)); //behind
+		lexicon.put("xft", new StaticDef(Prep.class, null)); //in front of
+		//lexicon.put("in", new StaticDef(Prep.class, null)); //by (is this the locative "near" sense)?
+		
+		//TODO: add semantics for these prepositions
 		
 		//Nouns
-		lexicon.put("jAm", new StaticDef(Noun.class, null)); //tree
+		lexicon.put("jAm", new StaticDef(Noun.class, Tile.TREE)); //tree
+		lexicon.put("ssn", new StaticDef(Noun.class, Tile.LILY)); //flower
 		
 		//Suffix Pronouns
 		lexicon.put("i", new FirstSuffixPronoun());
@@ -76,7 +87,7 @@ public class Lexicon {
 			return lexicon.get(form);
 		return null;
 	}
-	
+		
 	public static Set<Entry<String, Definition>> getAllTerminals() {
 		return lexicon.entrySet();
 	}

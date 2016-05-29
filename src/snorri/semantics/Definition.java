@@ -1,18 +1,24 @@
 package snorri.semantics;
 
 import snorri.events.SpellEvent;
-import snorri.nonterminals.NonTerminal;
+import snorri.nonterminals.SemiTerminal;
 
 public abstract class Definition {
 
-	private Class<? extends NonTerminal> partOfSpeech;
+	//maybe we can pass a type parameter here
 	
-	public Definition(Class<? extends NonTerminal> partOfSpeech) {
+	private Class<? extends SemiTerminal> partOfSpeech;
+	
+	public Definition(Class<? extends SemiTerminal> partOfSpeech) {
 		this.partOfSpeech = partOfSpeech;
 	}
 	
-	public Class<? extends NonTerminal> getPOS() {
+	public Class<? extends SemiTerminal> getPOS() {
 		return partOfSpeech;
+	}
+	
+	public boolean isPOS(Class<? extends SemiTerminal> c) {
+		return c.equals(partOfSpeech);
 	}
 	
 	public abstract Object getMeaning(SpellEvent e);

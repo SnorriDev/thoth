@@ -1,5 +1,5 @@
 package snorri.nonterminals;
 
-public class SuffixPronoun extends LowNonTerminal {
+public class SuffixPronoun extends SemiTerminal {
 
 }
