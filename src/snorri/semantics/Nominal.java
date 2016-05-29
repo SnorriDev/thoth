@@ -6,17 +6,16 @@ public interface Nominal {
 
 	public enum AbstractSemantics implements Nominal {
 		POSITION, WEAPON, TILE, NAME;
-
-		public Object get(World world, AbstractSemantics attr) {
-			
-			if (attr == NAME) {
-				return this.toString();
-			}
-			
-			return null;
-		}
 	}
-	
-	public Object get(World world, AbstractSemantics attr);
+
+	default Object get(World world, AbstractSemantics attr) {
+		
+		if (attr == AbstractSemantics.NAME) {
+			return toString();
+		}
+		
+		return null;
+		
+	}
 	
 }

@@ -90,6 +90,7 @@ public class Entity implements Nominal {
 		renderHitbox(g, gr);
 	}
 
+	@Override
 	public Object get(World world, AbstractSemantics attr) {
 		
 		if (attr == AbstractSemantics.POSITION) {
@@ -97,6 +98,9 @@ public class Entity implements Nominal {
 		}
 		if (attr == AbstractSemantics.TILE) {
 			return world.getLevel().getTile(pos);
+		}
+		if (attr == AbstractSemantics.NAME) {
+			return toString();
 		}
 		
 		return null;
