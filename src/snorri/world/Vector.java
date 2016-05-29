@@ -80,7 +80,7 @@ public class Vector {
 	}
 	
 	public boolean notInPlane() {
-		return Double.isNaN(x) || Double.isNaN(y);
+		return Double.isNaN(x) || Double.isNaN(y) || Double.isInfinite(x) || Double.isInfinite(y);
 	}
 	
 	public Vector copy() {

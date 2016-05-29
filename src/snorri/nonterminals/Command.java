@@ -9,9 +9,9 @@ public class Command extends NonTerminal {
 		
 		switch (children.size()) {
 		case 1:
-			return ((VerbDef) children.get(0)).exec(null);
+			return ((VerbDef) children.get(0).getMeaning(e)).exec(null);
 		case 2:
-			return ((VerbDef) children.get(0)).exec(children.get(1).getMeaning(e));
+			return ((VerbDef) children.get(0).getMeaning(e)).exec(children.get(1).getMeaning(e));
 		default:
 			if ((Boolean) children.get(2).getMeaning(e)) {
 				return children.get(0).getMeaning(e);

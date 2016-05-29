@@ -295,16 +295,30 @@ public class EntityGroup extends Entity {
 		
 	}
 	
-	public void move(Entity e, Vector trans) {
+	public boolean move(Entity e, Vector trans) {
+		
+		if (trans.notInPlane()) {
+			return false;
+		}
+		
 		delete(e);
 		e.pos.add(trans);
 		insert(e);
+		return true;
+		
 	}
 	
-	public void teleportTo(Entity e, Vector pos) {
+	public boolean teleportTo(Entity e, Vector pos) {
+		
+		if (pos.notInPlane()) {
+			return false;
+		}
+		
 		delete(e);
 		e.pos = pos.copy();
 		insert(e);
+		return true;
+		
 	}
 	
 	public Entity getFirstCollision(Collider c) {

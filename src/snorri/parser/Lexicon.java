@@ -8,6 +8,7 @@ import java.util.Set;
 import snorri.nonterminals.AbstractNoun;
 import snorri.nonterminals.Noun;
 import snorri.nonterminals.Prep;
+import snorri.semantics.Be;
 import snorri.semantics.Definition;
 import snorri.semantics.FirstObjectPronoun;
 import snorri.semantics.FirstSuffixPronoun;
@@ -62,6 +63,7 @@ public class Lexicon {
 		lexicon.put("ini", new Move());
 		lexicon.put("ms", new Move());
 		lexicon.put("xpi", new Walk());
+		lexicon.put("iw", new Be());
 //		lexicon.put("mAA", new StaticDef(TransVerb.class, null)); //see
 //		lexicon.put("sDm", new StaticDef(TransVerb.class, null)); //hear
 		

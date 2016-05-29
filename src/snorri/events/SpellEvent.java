@@ -42,7 +42,7 @@ public class SpellEvent {
 	}
 	
 	public Entity getThirdPerson() {
-		return new Entity(window.getMousePos());
+		return new Entity(window.getMousePosAbsolute());
 	}
 	
 	public Vector getLocative() {

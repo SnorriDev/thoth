@@ -11,9 +11,8 @@ public class Walk extends VerbDef {
 
 	@Override
 	public boolean exec(Object obj) {
-		Vector trans = e.getDestination().copy().sub(e.getSecondPerson().getPos()).normalize();
-		e.getWorld().getEntityTree().move(e.getSecondPerson(), trans);
-		return true;
+		Vector trans = e.getDestination().copy().sub(e.getSecondPerson().getPos()).normalize();		
+		return e.getWorld().getEntityTree().move(e.getSecondPerson(), trans);
 	}
 
 	//TODO: track if something is moving better

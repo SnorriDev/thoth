@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Date;
 
 import javax.swing.JPanel;
@@ -13,12 +15,14 @@ import javax.swing.SwingWorker;
 import snorri.entities.Entity;
 import snorri.entities.Projectile;
 import snorri.entities.Unit;
+import snorri.events.SpellEvent;
 import snorri.keyboard.Key;
 import snorri.keyboard.KeyStates;
+import snorri.parser.Spell;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class GameWindow extends JPanel implements KeyListener {
+public class GameWindow extends JPanel implements KeyListener, MouseListener {
 
 	
 	/**
@@ -38,6 +42,7 @@ public class GameWindow extends JPanel implements KeyListener {
 		this.focus = focus;
 		states = new KeyStates();
 		addKeyListener(this);
+		addMouseListener(this);
 		setFocusable(true);
 		startAnimation();
 	}
@@ -88,10 +93,20 @@ public class GameWindow extends JPanel implements KeyListener {
 		return world;
 	}
 	
-	public Vector getMousePos() {
+	/**
+	 * @return mouse position relative to the player
+	 */
+	public Vector getMousePosRelative() {
 		Vector origin = new Vector(getLocationOnScreen());
 		origin.add((new Vector(getBounds())).divide(2));		
 		return (new Vector(MouseInfo.getPointerInfo().getLocation())).sub(origin);
+	}
+	
+	/**
+	 * @return absolute mouse position
+	 */
+	public Vector getMousePosAbsolute() {
+		return getMousePosRelative().add(getFocus().getPos());
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -101,12 +116,30 @@ public class GameWindow extends JPanel implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		states.set(e.getKeyCode(), false);
 	}
-
+	
 	public void keyTyped(KeyEvent e) {
-		
+				
 		if (e.getKeyChar() == Key.SPACE.getChar()) {
-			//TODO: put this stuff in a shoot function
-			Vector dir = getMousePos().copy().normalize();
+			
+			//Debug spell casting
+			
+			Spell.cast("xpi", new SpellEvent(this, getFocus()));
+			
+		}
+		
+	}
+
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}
+
+	public void mousePressed(MouseEvent e) {
+		
+		if (e.getButton() == 1) {
+			//TODO: put this stuff in a shoot function, shoot with mouse
+			Vector dir = getMousePosRelative().copy().normalize();
 			
 			if (dir.notInPlane()) {
 				return;
@@ -115,6 +148,12 @@ public class GameWindow extends JPanel implements KeyListener {
 			world.add(new Projectile(focus, states.getMovementVector(), dir));
 		}
 		
+	}
+
+	public void mouseReleased(MouseEvent e) {		
+	}
+
+	public void mouseClicked(MouseEvent e) {
 	}
 	
 }
