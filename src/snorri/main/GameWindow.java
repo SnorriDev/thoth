@@ -120,11 +120,8 @@ public class GameWindow extends JPanel implements KeyListener, MouseListener {
 	public void keyTyped(KeyEvent e) {
 				
 		if (e.getKeyChar() == Key.SPACE.getChar()) {
-			
-			//Debug spell casting
-			
-			Spell.cast("xpi", new SpellEvent(this, getFocus()));
-			
+			//Cast a spell with space bar for debugging purposes	
+			Spell.castWTFMode("iry=i", new SpellEvent(this, getFocus()));	
 		}
 		
 	}

@@ -7,9 +7,7 @@ import javax.swing.JFrame;
 
 import snorri.entities.Entity;
 import snorri.entities.Player;
-import snorri.parser.Grammar;
 import snorri.parser.Lexicon;
-import snorri.parser.Node;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -21,10 +19,7 @@ public class Main {
 	public static void main(String[] args) {
 		
 		Lexicon.init();
-		
-		Node result = Grammar.parseString("xpi=f n=f");
-		Main.log("Parse found: " + result);
-		
+				
 		World world = new World();
 		
 		Entity a = new Entity(new Vector(105, 130));
@@ -53,6 +48,10 @@ public class Main {
 	
 	public static Rectangle getBounds() {
 		return frame.getBounds();
+	}
+	
+	public static void error(Object o) {
+		System.out.println("[ERROR] " + o);
 	}
 	
 	public static void log(String s) {
