@@ -3,6 +3,7 @@ package snorri.inventory;
 import snorri.main.Main;
 
 public class Inventory { // TODO: implement cooldown
+	
 	private Weapon weaponSlot;
 	private Armor armorSlot;
 	private Projectile[] projectileSlots;
