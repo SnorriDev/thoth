@@ -1,6 +1,5 @@
 package snorri.main;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.awt.event.KeyEvent;
@@ -79,7 +78,7 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		setBackground(Color.WHITE);
+		//setBackground(Color.WHITE);
 		world.render(this, g);
 		//TODO: function which renders everything intersecting a circle inscribing the screen
 	}
@@ -120,7 +119,7 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 				
 		if (e.getKeyChar() == Key.SPACE.getChar()) {
 			//Cast a spell with space bar for debugging purposes	
-			Spell.castWTFMode("iry=i", new SpellEvent(this, getFocus()));	
+			Spell.castWTFMode("xpi Xr=i", new SpellEvent(this, getFocus()));	
 		}
 		
 	}
