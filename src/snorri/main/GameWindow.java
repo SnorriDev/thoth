@@ -9,7 +9,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Date;
 
-import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
 import snorri.entities.Entity;
@@ -22,14 +21,14 @@ import snorri.parser.Spell;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class GameWindow extends JPanel implements KeyListener, MouseListener {
+public class GameWindow extends GamePanel implements KeyListener, MouseListener {
 
 	
 	/**
 	 * Main game window
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final int FRAME_DELTA = 50;
+	private static final int FRAME_DELTA = 30;
 	
 	private KeyStates states;
 	
@@ -41,8 +40,8 @@ public class GameWindow extends JPanel implements KeyListener, MouseListener {
 		this.world = world;
 		this.focus = focus;
 		states = new KeyStates();
-		addKeyListener(this);
 		addMouseListener(this);
+		addKeyListener(this);
 		setFocusable(true);
 		startAnimation();
 	}
