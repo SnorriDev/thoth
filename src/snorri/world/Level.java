@@ -23,6 +23,10 @@ public class Level {
 		dim = new Vector(width, height);
 	}
 	
+	public Level(String levelFileName) {
+		load(levelFileName);
+	}
+	
 	public void setTile(int x, int y, Tile t) {
 		map[x / Tile.WIDTH][y / Tile.WIDTH] = t;
 	}
@@ -54,9 +58,15 @@ public class Level {
 			is.read(b);
 			int height = ByteBuffer.wrap(b).getInt();
 			
-			for (int i = 0; i < height; i++ ) {
-				byte[] b2 = new byte[width];
-				is.read(b2);
+			dim = new Vector(width, height);
+			map = new Tile[width][height];
+			
+			byte[] b2 = new byte[2];
+			for (int i = 0; i < width; i++ ) {
+				for (int j = 0; j < height; j++ ) {
+					is.read(b2);
+					map[i][j] = new Tile(((Byte) b2[0]).intValue(), ((Byte) b2[1]).intValue());
+				}
 			}
 			
 			is.close();
@@ -81,7 +91,8 @@ public class Level {
 			
 			for (int i = 0; i < dim.getX(); i++ ) {
 				for (int j = 0; j < dim.getY(); j++ ) {
-					os.write(((byte) map[i][j].getId()) & 0xFF);
+					os.write(((byte) map[i][j].getType().getId()) & 0xFF);
+					os.write(((byte) map[i][j].getStyle()) & 0xFF);
 				}
 			}
 			
