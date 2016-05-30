@@ -29,7 +29,7 @@ public class Main {
 		
 		window = new MainMenu();
 		frame.getContentPane().add(window, BorderLayout.CENTER);
-		
+		frame.getContentPane().validate();
 	}
 	
 	public static Rectangle getBounds() {
