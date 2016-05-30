@@ -5,10 +5,13 @@ import snorri.world.Vector;
 public class Unit extends Entity {
 
 	private static final int BASE_SPEED = 2;
+	private static final int MAX_HEALTH = 100;
+	
+	private int health;
 	
 	public Unit(Vector pos) {
 		super(pos, 3);
-		// TODO Auto-generated constructor stub
+		health = MAX_HEALTH;
 	}
 
 	public void walk(Vector direction, EntityGroup col) {
@@ -20,6 +23,18 @@ public class Unit extends Entity {
 		
 		dir.multiply(getSpeed());
 		col.move(this, dir);
+	}
+	
+	public int getHealth() {
+		return health;
+	}
+	
+	public void damage(int dmg) {
+		health -= dmg;
+	}
+	
+	public boolean isDead() {
+		return health > 0;
 	}
 	
 	//override this for faster entities
