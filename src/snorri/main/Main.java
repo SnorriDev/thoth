@@ -11,17 +11,17 @@ import snorri.parser.Lexicon;
 import snorri.world.Vector;
 import snorri.world.World;
 
+
+
 public class Main {
 	
-	private static GamePanel window;
-	private static JFrame frame;
-	
+	private static GamePanel	window;
+	private static JFrame		frame;
+								
 	public static void main(String[] args) {
 		
 		Lexicon.init();
 		
-		
-				
 		frame = new JFrame("Spoken Word");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(500, 500);
@@ -52,7 +52,7 @@ public class Main {
 	public static GamePanel getWindow() {
 		return window;
 	}
-
+	
 	public static void launchGame() {
 		
 		frame.getContentPane().remove(window);
@@ -79,9 +79,9 @@ public class Main {
 		window.requestFocus();
 		
 	}
-
+	
 	public static void launchEditor() {
-
+		
 		frame.getContentPane().remove(window);
 		window = new LevelEditor();
 		frame.getContentPane().add(window, BorderLayout.CENTER);
@@ -89,5 +89,5 @@ public class Main {
 		window.requestFocus();
 		
 	}
-
+	
 }

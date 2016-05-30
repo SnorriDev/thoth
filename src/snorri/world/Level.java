@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import snorri.main.Main;
+import snorri.world.Tile.TileType;
 
 
 
@@ -21,6 +22,12 @@ public class Level {
 	public Level(int width, int height) {
 		map = new Tile[width][height];
 		dim = new Vector(width, height);
+		
+		for (int i = 0; i < dim.getX(); i++ ) {
+			for (int j = 0; j < dim.getY(); j++ ) {
+				map[i][j] = new Tile(TileType.SAND);
+			}
+		}
 	}
 	
 	public Level(String levelFileName) {
@@ -43,11 +50,16 @@ public class Level {
 		return getTile(v.getX(), v.getY());
 	}
 	
+	public Tile getTileRaw(int x, int y) {
+		return map[x][y];
+	}
+	
 	public Vector getDimensions() {
 		return dim;
 	}
 	
 	public void load(String fileName) {
+		Main.log("loading " + fileName + "...");
 		try {
 			byte[] b = new byte[4];
 			
@@ -77,16 +89,19 @@ public class Level {
 		catch (IOException ex) {
 			Main.error("Error reading file '" + fileName + "'");
 		}
+		Main.log("Load Complete!");
 	}
 	
 	public void save(String fileName) {
+		Main.log("saving " + fileName + "...");
 		try {
 			FileOutputStream os = new FileOutputStream(fileName);
 			ByteBuffer b1 = ByteBuffer.allocate(4);
+			ByteBuffer b2 = ByteBuffer.allocate(4);
 			
 			byte[] buffer = b1.putInt(dim.getX()).array();
 			os.write(buffer);
-			buffer = b1.putInt(dim.getY()).array();
+			buffer = b2.putInt(dim.getY()).array();
 			os.write(buffer);
 			
 			for (int i = 0; i < dim.getX(); i++ ) {
@@ -101,5 +116,6 @@ public class Level {
 		catch (IOException ex) {
 			Main.error("Error writing file '" + fileName + "'");
 		}
+		Main.log("Save Complete!");
 	}
 }
