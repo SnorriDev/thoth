@@ -34,10 +34,13 @@ public class World {
 						
 			p.update(this, f);
 			
-			Entity hit = col.getFirstCollision(p);
-			if (hit != null) {
-				p.onCollision(new CollisionEvent(p, hit, this));
-				return;
+			for (Entity hit : col.getAllCollisions(p)) {
+				
+				if (hit != null) {
+					p.onCollision(new CollisionEvent(p, hit, this));
+					return;
+				}
+				
 			}
 			
 		}

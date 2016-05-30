@@ -360,8 +360,28 @@ public class EntityGroup extends Entity {
 		
 	}
 	
-	//TODO
-	//collides method
+	
+	//could maybe write this more efficiently
+	public ArrayList<Entity> getAllCollisions(Collider c) {
+		
+		ArrayList<Entity> result = new ArrayList<Entity>();
+		
+		for (Entity child : entities) {
+			
+			if (child instanceof EntityGroup) {
+				result.addAll(((EntityGroup) child).getAllCollisions(c));
+				continue;
+			}
+			
+			if (child.intersects(c)) {
+				result.add(child);
+			}
+			
+		}
+		
+		return result;
+		
+	}
 	
 	private void set(Entity e) {
 		
