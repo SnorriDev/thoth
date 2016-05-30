@@ -27,7 +27,7 @@ import snorri.semantics.To;
 import snorri.semantics.Under;
 import snorri.semantics.Walk;
 import snorri.semantics.With;
-import snorri.world.Tile;
+import snorri.world.Tile.TileType;
 
 public class Lexicon {
 	
@@ -53,7 +53,7 @@ public class Lexicon {
 		//TODO: add semantics for these prepositions
 		
 		//Nouns
-		lexicon.put("jAm", new StaticDef(Noun.class, Tile.TREE)); //tree
+		lexicon.put("jAm", new StaticDef(Noun.class, TileType.TREE)); //tree
 		lexicon.put("ssn", new StaticDef(Noun.class, null)); //flower, gotta make this an entity
 		//word for nothing
 		
