@@ -8,18 +8,25 @@ import java.util.Set;
 import snorri.nonterminals.AbstractNoun;
 import snorri.nonterminals.Noun;
 import snorri.nonterminals.Prep;
+import snorri.semantics.Above;
+import snorri.semantics.At;
 import snorri.semantics.Be;
 import snorri.semantics.Definition;
 import snorri.semantics.FirstObjectPronoun;
 import snorri.semantics.FirstSuffixPronoun;
+import snorri.semantics.LeftOf;
 import snorri.semantics.Move;
 import snorri.semantics.Nominal.AbstractSemantics;
+import snorri.semantics.RightOf;
 import snorri.semantics.SecondObjectPronoun;
 import snorri.semantics.SecondSuffixPronoun;
 import snorri.semantics.StaticDef;
 import snorri.semantics.ThirdObjectPronoun;
 import snorri.semantics.ThirdSuffixPronoun;
+import snorri.semantics.To;
+import snorri.semantics.Under;
 import snorri.semantics.Walk;
+import snorri.semantics.With;
 import snorri.world.Tile;
 
 public class Lexicon {
@@ -34,19 +41,21 @@ public class Lexicon {
 		lexicon = new HashMap<String, Definition>();
 		
 		//Prepositions
-		lexicon.put("r", new StaticDef(Prep.class, null)); //to
-		lexicon.put("m", new StaticDef(Prep.class, null)); //in
-		lexicon.put("Xr", new StaticDef(Prep.class, null)); //under
-		lexicon.put("tp", new StaticDef(Prep.class, null)); //above
-		lexicon.put("HA", new StaticDef(Prep.class, null)); //behind
-		lexicon.put("xft", new StaticDef(Prep.class, null)); //in front of
-		//lexicon.put("in", new StaticDef(Prep.class, null)); //by (is this the locative "near" sense)?
+		lexicon.put("n", new StaticDef(Prep.class, new To())); //to
+		lexicon.put("m", new StaticDef(Prep.class, new At())); //in
+		lexicon.put("Xr", new StaticDef(Prep.class, new Under())); //under
+		lexicon.put("tp", new StaticDef(Prep.class, new Above())); //above
+		lexicon.put("HA", new StaticDef(Prep.class, new LeftOf())); //behind
+		lexicon.put("xft", new StaticDef(Prep.class, new RightOf())); //in front of
+		lexicon.put("Hna", new StaticDef(Prep.class, new With())); //with
+		lexicon.put("r", new StaticDef(Prep.class, null)); //around
 		
 		//TODO: add semantics for these prepositions
 		
 		//Nouns
 		lexicon.put("jAm", new StaticDef(Noun.class, Tile.TREE)); //tree
-		lexicon.put("ssn", new StaticDef(Noun.class, Tile.LILY)); //flower
+		lexicon.put("ssn", new StaticDef(Noun.class, null)); //flower, gotta make this an entity
+		//word for nothing
 		
 		//Suffix Pronouns
 		lexicon.put("i", new FirstSuffixPronoun());

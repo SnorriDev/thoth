@@ -2,6 +2,7 @@ package snorri.events;
 
 import snorri.entities.Entity;
 import snorri.main.GameWindow;
+import snorri.semantics.Nominal;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -13,10 +14,11 @@ public class SpellEvent {
 	private Vector loc; //the position in which or at which the spell is occuring
 	private Vector dest; //the "target" position of the spell
 	
+	private Nominal instrument; //assigned by the preposition "with"
+	
 	public SpellEvent(GameWindow window, Entity secondPerson) {
 		this.secondPerson = secondPerson;
 		this.window = window;
-		
 		loc = getFirstPerson().getPos().copy();
 		dest = getThirdPerson().getPos().copy();
 	}
@@ -24,7 +26,7 @@ public class SpellEvent {
 	public SpellEvent(SpellEvent e) {
 		secondPerson = e.secondPerson;
 		window = e.window;
-		
+		instrument = e.instrument;
 		loc = e.loc.copy();
 		dest = e.dest.copy();
 	}
@@ -59,6 +61,14 @@ public class SpellEvent {
 	
 	public void setDestination(Vector v) {
 		dest = v;
+	}
+
+	public Object getInstrument() {
+		return instrument;
+	}
+
+	public void setInstrument(Nominal instrument) {
+		this.instrument = instrument;
 	}
 	
 }
