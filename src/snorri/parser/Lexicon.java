@@ -16,6 +16,7 @@ import snorri.semantics.Boom;
 import snorri.semantics.Definition;
 import snorri.semantics.FirstObjectPronoun;
 import snorri.semantics.FirstSuffixPronoun;
+import snorri.semantics.Flood;
 import snorri.semantics.LeftOf;
 import snorri.semantics.Move;
 import snorri.semantics.Nominal.AbstractSemantics;
@@ -59,7 +60,14 @@ public class Lexicon {
 		lexicon.put("ssn", new StaticDef(Noun.class, Flower.class)); //flower, gotta make this an entity
 		lexicon.put("mw", new StaticDef(Noun.class, TileType.WATER));
 		lexicon.put("xt", new StaticDef(Noun.class, TileType.LAVA)); //technically this is fire
-		lexicon.put("Axt", new StaticDef(Noun.class, null)); //TODO: "flood"
+		lexicon.put("Axt", new Flood()); //TODO: flood as noun
+		lexicon.put("bit", new StaticDef(Noun.class, null)); //TODO: bee
+		
+		lexicon.put("st", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
+		lexicon.put("iry", new StaticDef(AbstractNoun.class, AbstractSemantics.WEAPON));
+		lexicon.put("pr", new StaticDef(AbstractNoun.class, AbstractSemantics.TILE));
+		lexicon.put("rn", new StaticDef(AbstractNoun.class, AbstractSemantics.NAME));
+		
 		//word for nothing
 				
 		//Suffix Pronouns
@@ -76,12 +84,6 @@ public class Lexicon {
 		lexicon.put("sw", new ThirdObjectPronoun());
 		lexicon.put("sy", new ThirdObjectPronoun());
 		lexicon.put("s", new ThirdObjectPronoun());
-		
-		//Abstract Nouns
-		lexicon.put("st", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
-		lexicon.put("iry", new StaticDef(AbstractNoun.class, AbstractSemantics.WEAPON));
-		lexicon.put("pr", new StaticDef(AbstractNoun.class, AbstractSemantics.TILE));
-		lexicon.put("rn", new StaticDef(AbstractNoun.class, AbstractSemantics.NAME));
 		
 		//Verbs
 		lexicon.put("in", new Move());
