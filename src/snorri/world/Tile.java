@@ -2,13 +2,15 @@ package snorri.world;
 
 import snorri.semantics.Nominal;
 
-public class Tile {
 
-	public static final int WIDTH = 32;
+
+public class Tile {
 	
-	private TileType type;
-	private int style = 0;
-	
+	public static final int	WIDTH	= 8;
+									
+	private TileType		type;
+	private int				style	= 0;
+									
 	public Tile(TileType type) {
 		this.type = type;
 	}
@@ -36,20 +38,20 @@ public class Tile {
 	}
 	
 	public enum TileType implements Nominal {
-	
-		SAND(true),
-		WALL(false, 50),
-		TREE(false, 30),
-		FOUNDATION(false, Integer.MAX_VALUE),
-		HUT(false, 30),
-		WATER(false, Integer.MAX_VALUE),
-		LAVA(false, Integer.MAX_VALUE);
 		
+		SAND(true), WALL(	false,
+							50), TREE(	false,
+										30), FOUNDATION(false,
+														Integer.MAX_VALUE), HUT(false,
+																				30), WATER(	false,
+																							Integer.MAX_VALUE), LAVA(	false,
+																														Integer.MAX_VALUE);
+																														
 		//TODO: pass an array of textures for each one
-			
-		private boolean pathable;
-		private int strength = 5;
 		
+		private boolean	pathable;
+		private int		strength	= 5;
+									
 		TileType(boolean pathable) {
 			this.pathable = pathable;
 		}
