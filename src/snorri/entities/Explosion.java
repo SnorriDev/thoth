@@ -2,7 +2,6 @@ package snorri.entities;
 
 import snorri.events.CollisionEvent;
 import snorri.world.Vector;
-import snorri.world.World;
 
 public class Explosion extends Collider {
 
@@ -20,11 +19,6 @@ public class Explosion extends Collider {
 		super(pos, r);
 		this.damage = damage;
 	}
-	
-	@Override
-	public void update(World world, float deltaTime) {
-		
-	}
 
 	@Override
 	public void onCollision(CollisionEvent e) {
@@ -34,8 +28,8 @@ public class Explosion extends Collider {
 	}
 	
 	@Override
-	protected int getLifeSpan() {
-		return 500;
+	protected float getLifeSpan() {
+		return 0.3f;
 	}
 
 }

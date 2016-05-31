@@ -25,7 +25,6 @@ public class Projectile extends Collider {
 	public void update(World world, float deltaTime) {
 		
 		pos.add(velocity.copy().multiply(deltaTime));
-				
 		super.update(world, deltaTime);
 		
 	}
@@ -39,7 +38,7 @@ public class Projectile extends Collider {
 		
 		//TODO: "damage" root
 		
-		e.getWorld().deleteHard(this); //could use removeFrom, but this is a little better
+		e.getWorld().deleteSoft(this); //could use removeFrom, but this is a little better
 				
 	}
 

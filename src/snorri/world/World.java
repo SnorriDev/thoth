@@ -38,7 +38,6 @@ public class World {
 				
 				if (hit != null) {
 					p.onCollision(new CollisionEvent(p, hit, this));
-					return;
 				}
 				
 			}

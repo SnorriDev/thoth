@@ -6,25 +6,25 @@ import snorri.world.World;
 
 public abstract class Collider extends Entity {
 
-	private int age = 0;
+	protected float age;
 	
 	public Collider(Vector pos, int r) {
 		super(pos, r);
+		age = 0;
 	}
 
 	public abstract void onCollision(CollisionEvent e);
 	
-	public void update(World world, int deltaTime) {
-		
+	@Override
+	public void update(World world, float deltaTime) {
 		age += deltaTime;
 		if (age > getLifeSpan()) {
 			world.deleteSoft(this);
 		}
-		
 	}
 	
-	protected int getLifeSpan() {
-		return 4000;
+	protected float getLifeSpan() {
+		return 3;
 	}
 		
 }

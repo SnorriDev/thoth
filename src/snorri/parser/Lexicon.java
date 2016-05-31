@@ -11,6 +11,7 @@ import snorri.nonterminals.Prep;
 import snorri.semantics.Above;
 import snorri.semantics.At;
 import snorri.semantics.Be;
+import snorri.semantics.Boom;
 import snorri.semantics.Definition;
 import snorri.semantics.FirstObjectPronoun;
 import snorri.semantics.FirstSuffixPronoun;
@@ -84,6 +85,8 @@ public class Lexicon {
 		lexicon.put("ms", new Move());
 		lexicon.put("xpi", new Walk());
 		lexicon.put("iw", new Be());
+		lexicon.put("bm", new Boom());
+		
 //		lexicon.put("mAA", new StaticDef(TransVerb.class, null)); //see
 //		lexicon.put("sDm", new StaticDef(TransVerb.class, null)); //hear
 		

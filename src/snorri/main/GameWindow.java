@@ -119,7 +119,7 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 				
 		if (e.getKeyChar() == Key.SPACE.getChar()) {
 			//Cast a spell with space bar for debugging purposes	
-			Spell.castWTFMode("xpi Xr=i", new SpellEvent(this, getFocus()));	
+			Spell.castWTFMode("bm m=f", new SpellEvent(this, getFocus()));	
 		}
 		
 	}
