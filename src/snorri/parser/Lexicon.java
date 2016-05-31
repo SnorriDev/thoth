@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import snorri.entities.Flower;
 import snorri.nonterminals.AbstractNoun;
 import snorri.nonterminals.Noun;
 import snorri.nonterminals.Prep;
@@ -55,9 +56,12 @@ public class Lexicon {
 		
 		//Nouns
 		lexicon.put("jAm", new StaticDef(Noun.class, TileType.TREE)); //tree
-		lexicon.put("ssn", new StaticDef(Noun.class, null)); //flower, gotta make this an entity
+		lexicon.put("ssn", new StaticDef(Noun.class, Flower.class)); //flower, gotta make this an entity
+		lexicon.put("mw", new StaticDef(Noun.class, TileType.WATER));
+		lexicon.put("xt", new StaticDef(Noun.class, TileType.LAVA)); //technically this is fire
+		lexicon.put("Axt", new StaticDef(Noun.class, null)); //TODO: "flood"
 		//word for nothing
-		
+				
 		//Suffix Pronouns
 		lexicon.put("i", new FirstSuffixPronoun());
 		lexicon.put("k", new SecondSuffixPronoun());
