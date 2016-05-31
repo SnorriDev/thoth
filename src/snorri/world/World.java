@@ -42,21 +42,17 @@ public class World {
 	}
 	
 	public void update(float f) {
-		
-		//TODO: update all the entities
-		
+				
 		col.update(this, f);
 		
 		for (Collider p : colliders) {
 						
 			p.update(this, f);
 			
-			for (Entity hit : col.getAllCollisions(p)) {
-				
+			for (Entity hit : col.getAllCollisions(p)) {		
 				if (hit != null) {
 					p.onCollision(new CollisionEvent(p, hit, this));
 				}
-				
 			}
 			
 		}
