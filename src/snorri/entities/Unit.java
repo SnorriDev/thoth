@@ -1,6 +1,7 @@
 package snorri.entities;
 
 import snorri.world.Vector;
+import snorri.world.World;
 
 public class Unit extends Entity {
 
@@ -12,6 +13,17 @@ public class Unit extends Entity {
 	public Unit(Vector pos) {
 		super(pos, 3);
 		health = MAX_HEALTH;
+	}
+	
+	@Override
+	public void update(World world, float deltaTime) {
+				
+		if (isDead()) {
+			world.deleteSoft(this);
+		}
+		
+		super.update(world, deltaTime);
+		
 	}
 
 	public void walk(Vector direction, EntityGroup col) {
@@ -34,7 +46,7 @@ public class Unit extends Entity {
 	}
 	
 	public boolean isDead() {
-		return health > 0;
+		return health <= 0;
 	}
 	
 	//override this for faster entities

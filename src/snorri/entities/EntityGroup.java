@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import snorri.main.GameWindow;
 import snorri.world.Vector;
+import snorri.world.World;
 
 public class EntityGroup extends Entity {
 	
@@ -119,6 +120,23 @@ public class EntityGroup extends Entity {
 	public Entity getRandomEntity() {
 		ArrayList<Entity> all = getAllEntities();
 		return all.get((int) (Math.random() * all.size()));
+	}
+	
+	public boolean hasChild(Entity e) {
+		
+		for (Entity e2 : entities) {
+			if (e2 instanceof EntityGroup) {
+				if (e2.contains(e)) {
+					return true;
+				}
+			}
+			if (e2 == e) {
+				return true;
+			}
+		}
+		
+		return false;
+		
 	}
 	
 	//blind-add an entity to the group
@@ -411,6 +429,14 @@ public class EntityGroup extends Entity {
 		
 		for (Entity e : entities) {
 			e.traverse(depth + 1);
+		}
+	}
+	
+	@Override
+	public void update(World world, float deltaTime) {
+		//TODO: recalculate border only in this outer function?
+		for (Entity e : entities) {
+			e.update(world, deltaTime);
 		}
 	}
 	

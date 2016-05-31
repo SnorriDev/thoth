@@ -9,8 +9,10 @@ import java.util.Queue;
 import snorri.entities.Collider;
 import snorri.entities.Entity;
 import snorri.entities.EntityGroup;
+import snorri.entities.Player;
 import snorri.events.CollisionEvent;
 import snorri.main.GameWindow;
+import snorri.main.Main;
 
 public class World {
 
@@ -29,6 +31,8 @@ public class World {
 	public void update(float f) {
 		
 		//TODO: update all the entities
+		
+		col.update(this, f);
 		
 		for (Collider p : colliders) {
 						
@@ -95,6 +99,11 @@ public class World {
 	 * @param e the entity to delete
 	 */
 	public void deleteSoft(Entity e) {
+		
+		if (e instanceof Player) {
+			Main.log("Player removed from world");
+		}
+		
 		deleteQ.add(e);
 	}
 	
@@ -104,7 +113,7 @@ public class World {
 	 * CollisionEvents and other contexts
 	 * @param e the entity to delete
 	 */
-	public boolean deleteHard(Entity e) {
+	private boolean deleteHard(Entity e) {
 		
 		if (e instanceof Collider) {
 			return colliders.remove(e);

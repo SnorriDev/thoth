@@ -68,8 +68,9 @@ public class Lexicon {
 		lexicon.put("pr", new StaticDef(AbstractNoun.class, AbstractSemantics.TILE));
 		lexicon.put("rn", new StaticDef(AbstractNoun.class, AbstractSemantics.NAME));
 		
-		//word for nothing
-				
+		//cactus, reeds
+		//words for "create" sxpr "build/create"; qmA "create"; two levels of building
+						
 		//Suffix Pronouns
 		lexicon.put("i", new FirstSuffixPronoun());
 		lexicon.put("k", new SecondSuffixPronoun());
