@@ -6,6 +6,8 @@ import snorri.world.World;
 
 public class Projectile extends Collider {
 
+	private static final long serialVersionUID = 1L;
+
 	private static final int PROJECTILE_SPEED = 100;
 		
 	private Vector velocity;

@@ -5,6 +5,7 @@ import snorri.world.World;
 
 public class Unit extends Entity {
 
+	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 2;
 	private static final int MAX_HEALTH = 100;
 	

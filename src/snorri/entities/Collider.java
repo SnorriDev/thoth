@@ -6,6 +6,7 @@ import snorri.world.World;
 
 public abstract class Collider extends Entity {
 
+	private static final long serialVersionUID = 1L;
 	protected float age;
 	
 	public Collider(Vector pos, int r) {

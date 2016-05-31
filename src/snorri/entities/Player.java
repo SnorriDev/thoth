@@ -10,6 +10,7 @@ import snorri.world.World;
 
 public class Player extends Unit {
 
+	private static final long serialVersionUID = 1L;
 	private Inventory inventory;
 	
 	public Player(Vector pos) {
