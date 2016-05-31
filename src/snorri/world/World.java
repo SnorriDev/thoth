@@ -1,6 +1,9 @@
 package snorri.world;
 
 import java.awt.Graphics;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,6 +29,16 @@ public class World {
 		col = new EntityGroup();
 		colliders = new ArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
+	}
+	
+	public World(File f) throws FileNotFoundException, IOException {
+		load(f);
+		colliders = new ArrayList<Collider>();
+		deleteQ = new LinkedList<Entity>();
+	}
+	
+	public World(String fileName) throws FileNotFoundException, IOException {
+		this(new File(fileName));
 	}
 	
 	public void update(float f) {
@@ -120,6 +133,43 @@ public class World {
 		}
 		
 		return col.delete(e);
+		
+	}
+	
+	public void save(String folderName) throws IOException {
+		
+		File f = new File(folderName);
+		
+		if (f.exists() && !f.isDirectory()) {
+			Main.error("tried to save world " + folderName + " to non-directory");
+			throw new IOException();
+		}
+		
+		if (!f.exists()) {
+			Main.log("creating new world directory...");
+			f.mkdir();
+		}
+		
+		String path = f.getPath();
+		col.saveEntities(path + "/entities.dat");
+		level.save(path + "/level.dat");
+		
+	}
+	
+	public void load(File f) throws FileNotFoundException, IOException {
+		
+		if (! f.exists()) {
+			Main.error("could not find world " + f.getName());
+			throw new FileNotFoundException();
+		}
+		
+		if (! f.isDirectory()) {
+			Main.error("world file " + f.getName() + " is not a directory");
+			throw new IOException();
+		}
+				
+		col = new EntityGroup(new File(f, "entities.dat"));
+		level = new Level(new File(f, "level.dat"));
 		
 	}
 	

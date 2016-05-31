@@ -1,5 +1,6 @@
 package snorri.world;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -30,8 +31,8 @@ public class Level {
 		}
 	}
 	
-	public Level(String levelFileName) {
-		load(levelFileName);
+	public Level(File file) throws FileNotFoundException, IOException {
+		load(file);
 	}
 	
 	public void setTile(int x, int y, Tile t) {
@@ -58,64 +59,57 @@ public class Level {
 		return dim;
 	}
 	
-	public void load(String fileName) {
-		Main.log("loading " + fileName + "...");
-		try {
-			byte[] b = new byte[4];
-			
-			FileInputStream is = new FileInputStream(fileName);
-			
-			is.read(b);
-			int width = ByteBuffer.wrap(b).getInt();
-			is.read(b);
-			int height = ByteBuffer.wrap(b).getInt();
-			
-			dim = new Vector(width, height);
-			map = new Tile[width][height];
-			
-			byte[] b2 = new byte[2];
-			for (int i = 0; i < width; i++ ) {
-				for (int j = 0; j < height; j++ ) {
-					is.read(b2);
-					map[i][j] = new Tile(((Byte) b2[0]).intValue(), ((Byte) b2[1]).intValue());
-				}
+	public void load(File file) throws FileNotFoundException, IOException {
+		
+		Main.log("loading " + file + "...");
+
+		byte[] b = new byte[4];
+
+		FileInputStream is = new FileInputStream(file);
+
+		is.read(b);
+		int width = ByteBuffer.wrap(b).getInt();
+		is.read(b);
+		int height = ByteBuffer.wrap(b).getInt();
+
+		dim = new Vector(width, height);
+		map = new Tile[width][height];
+
+		byte[] b2 = new byte[2];
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				is.read(b2);
+				map[i][j] = new Tile(((Byte) b2[0]).intValue(), ((Byte) b2[1]).intValue());
 			}
-			
-			is.close();
 		}
-		catch (FileNotFoundException ex) {
-			Main.error("Unable to open file '" + fileName + "'");
-		}
-		catch (IOException ex) {
-			Main.error("Error reading file '" + fileName + "'");
-		}
+
+		is.close();
+		
 		Main.log("Load Complete!");
 	}
 	
-	public void save(String fileName) {
+	public void save(String fileName) throws IOException {
+		
 		Main.log("saving " + fileName + "...");
-		try {
-			FileOutputStream os = new FileOutputStream(fileName);
-			ByteBuffer b1 = ByteBuffer.allocate(4);
-			ByteBuffer b2 = ByteBuffer.allocate(4);
-			
-			byte[] buffer = b1.putInt(dim.getX()).array();
-			os.write(buffer);
-			buffer = b2.putInt(dim.getY()).array();
-			os.write(buffer);
-			
-			for (int i = 0; i < dim.getX(); i++ ) {
-				for (int j = 0; j < dim.getY(); j++ ) {
-					os.write(((byte) map[i][j].getType().getId()) & 0xFF);
-					os.write(((byte) map[i][j].getStyle()) & 0xFF);
-				}
+
+		FileOutputStream os = new FileOutputStream(fileName);
+		ByteBuffer b1 = ByteBuffer.allocate(4);
+		ByteBuffer b2 = ByteBuffer.allocate(4);
+
+		byte[] buffer = b1.putInt(dim.getX()).array();
+		os.write(buffer);
+		buffer = b2.putInt(dim.getY()).array();
+		os.write(buffer);
+
+		for (int i = 0; i < dim.getX(); i++) {
+			for (int j = 0; j < dim.getY(); j++) {
+				os.write(((byte) map[i][j].getType().getId()) & 0xFF);
+				os.write(((byte) map[i][j].getStyle()) & 0xFF);
 			}
+		}
+
+		os.close();
 			
-			os.close();
-		}
-		catch (IOException ex) {
-			Main.error("Error writing file '" + fileName + "'");
-		}
 		Main.log("Save Complete!");
 	}
 }

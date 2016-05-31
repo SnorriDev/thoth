@@ -1,6 +1,7 @@
 package snorri.entities;
 
 import java.awt.Graphics;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -72,6 +73,11 @@ public class EntityGroup extends Entity {
 	public EntityGroup() {
 		super(null, 0);
 		entities = new ArrayList<Entity>();
+	}
+	
+	public EntityGroup(File file) throws FileNotFoundException, IOException {
+		this();
+		loadEntities(file);
 	}
 	
 	public EntityGroup(Vector center, int rad) {
@@ -448,7 +454,7 @@ public class EntityGroup extends Entity {
 		}
 	}
 	
-	public void saveEntities(String fileName) throws FileNotFoundException, IOException {
+	public void saveEntities(String fileName) throws IOException {
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName));
 		for (Entity e : getAllEntities()) {
 			out.writeObject(e);
@@ -456,9 +462,14 @@ public class EntityGroup extends Entity {
 		out.close();	
 	}
 	
-	public void loadEntities(String fileName) throws FileNotFoundException, IOException {
-		set(new EntityGroup());
-		ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName));
+	/**
+	 * Add all entities stored in a file to this EntityGroup
+	 * @param file file to read
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public void loadEntities(File file) throws FileNotFoundException, IOException {
+		ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
 		while (true) {
 			try {
 				add((Entity) in.readObject());
