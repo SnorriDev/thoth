@@ -6,7 +6,7 @@ import snorri.semantics.Nominal;
 
 public class Tile {
 	
-	public static final int	WIDTH	= 8;
+	public static final int	WIDTH	= 16;
 									
 	private TileType		type;
 	private int				style	= 0;
