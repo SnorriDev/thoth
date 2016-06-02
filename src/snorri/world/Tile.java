@@ -6,7 +6,7 @@ import snorri.semantics.Nominal;
 
 public class Tile {
 	
-	public static final int	WIDTH	= 8;
+	public static final int	WIDTH	= 16;
 									
 	private TileType		type;
 	private int				style	= 0;
@@ -38,15 +38,15 @@ public class Tile {
 	}
 	
 	public enum TileType implements Nominal {
-		
-		SAND(true), WALL(	false,
-							50), TREE(	false,
-										30), FOUNDATION(false,
-														Integer.MAX_VALUE), HUT(false,
-																				30), WATER(	false,
-																							Integer.MAX_VALUE), LAVA(	false,
-																														Integer.MAX_VALUE);
-																														
+												
+												SAND(true),
+												WALL(false, 50),
+												TREE(false, 30),
+												FOUNDATION(false, Integer.MAX_VALUE),
+												HUT(false, 30),
+												WATER(false, Integer.MAX_VALUE),
+												LAVA(false, Integer.MAX_VALUE);
+												
 		//TODO: pass an array of textures for each one
 		
 		private boolean	pathable;
