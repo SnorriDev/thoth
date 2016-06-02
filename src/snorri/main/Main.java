@@ -74,7 +74,7 @@ public class Main {
 	
 	public static Image getImageResource(String path) {
 		try {
-			return ImageIO.read(ClassLoader.getSystemResource(path));
+			return ImageIO.read(Main.class.getResource("/textures/items/bow.png"));
 		} catch (IOException e) {
 			Main.error("unable to find image " + path);
 			return null;
