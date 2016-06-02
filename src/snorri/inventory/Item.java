@@ -3,6 +3,9 @@ package snorri.inventory;
 import java.awt.Graphics;
 import java.awt.Image;
 
+import snorri.entities.Entity;
+import snorri.events.SpellEvent;
+import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.parser.Node;
 import snorri.world.Vector;
@@ -15,17 +18,20 @@ public abstract class Item {
 
 	public enum ItemType {
 
-		EMPTY(null, null),
-		PAPYRUS(Papyrus.class, null),
-		HELMET(Armor.class, null, 2),
+		EMPTY,
+		PAPYRUS(Papyrus.class, Main.getImageResource("/textures/items/papyrus.png")),
+		HELMET(Armor.class, Main.getImageResource("/textures/items/helmet.png"), 2),
 		SLING(Weapon.class, Main.getImageResource("/textures/items/bow.png"), 34),
-		PELLET(Projectile.class, null);
+		PELLET(Projectile.class, Main.getImageResource("/textures/items/pellet.png"));
 
 		private Class<? extends Item> c;
 		private int maxQuantity = 1;
 		private boolean enchantable = true;
 		private Object[] args;
 		private Image texture;
+		
+		ItemType() { //only use this for empty item
+		}
 		
 		ItemType(Class<? extends Item> c, Image texture, Object...args) {
 			this.c = c;
@@ -137,6 +143,11 @@ public abstract class Item {
 	// returns the spell on the item
 	public Node getSpell() {
 		return spell;
+	}
+	
+	public Object doSpellAt(Entity subject) {
+		SpellEvent e = new SpellEvent((GameWindow) Main.getWindow(), subject);
+		return spell.getMeaning(e);
 	}
 
 	public static Item newItem() {

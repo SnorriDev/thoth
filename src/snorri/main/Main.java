@@ -1,6 +1,7 @@
 package snorri.main;
 
 import java.awt.BorderLayout;
+import java.awt.FileDialog;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.IOException;
@@ -74,11 +75,19 @@ public class Main {
 	
 	public static Image getImageResource(String path) {
 		try {
-			return ImageIO.read(Main.class.getResource("/textures/items/bow.png"));
-		} catch (IOException e) {
+			return ImageIO.read(Main.class.getResource(path));
+		} catch (IllegalArgumentException e) {
 			Main.error("unable to find image " + path);
 			return null;
+		} catch (IOException e) {
+			return null;
 		}
+	}
+	
+	public static String getFileDialog(String msg) {
+		FileDialog fd = new FileDialog(frame, msg);
+		fd.setVisible(true);
+		return fd.getFile();
 	}
 	
 	public static void launchGame() {
