@@ -2,10 +2,11 @@ package snorri.keyboard;
 
 public enum Key {
 	
-	W (87, 'w'),
-	A (65, 'a'),
-	S (83, 's'),
-	D (68, 'd'),
+	W(87, 'w'),
+	A(65, 'a'),
+	S(83, 's'),
+	D(68, 'd'),
+	Q(81, 'q'),
 	SPACE(32, ' ');
 	
 	private int id;
@@ -24,6 +25,10 @@ public enum Key {
 		return ch;
 	}
 	
-	//TODO: add setter methods?
+	//for changing controls?
+	public void set(int c, char ch) {
+		id = c;
+		this.ch = ch;
+	}
 	
 }

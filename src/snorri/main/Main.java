@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 
 import javax.swing.JFrame;
 
+import snorri.entities.Desk;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.parser.Lexicon;
@@ -74,18 +75,13 @@ public class Main {
 		
 		World world = new World();
 		
-		Entity a = new Entity(new Vector(105, 130));
-		Entity b = new Entity(new Vector(100, 100));
-		Entity c = new Entity(new Vector(143, 133));
-		Entity d = new Entity(new Vector(100, 124));
-		Entity e = new Entity(new Vector(115, 100));
-		Entity f = new Entity(new Vector(111, 130));
-		world.add(a);
-		world.add(b);
-		world.add(c);
-		world.add(d);
-		world.add(e);
-		world.add(f);
+		world.add(new Entity(new Vector(105, 130)));
+		world.add(new Entity(new Vector(100, 100)));
+		world.add(new Entity(new Vector(143, 133)));
+		world.add(new Entity(new Vector(100, 124)));
+		world.add(new Entity(new Vector(115, 100)));
+		world.add(new Entity(new Vector(111, 130)));
+		world.add(new Desk(new Vector(200, 200)));
 		
 		window = new GameWindow(world, new Player(new Vector(50, 50)));
 		world.add(((GameWindow) window).getFocus()); //the player

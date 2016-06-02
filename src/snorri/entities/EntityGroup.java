@@ -370,7 +370,7 @@ public class EntityGroup extends Entity {
 		
 	}
 	
-	public Entity getFirstCollision(Collider c) {
+	public Entity getFirstCollision(Entity c) {
 		
 		for (Entity child : entities) { //TODO: use this iterator syntax elsewhere
 			
@@ -394,7 +394,7 @@ public class EntityGroup extends Entity {
 	
 	
 	//could maybe write this more efficiently
-	public ArrayList<Entity> getAllCollisions(Collider c) {
+	public ArrayList<Entity> getAllCollisions(Entity c) {
 		
 		ArrayList<Entity> result = new ArrayList<Entity>();
 		

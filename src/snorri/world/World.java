@@ -12,7 +12,6 @@ import java.util.Queue;
 import snorri.entities.Collider;
 import snorri.entities.Entity;
 import snorri.entities.EntityGroup;
-import snorri.entities.Player;
 import snorri.events.CollisionEvent;
 import snorri.main.GameWindow;
 import snorri.main.Main;
@@ -108,11 +107,6 @@ public class World {
 	 * @param e the entity to delete
 	 */
 	public void deleteSoft(Entity e) {
-		
-		if (e instanceof Player) {
-			Main.log("Player removed from world");
-		}
-		
 		deleteQ.add(e);
 	}
 	

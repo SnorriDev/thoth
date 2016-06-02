@@ -10,9 +10,11 @@ import java.util.Date;
 
 import javax.swing.SwingWorker;
 
+import snorri.entities.Collider;
+import snorri.entities.Desk;
 import snorri.entities.Entity;
+import snorri.entities.Player;
 import snorri.entities.Projectile;
-import snorri.entities.Unit;
 import snorri.events.SpellEvent;
 import snorri.keyboard.Key;
 import snorri.keyboard.KeyStates;
@@ -32,10 +34,10 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 	private KeyStates states;
 	
 	private World world;
-	private Unit focus;
+	private Player focus;
 	private long lastTime;
 	
-	public GameWindow(World world, Unit focus) {
+	public GameWindow(World world, Player focus) {
 		this.world = world;
 		this.focus = focus;
 		states = new KeyStates();
@@ -61,8 +63,20 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 		sw.execute();
 	}
 	
-	private void onFrame() {		
-		focus.walk(states.getMovementVector(), world.getEntityTree()); //TODO: move to update method of Player?
+	public Vector getMovementVector() {
+		return states.getMovementVector();
+	}
+	
+	private void onFrame() {
+		
+		if (! focus.isDead()) {
+						
+			//if (! focus.wouldHitSomething(states.getMovementVector(), world.getEntityTree())) this is buggy
+			focus.walk(states.getMovementVector(), world.getEntityTree()); //TODO: move to update method of Player?
+			
+			//TODO: render HUD
+		}
+		
 		long time = getTimestamp();
 		world.update((time - lastTime) / 1000f);
 		lastTime = time;
@@ -82,7 +96,7 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 		//TODO: function which renders everything intersecting a circle inscribing the screen
 	}
 	
-	public Entity getFocus() {
+	public Player getFocus() {
 		return focus;
 	}
 	
@@ -115,8 +129,19 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 	}
 	
 	public void keyTyped(KeyEvent e) {
-				
+		
 		if (e.getKeyChar() == Key.SPACE.getChar()) {
+			Collider interactRegion = new Collider(getFocus().getPos(), getFocus().getRadius() + Desk.INTERACT_RANGE);
+			//could make this more efficient potentially by making a new method
+			for (Entity entity : world.getEntityTree().getAllCollisions(interactRegion)) {
+				if (entity instanceof Desk) {
+					Main.log("interacting with a desk");
+					return;
+				}
+			}
+		}
+		
+		if (e.getKeyChar() == Key.Q.getChar()) {
 			//Cast a spell with space bar for debugging purposes	
 			Spell.castWTFMode("bm m=f", new SpellEvent(this, getFocus()));	
 		}

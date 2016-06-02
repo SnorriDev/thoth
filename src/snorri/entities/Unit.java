@@ -16,6 +16,11 @@ public class Unit extends Entity {
 		health = MAX_HEALTH;
 	}
 	
+	public Unit(Unit unit) {
+		super(unit);
+		health = unit.health;
+	}
+
 	@Override
 	public void update(World world, float deltaTime) {
 				
@@ -36,6 +41,18 @@ public class Unit extends Entity {
 		
 		dir.multiply(getSpeed());
 		col.move(this, dir);
+	}
+	
+	public boolean wouldHitSomething(Vector direction, EntityGroup col) {
+				
+		if (direction.equals(Vector.ZERO)) {
+			return true;
+		}
+		
+		Unit clone = new Unit(this);
+		clone.walk(direction, col);
+		col.delete(clone);
+		return col.getAllCollisions(clone).size() > 1;
 	}
 	
 	public int getHealth() {
