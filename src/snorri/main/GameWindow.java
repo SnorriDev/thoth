@@ -61,8 +61,7 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 		sw.execute();
 	}
 	
-	//TODO: pass a timeDelta argument to update()
-	private void onFrame() {
+	private void onFrame() {		
 		focus.walk(states.getMovementVector(), world.getEntityTree()); //TODO: move to update method of Player?
 		long time = getTimestamp();
 		world.update((time - lastTime) / 1000f);
@@ -119,7 +118,7 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 				
 		if (e.getKeyChar() == Key.SPACE.getChar()) {
 			//Cast a spell with space bar for debugging purposes	
-			Spell.castWTFMode("xpi Xr=i", new SpellEvent(this, getFocus()));	
+			Spell.castWTFMode("bm m=f", new SpellEvent(this, getFocus()));	
 		}
 		
 	}

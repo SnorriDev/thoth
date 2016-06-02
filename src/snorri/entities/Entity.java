@@ -1,6 +1,7 @@
 package snorri.entities;
 
 import java.awt.Graphics;
+import java.io.Serializable;
 
 import snorri.main.GameWindow;
 import snorri.main.Main;
@@ -8,8 +9,9 @@ import snorri.semantics.Nominal;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Entity implements Nominal {
-		
+public class Entity implements Nominal, Serializable {
+
+	private static final long serialVersionUID = 1L;
 	protected Vector pos;
 	protected int r;
 	

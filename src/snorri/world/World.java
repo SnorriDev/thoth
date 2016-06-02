@@ -1,6 +1,9 @@
 package snorri.world;
 
 import java.awt.Graphics;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,8 +12,10 @@ import java.util.Queue;
 import snorri.entities.Collider;
 import snorri.entities.Entity;
 import snorri.entities.EntityGroup;
+import snorri.entities.Player;
 import snorri.events.CollisionEvent;
 import snorri.main.GameWindow;
+import snorri.main.Main;
 
 public class World {
 
@@ -26,18 +31,32 @@ public class World {
 		deleteQ = new LinkedList<Entity>();
 	}
 	
+	public World(File f) throws FileNotFoundException, IOException {
+		load(f);
+		colliders = new ArrayList<Collider>();
+		deleteQ = new LinkedList<Entity>();
+	}
+	
+	public World(String fileName) throws FileNotFoundException, IOException {
+		this(new File(fileName));
+	}
+	
 	public void update(float f) {
 		
 		//TODO: update all the entities
+		
+		col.update(this, f);
 		
 		for (Collider p : colliders) {
 						
 			p.update(this, f);
 			
-			Entity hit = col.getFirstCollision(p);
-			if (hit != null) {
-				p.onCollision(new CollisionEvent(p, hit, this));
-				return;
+			for (Entity hit : col.getAllCollisions(p)) {
+				
+				if (hit != null) {
+					p.onCollision(new CollisionEvent(p, hit, this));
+				}
+				
 			}
 			
 		}
@@ -93,6 +112,11 @@ public class World {
 	 * @param e the entity to delete
 	 */
 	public void deleteSoft(Entity e) {
+		
+		if (e instanceof Player) {
+			Main.log("Player removed from world");
+		}
+		
 		deleteQ.add(e);
 	}
 	
@@ -102,13 +126,50 @@ public class World {
 	 * CollisionEvents and other contexts
 	 * @param e the entity to delete
 	 */
-	public boolean deleteHard(Entity e) {
+	private boolean deleteHard(Entity e) {
 		
 		if (e instanceof Collider) {
 			return colliders.remove(e);
 		}
 		
 		return col.delete(e);
+		
+	}
+	
+	public void save(String folderName) throws IOException {
+		
+		File f = new File(folderName);
+		
+		if (f.exists() && !f.isDirectory()) {
+			Main.error("tried to save world " + folderName + " to non-directory");
+			throw new IOException();
+		}
+		
+		if (!f.exists()) {
+			Main.log("creating new world directory...");
+			f.mkdir();
+		}
+		
+		String path = f.getPath();
+		col.saveEntities(path + "/entities.dat");
+		level.save(path + "/level.dat");
+		
+	}
+	
+	public void load(File f) throws FileNotFoundException, IOException {
+		
+		if (! f.exists()) {
+			Main.error("could not find world " + f.getName());
+			throw new FileNotFoundException();
+		}
+		
+		if (! f.isDirectory()) {
+			Main.error("world file " + f.getName() + " is not a directory");
+			throw new IOException();
+		}
+				
+		col = new EntityGroup(new File(f, "entities.dat"));
+		level = new Level(new File(f, "level.dat"));
 		
 	}
 	

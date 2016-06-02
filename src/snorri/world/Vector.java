@@ -2,12 +2,12 @@ package snorri.world;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.Serializable;
 
-public class Vector {
-
-	//TODO: generalize vectors with generic types to hold 
-	//either ints or doubles
+public class Vector implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	public static final Vector ZERO = new Vector(0, 0);
 	
 	public double x, y;

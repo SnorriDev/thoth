@@ -5,15 +5,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import snorri.entities.Flower;
 import snorri.nonterminals.AbstractNoun;
 import snorri.nonterminals.Noun;
 import snorri.nonterminals.Prep;
 import snorri.semantics.Above;
 import snorri.semantics.At;
 import snorri.semantics.Be;
+import snorri.semantics.Boom;
 import snorri.semantics.Definition;
 import snorri.semantics.FirstObjectPronoun;
 import snorri.semantics.FirstSuffixPronoun;
+import snorri.semantics.Flood;
 import snorri.semantics.LeftOf;
 import snorri.semantics.Move;
 import snorri.semantics.Nominal.AbstractSemantics;
@@ -54,9 +57,20 @@ public class Lexicon {
 		
 		//Nouns
 		lexicon.put("jAm", new StaticDef(Noun.class, TileType.TREE)); //tree
-		lexicon.put("ssn", new StaticDef(Noun.class, null)); //flower, gotta make this an entity
-		//word for nothing
+		lexicon.put("ssn", new StaticDef(Noun.class, Flower.class)); //flower, gotta make this an entity
+		lexicon.put("mw", new StaticDef(Noun.class, TileType.WATER));
+		lexicon.put("xt", new StaticDef(Noun.class, TileType.LAVA)); //technically this is fire
+		lexicon.put("Axt", new Flood()); //TODO: flood as noun
+		lexicon.put("bit", new StaticDef(Noun.class, null)); //TODO: bee
 		
+		lexicon.put("st", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
+		lexicon.put("iry", new StaticDef(AbstractNoun.class, AbstractSemantics.WEAPON));
+		lexicon.put("pr", new StaticDef(AbstractNoun.class, AbstractSemantics.TILE));
+		lexicon.put("rn", new StaticDef(AbstractNoun.class, AbstractSemantics.NAME));
+		
+		//cactus, reeds
+		//words for "create" sxpr "build/create"; qmA "create"; two levels of building
+						
 		//Suffix Pronouns
 		lexicon.put("i", new FirstSuffixPronoun());
 		lexicon.put("k", new SecondSuffixPronoun());
@@ -72,18 +86,14 @@ public class Lexicon {
 		lexicon.put("sy", new ThirdObjectPronoun());
 		lexicon.put("s", new ThirdObjectPronoun());
 		
-		//Abstract Nouns
-		lexicon.put("st", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
-		lexicon.put("iry", new StaticDef(AbstractNoun.class, AbstractSemantics.WEAPON));
-		lexicon.put("pr", new StaticDef(AbstractNoun.class, AbstractSemantics.TILE));
-		lexicon.put("rn", new StaticDef(AbstractNoun.class, AbstractSemantics.NAME));
-		
 		//Verbs
 		lexicon.put("in", new Move());
 		lexicon.put("ini", new Move());
 		lexicon.put("ms", new Move());
 		lexicon.put("xpi", new Walk());
 		lexicon.put("iw", new Be());
+		lexicon.put("bm", new Boom());
+		
 //		lexicon.put("mAA", new StaticDef(TransVerb.class, null)); //see
 //		lexicon.put("sDm", new StaticDef(TransVerb.class, null)); //hear
 		

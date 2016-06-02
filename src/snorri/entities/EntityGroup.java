@@ -1,14 +1,24 @@
 package snorri.entities;
 
 import java.awt.Graphics;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import snorri.main.GameWindow;
 import snorri.world.Vector;
+import snorri.world.World;
 
 public class EntityGroup extends Entity {
 	
+	private static final long serialVersionUID = 1L;
+
 	private static final int REACH = 0;
 	//TODO: adjust this based on density/radius of higher groups
 
@@ -65,6 +75,11 @@ public class EntityGroup extends Entity {
 		entities = new ArrayList<Entity>();
 	}
 	
+	public EntityGroup(File file) throws FileNotFoundException, IOException {
+		this();
+		loadEntities(file);
+	}
+	
 	public EntityGroup(Vector center, int rad) {
 		super(center, rad);
 		entities = new ArrayList<Entity>();
@@ -119,6 +134,23 @@ public class EntityGroup extends Entity {
 	public Entity getRandomEntity() {
 		ArrayList<Entity> all = getAllEntities();
 		return all.get((int) (Math.random() * all.size()));
+	}
+	
+	public boolean hasChild(Entity e) {
+		
+		for (Entity e2 : entities) {
+			if (e2 instanceof EntityGroup) {
+				if (e2.contains(e)) {
+					return true;
+				}
+			}
+			if (e2 == e) {
+				return true;
+			}
+		}
+		
+		return false;
+		
 	}
 	
 	//blind-add an entity to the group
@@ -360,8 +392,28 @@ public class EntityGroup extends Entity {
 		
 	}
 	
-	//TODO
-	//collides method
+	
+	//could maybe write this more efficiently
+	public ArrayList<Entity> getAllCollisions(Collider c) {
+		
+		ArrayList<Entity> result = new ArrayList<Entity>();
+		
+		for (Entity child : entities) {
+			
+			if (child instanceof EntityGroup) {
+				result.addAll(((EntityGroup) child).getAllCollisions(c));
+				continue;
+			}
+			
+			if (child.intersects(c)) {
+				result.add(child);
+			}
+			
+		}
+		
+		return result;
+		
+	}
 	
 	private void set(Entity e) {
 		
@@ -392,6 +444,40 @@ public class EntityGroup extends Entity {
 		for (Entity e : entities) {
 			e.traverse(depth + 1);
 		}
+	}
+	
+	@Override
+	public void update(World world, float deltaTime) {
+		//TODO: recalculate border only in this outer function?
+		for (Entity e : entities) {
+			e.update(world, deltaTime);
+		}
+	}
+	
+	public void saveEntities(String fileName) throws IOException {
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName));
+		for (Entity e : getAllEntities()) {
+			out.writeObject(e);
+		}
+		out.close();	
+	}
+	
+	/**
+	 * Add all entities stored in a file to this EntityGroup
+	 * @param file file to read
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public void loadEntities(File file) throws FileNotFoundException, IOException {
+		ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
+		while (true) {
+			try {
+				add((Entity) in.readObject());
+			} catch (Exception e) {
+				break;
+			}
+		}
+		in.close();
 	}
 	
 }
