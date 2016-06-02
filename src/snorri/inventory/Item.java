@@ -1,13 +1,18 @@
 package snorri.inventory;
 
+import java.awt.Graphics;
+import java.awt.Image;
+
 import snorri.main.Main;
 import snorri.parser.Node;
+import snorri.world.Vector;
 
 public abstract class Item {
-
+	
 	protected int quantity = 1; // default value
 	protected Node spell; // spell/enchantment associated with the item
 	protected ItemType type; // what type of item it is; you can get ID, maxQuantity, enchantable from this
+	private Image texture; //TODO: make this an image
 
 	public enum ItemType {
 
@@ -21,7 +26,7 @@ public abstract class Item {
 		private int maxQuantity = 1;
 		private boolean enchantable = true;
 		private Object[] args;
-
+		
 		ItemType(Class<? extends Item> c, Object...args) {
 			this.c = c;
 			this.args = args;
@@ -150,6 +155,25 @@ public abstract class Item {
 	@Override
 	public String toString() {
 		return type.toString();
+	}
+	
+	public void render(Graphics g, Vector pos) {
+		
+		if (texture == null) {
+			return;
+		}
+		
+		g.drawImage(texture, pos.getX(), pos.getY(), null);
+	}
+
+	public void renderSmall(Graphics g, Vector pos) {
+
+		if (texture == null) {
+			return;
+		}
+		
+		g.drawImage(texture, pos.getX(), pos.getY(), 32, 32, null);
+		
 	}
 
 }

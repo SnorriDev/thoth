@@ -23,7 +23,6 @@ import snorri.world.Vector;
 import snorri.world.World;
 
 public class GameWindow extends GamePanel implements KeyListener, MouseListener {
-
 	
 	/**
 	 * Main game window
@@ -70,17 +69,17 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 	private void onFrame() {
 		
 		if (! focus.isDead()) {
-						
+			
 			//if (! focus.wouldHitSomething(states.getMovementVector(), world.getEntityTree())) this is buggy
 			focus.walk(states.getMovementVector(), world.getEntityTree()); //TODO: move to update method of Player?
 			
-			//TODO: render HUD
 		}
 		
 		long time = getTimestamp();
 		world.update((time - lastTime) / 1000f);
 		lastTime = time;
 		repaint();
+		
 	}
 	
 	private long getTimestamp() {
@@ -91,9 +90,8 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		//setBackground(Color.WHITE);
 		world.render(this, g);
-		//TODO: function which renders everything intersecting a circle inscribing the screen
+		focus.getInventory().render(this, g);
 	}
 	
 	public Player getFocus() {
@@ -104,12 +102,16 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 		return world;
 	}
 	
+	public Vector getDimensions() {
+		return new Vector(getBounds());
+	}
+	
 	/**
 	 * @return mouse position relative to the player
 	 */
 	public Vector getMousePosRelative() {
 		Vector origin = new Vector(getLocationOnScreen());
-		origin.add((new Vector(getBounds())).divide(2));		
+		origin.add(getDimensions().divide(2));		
 		return (new Vector(MouseInfo.getPointerInfo().getLocation())).sub(origin);
 	}
 	
