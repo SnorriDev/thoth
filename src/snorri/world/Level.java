@@ -10,57 +10,55 @@ import java.nio.ByteBuffer;
 import snorri.main.Main;
 import snorri.world.Tile.TileType;
 
-
-
 public class Level {
-	
-	private Tile[][]	map;
-	private Vector		dim;
-						
-	//TODO: load from file, not empty grid with parameters
-	//not that indexing conventions are Cartesian, not matrix-based
-	
+
+	private Tile[][] map;
+	private Vector dim;
+
+	// TODO: load from file, not empty grid with parameters
+	// not that indexing conventions are Cartesian, not matrix-based
+
 	public Level(int width, int height) {
 		map = new Tile[width][height];
 		dim = new Vector(width, height);
-		
-		for (int i = 0; i < dim.getX(); i++ ) {
-			for (int j = 0; j < dim.getY(); j++ ) {
+
+		for (int i = 0; i < dim.getX(); i++) {
+			for (int j = 0; j < dim.getY(); j++) {
 				map[i][j] = new Tile(TileType.SAND);
 			}
 		}
 	}
-	
+
 	public Level(File file) throws FileNotFoundException, IOException {
 		load(file);
 	}
-	
+
 	public void setTile(int x, int y, Tile t) {
 		map[x / Tile.WIDTH][y / Tile.WIDTH] = t;
 	}
-	
+
 	public void setTileRaw(int x, int y, Tile t) {
 		map[x][y] = t;
 	}
-	
+
 	public Tile getTile(int x, int y) {
 		return map[x / Tile.WIDTH][y / Tile.WIDTH];
 	}
-	
+
 	public Tile getTile(Vector v) {
 		return getTile(v.getX(), v.getY());
 	}
-	
+
 	public Tile getTileRaw(int x, int y) {
 		return map[x][y];
 	}
-	
+
 	public Vector getDimensions() {
 		return dim;
 	}
-	
+
 	public void load(File file) throws FileNotFoundException, IOException {
-		
+
 		Main.log("loading " + file + "...");
 
 		byte[] b = new byte[4];
@@ -84,12 +82,12 @@ public class Level {
 		}
 
 		is.close();
-		
+
 		Main.log("Load Complete!");
 	}
-	
+
 	public void save(String fileName) throws IOException {
-		
+
 		Main.log("saving " + fileName + "...");
 
 		FileOutputStream os = new FileOutputStream(fileName);
@@ -109,7 +107,7 @@ public class Level {
 		}
 
 		os.close();
-			
+
 		Main.log("Save Complete!");
 	}
 }
