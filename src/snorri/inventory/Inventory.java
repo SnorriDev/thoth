@@ -31,7 +31,7 @@ public class Inventory { // TODO: implement cooldown
 
 	public void addProjectile(Projectile newProjectile) {
 		for (int i = 0; i < PROJECTILE_SLOTS; i++) {
-			if (projectileSlots[i].isEmpty()) {
+			if (projectileSlots[i] == null) {
 				projectileSlots[i] = newProjectile;
 				return;
 			}
@@ -41,7 +41,7 @@ public class Inventory { // TODO: implement cooldown
 
 	public void addPapyrus(Papyrus newPapyrus) {
 		for (int i = 0; i < PAPYRUS_SLOTS; i++) {
-			if (papyrusSlots[i].isEmpty()) {
+			if (papyrusSlots[i] == null) {
 				papyrusSlots[i] = newPapyrus;
 				return;
 			}

@@ -18,7 +18,7 @@ public abstract class Item {
 		EMPTY(null, null),
 		PAPYRUS(Papyrus.class, null),
 		HELMET(Armor.class, null, 2),
-		SLING(Weapon.class, Main.getImageResource("textures/items/bow.png"), 34),
+		SLING(Weapon.class, Main.getImageResource("/textures/items/bow.png"), 34),
 		PELLET(Projectile.class, null);
 
 		private Class<? extends Item> c;
@@ -137,10 +137,6 @@ public abstract class Item {
 	// returns the spell on the item
 	public Node getSpell() {
 		return spell;
-	}
-
-	public boolean isEmpty() {
-		return type == ItemType.EMPTY;
 	}
 
 	public static Item newItem() {
