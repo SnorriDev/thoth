@@ -1,8 +1,11 @@
 package snorri.main;
 
 import java.awt.BorderLayout;
+import java.awt.Image;
 import java.awt.Rectangle;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import snorri.entities.Desk;
@@ -67,6 +70,15 @@ public class Main {
 	
 	public static GamePanel getWindow() {
 		return window;
+	}
+	
+	public static Image getImageResource(String path) {
+		try {
+			return ImageIO.read(ClassLoader.getSystemResource(path));
+		} catch (IOException e) {
+			Main.error("unable to find image " + path);
+			return null;
+		}
 	}
 	
 	public static void launchGame() {

@@ -12,40 +12,41 @@ public abstract class Item {
 	protected int quantity = 1; // default value
 	protected Node spell; // spell/enchantment associated with the item
 	protected ItemType type; // what type of item it is; you can get ID, maxQuantity, enchantable from this
-	private Image texture; //TODO: make this an image
 
 	public enum ItemType {
 
-		EMPTY(null),
-		PAPYRUS(Papyrus.class),
-		HELMET(Armor.class, 2),
-		SLING(Weapon.class, 34),
-		PELLET(Projectile.class);
+		EMPTY(null, null),
+		PAPYRUS(Papyrus.class, null),
+		HELMET(Armor.class, null, 2),
+		SLING(Weapon.class, Main.getImageResource("textures/items/bow.png"), 34),
+		PELLET(Projectile.class, null);
 
 		private Class<? extends Item> c;
 		private int maxQuantity = 1;
 		private boolean enchantable = true;
 		private Object[] args;
+		private Image texture;
 		
-		ItemType(Class<? extends Item> c, Object...args) {
+		ItemType(Class<? extends Item> c, Image texture, Object...args) {
 			this.c = c;
 			this.args = args;
+			this.texture = texture;
 		}
 
 		// we need to put maxQuantity as the first argument to avoid ambiguity
 		// (lol)
-		ItemType(int maxQuantity, Class<? extends Item> c, Object... args) {
-			this(c, args);
+		ItemType(int maxQuantity, Class<? extends Item> c, Image texture, Object... args) {
+			this(c, texture, args);
 			this.maxQuantity = maxQuantity;
 		}
 		
-		ItemType(boolean enchantable, Class<? extends Item> c, Object... args) {
-			this(c, args);
+		ItemType(boolean enchantable, Class<? extends Item> c, Image texture, Object... args) {
+			this(c, texture, args);
 			this.enchantable = enchantable;
 		}
 		
-		ItemType(int maxQuantity, boolean enchantable, Class<? extends Item> c, Object... args) {
-			this(c, args);
+		ItemType(int maxQuantity, boolean enchantable, Class<? extends Item> c, Image texture, Object... args) {
+			this(c, texture, args);
 			this.maxQuantity = maxQuantity;
 			this.enchantable = enchantable;
 		}
@@ -57,6 +58,10 @@ public abstract class Item {
 		// the id of the item
 		public int getId() {
 			return ordinal();
+		}
+		
+		public Image getTexture() {
+			return texture;
 		}
 		
 		public boolean isEnchantable() {
@@ -86,7 +91,7 @@ public abstract class Item {
 		}
 
 	}
-
+	
 	public Item(ItemType t) {
 		type = t;
 	}
@@ -159,20 +164,20 @@ public abstract class Item {
 	
 	public void render(Graphics g, Vector pos) {
 		
-		if (texture == null) {
+		if (type.getTexture() == null) {
 			return;
 		}
 		
-		g.drawImage(texture, pos.getX(), pos.getY(), null);
+		g.drawImage(type.getTexture(), pos.getX(), pos.getY(), null);
 	}
 
 	public void renderSmall(Graphics g, Vector pos) {
 
-		if (texture == null) {
+		if (type.getTexture() == null) {
 			return;
 		}
 		
-		g.drawImage(texture, pos.getX(), pos.getY(), 32, 32, null);
+		g.drawImage(type.getTexture(), pos.getX(), pos.getY(), 32, 32, null);
 		
 	}
 
