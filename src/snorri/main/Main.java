@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import snorri.entities.Desk;
 import snorri.entities.Entity;
 import snorri.entities.Player;
+import snorri.entities.Unit;
 import snorri.parser.Lexicon;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -105,6 +106,7 @@ public class Main {
 		world.add(new Entity(new Vector(115, 100)));
 		world.add(new Entity(new Vector(111, 130)));
 		world.add(new Desk(new Vector(200, 200)));
+		world.add(new Unit(new Vector(20, 20)));
 		
 		window = new GameWindow(world, new Player(new Vector(50, 50)));
 		world.add(((GameWindow) window).getFocus()); //the player

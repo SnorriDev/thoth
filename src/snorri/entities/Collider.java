@@ -26,7 +26,7 @@ public class Collider extends Entity {
 	public void update(World world, float deltaTime) {
 		age += deltaTime;
 		if (age > getLifeSpan()) {
-			world.deleteSoft(this);
+			world.delete(this);
 		}
 	}
 	

@@ -62,7 +62,7 @@ public class Grammar {
 	}
 	
 	public static Node parseString(String input) {
-		List<String> raw = Arrays.asList(input.split(" +|\\.|="));
+		List<String> raw = Arrays.asList(input.replaceAll("\\.",  "").split(" +|="));
 		List<Node> result = new ArrayList<Node>();
 		for (int i = 0; i < raw.size(); i++) {
 			if (! raw.get(i).equals("")) {

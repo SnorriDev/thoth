@@ -67,6 +67,8 @@ public class Lexicon {
 		lexicon.put("iry", new StaticDef(AbstractNoun.class, AbstractSemantics.WEAPON));
 		lexicon.put("pr", new StaticDef(AbstractNoun.class, AbstractSemantics.TILE));
 		lexicon.put("rn", new StaticDef(AbstractNoun.class, AbstractSemantics.NAME));
+		lexicon.put("nb", new StaticDef(AbstractNoun.class, AbstractSemantics.SOURCE)); //means lord literally
+		lexicon.put("nbt", new StaticDef(AbstractNoun.class, AbstractSemantics.SOURCE)); //means lord literally
 		
 		//cactus, reeds
 		//words for "create" sxpr "build/create"; qmA "create"; two levels of building

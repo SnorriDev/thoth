@@ -25,7 +25,7 @@ public class Unit extends Entity {
 	public void update(World world, float deltaTime) {
 				
 		if (isDead()) {
-			world.deleteSoft(this);
+			world.delete(this);
 		}
 		
 		super.update(world, deltaTime);

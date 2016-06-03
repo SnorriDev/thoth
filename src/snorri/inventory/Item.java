@@ -19,15 +19,11 @@ public abstract class Item {
 	protected ItemType type; // what type of item it is; you can get ID, maxQuantity, enchantable from this
 	
 	private static final int ICON_SIZE = 64;
-	private static final Color COOLDOWN_COLOR = new Color(118, 45, 50, 150);
 	
-	protected static final Image DEFAULT_BORDER = Main.getImageResource("/textures/hud/itemBorder.png");
+	private static final Image DEFAULT_BORDER = Main.getImageResource("/textures/hud/itemBorder.png");
+	private static final Color DEFAULT_COOLDOWN_COLOR = new Color(156, 134, 73, 200);
 	
-	protected static final Image PROJECTILE_BORDER = Main.getImageResource("/textures/hud/projectileBorderInactive.png");
-	protected static final Image PAPYRUS_BORDER = Main.getImageResource("/textures/hud/papyrusBorderInactive.png");
-
-	protected static final Image PROJECTILE_BORDER_SELECTED = Main.getImageResource("/textures/hud/projectileBorder.png");
-	protected static final Image PAPYRUS_BORDER_SELECTED = Main.getImageResource("/textures/hud/papyrusBorder.png");
+	protected CooldownTimer timer;
 	
 	public enum ItemType {
 
@@ -35,7 +31,7 @@ public abstract class Item {
 		PAPYRUS(Papyrus.class, Main.getImageResource("/textures/items/papyrus.png")),
 		HELMET(Armor.class, Main.getImageResource("/textures/items/helmet.png"), 2),
 		SLING(Weapon.class, Main.getImageResource("/textures/items/bow.png"), 34),
-		PELLET(Projectile.class, Main.getImageResource("/textures/items/pellet.png"));
+		PELLET(Orb.class, Main.getImageResource("/textures/items/pellet.png"));
 
 		private Class<? extends Item> c;
 		private int maxQuantity = 1;
@@ -119,6 +115,28 @@ public abstract class Item {
 	public ItemType getType() {
 		return type;
 	}
+	
+	public void updateCooldown(float deltaTime) {
+		
+		if (timer == null) {
+			return;
+		}
+		
+		timer.update(deltaTime);
+	}
+	
+	public boolean canUse() {
+		
+		if (timer == null) {
+			return true;
+		}
+		
+		return timer.isOffCooldown();
+	}
+	
+	public CooldownTimer getTimer() {
+		return timer;
+	}
 
 	// returns quantity of item
 	public int getQuantity() {
@@ -159,11 +177,11 @@ public abstract class Item {
 	}
 	
 	public Object useSpellAt(Entity subject) {
-		
+				
 		if (spell == null) {
 			return null;
 		}
-		
+				
 		SpellEvent e = new SpellEvent((GameWindow) Main.getWindow(), subject);
 		return spell.getMeaning(e);
 	}
@@ -199,6 +217,10 @@ public abstract class Item {
 		return DEFAULT_BORDER;
 	}
 	
+	public Color getCooldownColor() {
+		return DEFAULT_COOLDOWN_COLOR;
+	}
+	
 	//TODO: use an ImageViewer to scale things
 	
 	/**
@@ -225,9 +247,9 @@ public abstract class Item {
 		} else {
 			g.drawImage(icon, iconPos.getX(), iconPos.getY(), null);
 			g.drawImage(border, pos.getX(), pos.getY(), null);
-			if (this instanceof Papyrus) { //TODO: instanceof Cooldownable
-				g.setColor(COOLDOWN_COLOR);
-				g.fillArc(iconPos.getX(), iconPos.getY(), ICON_SIZE, ICON_SIZE, 90, ((Papyrus) this).getTimer().getRatio(360));
+			if (timer != null) { //TODO: instanceof Cooldownable
+				g.setColor(getCooldownColor());
+				g.fillArc(iconPos.getX(), iconPos.getY(), ICON_SIZE, ICON_SIZE, 90, this.getTimer().getRatio(360));
 				g.setColor(Color.BLACK);
 			}
 		}
@@ -245,16 +267,6 @@ public abstract class Item {
 	 */
 	public static int drawEmpty(Graphics g, Vector pos) {
 		g.drawImage(DEFAULT_BORDER, pos.getX(), pos.getY(), null);
-		return getSlotWidth();
-	}
-	
-	public static int drawEmptyProjectile(Graphics g, Vector pos, boolean selected) {
-		g.drawImage(selected ? PROJECTILE_BORDER_SELECTED : PROJECTILE_BORDER, pos.getX(), pos.getY(), null);
-		return getSlotWidth();
-	}
-	
-	public static int drawEmptyPapyrus(Graphics g, Vector pos, boolean selected) {
-		g.drawImage(selected ? PAPYRUS_BORDER_SELECTED : PAPYRUS_BORDER, pos.getX(), pos.getY(), null);
 		return getSlotWidth();
 	}
 	

@@ -3,6 +3,7 @@ package snorri.entities;
 import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
+import snorri.inventory.Orb;
 import snorri.inventory.Papyrus;
 import snorri.inventory.Weapon;
 import snorri.parser.Grammar;
@@ -21,8 +22,12 @@ public class Player extends Unit {
 		
 		//test inventory
 		inventory.setWeapon((Weapon) Item.newItem(ItemType.SLING));
+		
 		inventory.addPapyrus((Papyrus) Item.newItem(ItemType.PAPYRUS));
 		inventory.getPapyrus(0).setSpell(Grammar.parseString("bm m=f"));
+		
+		inventory.addProjectile((Orb) Item.newItem(ItemType.PELLET));
+		inventory.getProjectile(0).setSpell(Grammar.parseString("bm m=k"));
 		
 	}
 	

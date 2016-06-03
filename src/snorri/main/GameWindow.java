@@ -14,7 +14,6 @@ import snorri.entities.Collider;
 import snorri.entities.Desk;
 import snorri.entities.Entity;
 import snorri.entities.Player;
-import snorri.entities.Projectile;
 import snorri.keyboard.Key;
 import snorri.keyboard.KeyStates;
 import snorri.world.Vector;
@@ -179,13 +178,15 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 		
 		if (e.getButton() == 1) {
 			//TODO: put this stuff in a shoot function, shoot with mouse
+			
 			Vector dir = getMousePosRelative().copy().normalize();
 			
 			if (dir.notInPlane()) {
 				return;
 			}
 			
-			world.add(new Projectile(focus, states.getMovementVector(), dir));
+			focus.getInventory().tryToShoot(world, focus, states.getMovementVector(), dir);
+			
 		}
 		
 	}

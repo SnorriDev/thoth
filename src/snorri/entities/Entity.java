@@ -78,6 +78,11 @@ public class Entity implements Nominal, Serializable {
 	}
 	
 	public void renderHitbox(GameWindow g, Graphics gr) {
+		
+		if (pos == null) {
+			return;
+		}
+		
 		Vector rel = pos.copy();
 		rel.sub(g.getFocus().pos);
 		gr.drawOval(rel.getX() - r + g.getBounds().width / 2, rel.getY() - r + g.getBounds().height / 2, 2 * r, 2 * r);

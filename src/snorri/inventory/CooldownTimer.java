@@ -4,7 +4,7 @@ public class CooldownTimer {
 
 	private float currentTime, cooldown;
 	
-	public CooldownTimer(int cooldown) {
+	public CooldownTimer(float cooldown) {
 		this.cooldown = cooldown;
 		currentTime = cooldown;
 	}

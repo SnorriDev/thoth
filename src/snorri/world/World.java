@@ -22,18 +22,21 @@ public class World {
 	private EntityGroup col;
 	private List<Collider> colliders;
 	private Queue<Entity> deleteQ;
+	private Queue<Entity> addQ;
 
 	public World() {
 		level = new Level(100, 100); // TODO: pass a level file to read
 		col = new EntityGroup();
 		colliders = new ArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
+		addQ = new LinkedList<Entity>();
 	}
 
 	public World(File f) throws FileNotFoundException, IOException {
 		load(f);
 		colliders = new ArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
+		addQ = new LinkedList<Entity>();
 	}
 
 	public World(String fileName) throws FileNotFoundException, IOException {
@@ -58,6 +61,10 @@ public class World {
 
 		while (!deleteQ.isEmpty()) {
 			deleteHard(deleteQ.poll());
+		}
+		
+		while (!addQ.isEmpty()) {
+			addHard(addQ.poll());
 		}
 
 	}
@@ -89,6 +96,10 @@ public class World {
 	 * 
 	 */
 	public void add(Entity e) {
+		addQ.add(e);
+	}
+	
+	public void addHard(Entity e) {
 
 		if (e instanceof Collider) {
 			colliders.add((Collider) e);
@@ -106,7 +117,7 @@ public class World {
 	 * @param e
 	 *            the entity to delete
 	 */
-	public void deleteSoft(Entity e) {
+	public void delete(Entity e) {
 		deleteQ.add(e);
 	}
 
@@ -118,7 +129,7 @@ public class World {
 	 *            the entity to delete
 	 */
 	private boolean deleteHard(Entity e) {
-
+		
 		if (e instanceof Collider) {
 			return colliders.remove(e);
 		}

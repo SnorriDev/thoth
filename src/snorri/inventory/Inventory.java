@@ -3,9 +3,11 @@ package snorri.inventory;
 import java.awt.Graphics;
 
 import snorri.entities.Player;
+import snorri.entities.Projectile;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.world.Vector;
+import snorri.world.World;
 
 public class Inventory {
 	
@@ -13,7 +15,7 @@ public class Inventory {
 	
 	private Weapon weaponSlot;
 	private Armor armorSlot;
-	private Projectile[] projectileSlots;
+	private Orb[] projectileSlots;
 	private Papyrus[] papyrusSlots;
 	private int selectedProjectile = 0;
 
@@ -25,20 +27,35 @@ public class Inventory {
 
 	public Inventory(Player player) {
 		this.player = player;
-		projectileSlots = new Projectile[PROJECTILE_SLOTS];
+		projectileSlots = new Orb[PROJECTILE_SLOTS];
 		papyrusSlots = new Papyrus[PAPYRUS_SLOTS];
 	}
 	
 	public void update(float deltaTime) {
-		//TODO: cooldowns on other things as well?
+
+		if (weaponSlot != null) {
+			weaponSlot.updateCooldown(deltaTime);
+		}
+		
+		if (armorSlot != null) {
+			armorSlot.updateCooldown(deltaTime);
+		}
+		
+		for (int i = 0; i < PROJECTILE_SLOTS; i++) {
+			if (projectileSlots[i] != null) {
+				projectileSlots[i].updateCooldown(deltaTime);
+			}
+		}
+		
 		for (int i = 0; i < PAPYRUS_SLOTS; i++) {
 			if (papyrusSlots[i] != null) {
 				papyrusSlots[i].updateCooldown(deltaTime);
 			}
 		}
+		
 	}
 
-	public void addProjectile(Projectile newProjectile) {
+	public void addProjectile(Orb newProjectile) {
 		for (int i = 0; i < PROJECTILE_SLOTS; i++) {
 			if (projectileSlots[i] == null) {
 				projectileSlots[i] = newProjectile;
@@ -73,6 +90,21 @@ public class Inventory {
 		weaponSlot = newWeapon;
 		return;
 	}
+	
+	public boolean tryToShoot(World world, Player focus, Vector movement, Vector dir) {
+		
+		if (weaponSlot == null) {
+			return false;
+		}
+		
+		if (weaponSlot.getTimer().activate()) {
+			world.add(new Projectile(focus, movement, dir, weaponSlot, getSelectedProjectile()));
+			return true;
+		}
+		
+		return false;
+		
+	}
 
 	public Armor getArmor() {
 		return armorSlot;
@@ -82,7 +114,7 @@ public class Inventory {
 		armorSlot = newArmor;
 	}
 
-	public Projectile getProjectile(int index) {
+	public Orb getProjectile(int index) {
 		if (index < 0 || index >= PROJECTILE_SLOTS) {
 			Main.error("index out of range, returning empty");
 			return null;
@@ -90,7 +122,7 @@ public class Inventory {
 		return projectileSlots[index];
 	}
 
-	public void setProjectile(int slot, Projectile newProjectile) {
+	public void setProjectile(int slot, Orb newProjectile) {
 		if (slot < 0 || slot >= PROJECTILE_SLOTS) {
 			Main.error("slot out of range");
 			return;
@@ -116,7 +148,7 @@ public class Inventory {
 		return;
 	}
 	
-	public Projectile getSelectedProjectile() {
+	public Orb getSelectedProjectile() {
 		return getProjectile(selectedProjectile);
 	}
 	
@@ -130,18 +162,18 @@ public class Inventory {
 		Vector topPos = new Vector(MARGIN, MARGIN);
 		
 		for (int i = 0; i < PROJECTILE_SLOTS; i++) {
-			drawItemContainer(g, topPos, projectileSlots[i], Projectile.class, selectedProjectile == i);
+			drawItemContainer(g, topPos, projectileSlots[i], Orb.class, selectedProjectile == i);
 		}
 		
 		for (int i = 0; i < PAPYRUS_SLOTS; i++) {
 			//will draw as selected/not selected based on cooldown
-			drawItemContainer(g, topPos, papyrusSlots[i], Papyrus.class, !(papyrusSlots[i] == null || !papyrusSlots[i].canUse()));
+			drawItemContainer(g, topPos, papyrusSlots[i], Papyrus.class);
 		}
 		
 		Vector bottomPos = new Vector(MARGIN, window.getDimensions().getY() - MARGIN - Item.getSlotWidth());
 		
-		drawItemContainer(g, bottomPos, weaponSlot, Weapon.class, true);
-		drawItemContainer(g, bottomPos, armorSlot, Armor.class, true);
+		drawItemContainer(g, bottomPos, weaponSlot, Weapon.class);
+		drawItemContainer(g, bottomPos, armorSlot, Armor.class);
 		
 	}
 	
@@ -152,9 +184,9 @@ public class Inventory {
 		int width;	
 		if (item == null) {
 			if (slotType.equals(Papyrus.class)) {
-				width = Item.drawEmptyPapyrus(g, pos, flag);
-			} else if (slotType.equals(Projectile.class)) {
-				width = Item.drawEmptyProjectile(g, pos, flag);
+				width = Papyrus.drawEmptyPapyrus(g, pos, flag);
+			} else if (slotType.equals(Orb.class)) {
+				width = Orb.drawEmptyOrb(g, pos, flag);
 			} else {
 				width = Item.drawEmpty(g, pos);
 			}
@@ -164,6 +196,10 @@ public class Inventory {
 		
 		pos.add(width + SLOT_SPACE, 0);
 		
+	}
+	
+	private void drawItemContainer(Graphics g, Vector pos, Item item, Class<? extends Item> slotType) {
+		drawItemContainer(g, pos, item, slotType, !(item == null || !item.canUse()));
 	}
 
 }
