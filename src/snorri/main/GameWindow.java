@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Date;
 
 import javax.swing.SwingWorker;
 
@@ -73,15 +72,15 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 		}
 				
 		long time = getTimestamp();
-		world.update((time - lastTime) / 1000f);
+		world.update((time - lastTime) / 1000000000f);
 		lastTime = time;
 		repaint();
 				
 	}
 	
+	//returns nanosecond-accurate time
 	private long getTimestamp() {
-		Date date = new Date();
-		return date.getTime();
+		return System.nanoTime();
 	}
 	
 	@Override

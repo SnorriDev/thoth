@@ -41,7 +41,15 @@ public class Projectile extends Collider {
 	
 	@Override
 	public void update(World world, float deltaTime) {
-		pos.add(velocity.copy().multiply(deltaTime));
+		
+		if (weapon == null || !weapon.altersMovement()) {
+			pos.add(velocity.copy().multiply(deltaTime));
+		} 
+		
+		if (weapon != null) {
+			Main.log("orb output: " + weapon.useSpellOn(this));
+		}
+		
 		super.update(world, deltaTime);
 	}
 

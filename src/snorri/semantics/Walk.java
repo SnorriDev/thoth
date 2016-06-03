@@ -24,5 +24,10 @@ public class Walk extends VerbDef {
 	public boolean eval(Object subj, Object obj) {
 		return subj instanceof Projectile;
 	}
+	
+	@Override
+	public boolean altersMovement() {
+		return true;
+	}
 
 }

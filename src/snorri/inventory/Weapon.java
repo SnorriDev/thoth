@@ -14,4 +14,13 @@ public class Weapon extends Item {
 		return (int) type.getProperty(0);
 	}
 
+	public boolean altersMovement() {
+		
+		if (spell == null) {
+			return false;
+		}
+		
+		return spell.altersMovement();
+	}
+
 }

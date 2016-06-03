@@ -22,5 +22,9 @@ public abstract class Definition {
 	}
 	
 	public abstract Object getMeaning(SpellEvent e);
+
+	public boolean altersMovement() {
+		return false;
+	}
 	
 }
