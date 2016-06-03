@@ -26,20 +26,20 @@ public class Main {
 		
 		Lexicon.init();
 		
-//		World w = new World();
-//		w.add(new Entity(new Vector(40, 40)));
-//		try {
-//			w.save("C:/Users/vikin_000/Desktop/world_test");
-//		} catch (IOException e) {
-//			Main.error("boom");
-//		}
-//		
-//		try {
-//			World w2 = new World("C:/Users/vikin_000/Desktop/world_test");
-//			Main.log(w2.getEntityTree().getAllEntities());
-//		} catch (IOException e) {
-//			Main.error("boom2");
-//		}
+		//		World w = new World();
+		//		w.add(new Entity(new Vector(40, 40)));
+		//		try {
+		//			w.save("C:/Users/vikin_000/Desktop/world_test");
+		//		} catch (IOException e) {
+		//			Main.error("boom");
+		//		}
+		//		
+		//		try {
+		//			World w2 = new World("C:/Users/vikin_000/Desktop/world_test");
+		//			Main.log(w2.getEntityTree().getAllEntities());
+		//		} catch (IOException e) {
+		//			Main.error("boom2");
+		//		}
 		
 		frame = new JFrame("Spoken Word");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,8 +74,9 @@ public class Main {
 	
 	public static Image getImageResource(String path) {
 		try {
-			return ImageIO.read(Main.class.getResource("/textures/items/bow.png"));
-		} catch (IOException e) {
+			return ImageIO.read(Main.class.getResource(path));
+		}
+		catch (IOException e) {
 			Main.error("unable to find image " + path);
 			return null;
 		}

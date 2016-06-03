@@ -1,5 +1,8 @@
 package snorri.world;
 
+import java.awt.Image;
+
+import snorri.main.Main;
 import snorri.semantics.Nominal;
 
 
@@ -39,26 +42,47 @@ public class Tile {
 	
 	public enum TileType implements Nominal {
 												
-												SAND(true),
-												WALL(false, 50),
-												TREE(false, 30),
-												FOUNDATION(false, Integer.MAX_VALUE),
-												HUT(false, 30),
-												WATER(false, Integer.MAX_VALUE),
-												LAVA(false, Integer.MAX_VALUE);
-												
+												SAND(
+														true,
+														new Image[] {	Main.getImageResource("/textures/tiles/sand00.png"),
+																		Main.getImageResource("/textures/tiles/sand01.png"),
+																		Main.getImageResource("/textures/tiles/sand02.png") }),
+												WALL(
+														false,
+														new Image[] {	Main.getImageResource("/textures/tiles/wall00.png"),
+																		Main.getImageResource("/textures/tiles/wall01.png"),
+																		Main.getImageResource("/textures/tiles/wall02.png"),
+																		Main.getImageResource("/textures/tiles/wall03.png"),
+																		Main.getImageResource("/textures/tiles/wall04.png") }),
+												TREE(
+														false,
+														new Image[] {	Main.getImageResource("/textures/tiles/tree00.png"),
+																		Main.getImageResource("/textures/tiles/tree01.png") }),
+												FOUNDATION(false, new Image[] { Main.getImageResource("/textures/tiles/column00.png") }),
+												HUT(false, new Image[] { Main.getImageResource("/textures/tiles/default00.png") }),
+												WATER(
+														false,
+														new Image[] {	Main.getImageResource("/textures/tiles/water00.png"),
+																		Main.getImageResource("/textures/tiles/water01.png") }),
+												LAVA(
+														false,
+														new Image[] {	Main.getImageResource("/textures/tiles/lava00.png"),
+																		Main.getImageResource("/textures/tiles/lava01.png"),
+																		Main.getImageResource("/textures/tiles/lava02.png") });
+																		
 		//TODO: pass an array of textures for each one
 		
 		private boolean	pathable;
-		private int		strength	= 5;
-									
-		TileType(boolean pathable) {
-			this.pathable = pathable;
+		private Image[]	textures;
+						
+		TileType() {
+			pathable = true;
+			textures = new Image[] { Main.getImageResource("/textures/tiles/default00.png") };
 		}
 		
-		TileType(boolean pathable, int strength) {
+		TileType(boolean pathable, Image[] textures) {
 			this.pathable = pathable;
-			this.strength = strength;
+			this.textures = textures;
 		}
 		
 		public static TileType byId(int id) {
@@ -71,10 +95,6 @@ public class Tile {
 		
 		public boolean isPathable() {
 			return pathable;
-		}
-		
-		public int getStrength() {
-			return strength;
 		}
 		
 	}
