@@ -176,7 +176,7 @@ public abstract class Item {
 		return spell;
 	}
 	
-	public Object useSpellAt(Entity subject) {
+	public Object useSpellOn(Entity subject) {
 				
 		if (spell == null) {
 			return null;

@@ -22,7 +22,7 @@ public class Papyrus extends Item {
 	public boolean tryToActivate(Player player) {
 		
 		if (timer.activate()) {
-			Main.log("spell output: " + useSpellAt(player));
+			Main.log("spell output: " + useSpellOn(player));
 			return true;
 		}
 		

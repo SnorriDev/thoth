@@ -57,10 +57,21 @@ public class Projectile extends Collider {
 		}
 		
 		if (orb != null) {
-			Main.log("weapon output: " + orb.useSpellAt(e.getTarget()));
+			Main.log("weapon output: " + orb.useSpellOn(e.getTarget()));
 		}
 				
 		e.getWorld().delete(this); //could use removeFrom, but this is a little better
+		
+	}
+	
+	@Override
+	public Object get(World world, AbstractSemantics attr) {
+		
+		if (attr == AbstractSemantics.SOURCE) {
+			return root;
+		}
+		
+		return super.get(world, attr);
 		
 	}
 
