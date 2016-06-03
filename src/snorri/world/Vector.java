@@ -94,5 +94,9 @@ public class Vector implements Serializable {
 	public boolean equals(Vector pos) {
 		return x == pos.x && y == pos.y;
 	}
+
+	public void add(int i, int j) {
+		add(new Vector(i, j));
+	}
 	
 }

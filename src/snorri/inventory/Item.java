@@ -15,7 +15,15 @@ public abstract class Item {
 	protected int quantity = 1; // default value
 	protected Node spell; // spell/enchantment associated with the item
 	protected ItemType type; // what type of item it is; you can get ID, maxQuantity, enchantable from this
+	
+	protected static final Image DEFAULT_BORDER = Main.getImageResource("/textures/hud/itemBorder.png");
+	
+	protected static final Image PROJECTILE_BORDER = Main.getImageResource("/textures/hud/projectileBorder.png");
+	protected static final Image PAPYRUS_BORDER = Main.getImageResource("/textures/hud/papyrusBorder.png");
 
+	protected static final Image PROJECTILE_BORDER_SELECTED = Main.getImageResource("/textures/hud/projectileBorderSelected.png");
+	protected static final Image PAPYRUS_BORDER_SELECTED = Main.getImageResource("/textures/hud/papyrusBorderSelected.png");
+	
 	public enum ItemType {
 
 		EMPTY,
@@ -169,23 +177,58 @@ public abstract class Item {
 		return type.toString();
 	}
 	
-	public void render(Graphics g, Vector pos) {
-		
-		if (type.getTexture() == null) {
-			return;
-		}
-		
-		g.drawImage(type.getTexture(), pos.getX(), pos.getY(), null);
+	public Image getBorder() {
+		return DEFAULT_BORDER;
 	}
-
-	public void renderSmall(Graphics g, Vector pos) {
-
-		if (type.getTexture() == null) {
-			return;
-		}
+	
+	//TODO: use an ImageViewer to scale things
+	
+	/**
+	 * draws a thumbnail and returns its width
+	 * @param g
+	 * @param pos
+	 * @return
+	 * 	width of thumbnail drawn
+	 */
+	public int drawThumbnail(Graphics g, Vector pos) {
 		
-		g.drawImage(type.getTexture(), pos.getX(), pos.getY(), 32, 32, null);
+		Image border = getBorder();
+		Image icon = type.getTexture();
 		
+		Vector iconPos = pos.copy();
+		iconPos.add(new Vector((border.getWidth(null) - icon.getWidth(null)) / 2, (border.getHeight(null) - icon.getHeight(null)) / 2));
+		
+		g.drawImage(border, pos.getX(), pos.getY(), null);
+		g.drawImage(icon, iconPos.getX(), iconPos.getY(), null);
+		
+		return border.getWidth(null);
+		
+	}
+	
+	/**
+	 * draws an empty thumbnail and returns its width
+	 * @param g
+	 * @param pos
+	 * @return
+	 * 	width of thumbnail drawn
+	 */
+	public static int drawEmpty(Graphics g, Vector pos) {
+		g.drawImage(DEFAULT_BORDER, pos.getX(), pos.getY(), null);
+		return getSlotWidth();
+	}
+	
+	public static int drawEmptyProjectile(Graphics g, Vector pos, boolean selected) {
+		g.drawImage(selected ? PROJECTILE_BORDER_SELECTED : PROJECTILE_BORDER, pos.getX(), pos.getY(), null);
+		return getSlotWidth();
+	}
+	
+	public static int drawEmptyPapyrus(Graphics g, Vector pos, boolean selected) {
+		g.drawImage(selected ? PAPYRUS_BORDER_SELECTED : PAPYRUS_BORDER, pos.getX(), pos.getY(), null);
+		return getSlotWidth();
+	}
+	
+	public static int getSlotWidth() {
+		return DEFAULT_BORDER.getWidth(null);
 	}
 
 }

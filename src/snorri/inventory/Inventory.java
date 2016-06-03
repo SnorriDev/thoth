@@ -1,6 +1,5 @@
 package snorri.inventory;
 
-import java.awt.Color;
 import java.awt.Graphics;
 
 import snorri.main.GameWindow;
@@ -13,16 +12,13 @@ public class Inventory { // TODO: implement cooldown
 	private Armor armorSlot;
 	private Projectile[] projectileSlots;
 	private Papyrus[] papyrusSlots;
+	private int selectedProjectile = 0;
 
 	private static final int PROJECTILE_SLOTS = 2;
 	private static final int PAPYRUS_SLOTS = 3;
 	
-	private static final int SLOT_WIDTH = 64;
-	private static final int BOTTOM_MARGIN = 20;
+	private static final int MARGIN = 20;
 	private static final int SLOT_SPACE = 15;
-	
-	private static final Color BORDER = new Color(127, 130, 99);
-	private static final Color BACKGROUND = new Color(206, 176, 103, 200);
 
 	public Inventory() {
 		projectileSlots = new Projectile[PROJECTILE_SLOTS];
@@ -91,7 +87,7 @@ public class Inventory { // TODO: implement cooldown
 		}
 		return papyrusSlots[index];
 	}
-
+	
 	public void setPapyrus(int slot, Papyrus newPapyrus) {
 		if (slot < 0 || slot >= PAPYRUS_SLOTS) {
 			Main.error("slot out of range");
@@ -101,60 +97,51 @@ public class Inventory { // TODO: implement cooldown
 		return;
 	}
 	
+	public Projectile getSelectedProjectile() {
+		return getProjectile(selectedProjectile);
+	}
+	
+	public void selectProjectile(int i) {
+		selectedProjectile = i;
+	}
+
+	
 	public void render(GameWindow window, Graphics g) {
 		
-		Vector dim = window.getDimensions();
-		int x = (dim.getX() - 5 * SLOT_WIDTH) / 2 - SLOT_SPACE;
-		int y = dim.getY() - BOTTOM_MARGIN - SLOT_WIDTH;
-		
-		drawSmallContainers(g, new Vector(x, y), weaponSlot, armorSlot);
-		x += SLOT_WIDTH / 2;
+		Vector topPos = new Vector(MARGIN, MARGIN);
 		
 		for (int i = 0; i < PROJECTILE_SLOTS; i++) {
-			drawItemContainer(g, new Vector(x, y), projectileSlots[i]);
-			x += SLOT_WIDTH;
+			drawItemContainer(g, topPos, projectileSlots[i], Projectile.class, selectedProjectile == i);
 		}
-		x += SLOT_SPACE;
 		
 		for (int i = 0; i < PAPYRUS_SLOTS; i++) {
-			drawItemContainer(g, new Vector(x, y), papyrusSlots[i]);
-			x += SLOT_WIDTH;
+			drawItemContainer(g, topPos, papyrusSlots[i], Papyrus.class, false);
 		}
+		
+		Vector bottomPos = new Vector(MARGIN, window.getDimensions().getY() - MARGIN - Item.getSlotWidth());
+		
+		drawItemContainer(g, bottomPos, weaponSlot, Weapon.class, false);
+		drawItemContainer(g, bottomPos, armorSlot, Armor.class, false);
 		
 	}
 	
-	private void drawSmallContainers(Graphics g, Vector pos, Item item1, Item item2) {
+	//updates the vector
+	private void drawItemContainer(Graphics g, Vector pos, Item item, Class<? extends Item> slotType, boolean flag) {
 		
-		g.setColor(BACKGROUND);
-		g.fillRect(pos.getX(), pos.getY(), SLOT_WIDTH / 2, SLOT_WIDTH);
-		
-		g.setColor(BORDER);
-		g.drawRect(pos.getX(), pos.getY(), SLOT_WIDTH / 2, SLOT_WIDTH / 2);
-		g.drawRect(pos.getX(), pos.getY() + SLOT_WIDTH / 2, SLOT_WIDTH / 2, SLOT_WIDTH / 2);
-	
-		if (item1 != null) {
-			item1.renderSmall(g, pos);
+		int width;	
+		if (item == null) {
+			if (slotType.equals(Papyrus.class)) {
+				width = Item.drawEmptyPapyrus(g, pos, flag);
+			} else if (slotType.equals(Projectile.class)) {
+				width = Item.drawEmptyProjectile(g, pos, flag);
+			} else {
+				width = Item.drawEmpty(g, pos);
+			}
+		} else {
+			width = item.drawThumbnail(g, pos);
 		}
 		
-		if (item2 != null) {
-			item2.renderSmall(g, pos);
-		}
-		
-	}
-	
-	private void drawItemContainer(Graphics g, Vector pos, Item item) {
-		
-		g.setColor(BACKGROUND);
-		g.fillRect(pos.getX(), pos.getY(), SLOT_WIDTH, SLOT_WIDTH);
-
-		//TODO: once all Item textures are non-null, maybe move this to Item when we render the image
-		g.setColor(BORDER);
-		g.drawRect(pos.getX(), pos.getY(), SLOT_WIDTH, SLOT_WIDTH);
-		
-		g.setColor(Color.BLACK);
-		if (item != null) {
-			item.render(g, pos);
-		}
+		pos.add(width + SLOT_SPACE, 0);
 		
 	}
 
