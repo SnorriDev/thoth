@@ -9,8 +9,8 @@ public class Projectile extends Item {
 	}
 	
 	@Override
-	public Image getBorder() {
-		return PROJECTILE_BORDER;
+	public Image getBorder(boolean selected) {
+		return selected ? PROJECTILE_BORDER_SELECTED : PROJECTILE_BORDER;
 	}
 
 }

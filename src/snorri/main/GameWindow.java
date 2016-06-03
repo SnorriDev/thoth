@@ -15,10 +15,8 @@ import snorri.entities.Desk;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.entities.Projectile;
-import snorri.events.SpellEvent;
 import snorri.keyboard.Key;
 import snorri.keyboard.KeyStates;
-import snorri.parser.Spell;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -74,12 +72,12 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 			focus.walk(states.getMovementVector(), world.getEntityTree()); //TODO: move to update method of Player?
 			
 		}
-		
+				
 		long time = getTimestamp();
 		world.update((time - lastTime) / 1000f);
 		lastTime = time;
 		repaint();
-		
+				
 	}
 	
 	private long getTimestamp() {
@@ -135,6 +133,7 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 		if (e.getKeyChar() == Key.SPACE.getChar()) {
 			Collider interactRegion = new Collider(getFocus().getPos(), getFocus().getRadius() + Desk.INTERACT_RANGE);
 			//could make this more efficient potentially by making a new method
+			//also move to its own thing for organization?
 			for (Entity entity : world.getEntityTree().getAllCollisions(interactRegion)) {
 				if (entity instanceof Desk) {
 					Main.log("interacting with a desk");
@@ -143,10 +142,30 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 			}
 		}
 		
-		if (e.getKeyChar() == Key.Q.getChar()) {
-			//Cast a spell with space bar for debugging purposes	
-			Spell.castWTFMode("bm m=f", new SpellEvent(this, getFocus()));	
+		if (e.getKeyChar() == Key.ONE.getChar()) {
+			focus.getInventory().selectProjectile(0);
 		}
+		
+		if (e.getKeyChar() == Key.TWO.getChar()) {
+			focus.getInventory().selectProjectile(1);
+		}
+		
+		if (e.getKeyChar() == Key.THREE.getChar()) {
+			focus.getInventory().usePapyrus(0);
+		}
+		
+		if (e.getKeyChar() == Key.FOUR.getChar()) {
+			focus.getInventory().usePapyrus(1);
+		}
+		
+		if (e.getKeyChar() == Key.FIVE.getChar()) {
+			focus.getInventory().usePapyrus(2);
+		}
+		
+//		if (e.getKeyChar() == Key.Q.getChar()) {
+//			//Cast a spell with space bar for debugging purposes	
+//			Spell.castWTFMode("bm m=f", new SpellEvent(this, getFocus()));	
+//		}
 		
 	}
 

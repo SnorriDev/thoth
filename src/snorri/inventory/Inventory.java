@@ -2,11 +2,14 @@ package snorri.inventory;
 
 import java.awt.Graphics;
 
+import snorri.entities.Player;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.world.Vector;
 
-public class Inventory { // TODO: implement cooldown
+public class Inventory {
+	
+	private Player player;
 	
 	private Weapon weaponSlot;
 	private Armor armorSlot;
@@ -20,9 +23,19 @@ public class Inventory { // TODO: implement cooldown
 	private static final int MARGIN = 20;
 	private static final int SLOT_SPACE = 15;
 
-	public Inventory() {
+	public Inventory(Player player) {
+		this.player = player;
 		projectileSlots = new Projectile[PROJECTILE_SLOTS];
 		papyrusSlots = new Papyrus[PAPYRUS_SLOTS];
+	}
+	
+	public void update(float deltaTime) {
+		//TODO: cooldowns on other things as well?
+		for (int i = 0; i < PAPYRUS_SLOTS; i++) {
+			if (papyrusSlots[i] != null) {
+				papyrusSlots[i].updateCooldown(deltaTime);
+			}
+		}
 	}
 
 	public void addProjectile(Projectile newProjectile) {
@@ -43,6 +56,12 @@ public class Inventory { // TODO: implement cooldown
 			}
 		}
 		Main.error("all papyrus slots full, cannot add papyrus");
+	}
+	
+	public void usePapyrus(int i) {
+		if (papyrusSlots[i] != null) {
+			papyrusSlots[i].tryToActivate(player);
+		}
 	}
 
 	public Weapon getWeapon() {
@@ -115,16 +134,18 @@ public class Inventory { // TODO: implement cooldown
 		}
 		
 		for (int i = 0; i < PAPYRUS_SLOTS; i++) {
-			drawItemContainer(g, topPos, papyrusSlots[i], Papyrus.class, false);
+			//will draw as selected/not selected based on cooldown
+			drawItemContainer(g, topPos, papyrusSlots[i], Papyrus.class, !(papyrusSlots[i] == null || !papyrusSlots[i].canUse()));
 		}
 		
 		Vector bottomPos = new Vector(MARGIN, window.getDimensions().getY() - MARGIN - Item.getSlotWidth());
 		
-		drawItemContainer(g, bottomPos, weaponSlot, Weapon.class, false);
-		drawItemContainer(g, bottomPos, armorSlot, Armor.class, false);
+		drawItemContainer(g, bottomPos, weaponSlot, Weapon.class, true);
+		drawItemContainer(g, bottomPos, armorSlot, Armor.class, true);
 		
 	}
 	
+	//might be nicer if we split this into three different methods
 	//updates the vector
 	private void drawItemContainer(Graphics g, Vector pos, Item item, Class<? extends Item> slotType, boolean flag) {
 		
@@ -138,7 +159,7 @@ public class Inventory { // TODO: implement cooldown
 				width = Item.drawEmpty(g, pos);
 			}
 		} else {
-			width = item.drawThumbnail(g, pos);
+			width = item.drawThumbnail(g, pos, flag);
 		}
 		
 		pos.add(width + SLOT_SPACE, 0);

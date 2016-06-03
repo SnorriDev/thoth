@@ -1,5 +1,6 @@
 package snorri.inventory;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -14,15 +15,19 @@ public abstract class Item {
 	
 	protected int quantity = 1; // default value
 	protected Node spell; // spell/enchantment associated with the item
+	protected String nickname; //name which the player gives the item so they know what it does
 	protected ItemType type; // what type of item it is; you can get ID, maxQuantity, enchantable from this
+	
+	private static final int ICON_SIZE = 64;
+	private static final Color COOLDOWN_COLOR = new Color(118, 45, 50, 150);
 	
 	protected static final Image DEFAULT_BORDER = Main.getImageResource("/textures/hud/itemBorder.png");
 	
-	protected static final Image PROJECTILE_BORDER = Main.getImageResource("/textures/hud/projectileBorder.png");
-	protected static final Image PAPYRUS_BORDER = Main.getImageResource("/textures/hud/papyrusBorder.png");
+	protected static final Image PROJECTILE_BORDER = Main.getImageResource("/textures/hud/projectileBorderInactive.png");
+	protected static final Image PAPYRUS_BORDER = Main.getImageResource("/textures/hud/papyrusBorderInactive.png");
 
-	protected static final Image PROJECTILE_BORDER_SELECTED = Main.getImageResource("/textures/hud/projectileBorderSelected.png");
-	protected static final Image PAPYRUS_BORDER_SELECTED = Main.getImageResource("/textures/hud/papyrusBorderSelected.png");
+	protected static final Image PROJECTILE_BORDER_SELECTED = Main.getImageResource("/textures/hud/projectileBorder.png");
+	protected static final Image PAPYRUS_BORDER_SELECTED = Main.getImageResource("/textures/hud/papyrusBorder.png");
 	
 	public enum ItemType {
 
@@ -153,7 +158,12 @@ public abstract class Item {
 		return spell;
 	}
 	
-	public Object doSpellAt(Entity subject) {
+	public Object useSpellAt(Entity subject) {
+		
+		if (spell == null) {
+			return null;
+		}
+		
 		SpellEvent e = new SpellEvent((GameWindow) Main.getWindow(), subject);
 		return spell.getMeaning(e);
 	}
@@ -174,10 +184,18 @@ public abstract class Item {
 	
 	@Override
 	public String toString() {
-		return type.toString();
+		return type.toString() + "{" + nickname + "}";
 	}
 	
-	public Image getBorder() {
+	public void setNickname(String s) {
+		nickname = s;
+	}
+	
+	public String getNickname() {
+		return nickname;
+	}
+	
+	public Image getBorder(boolean selected) {
 		return DEFAULT_BORDER;
 	}
 	
@@ -187,20 +205,33 @@ public abstract class Item {
 	 * draws a thumbnail and returns its width
 	 * @param g
 	 * @param pos
+	 * @param selected 
 	 * @return
 	 * 	width of thumbnail drawn
 	 */
-	public int drawThumbnail(Graphics g, Vector pos) {
+	public int drawThumbnail(Graphics g, Vector pos, boolean selected) {
 		
-		Image border = getBorder();
+		Image border = getBorder(selected);
 		Image icon = type.getTexture();
 		
 		Vector iconPos = pos.copy();
 		iconPos.add(new Vector((border.getWidth(null) - icon.getWidth(null)) / 2, (border.getHeight(null) - icon.getHeight(null)) / 2));
 		
-		g.drawImage(border, pos.getX(), pos.getY(), null);
-		g.drawImage(icon, iconPos.getX(), iconPos.getY(), null);
-		
+		//TODO: show cooldown
+				
+		if (selected) {
+			g.drawImage(border, pos.getX(), pos.getY(), null);
+			g.drawImage(icon, iconPos.getX(), iconPos.getY(), null);
+		} else {
+			g.drawImage(icon, iconPos.getX(), iconPos.getY(), null);
+			g.drawImage(border, pos.getX(), pos.getY(), null);
+			if (this instanceof Papyrus) { //TODO: instanceof Cooldownable
+				g.setColor(COOLDOWN_COLOR);
+				g.fillArc(iconPos.getX(), iconPos.getY(), ICON_SIZE, ICON_SIZE, 90, ((Papyrus) this).getTimer().getRatio(360));
+				g.setColor(Color.BLACK);
+			}
+		}
+					
 		return border.getWidth(null);
 		
 	}

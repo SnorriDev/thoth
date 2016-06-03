@@ -44,7 +44,7 @@ public class Main {
 		
 		frame = new JFrame("Spoken Word");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(1920, 1080);
+		frame.setSize(1800, 900);
 		frame.setVisible(true);
 		
 		//FOR FULL SCREEN: frame.setExtendedState(JFrame.MAXIMIZED_BOTH);

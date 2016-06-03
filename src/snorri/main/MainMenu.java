@@ -10,8 +10,11 @@ public class MainMenu extends GamePanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 		
 	public MainMenu() {
-		createButton("Play");
-		createButton("Map Editor");
+		//setLayout(new BorderLayout());
+		createButton("New Story");
+		createButton("Continue Story");
+		createButton("Load World");
+		createButton("World Editor");
 	}
 	
 	private JButton createButton(String text) {
@@ -26,10 +29,10 @@ public class MainMenu extends GamePanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		switch (e.getActionCommand()) {
-		case "Play":
+		case "New Story":
 			Main.launchGame();
 			break;
-		case "Map Editor":
+		case "World Editor":
 			Main.launchEditor();
 		}
 		

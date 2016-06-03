@@ -1,9 +1,10 @@
-package snorri.parser;
+package snorri.main;
 
 import snorri.events.SpellEvent;
-import snorri.main.Main;
+import snorri.parser.Grammar;
+import snorri.parser.Node;
 
-public class Spell {
+public class Debug {
 
 	public static void castWTFMode(String s, SpellEvent e) {
 		Node spell = Grammar.parseString(s);
