@@ -90,7 +90,7 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 		super.paintComponent(g);
 		world.render(this, g);
 		focus.getInventory().render(this, g);
-		//focus.renderHealthBar(g);
+		focus.renderHealthBar(g);
 	}
 	
 	public Player getFocus() {
