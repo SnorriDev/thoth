@@ -26,6 +26,8 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 	private static final long serialVersionUID = 1L;
 	private static final int FRAME_DELTA = 30;
 	
+	public static final int MARGIN = 20;
+	
 	private KeyStates states;
 	
 	private World world;
@@ -88,6 +90,7 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 		super.paintComponent(g);
 		world.render(this, g);
 		focus.getInventory().render(this, g);
+		//focus.renderHealthBar(g);
 	}
 	
 	public Player getFocus() {
