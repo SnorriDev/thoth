@@ -85,10 +85,10 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 	}
 	
 	@Override
-	public void paintComponent(Graphics g){
-		super.paintComponent(g);
-		world.render(this, g);
-		focus.getInventory().render(this, g);
+	public void paintComponent(Graphics gr){
+		super.paintComponent(gr);
+		world.render(this, gr);
+		focus.getInventory().render(this, gr);
 	}
 	
 	public Player getFocus() {

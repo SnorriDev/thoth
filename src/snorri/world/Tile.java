@@ -1,8 +1,9 @@
 package snorri.world;
 
+import java.awt.Graphics;
 import java.awt.Image;
-import java.io.IOException;
 
+import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.semantics.Nominal;
 
@@ -13,10 +14,11 @@ public class Tile {
 	public static final int	WIDTH	= 16;
 									
 	private TileType		type;
-	private int				style	= 0;
-									
+	private int				style;
+	
 	public Tile(TileType type) {
 		this.type = type;
+		style = 0;
 	}
 	
 	public Tile(TileType type, int style) {
@@ -26,6 +28,7 @@ public class Tile {
 	
 	public Tile(int id) {
 		this(TileType.byId(id));
+		style = 0;
 	}
 	
 	public Tile(int id, int style) {
@@ -39,6 +42,12 @@ public class Tile {
 	
 	public int getStyle() {
 		return style;
+	}
+	
+	public void drawTile(GameWindow g, Graphics gr, Vector v) {
+		Vector relPos = v.getRelPos(g);
+		gr.drawImage(type.getTexture(style), relPos.getX(), (int)relPos.getY(), g);
+		return;
 	}
 	
 	public enum TileType implements Nominal {
@@ -63,8 +72,6 @@ public class Tile {
 														Main.getImageResource("/textures/tiles/lava00.png"),
 														Main.getImageResource("/textures/tiles/lava01.png"),
 														Main.getImageResource("/textures/tiles/lava02.png")});
-												
-		//TODO: pass an array of textures for each one
 		
 		private boolean	pathable;
 		private Image[]	textures;

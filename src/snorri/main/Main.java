@@ -97,6 +97,7 @@ public class Main {
 		
 		frame.getContentPane().remove(window);
 		
+		
 		World world = new World();
 		
 		world.add(new Entity(new Vector(105, 130)));

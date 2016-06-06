@@ -4,6 +4,9 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.Serializable;
 
+import snorri.main.GameWindow;
+import snorri.main.Main;
+
 public class Vector implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -26,6 +29,12 @@ public class Vector implements Serializable {
 		this.x = r.getWidth();
 		this.y = r.getHeight();
 	}
+	
+	public Vector getRelPos(GameWindow g) {
+		Vector focusPos = g.getFocus().getPos();
+		Vector relPos = this.multiply(Tile.WIDTH).sub(focusPos).add(g.getDimensions().divide(2));
+		return relPos;
+	}
 
 	public int getX() {
 		return (int) x;
@@ -34,6 +43,14 @@ public class Vector implements Serializable {
 	public int getY() {
 		return (int) y;
 	}
+	
+	/*public double getXdouble() {
+		return x;
+	}
+	
+	public double getYdouble() {
+		return y;
+	}*/
 	
 	//all of this stuff could be cleaned up, maybe
 	//these all have side effects and return a pointer to obj

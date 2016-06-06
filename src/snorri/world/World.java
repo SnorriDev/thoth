@@ -69,15 +69,16 @@ public class World {
 
 	}
 
-	public void render(GameWindow window, Graphics g) {
+	public void render(GameWindow g, Graphics gr) {
 
 		// TODO: draw grid
 		// TODO: render, not render hitboxes
-
-		col.renderAround(window, g);
+		//level.renderMap(g,gr,levelMap);
+		level.renderMap(g, gr);
+		col.renderAround(g, gr);
 
 		for (Collider p : colliders) {
-			p.renderHitbox(window, g);
+			p.renderHitbox(g, gr);
 		}
 
 	}

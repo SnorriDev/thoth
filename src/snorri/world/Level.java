@@ -1,5 +1,6 @@
 package snorri.world;
 
+import java.awt.Graphics;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -7,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.world.Tile.TileType;
 
@@ -56,6 +58,15 @@ public class Level {
 	public Vector getDimensions() {
 		return dim;
 	}
+	
+	public void renderMap(GameWindow g, Graphics gr) {
+		for (int i = 0; i < map.length; i++) {
+			for (int j = 0; j < map[i].length; j++) {
+				map[i][j].drawTile(g, gr, new Vector(i,j)); //will this cause a memory leak?
+			}
+		}
+		return;
+	}
 
 	public void load(File file) throws FileNotFoundException, IOException {
 
@@ -84,6 +95,7 @@ public class Level {
 		is.close();
 
 		Main.log("Load Complete!");
+		return;
 	}
 
 	public void save(String fileName) throws IOException {
@@ -109,5 +121,6 @@ public class Level {
 		os.close();
 
 		Main.log("Save Complete!");
+		return;
 	}
 }
