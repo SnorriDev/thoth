@@ -31,5 +31,15 @@ public class Terminal implements Node {
 	public String toString() {
 		return "[" + orthography + "]";
 	}
+
+	@Override
+	public boolean altersMovement() {
+		
+		if (Lexicon.lookup(orthography) == null) {
+			return false;
+		}
+		
+		return Lexicon.lookup(orthography).altersMovement();
+	}
 	
 }

@@ -27,4 +27,16 @@ public abstract class NonTerminal implements Node {
 		return children;
 	}
 	
+	@Override
+	public boolean altersMovement() {
+		
+		for (Node child : children) {
+			if (child.altersMovement()) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 }

@@ -16,7 +16,7 @@ public class Papyrus extends Item {
 	
 	public Papyrus(ItemType t) {
 		super(t);
-		timer = new CooldownTimer(5);
+		timer = new Timer(5);
 	}
 	
 	public boolean tryToActivate(Player player) {

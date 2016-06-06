@@ -22,7 +22,6 @@ public class Inventory {
 	private static final int PROJECTILE_SLOTS = 2;
 	private static final int PAPYRUS_SLOTS = 3;
 	
-	private static final int MARGIN = 20;
 	private static final int SLOT_SPACE = 15;
 
 	public Inventory(Player player) {
@@ -159,7 +158,7 @@ public class Inventory {
 	
 	public void render(GameWindow window, Graphics g) {
 		
-		Vector topPos = new Vector(MARGIN, MARGIN);
+		Vector topPos = new Vector(GameWindow.MARGIN, GameWindow.MARGIN);
 		
 		for (int i = 0; i < PROJECTILE_SLOTS; i++) {
 			drawItemContainer(g, topPos, projectileSlots[i], Orb.class, selectedProjectile == i);
@@ -170,7 +169,7 @@ public class Inventory {
 			drawItemContainer(g, topPos, papyrusSlots[i], Papyrus.class);
 		}
 		
-		Vector bottomPos = new Vector(MARGIN, window.getDimensions().getY() - MARGIN - Item.getSlotWidth());
+		Vector bottomPos = new Vector(GameWindow.MARGIN, window.getDimensions().getY() - GameWindow.MARGIN - Item.getSlotWidth());
 		
 		drawItemContainer(g, bottomPos, weaponSlot, Weapon.class);
 		drawItemContainer(g, bottomPos, armorSlot, Armor.class);

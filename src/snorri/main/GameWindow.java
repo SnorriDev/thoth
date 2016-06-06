@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Date;
 
 import javax.swing.SwingWorker;
 
@@ -26,6 +25,8 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 	 */
 	private static final long serialVersionUID = 1L;
 	private static final int FRAME_DELTA = 30;
+	
+	public static final int MARGIN = 20;
 	
 	private KeyStates states;
 	
@@ -73,22 +74,23 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 		}
 				
 		long time = getTimestamp();
-		world.update((time - lastTime) / 1000f);
+		world.update((time - lastTime) / 1000000000f);
 		lastTime = time;
 		repaint();
 				
 	}
 	
+	//returns nanosecond-accurate time
 	private long getTimestamp() {
-		Date date = new Date();
-		return date.getTime();
+		return System.nanoTime();
 	}
 	
 	@Override
-	public void paintComponent(Graphics gr){
-		super.paintComponent(gr);
-		world.render(this, gr);
-		focus.getInventory().render(this, gr);
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		world.render(this, g);
+		focus.getInventory().render(this, g);
+		focus.renderHealthBar(g);
 	}
 	
 	public Player getFocus() {

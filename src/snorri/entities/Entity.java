@@ -3,6 +3,7 @@ package snorri.entities;
 import java.awt.Graphics;
 import java.io.Serializable;
 
+import snorri.inventory.Timer;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.semantics.Nominal;
@@ -14,6 +15,8 @@ public class Entity implements Nominal, Serializable {
 	private static final long serialVersionUID = 1L;
 	protected Vector pos;
 	protected int r;
+	
+	private Timer burnTimer = new Timer(5);
 	
 	public Entity(Entity e) {
 		this.pos = e.pos.copy();
@@ -35,6 +38,14 @@ public class Entity implements Nominal, Serializable {
 	
 	public int getRadius() {
 		return r;
+	}
+	
+	public void burn() {
+		burnTimer.hardReset();
+	}
+	
+	public boolean isBurning() {
+		return ! burnTimer.isOffCooldown();
 	}
 
 	public boolean intersects(Vector pos1) {
@@ -75,6 +86,7 @@ public class Entity implements Nominal, Serializable {
 	
 	//TODO: make this into a boolean so we can know whether or not to recalculate collision bubbles
 	public void update(World world, float f) {
+		burnTimer.update(f);
 	}
 	
 	public void renderHitbox(GameWindow g, Graphics gr) {

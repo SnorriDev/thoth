@@ -41,7 +41,15 @@ public class Projectile extends Collider {
 	
 	@Override
 	public void update(World world, float deltaTime) {
-		pos.add(velocity.copy().multiply(deltaTime));
+		
+		if (weapon == null || !weapon.altersMovement()) {
+			pos.add(velocity.copy().multiply(deltaTime));
+		} 
+		
+		if (weapon != null) {
+			Main.log("weapon output: " + weapon.useSpellOn(this, deltaTime / getLifeSpan()));
+		}
+		
 		super.update(world, deltaTime);
 	}
 
@@ -57,7 +65,7 @@ public class Projectile extends Collider {
 		}
 		
 		if (orb != null) {
-			Main.log("weapon output: " + orb.useSpellOn(e.getTarget()));
+			Main.log("orb output: " + orb.useSpellOn(e.getTarget()));
 		}
 				
 		e.getWorld().delete(this); //could use removeFrom, but this is a little better

@@ -21,5 +21,10 @@ public class Move extends VerbDef {
 	public boolean eval(Object subj, Object obj) {
 		return false;
 	}
+	
+	@Override
+	public boolean altersMovement() {
+		return true;
+	}
 
 }
