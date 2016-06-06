@@ -4,13 +4,15 @@ import snorri.entities.Explosion;
 
 public class Boom extends VerbDef {
 
+	private static final double DAMAGE = 100;
+	
 	public Boom() {
 		super(false);
 	}
 
 	@Override
 	public boolean exec(Object obj) {
-		e.getWorld().add(new Explosion(e.getLocative()));
+		e.getWorld().add(new Explosion(e.getLocative(), e.modifyHealthInteraction(DAMAGE)));
 		return true;
 	}
 

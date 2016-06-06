@@ -16,11 +16,18 @@ public class SpellEvent {
 	
 	private Nominal instrument; //assigned by the preposition "with"
 	
+	private double healthInteractModifier = 1; //used so that healing/damage effects aren't ridiculous on continuous casted spells
+	
 	public SpellEvent(GameWindow window, Entity secondPerson) {
 		this.secondPerson = secondPerson;
 		this.window = window;
 		loc = getFirstPerson().getPos().copy();
 		dest = getThirdPerson().getPos().copy();
+	}
+	
+	public SpellEvent(GameWindow window, Entity secondPerson, double healthInteractModifier) {
+		this(window, secondPerson);
+		this.healthInteractModifier = healthInteractModifier;
 	}
 	
 	public SpellEvent(SpellEvent e) {
@@ -29,6 +36,7 @@ public class SpellEvent {
 		instrument = e.instrument;
 		loc = e.loc.copy();
 		dest = e.dest.copy();
+		healthInteractModifier = e.healthInteractModifier;
 	}
 	
 	public World getWorld() {
@@ -69,6 +77,11 @@ public class SpellEvent {
 
 	public void setInstrument(Nominal instrument) {
 		this.instrument = instrument;
+	}
+	
+	//use this to reduce healing and damage on continuous spells
+	public double modifyHealthInteraction(double amount) {
+		return amount * healthInteractModifier;
 	}
 	
 }

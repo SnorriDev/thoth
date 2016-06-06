@@ -1,5 +1,6 @@
 package snorri.entities;
 
+import snorri.events.SpellEvent;
 import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -70,11 +71,19 @@ public class Unit extends Entity {
 		health -= d;
 	}
 	
+	public void damage(double d, SpellEvent e) {
+		heal(e.modifyHealthInteraction(d));
+	}
+	
 	public void heal(double d) {
 		health += d;
 		if (health > MAX_HEALTH) {
 			health = MAX_HEALTH;
 		}
+	}
+	
+	public void heal(double d, SpellEvent e) {
+		heal(e.modifyHealthInteraction(d));
 	}
 	
 	public boolean isDead() {

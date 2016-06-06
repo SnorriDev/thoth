@@ -6,7 +6,7 @@ import snorri.world.Vector;
 public class Explosion extends Collider {
 
 	private static final long serialVersionUID = 1L;
-	private int damage = 100;
+	private double damage = 100;
 	
 	public Explosion(Vector pos) {
 		super(pos, 16);
@@ -16,8 +16,13 @@ public class Explosion extends Collider {
 		super(pos, r);
 	}
 	
-	public Explosion(Vector pos, int r, int damage) {
+	public Explosion(Vector pos, int r, double damage) {
 		super(pos, r);
+		this.damage = damage;
+	}
+	
+	public Explosion(Vector pos, double damage) {
+		this(pos);
 		this.damage = damage;
 	}
 

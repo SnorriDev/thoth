@@ -1,6 +1,9 @@
 package snorri.inventory;
 
-
+import snorri.entities.Entity;
+import snorri.events.SpellEvent;
+import snorri.main.GameWindow;
+import snorri.main.Main;
 
 public class Weapon extends Item {
 
@@ -21,6 +24,17 @@ public class Weapon extends Item {
 		}
 		
 		return spell.altersMovement();
+	}
+	
+	public Object useSpellOn(Entity subject, double modifier) {
+		
+		if (spell == null) {
+			return null;
+		}
+				
+		SpellEvent e = new SpellEvent((GameWindow) Main.getWindow(), subject, modifier);
+		return spell.getMeaning(e);
+		
 	}
 
 }
