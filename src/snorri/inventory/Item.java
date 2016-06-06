@@ -23,7 +23,7 @@ public abstract class Item {
 	private static final Image DEFAULT_BORDER = Main.getImageResource("/textures/hud/itemBorder.png");
 	private static final Color DEFAULT_COOLDOWN_COLOR = new Color(156, 134, 73, 200);
 	
-	protected CooldownTimer timer;
+	protected Timer timer;
 	
 	public enum ItemType {
 
@@ -134,7 +134,7 @@ public abstract class Item {
 		return timer.isOffCooldown();
 	}
 	
-	public CooldownTimer getTimer() {
+	public Timer getTimer() {
 		return timer;
 	}
 

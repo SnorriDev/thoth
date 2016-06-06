@@ -13,6 +13,7 @@ import snorri.semantics.Above;
 import snorri.semantics.At;
 import snorri.semantics.Be;
 import snorri.semantics.Boom;
+import snorri.semantics.Burn;
 import snorri.semantics.Definition;
 import snorri.semantics.FirstObjectPronoun;
 import snorri.semantics.FirstSuffixPronoun;
@@ -51,7 +52,7 @@ public class Lexicon {
 		lexicon.put("HA", new StaticDef(Prep.class, new LeftOf())); //behind
 		lexicon.put("xft", new StaticDef(Prep.class, new RightOf())); //in front of
 		lexicon.put("Hna", new StaticDef(Prep.class, new With())); //with
-		lexicon.put("r", new StaticDef(Prep.class, null)); //around
+		lexicon.put("mhAw", new StaticDef(Prep.class, null)); //around
 		
 		//TODO: add semantics for these prepositions
 		
@@ -95,6 +96,7 @@ public class Lexicon {
 		lexicon.put("xpi", new Walk());
 		lexicon.put("iw", new Be());
 		lexicon.put("bm", new Boom());
+		lexicon.put("mAX", new Burn());
 		
 //		lexicon.put("mAA", new StaticDef(TransVerb.class, null)); //see
 //		lexicon.put("sDm", new StaticDef(TransVerb.class, null)); //hear

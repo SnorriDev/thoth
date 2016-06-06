@@ -1,10 +1,10 @@
 package snorri.inventory;
 
-public class CooldownTimer {
+public class Timer {
 
 	private float currentTime, cooldown;
 	
-	public CooldownTimer(float cooldown) {
+	public Timer(float cooldown) {
 		this.cooldown = cooldown;
 		currentTime = cooldown;
 	}
@@ -24,6 +24,10 @@ public class CooldownTimer {
 		currentTime = 0f;
 		return true;
 		
+	}
+	
+	public void hardReset() {
+		currentTime = 0f;
 	}
 	
 	public boolean isOffCooldown() {

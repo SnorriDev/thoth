@@ -6,7 +6,7 @@ public class Weapon extends Item {
 
 	public Weapon(ItemType t) {
 		super(t);
-		timer = new CooldownTimer(0.3f);
+		timer = new Timer(0.3f);
 	}
 	
 	//retrieve the sharpness for this weapon from the ItemType

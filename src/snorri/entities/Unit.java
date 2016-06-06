@@ -1,5 +1,6 @@
 package snorri.entities;
 
+import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -7,9 +8,10 @@ public class Unit extends Entity {
 
 	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 2;
-	private static final int MAX_HEALTH = 100;
+	protected static final double MAX_HEALTH = 100;
+	private static final double BURN_DOT = 5d;
 	
-	private int health;
+	private double health;
 	
 	public Unit(Vector pos) {
 		super(pos, 3);
@@ -23,7 +25,12 @@ public class Unit extends Entity {
 
 	@Override
 	public void update(World world, float deltaTime) {
-				
+		
+		if (isBurning()) {
+			damage(BURN_DOT * deltaTime);
+			Main.log("burning");
+		}
+		
 		if (isDead()) {
 			world.delete(this);
 		}
@@ -55,12 +62,12 @@ public class Unit extends Entity {
 		return col.getAllCollisions(clone).size() > 1;
 	}
 	
-	public int getHealth() {
+	public double getHealth() {
 		return health;
 	}
 	
-	public void damage(int dmg) {
-		health -= dmg;
+	public void damage(double d) {
+		health -= d;
 	}
 	
 	public boolean isDead() {
