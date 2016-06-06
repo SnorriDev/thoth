@@ -74,6 +74,12 @@ public class Level {
 					if (j >= 0 && j < map[i].length) {
 						map[i][j].drawTile(g, gr, new Vector(i,j));
 					}
+					else {
+						new Tile(0,2).drawTile(g, gr, new Vector(i,j));
+					}
+				}
+				else {
+					new Tile(0,1).drawTile(g, gr, new Vector(i,j));
 				}
 			}
 		}
