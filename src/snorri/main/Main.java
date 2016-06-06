@@ -40,7 +40,7 @@ public class Main {
 		// } catch (IOException e) {
 		// Main.error("boom2");
 		// }
-
+		
 		frame = new JFrame("Spoken Word");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(1800, 900);

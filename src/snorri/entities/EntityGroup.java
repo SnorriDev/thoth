@@ -427,7 +427,7 @@ public class EntityGroup extends Entity {
 	
 	@Override
 	public void renderHitbox(GameWindow g, Graphics gr) {
-		super.renderHitbox(g, gr);
+		//super.renderHitbox(g, gr);
 		for (Entity e : entities) {
 			e.renderHitbox(g, gr);
 		}
