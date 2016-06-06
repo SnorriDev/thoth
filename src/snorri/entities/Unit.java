@@ -9,7 +9,7 @@ public class Unit extends Entity {
 	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 2;
 	protected static final double MAX_HEALTH = 100;
-	private static final double BURN_DOT = 5d;
+	private static final double BURN_DOT = 8d;
 	
 	private double health;
 	
@@ -70,6 +70,13 @@ public class Unit extends Entity {
 		health -= d;
 	}
 	
+	public void heal(double d) {
+		health += d;
+		if (health > MAX_HEALTH) {
+			health = MAX_HEALTH;
+		}
+	}
+	
 	public boolean isDead() {
 		return health <= 0;
 	}
@@ -77,6 +84,17 @@ public class Unit extends Entity {
 	//override this for faster entities
 	protected int getSpeed() {
 		return BASE_SPEED;
+	}
+	
+	@Override
+	public Object get(World world, AbstractSemantics attr) {
+		
+		if (attr == AbstractSemantics.HEALTH) {
+			return (int) health;
+		}
+		
+		return super.get(world, attr);
+		
 	}
 	
 }

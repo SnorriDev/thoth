@@ -33,10 +33,12 @@ public class Player extends Unit {
 		
 		//test inventory
 		inventory.setWeapon((Weapon) Item.newItem(ItemType.SLING));
-		inventory.getWeapon().setSpell(Grammar.parseString("bm m=f"));
+		inventory.getWeapon().setSpell(Grammar.parseString("nD wi"));
 		
 		inventory.addPapyrus((Papyrus) Item.newItem(ItemType.PAPYRUS));
+		inventory.addPapyrus((Papyrus) Item.newItem(ItemType.PAPYRUS));
 		inventory.getPapyrus(0).setSpell(Grammar.parseString("mAX"));
+		inventory.getPapyrus(1).setSpell(Grammar.parseString("nD wi"));
 		
 		inventory.addProjectile((Orb) Item.newItem(ItemType.PELLET));
 		inventory.getProjectile(0).setSpell(Grammar.parseString("bm m=k"));

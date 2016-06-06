@@ -5,7 +5,7 @@ import snorri.world.World;
 public interface Nominal {
 
 	public enum AbstractSemantics implements Nominal {
-		POSITION, WEAPON, TILE, NAME, SOURCE;
+		POSITION, WEAPON, TILE, NAME, SOURCE, HEALTH;
 	}
 
 	default Object get(World world, AbstractSemantics attr) {
