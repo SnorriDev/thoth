@@ -74,7 +74,7 @@ public class World {
 		// TODO: draw grid
 		// TODO: render, not render hitboxes
 		//level.renderMap(g,gr,levelMap);
-		level.renderMap(g, gr);
+		level.renderMap(g, gr, true);
 		col.renderAround(g, gr);
 
 		for (Collider p : colliders) {

@@ -7,8 +7,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.SwingWorker;
-
 import snorri.entities.Collider;
 import snorri.entities.Desk;
 import snorri.entities.Entity;
@@ -24,7 +22,6 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 	 * Main game window
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final int FRAME_DELTA = 30;
 	
 	public static final int MARGIN = 20;
 	
@@ -41,30 +38,16 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 		addMouseListener(this);
 		addKeyListener(this);
 		setFocusable(true);
-		startAnimation();
-	}
-	
-	public void startAnimation() {
-		
-		SwingWorker<Object, Object> sw = new SwingWorker<Object, Object>() {
-			@Override
-			protected Object doInBackground() throws Exception {
-				while (true) {
-					onFrame();
-					Thread.sleep(FRAME_DELTA);
-				}
-			}
-		};
-
 		lastTime = getTimestamp();
-		sw.execute();
+		startAnimation();
 	}
 	
 	public Vector getMovementVector() {
 		return states.getMovementVector();
 	}
 	
-	private void onFrame() {
+	@Override
+	protected void onFrame() {
 		
 		if (! focus.isDead()) {
 			
@@ -78,11 +61,6 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 		lastTime = time;
 		repaint();
 				
-	}
-	
-	//returns nanosecond-accurate time
-	private long getTimestamp() {
-		return System.nanoTime();
 	}
 	
 	@Override

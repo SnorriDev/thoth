@@ -59,7 +59,7 @@ public class Level {
 		return dim;
 	}
 	
-	public void renderMap(GameWindow g, Graphics gr) {
+	public void renderMap(GameWindow g, Graphics gr, boolean renderOutside) {
 		int cushion = 4;
 		int scaleFactor = 2;
 		int minX = g.getFocus().getPos().getX() / Tile.WIDTH - g.getDimensions().getX() / Tile.WIDTH / scaleFactor - cushion;
@@ -74,12 +74,12 @@ public class Level {
 					if (j >= 0 && j < map[i].length) {
 						map[i][j].drawTile(g, gr, new Vector(i,j));
 					}
-					else {
-						new Tile(0,0).drawTile(g, gr, new Vector(i,j));
+					else if (renderOutside) {
+						map[0][0].drawTile(g, gr, new Vector(i,j));
 					}
 				}
-				else {
-					new Tile(0,0).drawTile(g, gr, new Vector(i,j));
+				else if (renderOutside) {
+					map[0][0].drawTile(g, gr, new Vector(i,j));
 				}
 			}
 		}
