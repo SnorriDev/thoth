@@ -5,7 +5,6 @@ import java.awt.Rectangle;
 import java.io.Serializable;
 
 import snorri.main.GameWindow;
-import snorri.main.Main;
 
 public class Vector implements Serializable {
 	

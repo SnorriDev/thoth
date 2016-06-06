@@ -60,9 +60,21 @@ public class Level {
 	}
 	
 	public void renderMap(GameWindow g, Graphics gr) {
-		for (int i = 0; i < map.length; i++) {
-			for (int j = 0; j < map[i].length; j++) {
-				map[i][j].drawTile(g, gr, new Vector(i,j)); //will this cause a memory leak?
+		int cushion = 4;
+		int scaleFactor = 2;
+		int minX = g.getFocus().getPos().getX() / Tile.WIDTH - g.getDimensions().getX() / Tile.WIDTH / scaleFactor - cushion;
+		int maxX = g.getFocus().getPos().getX() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / scaleFactor + cushion;
+		int minY = g.getFocus().getPos().getY() / Tile.WIDTH - g.getDimensions().getY() / Tile.WIDTH / scaleFactor - cushion;
+		int maxY = g.getFocus().getPos().getY() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / scaleFactor + cushion;
+		//Main.log(g.getFocus().getPos().getX() / Tile.WIDTH + " " + g.getFocus().getPos().getY() / Tile.WIDTH + "\t\t" + g.getFocus().getPos().getX() + " " + g.getFocus().getPos().getY() + "\t\t" + g.getDimensions().getX() + " " + g.getDimensions().getY() + "\t\t" + minX + " " + minY + "\t\t" + maxX + " " + maxY);
+		
+		for (int i = minX; i < maxX; i++) {
+			for (int j = minY; j < maxY; j++) {
+				if (i >= 0 && i < map.length) {
+					if (j >= 0 && j < map[i].length) {
+						map[i][j].drawTile(g, gr, new Vector(i,j));
+					}
+				}
 			}
 		}
 		return;
