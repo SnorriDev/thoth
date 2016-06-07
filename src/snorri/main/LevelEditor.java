@@ -45,7 +45,6 @@ public class LevelEditor extends FocusedWindow {
 			}
 			catch (IOException er) {
 				Main.error("error opening world " + file.getName());
-				er.printStackTrace();
 			}
 			openingFile = false;
 			break;
@@ -57,14 +56,14 @@ public class LevelEditor extends FocusedWindow {
 			
 			openingFile = true;
 			File f = Main.getFileDialog("Select save destination", FileDialog.SAVE);
-			Main.log(f);
 			try {
 				if (f != null)
 					world.save(f);
 			}
 			catch (IOException er) {
 				Main.error("error saving world " + f.getName());
-				er.printStackTrace();
+				Main.error("make sure all objects being saved are serializable");
+				er.printStackTrace(); //keep this so we can easily tell what non-serializable object is causing the issue
 			}
 			openingFile = false;
 			
