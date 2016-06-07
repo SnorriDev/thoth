@@ -7,6 +7,8 @@ import snorri.main.Main;
 
 public class Weapon extends Item {
 
+	private static final long serialVersionUID = 1L;
+
 	public Weapon(ItemType t) {
 		super(t);
 		timer = new Timer(0.3f);

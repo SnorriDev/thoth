@@ -4,6 +4,8 @@ import snorri.events.SpellEvent;
 
 public class Sentence extends NonTerminal {
 
+	private static final long serialVersionUID = 1L;
+	
 	public Object getMeaning(SpellEvent e) {
 		
 		if (children.size() == 1) {

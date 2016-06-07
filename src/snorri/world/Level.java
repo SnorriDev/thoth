@@ -116,11 +116,11 @@ public class Level {
 		return;
 	}
 
-	public void save(String fileName) throws IOException {
+	public void save(File file) throws IOException {
 
-		Main.log("saving " + fileName + "...");
+		Main.log("saving " + file.getName() + "...");
 
-		FileOutputStream os = new FileOutputStream(fileName);
+		FileOutputStream os = new FileOutputStream(file);
 		ByteBuffer b1 = ByteBuffer.allocate(4);
 		ByteBuffer b2 = ByteBuffer.allocate(4);
 

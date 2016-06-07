@@ -10,12 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
-import snorri.entities.Desk;
-import snorri.entities.Entity;
-import snorri.entities.Player;
-import snorri.entities.Unit;
 import snorri.parser.Lexicon;
-import snorri.world.Vector;
 import snorri.world.World;
 
 public class Main {
@@ -75,15 +70,20 @@ public class Main {
 		}
 	}
 
-	public static String getFileDialog(String msg) {
-		FileDialog fd = new FileDialog(frame, msg);
+	public static File getFileDialog(String msg, int flag) {
+		FileDialog fd = new FileDialog(frame, msg, flag);
 		fd.setVisible(true);
 		
-		if (! new File(fd.getFile()).isDirectory()) {
-			return fd.getDirectory();
+		if (fd.getFile() == null) {
+			return null;
 		}
 		
-		return fd.getFile();
+		File f = new File(fd.getDirectory(), fd.getFile());
+		if (f.exists() && ! f.isDirectory()) {
+			return new File(fd.getDirectory());
+		}
+		
+		return f;
 	}
 
 	public static void launchGame() {
@@ -92,17 +92,10 @@ public class Main {
 
 		World world = new World();
 
-		world.add(new Entity(new Vector(105, 130)));
-		world.add(new Entity(new Vector(100, 100)));
-		world.add(new Entity(new Vector(143, 133)));
-		world.add(new Entity(new Vector(100, 124)));
-		world.add(new Entity(new Vector(115, 100)));
-		world.add(new Entity(new Vector(111, 130)));
-		world.add(new Desk(new Vector(200, 200)));
-		world.add(new Unit(new Vector(20, 20)));
-
-		window = new GameWindow(world, new Player(new Vector(50, 50)));
-		world.add(((GameWindow) window).getFocus()); // the player
+		window = new GameWindow(world);
+		
+		Main.log(((GameWindow) window).getFocus());
+		
 		frame.getContentPane().add(window, BorderLayout.CENTER);
 		frame.getContentPane().revalidate();
 		window.requestFocus();

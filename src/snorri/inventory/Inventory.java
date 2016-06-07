@@ -1,6 +1,7 @@
 package snorri.inventory;
 
 import java.awt.Graphics;
+import java.io.Serializable;
 
 import snorri.entities.Player;
 import snorri.entities.Projectile;
@@ -9,8 +10,13 @@ import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Inventory {
+public class Inventory implements Serializable {
 	
+	/**
+	 * Holds the inventory of a player
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private Player player;
 	
 	private Weapon weaponSlot;

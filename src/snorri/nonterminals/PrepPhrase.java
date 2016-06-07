@@ -6,6 +6,8 @@ import snorri.semantics.PrepDef;
 
 public class PrepPhrase extends NonTerminal {
 
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * @return a modified copy of SpellEvent which carries the necessary semantics
 	 */
