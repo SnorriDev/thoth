@@ -11,7 +11,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import snorri.main.GameWindow;
+import snorri.main.FocusedWindow;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -426,7 +426,7 @@ public class EntityGroup extends Entity {
 	}
 	
 	@Override
-	public void renderHitbox(GameWindow g, Graphics gr) {
+	public void renderHitbox(FocusedWindow g, Graphics gr) {
 		//super.renderHitbox(g, gr);
 		for (Entity e : entities) {
 			e.renderHitbox(g, gr);

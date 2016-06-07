@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.Serializable;
 
-import snorri.main.GameWindow;
+import snorri.main.FocusedWindow;
 
 public class Vector implements Serializable {
 	
@@ -29,7 +29,7 @@ public class Vector implements Serializable {
 		this.y = r.getHeight();
 	}
 	
-	public Vector getRelPos(GameWindow g) {
+	public Vector getRelPos(FocusedWindow g) {
 		Vector focusPos = g.getFocus().getPos();
 		Vector relPos = this.multiply(Tile.WIDTH).sub(focusPos).add(g.getDimensions().divide(2));
 		return relPos;

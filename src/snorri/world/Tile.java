@@ -3,7 +3,7 @@ package snorri.world;
 import java.awt.Graphics;
 import java.awt.Image;
 
-import snorri.main.GameWindow;
+import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.semantics.Nominal;
 
@@ -44,7 +44,7 @@ public class Tile {
 		return style;
 	}
 	
-	public void drawTile(GameWindow g, Graphics gr, Vector v) {
+	public void drawTile(FocusedWindow g, Graphics gr, Vector v) {
 		Vector relPos = v.getRelPos(g);
 		gr.drawImage(type.getTexture(style), relPos.getX(), (int)relPos.getY(), g);
 		return;

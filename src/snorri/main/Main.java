@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FileDialog;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -25,21 +26,9 @@ public class Main {
 	public static void main(String[] args) {
 
 		Lexicon.init();
-
-		// World w = new World();
-		// w.add(new Entity(new Vector(40, 40)));
-		// try {
-		// w.save("C:/Users/vikin_000/Desktop/world_test");
-		// } catch (IOException e) {
-		// Main.error("boom");
-		// }
-		//
-		// try {
-		// World w2 = new World("C:/Users/vikin_000/Desktop/world_test");
-		// Main.log(w2.getEntityTree().getAllEntities());
-		// } catch (IOException e) {
-		// Main.error("boom2");
-		// }
+		
+		System.setProperty("apple.awt.fileDialogForDirectories", "true");
+		System.setProperty("windows.awt.fileDialogForDirectories", "true");
 		
 		frame = new JFrame("Spoken Word");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -88,7 +77,13 @@ public class Main {
 
 	public static String getFileDialog(String msg) {
 		FileDialog fd = new FileDialog(frame, msg);
+		//fd.setFile("*.");
 		fd.setVisible(true);
+		
+		if (! new File(fd.getFile()).isDirectory()) {
+			return fd.getDirectory();
+		}
+		
 		return fd.getFile();
 	}
 

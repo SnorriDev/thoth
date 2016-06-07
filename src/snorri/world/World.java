@@ -13,7 +13,7 @@ import snorri.entities.Collider;
 import snorri.entities.Entity;
 import snorri.entities.EntityGroup;
 import snorri.events.CollisionEvent;
-import snorri.main.GameWindow;
+import snorri.main.FocusedWindow;
 import snorri.main.Main;
 
 public class World {
@@ -25,11 +25,13 @@ public class World {
 	private Queue<Entity> addQ;
 
 	public World() {
+		Main.log("creating new world..");
 		level = new Level(100, 100); // TODO: pass a level file to read
 		col = new EntityGroup();
 		colliders = new ArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
+		Main.log("new world created!");
 	}
 
 	public World(File f) throws FileNotFoundException, IOException {
@@ -69,12 +71,12 @@ public class World {
 
 	}
 
-	public void render(GameWindow g, Graphics gr) {
+	public void render(FocusedWindow g, Graphics gr, boolean showOutlands) {
 
 		// TODO: draw grid
 		// TODO: render, not render hitboxes
 		//level.renderMap(g,gr,levelMap);
-		level.renderMap(g, gr, true);
+		level.renderMap(g, gr, showOutlands);
 		col.renderAround(g, gr);
 
 		for (Collider p : colliders) {

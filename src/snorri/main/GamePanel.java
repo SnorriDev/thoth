@@ -1,9 +1,14 @@
 package snorri.main;
 
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
-public abstract class GamePanel extends JPanel {
+import snorri.world.Vector;
+
+public abstract class GamePanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final int FRAME_DELTA = 30;
@@ -22,7 +27,19 @@ public abstract class GamePanel extends JPanel {
 
 		sw.execute();
 	}
+	
+	protected JButton createButton(String text) {
+		JButton button = new JButton(text);
+		add(button);
+		button.setSelected(false);
+		button.addActionListener(this);
+		return button;
+	}
 
+	public Vector getDimensions() {
+		return new Vector(getBounds());
+	}
+	
 	protected void onFrame() {
 		// TODO Auto-generated method stub
 

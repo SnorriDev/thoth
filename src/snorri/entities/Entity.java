@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.io.Serializable;
 
 import snorri.inventory.Timer;
-import snorri.main.GameWindow;
+import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.semantics.Nominal;
 import snorri.world.Vector;
@@ -89,7 +89,7 @@ public class Entity implements Nominal, Serializable {
 		burnTimer.update(f);
 	}
 	
-	public void renderHitbox(GameWindow g, Graphics gr) {
+	public void renderHitbox(FocusedWindow g, Graphics gr) {
 		
 		if (pos == null) {
 			return;
@@ -105,7 +105,7 @@ public class Entity implements Nominal, Serializable {
 		return e.pos.equals(pos) && e.r == r;
 	}
 	
-	public void renderAround(GameWindow g, Graphics gr) {
+	public void renderAround(FocusedWindow g, Graphics gr) {
 		renderHitbox(g, gr);
 	}
 

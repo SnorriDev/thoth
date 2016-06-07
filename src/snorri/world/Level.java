@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import snorri.main.GameWindow;
+import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.world.Tile.TileType;
 
@@ -59,7 +59,7 @@ public class Level {
 		return dim;
 	}
 	
-	public void renderMap(GameWindow g, Graphics gr, boolean renderOutside) {
+	public void renderMap(FocusedWindow g, Graphics gr, boolean renderOutside) {
 		int cushion = 4;
 		int scaleFactor = 2;
 		int minX = g.getFocus().getPos().getX() / Tile.WIDTH - g.getDimensions().getX() / Tile.WIDTH / scaleFactor - cushion;

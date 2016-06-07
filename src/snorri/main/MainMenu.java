@@ -1,11 +1,8 @@
 package snorri.main;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-
-public class MainMenu extends GamePanel implements ActionListener {
+public class MainMenu extends GamePanel {
 
 	private static final long serialVersionUID = 1L;
 		
@@ -15,14 +12,6 @@ public class MainMenu extends GamePanel implements ActionListener {
 		createButton("Continue Story");
 		createButton("Load World");
 		createButton("World Editor");
-	}
-	
-	private JButton createButton(String text) {
-		JButton button = new JButton(text);
-		add(button);
-		button.setSelected(false);
-		button.addActionListener(this);
-		return button;
 	}
 
 	@Override

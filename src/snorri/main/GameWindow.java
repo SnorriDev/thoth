@@ -2,6 +2,7 @@ package snorri.main;
 
 import java.awt.Graphics;
 import java.awt.MouseInfo;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -16,7 +17,7 @@ import snorri.keyboard.KeyStates;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class GameWindow extends GamePanel implements KeyListener, MouseListener {
+public class GameWindow extends FocusedWindow implements KeyListener, MouseListener {
 	
 	/**
 	 * Main game window
@@ -66,7 +67,7 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		world.render(this, g);
+		world.render(this, g, true);
 		focus.getInventory().render(this, g);
 		focus.renderHealthBar(g);
 	}
@@ -77,10 +78,6 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 	
 	public World getWorld() {
 		return world;
-	}
-	
-	public Vector getDimensions() {
-		return new Vector(getBounds());
 	}
 	
 	/**
@@ -175,6 +172,12 @@ public class GameWindow extends GamePanel implements KeyListener, MouseListener 
 	}
 
 	public void mouseClicked(MouseEvent e) {
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
