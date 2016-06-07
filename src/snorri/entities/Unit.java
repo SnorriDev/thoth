@@ -15,7 +15,7 @@ public class Unit extends Entity {
 	private double health;
 	
 	public Unit(Vector pos) {
-		super(pos, 3);
+		super(pos, 20);
 		health = MAX_HEALTH;
 	}
 	
