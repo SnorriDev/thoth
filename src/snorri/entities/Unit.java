@@ -41,14 +41,7 @@ public class Unit extends Entity {
 	}
 
 	public void walk(Vector direction, EntityGroup col) {
-		Vector dir = direction.copy();
-		
-		if (dir.equals(Vector.ZERO)) {
-			return;
-		}
-		
-		dir.multiply(getSpeed());
-		col.move(this, dir);
+		move(direction, col, getSpeed());
 	}
 	
 	public boolean wouldHitSomething(Vector direction, EntityGroup col) {

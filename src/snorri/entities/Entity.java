@@ -124,5 +124,16 @@ public class Entity implements Nominal, Serializable {
 		
 		return null;
 	}
+	
+	public void move(Vector direction, EntityGroup col, double speed) {
+		Vector dir = direction.copy();
+		
+		if (dir.equals(Vector.ZERO)) {
+			return;
+		}
+		
+		dir.multiply(speed);
+		col.move(this, dir);
+	}
 
 }

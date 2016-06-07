@@ -1,23 +1,20 @@
 package snorri.main;
 
 import java.awt.Graphics;
-import java.awt.MouseInfo;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import snorri.entities.Collider;
 import snorri.entities.Desk;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.keyboard.Key;
-import snorri.keyboard.KeyStates;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class GameWindow extends FocusedWindow implements KeyListener, MouseListener {
+public class GameWindow extends FocusedWindow {
 	
 	/**
 	 * Main game window
@@ -26,25 +23,15 @@ public class GameWindow extends FocusedWindow implements KeyListener, MouseListe
 	
 	public static final int MARGIN = 20;
 	
-	private KeyStates states;
-	
 	private World world;
 	private Player focus;
 	private long lastTime;
 	
 	public GameWindow(World world, Player focus) {
+		super();
 		this.world = world;
 		this.focus = focus;
-		states = new KeyStates();
-		addMouseListener(this);
-		addKeyListener(this);
-		setFocusable(true);
 		lastTime = getTimestamp();
-		startAnimation();
-	}
-	
-	public Vector getMovementVector() {
-		return states.getMovementVector();
 	}
 	
 	@Override
@@ -78,30 +65,6 @@ public class GameWindow extends FocusedWindow implements KeyListener, MouseListe
 	
 	public World getWorld() {
 		return world;
-	}
-	
-	/**
-	 * @return mouse position relative to the player
-	 */
-	public Vector getMousePosRelative() {
-		Vector origin = new Vector(getLocationOnScreen());
-		origin.add(getDimensions().divide(2));		
-		return (new Vector(MouseInfo.getPointerInfo().getLocation())).sub(origin);
-	}
-	
-	/**
-	 * @return absolute mouse position
-	 */
-	public Vector getMousePosAbsolute() {
-		return getMousePosRelative().add(getFocus().getPos());
-	}
-
-	public void keyPressed(KeyEvent e) {
-		states.set(e.getKeyCode(), true);
-	}
-
-	public void keyReleased(KeyEvent e) {
-		states.set(e.getKeyCode(), false);
 	}
 	
 	public void keyTyped(KeyEvent e) {
@@ -145,12 +108,6 @@ public class GameWindow extends FocusedWindow implements KeyListener, MouseListe
 		
 	}
 
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	public void mouseExited(MouseEvent e) {
-	}
-
 	public void mousePressed(MouseEvent e) {
 		
 		if (e.getButton() == 1) {
@@ -168,10 +125,28 @@ public class GameWindow extends FocusedWindow implements KeyListener, MouseListe
 		
 	}
 
-	public void mouseReleased(MouseEvent e) {		
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
-	public void mouseClicked(MouseEvent e) {
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override

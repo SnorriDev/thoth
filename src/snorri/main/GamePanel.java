@@ -15,6 +15,8 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 
 	protected void startAnimation() {
 
+		Main.log("starting animation");
+		
 		SwingWorker<Object, Object> sw = new SwingWorker<Object, Object>() {
 			@Override
 			protected Object doInBackground() throws Exception {

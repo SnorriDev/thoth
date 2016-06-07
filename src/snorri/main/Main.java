@@ -77,7 +77,6 @@ public class Main {
 
 	public static String getFileDialog(String msg) {
 		FileDialog fd = new FileDialog(frame, msg);
-		//fd.setFile("*.");
 		fd.setVisible(true);
 		
 		if (! new File(fd.getFile()).isDirectory()) {

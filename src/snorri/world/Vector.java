@@ -79,6 +79,11 @@ public class Vector implements Serializable {
 	}
 	
 	public Vector scale(double magnitude) {
+		
+		if (equals(ZERO)) {
+			return ZERO;
+		}
+		
 		return multiply(magnitude / distance(ZERO));
 	}
 	
