@@ -11,6 +11,7 @@ import snorri.entities.Desk;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.keyboard.Key;
+import snorri.world.Playable;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -23,15 +24,19 @@ public class GameWindow extends FocusedWindow {
 	
 	public static final int MARGIN = 20;
 	
-	private World world;
+	private Playable universe;
 	private Player focus;
 	private long lastTime;
 	
-	public GameWindow(World world, Player focus) {
+	public GameWindow(Playable universe, Player focus) {
 		super();
-		this.world = world;
+		this.universe = universe;
 		this.focus = focus;
 		lastTime = getTimestamp();
+	}
+	
+	public GameWindow(Playable universe) {
+		this(universe, universe.getFocus());
 	}
 	
 	@Override
@@ -40,12 +45,12 @@ public class GameWindow extends FocusedWindow {
 		if (! focus.isDead()) {
 			
 			//if (! focus.wouldHitSomething(states.getMovementVector(), world.getEntityTree())) this is buggy
-			focus.walk(states.getMovementVector(), world.getEntityTree()); //TODO: move to update method of Player?
+			focus.walk(states.getMovementVector(), universe.getCurrentWorld().getEntityTree()); //TODO: move to update method of Player?
 			
 		}
 				
 		long time = getTimestamp();
-		world.update((time - lastTime) / 1000000000f);
+		universe.getCurrentWorld().update((time - lastTime) / 1000000000f);
 		lastTime = time;
 		repaint();
 				
@@ -54,7 +59,7 @@ public class GameWindow extends FocusedWindow {
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		world.render(this, g, true);
+		universe.getCurrentWorld().render(this, g, true);
 		focus.getInventory().render(this, g);
 		focus.renderHealthBar(g);
 	}
@@ -64,7 +69,7 @@ public class GameWindow extends FocusedWindow {
 	}
 	
 	public World getWorld() {
-		return world;
+		return universe.getCurrentWorld();
 	}
 	
 	public void keyTyped(KeyEvent e) {
@@ -73,7 +78,7 @@ public class GameWindow extends FocusedWindow {
 			Collider interactRegion = new Collider(getFocus().getPos(), getFocus().getRadius() + Desk.INTERACT_RANGE);
 			//could make this more efficient potentially by making a new method
 			//also move to its own thing for organization?
-			for (Entity entity : world.getEntityTree().getAllCollisions(interactRegion)) {
+			for (Entity entity : universe.getCurrentWorld().getEntityTree().getAllCollisions(interactRegion)) {
 				if (entity instanceof Desk) {
 					Main.log("interacting with a desk");
 					return;
@@ -119,7 +124,7 @@ public class GameWindow extends FocusedWindow {
 				return;
 			}
 			
-			focus.getInventory().tryToShoot(world, focus, states.getMovementVector(), dir);
+			focus.getInventory().tryToShoot(universe.getCurrentWorld(), focus, states.getMovementVector(), dir);
 			
 		}
 		

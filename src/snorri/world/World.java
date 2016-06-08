@@ -10,13 +10,16 @@ import java.util.List;
 import java.util.Queue;
 
 import snorri.entities.Collider;
+import snorri.entities.Desk;
 import snorri.entities.Entity;
 import snorri.entities.EntityGroup;
+import snorri.entities.Player;
+import snorri.entities.Unit;
 import snorri.events.CollisionEvent;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 
-public class World {
+public class World implements Playable {
 
 	private Level level;
 	private EntityGroup col;
@@ -31,18 +34,30 @@ public class World {
 		colliders = new ArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
+		
+		//temporary
+		addHard(new Entity(new Vector(105, 130)));
+		addHard(new Entity(new Vector(100, 100)));
+		addHard(new Entity(new Vector(143, 133)));
+		addHard(new Entity(new Vector(100, 124)));
+		addHard(new Entity(new Vector(115, 100)));
+		addHard(new Entity(new Vector(111, 130)));
+		addHard(new Desk(new Vector(200, 200)));
+		addHard(new Unit(new Vector(20, 20)));
+		addHard(new Player(new Vector(50, 50)));
+		
 		Main.log("new world created!");
 	}
 
-	public World(File f) throws FileNotFoundException, IOException {
-		load(f);
+	public World(String folderName) throws FileNotFoundException, IOException {
+		this(new File(folderName));
+	}
+
+	public World(File file) throws FileNotFoundException, IOException {
+		load(file);
 		colliders = new ArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
-	}
-
-	public World(String fileName) throws FileNotFoundException, IOException {
-		this(new File(fileName));
 	}
 
 	public void update(float f) {
@@ -141,12 +156,11 @@ public class World {
 
 	}
 
-	public void save(String folderName) throws IOException {
-
-		File f = new File(folderName);
-
+	@Override
+	public void save(File f) throws IOException {
+		
 		if (f.exists() && !f.isDirectory()) {
-			Main.error("tried to save world " + folderName + " to non-directory");
+			Main.error("tried to save world " + f.getName() + " to non-directory");
 			throw new IOException();
 		}
 
@@ -154,15 +168,16 @@ public class World {
 			Main.log("creating new world directory...");
 			f.mkdir();
 		}
-
+		
 		String path = f.getPath();
-		col.saveEntities(path + "/entities.dat");
-		level.save(path + "/level.dat");
+		col.saveEntities(new File(path, "entities.dat"));
+		level.save(new File(path, "level.dat"));
 
 	}
 
+	@Override
 	public void load(File f) throws FileNotFoundException, IOException {
-
+		
 		if (!f.exists()) {
 			Main.error("could not find world " + f.getName());
 			throw new FileNotFoundException();
@@ -176,6 +191,21 @@ public class World {
 		col = new EntityGroup(new File(f, "entities.dat"));
 		level = new Level(new File(f, "level.dat"));
 
+	}
+
+	@Override
+	public Player getFocus() {
+		for (Entity e : col.getAllEntities()) {
+			if (e instanceof Player) {
+				return (Player) e;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public World getCurrentWorld() {
+		return this;
 	}
 
 }

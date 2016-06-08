@@ -1,7 +1,13 @@
 package snorri.inventory;
 
-public class Timer {
+import java.io.Serializable;
 
+public class Timer implements Serializable {
+
+	/**
+	 * Used for timing cooldowns and burning
+	 */
+	private static final long serialVersionUID = 1L;
 	private float currentTime, cooldown;
 	
 	public Timer(float cooldown) {

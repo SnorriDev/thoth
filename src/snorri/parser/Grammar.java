@@ -57,7 +57,7 @@ public class Grammar {
 			rules.add(new Rule(new Object[] {e.getKey()}, e.getValue().getPOS()));
 		}
 		
-		Main.log("Lexicon with " + Lexicon.getAllTerminals().size() + " definitions loaded");
+		Main.log("lexicon with " + Lexicon.getAllTerminals().size() + " definitions loaded");
 		
 	}
 	
@@ -94,7 +94,7 @@ public class Grammar {
 																		
 						int size = nodes.size();
 						NonTerminal nonTerm = fit.newInstance();
-						nonTerm.setChildren(nodes.subList(i, j));
+						nonTerm.setChildren(new ArrayList<Node>(nodes.subList(i, j)));
 						List<Node> result = new ArrayList<Node>(nodes.subList(0, i));
 						result.add(nonTerm);
 						result.addAll(new ArrayList<Node>(nodes.subList(j, size)));

@@ -14,8 +14,6 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 	private static final int FRAME_DELTA = 30;
 
 	protected void startAnimation() {
-
-		Main.log("starting animation");
 		
 		SwingWorker<Object, Object> sw = new SwingWorker<Object, Object>() {
 			@Override

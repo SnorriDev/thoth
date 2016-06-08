@@ -6,6 +6,8 @@ import snorri.semantics.Nominal.AbstractSemantics;
 
 public class NounPhrase extends NonTerminal {
 
+	private static final long serialVersionUID = 1L;
+
 	public Object getMeaning(SpellEvent e) {
 		
 		if (children.size() == 1) {

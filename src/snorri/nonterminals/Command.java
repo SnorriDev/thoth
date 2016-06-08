@@ -5,6 +5,8 @@ import snorri.semantics.VerbDef;
 
 public class Command extends NonTerminal {
 
+	private static final long serialVersionUID = 1L;
+
 	public Object getMeaning(SpellEvent e) {
 		
 		switch (children.size()) {

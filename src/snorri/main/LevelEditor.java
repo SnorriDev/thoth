@@ -1,9 +1,11 @@
 package snorri.main;
 
+import java.awt.FileDialog;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
 
 import snorri.entities.Entity;
@@ -36,13 +38,16 @@ public class LevelEditor extends FocusedWindow {
 			world = new World();
 			break;
 		case "Load":
+			openingFile = true;
+			File file = Main.getFileDialog("Select file to load", FileDialog.LOAD);
 			try {
-				openingFile = true;
-				world = new World(Main.getFileDialog("Select file to load"));
-				openingFile = false;
-			} catch (IOException ex) {
-				 Main.error("error loading file");
+				if (file != null)
+					world = new World(file);
 			}
+			catch (IOException er) {
+				Main.error("error opening world " + file.getName());
+			}
+			openingFile = false;
 			break;
 		case "Save":
 			
@@ -50,13 +55,19 @@ public class LevelEditor extends FocusedWindow {
 				return;
 			}
 			
+			openingFile = true;
+			File f = Main.getFileDialog("Select save destination", FileDialog.SAVE);
 			try {
-				openingFile = true;
-				world.save(Main.getFileDialog("Select save destination"));
-				openingFile = false;
-			} catch (IOException ex) {
-				Main.error("error saving file");
+				if (f != null)
+					world.save(f);
 			}
+			catch (IOException er) {
+				Main.error("error saving world " + f.getName());
+				Main.error("make sure all objects being saved are serializable");
+				er.printStackTrace(); //keep this so we can easily tell what non-serializable object is causing the issue
+			}
+			openingFile = false;
+			
 		}
 		
 		repaint();

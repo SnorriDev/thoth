@@ -3,6 +3,7 @@ package snorri.inventory;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.io.Serializable;
 
 import snorri.entities.Entity;
 import snorri.events.SpellEvent;
@@ -11,7 +12,9 @@ import snorri.main.Main;
 import snorri.parser.Node;
 import snorri.world.Vector;
 
-public abstract class Item {
+public abstract class Item implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	protected int quantity = 1; // default value
 	protected Node spell; // spell/enchantment associated with the item

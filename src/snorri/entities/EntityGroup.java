@@ -454,12 +454,12 @@ public class EntityGroup extends Entity {
 		}
 	}
 	
-	public void saveEntities(String fileName) throws IOException {
-		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName));
+	public void saveEntities(File file) throws IOException {
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
 		for (Entity e : getAllEntities()) {
 			out.writeObject(e);
 		}
-		out.close();	
+		out.close();
 	}
 	
 	/**
