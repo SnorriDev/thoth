@@ -1,8 +1,10 @@
 package snorri.entities;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import java.io.Serializable;
 
+import snorri.animations.Animation;
 import snorri.inventory.Timer;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
@@ -15,6 +17,7 @@ public class Entity implements Nominal, Serializable {
 	private static final long serialVersionUID = 1L;
 	protected Vector pos;
 	protected int r;
+	protected Animation animation;
 	
 	private Timer burnTimer = new Timer(5);
 	
@@ -38,6 +41,10 @@ public class Entity implements Nominal, Serializable {
 	
 	public int getRadius() {
 		return r;
+	}
+	
+	public Animation getAnimation() {
+		return animation;
 	}
 	
 	public void burn() {
@@ -106,7 +113,20 @@ public class Entity implements Nominal, Serializable {
 	}
 	
 	public void renderAround(FocusedWindow g, Graphics gr) {
+		
 		renderHitbox(g, gr);
+		
+		if (animation == null) {
+			return;
+		}
+		
+		Image sprite = animation.getSprite();
+		if (sprite == null) {
+			return;
+		}
+		
+		gr.drawImage(animation.getSprite(), pos.getX() - sprite.getWidth(null) + g.getBounds().width / 2, pos.getY() - sprite.getHeight(null) + g.getBounds().height / 2, null);
+		
 	}
 
 	@Override

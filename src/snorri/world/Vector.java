@@ -29,6 +29,11 @@ public class Vector implements Serializable {
 		this.y = r.getHeight();
 	}
 	
+	public Vector(Vector v) {
+		this.x = v.x;
+		this.y = v.y;
+	}
+	
 	public Vector getRelPos(FocusedWindow g) {
 		Vector focusPos = g.getFocus().getPos();
 		Vector relPos = this.multiply(Tile.WIDTH).sub(focusPos).add(g.getDimensions().divide(2));
@@ -105,7 +110,7 @@ public class Vector implements Serializable {
 	}
 	
 	public Vector copy() {
-		return new Vector(x, y);
+		return new Vector(this);
 	}
 	
 	public String toString() {
