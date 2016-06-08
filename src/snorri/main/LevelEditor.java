@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 import snorri.entities.Entity;
+import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -113,8 +114,12 @@ public class LevelEditor extends FocusedWindow {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		Vector location = getMousePosAbsolute().copy();
+		int x = location.getX();
+		int y = location.getY();
+		Main.log(x + "\t" + y);
+		Main.log(world.getLevel().getTile(x, y).getType() + "\t" + world.getLevel().getTile(x, y).getStyle());
+		world.getLevel().setTile(x,y,new Tile(1,1));
 	}
 
 	@Override
