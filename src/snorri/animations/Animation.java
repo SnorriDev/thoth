@@ -2,16 +2,19 @@ package snorri.animations;
 
 import java.awt.Image;
 import java.io.File;
+import java.io.Serializable;
 
 import snorri.main.Main;
 
-public class Animation {
+public class Animation implements Serializable {
 
 	/**
 	 * stores all the animation frames as Images (PNGS)
 	 * to convert SWFs to PNGs, use swfrender
 	 * can cycle through frames sequentially by calling getSprite()
 	 */
+	
+	private static final long serialVersionUID = 1L;
 	
 	private Image[] frames;
 	private int currentFrame = 0;
