@@ -53,6 +53,16 @@ public class Level {
 	public Tile getTile(Vector v) {
 		return getTile(v.getX(), v.getY());
 	}
+	
+	public Tile getNewTileRaw(int x, int y) {
+		if (x < 0 || x >= map.length || y < 0 || y >= map[x].length) {
+			return null;
+		}
+		if (getTileRaw(x,y) == null) {
+			return null;
+		}
+		return new Tile(getTileRaw(x,y));
+	}
 
 	public Tile getTileRaw(int x, int y) {
 		if (x < 0 || x >= map.length || y < 0 || y >= map[x].length) {

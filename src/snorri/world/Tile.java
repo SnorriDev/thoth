@@ -38,6 +38,8 @@ public class Tile {
 	}
 	
 	public Tile(Tile tile) {
+		if (tile == null)
+			return;
 		type = tile.getType();
 		style = tile.getStyle();
 	}
@@ -79,6 +81,13 @@ public class Tile {
 	@Override
 	public String toString() {
 		return type.name() + ":" + style;
+	}
+	
+	public boolean equals(Tile t) {
+		if (t == null || this == null) {
+			return false;
+		}
+		return (type.getId() == t.getType().getId() && style == t.getStyle());
 	}
 	
 	public enum TileType implements Nominal {
