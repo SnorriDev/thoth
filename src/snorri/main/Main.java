@@ -86,20 +86,16 @@ public class Main {
 		return f;
 	}
 
-	public static void launchGame() {
-
+	public static void launchGame(World world) {
 		frame.getContentPane().remove(window);
-
-		World world = new World();
-
-		window = new GameWindow(world);
-		
-		Main.log(((GameWindow) window).getFocus());
-		
+		window = new GameWindow(world);		
 		frame.getContentPane().add(window, BorderLayout.CENTER);
 		frame.getContentPane().revalidate();
 		window.requestFocus();
-
+	}
+	
+	public static void launchGame() {
+		launchGame(new World());
 	}
 
 	public static void launchEditor() {
