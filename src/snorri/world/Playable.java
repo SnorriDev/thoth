@@ -1,10 +1,12 @@
 package snorri.world;
 
+import java.awt.FileDialog;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import snorri.entities.Player;
+import snorri.main.Main;
 
 public interface Playable {
 	
@@ -24,6 +26,22 @@ public interface Playable {
 
 	default void save(String folderName) throws IOException {
 		save(new File(folderName));
+	}
+	
+	default void wrapSave() {
+		
+		File f = Main.getFileDialog("Select save destination", FileDialog.SAVE);
+		
+		if (f == null) {
+			return;
+		}
+		
+		try {
+			save(f);
+		} catch (IOException er) {
+			Main.error("cannot save world " + f.getName() + "; are all objects serializable?");
+			er.printStackTrace(); //see what is non-serializable
+		}
 	}
 	
 }

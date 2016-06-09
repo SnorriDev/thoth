@@ -52,7 +52,7 @@ public class Projectile extends Collider {
 		
 		//if we hit the edge of the map or a wall, end
 		if (world.getLevel().getTile(pos) == null || ! world.getLevel().getTile(pos).isPathable()) {
-			//TODO: explode?
+			//TODO: activate spell?
 			world.delete(this);
 		}
 				

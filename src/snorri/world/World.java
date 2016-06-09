@@ -1,5 +1,6 @@
 package snorri.world;
 
+import java.awt.FileDialog;
 import java.awt.Graphics;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -49,6 +50,22 @@ public class World implements Playable {
 		colliders = new ArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
+	}
+	
+	public static World wrapLoad() {
+		
+		File file = Main.getFileDialog("Select file to load", FileDialog.LOAD);
+		
+		if (file == null) {
+			return null;
+		}
+		
+		try {
+			return new World(file);
+		} catch (IOException er) {
+			Main.error("error opening world " + file.getName());
+			return null;
+		}
 	}
 
 	public void update(float f) {

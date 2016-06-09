@@ -122,12 +122,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			break;
 		case "Open":
 			openingFile = true;
-			File file = Main.getFileDialog("Select file to load", FileDialog.LOAD);
-			try {
-				if (file != null)
-					world = new World(file);
-			} catch (IOException er) {
-				Main.error("error opening world " + file.getName());
+			World w1 = World.wrapLoad();
+			if (w1 != null) {
+				world = w1;
 			}
 			openingFile = false;
 			break;
@@ -138,17 +135,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			}
 
 			openingFile = true;
-			File f = Main.getFileDialog("Select save destination", FileDialog.SAVE);
-			try {
-				if (f != null)
-					world.save(f);
-			} catch (IOException er) {
-				Main.error("error saving world " + f.getName());
-				Main.error("make sure all objects being saved are serializable");
-				er.printStackTrace(); // keep this so we can easily tell what
-										// non-serializable object is causing
-										// the issue
-			}
+			world.wrapSave();
 			openingFile = false;
 		}
 
