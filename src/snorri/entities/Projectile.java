@@ -49,6 +49,12 @@ public class Projectile extends Collider {
 		if (weapon != null) {
 			Main.log("weapon output: " + weapon.useSpellOn(this, deltaTime / getLifeSpan()));
 		}
+		
+		//if we hit the edge of the map or a wall, end
+		if (world.getLevel().getTile(pos) == null || ! world.getLevel().getTile(pos).isPathable()) {
+			//TODO: explode?
+			world.delete(this);
+		}
 				
 		super.update(world, deltaTime);
 	}
@@ -56,9 +62,11 @@ public class Projectile extends Collider {
 	@Override
 	public void onCollision(CollisionEvent e) {
 		
-		if (e.getTarget().equals(root)) {
+		if (root.equals(e.getTarget())) {
 			return;
 		}
+		
+		Main.log("made it");
 		
 		if (e.getTarget() instanceof Unit) {
 			((Unit) e.getTarget()).damage(weapon.getSharpness());

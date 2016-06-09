@@ -159,5 +159,9 @@ public class Tile {
 	public String toNumericString() {
 		return getType().getId() + ":" + getStyle();
 	}
+
+	public boolean isPathable() {
+		return type.isPathable();
+	}
 	
 }

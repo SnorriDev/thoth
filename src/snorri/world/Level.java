@@ -47,7 +47,7 @@ public class Level {
 	}
 
 	public Tile getTile(int x, int y) {
-		return map[x / Tile.WIDTH][y / Tile.WIDTH];
+		return getTileRaw(x / Tile.WIDTH, y / Tile.WIDTH);
 	}
 
 	public Tile getTile(Vector v) {
@@ -55,6 +55,9 @@ public class Level {
 	}
 
 	public Tile getTileRaw(int x, int y) {
+		if (x < 0 || x >= map.length || y < 0 || y >= map[x].length) {
+			return null;
+		}
 		return map[x][y];
 	}
 
