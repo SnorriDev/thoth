@@ -223,9 +223,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		int x = location.getX() / Tile.WIDTH;
 		int y = location.getY() / Tile.WIDTH;
 
-		Tile t = world.getLevel().getNewTileRaw(x, y);
-		if (selectedTile != null && world.getLevel().getNewTileRaw(x, y) != null && t != null && !t.equals(selectedTile)) {
-			world.getLevel().setTileRaw(x, y, selectedTile);
+		Tile t = world.getLevel().getNewTileGrid(x, y);
+		if (selectedTile != null && world.getLevel().getNewTileGrid(x, y) != null && t != null && !t.equals(selectedTile)) {
+			world.getLevel().setTileGrid(x, y, selectedTile);
 			fill_helper(x + 1, y, t);
 			fill_helper(x - 1, y, t);
 			fill_helper(x, y + 1, t);
@@ -234,8 +234,8 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	}
 
 	public void fill_helper(int x, int y, Tile t) {
-		if (selectedTile != null && world.getLevel().getNewTileRaw(x, y) != null && t != null && world.getLevel().getNewTileRaw(x, y).equals(t)) {
-			world.getLevel().setTileRaw(x, y, selectedTile);
+		if (selectedTile != null && world.getLevel().getNewTileGrid(x, y) != null && t != null && world.getLevel().getNewTileGrid(x, y).equals(t)) {
+			world.getLevel().setTileGrid(x, y, selectedTile);
 			fill_helper(x + 1, y, t);
 			fill_helper(x - 1, y, t);
 			fill_helper(x, y + 1, t);
