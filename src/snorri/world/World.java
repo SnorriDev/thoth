@@ -10,11 +10,9 @@ import java.util.List;
 import java.util.Queue;
 
 import snorri.entities.Collider;
-import snorri.entities.Desk;
 import snorri.entities.Entity;
 import snorri.entities.EntityGroup;
 import snorri.entities.Player;
-import snorri.entities.Unit;
 import snorri.events.CollisionEvent;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
@@ -28,6 +26,7 @@ public class World implements Playable {
 	private Queue<Entity> addQ;
 
 	public World() {
+		
 		Main.log("creating new world..");
 		level = new Level(300, 300); // TODO: pass a level file to read
 		col = new EntityGroup();
@@ -36,15 +35,7 @@ public class World implements Playable {
 		addQ = new LinkedList<Entity>();
 		
 		//temporary
-		addHard(new Entity(new Vector(105, 130)));
-		addHard(new Entity(new Vector(100, 100)));
-		addHard(new Entity(new Vector(143, 133)));
-		addHard(new Entity(new Vector(100, 124)));
-		addHard(new Entity(new Vector(115, 100)));
-		addHard(new Entity(new Vector(111, 130)));
-		addHard(new Desk(new Vector(200, 200)));
-		addHard(new Unit(new Vector(20, 20)));
-		addHard(new Player(new Vector(50, 50)));
+		addHard(new Player(new Vector(100, 100)));
 		
 		Main.log("new world created!");
 	}

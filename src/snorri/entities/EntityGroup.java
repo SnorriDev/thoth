@@ -180,7 +180,7 @@ public class EntityGroup extends Entity {
 		
 		EntityGroup enclosing = EntityGroup.getEnclosing(points, points.length, boundary, 0);
 		
-		pos = enclosing.pos.copy();
+		pos = (enclosing.pos == null) ? null : enclosing.pos.copy();
 		r = enclosing.r + REACH; //"MARGIN"
 		
 		r += getMaxRadius(points);
@@ -205,6 +205,10 @@ public class EntityGroup extends Entity {
 
 	//linear time algorithm for getting enclosing entity
 	private static EntityGroup getEnclosing(Entity[] points, int n, Entity[] boundary, int b) {
+		
+		if (points.length == 0) {
+			return new EntityGroup();
+		}
 		
 		if (n == 0 && b == 2) {
 			return new EntityGroup(boundary[0], boundary[1]);

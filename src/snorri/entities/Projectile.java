@@ -49,7 +49,7 @@ public class Projectile extends Collider {
 		if (weapon != null) {
 			Main.log("weapon output: " + weapon.useSpellOn(this, deltaTime / getLifeSpan()));
 		}
-		
+				
 		super.update(world, deltaTime);
 	}
 
