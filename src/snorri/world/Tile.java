@@ -2,6 +2,7 @@ package snorri.world;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.util.ArrayList;
 
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
@@ -36,6 +37,27 @@ public class Tile {
 		this.style = style;
 	}
 	
+	public Tile(Tile tile) {
+		type = tile.getType();
+		style = tile.getStyle();
+	}
+	
+	public Tile(String substring) {
+		String[] l = substring.split(":");
+		type = TileType.byId(Integer.parseInt(l[0]));
+		style = Integer.parseInt(l[1]);
+	}
+
+	public static ArrayList<Tile> getAll() {
+		ArrayList<Tile> list = new ArrayList<Tile>();
+		for(int i = 0; i < TileType.values().length; i++) {
+			for(int j = 0; j < TileType.byId(i).getNumberStyles(); j++) {
+				list.add(new Tile(i,j));
+			}
+		}
+		return list;
+	}
+	
 	public TileType getType() {
 		return type;
 	}
@@ -48,6 +70,15 @@ public class Tile {
 		Vector relPos = v.getRelPos(g);
 		gr.drawImage(type.getTexture(style), relPos.getX(), (int)relPos.getY(), g);
 		return;
+	}
+	
+	public Image getTexture() {
+		return type.getTexture(style);
+	}
+	
+	@Override
+	public String toString() {
+		return type.name() + ":" + style;
 	}
 	
 	public enum TileType implements Nominal {
@@ -123,6 +154,10 @@ public class Tile {
 			return textures.length;
 		}
 		
+	}
+
+	public String toNumericString() {
+		return getType().getId() + ":" + getStyle();
 	}
 	
 }

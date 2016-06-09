@@ -36,10 +36,13 @@ public class Level {
 	}
 
 	public void setTile(int x, int y, Tile t) {
-		map[x / Tile.WIDTH][y / Tile.WIDTH] = t;
+		setTileRaw(x / Tile.WIDTH,y / Tile.WIDTH, t);
 	}
 
 	public void setTileRaw(int x, int y, Tile t) {
+		if (x < 0 || x >= map.length || y < 0 || y >= map[x].length) {
+			return;
+		}
 		map[x][y] = t;
 	}
 

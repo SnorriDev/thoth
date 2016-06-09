@@ -111,5 +111,9 @@ public class Main {
 		window.requestFocus();
 
 	}
+	
+	public static JFrame getFrame() {
+		return frame;
+	}
 
 }
