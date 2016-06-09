@@ -12,6 +12,11 @@ public class Vector implements Serializable {
 
 	public static final Vector ZERO = new Vector(0, 0);
 	
+	public static final Vector RIGHT = new Vector(1, 0);
+	public static final Vector DOWN = new Vector(0, 1);
+	public static final Vector DOWN_RIGHT = new Vector(1, 1);
+	public static final Vector DOWN_LEFT = new Vector(-1, 1);
+	
 	public double x, y;
 	
 	public Vector(double x, double y) {
@@ -96,6 +101,12 @@ public class Vector implements Serializable {
 		return scale(1);
 	}
 	
+	public Vector abs() {
+		x = Math.abs(x);
+		y = Math.abs(y);
+		return this;
+	}
+	
 	//rounds to an int for convenience
 	public int distance(Vector pos) {
 		return (int) Math.sqrt((x - pos.x) * (x - pos.x) + (y - pos.y) * (y - pos.y));
@@ -123,6 +134,26 @@ public class Vector implements Serializable {
 
 	public void add(int i, int j) {
 		add(new Vector(i, j));
+	}
+	
+	public Vector projectX() {
+		return new Vector(x, 0);
+	}
+	
+	public Vector projectY() {
+		return new Vector(0, y);
+	}
+	
+	public double dot(Vector v) {
+		return x * v.x + y * v.y;
+	}
+	
+	public double getAngleBetween(Vector v) {
+		return Math.acos(dot(v) / (magnitude() * v.magnitude()));
+	}
+	
+	public Vector project(Vector axis) {
+		return axis.scale(dot(axis) / axis.magnitude());
 	}
 	
 }

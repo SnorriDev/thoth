@@ -2,6 +2,7 @@ package snorri.entities;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.io.Serializable;
 
 import snorri.animations.Animation;
@@ -9,6 +10,8 @@ import snorri.inventory.Timer;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.semantics.Nominal;
+import snorri.world.Level;
+import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -18,6 +21,8 @@ public class Entity implements Nominal, Serializable {
 	protected Vector pos;
 	protected int r;
 	protected Animation animation;
+	
+	//TODO: entities that ignore collisions (with a boolean?)
 	
 	private Timer burnTimer = new Timer(5);
 	
@@ -65,6 +70,52 @@ public class Entity implements Nominal, Serializable {
 	
 	public boolean intersects(Entity e, int rad) {
 		return e.pos.distance(pos) <= r + e.r + rad;
+	}
+	
+	public boolean intersects(Rectangle rect) {
+		
+		Vector circleDistance = new Vector(rect.getX(), rect.getY()).add(new Vector(rect).divide(2)).sub(pos).abs();
+		
+		if (circleDistance.getX() > rect.getWidth() / 2 + r) {
+			return false;
+		}
+		
+		if (circleDistance.getY() > rect.getHeight() / 2 + r) {
+			return false;
+		}
+		
+		if (circleDistance.getX() <= rect.getWidth() / 2) {
+			return true;
+		}
+		
+		if (circleDistance.getY() <= rect.getHeight() / 2) {
+			return true;
+		}
+		
+		double cornerDistance = new Vector(rect).divide(2).distance(circleDistance);
+		return cornerDistance <= r;
+		
+	}
+	
+	public boolean intersectsWall(World world) {
+		
+		for (int i = (pos.getX() - r) / Tile.WIDTH; i <= (pos.getX() + r) / Tile.WIDTH; i++) {
+			for (int j = (pos.getY() - r) / Tile.WIDTH; j <= (pos.getY() + r) / Tile.WIDTH; j++) {
+				
+				if (! intersects(Level.getRectange(i, j))) {
+					continue;
+				}
+				
+				Tile t = world.getLevel().getTileRaw(i, j);
+				if (t == null || !t.isPathable()) {
+					return true;
+				}
+								
+			}
+		}
+		
+		return false;
+		
 	}
 	
 	public boolean contains(Entity e) {
@@ -145,15 +196,19 @@ public class Entity implements Nominal, Serializable {
 		return null;
 	}
 	
-	public void move(Vector direction, EntityGroup col, double speed) {
-		Vector dir = direction.copy();
+	public void move(World world, Vector direction, double speed) {
+		
+		Vector dir = direction.copy().multiply(speed);
 		
 		if (dir.equals(Vector.ZERO)) {
 			return;
 		}
 		
-		dir.multiply(speed);
-		col.move(this, dir);
+		if (new Entity(pos.copy().add(dir), r).intersectsWall(world)) {
+			return;
+		}
+		
+		world.getEntityTree().move(this, dir);
 	}
 
 }

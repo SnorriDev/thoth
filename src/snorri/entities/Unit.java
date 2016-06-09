@@ -40,20 +40,20 @@ public class Unit extends Entity {
 		
 	}
 
-	public void walk(Vector direction, EntityGroup col) {
-		move(direction, col, getSpeed());
+	public void walk(World world, Vector direction) {
+		move(world, direction, getSpeed());
 	}
 	
-	public boolean wouldHitSomething(Vector direction, EntityGroup col) {
+	public boolean wouldHitSomething(World world, Vector direction) {
 				
 		if (direction.equals(Vector.ZERO)) {
 			return true;
 		}
 		
 		Unit clone = new Unit(this);
-		clone.walk(direction, col);
-		col.delete(clone);
-		return col.getAllCollisions(clone).size() > 1;
+		clone.walk(world, direction);
+		world.getEntityTree().delete(clone);
+		return world.getEntityTree().getAllCollisions(clone).size() > 1;
 	}
 	
 	public double getHealth() {
