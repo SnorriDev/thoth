@@ -29,7 +29,7 @@ public class World implements Playable {
 
 	public World() {
 		Main.log("creating new world..");
-		level = new Level(100, 100); // TODO: pass a level file to read
+		level = new Level(300, 300); // TODO: pass a level file to read
 		col = new EntityGroup();
 		colliders = new ArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
