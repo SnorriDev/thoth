@@ -37,10 +37,10 @@ public class Level {
 	}
 
 	public void setTile(int x, int y, Tile t) {
-		setTileRaw(x / Tile.WIDTH,y / Tile.WIDTH, t);
+		setTileGrid(x / Tile.WIDTH,y / Tile.WIDTH, t);
 	}
 
-	public void setTileRaw(int x, int y, Tile t) {
+	public void setTileGrid(int x, int y, Tile t) {
 		if (x < 0 || x >= map.length || y < 0 || y >= map[x].length) {
 			return;
 		}
@@ -48,14 +48,24 @@ public class Level {
 	}
 
 	public Tile getTile(int x, int y) {
-		return getTileRaw(x / Tile.WIDTH, y / Tile.WIDTH);
+		return getTileGrid(x / Tile.WIDTH, y / Tile.WIDTH);
 	}
 
 	public Tile getTile(Vector v) {
 		return getTile(v.getX(), v.getY());
 	}
+	
+	public Tile getNewTileGrid(int x, int y) {
+		if (x < 0 || x >= map.length || y < 0 || y >= map[x].length) {
+			return null;
+		}
+		if (getTileGrid(x,y) == null) {
+			return null;
+		}
+		return new Tile(getTileGrid(x,y));
+	}
 
-	public Tile getTileRaw(int x, int y) {
+	public Tile getTileGrid(int x, int y) {
 		if (x < 0 || x >= map.length || y < 0 || y >= map[x].length) {
 			return null;
 		}

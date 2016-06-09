@@ -79,10 +79,18 @@ public class Main {
 		}
 		
 		File f = new File(fd.getDirectory(), fd.getFile());
+		
+		//if they select an image, return that
+		if (fd.getFile().endsWith("png")) {
+			return f;
+		}
+		
+		//if they select a file that's not an image, return that directory
 		if (f.exists() && ! f.isDirectory()) {
 			return new File(fd.getDirectory());
 		}
 		
+		//if the file is a directory or doesn't exist, return it
 		return f;
 	}
 

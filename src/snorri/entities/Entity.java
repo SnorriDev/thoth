@@ -106,7 +106,7 @@ public class Entity implements Nominal, Serializable {
 					continue;
 				}
 				
-				Tile t = world.getLevel().getTileRaw(i, j);
+				Tile t = world.getLevel().getTileGrid(i, j);
 				if (t == null || !t.isPathable()) {
 					return true;
 				}
