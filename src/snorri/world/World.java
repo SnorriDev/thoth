@@ -20,6 +20,8 @@ import snorri.main.Main;
 
 public class World implements Playable {
 
+	private static final Vector DEFAULT_SPAWN = new Vector(100, 100);
+	
 	private Level level;
 	private EntityGroup col;
 	private List<Collider> colliders;
@@ -27,24 +29,14 @@ public class World implements Playable {
 	private Queue<Entity> addQ;
 
 	public World() {
-
-		Main.log("creating new world..");
-		level = new Level(300, 300); // TODO: pass a level file to read
-		col = new EntityGroup();
-		colliders = new ArrayList<Collider>();
-		deleteQ = new LinkedList<Entity>();
-		addQ = new LinkedList<Entity>();
-
-		// temporary
-		addHard(new Player(new Vector(100, 100)));
-
-		Main.log("new world created!");
+		this(300, 300);
 	}
 
 	public World(int width, int height) {
 
 		Main.log("creating new world of size " + width + " x " + height + "..");
 		level = new Level(width, height); // TODO: pass a level file to read
+		level.computePathfinding(DEFAULT_SPAWN);
 		col = new EntityGroup();
 		colliders = new ArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
@@ -62,6 +54,7 @@ public class World implements Playable {
 
 	public World(File file) throws FileNotFoundException, IOException {
 		load(file);
+		level.computePathfinding(DEFAULT_SPAWN);
 		colliders = new ArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();

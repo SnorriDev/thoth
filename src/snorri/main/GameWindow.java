@@ -12,13 +12,14 @@ import snorri.entities.Desk;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.keyboard.Key;
-import snorri.world.PathNode;
-import snorri.world.Pathfinding;
+import snorri.pathfinding.PathNode;
+import snorri.pathfinding.Pathfinder;
+import snorri.pathfinding.Pathfinding;
 import snorri.world.Playable;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class GameWindow extends FocusedWindow {
+public class GameWindow extends FocusedWindow implements Pathfinder {
 	
 	/**
 	 * Main game window
@@ -95,7 +96,10 @@ public class GameWindow extends FocusedWindow {
 			//we could also terminate the search after a certain amount of time
 			//alternatively, if it's running in another thread, it doesn't really matter that much
 			Pathfinding p = new Pathfinding(getWorld().getLevel());
-			path = p.findPath(focus.getPos().copy().toGridPos(), getMousePosAbsolute().toGridPos());
+			Vector target = getMousePosAbsolute().toGridPos();
+			if (getWorld().getLevel().getTileGrid(target) != null) {
+				p.setPathAsync(focus.getPos().copy().toGridPos(), target, this);
+			}
 		}
 		
 		if (e.getKeyChar() == Key.SPACE.getChar()) {
@@ -182,6 +186,11 @@ public class GameWindow extends FocusedWindow {
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public void setPath(Deque<PathNode> stack) {
+		path = stack;
 	}
 	
 }

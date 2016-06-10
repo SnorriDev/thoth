@@ -16,6 +16,7 @@ public class Tile {
 	private TileType		type;
 	private int				style;
 	private boolean surroundingsPathable = true;
+	private boolean reachable;
 	
 	public Tile(TileType type) {
 		this.type = type;
@@ -194,15 +195,14 @@ public class Tile {
 			}
 		}
 		
-//		for (int i = 0; i <= 1; i++) {
-//			for (int j = 0; j <= 1; j++) {
-//				if (new Entity(new Vector(x + i * Tile.WIDTH, y + j * Tile.WIDTH), Unit.RADIUS).intersectsWall(level)) {
-//					surroundingsPathable = false;
-//					return;
-//				}
-//			}
-//		}
-		
+	}
+
+	public void setReachable(boolean b) {
+		reachable = b;
+	}
+	
+	public boolean isReachable() {
+		return reachable;
 	}
 	
 }

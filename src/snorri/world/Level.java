@@ -18,7 +18,6 @@ public class Level {
 	private Tile[][] map;
 	private Vector dim;
 
-	// TODO: load from file, not empty grid with parameters
 	// not that indexing conventions are Cartesian, not matrix-based
 
 	public Level(int width, int height) {
@@ -31,13 +30,10 @@ public class Level {
 			}
 		}
 		
-		computePathfinding();
-		
 	}
 
 	public Level(File file) throws FileNotFoundException, IOException {
 		load(file);
-		computePathfinding();
 	}
 
 	public void setTile(int x, int y, Tile t) {
@@ -59,6 +55,7 @@ public class Level {
 		return getTile(v.getX(), v.getY());
 	}
 	
+	//TODO: we probably don't need this
 	public Tile getNewTileGrid(int x, int y) {
 		if (x < 0 || x >= map.length || y < 0 || y >= map[x].length) {
 			return null;
@@ -91,7 +88,6 @@ public class Level {
 		int maxX = g.getFocus().getPos().getX() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / scaleFactor + cushion;
 		int minY = g.getFocus().getPos().getY() / Tile.WIDTH - g.getDimensions().getY() / Tile.WIDTH / scaleFactor - cushion;
 		int maxY = g.getFocus().getPos().getY() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / scaleFactor + cushion;
-		//Main.log(g.getFocus().getPos().getX() / Tile.WIDTH + " " + g.getFocus().getPos().getY() / Tile.WIDTH + "\t\t" + g.getFocus().getPos().getX() + " " + g.getFocus().getPos().getY() + "\t\t" + g.getDimensions().getX() + " " + g.getDimensions().getY() + "\t\t" + minX + " " + minY + "\t\t" + maxX + " " + maxY);
 		
 		for (int i = minX; i < maxX; i++) {
 			for (int j = minY; j < maxY; j++) {
@@ -171,7 +167,7 @@ public class Level {
 		return new Rectangle(i * Tile.WIDTH, j * Tile.WIDTH, Tile.WIDTH, Tile.WIDTH);
 	}
 	
-	public void computePathfinding() {
+	private void computePathability() {
 		Main.log("computing pathfinding grid...");
 		for (int i = 0; i < dim.getX(); i++) {
 			for (int j = 0; j < dim.getY(); j++) {
@@ -184,6 +180,42 @@ public class Level {
 	public boolean isContextPathable(Vector pos) {
 		Tile t = getTileGrid(pos);
 		return t != null && t.isContextPathable();
+	}
+
+	//TODO: get this working
+//	private void computeReachableGraph(Vector v) {
+//		for (int i = 0; i < dim.getX(); i++) {
+//			for (int j = 0; j < dim.getY(); j++) {
+//				map[i][j].setReachable(false);
+//			}
+//		}
+//		
+//		Vector gridPos = v.copy().toGridPos();
+//		fillReachable(gridPos.getX(), gridPos.getY());
+//		
+//	}
+//
+//	//why are we getting stack overflows
+//	private void fillReachable(int x, int y) {
+//		
+//		Tile t = getTileGrid(x, y);
+//		if (t == null || t.isReachable() || ! t.isContextPathable()) {
+//			return;
+//		}
+//		
+//		Main.log(! t.isContextPathable());
+//		
+//		t.setReachable(true);
+//		fillReachable(x + 1, y);
+//		fillReachable(x - 1, y);
+//		fillReachable(x, y + 1);
+//		//fillReachable(x, y - 1);
+//		
+//	}
+
+	public void computePathfinding(Vector defaultSpawn) {
+		computePathability();
+		//computeReachableGraph(defaultSpawn);
 	}
 	
 }
