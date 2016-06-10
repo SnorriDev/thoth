@@ -196,19 +196,57 @@ public class Entity implements Nominal, Serializable {
 		return null;
 	}
 	
-	public void move(World world, Vector direction, double speed) {
+	/**
+	 * if dir is zero, then this function will always return false
+	 * @return whether moving in direction dir would bring entity into wall
+	 */
+	public boolean wouldIntersectWall(World world, Vector dir) {
+		//TODO: perhaps this is using lots of memory
+		
+		if (dir.equals(Vector.ZERO)) {
+			return true;
+		}
+		
+		return new Entity(pos.copy().add(dir), r).intersectsWall(world);
+		
+	}
+	
+	public boolean move(World world, Vector direction, double speed) {
 		
 		Vector dir = direction.copy().multiply(speed);
 		
 		if (dir.equals(Vector.ZERO)) {
-			return;
+			return false;
 		}
-		
-		if (new Entity(pos.copy().add(dir), r).intersectsWall(world)) {
-			return;
+				
+		if (wouldIntersectWall(world, dir)) {
+			
+			//see if we're hitting only one wall
+			if (! wouldIntersectWall(world, dir.getProjectionX())) {
+				dir = dir.getProjectionX();
+			}
+			else if (! wouldIntersectWall(world, dir.getProjectionY())) {
+				dir = dir.getProjectionY();
+			}
+			
+			//see if we're hitting a corner
+			else if (! wouldIntersectWall(world, dir.getProjection(Vector.DOWN_LEFT))) {
+				dir = dir.getProjection(Vector.DOWN_LEFT);
+			}
+			else if (! wouldIntersectWall(world, dir.getProjection(Vector.DOWN_RIGHT))) {
+				dir = dir.getProjection(Vector.DOWN_RIGHT);
+			}
+			
+			//give up; TODO more stuff?
+			else {
+				return false;
+			}
+			
 		}
 		
 		world.getEntityTree().move(this, dir);
+		return true;
+		
 	}
 
 }

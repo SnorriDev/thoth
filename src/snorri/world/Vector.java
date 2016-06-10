@@ -91,7 +91,7 @@ public class Vector implements Serializable {
 	public Vector scale(double magnitude) {
 		
 		if (equals(ZERO)) {
-			return ZERO;
+			return ZERO.copy();
 		}
 		
 		return multiply(magnitude / distance(ZERO));
@@ -136,11 +136,11 @@ public class Vector implements Serializable {
 		add(new Vector(i, j));
 	}
 	
-	public Vector projectX() {
+	public Vector getProjectionX() {
 		return new Vector(x, 0);
 	}
 	
-	public Vector projectY() {
+	public Vector getProjectionY() {
 		return new Vector(0, y);
 	}
 	
@@ -152,8 +152,17 @@ public class Vector implements Serializable {
 		return Math.acos(dot(v) / (magnitude() * v.magnitude()));
 	}
 	
-	public Vector project(Vector axis) {
-		return axis.scale(dot(axis) / axis.magnitude());
+	public Vector getProjection(Vector axis) {
+		return axis.copy().scale(dot(axis) / axis.magnitude());
+	}
+	
+	public Vector getPerpendicular() {
+		
+		if (y == 0) {
+			return ZERO.copy();
+		}
+		
+		return new Vector(1, -x/y).normalize();
 	}
 	
 }
