@@ -34,7 +34,7 @@ public class Pathfinding {
 		openSet.offer(map[start.getX()][start.getY()]);
 		
 		while (! openSet.isEmpty()) {
-			
+						
 			PathNode current = openSet.poll();
 			
 			if (current.getGridPos().equals(goal)) {
@@ -70,6 +70,7 @@ public class Pathfinding {
 	}
 	
 	public Deque<PathNode> reconstructPath(PathNode current) {
+				
 		Deque<PathNode> stack = new ArrayDeque<PathNode>();
 		while (current != null) {
 			stack.push(current);

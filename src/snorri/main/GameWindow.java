@@ -90,7 +90,10 @@ public class GameWindow extends FocusedWindow {
 	public void keyTyped(KeyEvent e) {
 		
 		if (e.getKeyChar() == Key.Q.getChar()) {
-			//TODO: some errors with invalid paths?
+			//TODO: it takes a while to DECIDE that there is no path somewhere.
+			//perhaps circumvent this by storing a variable reachableFromSpawn in each Tile
+			//we could also terminate the search after a certain amount of time
+			//alternatively, if it's running in another thread, it doesn't really matter that much
 			Pathfinding p = new Pathfinding(getWorld().getLevel());
 			path = p.findPath(focus.getPos().copy().toGridPos(), getMousePosAbsolute().toGridPos());
 		}
