@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
 
+import snorri.entities.Entity;
+import snorri.entities.Unit;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.semantics.Nominal;
@@ -16,6 +18,7 @@ public class Tile {
 									
 	private TileType		type;
 	private int				style;
+	private boolean surroundingsPathable = true;
 	
 	public Tile(TileType type) {
 		this.type = type;
@@ -171,6 +174,38 @@ public class Tile {
 
 	public boolean isPathable() {
 		return type.isPathable();
+	}
+	
+	public boolean isContextPathable() {
+		return isPathable() && surroundingsPathable;
+	}
+	
+	//figure out if we can stand on this block at the very beginning
+	public void computeSurroundingsPathable(int x, int y, Level level) {
+		
+		surroundingsPathable = true;
+		
+		for (int i = (x * Tile.WIDTH - Unit.RADIUS) / Tile.WIDTH; i <= (x * Tile.WIDTH + Unit.RADIUS) / Tile.WIDTH; i++) {
+			for (int j = (y * Tile.WIDTH - Unit.RADIUS) / Tile.WIDTH; j <= (y * Tile.WIDTH + Unit.RADIUS) / Tile.WIDTH; j++) {
+				
+				Tile t = level.getTileGrid(i, j);
+				if (t == null || !t.isPathable()) {
+					surroundingsPathable = false;
+					return;
+				}
+								
+			}
+		}
+		
+//		for (int i = 0; i <= 1; i++) {
+//			for (int j = 0; j <= 1; j++) {
+//				if (new Entity(new Vector(x + i * Tile.WIDTH, y + j * Tile.WIDTH), Unit.RADIUS).intersectsWall(level)) {
+//					surroundingsPathable = false;
+//					return;
+//				}
+//			}
+//		}
+		
 	}
 	
 }

@@ -21,7 +21,7 @@ public class Level {
 	// TODO: load from file, not empty grid with parameters
 	// not that indexing conventions are Cartesian, not matrix-based
 
-	public Level(int width, int height) {
+	public Level(int width, int height, World world) {
 		map = new Tile[width][height];
 		dim = new Vector(width, height);
 
@@ -30,10 +30,14 @@ public class Level {
 				map[i][j] = new Tile(TileType.SAND);
 			}
 		}
+		
+		computePathfinding();
+		
 	}
 
 	public Level(File file) throws FileNotFoundException, IOException {
 		load(file);
+		computePathfinding();
 	}
 
 	public void setTile(int x, int y, Tile t) {
@@ -70,6 +74,10 @@ public class Level {
 			return null;
 		}
 		return map[x][y];
+	}
+	
+	public Tile getTileGrid(Vector v) {
+		return getTileGrid(v.getX(), v.getY());
 	}
 
 	public Vector getDimensions() {
@@ -129,7 +137,7 @@ public class Level {
 
 		is.close();
 
-		Main.log("Load Complete!");
+		Main.log("load complete!");
 		return;
 	}
 
@@ -155,12 +163,27 @@ public class Level {
 
 		os.close();
 
-		Main.log("Save Complete!");
+		Main.log("save complete!");
 		return;
 	}
 	
 	public static Rectangle getRectange(int i, int j) {
 		return new Rectangle(i * Tile.WIDTH, j * Tile.WIDTH, Tile.WIDTH, Tile.WIDTH);
+	}
+	
+	public void computePathfinding() {
+		Main.log("computing pathfinding grid...");
+		for (int i = 0; i < dim.getX(); i++) {
+			for (int j = 0; j < dim.getY(); j++) {
+				map[i][j].computeSurroundingsPathable(i, j, this);
+			}
+		}
+		Main.log("pathfinding grid computed!");
+	}
+	
+	public boolean isContextPathable(Vector pos) {
+		Tile t = getTileGrid(pos);
+		return t != null && t.isContextPathable();
 	}
 	
 }

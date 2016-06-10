@@ -40,6 +40,10 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 		return new Vector(getBounds());
 	}
 	
+	public Vector getCenter() {
+		return getDimensions().divide(2);
+	}
+	
 	protected void onFrame() {
 		// TODO Auto-generated method stub
 

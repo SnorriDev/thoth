@@ -9,13 +9,14 @@ public class Unit extends Entity {
 
 	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 2;
+	public static final int RADIUS = 20;
 	protected static final double MAX_HEALTH = 100;
 	private static final double BURN_DOT = 8d;
 	
 	private double health;
 	
 	public Unit(Vector pos) {
-		super(pos, 20);
+		super(pos, RADIUS);
 		health = MAX_HEALTH;
 	}
 	

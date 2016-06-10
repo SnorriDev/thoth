@@ -5,12 +5,15 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.Deque;
 
 import snorri.entities.Collider;
 import snorri.entities.Desk;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.keyboard.Key;
+import snorri.world.PathNode;
+import snorri.world.Pathfinding;
 import snorri.world.Playable;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -27,6 +30,9 @@ public class GameWindow extends FocusedWindow {
 	private Playable universe;
 	private Player focus;
 	private long lastTime;
+	
+	//temporary for testing pathfinding
+	private Deque<PathNode> path;
 	
 	public GameWindow(Playable universe, Player focus) {
 		super();
@@ -62,6 +68,15 @@ public class GameWindow extends FocusedWindow {
 		universe.getCurrentWorld().render(this, g, true);
 		focus.getInventory().render(this, g);
 		focus.renderHealthBar(g);
+		
+		//temp for debugging pathfinding
+		if (path == null) {
+			return;
+		}
+		for (PathNode node : path) {
+			node.render(g, this);
+		}
+		
 	}
 	
 	public Player getFocus() {
@@ -73,6 +88,11 @@ public class GameWindow extends FocusedWindow {
 	}
 	
 	public void keyTyped(KeyEvent e) {
+		
+		if (e.getKeyChar() == Key.Q.getChar()) {
+			Pathfinding p = new Pathfinding(getWorld().getLevel());
+			path = p.findPath(focus.getPos().copy().toGridPos(), new Vector(100, 100));
+		}
 		
 		if (e.getKeyChar() == Key.SPACE.getChar()) {
 			Collider interactRegion = new Collider(getFocus().getPos(), getFocus().getRadius() + Desk.INTERACT_RANGE);

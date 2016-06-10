@@ -20,8 +20,8 @@ public class EntityGroup extends Entity {
 	private static final long serialVersionUID = 1L;
 
 	private static final int REACH = 0;
-	//TODO: adjust this based on density/radius of higher groups
-
+	
+	//TODO: within each EntityGroup, store entities in a PriorityQueue so we can draw them in the correct order
 	ArrayList<Entity> entities;
 	
 	//can make this stuff more elegant

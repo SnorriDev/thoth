@@ -98,7 +98,11 @@ public class Entity implements Nominal, Serializable {
 	}
 	
 	public boolean intersectsWall(World world) {
-		
+		return intersectsWall(world.getLevel());
+	}
+	
+	public boolean intersectsWall(Level level) {
+
 		for (int i = (pos.getX() - r) / Tile.WIDTH; i <= (pos.getX() + r) / Tile.WIDTH; i++) {
 			for (int j = (pos.getY() - r) / Tile.WIDTH; j <= (pos.getY() + r) / Tile.WIDTH; j++) {
 				
@@ -106,7 +110,7 @@ public class Entity implements Nominal, Serializable {
 					continue;
 				}
 				
-				Tile t = world.getLevel().getTileGrid(i, j);
+				Tile t = level.getTileGrid(i, j);
 				if (t == null || !t.isPathable()) {
 					return true;
 				}

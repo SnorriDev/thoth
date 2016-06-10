@@ -132,8 +132,12 @@ public class Vector implements Serializable {
 		return x == pos.x && y == pos.y;
 	}
 
-	public void add(int i, int j) {
-		add(new Vector(i, j));
+	public Vector add(int i, int j) {
+		return add(new Vector(i, j));
+	}
+	
+	public Vector sub(int i, int j) {
+		return sub(new Vector(i, j));
 	}
 	
 	public Vector getProjectionX() {
@@ -157,12 +161,29 @@ public class Vector implements Serializable {
 	}
 	
 	public Vector getPerpendicular() {
-		
 		if (y == 0) {
 			return ZERO.copy();
 		}
-		
 		return new Vector(1, -x/y).normalize();
 	}
 	
+	public Vector toGridPos() {
+		x = getX() / Tile.WIDTH;
+		y = getY() / Tile.WIDTH;
+		return this;
+	}
+	
+	public Vector toGlobalPos() {
+		x = getX() * Tile.WIDTH;
+		y = getY() * Tile.WIDTH;
+		return this;
+	}
+	
+	//use Level.getTileGrid(v) != null
+	@Deprecated
+	public boolean isInBounds(Level level) {
+		Vector dim = level.getDimensions();
+		return getX() >= 0 && getX() < dim.getX() && getY() >= 0 && getY() < dim.getY();
+	}
+		
 }
