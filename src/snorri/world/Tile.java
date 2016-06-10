@@ -92,26 +92,26 @@ public class Tile {
 	
 	public enum TileType implements Nominal {
 												
-												SAND(true, new Image[] {
-														Main.getImageResource("/textures/tiles/sand00.png"),
-														Main.getImageResource("/textures/tiles/sand01.png"),
-														Main.getImageResource("/textures/tiles/sand02.png")}),
-												WALL(false, new Image[] {
-														Main.getImageResource("/textures/tiles/wall00.png"),
-														Main.getImageResource("/textures/tiles/wall01.png"),
-														Main.getImageResource("/textures/tiles/wall02.png"),
-														Main.getImageResource("/textures/tiles/wall03.png"),
-														Main.getImageResource("/textures/tiles/wall04.png")}),
-												TREE(false, Main.getImageResource("/textures/tiles/tree00.png")),
-												FOUNDATION(false, Main.getImageResource("/textures/tiles/default00.png")),
-												HUT(false, Main.getImageResource("/textures/tiles/default00.png")),
-												WATER(false, new Image[] {
-													Main.getImageResource("/textures/tiles/water00.png"),
-													Main.getImageResource("/textures/tiles/water01.png")}),
-												LAVA(false, new Image[] {
-														Main.getImageResource("/textures/tiles/lava00.png"),
-														Main.getImageResource("/textures/tiles/lava01.png"),
-														Main.getImageResource("/textures/tiles/lava02.png")});
+		SAND(true, new Image[] {
+			Main.getImageResource("/textures/tiles/sand00.png"),
+			Main.getImageResource("/textures/tiles/sand01.png"),
+			Main.getImageResource("/textures/tiles/sand02.png")}),
+		WALL(false, new Image[] {
+			Main.getImageResource("/textures/tiles/wall00.png"),
+			Main.getImageResource("/textures/tiles/wall01.png"),
+			Main.getImageResource("/textures/tiles/wall02.png"),
+			Main.getImageResource("/textures/tiles/wall03.png"),
+			Main.getImageResource("/textures/tiles/wall04.png")}),
+		TREE(false, Main.getImageResource("/textures/tiles/tree00.png")),
+		FOUNDATION(false, Main.getImageResource("/textures/tiles/default00.png")),
+		HUT(false, Main.getImageResource("/textures/tiles/default00.png")),
+		WATER(false, new Image[] {
+			Main.getImageResource("/textures/tiles/water00.png"),
+			Main.getImageResource("/textures/tiles/water01.png")}),
+		LAVA(false, new Image[] {
+			Main.getImageResource("/textures/tiles/lava00.png"),
+			Main.getImageResource("/textures/tiles/lava01.png"),
+			Main.getImageResource("/textures/tiles/lava02.png")});
 		
 		private boolean	pathable;
 		private Image[]	textures;

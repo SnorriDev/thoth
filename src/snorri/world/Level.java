@@ -1,6 +1,7 @@
 package snorri.world;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -157,4 +158,9 @@ public class Level {
 		Main.log("Save Complete!");
 		return;
 	}
+	
+	public static Rectangle getRectange(int i, int j) {
+		return new Rectangle(i * Tile.WIDTH, j * Tile.WIDTH, Tile.WIDTH, Tile.WIDTH);
+	}
+	
 }

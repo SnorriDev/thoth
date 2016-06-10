@@ -45,7 +45,7 @@ public class GameWindow extends FocusedWindow {
 		if (! focus.isDead()) {
 			
 			//if (! focus.wouldHitSomething(states.getMovementVector(), world.getEntityTree())) this is buggy
-			focus.walk(states.getMovementVector(), universe.getCurrentWorld().getEntityTree()); //TODO: move to update method of Player?
+			focus.walk(universe.getCurrentWorld(), states.getMovementVector()); //TODO: move to update method of Player?
 			
 		}
 				

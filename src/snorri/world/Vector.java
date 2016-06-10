@@ -12,6 +12,11 @@ public class Vector implements Serializable {
 
 	public static final Vector ZERO = new Vector(0, 0);
 	
+	public static final Vector RIGHT = new Vector(1, 0);
+	public static final Vector DOWN = new Vector(0, 1);
+	public static final Vector DOWN_RIGHT = new Vector(1, 1);
+	public static final Vector DOWN_LEFT = new Vector(-1, 1);
+	
 	public double x, y;
 	
 	public Vector(double x, double y) {
@@ -86,7 +91,7 @@ public class Vector implements Serializable {
 	public Vector scale(double magnitude) {
 		
 		if (equals(ZERO)) {
-			return ZERO;
+			return ZERO.copy();
 		}
 		
 		return multiply(magnitude / distance(ZERO));
@@ -94,6 +99,12 @@ public class Vector implements Serializable {
 	
 	public Vector normalize() {
 		return scale(1);
+	}
+	
+	public Vector abs() {
+		x = Math.abs(x);
+		y = Math.abs(y);
+		return this;
 	}
 	
 	//rounds to an int for convenience
@@ -123,6 +134,35 @@ public class Vector implements Serializable {
 
 	public void add(int i, int j) {
 		add(new Vector(i, j));
+	}
+	
+	public Vector getProjectionX() {
+		return new Vector(x, 0);
+	}
+	
+	public Vector getProjectionY() {
+		return new Vector(0, y);
+	}
+	
+	public double dot(Vector v) {
+		return x * v.x + y * v.y;
+	}
+	
+	public double getAngleBetween(Vector v) {
+		return Math.acos(dot(v) / (magnitude() * v.magnitude()));
+	}
+	
+	public Vector getProjection(Vector axis) {
+		return axis.copy().scale(dot(axis) / axis.magnitude());
+	}
+	
+	public Vector getPerpendicular() {
+		
+		if (y == 0) {
+			return ZERO.copy();
+		}
+		
+		return new Vector(1, -x/y).normalize();
 	}
 	
 }
