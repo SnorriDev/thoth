@@ -19,6 +19,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -119,7 +120,22 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 		switch (e.getActionCommand()) {
 		case "New":
-			world = new World();
+			String widthString = (String) JOptionPane.showInputDialog(this, "What would you like the map width to be?",
+					"Width", JOptionPane.PLAIN_MESSAGE);
+			String heightString = (String) JOptionPane.showInputDialog(this,
+					"What would you like the map height to be?", "Height", JOptionPane.PLAIN_MESSAGE);
+
+			int width = Integer.parseInt(widthString);
+			int height = Integer.parseInt(heightString);
+
+			int maxSize = 1024; // TODO: we might want to put this somewhere
+								// else
+			if (width > 0 && height > 0 && width <= maxSize && height <= maxSize) {
+				world = new World(width, height);
+			}
+			else {
+				world = new World();
+			}
 			break;
 		case "Open":
 			openingFile = true;
@@ -224,7 +240,8 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		int y = location.getY() / Tile.WIDTH;
 
 		Tile t = world.getLevel().getNewTileGrid(x, y);
-		if (selectedTile != null && world.getLevel().getNewTileGrid(x, y) != null && t != null && !t.equals(selectedTile)) {
+		if (selectedTile != null && world.getLevel().getNewTileGrid(x, y) != null && t != null
+				&& !t.equals(selectedTile)) {
 			world.getLevel().setTileGrid(x, y, selectedTile);
 			fill_helper(x + 1, y, t);
 			fill_helper(x - 1, y, t);
@@ -234,7 +251,8 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	}
 
 	public void fill_helper(int x, int y, Tile t) {
-		if (selectedTile != null && world.getLevel().getNewTileGrid(x, y) != null && t != null && world.getLevel().getNewTileGrid(x, y).equals(t)) {
+		if (selectedTile != null && world.getLevel().getNewTileGrid(x, y) != null && t != null
+				&& world.getLevel().getNewTileGrid(x, y).equals(t)) {
 			world.getLevel().setTileGrid(x, y, selectedTile);
 			fill_helper(x + 1, y, t);
 			fill_helper(x - 1, y, t);

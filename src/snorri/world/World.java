@@ -27,17 +27,32 @@ public class World implements Playable {
 	private Queue<Entity> addQ;
 
 	public World() {
-		
+
 		Main.log("creating new world..");
 		level = new Level(300, 300); // TODO: pass a level file to read
 		col = new EntityGroup();
 		colliders = new ArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
-		
-		//temporary
+
+		// temporary
 		addHard(new Player(new Vector(100, 100)));
-		
+
+		Main.log("new world created!");
+	}
+
+	public World(int width, int height) {
+
+		Main.log("creating new world of size " + width + " x " + height + "..");
+		level = new Level(width, height); // TODO: pass a level file to read
+		col = new EntityGroup();
+		colliders = new ArrayList<Collider>();
+		deleteQ = new LinkedList<Entity>();
+		addQ = new LinkedList<Entity>();
+
+		// temporary
+		addHard(new Player(new Vector(100, 100)));
+
 		Main.log("new world created!");
 	}
 
@@ -51,15 +66,15 @@ public class World implements Playable {
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
 	}
-	
+
 	public static World wrapLoad() {
-		
+
 		File file = Main.getFileDialog("Select file to load", FileDialog.LOAD);
-		
+
 		if (file == null) {
 			return null;
 		}
-		
+
 		try {
 			return new World(file);
 		} catch (IOException er) {
@@ -87,7 +102,7 @@ public class World implements Playable {
 		while (!deleteQ.isEmpty()) {
 			deleteHard(deleteQ.poll());
 		}
-		
+
 		while (!addQ.isEmpty()) {
 			addHard(addQ.poll());
 		}
@@ -98,7 +113,7 @@ public class World implements Playable {
 
 		// TODO: draw grid
 		// TODO: render, not render hitboxes
-		//level.renderMap(g,gr,levelMap);
+		// level.renderMap(g,gr,levelMap);
 		level.renderMap(g, gr, showOutlands);
 		col.renderAround(g, gr);
 
@@ -124,7 +139,7 @@ public class World implements Playable {
 	public void add(Entity e) {
 		addQ.add(e);
 	}
-	
+
 	public void addHard(Entity e) {
 
 		if (e instanceof Collider) {
@@ -155,7 +170,7 @@ public class World implements Playable {
 	 *            the entity to delete
 	 */
 	private boolean deleteHard(Entity e) {
-		
+
 		if (e instanceof Collider) {
 			return colliders.remove(e);
 		}
@@ -166,7 +181,7 @@ public class World implements Playable {
 
 	@Override
 	public void save(File f) throws IOException {
-		
+
 		if (f.exists() && !f.isDirectory()) {
 			Main.error("tried to save world " + f.getName() + " to non-directory");
 			throw new IOException();
@@ -176,7 +191,7 @@ public class World implements Playable {
 			Main.log("creating new world directory...");
 			f.mkdir();
 		}
-		
+
 		String path = f.getPath();
 		col.saveEntities(new File(path, "entities.dat"));
 		level.save(new File(path, "level.dat"));
@@ -185,7 +200,7 @@ public class World implements Playable {
 
 	@Override
 	public void load(File f) throws FileNotFoundException, IOException {
-		
+
 		if (!f.exists()) {
 			Main.error("could not find world " + f.getName());
 			throw new FileNotFoundException();
