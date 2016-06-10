@@ -2,6 +2,7 @@ package snorri.main;
 
 import java.awt.FileDialog;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -16,10 +17,15 @@ import java.io.IOException;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
@@ -109,6 +115,34 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		Main.getFrame().setJMenuBar(menuBar);
 	}
 
+	private boolean isInteger(String input) {
+		try {
+			Integer.parseInt(input);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	private int[] hwDialog() {
+		int[] wh = { -1, -1 };
+		JTextField w = new JTextField("300");
+		JTextField h = new JTextField("300");
+		JPanel panel = new JPanel(new GridLayout(0, 1));
+		panel.add(new JLabel("Width:"));
+		panel.add(w);
+		panel.add(new JLabel("Height:"));
+		panel.add(h);
+		JOptionPane.showConfirmDialog(null, panel, "Enter Width & Height", JOptionPane.PLAIN_MESSAGE);
+
+		if (isInteger(w.getText()) && isInteger(h.getText())) {
+			wh[0] = Integer.parseInt(w.getText());
+			wh[1] = Integer.parseInt(h.getText());
+		}
+
+		return wh;
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -119,7 +153,14 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 		switch (e.getActionCommand()) {
 		case "New":
-			world = new World();
+			int maxSize = 1024;
+			int[] wh = hwDialog();
+
+			if (wh != null && wh[0] > 0 && wh[1] > 0 && wh[0] <= maxSize && wh[1] <= maxSize) {
+				world = new World(wh[0], wh[1]);
+			} else {
+				world = new World();
+			}
 			break;
 		case "Open":
 			openingFile = true;
@@ -224,7 +265,8 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		int y = location.getY() / Tile.WIDTH;
 
 		Tile t = world.getLevel().getNewTileGrid(x, y);
-		if (selectedTile != null && world.getLevel().getNewTileGrid(x, y) != null && t != null && !t.equals(selectedTile)) {
+		if (selectedTile != null && world.getLevel().getNewTileGrid(x, y) != null && t != null
+				&& !t.equals(selectedTile)) {
 			world.getLevel().setTileGrid(x, y, selectedTile);
 			fill_helper(x + 1, y, t);
 			fill_helper(x - 1, y, t);
@@ -234,7 +276,8 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	}
 
 	public void fill_helper(int x, int y, Tile t) {
-		if (selectedTile != null && world.getLevel().getNewTileGrid(x, y) != null && t != null && world.getLevel().getNewTileGrid(x, y).equals(t)) {
+		if (selectedTile != null && world.getLevel().getNewTileGrid(x, y) != null && t != null
+				&& world.getLevel().getNewTileGrid(x, y).equals(t)) {
 			world.getLevel().setTileGrid(x, y, selectedTile);
 			fill_helper(x + 1, y, t);
 			fill_helper(x - 1, y, t);

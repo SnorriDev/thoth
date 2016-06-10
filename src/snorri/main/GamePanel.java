@@ -45,8 +45,7 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 	}
 	
 	protected void onFrame() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	// returns nanosecond-accurate time

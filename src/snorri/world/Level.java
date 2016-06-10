@@ -21,7 +21,7 @@ public class Level {
 	// TODO: load from file, not empty grid with parameters
 	// not that indexing conventions are Cartesian, not matrix-based
 
-	public Level(int width, int height, World world) {
+	public Level(int width, int height) {
 		map = new Tile[width][height];
 		dim = new Vector(width, height);
 

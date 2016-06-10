@@ -90,8 +90,9 @@ public class GameWindow extends FocusedWindow {
 	public void keyTyped(KeyEvent e) {
 		
 		if (e.getKeyChar() == Key.Q.getChar()) {
+			//TODO: some errors with invalid paths?
 			Pathfinding p = new Pathfinding(getWorld().getLevel());
-			path = p.findPath(focus.getPos().copy().toGridPos(), new Vector(100, 100));
+			path = p.findPath(focus.getPos().copy().toGridPos(), getMousePosAbsolute().toGridPos());
 		}
 		
 		if (e.getKeyChar() == Key.SPACE.getChar()) {

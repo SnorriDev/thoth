@@ -4,13 +4,10 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
 
-import snorri.entities.Entity;
 import snorri.entities.Unit;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.semantics.Nominal;
-
-
 
 public class Tile {
 	
