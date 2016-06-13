@@ -30,12 +30,19 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final int SCALE_FACTOR = 10;
+
 	private World world;
 	private Entity focus;
 	private boolean openingFile = false;
 
 	private Tile selectedTile;
 	private boolean isClicking = false;
+
+	private boolean canGoLeft;
+	private boolean canGoRight;
+	private boolean canGoUp;
+	private boolean canGoDown;
 
 	JMenuBar menuBar;
 	JMenu menu, submenu;
@@ -193,7 +200,37 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	protected void onFrame() {
 
 		if (world != null) {
-			focus.getPos().add(states.getMovementVector().scale(10));
+			canGoLeft = true;
+			canGoRight = true;
+			canGoUp = true;
+			canGoDown = true;
+
+			if (focus.getPos().getX() <= -SCALE_FACTOR) {
+				canGoLeft = false;
+			}
+			if (focus.getPos().getX() >= world.getLevel().getDimensions().getX() * Tile.WIDTH + SCALE_FACTOR) {
+				canGoRight = false;
+			}
+			if (focus.getPos().getY() <= -SCALE_FACTOR) {
+				canGoUp = false;
+			}
+			if (focus.getPos().getY() >= world.getLevel().getDimensions().getY()  * Tile.WIDTH + SCALE_FACTOR) {
+				canGoDown = false;
+			}
+
+			if (states.getMovementVector().getX() < 0 && !canGoLeft) {
+				focus.getPos().sub(states.getMovementVector().getProjectionX().scale(SCALE_FACTOR));
+			}
+			if (states.getMovementVector().getX() > 0 && !canGoRight) {
+				focus.getPos().sub(states.getMovementVector().getProjectionX().scale(SCALE_FACTOR));
+			}
+			if (states.getMovementVector().getY() < 0 && !canGoUp) {
+				focus.getPos().sub(states.getMovementVector().getProjectionY().scale(SCALE_FACTOR));
+			}
+			if (states.getMovementVector().getY() > 0 && !canGoDown) {
+				focus.getPos().sub(states.getMovementVector().getProjectionY().scale(SCALE_FACTOR));
+			}
+			focus.getPos().add(states.getMovementVector().scale(SCALE_FACTOR));
 
 			if (isClicking) {
 				Vector location = getMousePosAbsolute().copy();
