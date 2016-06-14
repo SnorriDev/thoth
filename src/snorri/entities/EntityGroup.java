@@ -429,6 +429,18 @@ public class EntityGroup extends Entity {
 		
 	}
 	
+	public void recalculate() {
+		
+		for (Entity e : entities) {
+			if (e instanceof EntityGroup) {
+				((EntityGroup) e).recalculate();
+			}
+		}
+		
+		setEnclosing();
+		
+	}
+	
 	@Override
 	public void renderHitbox(FocusedWindow g, Graphics gr) {
 		//super.renderHitbox(g, gr);

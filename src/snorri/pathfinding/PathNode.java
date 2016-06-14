@@ -12,9 +12,18 @@ import snorri.world.Vector;
 public class PathNode implements Comparable<PathNode> {
 
 	private static final double D = 1;
-	@SuppressWarnings("unused")
 	private static final double D2 = 1;
-	private static final Vector[] NEIGHBORS = new Vector[] {new Vector(-1, 0), new Vector(1, 0), new Vector(0, 1), new Vector(0, -1)};
+	
+	//change this to edit whether or not we can go diagonally
+	private static final Vector[] NEIGHBORS = new Vector[] {
+			new Vector(-1, 0),
+			new Vector(1, 0),
+			new Vector(0, 1),
+			new Vector(0, -1),
+			new Vector(-1, -1),
+			new Vector(1, -1),
+			new Vector(1, 1),
+			new Vector(-1, 1)};
 	
 	private Vector gridPos;
 	
@@ -66,6 +75,10 @@ public class PathNode implements Comparable<PathNode> {
 	public Vector getGridPos() {
 		return gridPos;
 	}
+	
+	public Vector getGlobalPos() {
+		return gridPos.copy().toGlobalPos();
+	}
 
 	//TODO: randomize the order of neighbors so we get random paths
 	public Queue<PathNode> getNeighbors(PathNode[][] map, Level level) {
@@ -88,16 +101,16 @@ public class PathNode implements Comparable<PathNode> {
 	}
 
 	public double distance(PathNode neighbor) {
-		return 1d;
-//		Vector d = gridPos.copy().sub(neighbor.gridPos).abs();
-//		return d.x + d.y;
+		//return 1d;
+		Vector d = gridPos.copy().sub(neighbor.gridPos).abs();
+		return d.x + d.y;
 	}
 	
 	//no diagonal movement
 	//TODO: move this to PathNode maybe
 	public double getHeuristic(Vector goal) {
 		Vector d = gridPos.copy().sub(goal).abs();
-		return D * (d.x + d.y); //+ (D2 - 2 * D) * Double.min(d.x, d.y);
+		return D * (d.x + d.y) + (D2 - 2 * D) * Double.min(d.x, d.y);
 	}
 	
 	public void render(Graphics gr, FocusedWindow window) {

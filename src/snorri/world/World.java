@@ -11,12 +11,14 @@ import java.util.List;
 import java.util.Queue;
 
 import snorri.entities.Collider;
+import snorri.entities.Enemy;
 import snorri.entities.Entity;
 import snorri.entities.EntityGroup;
 import snorri.entities.Player;
 import snorri.events.CollisionEvent;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
+import snorri.pathfinding.Pathfinding;
 
 public class World implements Playable {
 
@@ -41,9 +43,12 @@ public class World implements Playable {
 		colliders = new ArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
+		
+		Pathfinding.setWorld(this);
 
 		// temporary
 		addHard(new Player(new Vector(100, 100)));
+		addHard(new Enemy(new Vector(600, 600)));
 
 		Main.log("new world created!");
 	}
@@ -53,11 +58,15 @@ public class World implements Playable {
 	}
 
 	public World(File file) throws FileNotFoundException, IOException {
+		
 		load(file);
 		level.computePathfinding(DEFAULT_SPAWN);
 		colliders = new ArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
+		
+		Pathfinding.setWorld(this);
+		
 	}
 
 	public static World wrapLoad() {
@@ -79,7 +88,8 @@ public class World implements Playable {
 	public void update(float f) {
 
 		col.update(this, f);
-
+		col.recalculate(); //TODO: verify the tree is good
+		
 		for (Collider p : colliders) {
 
 			p.update(this, f);

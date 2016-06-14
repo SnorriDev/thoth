@@ -1,9 +1,9 @@
 package snorri.pathfinding;
 
-import java.util.Deque;
+import java.util.ArrayDeque;
 
 public interface Pathfinder {
 
-	public void setPath(Deque<PathNode> stack);
+	public void setPath(ArrayDeque<PathNode> stack);
 	
 }

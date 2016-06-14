@@ -2,43 +2,48 @@ package snorri.pathfinding;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.PriorityQueue;
 
-import snorri.world.Level;
 import snorri.world.Vector;
+import snorri.world.World;
 
 public class Pathfinding {
 	
 	//save array of costs from start
 	//everything is null, or etc.
 		
-	private Level level;
-	private Vector dim;
+	private static World world;
+	private static Vector dim;
 	
 	//reset with every call to findPath
-	private PathNode[][] map;
-	private PriorityQueue<PathNode> openSet;
-	private ArrayList<PathNode> closedSet;
+	private static PathNode[][] map;
+	private static PriorityQueue<PathNode> openSet;
+	private static ArrayList<PathNode> closedSet;
 	
-	public Pathfinding(Level level) {
-		this.level = level;
-		dim = level.getDimensions();
+	public static void setWorld(World world) {
+		Pathfinding.world = world;
+		dim = world.getLevel().getDimensions();
 	}
 	
-	public void setPathAsync(Vector start, Vector goal, Pathfinder p) {	
+	public static void setPathAsync(Vector start, Vector goal, Pathfinder p) {	
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				//TODO: still test somehow for reachability?
-				p.setPath(findPath(start, goal));
+				ArrayDeque<PathNode> stack = findPath(start, goal);
+				if (stack != null) {
+					p.setPath(stack);
+				}
 			}
 		}).start();
 	}
 	
 	//TODO: optimize this using the map double array instead of a random ass set
 	//TODO: can still tweak a bit to introduce more optimal routes, random variation, diagonal movement, etc.
-	public Deque<PathNode> findPath(Vector start, Vector goal) {
+	public static ArrayDeque<PathNode> findPath(Vector start, Vector goal) {
+		
+		if (dim == null) {
+			return null;
+		}
 		
 		map = new PathNode[dim.getX()][dim.getY()];
 		openSet = new PriorityQueue<PathNode>();
@@ -58,7 +63,7 @@ public class Pathfinding {
 			closedSet.add(current);
 			
 			//getNeighbors has the side effect of creating PathNodes which are null
-			for (PathNode neighbor : current.getNeighbors(map, level)) {
+			for (PathNode neighbor : current.getNeighbors(map, world.getLevel())) {
 								
 				if (closedSet.contains(neighbor)) {
 					continue;
@@ -83,11 +88,11 @@ public class Pathfinding {
 		
 	}
 	
-	public Deque<PathNode> reconstructPath(PathNode current) {
+	public static ArrayDeque<PathNode> reconstructPath(PathNode current) {
 				
-		Deque<PathNode> stack = new ArrayDeque<PathNode>();
+		ArrayDeque<PathNode> stack = new ArrayDeque<PathNode>();
 		while (current != null) {
-			stack.push(current);
+			stack.add(current);
 			current = current.getOrigin();
 		}
 		return stack;

@@ -42,7 +42,11 @@ public class Unit extends Entity {
 	}
 
 	public void walk(World world, Vector direction) {
-		move(world, direction, getSpeed());
+		moveHard(world, direction, getSpeed());
+	}
+	
+	public void walkTo(World world, Vector target) {
+		walk(world, target.copy().sub(pos));
 	}
 	
 	public boolean wouldHitSomething(World world, Vector direction) {

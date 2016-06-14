@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.Deque;
+import java.util.ArrayDeque;
 
 import snorri.entities.Collider;
 import snorri.entities.Desk;
@@ -33,7 +33,7 @@ public class GameWindow extends FocusedWindow implements Pathfinder {
 	private long lastTime;
 	
 	//temporary for testing pathfinding
-	private Deque<PathNode> path;
+	private ArrayDeque<PathNode> path;
 	
 	public GameWindow(Playable universe, Player focus) {
 		super();
@@ -95,10 +95,10 @@ public class GameWindow extends FocusedWindow implements Pathfinder {
 			//perhaps circumvent this by storing a variable reachableFromSpawn in each Tile
 			//we could also terminate the search after a certain amount of time
 			//alternatively, if it's running in another thread, it doesn't really matter that much
-			Pathfinding p = new Pathfinding(getWorld().getLevel());
+			Pathfinding.setWorld(getWorld());
 			Vector target = getMousePosAbsolute().toGridPos();
 			if (getWorld().getLevel().getTileGrid(target) != null) {
-				p.setPathAsync(focus.getPos().copy().toGridPos(), target, this);
+				Pathfinding.setPathAsync(focus.getPos().copy().toGridPos(), target, this);
 			}
 		}
 		
@@ -189,7 +189,7 @@ public class GameWindow extends FocusedWindow implements Pathfinder {
 	}
 	
 	@Override
-	public void setPath(Deque<PathNode> stack) {
+	public void setPath(ArrayDeque<PathNode> stack) {
 		path = stack;
 	}
 	

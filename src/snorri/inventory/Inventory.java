@@ -3,8 +3,8 @@ package snorri.inventory;
 import java.awt.Graphics;
 import java.io.Serializable;
 
-import snorri.entities.Player;
 import snorri.entities.Projectile;
+import snorri.entities.Unit;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.world.Vector;
@@ -17,7 +17,7 @@ public class Inventory implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private Player player;
+	private Unit player;
 	
 	private Weapon weaponSlot;
 	private Armor armorSlot;
@@ -30,7 +30,7 @@ public class Inventory implements Serializable {
 	
 	private static final int SLOT_SPACE = 15;
 
-	public Inventory(Player player) {
+	public Inventory(Unit player) {
 		this.player = player;
 		projectileSlots = new Orb[PROJECTILE_SLOTS];
 		papyrusSlots = new Papyrus[PAPYRUS_SLOTS];
@@ -96,7 +96,7 @@ public class Inventory implements Serializable {
 		return;
 	}
 	
-	public boolean tryToShoot(World world, Player focus, Vector movement, Vector dir) {
+	public boolean tryToShoot(World world, Unit focus, Vector movement, Vector dir) {
 		
 		if (weaponSlot == null) {
 			return false;
