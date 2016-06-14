@@ -21,7 +21,7 @@ public class Projectile extends Collider {
 	
 	public Projectile(Entity root, Vector rootVelocity, Vector path, Weapon weapon, Orb orb) {
 		super(root.getPos().copy(), 1); //radius of a projectile is 1
-		velocity = rootVelocity.copy().add(path.copy().multiply(PROJECTILE_SPEED));
+		velocity = rootVelocity.copy().add(path.copy().scale(PROJECTILE_SPEED));
 		this.root = root;
 		this.weapon = weapon;
 		this.orb = orb;
@@ -49,7 +49,7 @@ public class Projectile extends Collider {
 		if (weapon != null) {
 			Main.log("weapon output: " + weapon.useSpellOn(this, deltaTime / getLifeSpan()));
 		}
-		
+				
 		//if we hit the edge of the map or a wall, end
 		if (world.getLevel().getTile(pos) == null || ! world.getLevel().getTile(pos).isPathable()) {
 			//TODO: activate spell?
@@ -65,9 +65,7 @@ public class Projectile extends Collider {
 		if (root.equals(e.getTarget())) {
 			return;
 		}
-		
-		Main.log("made it");
-		
+				
 		if (e.getTarget() instanceof Unit) {
 			((Unit) e.getTarget()).damage(weapon.getSharpness());
 		}
