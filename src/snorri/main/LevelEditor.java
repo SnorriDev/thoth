@@ -22,9 +22,16 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import snorri.entities.Entity;
+import snorri.world.Level;
 import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
+
+//TODO: show selected texture at top of selected texture menu ¿can this be done?
+//TODO: add undo/redo function
+//TODO: add image to world feature
+//TODO: add default texture
+//TODO: add ability to add entities
 
 public class LevelEditor extends FocusedWindow implements ActionListener {
 
@@ -85,6 +92,11 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Resize", KeyEvent.VK_R);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
 
 		// Tile Selection Menu
 		menu = new JMenu("Select Tile");
@@ -123,7 +135,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		}
 	}
 
-	private int[] hwDialog() {
+	private int[] whDialog() {
 		int[] wh = { -1, -1 };
 		JTextField w = new JTextField("300");
 		JTextField h = new JTextField("300");
@@ -152,10 +164,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 		switch (e.getActionCommand()) {
 		case "New":
-			int maxSize = 1024;
-			int[] wh = hwDialog();
+			int[] wh = whDialog();
 
-			if (wh != null && wh[0] > 0 && wh[1] > 0 && wh[0] <= maxSize && wh[1] <= maxSize) {
+			if (wh != null && wh[0] > 0 && wh[1] > 0 && wh[0] <= Level.MAX_SIZE && wh[1] <= Level.MAX_SIZE) {
 				world = new World(wh[0], wh[1]);
 			} else {
 				world = new World();
@@ -178,6 +189,14 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			openingFile = true;
 			world.wrapSave();
 			openingFile = false;
+			break;
+		case "Resize":
+			if (world == null) {
+				return;
+			}
+			
+			int[] whNew = whDialog();
+			resize(whNew[0],whNew[1]);
 		}
 
 		repaint();
@@ -313,5 +332,14 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			fill_helper(x, y + 1, t);
 			fill_helper(x, y - 1, t);
 		}
+	}
+	
+	public void resize(int newWidth, int newHeight) {
+		world = new World(world.getLevel().resize(newWidth, newHeight));
+	}
+	
+	//TODO: does nothing right now
+	public void autosave() {
+		return;
 	}
 }

@@ -15,6 +15,8 @@ import snorri.world.Tile.TileType;
 
 public class Level {
 
+	public static final int MAX_SIZE = 1024;
+	
 	private Tile[][] map;
 	private Vector dim;
 
@@ -34,6 +36,27 @@ public class Level {
 
 	public Level(File file) throws FileNotFoundException, IOException {
 		load(file);
+	}
+	
+	//for resizing
+	private Level(Level l, int newWidth, int newHeight) {
+		map = new Tile[newWidth][newHeight];
+		dim = new Vector(newWidth, newHeight);
+		
+		for (int i = 0; i < dim.getX(); i++) {
+			for (int j = 0; j < dim.getY(); j++) {
+				map[i][j] = new Tile(TileType.SAND);
+			}
+		}
+		for (int i = 0; i < dim.getX() && i < l.dim.getX(); i++) {
+			for (int j = 0; j < dim.getY() && j < l.dim.getY(); j++) {
+				map[i][j] = l.map[i][j];
+			}
+		}
+	}
+	
+	public Level resize(int newWidth, int newHeight) {
+		return new Level(this, newWidth, newHeight);
 	}
 
 	public void setTile(int x, int y, Tile t) {

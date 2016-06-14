@@ -66,6 +66,21 @@ public class World implements Playable {
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
 	}
+	
+	public World(Level l) {
+
+		Main.log("creating new world of size " + l.getDimensions().getX() + " x " + l.getDimensions().getX() + "..");
+		level = l;
+		col = new EntityGroup();
+		colliders = new ArrayList<Collider>();
+		deleteQ = new LinkedList<Entity>();
+		addQ = new LinkedList<Entity>();
+
+		// temporary
+		addHard(new Player(new Vector(100, 100)));
+
+		Main.log("new world created!");
+	}
 
 	public static World wrapLoad() {
 
