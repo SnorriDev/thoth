@@ -109,7 +109,11 @@ public class Vector implements Serializable {
 	
 	//rounds to an int for convenience
 	public int distance(Vector pos) {
-		return (int) Math.sqrt((x - pos.x) * (x - pos.x) + (y - pos.y) * (y - pos.y));
+		return (int) Math.sqrt(distanceSquared(pos));
+	}
+	
+	public double distanceSquared(Vector pos) {
+		return (x - pos.x) * (x - pos.x) + (y - pos.y) * (y - pos.y);
 	}
 	
 	public int magnitude() {

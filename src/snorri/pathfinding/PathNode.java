@@ -12,7 +12,7 @@ import snorri.world.Vector;
 public class PathNode implements Comparable<PathNode> {
 
 	private static final double D = 1;
-	private static final double D2 = 1;
+	private static final double D2 = 1;//Math.sqrt(2); we get better performance with 1
 	
 	//change this to edit whether or not we can go diagonally
 	private static final Vector[] NEIGHBORS = new Vector[] {
@@ -102,6 +102,7 @@ public class PathNode implements Comparable<PathNode> {
 
 	public double distance(PathNode neighbor) {
 		//return 1d;
+		//return gridPos.copy().distance(neighbor.gridPos);
 		Vector d = gridPos.copy().sub(neighbor.gridPos).abs();
 		return d.x + d.y;
 	}

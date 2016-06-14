@@ -23,6 +23,7 @@ public class Enemy extends Unit implements Pathfinder {
 	protected double attackRange = 200;
 	
 	protected Inventory inventory;
+	protected Entity target;
 	
 	private ArrayDeque<PathNode> path;
 	
@@ -32,6 +33,30 @@ public class Enemy extends Unit implements Pathfinder {
 		inventory.addProjectile((Orb) Item.newItem(ItemType.PELLET));
 		inventory.setWeapon((Weapon) Item.newItem(ItemType.SLING));
 		Pathfinding.setPathAsync(pos.copy().toGridPos(), new Vector(100, 100).toGridPos(), this);
+	}
+	
+	/**
+	 * does a grid raycast to detect unpathable terrain blocking the shot
+	 * @param target
+	 * 		the entity we're tryna cap
+	 * @return
+	 * 		whether terrain obstructs the shot
+	 */
+	public boolean canShootAt(World world, Entity target) {
+		
+		Vector step = target.pos.copy().sub(pos).normalize();
+		Vector tempPos = pos.copy();
+		
+		//I'm checking if pos and target.pos are both okay just in case we're in a wall
+		while (tempPos.distanceSquared(pos) <= target.pos.distanceSquared(pos) && tempPos.distanceSquared(pos) <= attackRange * attackRange) {	
+			if (world.getLevel().isPathable(tempPos)) {
+				return false;
+			}
+			tempPos.add(step);	
+		}
+
+		return true;
+		
 	}
 	
 	public void shootAt(World world, Entity e) {

@@ -177,6 +177,11 @@ public class Level {
 		Main.log("pathfinding grid computed!");
 	}
 	
+	public boolean isPathable(Vector pos) {
+		Tile t = getTileGrid(pos);
+		return t != null && t.isPathable();
+	}
+	
 	public boolean isContextPathable(Vector pos) {
 		Tile t = getTileGrid(pos);
 		return t != null && t.isContextPathable();
