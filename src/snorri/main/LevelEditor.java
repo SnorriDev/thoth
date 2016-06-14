@@ -41,8 +41,6 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	private World world;
 	private Entity focus;
-	private boolean openingFile = false;
-
 	private Tile selectedTile;
 	private boolean isClicking = false;
 
@@ -144,12 +142,16 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		panel.add(w);
 		panel.add(new JLabel("Height:"));
 		panel.add(h);
-		JOptionPane.showConfirmDialog(null, panel, "Enter Width & Height", JOptionPane.PLAIN_MESSAGE);
+		int option = JOptionPane.showConfirmDialog(null, panel, "Enter Width & Height", JOptionPane.PLAIN_MESSAGE);
+		if (option == JOptionPane.CLOSED_OPTION) {
+			return null;
+		}
 
 		if (isInteger(w.getText()) && isInteger(h.getText())) {
 			wh[0] = Integer.parseInt(w.getText());
 			wh[1] = Integer.parseInt(h.getText());
 		}
+		
 
 		return wh;
 	}
@@ -165,6 +167,10 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		switch (e.getActionCommand()) {
 		case "New":
 			int[] wh = whDialog();
+			
+			if (wh == null) {
+				return;
+			}
 
 			if (wh != null && wh[0] > 0 && wh[1] > 0 && wh[0] <= Level.MAX_SIZE && wh[1] <= Level.MAX_SIZE) {
 				world = new World(wh[0], wh[1]);
@@ -173,12 +179,10 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			}
 			break;
 		case "Open":
-			openingFile = true;
 			World w1 = World.wrapLoad();
 			if (w1 != null) {
 				world = w1;
 			}
-			openingFile = false;
 			break;
 		case "Save":
 
@@ -186,9 +190,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				return;
 			}
 
-			openingFile = true;
 			world.wrapSave();
-			openingFile = false;
 			break;
 		case "Resize":
 			if (world == null) {
@@ -196,6 +198,11 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			}
 			
 			int[] whNew = whDialog();
+			
+			if (whNew == null) {
+				return;
+			}
+			
 			resize(whNew[0],whNew[1]);
 		}
 
@@ -261,8 +268,6 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		}
 
 		repaint();
-		if (!openingFile)
-			requestFocus();
 
 	}
 
