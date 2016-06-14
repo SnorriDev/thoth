@@ -27,7 +27,7 @@ import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
 
-//TODO: show selected texture at top of selected texture menu ¿can this be done?
+//TODO: show selected texture at top of selected texture menu ¿can this be done?idk
 //TODO: add undo/redo function
 //TODO: add image to world feature
 //TODO: add default texture
