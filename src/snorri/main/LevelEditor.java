@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -21,7 +23,9 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
+import snorri.entities.Enemy;
 import snorri.entities.Entity;
+import snorri.keyboard.Key;
 import snorri.world.Level;
 import snorri.world.Tile;
 import snorri.world.Vector;
@@ -31,7 +35,7 @@ import snorri.world.World;
 //TODO: add undo/redo function
 //TODO: add image to world feature
 //TODO: add default texture
-//TODO: add ability to add entities
+//TODO: figure out why fill overflows
 
 public class LevelEditor extends FocusedWindow implements ActionListener {
 
@@ -42,6 +46,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	private World world;
 	private Entity focus;
 	private Tile selectedTile;
+	private Class<? extends Entity> selectedEntityClass;
 	private boolean isClicking = false;
 
 	private boolean canGoLeft;
@@ -59,11 +64,14 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		super();
 
 		selectedTile = new Tile(0, 0);
+		selectedEntityClass = ClassFinder.find("snorri.entities").get(0);
 		createMenu();
 
 		repaint();
 
 		focus = new Entity(new Vector(50, 50));
+
+		Main.log(ClassFinder.find("snorri.entities").get(0).getSimpleName());
 	}
 
 	private void createMenu() {
@@ -90,7 +98,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
-		
+
 		menuItem = new JMenuItem("Resize", KeyEvent.VK_R);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
@@ -101,9 +109,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		menu.setMnemonic(KeyEvent.VK_T);
 		menuBar.add(menu);
 
-		ButtonGroup group = new ButtonGroup();
+		ButtonGroup groupTiles = new ButtonGroup();
 
-		boolean first = true;
+		boolean firstTile = true;
 		for (Tile t : Tile.getAll()) {
 
 			if (t == null || t.getTexture() == null) {
@@ -111,14 +119,40 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			}
 
 			rbMenuItem = new JRadioButtonMenuItem(t.toString(), new ImageIcon(t.getTexture()));
-			rbMenuItem.setSelected(first);
+			rbMenuItem.setSelected(firstTile);
 			rbMenuItem.setActionCommand("set" + t.toNumericString());
 			rbMenuItem.addActionListener(this);
-			group.add(rbMenuItem);
+			groupTiles.add(rbMenuItem);
 			menu.add(rbMenuItem);
 
-			first = false;
+			firstTile = false;
 
+		}
+
+		menu = new JMenu("Select Entity");
+		menu.setMnemonic(KeyEvent.VK_E);
+		menuBar.add(menu);
+
+		List<Class<? extends Entity>> entityClassList = ClassFinder.find("snorri.entities");
+		ButtonGroup groupEntities = new ButtonGroup();
+
+		boolean firstEntity = true;
+		int i = 0;
+		for (Class<? extends Entity> c : entityClassList) {
+
+			rbMenuItem = new JRadioButtonMenuItem(c.getSimpleName()); // TODO:
+																		// give
+																		// entities
+																		// image
+																		// icons
+			rbMenuItem.setSelected(firstEntity);
+			rbMenuItem.setActionCommand("spawn" + i);
+			rbMenuItem.addActionListener(this);
+			groupEntities.add(rbMenuItem);
+			menu.add(rbMenuItem);
+
+			firstEntity = false;
+			i++;
 		}
 
 		Main.getFrame().setJMenuBar(menuBar);
@@ -151,7 +185,6 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			wh[0] = Integer.parseInt(w.getText());
 			wh[1] = Integer.parseInt(h.getText());
 		}
-		
 
 		return wh;
 	}
@@ -164,10 +197,16 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			return;
 		}
 
+		if (e.getActionCommand().startsWith("spawn")) {
+			selectedEntityClass = ClassFinder.find("snorri.entities")
+					.get(Integer.parseInt(e.getActionCommand().substring(5)));
+			return;
+		}
+
 		switch (e.getActionCommand()) {
 		case "New":
 			int[] wh = whDialog();
-			
+
 			if (wh == null) {
 				return;
 			}
@@ -196,14 +235,14 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			if (world == null) {
 				return;
 			}
-			
+
 			int[] whNew = whDialog();
-			
+
 			if (whNew == null) {
 				return;
 			}
-			
-			resize(whNew[0],whNew[1]);
+
+			resize(whNew[0], whNew[1]);
 		}
 
 		repaint();
@@ -240,7 +279,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			if (focus.getPos().getY() <= -SCALE_FACTOR) {
 				canGoUp = false;
 			}
-			if (focus.getPos().getY() >= world.getLevel().getDimensions().getY()  * Tile.WIDTH + SCALE_FACTOR) {
+			if (focus.getPos().getY() >= world.getLevel().getDimensions().getY() * Tile.WIDTH + SCALE_FACTOR) {
 				canGoDown = false;
 			}
 
@@ -307,9 +346,12 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		if (arg0.getKeyChar() == Key.E.getChar()) {
+			spawnEntity();
+		}
 
 	}
+
 	// TOBY do stuff here!
 
 	public void fill() {
@@ -338,12 +380,21 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			fill_helper(x, y - 1, t);
 		}
 	}
-	
+
+	public void spawnEntity() {
+		try {
+			world.addHard(selectedEntityClass.getConstructor(Vector.class).newInstance(this.getMousePosAbsolute()));
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			Main.error("constructor does not exist for class " + selectedEntityClass.getSimpleName());
+		}
+	}
+
 	public void resize(int newWidth, int newHeight) {
 		world = new World(world.getLevel().resize(newWidth, newHeight));
 	}
-	
-	//TODO: does nothing right now
+
+	// TODO: does nothing right now
 	public void autosave() {
 		return;
 	}

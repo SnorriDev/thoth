@@ -15,7 +15,8 @@ public enum Key {
 	
 	SPACE(32, ' '),
 	
-	Q(81, 'q');
+	Q(81, 'q'), //debugging key
+	E(69, 'e'); //Spawn entity key 
 	
 	private int id;
 	private char ch;

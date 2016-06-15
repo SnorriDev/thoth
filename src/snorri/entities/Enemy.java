@@ -8,6 +8,8 @@ import snorri.inventory.Item.ItemType;
 import snorri.inventory.Orb;
 import snorri.inventory.Timer;
 import snorri.inventory.Weapon;
+import snorri.main.Main;
+import snorri.main.GameWindow;
 import snorri.pathfinding.PathNode;
 import snorri.pathfinding.Pathfinder;
 import snorri.pathfinding.Pathfinding;
@@ -38,6 +40,14 @@ public class Enemy extends Unit implements Pathfinder {
 		inventory = new Inventory(this);
 		setOrb((Orb) Item.newItem(ItemType.PELLET));
 		setWeapon((Weapon) Item.newItem(ItemType.SLING));
+	}
+	
+	public Enemy(Vector pos) {
+		this(pos, ((GameWindow) Main.getWindow()).getWorld().getFocus());
+	}
+	
+	public void setTarget(Entity target) {
+		this.target = target;
 	}
 	
 	public void setWeapon(Weapon weapon) {
