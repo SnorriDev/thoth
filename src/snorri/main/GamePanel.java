@@ -14,15 +14,14 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 	private static final int FRAME_DELTA = 20;
 
 	protected void startAnimation() {
-		
+
 		SwingWorker<Object, Object> sw = new SwingWorker<Object, Object>() {
 			@Override
 			protected Object doInBackground() throws Exception {
 				while (true) {
 					try {
 						onFrame();
-					}
-					catch (Exception e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 					Thread.sleep(FRAME_DELTA);
@@ -32,7 +31,7 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 
 		sw.execute();
 	}
-	
+
 	protected JButton createButton(String text) {
 		JButton button = new JButton(text);
 		add(button);
@@ -44,13 +43,13 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 	public Vector getDimensions() {
 		return new Vector(getBounds());
 	}
-	
+
 	public Vector getCenter() {
 		return getDimensions().divide(2);
 	}
-	
+
 	protected void onFrame() {
-		
+
 	}
 
 	// returns nanosecond-accurate time

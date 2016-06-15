@@ -1,7 +1,6 @@
 package snorri.entities;
 
 import snorri.events.SpellEvent;
-import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 

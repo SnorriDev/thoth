@@ -49,11 +49,8 @@ public class GameWindow extends FocusedWindow implements Pathfinder {
 	@Override
 	protected void onFrame() {
 		
-		if (!(focus == null) && !focus.isDead()) {
-			
-			//if (! focus.wouldHitSomething(states.getMovementVector(), world.getEntityTree())) this is buggy
+		if (!focus.isDead()) {			
 			focus.walk(universe.getCurrentWorld(), states.getMovementVector()); //TODO: move to update method of Player?
-			
 		}
 				
 		long time = getTimestamp();
