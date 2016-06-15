@@ -36,7 +36,7 @@ public class Inventory implements Serializable {
 		papyrusSlots = new Papyrus[PAPYRUS_SLOTS];
 	}
 	
-	public void update(float deltaTime) {
+	public void update(double deltaTime) {
 
 		if (weaponSlot != null) {
 			weaponSlot.updateCooldown(deltaTime);

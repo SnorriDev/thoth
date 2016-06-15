@@ -12,7 +12,7 @@ public interface Playable {
 	
 	World getCurrentWorld();
 	
-	public void update(float deltaTime);
+	public void update(double deltaTime);
 
 	public Player getFocus();
 

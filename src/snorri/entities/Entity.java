@@ -147,8 +147,8 @@ public class Entity implements Nominal, Serializable {
 	}
 	
 	//TODO: make this into a boolean so we can know whether or not to recalculate collision bubbles
-	public void update(World world, float f) {
-		burnTimer.update(f);
+	public void update(World world, double d) {
+		burnTimer.update(d);
 	}
 	
 	public void renderHitbox(FocusedWindow g, Graphics gr) {

@@ -12,7 +12,7 @@ public class Projectile extends Collider {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int PROJECTILE_SPEED = 200;
+	private static final int PROJECTILE_SPEED = 175;
 		
 	private Vector velocity;
 	private Entity root;
@@ -41,7 +41,7 @@ public class Projectile extends Collider {
 	}
 	
 	@Override
-	public void update(World world, float deltaTime) {
+	public void update(World world, double deltaTime) {
 		
 		if (weapon == null || !weapon.altersMovement()) {
 			pos.add(velocity.copy().multiply(deltaTime));

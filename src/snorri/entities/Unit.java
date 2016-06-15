@@ -26,7 +26,7 @@ public class Unit extends Entity {
 	}
 
 	@Override
-	public void update(World world, float deltaTime) {
+	public void update(World world, double deltaTime) {
 		
 		if (isBurning()) {
 			damage(BURN_DOT * deltaTime);

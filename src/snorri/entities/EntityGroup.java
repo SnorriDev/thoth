@@ -463,10 +463,10 @@ public class EntityGroup extends Entity {
 	}
 	
 	@Override
-	public void update(World world, float deltaTime) {
+	public void update(World world, double d) {
 		//TODO: recalculate border only in this outer function?
 		for (Entity e : entities) {
-			e.update(world, deltaTime);
+			e.update(world, d);
 		}
 	}
 	

@@ -46,7 +46,7 @@ public class Player extends Unit {
 	}
 	
 	@Override
-	public void update(World world, float deltaTime) {		
+	public void update(World world, double deltaTime) {		
 		super.update(world, deltaTime);
 		inventory.update(deltaTime);
 	}

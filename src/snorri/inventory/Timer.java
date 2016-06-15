@@ -6,16 +6,17 @@ public class Timer implements Serializable {
 
 	/**
 	 * Used for timing cooldowns and burning
+	 * TODO: change this stuff to doubles
 	 */
 	private static final long serialVersionUID = 1L;
-	private float currentTime, cooldown;
+	private double currentTime, cooldown;
 	
-	public Timer(float cooldown) {
+	public Timer(double cooldown) {
 		this.cooldown = cooldown;
 		currentTime = cooldown;
 	}
 	
-	public void update(float deltaTime) {
+	public void update(double deltaTime) {
 		if (! isOffCooldown()) {
 			currentTime += deltaTime;
 		}
@@ -44,7 +45,7 @@ public class Timer implements Serializable {
 		return (int) ((cooldown - currentTime) / cooldown * max);
 	}
 	
-	public float getCooldown() {
+	public double getCooldown() {
 		if (isOffCooldown()) {
 			return 0;
 		}

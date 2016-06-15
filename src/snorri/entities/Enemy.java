@@ -6,6 +6,7 @@ import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
 import snorri.inventory.Orb;
+import snorri.inventory.Timer;
 import snorri.inventory.Weapon;
 import snorri.pathfinding.PathNode;
 import snorri.pathfinding.Pathfinder;
@@ -24,6 +25,7 @@ public class Enemy extends Unit implements Pathfinder {
 	
 	protected double seekRange = 1000;
 	protected double attackRange = 300;
+	protected double attackDelay = 1;
 	
 	protected Inventory inventory;
 	protected Entity target;
@@ -39,6 +41,7 @@ public class Enemy extends Unit implements Pathfinder {
 	}
 	
 	public void setWeapon(Weapon weapon) {
+		weapon.setCustomTimer(new Timer(attackDelay));
 		inventory.setWeapon(weapon);
 	}
 	
@@ -84,7 +87,7 @@ public class Enemy extends Unit implements Pathfinder {
 	}
 	
 	@Override
-	public void update(World world, float deltaTime) {
+	public void update(World world, double deltaTime) {
 		
 		if (target != null) {
 			
@@ -112,7 +115,7 @@ public class Enemy extends Unit implements Pathfinder {
 		
 	}
 
-	private void follow(World world, float deltaTime) {
+	private void follow(World world, double deltaTime) {
 		
 		if (path.peek().getGlobalPos().distance(this.getPos()) < APPROACH_MARGIN) {
 			path.pop();

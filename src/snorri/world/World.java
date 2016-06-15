@@ -85,14 +85,14 @@ public class World implements Playable {
 		}
 	}
 
-	public void update(float f) {
+	public void update(double d) {
 
-		col.update(this, f);
+		col.update(this, d);
 		col.recalculate(); //TODO: verify the tree is good
 		
 		for (Collider p : colliders) {
 
-			p.update(this, f);
+			p.update(this, d);
 
 			for (Entity hit : col.getAllCollisions(p)) {
 				if (hit != null) {

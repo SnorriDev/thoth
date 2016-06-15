@@ -17,7 +17,7 @@ public class Campaign implements Playable {
 	}
 
 	@Override
-	public void update(float deltaTime) {
+	public void update(double deltaTime) {
 		// TODO Auto-generated method stub
 
 	}
