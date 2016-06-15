@@ -3,6 +3,7 @@ package snorri.entities;
 import snorri.events.CollisionEvent;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
+import snorri.main.Debug;
 import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -11,7 +12,7 @@ public class Projectile extends Collider {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int PROJECTILE_SPEED = 150;
+	private static final int PROJECTILE_SPEED = 200;
 		
 	private Vector velocity;
 	private Entity root;
@@ -46,7 +47,7 @@ public class Projectile extends Collider {
 			pos.add(velocity.copy().multiply(deltaTime));
 		} 
 		
-		if (weapon != null) {
+		if (Debug.SHOW_WEAPON_OUTPUT && weapon != null) {
 			Main.log("weapon output: " + weapon.useSpellOn(this, deltaTime / getLifeSpan()));
 		}
 				

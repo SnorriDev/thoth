@@ -41,21 +41,18 @@ public class Pathfinding {
 	//TODO: optimize this using the map double array instead of a random ass set
 	//TODO: can still tweak a bit to introduce more optimal routes, random variation, diagonal movement, etc.
 	public static ArrayDeque<PathNode> findPath(Vector start, Vector goal) {
-		
-		if (dim == null) {
-			return null;
-		}
-		
+				
 		map = new PathNode[dim.getX()][dim.getY()];
 		openSet = new PriorityQueue<PathNode>();
 		closedSet = new ArrayList<PathNode>();
-
+		
 		map[start.getX()][start.getY()] = new PathNode(start, 0, goal);
 		openSet.offer(map[start.getX()][start.getY()]);
 		
+		PathNode current;
 		while (! openSet.isEmpty()) {
-						
-			PathNode current = openSet.poll();
+			
+			current = openSet.poll();
 						
 			if (current.getGridPos().equals(goal)) {
 				return reconstructPath(current);
@@ -65,7 +62,7 @@ public class Pathfinding {
 			
 			//getNeighbors has the side effect of creating PathNodes which are null
 			for (PathNode neighbor : current.getNeighbors(map, world.getLevel())) {
-								
+				
 				if (closedSet.contains(neighbor)) {
 					continue;
 				}

@@ -19,7 +19,12 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 			@Override
 			protected Object doInBackground() throws Exception {
 				while (true) {
-					onFrame();
+					try {
+						onFrame();
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+					}
 					Thread.sleep(FRAME_DELTA);
 				}
 			}

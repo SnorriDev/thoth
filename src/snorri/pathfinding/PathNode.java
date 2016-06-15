@@ -69,6 +69,9 @@ public class PathNode implements Comparable<PathNode> {
 	
 	@Override
 	public int compareTo(PathNode o) {
+		if (o == null || o.f == null) {
+			return f.compareTo(Double.MAX_VALUE);
+		}
 		return f.compareTo(o.f);
 	}
 	

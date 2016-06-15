@@ -5,7 +5,6 @@ import java.util.ArrayDeque;
 import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
-import snorri.main.Main;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.pathfinding.PathNode;
@@ -21,6 +20,7 @@ public class Enemy extends Unit implements Pathfinder {
 	private static final double CHANGE_PATH_MARGIN = 200;
 	
 	private Vector lastSeenPos;
+	private boolean recalculatingPath = false;
 	
 	protected double seekRange = 1000;
 	protected double attackRange = 300;
@@ -64,7 +64,6 @@ public class Enemy extends Unit implements Pathfinder {
 			tempPos.add(step);	
 		}
 
-		Main.log(tempPos.distance(pos));
 		return true;
 		
 	}
@@ -94,7 +93,7 @@ public class Enemy extends Unit implements Pathfinder {
 				}
 				
 			}
-			else if (target.pos.distanceSquared(pos) <= seekRange * seekRange) {
+			else if (target.pos.distanceSquared(pos) <= seekRange * seekRange && ! recalculatingPath) {
 				startPath();
 			}
 						
@@ -123,25 +122,24 @@ public class Enemy extends Unit implements Pathfinder {
 	@Override
 	public void setPath(ArrayDeque<PathNode> stack) {
 		
-		if (stack == null) {
-			return;
-		}
+//		if (stack == null) {
+//			return;
+//		}
 		
-		path = new ArrayDeque<PathNode>();
-		
-		while (! stack.isEmpty()) {
-			path.push(stack.poll());
-		}
+		path = stack;
+		recalculatingPath = false;
 		
 	}
 	
 	public void startPath() {
 		Pathfinding.setPathAsync(pos.copy().toGridPos(), target.pos.copy().toGridPos(), this);
 		lastSeenPos = target.pos.copy(); //don't put this in other thing
+		recalculatingPath = true;
 	}
 	
 	public void stopPath() {
 		path = null;
+		recalculatingPath = false;
 	}
 
 }
