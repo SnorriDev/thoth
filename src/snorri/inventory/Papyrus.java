@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 
-import snorri.entities.Player;
+import snorri.entities.Unit;
 import snorri.main.Main;
 import snorri.world.Vector;
 
@@ -21,7 +21,7 @@ public class Papyrus extends Item {
 		timer = new Timer(5);
 	}
 	
-	public boolean tryToActivate(Player player) {
+	public boolean tryToActivate(Unit player) {
 		
 		if (timer.activate()) {
 			Main.log("spell output: " + useSpellOn(player));

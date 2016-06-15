@@ -5,17 +5,21 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayDeque;
 
 import snorri.entities.Collider;
 import snorri.entities.Desk;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.keyboard.Key;
+import snorri.pathfinding.PathNode;
+import snorri.pathfinding.Pathfinder;
+import snorri.pathfinding.Pathfinding;
 import snorri.world.Playable;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class GameWindow extends FocusedWindow {
+public class GameWindow extends FocusedWindow implements Pathfinder {
 	
 	/**
 	 * Main game window
@@ -27,6 +31,9 @@ public class GameWindow extends FocusedWindow {
 	private Playable universe;
 	private Player focus;
 	private long lastTime;
+	
+	//temporary for testing pathfinding
+	private ArrayDeque<PathNode> path;
 	
 	public GameWindow(Playable universe, Player focus) {
 		super();
@@ -50,7 +57,7 @@ public class GameWindow extends FocusedWindow {
 		}
 				
 		long time = getTimestamp();
-		universe.getCurrentWorld().update((time - lastTime) / 1000000000f);
+		universe.getCurrentWorld().update((time - lastTime) / 1000000000d);
 		lastTime = time;
 		repaint();
 				
@@ -62,6 +69,15 @@ public class GameWindow extends FocusedWindow {
 		universe.getCurrentWorld().render(this, g, true);
 		focus.getInventory().render(this, g);
 		focus.renderHealthBar(g);
+		
+		//temp for debugging pathfinding
+		if (path == null) {
+			return;
+		}
+		for (PathNode node : path) {
+			node.render(g, this);
+		}
+		
 	}
 	
 	public Player getFocus() {
@@ -73,6 +89,18 @@ public class GameWindow extends FocusedWindow {
 	}
 	
 	public void keyTyped(KeyEvent e) {
+		
+		if (e.getKeyChar() == Key.Q.getChar()) {
+			//TODO: it takes a while to DECIDE that there is no path somewhere.
+			//perhaps circumvent this by storing a variable reachableFromSpawn in each Tile
+			//we could also terminate the search after a certain amount of time
+			//alternatively, if it's running in another thread, it doesn't really matter that much
+			Pathfinding.setWorld(getWorld());
+			Vector target = getMousePosAbsolute().toGridPos();
+			if (getWorld().getLevel().getTileGrid(target) != null) {
+				Pathfinding.setPathAsync(focus.getPos().copy().toGridPos(), target, this);
+			}
+		}
 		
 		if (e.getKeyChar() == Key.SPACE.getChar()) {
 			Collider interactRegion = new Collider(getFocus().getPos(), getFocus().getRadius() + Desk.INTERACT_RANGE);
@@ -87,11 +115,11 @@ public class GameWindow extends FocusedWindow {
 		}
 		
 		if (e.getKeyChar() == Key.ONE.getChar()) {
-			focus.getInventory().selectProjectile(0);
+			focus.getInventory().selectOrb(0);
 		}
 		
 		if (e.getKeyChar() == Key.TWO.getChar()) {
-			focus.getInventory().selectProjectile(1);
+			focus.getInventory().selectOrb(1);
 		}
 		
 		if (e.getKeyChar() == Key.THREE.getChar()) {
@@ -158,6 +186,11 @@ public class GameWindow extends FocusedWindow {
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public void setPath(ArrayDeque<PathNode> stack) {
+		path = stack;
 	}
 	
 }

@@ -9,7 +9,7 @@ public class Explosion extends Collider {
 	private double damage = 100;
 	
 	public Explosion(Vector pos) {
-		super(pos, 16);
+		super(pos, 30);
 	}
 	
 	public Explosion(Vector pos, int r) {

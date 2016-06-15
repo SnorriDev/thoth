@@ -23,7 +23,7 @@ public class Collider extends Entity {
 	}
 	
 	@Override
-	public void update(World world, float deltaTime) {
+	public void update(World world, double deltaTime) {
 		age += deltaTime;
 		if (age > getLifeSpan()) {
 			world.delete(this);
@@ -31,7 +31,7 @@ public class Collider extends Entity {
 	}
 	
 	protected float getLifeSpan() {
-		return 3;
+		return 4;
 	}
 		
 }
