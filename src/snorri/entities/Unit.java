@@ -30,7 +30,6 @@ public class Unit extends Entity {
 		
 		if (isBurning()) {
 			damage(BURN_DOT * deltaTime);
-			Main.log("burning");
 		}
 		
 		if (isDead()) {
