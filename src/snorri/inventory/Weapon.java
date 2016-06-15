@@ -18,6 +18,10 @@ public class Weapon extends Item {
 	public int getSharpness() {
 		return (int) type.getProperty(0);
 	}
+	
+	public void setCustomTimer(Timer timer) {
+		this.timer = timer;
+	}
 
 	public boolean altersMovement() {
 		

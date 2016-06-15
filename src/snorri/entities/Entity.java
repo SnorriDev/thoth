@@ -98,7 +98,11 @@ public class Entity implements Nominal, Serializable {
 	}
 	
 	public boolean intersectsWall(World world) {
-		
+		return intersectsWall(world.getLevel());
+	}
+	
+	public boolean intersectsWall(Level level) {
+
 		for (int i = (pos.getX() - r) / Tile.WIDTH; i <= (pos.getX() + r) / Tile.WIDTH; i++) {
 			for (int j = (pos.getY() - r) / Tile.WIDTH; j <= (pos.getY() + r) / Tile.WIDTH; j++) {
 				
@@ -106,7 +110,7 @@ public class Entity implements Nominal, Serializable {
 					continue;
 				}
 				
-				Tile t = world.getLevel().getTileGrid(i, j);
+				Tile t = level.getTileGrid(i, j);
 				if (t == null || !t.isPathable()) {
 					return true;
 				}
@@ -143,8 +147,8 @@ public class Entity implements Nominal, Serializable {
 	}
 	
 	//TODO: make this into a boolean so we can know whether or not to recalculate collision bubbles
-	public void update(World world, float f) {
-		burnTimer.update(f);
+	public void update(World world, double d) {
+		burnTimer.update(d);
 	}
 	
 	public void renderHitbox(FocusedWindow g, Graphics gr) {
@@ -211,9 +215,10 @@ public class Entity implements Nominal, Serializable {
 		
 	}
 	
+	@Deprecated
 	public boolean move(World world, Vector direction, double speed) {
 		
-		Vector dir = direction.copy().multiply(speed);
+		Vector dir = direction.copy().scale(speed);
 		
 		if (dir.equals(Vector.ZERO)) {
 			return false;
@@ -245,6 +250,44 @@ public class Entity implements Nominal, Serializable {
 		}
 		
 		world.getEntityTree().move(this, dir);
+		return true;
+		
+	}
+	
+	public boolean moveHard(World world, Vector direction, double speed) {
+		
+		Vector dir = direction.copy().scale(speed);
+		
+		if (dir.equals(Vector.ZERO)) {
+			return false;
+		}
+				
+		if (wouldIntersectWall(world, dir)) {
+			
+			//see if we're hitting only one wall
+			if (! wouldIntersectWall(world, dir.getProjectionX())) {
+				dir = dir.getProjectionX();
+			}
+			else if (! wouldIntersectWall(world, dir.getProjectionY())) {
+				dir = dir.getProjectionY();
+			}
+			
+			//see if we're hitting a corner
+			else if (! wouldIntersectWall(world, dir.getProjection(Vector.DOWN_LEFT))) {
+				dir = dir.getProjection(Vector.DOWN_LEFT);
+			}
+			else if (! wouldIntersectWall(world, dir.getProjection(Vector.DOWN_RIGHT))) {
+				dir = dir.getProjection(Vector.DOWN_RIGHT);
+			}
+			
+			//give up; TODO more stuff?
+			else {
+				return false;
+			}
+			
+		}
+		
+		this.pos.add(dir);
 		return true;
 		
 	}

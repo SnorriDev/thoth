@@ -9,13 +9,14 @@ public class Unit extends Entity {
 
 	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 2;
+	public static final int RADIUS = 20;
 	protected static final double MAX_HEALTH = 100;
 	private static final double BURN_DOT = 8d;
 	
 	private double health;
 	
 	public Unit(Vector pos) {
-		super(pos, 20);
+		super(pos, RADIUS);
 		health = MAX_HEALTH;
 	}
 	
@@ -25,7 +26,7 @@ public class Unit extends Entity {
 	}
 
 	@Override
-	public void update(World world, float deltaTime) {
+	public void update(World world, double deltaTime) {
 		
 		if (isBurning()) {
 			damage(BURN_DOT * deltaTime);
@@ -41,7 +42,11 @@ public class Unit extends Entity {
 	}
 
 	public void walk(World world, Vector direction) {
-		move(world, direction, getSpeed());
+		moveHard(world, direction, getSpeed());
+	}
+	
+	public void walkTo(World world, Vector target) {
+		walk(world, target.copy().sub(pos));
 	}
 	
 	public boolean wouldHitSomething(World world, Vector direction) {

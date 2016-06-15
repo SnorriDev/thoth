@@ -119,7 +119,7 @@ public abstract class Item implements Serializable {
 		return type;
 	}
 	
-	public void updateCooldown(float deltaTime) {
+	public void updateCooldown(double deltaTime) {
 		
 		if (timer == null) {
 			return;

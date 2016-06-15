@@ -11,15 +11,19 @@ import java.util.List;
 import java.util.Queue;
 
 import snorri.entities.Collider;
+import snorri.entities.Enemy;
 import snorri.entities.Entity;
 import snorri.entities.EntityGroup;
 import snorri.entities.Player;
 import snorri.events.CollisionEvent;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
+import snorri.pathfinding.Pathfinding;
 
 public class World implements Playable {
 
+	private static final Vector DEFAULT_SPAWN = new Vector(100, 100);
+	
 	private Level level;
 	private EntityGroup col;
 	private List<Collider> colliders;
@@ -27,31 +31,24 @@ public class World implements Playable {
 	private Queue<Entity> addQ;
 
 	public World() {
-
-		Main.log("creating new world..");
-		level = new Level(300, 300); // TODO: pass a level file to read
-		col = new EntityGroup();
-		colliders = new ArrayList<Collider>();
-		deleteQ = new LinkedList<Entity>();
-		addQ = new LinkedList<Entity>();
-
-		// temporary
-		addHard(new Player(new Vector(100, 100)));
-
-		Main.log("new world created!");
+		this(300, 300);
 	}
 
 	public World(int width, int height) {
 
 		Main.log("creating new world of size " + width + " x " + height + "..");
 		level = new Level(width, height); // TODO: pass a level file to read
+		level.computePathfinding(DEFAULT_SPAWN);
 		col = new EntityGroup();
 		colliders = new ArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
+		
+		Pathfinding.setWorld(this);
 
 		// temporary
 		addHard(new Player(new Vector(100, 100)));
+		addHard(new Enemy(new Vector(600, 600), this.getFocus()));
 
 		Main.log("new world created!");
 	}
@@ -61,10 +58,15 @@ public class World implements Playable {
 	}
 
 	public World(File file) throws FileNotFoundException, IOException {
+		
 		load(file);
+		level.computePathfinding(DEFAULT_SPAWN);
 		colliders = new ArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
+		
+		Pathfinding.setWorld(this);
+		
 	}
 	
 	public World(Level l) {
@@ -98,13 +100,14 @@ public class World implements Playable {
 		}
 	}
 
-	public void update(float f) {
+	public void update(double d) {
 
-		col.update(this, f);
-
+		col.update(this, d);
+		col.recalculate(); //TODO: verify the tree is good
+		
 		for (Collider p : colliders) {
 
-			p.update(this, f);
+			p.update(this, d);
 
 			for (Entity hit : col.getAllCollisions(p)) {
 				if (hit != null) {

@@ -4,11 +4,10 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
 
+import snorri.entities.Unit;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.semantics.Nominal;
-
-
 
 public class Tile {
 	
@@ -16,6 +15,8 @@ public class Tile {
 									
 	private TileType		type;
 	private int				style;
+	private boolean surroundingsPathable = true;
+	private boolean reachable;
 	
 	public Tile(TileType type) {
 		this.type = type;
@@ -171,6 +172,37 @@ public class Tile {
 
 	public boolean isPathable() {
 		return type.isPathable();
+	}
+	
+	public boolean isContextPathable() {
+		return isPathable() && surroundingsPathable;
+	}
+	
+	//figure out if we can stand on this block at the very beginning
+	public void computeSurroundingsPathable(int x, int y, Level level) {
+		
+		surroundingsPathable = true;
+		
+		for (int i = (x * Tile.WIDTH - Unit.RADIUS) / Tile.WIDTH; i <= (x * Tile.WIDTH + Unit.RADIUS) / Tile.WIDTH; i++) {
+			for (int j = (y * Tile.WIDTH - Unit.RADIUS) / Tile.WIDTH; j <= (y * Tile.WIDTH + Unit.RADIUS) / Tile.WIDTH; j++) {
+				
+				Tile t = level.getTileGrid(i, j);
+				if (t == null || !t.isPathable()) {
+					surroundingsPathable = false;
+					return;
+				}
+								
+			}
+		}
+		
+	}
+
+	public void setReachable(boolean b) {
+		reachable = b;
+	}
+	
+	public boolean isReachable() {
+		return reachable;
 	}
 	
 }

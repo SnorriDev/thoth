@@ -40,13 +40,13 @@ public class Player extends Unit {
 		inventory.getPapyrus(0).setSpell(Grammar.parseString("mAX"));
 		inventory.getPapyrus(1).setSpell(Grammar.parseString("nD wi"));
 		
-		inventory.addProjectile((Orb) Item.newItem(ItemType.PELLET));
-		inventory.getProjectile(0).setSpell(Grammar.parseString("bm m=k"));
+		inventory.addOrb((Orb) Item.newItem(ItemType.PELLET));
+		inventory.getOrb(0).setSpell(Grammar.parseString("bm m=k"));
 		
 	}
 	
 	@Override
-	public void update(World world, float deltaTime) {		
+	public void update(World world, double deltaTime) {		
 		super.update(world, deltaTime);
 		inventory.update(deltaTime);
 	}

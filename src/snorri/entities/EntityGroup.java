@@ -20,8 +20,8 @@ public class EntityGroup extends Entity {
 	private static final long serialVersionUID = 1L;
 
 	private static final int REACH = 0;
-	//TODO: adjust this based on density/radius of higher groups
-
+	
+	//TODO: within each EntityGroup, store entities in a PriorityQueue so we can draw them in the correct order
 	ArrayList<Entity> entities;
 	
 	//can make this stuff more elegant
@@ -429,6 +429,18 @@ public class EntityGroup extends Entity {
 		
 	}
 	
+	public void recalculate() {
+		
+		for (Entity e : entities) {
+			if (e instanceof EntityGroup) {
+				((EntityGroup) e).recalculate();
+			}
+		}
+		
+		setEnclosing();
+		
+	}
+	
 	@Override
 	public void renderHitbox(FocusedWindow g, Graphics gr) {
 		//super.renderHitbox(g, gr);
@@ -451,10 +463,10 @@ public class EntityGroup extends Entity {
 	}
 	
 	@Override
-	public void update(World world, float deltaTime) {
+	public void update(World world, double d) {
 		//TODO: recalculate border only in this outer function?
 		for (Entity e : entities) {
-			e.update(world, deltaTime);
+			e.update(world, d);
 		}
 	}
 	
