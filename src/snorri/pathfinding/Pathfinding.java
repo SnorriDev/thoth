@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
+import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -55,7 +56,7 @@ public class Pathfinding {
 		while (! openSet.isEmpty()) {
 						
 			PathNode current = openSet.poll();
-			
+						
 			if (current.getGridPos().equals(goal)) {
 				return reconstructPath(current);
 			}
@@ -89,13 +90,14 @@ public class Pathfinding {
 	}
 	
 	public static ArrayDeque<PathNode> reconstructPath(PathNode current) {
-				
+		
 		ArrayDeque<PathNode> stack = new ArrayDeque<PathNode>();
 		while (current != null) {
 			stack.add(current);
 			current = current.getOrigin();
 		}
 		return stack;
+		
 	}
 	
 	public PathNode getNode(Vector pos) {

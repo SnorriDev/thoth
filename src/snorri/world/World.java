@@ -48,7 +48,7 @@ public class World implements Playable {
 
 		// temporary
 		addHard(new Player(new Vector(100, 100)));
-		addHard(new Enemy(new Vector(600, 600)));
+		addHard(new Enemy(new Vector(600, 600), this.getFocus()));
 
 		Main.log("new world created!");
 	}

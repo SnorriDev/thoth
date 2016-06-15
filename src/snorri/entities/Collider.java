@@ -31,7 +31,7 @@ public class Collider extends Entity {
 	}
 	
 	protected float getLifeSpan() {
-		return 3;
+		return 5;
 	}
 		
 }

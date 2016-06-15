@@ -5,10 +5,9 @@ import java.util.ArrayDeque;
 import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
+import snorri.main.Main;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
-import snorri.main.GameWindow;
-import snorri.main.Main;
 import snorri.pathfinding.PathNode;
 import snorri.pathfinding.Pathfinder;
 import snorri.pathfinding.Pathfinding;
@@ -19,20 +18,24 @@ public class Enemy extends Unit implements Pathfinder {
 
 	private static final long serialVersionUID = 1L;
 	private static final double APPROACH_MARGIN = 15;
+	private static final double CHANGE_PATH_MARGIN = 200;
 	
-	protected double attackRange = 200;
+	private Vector lastSeenPos;
+	
+	protected double seekRange = 1000;
+	protected double attackRange = 300;
 	
 	protected Inventory inventory;
 	protected Entity target;
 	
 	private ArrayDeque<PathNode> path;
 	
-	public Enemy(Vector pos) {
+	public Enemy(Vector pos, Entity target) {
 		super(pos);
+		this.target = target;
 		inventory = new Inventory(this);
 		inventory.addProjectile((Orb) Item.newItem(ItemType.PELLET));
 		inventory.setWeapon((Weapon) Item.newItem(ItemType.SLING));
-		Pathfinding.setPathAsync(pos.copy().toGridPos(), new Vector(100, 100).toGridPos(), this);
 	}
 	
 	/**
@@ -48,13 +51,20 @@ public class Enemy extends Unit implements Pathfinder {
 		Vector tempPos = pos.copy();
 		
 		//I'm checking if pos and target.pos are both okay just in case we're in a wall
-		while (tempPos.distanceSquared(pos) <= target.pos.distanceSquared(pos) && tempPos.distanceSquared(pos) <= attackRange * attackRange) {	
-			if (world.getLevel().isPathable(tempPos)) {
+		while (tempPos.distanceSquared(pos) <= target.pos.distanceSquared(pos)) {	
+		
+			if (! world.getLevel().isPathable(tempPos.copy().toGridPos())) {
 				return false;
 			}
+			
+			if (tempPos.distanceSquared(pos) > attackRange * attackRange) {
+				return false;
+			}
+			
 			tempPos.add(step);	
 		}
 
+		Main.log(tempPos.distance(pos));
 		return true;
 		
 	}
@@ -69,10 +79,28 @@ public class Enemy extends Unit implements Pathfinder {
 	@Override
 	public void update(World world, float deltaTime) {
 		
-		if (path != null) {
-			follow(world, deltaTime);
+		if (target != null) {
+			
+			if (path != null) {
+				
+				if (target.pos.distanceSquared(lastSeenPos) > CHANGE_PATH_MARGIN * CHANGE_PATH_MARGIN) {
+					stopPath(); //path will be recalculated if it's still in range
+				}
+				else if (canShootAt(world, target)) {
+					shootAt(world, target);
+				}
+				else {
+					follow(world, deltaTime);
+				}
+				
+			}
+			else if (target.pos.distanceSquared(pos) <= seekRange * seekRange) {
+				startPath();
+			}
+						
 		}
 		
+		inventory.update(deltaTime);
 		super.update(world, deltaTime);
 		
 	}
@@ -85,7 +113,6 @@ public class Enemy extends Unit implements Pathfinder {
 		
 		if (path.isEmpty()) {
 			stopPath();
-			shootAt(world, ((GameWindow) Main.getWindow()).getFocus());
 			return;
 		}
 		
@@ -106,6 +133,11 @@ public class Enemy extends Unit implements Pathfinder {
 			path.push(stack.poll());
 		}
 		
+	}
+	
+	public void startPath() {
+		Pathfinding.setPathAsync(pos.copy().toGridPos(), target.pos.copy().toGridPos(), this);
+		lastSeenPos = target.pos.copy(); //don't put this in other thing
 	}
 	
 	public void stopPath() {
