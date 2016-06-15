@@ -252,5 +252,9 @@ public class World implements Playable {
 	public World getCurrentWorld() {
 		return this;
 	}
+	
+	public void resize(int newWidth, int newHeight) {
+		level = level.resize(newWidth, newHeight);
+	}
 
 }

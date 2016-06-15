@@ -23,7 +23,6 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
-import snorri.entities.Enemy;
 import snorri.entities.Entity;
 import snorri.keyboard.Key;
 import snorri.world.Level;
@@ -34,7 +33,7 @@ import snorri.world.World;
 //TODO: show selected texture at top of selected texture menu ¿can this be done?idk
 //TODO: add undo/redo function
 //TODO: add image to world feature
-//TODO: add default texture
+//TODO: add entity deletion feature
 //TODO: figure out why fill overflows
 
 public class LevelEditor extends FocusedWindow implements ActionListener {
@@ -392,7 +391,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	}
 
 	public void resize(int newWidth, int newHeight) {
-		world = new World(world.getLevel().resize(newWidth, newHeight));
+		world.resize(newWidth, newHeight);
 	}
 
 	// TODO: does nothing right now
