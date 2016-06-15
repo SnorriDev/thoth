@@ -115,11 +115,11 @@ public class GameWindow extends FocusedWindow implements Pathfinder {
 		}
 		
 		if (e.getKeyChar() == Key.ONE.getChar()) {
-			focus.getInventory().selectProjectile(0);
+			focus.getInventory().selectOrb(0);
 		}
 		
 		if (e.getKeyChar() == Key.TWO.getChar()) {
-			focus.getInventory().selectProjectile(1);
+			focus.getInventory().selectOrb(1);
 		}
 		
 		if (e.getKeyChar() == Key.THREE.getChar()) {

@@ -21,18 +21,18 @@ public class Inventory implements Serializable {
 	
 	private Weapon weaponSlot;
 	private Armor armorSlot;
-	private Orb[] projectileSlots;
+	private Orb[] orbSlots;
 	private Papyrus[] papyrusSlots;
-	private int selectedProjectile = 0;
+	private int selectedOrb = 0;
 
-	private static final int PROJECTILE_SLOTS = 2;
+	private static final int ORB_SLOTS = 2;
 	private static final int PAPYRUS_SLOTS = 3;
 	
 	private static final int SLOT_SPACE = 15;
 
 	public Inventory(Unit player) {
 		this.player = player;
-		projectileSlots = new Orb[PROJECTILE_SLOTS];
+		orbSlots = new Orb[ORB_SLOTS];
 		papyrusSlots = new Papyrus[PAPYRUS_SLOTS];
 	}
 	
@@ -46,9 +46,9 @@ public class Inventory implements Serializable {
 			armorSlot.updateCooldown(deltaTime);
 		}
 		
-		for (int i = 0; i < PROJECTILE_SLOTS; i++) {
-			if (projectileSlots[i] != null) {
-				projectileSlots[i].updateCooldown(deltaTime);
+		for (int i = 0; i < ORB_SLOTS; i++) {
+			if (orbSlots[i] != null) {
+				orbSlots[i].updateCooldown(deltaTime);
 			}
 		}
 		
@@ -60,10 +60,10 @@ public class Inventory implements Serializable {
 		
 	}
 
-	public void addProjectile(Orb newProjectile) {
-		for (int i = 0; i < PROJECTILE_SLOTS; i++) {
-			if (projectileSlots[i] == null) {
-				projectileSlots[i] = newProjectile;
+	public void addOrb(Orb newProjectile) {
+		for (int i = 0; i < ORB_SLOTS; i++) {
+			if (orbSlots[i] == null) {
+				orbSlots[i] = newProjectile;
 				return;
 			}
 		}
@@ -103,7 +103,7 @@ public class Inventory implements Serializable {
 		}
 		
 		if (weaponSlot.getTimer().activate()) {
-			world.add(new Projectile(focus, movement, dir, weaponSlot, getSelectedProjectile()));
+			world.add(new Projectile(focus, movement, dir, weaponSlot, getSelectedOrb()));
 			return true;
 		}
 		
@@ -119,20 +119,20 @@ public class Inventory implements Serializable {
 		armorSlot = newArmor;
 	}
 
-	public Orb getProjectile(int index) {
-		if (index < 0 || index >= PROJECTILE_SLOTS) {
+	public Orb getOrb(int index) {
+		if (index < 0 || index >= ORB_SLOTS) {
 			Main.error("index out of range, returning empty");
 			return null;
 		}
-		return projectileSlots[index];
+		return orbSlots[index];
 	}
 
-	public void setProjectile(int slot, Orb newProjectile) {
-		if (slot < 0 || slot >= PROJECTILE_SLOTS) {
+	public void setOrb(int slot, Orb newProjectile) {
+		if (slot < 0 || slot >= ORB_SLOTS) {
 			Main.error("slot out of range");
 			return;
 		}
-		projectileSlots[slot] = newProjectile;
+		orbSlots[slot] = newProjectile;
 		return;
 	}
 
@@ -153,12 +153,12 @@ public class Inventory implements Serializable {
 		return;
 	}
 	
-	public Orb getSelectedProjectile() {
-		return getProjectile(selectedProjectile);
+	public Orb getSelectedOrb() {
+		return getOrb(selectedOrb);
 	}
 	
-	public void selectProjectile(int i) {
-		selectedProjectile = i;
+	public void selectOrb(int i) {
+		selectedOrb = i;
 	}
 
 	
@@ -166,8 +166,8 @@ public class Inventory implements Serializable {
 		
 		Vector topPos = new Vector(GameWindow.MARGIN, GameWindow.MARGIN);
 		
-		for (int i = 0; i < PROJECTILE_SLOTS; i++) {
-			drawItemContainer(g, topPos, projectileSlots[i], Orb.class, selectedProjectile == i);
+		for (int i = 0; i < ORB_SLOTS; i++) {
+			drawItemContainer(g, topPos, orbSlots[i], Orb.class, selectedOrb == i);
 		}
 		
 		for (int i = 0; i < PAPYRUS_SLOTS; i++) {

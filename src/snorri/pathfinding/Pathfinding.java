@@ -4,7 +4,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
-import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 

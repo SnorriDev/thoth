@@ -34,8 +34,16 @@ public class Enemy extends Unit implements Pathfinder {
 		super(pos);
 		this.target = target;
 		inventory = new Inventory(this);
-		inventory.addProjectile((Orb) Item.newItem(ItemType.PELLET));
-		inventory.setWeapon((Weapon) Item.newItem(ItemType.SLING));
+		setOrb((Orb) Item.newItem(ItemType.PELLET));
+		setWeapon((Weapon) Item.newItem(ItemType.SLING));
+	}
+	
+	public void setWeapon(Weapon weapon) {
+		inventory.setWeapon(weapon);
+	}
+	
+	public void setOrb(Orb orb) {
+		inventory.setOrb(0, orb);
 	}
 	
 	/**
