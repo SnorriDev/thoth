@@ -9,7 +9,7 @@ import snorri.inventory.Orb;
 import snorri.inventory.Timer;
 import snorri.inventory.Weapon;
 import snorri.main.Main;
-import snorri.main.GameWindow;
+import snorri.main.FocusedWindow;
 import snorri.pathfinding.PathNode;
 import snorri.pathfinding.Pathfinder;
 import snorri.pathfinding.Pathfinding;
@@ -43,7 +43,7 @@ public class Enemy extends Unit implements Pathfinder {
 	}
 	
 	public Enemy(Vector pos) {
-		this(pos, ((GameWindow) Main.getWindow()).getWorld().getFocus());
+		this(pos, ((FocusedWindow) Main.getWindow()).getWorld().getFocus());
 	}
 	
 	public void setTarget(Entity target) {

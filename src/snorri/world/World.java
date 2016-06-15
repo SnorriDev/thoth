@@ -67,6 +67,10 @@ public class World implements Playable {
 		
 		Pathfinding.setWorld(this);
 		
+		if (getFocus() == null) {
+			Main.error("world without player detected");
+		}
+		
 	}
 	
 	public World(Level l) {

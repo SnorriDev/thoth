@@ -387,6 +387,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
 			Main.error("constructor does not exist for class " + selectedEntityClass.getSimpleName());
+			e.printStackTrace();
 		}
 	}
 
@@ -397,5 +398,10 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	// TODO: does nothing right now
 	public void autosave() {
 		return;
+	}
+	
+	@Override
+	public World getWorld() {
+		return world;
 	}
 }

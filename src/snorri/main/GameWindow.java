@@ -49,7 +49,7 @@ public class GameWindow extends FocusedWindow implements Pathfinder {
 	@Override
 	protected void onFrame() {
 		
-		if (! focus.isDead()) {
+		if (!(focus == null) && !focus.isDead()) {
 			
 			//if (! focus.wouldHitSomething(states.getMovementVector(), world.getEntityTree())) this is buggy
 			focus.walk(universe.getCurrentWorld(), states.getMovementVector()); //TODO: move to update method of Player?
@@ -84,6 +84,7 @@ public class GameWindow extends FocusedWindow implements Pathfinder {
 		return focus;
 	}
 	
+	@Override
 	public World getWorld() {
 		return universe.getCurrentWorld();
 	}
