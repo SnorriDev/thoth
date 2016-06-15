@@ -1,7 +1,8 @@
 package snorri.main;
 
 import java.io.File;
-import java.net.URL;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,45 +10,47 @@ import snorri.entities.Entity;
 
 public class ClassFinder {
 
-    private static final char PKG_SEPARATOR = '.';
+	private static final char PKG_SEPARATOR = '.';
+	private static final char DIR_SEPARATOR = '/';
+	private static final String CLASS_FILE_SUFFIX = ".class";
 
-    private static final char DIR_SEPARATOR = '/';
+	public static List<Class<? extends Entity>> find(String scannedPackage) {
+		String scannedPath = "/" + scannedPackage.replace(PKG_SEPARATOR, DIR_SEPARATOR);
+		String scannedDir = ClassFinder.class.getResource(scannedPath).toString().replace("file:", "");
+		try {
+			File dir = new File(URLDecoder.decode(scannedDir, "UTF-8")); // allows directories with spaces
+			List<Class<? extends Entity>> classes = new ArrayList<Class<? extends Entity>>();
+			if (!dir.isDirectory()) {
+				Main.error("could not find class " + scannedPackage);
+				return null;
+			}
+			for (File file : dir.listFiles()) {
+				classes.addAll(find(file, scannedPackage));
+			}
+			return classes;
+		} catch (UnsupportedEncodingException e) {
+			Main.error("issue loading class " + scannedPackage);
+			return null;
+		}
+	}
 
-    private static final String CLASS_FILE_SUFFIX = ".class";
-
-    private static final String BAD_PACKAGE_ERROR = "Unable to get resources from path '%s'. Are you sure the package '%s' exists?";
-
-    public static List<Class<? extends Entity>> find(String scannedPackage) {
-        String scannedPath = scannedPackage.replace(PKG_SEPARATOR, DIR_SEPARATOR);
-        URL scannedUrl = Thread.currentThread().getContextClassLoader().getResource(scannedPath);
-        if (scannedUrl == null) {
-            throw new IllegalArgumentException(String.format(BAD_PACKAGE_ERROR, scannedPath, scannedPackage));
-        }
-        File scannedDir = new File(scannedUrl.getFile());
-        List<Class<? extends Entity>> classes = new ArrayList<Class<? extends Entity>>();
-        for (File file : scannedDir.listFiles()) {
-            classes.addAll(find(file, scannedPackage));
-        }
-        return classes;
-    }
-
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	private static List<Class<? extends Entity>> find(File file, String scannedPackage) {
-        List<Class<? extends Entity>> classes = new ArrayList<Class<? extends Entity>>();
-        String resource = scannedPackage + PKG_SEPARATOR + file.getName();
-        if (file.isDirectory()) {
-            for (File child : file.listFiles()) {
-                classes.addAll(find(child, resource));
-            }
-        } else if (resource.endsWith(CLASS_FILE_SUFFIX)) {
-            int endIndex = resource.length() - CLASS_FILE_SUFFIX.length();
-            String className = resource.substring(0, endIndex);
-            try {
-                classes.add((Class<? extends Entity>) Class.forName(className));
-            } catch (ClassNotFoundException ignore) {
-            }
-        }
-        return classes;
-    }
+		List<Class<? extends Entity>> classes = new ArrayList<Class<? extends Entity>>();
+		String resource = scannedPackage + PKG_SEPARATOR + file.getName();
+		if (file.isDirectory()) {
+			for (File child : file.listFiles()) {
+				classes.addAll(find(child, resource));
+			}
+		} else if (resource.endsWith(CLASS_FILE_SUFFIX)) {
+			int endIndex = resource.length() - CLASS_FILE_SUFFIX.length();
+			String className = resource.substring(0, endIndex);
+			try {
+				classes.add((Class<? extends Entity>) Class.forName(className));
+			} catch (ClassNotFoundException ignore) {
+			}
+		}
+		return classes;
+	}
 
 }

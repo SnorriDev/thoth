@@ -11,7 +11,7 @@ import snorri.world.Vector;
 public abstract class GamePanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private static final int FRAME_DELTA = 30;
+	private static final int FRAME_DELTA = 20;
 
 	protected void startAnimation() {
 		
