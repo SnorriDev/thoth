@@ -24,6 +24,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import snorri.entities.Entity;
+import snorri.entities.Player;
 import snorri.keyboard.Key;
 import snorri.world.Level;
 import snorri.world.Tile;
@@ -348,6 +349,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		if (arg0.getKeyChar() == Key.E.getChar()) {
 			spawnEntity();
 		}
+		if (arg0.getKeyChar() == Key.DELETE.getChar()) {
+			deleteEntity();
+		}
 
 	}
 
@@ -382,11 +386,24 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	public void spawnEntity() {
 		try {
+			
+			if (selectedEntityClass.equals(Player.class)) {
+				world.deleteHard(world.getFocus()); //don't need to check null
+			}
+			
 			world.addHard(selectedEntityClass.getConstructor(Vector.class).newInstance(this.getMousePosAbsolute()));
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e) {
-			Main.error("constructor does not exist for class " + selectedEntityClass.getSimpleName());
+				| SecurityException e) {
 			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			Main.error("cannot spawn entity type " + selectedEntityClass.getSimpleName());
+		}
+	}
+	
+	public void deleteEntity() {
+		Entity deletableEntity = world.getEntityTree().getFirstCollision(new Entity(this.getMousePosAbsolute(), 0));
+		if (!(deletableEntity instanceof Player)) {
+			world.deleteHard(deletableEntity);
 		}
 	}
 

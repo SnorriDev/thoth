@@ -191,7 +191,7 @@ public class World implements Playable {
 	 * @param e
 	 *            the entity to delete
 	 */
-	private boolean deleteHard(Entity e) {
+	public boolean deleteHard(Entity e) {
 
 		if (e instanceof Collider) {
 			return colliders.remove(e);

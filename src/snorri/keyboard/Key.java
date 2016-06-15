@@ -16,7 +16,8 @@ public enum Key {
 	SPACE(32, ' '),
 	
 	Q(81, 'q'), //debugging key
-	E(69, 'e'); //Spawn entity key 
+	E(69, 'e'), //spawn entity key
+	DELETE(88, 'x'); //delete entity key
 	
 	private int id;
 	private char ch;
