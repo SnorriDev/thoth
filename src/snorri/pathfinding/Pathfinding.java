@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
+import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -14,11 +15,6 @@ public class Pathfinding {
 		
 	private static World world;
 	private static Vector dim;
-	
-	//reset with every call to findPath
-	private static PathNode[][] map;
-	private static PriorityQueue<PathNode> openSet;
-	private static ArrayList<PathNode> closedSet;
 	
 	public static void setWorld(World world) {
 		Pathfinding.world = world;
@@ -40,10 +36,12 @@ public class Pathfinding {
 	//TODO: optimize this using the map double array instead of a random ass set
 	//TODO: can still tweak a bit to introduce more optimal routes, random variation, diagonal movement, etc.
 	public static ArrayDeque<PathNode> findPath(Vector start, Vector goal) {
-				
-		map = new PathNode[dim.getX()][dim.getY()];
-		openSet = new PriorityQueue<PathNode>();
-		closedSet = new ArrayList<PathNode>();
+		
+		PathNode[][] map = new PathNode[dim.getX()][dim.getY()];
+		PriorityQueue<PathNode> openSet = new PriorityQueue<PathNode>();
+		ArrayList<PathNode> closedSet = new ArrayList<PathNode>();
+		
+		Main.log(start);
 		
 		map[start.getX()][start.getY()] = new PathNode(start, 0, goal);
 		openSet.offer(map[start.getX()][start.getY()]);
@@ -89,15 +87,11 @@ public class Pathfinding {
 		
 		ArrayDeque<PathNode> stack = new ArrayDeque<PathNode>();
 		while (current != null) {
-			stack.add(current);
+			stack.push(current);
 			current = current.getOrigin();
 		}
 		return stack;
 		
-	}
-	
-	public PathNode getNode(Vector pos) {
-		return map[pos.getX()][pos.getY()];
 	}
 	
 }
