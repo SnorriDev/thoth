@@ -156,11 +156,8 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		int i = 0;
 		for (Class<? extends Entity> c : entityClassList) {
 
-			rbMenuItem = new JRadioButtonMenuItem(c.getSimpleName()); // TODO:
-																		// give
-																		// entities
-																		// image
-																		// icons
+			// TODO: give entities image icons
+			rbMenuItem = new JRadioButtonMenuItem(c.getSimpleName());
 			rbMenuItem.setSelected(firstEntity);
 			rbMenuItem.setActionCommand("spawn" + i);
 			rbMenuItem.addActionListener(this);
