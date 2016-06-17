@@ -88,7 +88,10 @@ public class World implements Playable {
 		Player p = new Player(l.getGoodSpawn(level.getDimensions().random()));
 		addHard(p);
 		for (int i = 0; i < 80; i++) {
-			addHard(new Enemy(l.getGoodSpawn(level.getDimensions().random()), p));
+			Vector spawnPos = l.getGoodSpawn(level.getDimensions().random());
+			if (spawnPos != null) { //spawning enemies at null positions is gross and caused lots of issues
+				addHard(new Enemy(spawnPos, p));
+			}
 		}
 
 		Main.log("new world created!");

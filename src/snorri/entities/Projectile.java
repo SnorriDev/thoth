@@ -21,7 +21,7 @@ public class Projectile extends Collider {
 	private Orb orb;
 	
 	public Projectile(Entity root, Vector rootVelocity, Vector path, Weapon weapon, Orb orb) {
-		super(root.getPos().copy(), 1); //radius of a projectile is 1
+		super(root.getPos().copy(), 2); //radius of a projectile is 1
 		velocity = rootVelocity.copy().add(path.copy().scale(PROJECTILE_SPEED));
 		this.root = root;
 		this.weapon = weapon;

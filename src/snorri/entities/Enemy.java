@@ -99,7 +99,7 @@ public class Enemy extends Unit implements Pathfinder {
 	
 	@Override
 	public void update(World world, double deltaTime) {
-				
+		
 		if (target != null) {
 			
 			if (path != null) {
@@ -143,17 +143,16 @@ public class Enemy extends Unit implements Pathfinder {
 
 	@Override
 	public void setPath(ArrayDeque<PathNode> stack) {
-		
-//		if (stack == null) {
-//			return;
-//		}
-		
 		path = stack;
 		recalculatingPath = false;
-		
 	}
 	
 	public void startPath() {
+		
+		if (pos == null) {
+			return;
+		}
+				
 		Pathfinding.setPathAsync(pos.copy().toGridPos(), target.pos.copy().toGridPos(), this);
 		lastSeenPos = target.pos.copy(); //don't put this in other thing
 		recalculatingPath = true;

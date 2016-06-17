@@ -28,11 +28,15 @@ public class Entity implements Nominal, Serializable {
 	private boolean flying;
 
 	public Entity(Entity e) {
-		this.pos = e.pos.copy();
-		this.r = e.r;
+		this(e.pos.copy(), e.r);
 	}
 	
 	public Entity(Vector pos, int r) {
+		
+		if (pos == null && ! (this instanceof EntityGroup)) {
+			Main.error("spawned non-EntityGroup at null");
+		}
+		
 		this.pos = pos;
 		this.r = r;
 	}
@@ -77,6 +81,10 @@ public class Entity implements Nominal, Serializable {
 	}
 	
 	public boolean intersects(Rectangle rect) {
+		
+		if (pos == null) {
+			return true;
+		}
 		
 		Vector circleDistance = new Vector(rect.getX(), rect.getY()).add(new Vector(rect).divide(2)).sub(pos).abs();
 		
@@ -171,6 +179,9 @@ public class Entity implements Nominal, Serializable {
 	
 	//returns true if the two entities are spatially equivalent
 	public boolean equals(Entity e) {
+		if (e.pos == null) {
+			return pos == null;
+		}
 		return e.pos.equals(pos) && e.r == r;
 	}
 	
