@@ -3,13 +3,13 @@ package snorri.terrain;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class SimpleTerrain extends TerrainGenerator {
+public class SimpleTerrainGen extends TerrainGenerator {
 	
-	public SimpleTerrain(Vector dim) {
+	public SimpleTerrainGen(Vector dim) {
 		super(dim);
 	}
 	
-	public SimpleTerrain(int x, int y) {
+	public SimpleTerrainGen(int x, int y) {
 		this(new Vector(x, y));
 	}
 

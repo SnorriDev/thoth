@@ -87,7 +87,7 @@ public class World implements Playable {
 		// temporary
 		Player p = new Player(l.getGoodSpawn(level.getDimensions().random()));
 		addHard(p);
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 80; i++) {
 			addHard(new Enemy(l.getGoodSpawn(level.getDimensions().random()), p));
 		}
 

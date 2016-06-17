@@ -465,7 +465,7 @@ public class EntityGroup extends Entity {
 	
 	public void updateAround(World world, double d, Entity focus) {
 		for (Entity e : entities) {
-			if (e.pos.distance(focus.pos) < UPDATE_RADIUS) {
+			if (e.intersects(new Entity(focus.pos, UPDATE_RADIUS))) {
 				if (e instanceof EntityGroup) {
 					((EntityGroup) e).updateAround(world, d, focus);
 				} else {
