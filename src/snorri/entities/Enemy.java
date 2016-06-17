@@ -27,7 +27,7 @@ public class Enemy extends Unit implements Pathfinder {
 	
 	protected double seekRange = 1000;
 	protected double attackRange = 300;
-	protected final double attackDelay = 1;
+	protected final double attackDelay = 2;
 	
 	protected Inventory inventory;
 	protected Entity target;
@@ -52,8 +52,8 @@ public class Enemy extends Unit implements Pathfinder {
 	}
 	
 	public void setWeapon(Weapon weapon) {
-		weapon.setCustomTimer(new Timer(attackDelay));
 		inventory.setWeapon(weapon);
+		weapon.setCustomTimer(new Timer(attackDelay));
 	}
 	
 	public void setOrb(Orb orb) {
