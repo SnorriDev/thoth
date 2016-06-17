@@ -66,7 +66,7 @@ public class Projectile extends Collider {
 	@Override
 	public void onCollision(CollisionEvent e) {
 		
-		if (root.equals(e.getTarget())) {
+		if (root.spatialEquals(e.getTarget())) {
 			return;
 		}
 				

@@ -48,7 +48,11 @@ public class GameWindow extends FocusedWindow implements Pathfinder {
 	
 	@Override
 	protected void onFrame() {
-				
+		
+		if (universe.getCurrentWorld() == null) {
+			return;
+		}
+		
 		long time = getTimestamp();
 		universe.getCurrentWorld().update((time - lastTime) / 1000000000d);
 		lastTime = time;

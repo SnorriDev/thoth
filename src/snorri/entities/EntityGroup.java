@@ -187,7 +187,7 @@ public class EntityGroup extends Entity {
 		
 		r += getMaxRadius(points);
 				
-		if (entities.size() == 1 && equals(entities.get(0))) {
+		if (entities.size() == 1 && spatialEquals(entities.get(0))) {
 			set(entities.get(0));
 		}
 		
@@ -448,10 +448,13 @@ public class EntityGroup extends Entity {
 		Vector playerPos = g.getFocus().getPos();
 		Vector dim = g.getDimensions();
 		Rectangle view = new Rectangle(playerPos.getX() - dim.getX() / 2, playerPos.getY() - dim.getY() / 2, dim.getX(), dim.getY());
+		synchronized(this) {
 		for (Entity e : entities) {
 			if (e.intersects(view)) {
+				//the is in renderHitbox (Entity)
 				e.renderAround(g, gr);
 			}
+		}
 		}
 	}
 	

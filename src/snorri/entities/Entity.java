@@ -170,15 +170,22 @@ public class Entity implements Nominal, Serializable {
 	}
 	
 	public void renderHitbox(FocusedWindow g, Graphics gr) {
-		if (pos == null) {
+		//for some reason this is causing concurrent modification issues
+		if (pos == null || g.getFocus().getPos() == null) {
 			return;
 		}
-		Vector rel = pos.copy().sub(g.getFocus().pos);
+		Vector rel = pos.copy().sub(g.getFocus().getPos());
+		//the issue is in this draw oval line! wtf (concurrent modification of graphics?)
 		gr.drawOval(rel.getX() - r + g.getBounds().width / 2, rel.getY() - r + g.getBounds().height / 2, 2 * r, 2 * r);
 	}
 	
-	//returns true if the two entities are spatially equivalent
-	public boolean equals(Entity e) {
+	/**
+	 * @param e
+	 * 	other
+	 * @return
+	 * 	whether the two entities are spatially equivalent (same radius and position)
+	 */
+	public boolean spatialEquals(Entity e) {
 		if (e.pos == null) {
 			return pos == null;
 		}

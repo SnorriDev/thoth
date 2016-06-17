@@ -129,6 +129,8 @@ public class World implements Playable {
 			}
 
 		}
+		
+		col.recalculate(); //TODO: recalculate in any spells that change things
 
 		while (!deleteQ.isEmpty()) {
 			deleteHard(deleteQ.poll());
