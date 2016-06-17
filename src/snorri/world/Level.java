@@ -263,7 +263,7 @@ public class Level {
 	public Vector getGoodSpawn(int startX, int startY) {
 		for (int x = startX; x < dim.getX(); x++) {
 			for (int y = startY; y < dim.getY(); y++) {
-				if (isContextPathable(x, y) && isContextPathable(x - 2, y - 2)) {
+				if (isContextPathable(x, y) && isContextPathable(x - 2, y - 2) && isContextPathable(x + 2, y - 2)) {
 					return new Vector(x, y).toGlobalPos();
 				}
 			}

@@ -1,6 +1,7 @@
 package snorri.entities;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -443,10 +444,14 @@ public class EntityGroup extends Entity {
 	}
 	
 	@Override
-	public void renderHitbox(FocusedWindow g, Graphics gr) {
-		//super.renderHitbox(g, gr);
+	public void renderAround(FocusedWindow g, Graphics gr) {
+		Vector playerPos = g.getFocus().getPos();
+		Vector dim = g.getDimensions();
+		Rectangle view = new Rectangle(playerPos.getX() - dim.getX() / 2, playerPos.getY() - dim.getY() / 2, dim.getX(), dim.getY());
 		for (Entity e : entities) {
-			e.renderHitbox(g, gr);
+			if (e.intersects(view)) {
+				e.renderAround(g, gr);
+			}
 		}
 	}
 	

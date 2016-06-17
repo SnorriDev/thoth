@@ -143,7 +143,7 @@ public class World implements Playable {
 		col.renderAround(g, gr);
 
 		for (Collider p : colliders) {
-			p.renderHitbox(g, gr);
+			p.renderAround(g, gr);
 		}
 
 	}

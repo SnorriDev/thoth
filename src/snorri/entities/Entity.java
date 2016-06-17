@@ -70,6 +70,9 @@ public class Entity implements Nominal, Serializable {
 	}
 	
 	public boolean intersects(Entity e, int rad) {
+		if (pos == null || e.pos == null) {
+			return true;
+		}
 		return e.pos.distance(pos) <= r + e.r + rad;
 	}
 	
@@ -124,10 +127,16 @@ public class Entity implements Nominal, Serializable {
 	}
 	
 	public boolean contains(Entity e) {
+		if (pos == null || e.pos == null) {
+			return true;
+		}
 		return e.pos.distance(pos) + e.r <= r;
 	}
 	
 	public boolean contains(Entity e, int rad) {
+		if (pos == null || e.pos == null) {
+			return true;
+		}
 		return e.pos.distance(pos) + e.r <= r + rad;
 	}
 	

@@ -113,6 +113,9 @@ public class Vector implements Serializable {
 	}
 	
 	public double distanceSquared(Vector pos) {
+		if (pos == null) {
+			return 0;
+		}
 		return (x - pos.x) * (x - pos.x) + (y - pos.y) * (y - pos.y);
 	}
 	
