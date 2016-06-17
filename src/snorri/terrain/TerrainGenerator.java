@@ -6,13 +6,14 @@ import snorri.world.Tile.TileType;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public abstract class TerrainGenerator {
+public class TerrainGenerator {
 
 	protected static final double[] DEFAULT_FREQUENCIES = new double[] {1, 2, 3, 4, 5, 8};
 	protected static final double DEFAULT_SMOOTHNESS = 1.2;
 	protected static final double DEFAULT_ELEVATION = 0.6;
-	
 	private static final double POS_TRANS = 0.5;
+	private static final Vector RANDOM_RANGE = new Vector(10000, 10000);
+	//TODO: use random seed, not just translation
 	
 	protected Vector dim;
 	
@@ -49,29 +50,42 @@ public abstract class TerrainGenerator {
 		
 	}
 	
-	protected TerrainGenerator(Vector dim) {
+	public TerrainGenerator(Vector dim) {
 		this.dim = dim;
+	}
+	
+	public TerrainGenerator(int x, int y) {
+		this(new Vector(x, y));
+	}
+	
+	public World genWorld() {
+		World world = new World(genLevel());
+		world.getLevel().computePathability();
+		return world;
 	}
 	
 	protected double[][] genHeightMap(double[] frequencies, double smoothness, double elevation) {
 		double[][] heightMap = new double[dim.getX()][dim.getY()];
-		Vector n;
+		Vector randomTrans = RANDOM_RANGE.random();
 		for (int x = 0; x < dim.getX(); x++) {
 			for (int y = 0; y < dim.getY(); y++) {
-				n = getScaledPos(x, y);
-				double e = elevation;
-				for (int i = 0; i < frequencies.length; i++) {
-					//maybe just scale n over and over
-					e += 1 / frequencies[i] * noise(n.copy().multiply(frequencies[i]));
-				}
-				if (e > 0) {
-					heightMap[x][y] = Math.pow(e, smoothness);
-				} else {
-					heightMap[x][y] = e;
-				}
+				heightMap[x][y] = getHeight(x , y, randomTrans, frequencies, smoothness, elevation);
 			}
 		}
 		return heightMap;
+	}
+	
+	protected double getHeight(int x, int y, Vector randomTrans, double[] frequencies, double smoothness, double elevation) {
+		Vector n = getScaledPos(x + randomTrans.getX(), y + randomTrans.getY());
+		double e = elevation;
+		for (int i = 0; i < frequencies.length; i++) {
+			e += 1 / frequencies[i] * noise(n.copy().multiply(frequencies[i]));
+		}
+		if (e > 0) {
+			return Math.pow(e, smoothness);
+		} else {
+			return e;
+		}
 	}
 	
 	protected double[][] genHeightMap() {
@@ -96,9 +110,7 @@ public abstract class TerrainGenerator {
 	public Level genLevel() {
 		return genLevel(genHeightMap(), Biome.DEFAULT);
 	}
-	
-	public abstract World genWorld();
-	
+		
 	protected Vector getScaledPos(int x, int y) {
 		return new Vector(x / dim.x + POS_TRANS, y / dim.y + POS_TRANS);
 	}

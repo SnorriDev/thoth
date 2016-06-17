@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import snorri.parser.Lexicon;
-import snorri.terrain.SimpleTerrainGen;
+import snorri.terrain.TerrainGenerator;
 import snorri.world.World;
 
 public class Main {
@@ -105,7 +105,7 @@ public class Main {
 	
 	public static void launchGame() {
 		
-		SimpleTerrainGen ter = new SimpleTerrainGen(400, 300);
+		TerrainGenerator ter = new TerrainGenerator(400, 300);
 		launchGame(ter.genWorld());
 		
 		//launchGame(new World());
