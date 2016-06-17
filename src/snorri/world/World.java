@@ -75,15 +75,21 @@ public class World implements Playable {
 	
 	public World(Level l) {
 
-		Main.log("creating new world of size " + l.getDimensions().getX() + " x " + l.getDimensions().getX() + "..");
+		Main.log("creating new world of size " + l.getDimensions().getX() + " x " + l.getDimensions().getY() + "..");
 		level = l;
 		col = new EntityGroup();
 		colliders = new ArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
 
+		Pathfinding.setWorld(this);
+		
 		// temporary
-		addHard(new Player(new Vector(100, 100)));
+		Player p = new Player(l.getGoodSpawn(level.getDimensions().random()));
+		addHard(p);
+		for (int i = 0; i < 20; i++) {
+			addHard(new Enemy(l.getGoodSpawn(level.getDimensions().random()), p));
+		}
 
 		Main.log("new world created!");
 	}
@@ -106,7 +112,7 @@ public class World implements Playable {
 
 	public void update(double d) {
 
-		col.update(this, d);
+		col.updateAround(this, d, ((FocusedWindow) Main.getWindow()).getFocus());
 		col.recalculate(); //TODO: verify the tree is good
 		
 		for (Collider p : colliders) {
@@ -133,9 +139,6 @@ public class World implements Playable {
 
 	public void render(FocusedWindow g, Graphics gr, boolean showOutlands) {
 
-		// TODO: draw grid
-		// TODO: render, not render hitboxes
-		// level.renderMap(g,gr,levelMap);
 		level.renderMap(g, gr, showOutlands);
 		col.renderAround(g, gr);
 

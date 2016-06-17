@@ -106,34 +106,40 @@ public class Tile {
 		TREE(false, Main.getImageResource("/textures/tiles/tree00.png")),
 		FOUNDATION(false, Main.getImageResource("/textures/tiles/default00.png")),
 		HUT(false, Main.getImageResource("/textures/tiles/default00.png")),
-		WATER(false, new Image[] {
+		WATER(false, true, new Image[] {
 			Main.getImageResource("/textures/tiles/water00.png"),
 			Main.getImageResource("/textures/tiles/water01.png")}),
-		LAVA(false, new Image[] {
+		LAVA(false, true, new Image[] {
 			Main.getImageResource("/textures/tiles/lava00.png"),
 			Main.getImageResource("/textures/tiles/lava01.png"),
-			Main.getImageResource("/textures/tiles/lava02.png")});
+			Main.getImageResource("/textures/tiles/lava02.png")}),
+		GRASS(true, new Image[] {
+			Main.getImageResource("/textures/tiles/grass00.png"),
+			Main.getImageResource("/textures/tiles/grass01.png")});
 		
-		private boolean	pathable;
+		private boolean	pathable, canShootOver;
 		private Image[]	textures;
 									
 		TileType() {
-			pathable = true;
-			textures = new Image[] {Main.getImageResource("/textures/tiles/default00.png")};
+			this(true);
 		}
 		TileType(boolean pathable) {
-			pathable = true;
-			textures = new Image[] {Main.getImageResource("/textures/tiles/default00.png")};
+			this(pathable, new Image[] {Main.getImageResource("/textures/tiles/default00.png")});
 		}
 		
 		TileType(boolean pathable, Image texture) {
-			this.pathable = pathable;
-			textures = new Image[] {texture};
+			this(pathable, new Image[] {texture});
 		}
 		
 		TileType(boolean pathable, Image[] textures) {
 			this.pathable = pathable;
 			this.textures = textures;
+			canShootOver = pathable;
+		}
+		
+		TileType(boolean pathable, boolean swimmable, Image[] textures) {
+			this(pathable, textures);
+			canShootOver = swimmable;
 		}
 		
 		public static TileType byId(int id) {
@@ -146,6 +152,10 @@ public class Tile {
 		
 		public boolean isPathable() {
 			return pathable;
+		}
+		
+		public boolean canShootOver() {
+			return canShootOver; //TODO: maybe change this to store more info
 		}
 		
 		public Image[] getTextures() {
@@ -203,6 +213,10 @@ public class Tile {
 	
 	public boolean isReachable() {
 		return reachable;
+	}
+
+	public boolean canShootOver() {
+		return type.canShootOver();
 	}
 	
 }

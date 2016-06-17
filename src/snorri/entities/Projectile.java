@@ -12,7 +12,7 @@ public class Projectile extends Collider {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int PROJECTILE_SPEED = 175;
+	private static final int PROJECTILE_SPEED = 300;
 		
 	private Vector velocity;
 	private Entity root;
@@ -47,12 +47,15 @@ public class Projectile extends Collider {
 			pos.add(velocity.copy().multiply(deltaTime));
 		} 
 		
-		if (Debug.SHOW_WEAPON_OUTPUT && weapon != null) {
-			Main.log("weapon output: " + weapon.useSpellOn(this, deltaTime / getLifeSpan()));
+		if (weapon != null) {
+			Object output = weapon.useSpellOn(this, deltaTime / getLifeSpan());
+			if (Debug.SHOW_WEAPON_OUTPUT) {
+				Main.log("weapon output: " + output);
+			}
 		}
 				
 		//if we hit the edge of the map or a wall, end
-		if (world.getLevel().getTile(pos) == null || ! world.getLevel().getTile(pos).isPathable()) {
+		if (world.getLevel().getTile(pos) == null || ! world.getLevel().getTile(pos).canShootOver()) {
 			//TODO: activate spell?
 			world.delete(this);
 		}
@@ -72,7 +75,10 @@ public class Projectile extends Collider {
 		}
 		
 		if (orb != null) {
-			Main.log("orb output: " + orb.useSpellOn(e.getTarget()));
+			Object output = orb.useSpellOn(e.getTarget());
+			if (Debug.SHOW_ORB_OUTPUT) {
+				Main.log("orb output: " + output);
+			}
 		}
 				
 		e.getWorld().delete(this); //could use removeFrom, but this is a little better

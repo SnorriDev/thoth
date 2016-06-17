@@ -18,6 +18,7 @@ import snorri.semantics.Definition;
 import snorri.semantics.FirstObjectPronoun;
 import snorri.semantics.FirstSuffixPronoun;
 import snorri.semantics.Flood;
+import snorri.semantics.Fly;
 import snorri.semantics.Heal;
 import snorri.semantics.LeftOf;
 import snorri.semantics.Move;
@@ -36,6 +37,11 @@ import snorri.world.Tile.TileType;
 
 public class Lexicon {
 	
+	/**
+	 * maps strings -> meaning
+	 * currently, each word can only have one meaning,
+	 * although this may change
+	 */
 	private static Map<String, Definition> lexicon;
 	
 	//TODO: allow duplicate definitions? hash by String, POS
@@ -54,9 +60,7 @@ public class Lexicon {
 		lexicon.put("xft", new StaticDef(Prep.class, new RightOf())); //in front of
 		lexicon.put("Hna", new StaticDef(Prep.class, new With())); //with
 		lexicon.put("mhAw", new StaticDef(Prep.class, null)); //around
-		
-		//TODO: add semantics for these prepositions
-		
+				
 		//Nouns
 		lexicon.put("jAm", new StaticDef(Noun.class, TileType.TREE)); //tree
 		lexicon.put("ssn", new StaticDef(Noun.class, Flower.class)); //flower, gotta make this an entity
@@ -99,6 +103,7 @@ public class Lexicon {
 		lexicon.put("bm", new Boom());
 		lexicon.put("mAX", new Burn());
 		lexicon.put("nD", new Heal()); //literally means "protect"
+		lexicon.put("pA", new Fly());
 		
 //		lexicon.put("mAA", new StaticDef(TransVerb.class, null)); //see
 //		lexicon.put("sDm", new StaticDef(TransVerb.class, null)); //hear

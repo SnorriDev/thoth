@@ -37,7 +37,7 @@ public class Player extends Unit {
 		
 		inventory.addPapyrus((Papyrus) Item.newItem(ItemType.PAPYRUS));
 		inventory.addPapyrus((Papyrus) Item.newItem(ItemType.PAPYRUS));
-		inventory.getPapyrus(0).setSpell(Grammar.parseString("mAX"));
+		inventory.getPapyrus(0).setSpell(Grammar.parseString("pA"));
 		inventory.getPapyrus(1).setSpell(Grammar.parseString("nD wi"));
 		
 		inventory.addOrb((Orb) Item.newItem(ItemType.PELLET));
@@ -46,9 +46,10 @@ public class Player extends Unit {
 	}
 	
 	@Override
-	public void update(World world, double deltaTime) {		
+	public void update(World world, double deltaTime) {
 		super.update(world, deltaTime);
 		inventory.update(deltaTime);
+		walk(world, ((GameWindow) Main.getWindow()).getMovementVector(), deltaTime);
 	}
 	
 	@Override

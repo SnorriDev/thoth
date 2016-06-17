@@ -20,6 +20,7 @@ public class EntityGroup extends Entity {
 	private static final long serialVersionUID = 1L;
 
 	private static final int REACH = 0;
+	private static final int UPDATE_RADIUS = 4000;
 	
 	//TODO: within each EntityGroup, store entities in a PriorityQueue so we can draw them in the correct order
 	ArrayList<Entity> entities;
@@ -376,7 +377,7 @@ public class EntityGroup extends Entity {
 	
 	public Entity getFirstCollision(Entity c) {
 		
-		for (Entity child : entities) { //TODO: use this iterator syntax elsewhere
+		for (Entity child : entities) {
 			
 			if (child instanceof EntityGroup) {
 				Entity result = ((EntityGroup) child).getFirstCollision(c);
@@ -459,6 +460,18 @@ public class EntityGroup extends Entity {
 		
 		for (Entity e : entities) {
 			e.traverse(depth + 1);
+		}
+	}
+	
+	public void updateAround(World world, double d, Entity focus) {
+		for (Entity e : entities) {
+			if (e.pos.distance(focus.pos) < UPDATE_RADIUS) {
+				if (e instanceof EntityGroup) {
+					((EntityGroup) e).updateAround(world, d, focus);
+				} else {
+					e.update(world, d);
+				}
+			}
 		}
 	}
 	

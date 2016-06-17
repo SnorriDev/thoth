@@ -27,7 +27,7 @@ public class Enemy extends Unit implements Pathfinder {
 	
 	protected double seekRange = 1000;
 	protected double attackRange = 300;
-	protected double attackDelay = 1;
+	protected final double attackDelay = 1;
 	
 	protected Inventory inventory;
 	protected Entity target;
@@ -42,10 +42,11 @@ public class Enemy extends Unit implements Pathfinder {
 		setWeapon((Weapon) Item.newItem(ItemType.SLING));
 	}
 	
+	//can only use this when we are in GameWindow with Player
 	public Enemy(Vector pos) {
 		this(pos, ((FocusedWindow) Main.getWindow()).getWorld().getFocus());
 	}
-	
+		
 	public void setTarget(Entity target) {
 		this.target = target;
 	}
@@ -74,7 +75,7 @@ public class Enemy extends Unit implements Pathfinder {
 		//I'm checking if pos and target.pos are both okay just in case we're in a wall
 		while (tempPos.distanceSquared(pos) <= target.pos.distanceSquared(pos)) {	
 		
-			if (! world.getLevel().isPathable(tempPos.copy().toGridPos())) {
+			if (! world.getLevel().canShootOver(tempPos.copy().toGridPos())) {
 				return false;
 			}
 			
@@ -98,7 +99,7 @@ public class Enemy extends Unit implements Pathfinder {
 	
 	@Override
 	public void update(World world, double deltaTime) {
-		
+				
 		if (target != null) {
 			
 			if (path != null) {
@@ -136,7 +137,7 @@ public class Enemy extends Unit implements Pathfinder {
 			return;
 		}
 		
-		walkTo(world, path.peek().getGlobalPos());
+		walkTo(world, path.peek().getGlobalPos(), deltaTime);
 		
 	}
 

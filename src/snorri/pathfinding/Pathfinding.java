@@ -4,7 +4,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
-import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -40,9 +39,7 @@ public class Pathfinding {
 		PathNode[][] map = new PathNode[dim.getX()][dim.getY()];
 		PriorityQueue<PathNode> openSet = new PriorityQueue<PathNode>();
 		ArrayList<PathNode> closedSet = new ArrayList<PathNode>();
-		
-		Main.log(start);
-		
+				
 		map[start.getX()][start.getY()] = new PathNode(start, 0, goal);
 		openSet.offer(map[start.getX()][start.getY()]);
 		

@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import snorri.parser.Lexicon;
+import snorri.terrain.SimpleTerrain;
 import snorri.world.World;
 
 public class Main {
@@ -103,7 +104,11 @@ public class Main {
 	}
 	
 	public static void launchGame() {
-		launchGame(new World());
+		
+		SimpleTerrain ter = new SimpleTerrain(400, 300);
+		launchGame(ter.genWorld());
+		
+		//launchGame(new World());
 	}
 
 	public static void launchEditor() {

@@ -25,7 +25,8 @@ public class Entity implements Nominal, Serializable {
 	//TODO: entities that ignore collisions (with a boolean?)
 	
 	private Timer burnTimer = new Timer(5);
-	
+	private boolean flying;
+
 	public Entity(Entity e) {
 		this.pos = e.pos.copy();
 		this.r = e.r;
@@ -152,13 +153,10 @@ public class Entity implements Nominal, Serializable {
 	}
 	
 	public void renderHitbox(FocusedWindow g, Graphics gr) {
-		
 		if (pos == null) {
 			return;
 		}
-		
-		Vector rel = pos.copy();
-		rel.sub(g.getFocus().pos);
+		Vector rel = pos.copy().sub(g.getFocus().pos);
 		gr.drawOval(rel.getX() - r + g.getBounds().width / 2, rel.getY() - r + g.getBounds().height / 2, 2 * r, 2 * r);
 	}
 	
@@ -215,45 +213,29 @@ public class Entity implements Nominal, Serializable {
 		
 	}
 	
-	@Deprecated
-	public boolean move(World world, Vector direction, double speed) {
-		
-		Vector dir = direction.copy().scale(speed);
-		
-		if (dir.equals(Vector.ZERO)) {
-			return false;
-		}
-				
-		if (wouldIntersectWall(world, dir)) {
-			
-			//see if we're hitting only one wall
-			if (! wouldIntersectWall(world, dir.getProjectionX())) {
-				dir = dir.getProjectionX();
-			}
-			else if (! wouldIntersectWall(world, dir.getProjectionY())) {
-				dir = dir.getProjectionY();
-			}
-			
-			//see if we're hitting a corner
-			else if (! wouldIntersectWall(world, dir.getProjection(Vector.DOWN_LEFT))) {
-				dir = dir.getProjection(Vector.DOWN_LEFT);
-			}
-			else if (! wouldIntersectWall(world, dir.getProjection(Vector.DOWN_RIGHT))) {
-				dir = dir.getProjection(Vector.DOWN_RIGHT);
-			}
-			
-			//give up; TODO more stuff?
-			else {
-				return false;
-			}
-			
-		}
-		
-		world.getEntityTree().move(this, dir);
-		return true;
-		
+	public void startFlying() {
+		flying = true;
 	}
 	
+	public void stopFlying() {
+		flying = false;
+	}
+	
+	public boolean isFlying() {
+		return flying;
+	}
+	
+	/**
+	 * moves entity WITHOUT recalculating entity tree radii
+	 * @param world
+	 * 	world we're moving in
+	 * @param direction
+	 * 	direction to move (magnitude is irrelevant)
+	 * @param speed
+	 * 	speed to move at
+	 * @return
+	 * 	whether or not we were able to move
+	 */
 	public boolean moveHard(World world, Vector direction, double speed) {
 		
 		Vector dir = direction.copy().scale(speed);
@@ -262,7 +244,7 @@ public class Entity implements Nominal, Serializable {
 			return false;
 		}
 				
-		if (wouldIntersectWall(world, dir)) {
+		if (!flying && wouldIntersectWall(world, dir)) {
 			
 			//see if we're hitting only one wall
 			if (! wouldIntersectWall(world, dir.getProjectionX())) {

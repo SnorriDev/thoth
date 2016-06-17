@@ -48,10 +48,6 @@ public class GameWindow extends FocusedWindow implements Pathfinder {
 	
 	@Override
 	protected void onFrame() {
-		
-		if (!focus.isDead()) {			
-			focus.walk(universe.getCurrentWorld(), states.getMovementVector()); //TODO: move to update method of Player?
-		}
 				
 		long time = getTimestamp();
 		universe.getCurrentWorld().update((time - lastTime) / 1000000000d);

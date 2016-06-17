@@ -18,6 +18,7 @@ public class Animation implements Serializable {
 	
 	private Image[] frames;
 	private int currentFrame = 0;
+	private boolean hasCycled = false;
 	
 	public Animation(File folder) {
 		
@@ -42,10 +43,18 @@ public class Animation implements Serializable {
 		
 		if (currentFrame == frames.length) {
 			currentFrame = 0;
+			hasCycled = true;
 		}
 		
 		return frames[currentFrame++];
 		
+	}
+	
+	/**
+	 * @return whether the animation loop has been completed at least once
+	 */
+	public boolean hasCycled() {
+		return hasCycled;
 	}
 	
 }

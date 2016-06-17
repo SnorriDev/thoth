@@ -1,1 +1,11 @@
+snorri.animations
+snorri.entities
+snorri.events
+snorri.inventory
+snorri.keyboard
+snorri.main
+snorri.nonterminals
+snorri.parser
 snorri.pathfinding
+snorri.semantics
+snorri.world

@@ -7,7 +7,7 @@ import snorri.world.World;
 public class Unit extends Entity {
 
 	private static final long serialVersionUID = 1L;
-	private static final int BASE_SPEED = 2;
+	private static final int BASE_SPEED = 100;
 	public static final int RADIUS = 20;
 	protected static final double MAX_HEALTH = 100;
 	private static final double BURN_DOT = 8d;
@@ -39,24 +39,12 @@ public class Unit extends Entity {
 		
 	}
 
-	public void walk(World world, Vector direction) {
-		moveHard(world, direction, getSpeed());
+	public void walk(World world, Vector direction, double deltaTime) {
+		moveHard(world, direction, getSpeed() * deltaTime);
 	}
 	
-	public void walkTo(World world, Vector target) {
-		walk(world, target.copy().sub(pos));
-	}
-	
-	public boolean wouldHitSomething(World world, Vector direction) {
-				
-		if (direction.equals(Vector.ZERO)) {
-			return true;
-		}
-		
-		Unit clone = new Unit(this);
-		clone.walk(world, direction);
-		world.getEntityTree().delete(clone);
-		return world.getEntityTree().getAllCollisions(clone).size() > 1;
+	public void walkTo(World world, Vector target, double deltaTime) {
+		walk(world, target.copy().sub(pos), deltaTime);
 	}
 	
 	public double getHealth() {

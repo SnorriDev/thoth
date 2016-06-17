@@ -183,6 +183,13 @@ public class Vector implements Serializable {
 		return this;
 	}
 	
+	/**
+	 * @return a random vector chosen uniformly from [0, x) x [0, y)
+	 */
+	public Vector random() {
+		return new Vector(Math.random() * x, Math.random() * y);
+	}
+	
 	//use Level.getTileGrid(v) != null
 	@Deprecated
 	public boolean isInBounds(Level level) {

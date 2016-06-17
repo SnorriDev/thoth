@@ -33,6 +33,10 @@ public class Level {
 		}
 		
 	}
+	
+	public Level(Vector v) {
+		this(v.getX(), v.getY());
+	}
 
 	public Level(File file) throws FileNotFoundException, IOException {
 		load(file);
@@ -190,7 +194,7 @@ public class Level {
 		return new Rectangle(i * Tile.WIDTH, j * Tile.WIDTH, Tile.WIDTH, Tile.WIDTH);
 	}
 	
-	private void computePathability() {
+	public void computePathability() {
 		Main.log("computing pathfinding grid...");
 		for (int i = 0; i < dim.getX(); i++) {
 			for (int j = 0; j < dim.getY(); j++) {
@@ -208,6 +212,16 @@ public class Level {
 	public boolean isContextPathable(Vector pos) {
 		Tile t = getTileGrid(pos);
 		return t != null && t.isContextPathable();
+	}
+	
+	public boolean isContextPathable(int x, int y) {
+		Tile t = getTileGrid(x, y);
+		return t != null && t.isContextPathable();
+	}
+	
+	public boolean canShootOver(Vector pos) {
+		Tile t = getTileGrid(pos);
+		return t!= null && t.canShootOver();
 	}
 
 	//TODO: get this working
@@ -244,6 +258,21 @@ public class Level {
 	public void computePathfinding(Vector defaultSpawn) {
 		computePathability();
 		//computeReachableGraph(defaultSpawn);
+	}
+
+	public Vector getGoodSpawn(int startX, int startY) {
+		for (int x = startX; x < dim.getX(); x++) {
+			for (int y = startY; y < dim.getY(); y++) {
+				if (isContextPathable(x, y) && isContextPathable(x - 2, y - 2)) {
+					return new Vector(x, y).toGlobalPos();
+				}
+			}
+		}
+		return null;
+	}
+	
+	public Vector getGoodSpawn(Vector v) {
+		return getGoodSpawn(v.getX(), v.getY());
 	}
 	
 }
