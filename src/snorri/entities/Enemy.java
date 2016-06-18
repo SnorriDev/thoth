@@ -27,7 +27,7 @@ public class Enemy extends Unit implements Pathfinder {
 	
 	protected double seekRange = 1000;
 	protected double attackRange = 300;
-	protected final double attackDelay = 2;
+	protected final double attackDelay;
 	
 	protected Inventory inventory;
 	protected Entity target;
@@ -36,6 +36,7 @@ public class Enemy extends Unit implements Pathfinder {
 	
 	public Enemy(Vector pos, Entity target) {
 		super(pos);
+		attackDelay = 2;
 		this.target = target;
 		inventory = new Inventory(this);
 		setOrb((Orb) Item.newItem(ItemType.PELLET));
@@ -143,7 +144,9 @@ public class Enemy extends Unit implements Pathfinder {
 
 	@Override
 	public void setPath(ArrayDeque<PathNode> stack) {
-		path = stack;
+		if (stack != null) {
+			path = stack;
+		}
 		recalculatingPath = false;
 	}
 	

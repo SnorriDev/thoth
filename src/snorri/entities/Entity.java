@@ -29,6 +29,9 @@ public class Entity implements Nominal, Serializable {
 
 	public Entity(Entity e) {
 		this(e.pos.copy(), e.r);
+		if (e.pos == null) {
+			Main.log("spawned null entity: " + e);
+		}
 	}
 	
 	public Entity(Vector pos, int r) {
@@ -115,8 +118,8 @@ public class Entity implements Nominal, Serializable {
 	
 	public boolean intersectsWall(Level level) {
 
-		for (int i = (pos.getX() - r) / Tile.WIDTH; i <= (pos.getX() + r) / Tile.WIDTH; i++) {
-			for (int j = (pos.getY() - r) / Tile.WIDTH; j <= (pos.getY() + r) / Tile.WIDTH; j++) {
+		for (int i = (pos.getX() - r) / Tile.WIDTH - 1; i <= (pos.getX() + r) / Tile.WIDTH; i++) {
+			for (int j = (pos.getY() - r) / Tile.WIDTH - 1; j <= (pos.getY() + r) / Tile.WIDTH; j++) {
 				
 				if (! intersects(Level.getRectange(i, j))) {
 					continue;
