@@ -5,10 +5,9 @@ import java.awt.Graphics;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import snorri.entities.Collider;
 import snorri.entities.Enemy;
@@ -26,7 +25,7 @@ public class World implements Playable {
 	
 	private Level level;
 	private EntityGroup col;
-	private List<Collider> colliders;
+	private CopyOnWriteArrayList<Collider> colliders;
 	private Queue<Entity> deleteQ;
 	private Queue<Entity> addQ;
 
@@ -40,7 +39,7 @@ public class World implements Playable {
 		level = new Level(width, height); // TODO: pass a level file to read
 		level.computePathfinding(DEFAULT_SPAWN);
 		col = new EntityGroup();
-		colliders = new ArrayList<Collider>();
+		colliders = new CopyOnWriteArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
 		
@@ -61,7 +60,7 @@ public class World implements Playable {
 		
 		load(file);
 		level.computePathfinding(DEFAULT_SPAWN);
-		colliders = new ArrayList<Collider>();
+		colliders = new CopyOnWriteArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
 		
@@ -78,7 +77,7 @@ public class World implements Playable {
 		Main.log("creating new world of size " + l.getDimensions().getX() + " x " + l.getDimensions().getY() + "..");
 		level = l;
 		col = new EntityGroup();
-		colliders = new ArrayList<Collider>();
+		colliders = new CopyOnWriteArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
 
@@ -117,7 +116,7 @@ public class World implements Playable {
 
 		col.updateAround(this, d, ((FocusedWindow) Main.getWindow()).getFocus());
 		col.recalculate(); //TODO: verify the tree is good
-		
+				
 		for (Collider p : colliders) {
 
 			p.update(this, d);
@@ -147,7 +146,7 @@ public class World implements Playable {
 		level.renderMap(g, gr, showOutlands);
 		col.renderAround(g, gr);
 
-		for (Collider p : colliders) {
+		for (Collider p : colliders.toArray(new Collider[0])) {
 			p.renderAround(g, gr);
 		}
 

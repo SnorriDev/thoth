@@ -9,9 +9,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
@@ -25,13 +25,15 @@ public class EntityGroup extends Entity {
 	private static final int REACH = 0;
 	private static final int UPDATE_RADIUS = 4000;
 	
+	//TODO: nice priorityqueue from https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/package-summary.html
+
 	//TODO: within each EntityGroup, store entities in a PriorityQueue so we can draw them in the correct order
-	ArrayList<Entity> entities;
+	CopyOnWriteArrayList<Entity> entities;
 	
 	//can make this stuff more elegant
 	public EntityGroup(Entity root) {
 		super(root);
-		entities = new ArrayList<Entity>();
+		entities = new CopyOnWriteArrayList<Entity>();
 		entities.add(root);
 	}
 	
@@ -76,7 +78,7 @@ public class EntityGroup extends Entity {
 	
 	public EntityGroup() {
 		super(null, 0);
-		entities = new ArrayList<Entity>();
+		entities = new CopyOnWriteArrayList<Entity>();
 	}
 	
 	public EntityGroup(File file) throws FileNotFoundException, IOException {
@@ -86,7 +88,7 @@ public class EntityGroup extends Entity {
 	
 	public EntityGroup(Vector center, int rad) {
 		super(center, rad);
-		entities = new ArrayList<Entity>();
+		entities = new CopyOnWriteArrayList<Entity>();
 	}
 	
 	public EntityGroup(Entity e1, Entity e2, Entity e3) {
@@ -122,8 +124,8 @@ public class EntityGroup extends Entity {
 		return entities.iterator();
 	}
 	
-	public ArrayList<Entity> getAllEntities() {
-		ArrayList<Entity> res = new ArrayList<Entity>();
+	public CopyOnWriteArrayList<Entity> getAllEntities() {
+		CopyOnWriteArrayList<Entity> res = new CopyOnWriteArrayList<Entity>();
 		for (Entity e : entities) {
 			if (e instanceof EntityGroup) {
 				res.addAll(((EntityGroup) e).getAllEntities());
@@ -136,7 +138,7 @@ public class EntityGroup extends Entity {
 	
 	//sadly, doing it this inefficient way is the only way to ensure uniform distribution
 	public Entity getRandomEntity() {
-		ArrayList<Entity> all = getAllEntities();
+		CopyOnWriteArrayList<Entity> all = getAllEntities();
 		return all.get((int) (Math.random() * all.size()));
 	}
 	
@@ -402,9 +404,9 @@ public class EntityGroup extends Entity {
 	
 	
 	//could maybe write this more efficiently
-	public ArrayList<Entity> getAllCollisions(Entity c) {
+	public CopyOnWriteArrayList<Entity> getAllCollisions(Entity c) {
 		
-		ArrayList<Entity> result = new ArrayList<Entity>();
+		CopyOnWriteArrayList<Entity> result = new CopyOnWriteArrayList<Entity>();
 		
 		for (Entity child : entities) {
 			
@@ -452,7 +454,7 @@ public class EntityGroup extends Entity {
 		Rectangle view = new Rectangle(playerPos.getX() - dim.getX() / 2, playerPos.getY() - dim.getY() / 2, dim.getX(), dim.getY());
 		synchronized(this) {
 			try {
-				for (Entity e : entities) {
+				for (Entity e : entities.toArray(new Entity[0])) {
 					if (e.intersects(view)) {
 						//the is in renderHitbox (Entity)
 						e.renderAround(g, gr);

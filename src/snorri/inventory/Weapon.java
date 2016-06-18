@@ -11,12 +11,16 @@ public class Weapon extends Item {
 
 	public Weapon(ItemType t) {
 		super(t);
-		timer = new Timer(0.3f);
+		timer = new Timer(getBaseCooldown());
 	}
 	
 	//retrieve the sharpness for this weapon from the ItemType
-	public int getSharpness() {
-		return (int) type.getProperty(0);
+	public double getSharpness() {
+		return (double) type.getProperty(0);
+	}
+	
+	public double getBaseCooldown() {
+		return (double) type.getProperty(1);
 	}
 	
 	public void setCustomTimer(Timer timer) {

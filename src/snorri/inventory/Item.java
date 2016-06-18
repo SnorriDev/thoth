@@ -32,9 +32,10 @@ public abstract class Item implements Serializable {
 
 		EMPTY,
 		PAPYRUS(Papyrus.class, Main.getImageResource("/textures/items/papyrus.png")),
-		HELMET(Armor.class, Main.getImageResource("/textures/items/helmet.png"), 2),
-		SLING(Weapon.class, Main.getImageResource("/textures/items/bow.png"), 34),
-		PELLET(Orb.class, Main.getImageResource("/textures/items/pellet.png"));
+		HELMET(Armor.class, Main.getImageResource("/textures/items/helmet.png"), 2d),
+		SLING(Weapon.class, Main.getImageResource("/textures/items/bow.png"), 34d, 0.3),
+		PELLET(Orb.class, Main.getImageResource("/textures/items/pellet.png")),
+		SLOW_SLING(Weapon.class, Main.getImageResource("/textures/items/bow.png"), 34d, 2d);
 
 		private Class<? extends Item> c;
 		private int maxQuantity = 1;

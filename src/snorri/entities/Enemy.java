@@ -6,7 +6,6 @@ import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
 import snorri.inventory.Orb;
-import snorri.inventory.Timer;
 import snorri.inventory.Weapon;
 import snorri.main.Main;
 import snorri.main.FocusedWindow;
@@ -27,7 +26,6 @@ public class Enemy extends Unit implements Pathfinder {
 	
 	protected double seekRange = 1000;
 	protected double attackRange = 300;
-	protected final double attackDelay;
 	
 	protected Inventory inventory;
 	protected Entity target;
@@ -36,11 +34,10 @@ public class Enemy extends Unit implements Pathfinder {
 	
 	public Enemy(Vector pos, Entity target) {
 		super(pos);
-		attackDelay = 2;
 		this.target = target;
 		inventory = new Inventory(this);
 		setOrb((Orb) Item.newItem(ItemType.PELLET));
-		setWeapon((Weapon) Item.newItem(ItemType.SLING));
+		setWeapon((Weapon) Item.newItem(ItemType.SLOW_SLING));
 	}
 	
 	//can only use this when we are in GameWindow with Player
@@ -54,7 +51,6 @@ public class Enemy extends Unit implements Pathfinder {
 	
 	public void setWeapon(Weapon weapon) {
 		inventory.setWeapon(weapon);
-		weapon.setCustomTimer(new Timer(attackDelay));
 	}
 	
 	public void setOrb(Orb orb) {
@@ -100,6 +96,10 @@ public class Enemy extends Unit implements Pathfinder {
 	
 	@Override
 	public void update(World world, double deltaTime) {
+		
+		if (deltaTime > 1) {
+			Main.error("got insane delta time of " + deltaTime);
+		}
 		
 		if (target != null) {
 			

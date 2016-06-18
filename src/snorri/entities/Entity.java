@@ -28,16 +28,20 @@ public class Entity implements Nominal, Serializable {
 	private boolean flying;
 
 	public Entity(Entity e) {
-		this(e.pos.copy(), e.r);
-		if (e.pos == null) {
-			Main.log("spawned null entity: " + e);
+		if (e.pos == null && !(this instanceof EntityGroup)) {
+			Main.error("spawned non-EntityGroup at null using other entity: " + this.getClass().getSimpleName());
+			return;
 		}
+		
+		this.pos = e.pos.copy();
+		this.r = e.r;
+		
 	}
 	
 	public Entity(Vector pos, int r) {
 		
-		if (pos == null && ! (this instanceof EntityGroup)) {
-			Main.error("spawned non-EntityGroup at null");
+		if (pos == null && !(this instanceof EntityGroup)) {
+			Main.error("spawned non-EntityGroup at null: " + this.getClass().getSimpleName());
 		}
 		
 		this.pos = pos;
