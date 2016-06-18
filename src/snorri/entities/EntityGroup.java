@@ -10,9 +10,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
 import snorri.main.FocusedWindow;
+import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -449,12 +451,16 @@ public class EntityGroup extends Entity {
 		Vector dim = g.getDimensions();
 		Rectangle view = new Rectangle(playerPos.getX() - dim.getX() / 2, playerPos.getY() - dim.getY() / 2, dim.getX(), dim.getY());
 		synchronized(this) {
-		for (Entity e : entities) {
-			if (e.intersects(view)) {
-				//the is in renderHitbox (Entity)
-				e.renderAround(g, gr);
+			try {
+				for (Entity e : entities) {
+					if (e.intersects(view)) {
+						//the is in renderHitbox (Entity)
+						e.renderAround(g, gr);
+					}
+				}
+			} catch (ConcurrentModificationException e) {
+				Main.error("concurrent modification detected");
 			}
-		}
 		}
 	}
 	
