@@ -116,7 +116,7 @@ public class Enemy extends Unit implements Pathfinder {
 				}
 				
 			}
-			else if (target.pos.distanceSquared(pos) <= seekRange * seekRange && ! recalculatingPath) {
+			else if (! recalculatingPath && target.pos.distanceSquared(pos) <= seekRange * seekRange) {
 				startPath();
 			}
 						
