@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -32,9 +34,7 @@ import snorri.world.Vector;
 import snorri.world.World;
 
 //TODO: show selected texture at top of selected texture menu ¿can this be done?idk
-//TODO: add undo/redo function
 //TODO: add image to world feature
-//TODO: add entity deletion feature
 //TODO: figure out why fill overflows
 
 public class LevelEditor extends FocusedWindow implements ActionListener {
@@ -54,6 +54,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	private boolean canGoUp;
 	private boolean canGoDown;
 
+	private boolean canUndo;
+	private boolean canRedo;
+
 	JMenuBar menuBar;
 	JMenu menu, submenu;
 	JMenuItem menuItem;
@@ -70,6 +73,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		repaint();
 
 		focus = new Entity(new Vector(50, 50));
+
+		canUndo = false;
+		canRedo = false;
 
 		Main.log(ClassFinder.find("snorri.entities").get(0).getSimpleName());
 	}
@@ -101,6 +107,16 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 		menuItem = new JMenuItem("Resize", KeyEvent.VK_R);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+
+		menuItem = new JMenuItem("Undo", KeyEvent.VK_Z);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+
+		menuItem = new JMenuItem("Redo", KeyEvent.VK_Y);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
@@ -140,11 +156,8 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		int i = 0;
 		for (Class<? extends Entity> c : entityClassList) {
 
-			rbMenuItem = new JRadioButtonMenuItem(c.getSimpleName()); // TODO:
-																		// give
-																		// entities
-																		// image
-																		// icons
+			// TODO: give entities image icons
+			rbMenuItem = new JRadioButtonMenuItem(c.getSimpleName());
 			rbMenuItem.setSelected(firstEntity);
 			rbMenuItem.setActionCommand("spawn" + i);
 			rbMenuItem.addActionListener(this);
@@ -243,6 +256,20 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			}
 
 			resize(whNew[0], whNew[1]);
+			break;
+		case "Undo":
+			if (world == null || !canUndo) {
+				Main.error("unable to undo");
+				return;
+			}
+			undo();
+			break;
+		case "Redo":
+			if (world == null || !canRedo) {
+				Main.error("unable to redo");
+				return;
+			}
+			redo();
 		}
 
 		repaint();
@@ -317,8 +344,10 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (SwingUtilities.isRightMouseButton(e)) {
-			fill();
+		if (world != null) {
+			if (SwingUtilities.isRightMouseButton(e)) {
+				fill();
+			}
 		}
 	}
 
@@ -334,8 +363,10 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (SwingUtilities.isLeftMouseButton(e)) {
-			isClicking = true;
+		if (world != null) {
+			if (SwingUtilities.isLeftMouseButton(e)) {
+				isClicking = true;
+			}
 		}
 	}
 
@@ -365,6 +396,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		Tile t = world.getLevel().getNewTileGrid(x, y);
 		if (selectedTile != null && world.getLevel().getNewTileGrid(x, y) != null && t != null
 				&& !t.equals(selectedTile)) {
+			autosaveUndo();
 			world.getLevel().setTileGrid(x, y, selectedTile);
 			fill_helper(x + 1, y, t);
 			fill_helper(x - 1, y, t);
@@ -386,11 +418,12 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	public void spawnEntity() {
 		try {
-			
+			autosaveUndo();
+
 			if (selectedEntityClass.equals(Player.class)) {
-				world.deleteHard(world.getFocus()); //don't need to check null
+				world.deleteHard(world.getFocus()); // don't need to check null
 			}
-			
+
 			world.addHard(selectedEntityClass.getConstructor(Vector.class).newInstance(this.getMousePosAbsolute()));
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| SecurityException e) {
@@ -399,23 +432,82 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			Main.error("cannot spawn entity type " + selectedEntityClass.getSimpleName());
 		}
 	}
-	
+
 	public void deleteEntity() {
 		Entity deletableEntity = world.getEntityTree().getFirstCollision(new Entity(this.getMousePosAbsolute(), 0));
 		if (!(deletableEntity instanceof Player)) {
+			autosaveUndo();
 			world.deleteHard(deletableEntity);
 		}
 	}
 
 	public void resize(int newWidth, int newHeight) {
+		autosaveUndo();
 		world.resize(newWidth, newHeight);
 	}
 
-	// TODO: does nothing right now
-	public void autosave() {
-		return;
+	public void autosaveUndo() {
+		try {
+			world.save(new File("./worlds/.undo1"));
+			Main.log("autosaved for undo");
+			canUndo = true;
+			canRedo = false;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			Main.error("unable to autosave for undo");
+			e.printStackTrace();
+		}
 	}
-	
+
+	public void autosaveRedo() {
+		try {
+			world.save(new File("./worlds/.redo1"));
+			Main.log("autosaved for redo");
+			canUndo = false;
+			canRedo = true;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			Main.error("unable to autosave for redo");
+			canRedo = false;
+			e.printStackTrace();
+		}
+	}
+
+	public void undo() {
+		if (canUndo) {
+			try {
+				autosaveRedo();
+				world.load(new File("./worlds/.undo1"));
+				canUndo = false;
+				canRedo = true;
+				Main.log("undo!");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				Main.error("cannot undo, IOException");
+				e.printStackTrace();
+			}
+		} else {
+			Main.error("cannot undo right now");
+		}
+	}
+
+	public void redo() {
+		if (canRedo) {
+			try {
+				world.load(new File("./worlds/.redo1"));
+				Main.log("redo!");
+				canUndo = true;
+				canRedo = false;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				Main.error("cannot redo, IOException");
+				e.printStackTrace();
+			}
+		} else {
+			Main.error("cannot redo right now");
+		}
+	}
+
 	@Override
 	public World getWorld() {
 		return world;
