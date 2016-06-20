@@ -52,10 +52,17 @@ public class GameWindow extends FocusedWindow implements Pathfinder {
 		if (universe.getCurrentWorld() == null) {
 			return;
 		}
-		
+				
 		long time = getTimestamp();
-		universe.getCurrentWorld().update((time - lastTime) / 1000000000d);
+		double deltaTime = (time - lastTime) / 1000000000d;
 		lastTime = time;
+		
+		if (deltaTime > 0.1) { //this is shitty
+			Main.log("skipped frame because of high delta time (" + deltaTime + ")");
+			return;
+		}
+		
+		universe.getCurrentWorld().update(deltaTime);
 		repaint();
 				
 	}

@@ -5,9 +5,9 @@ import java.io.Serializable;
 public class Timer implements Serializable {
 
 	/**
-	 * Used for timing cooldowns and burning
-	 * TODO: change this stuff to doubles
+	 * used for timing cooldowns and burning
 	 */
+	
 	private static final long serialVersionUID = 1L;
 	private double currentTime, cooldown;
 	
@@ -28,13 +28,13 @@ public class Timer implements Serializable {
 			return false;
 		}
 		
-		currentTime = 0f;
+		currentTime = 0d;
 		return true;
 		
 	}
 	
 	public void hardReset() {
-		currentTime = 0f;
+		currentTime = 0d;
 	}
 	
 	public boolean isOffCooldown() {
@@ -52,6 +52,7 @@ public class Timer implements Serializable {
 		return cooldown - currentTime;
 	}
 
+	@Deprecated
 	public void setDelay(double attackDelay) {
 		cooldown = attackDelay;
 		currentTime = cooldown;

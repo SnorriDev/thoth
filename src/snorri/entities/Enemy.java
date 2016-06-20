@@ -97,10 +97,6 @@ public class Enemy extends Unit implements Pathfinder {
 	@Override
 	public void update(World world, double deltaTime) {
 		
-		if (deltaTime > 1) {
-			Main.error("got insane delta time of " + deltaTime);
-		}
-		
 		if (target != null) {
 			
 			if (path != null) {
