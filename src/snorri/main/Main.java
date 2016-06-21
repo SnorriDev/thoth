@@ -36,6 +36,7 @@ public class Main {
 		window = new MainMenu();
 		frame.getContentPane().add(window, BorderLayout.CENTER);
 		frame.getContentPane().validate();
+		
 	}
 
 	public static Rectangle getBounds() {
@@ -48,8 +49,6 @@ public class Main {
 
 	public static void log(String s) {
 		System.out.println("[LOG] " + s);
-		// System.out.println("[" + Colors.LOG + "LOG" + Colors.RESET + "] " +
-		// s);
 	}
 
 	public static void log(Object o) {

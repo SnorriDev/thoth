@@ -8,9 +8,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
+import snorri.pathfinding.PathNode;
 import snorri.world.Tile.TileType;
 
 public class Level {
@@ -19,6 +23,8 @@ public class Level {
 	
 	private Tile[][] map;
 	private Vector dim;
+	
+	private ArrayList<ArrayList<Vector>> connectedSubGraphs;
 
 	// not that indexing conventions are Cartesian, not matrix-based
 
@@ -194,7 +200,7 @@ public class Level {
 		return new Rectangle(i * Tile.WIDTH, j * Tile.WIDTH, Tile.WIDTH, Tile.WIDTH);
 	}
 	
-	public void computePathability() {
+	private void computePathability() {
 		Main.log("computing pathfinding grid...");
 		for (int i = 0; i < dim.getX(); i++) {
 			for (int j = 0; j < dim.getY(); j++) {
@@ -224,40 +230,65 @@ public class Level {
 		return t!= null && t.canShootOver();
 	}
 
-	//TODO: get this working
-//	private void computeReachableGraph(Vector v) {
-//		for (int i = 0; i < dim.getX(); i++) {
-//			for (int j = 0; j < dim.getY(); j++) {
-//				map[i][j].setReachable(false);
-//			}
-//		}
-//		
-//		Vector gridPos = v.copy().toGridPos();
-//		fillReachable(gridPos.getX(), gridPos.getY());
-//		
-//	}
-//
-//	//why are we getting stack overflows
-//	private void fillReachable(int x, int y) {
-//		
-//		Tile t = getTileGrid(x, y);
-//		if (t == null || t.isReachable() || ! t.isContextPathable()) {
-//			return;
-//		}
-//		
-//		Main.log(! t.isContextPathable());
-//		
-//		t.setReachable(true);
-//		fillReachable(x + 1, y);
-//		fillReachable(x - 1, y);
-//		fillReachable(x, y + 1);
-//		//fillReachable(x, y - 1);
-//		
-//	}
+	private void computeConnectedSubGraphs() {
+		
+		connectedSubGraphs = new ArrayList<ArrayList<Vector>>();
+		
+		Main.log("computing connected sub-graphs...");
+		
+		for (int x = 0; x < dim.getX(); x++) {
+			tile: for (int y = 0; y < dim.getY(); y++) {
+				
+				if (! isContextPathable(x, y)) {
+					continue;
+				}
+				
+				Vector pos = new Vector(x, y);
+				for (ArrayList<Vector> graph : connectedSubGraphs) {
+					if (graph.contains(pos)) {
+						continue tile;
+					}
+				}
+				
+				ArrayList<Vector> graph = computeConnectedSubGraph(pos);
+				connectedSubGraphs.add(graph);
+				
+			}
+		}
+		
+		Main.log("connected sub-graphs computed!");
+		Main.log(connectedSubGraphs);
+		
+	}
+	
+	private ArrayList<Vector> computeConnectedSubGraph(Vector start) {
+		
+		ArrayList<Vector> graph = new ArrayList<Vector>();
+		Queue<Vector> searchQ = new LinkedList<Vector>();
+		searchQ.add(start);
+		
+		Vector pos;
+		while (!searchQ.isEmpty()) {
+			
+			pos = searchQ.poll();
+			if (!isContextPathable(pos) || graph.contains(pos)) {
+				continue;
+			}
+			graph.add(pos);
+			
+			for (Vector v : PathNode.NEIGHBORS) {
+				searchQ.add(pos.copy().add(v));
+			}
+			
+		}
+		
+		return graph;
+				
+	}
 
-	public void computePathfinding(Vector defaultSpawn) {
+	public void computePathfinding() {
 		computePathability();
-		//computeReachableGraph(defaultSpawn);
+		computeConnectedSubGraphs();
 	}
 
 	public Vector getGoodSpawn(int startX, int startY) {

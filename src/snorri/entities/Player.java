@@ -9,6 +9,7 @@ import snorri.inventory.Item.ItemType;
 import snorri.inventory.Orb;
 import snorri.inventory.Papyrus;
 import snorri.inventory.Weapon;
+import snorri.main.Debug;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.parser.Grammar;
@@ -47,6 +48,11 @@ public class Player extends Unit {
 	
 	@Override
 	public void update(World world, double deltaTime) {
+		
+		if (Debug.LOG_FOCUS) {
+			Main.log("main player updated");
+		}
+		
 		super.update(world, deltaTime);
 		inventory.update(deltaTime);
 		walk(world, ((GameWindow) Main.getWindow()).getMovementVector(), deltaTime);

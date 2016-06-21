@@ -37,7 +37,7 @@ public class World implements Playable {
 
 		Main.log("creating new world of size " + width + " x " + height + "..");
 		level = new Level(width, height); // TODO: pass a level file to read
-		level.computePathfinding(DEFAULT_SPAWN);
+		level.computePathfinding();
 		col = new EntityGroup();
 		colliders = new CopyOnWriteArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
@@ -46,7 +46,7 @@ public class World implements Playable {
 		Pathfinding.setWorld(this);
 
 		// temporary
-		addHard(new Player(new Vector(100, 100)));
+		addHard(new Player(DEFAULT_SPAWN.copy()));
 		addHard(new Enemy(new Vector(600, 600), this.getFocus()));
 
 		Main.log("new world created!");
@@ -55,11 +55,11 @@ public class World implements Playable {
 	public World(String folderName) throws FileNotFoundException, IOException {
 		this(new File(folderName));
 	}
-
+	
 	public World(File file) throws FileNotFoundException, IOException {
 		
 		load(file);
-		level.computePathfinding(DEFAULT_SPAWN);
+		level.computePathfinding();
 		colliders = new CopyOnWriteArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
@@ -83,7 +83,6 @@ public class World implements Playable {
 
 		Pathfinding.setWorld(this);
 		
-		// temporary
 		Player p = new Player(l.getGoodSpawn(level.getDimensions().random()));
 		addHard(p);
 		for (int i = 0; i < 80; i++) {

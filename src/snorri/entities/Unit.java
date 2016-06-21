@@ -1,8 +1,6 @@
 package snorri.entities;
 
 import snorri.events.SpellEvent;
-import snorri.main.Debug;
-import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -28,10 +26,6 @@ public class Unit extends Entity {
 
 	@Override
 	public void update(World world, double deltaTime) {
-		
-		if (Debug.LOG_FOCUS) {
-			Main.log("main player updated");
-		}
 		
 		if (isBurning()) {
 			damage(BURN_DOT * deltaTime);

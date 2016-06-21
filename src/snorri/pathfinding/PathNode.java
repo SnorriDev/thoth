@@ -15,7 +15,7 @@ public class PathNode implements Comparable<PathNode> {
 	private static final double D2 = 1;//Math.sqrt(2); we get better performance with 1
 	
 	//change this to edit whether or not we can go diagonally
-	private static final Vector[] NEIGHBORS = new Vector[] {
+	public static final Vector[] NEIGHBORS = new Vector[] {
 			new Vector(-1, 0),
 			new Vector(1, 0),
 			new Vector(0, 1),
