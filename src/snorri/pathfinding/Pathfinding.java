@@ -32,9 +32,13 @@ public class Pathfinding {
 		}).start();
 	}
 	
-	//TODO: optimize this using the map double array instead of a random ass set
 	//TODO: can still tweak a bit to introduce more optimal routes, random variation, diagonal movement, etc.
 	public static ArrayDeque<PathNode> findPath(Vector start, Vector goal) {
+		
+		//do this to avoid lots of unnecessary computation
+		if (!world.getLevel().arePathConnected(start, goal)) {
+			return null;
+		}
 		
 		PathNode[][] map = new PathNode[dim.getX()][dim.getY()];
 		PriorityQueue<PathNode> openSet = new PriorityQueue<PathNode>();

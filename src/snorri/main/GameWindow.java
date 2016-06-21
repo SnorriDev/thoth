@@ -5,21 +5,17 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.ArrayDeque;
 
 import snorri.entities.Collider;
 import snorri.entities.Desk;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.keyboard.Key;
-import snorri.pathfinding.PathNode;
-import snorri.pathfinding.Pathfinder;
-import snorri.pathfinding.Pathfinding;
 import snorri.world.Playable;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class GameWindow extends FocusedWindow implements Pathfinder {
+public class GameWindow extends FocusedWindow {
 	
 	/**
 	 * Main game window
@@ -31,10 +27,7 @@ public class GameWindow extends FocusedWindow implements Pathfinder {
 	private Playable universe;
 	private Player focus;
 	private long lastTime;
-	
-	//temporary for testing pathfinding
-	private ArrayDeque<PathNode> path;
-	
+		
 	public GameWindow(Playable universe, Player focus) {
 		super();
 		this.universe = universe;
@@ -73,15 +66,7 @@ public class GameWindow extends FocusedWindow implements Pathfinder {
 		universe.getCurrentWorld().render(this, g, true);
 		focus.getInventory().render(this, g);
 		focus.renderHealthBar(g);
-		
-		//temp for debugging pathfinding
-		if (path == null) {
-			return;
-		}
-		for (PathNode node : path) {
-			node.render(g, this);
-		}
-		
+				
 	}
 	
 	public Player getFocus() {
@@ -100,11 +85,7 @@ public class GameWindow extends FocusedWindow implements Pathfinder {
 			//perhaps circumvent this by storing a variable reachableFromSpawn in each Tile
 			//we could also terminate the search after a certain amount of time
 			//alternatively, if it's running in another thread, it doesn't really matter that much
-			Pathfinding.setWorld(getWorld());
-			Vector target = getMousePosAbsolute().toGridPos();
-			if (getWorld().getLevel().getTileGrid(target) != null) {
-				Pathfinding.setPathAsync(focus.getPos().copy().toGridPos(), target, this);
-			}
+			//perhaps add more pathfinding stuff here
 		}
 		
 		if (e.getKeyChar() == Key.SPACE.getChar()) {
@@ -191,11 +172,6 @@ public class GameWindow extends FocusedWindow implements Pathfinder {
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	@Override
-	public void setPath(ArrayDeque<PathNode> stack) {
-		path = stack;
 	}
 	
 }

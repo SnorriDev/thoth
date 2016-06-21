@@ -135,8 +135,15 @@ public class Vector implements Serializable {
 		return "(x: " + x + ", y: " + y + ")";
 	}
 	
-	public boolean equals(Vector pos) {
-		return x == pos.x && y == pos.y;
+	/**
+	 * we need to define this to take an Object so it works with built-in Java stuff like Collection.contains
+	 */
+	@Override
+	public boolean equals(Object pos) {
+		if (pos instanceof Vector) {
+			return x == ((Vector) pos).x && y == ((Vector) pos).y;
+		}
+		return false;
 	}
 
 	public Vector add(int i, int j) {

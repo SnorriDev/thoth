@@ -227,7 +227,31 @@ public class Level {
 	
 	public boolean canShootOver(Vector pos) {
 		Tile t = getTileGrid(pos);
-		return t!= null && t.canShootOver();
+		return t != null && t.canShootOver();
+	}
+	
+	public boolean arePathConnected(Vector p1, Vector p2) {
+		
+		ArrayList<Vector> v = new ArrayList<Vector>();
+		v.add(p1);
+		v.add(p2);
+		
+		for (ArrayList<Vector> graph : connectedSubGraphs) {
+			
+			//we found them in the same connected graph
+			if (graph.containsAll(v)) {
+				return true;
+			}
+			
+			//we found one in the graph, but not the other
+			if (graph.contains(p1) || graph.contains(p2)) {
+				return false;
+			}
+			
+		}
+		
+		return false;
+		
 	}
 
 	private void computeConnectedSubGraphs() {
@@ -239,6 +263,11 @@ public class Level {
 		for (int x = 0; x < dim.getX(); x++) {
 			tile: for (int y = 0; y < dim.getY(); y++) {
 				
+				double percent = 100 * (1.0 * x * dim.getY() + y) / (dim.getX() * dim.getY());
+				if (percent % 10 == 0) {
+					Main.log(percent + "%");
+				}
+				
 				if (! isContextPathable(x, y)) {
 					continue;
 				}
@@ -249,15 +278,14 @@ public class Level {
 						continue tile;
 					}
 				}
-				
-				ArrayList<Vector> graph = computeConnectedSubGraph(pos);
-				connectedSubGraphs.add(graph);
+								
+				connectedSubGraphs.add(computeConnectedSubGraph(pos));
+				Main.log("found new sub-graph");
 				
 			}
 		}
 		
-		Main.log("connected sub-graphs computed!");
-		Main.log(connectedSubGraphs);
+		Main.log(connectedSubGraphs.size() + " sub-graphs computed!");
 		
 	}
 	
@@ -265,15 +293,18 @@ public class Level {
 		
 		ArrayList<Vector> graph = new ArrayList<Vector>();
 		Queue<Vector> searchQ = new LinkedList<Vector>();
-		searchQ.add(start);
-		
+		searchQ.add(start);	
 		Vector pos;
+		boolean[][] visited = new boolean[dim.getX()][dim.getY()];
+		
 		while (!searchQ.isEmpty()) {
 			
 			pos = searchQ.poll();
-			if (!isContextPathable(pos) || graph.contains(pos)) {
+			if (visited[pos.getX()][pos.getY()] || !isContextPathable(pos)) {
 				continue;
 			}
+						
+			visited[pos.getX()][pos.getY()] = true;
 			graph.add(pos);
 			
 			for (Vector v : PathNode.NEIGHBORS) {
