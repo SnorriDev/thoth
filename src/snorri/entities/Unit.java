@@ -1,6 +1,7 @@
 package snorri.entities;
 
 import snorri.events.SpellEvent;
+import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -13,6 +14,9 @@ public class Unit extends Entity {
 	private static final double BURN_DOT = 8d;
 	
 	private double health;
+	
+	//for debugging purposes
+	private boolean hasUpdated = false;
 	
 	public Unit(Vector pos) {
 		super(pos, RADIUS);
@@ -27,6 +31,14 @@ public class Unit extends Entity {
 	@Override
 	public void update(World world, double deltaTime) {
 		
+		//TODO: remove need for this, also move to Entity
+		if (hasUpdated) {
+			Main.error("duplicate unit detected and removed");
+			world.delete(this);
+			return;
+		}
+		hasUpdated = true;
+		
 		if (isBurning()) {
 			damage(BURN_DOT * deltaTime);
 		}
@@ -37,6 +49,10 @@ public class Unit extends Entity {
 		
 		super.update(world, deltaTime);
 		
+	}
+	
+	public void resetUpdated() {
+		hasUpdated = false;
 	}
 
 	public void walk(World world, Vector direction, double deltaTime) {

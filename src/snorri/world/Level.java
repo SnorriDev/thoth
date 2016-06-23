@@ -264,8 +264,8 @@ public class Level {
 			tile: for (int y = 0; y < dim.getY(); y++) {
 				
 				double percent = 100 * (1.0 * x * dim.getY() + y) / (dim.getX() * dim.getY());
-				if (percent % 10 == 0) {
-					Main.log(percent + "%");
+				if (percent % 20 == 0) {
+					Main.log("\t" + (int) percent + "% of tiles checked");
 				}
 				
 				if (! isContextPathable(x, y)) {
@@ -280,12 +280,12 @@ public class Level {
 				}
 								
 				connectedSubGraphs.add(computeConnectedSubGraph(pos));
-				Main.log("found new sub-graph");
+				Main.log("\tfound new sub-graph");
 				
 			}
 		}
 		
-		Main.log(connectedSubGraphs.size() + " sub-graphs computed!");
+		Main.log(connectedSubGraphs.size() + " sub-graph(s) computed!");
 		
 	}
 	

@@ -14,6 +14,7 @@ import snorri.entities.Enemy;
 import snorri.entities.Entity;
 import snorri.entities.EntityGroup;
 import snorri.entities.Player;
+import snorri.entities.Unit;
 import snorri.events.CollisionEvent;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
@@ -35,7 +36,7 @@ public class World implements Playable {
 
 	public World(int width, int height) {
 
-		Main.log("creating new world of size " + width + " x " + height + "..");
+		Main.log("creating new world of size " + width + " x " + height + "...");
 		level = new Level(width, height); // TODO: pass a level file to read
 		level.computePathfinding();
 		col = new EntityGroup();
@@ -74,7 +75,7 @@ public class World implements Playable {
 	
 	public World(Level l) {
 
-		Main.log("creating new world of size " + l.getDimensions().getX() + " x " + l.getDimensions().getY() + "..");
+		Main.log("creating new world of size " + l.getDimensions().getX() + " x " + l.getDimensions().getY() + "...");
 		level = l;
 		col = new EntityGroup();
 		colliders = new CopyOnWriteArrayList<Collider>();
@@ -118,6 +119,13 @@ public class World implements Playable {
 		
 		col.updateAround(this, d, ((FocusedWindow) Main.getWindow()).getFocus());
 		col.recalculate(); //TODO: verify the tree is good
+		
+		//debugging
+		for (Entity ent : col.getAllEntities()) {
+			if (ent instanceof Unit) {
+				((Unit) ent).resetUpdated();
+			}
+		}
 				
 		for (Collider p : colliders) {
 

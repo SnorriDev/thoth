@@ -184,7 +184,7 @@ public class EntityGroup extends Entity {
 		Entity[] points = (Entity[]) entities.toArray(new Entity[] {});
 		Entity[] boundary = new Entity[3];
 		
-		EntityGroup enclosing = EntityGroup.getEnclosing(points, points.length, boundary, 0);
+		EntityGroup enclosing = getEnclosing(points, points.length, boundary, 0);
 		
 		pos = (enclosing.pos == null) ? null : enclosing.pos.copy();
 		r = enclosing.r + REACH; //"MARGIN"
@@ -209,7 +209,10 @@ public class EntityGroup extends Entity {
 		return max;
 	}
 
-	//linear time algorithm for getting enclosing entity
+	/**
+	 * linear time algorithm for getting enclosing entity
+	 * @return an EntityGroup which encloses all the other entities
+	 */
 	private static EntityGroup getEnclosing(Entity[] points, int n, Entity[] boundary, int b) {
 		
 		if (points.length == 0) {
@@ -250,6 +253,11 @@ public class EntityGroup extends Entity {
 	
 	public void insert(Entity e) {
 		
+		//TODO: something is wrong here in insert
+		//that is causing entities to duplicate
+		//temporary "fix" addresses this
+		//also maybe pass a boolean when we do adds to figure out whether we need to recalc border?
+		
 		if (pos == null) {
 			set(new EntityGroup(e));
 			return;
@@ -274,35 +282,37 @@ public class EntityGroup extends Entity {
 			}
 			return;
 		}
-		
-		//TODO MAJOR PROGRESS
-		//The issue is here, with intersects
 								
 		Iterator<Entity> iter = getChildren();
 		while (iter.hasNext()) {
 			Entity child = iter.next();
 			if (child instanceof EntityGroup) {
 				
-				if (child.contains(e, REACH)) {					
+				if (child.intersects(e, REACH)) {					
 					remove(child);
 					((EntityGroup) child).insert(e);
-					add(child); //some weird cases might make add not work here; change the behavior of insert?
+					add(child);
 					return;
 				}
-				if (child.intersects(e, REACH)) {
-										
-					remove(child);					
-					((EntityGroup) child).insert(e);
-					insert(child);
-					
-					return;
-				}
+				
+//				if (child.contains(e, REACH)) {					
+//					remove(child);
+//					((EntityGroup) child).insert(e);
+//					add(child); //some weird cases might make add not work here; change the behavior of insert?
+//					return;
+//				}
+//				if (child.intersects(e, REACH)) {					
+//					remove(child);					
+//					((EntityGroup) child).insert(e);
+//					insert(child); //TODO: just change this to add? make same as above?
+//					return;
+//				}
 								
 			}
 			
 			if (child.intersects(e, REACH) && e instanceof EntityGroup) {
 				
-				//Main.log(child + " fancy intersects " + e);
+				Main.log(child + " fancy intersects " + e);
 				
 				delete(child);
 				((EntityGroup) e).insert(child);
@@ -493,7 +503,6 @@ public class EntityGroup extends Entity {
 	
 	@Override
 	public void update(World world, double d) {
-		//TODO: recalculate border only in this outer function?
 		for (Entity e : entities) {
 			e.update(world, d);
 		}
