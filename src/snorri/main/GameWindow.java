@@ -50,9 +50,8 @@ public class GameWindow extends FocusedWindow {
 		double deltaTime = (time - lastTime) / 1000000000d;
 		lastTime = time;
 		
-		if (deltaTime > 0.1) { //this is shitty
-			Main.log("skipped frame because of high delta time (" + deltaTime + ")");
-			return;
+		if (deltaTime > 0.2) { //this is shitty
+			Main.log("high delta time detected (" + deltaTime + " sec)");
 		}
 		
 		universe.getCurrentWorld().update(deltaTime);

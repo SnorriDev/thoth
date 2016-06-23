@@ -113,6 +113,9 @@ public class World implements Playable {
 
 	public void update(double d) {
 
+		//TODO: recalculate could be causing issues.. duplication?
+		//print pointers of objects that get updated?
+		
 		col.updateAround(this, d, ((FocusedWindow) Main.getWindow()).getFocus());
 		col.recalculate(); //TODO: verify the tree is good
 				
