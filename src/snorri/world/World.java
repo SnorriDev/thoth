@@ -38,7 +38,7 @@ public class World implements Playable {
 
 		Main.log("creating new world of size " + width + " x " + height + "...");
 		level = new Level(width, height); // TODO: pass a level file to read
-		level.computePathfinding();
+		//level.computePathfinding();
 		col = new EntityGroup();
 		colliders = new CopyOnWriteArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
