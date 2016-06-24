@@ -1,6 +1,8 @@
 package snorri.semantics;
 
 import snorri.entities.Projectile;
+import snorri.entities.Unit;
+import snorri.main.GamePanel;
 import snorri.world.Vector;
 
 public class Walk extends VerbDef {
@@ -11,8 +13,12 @@ public class Walk extends VerbDef {
 
 	@Override
 	public boolean exec(Object obj) {
-		Vector trans = e.getDestination().copy().sub(e.getSecondPerson().getPos()).normalize();		
-		return e.getWorld().getEntityTree().move(e.getSecondPerson(), trans);
+		if (e.getSecondPerson() instanceof Unit) {
+			Vector trans = e.getDestination().copy().sub(e.getSecondPerson().getPos()).normalize();	
+			((Unit) e.getSecondPerson()).walk(e.getWorld(), trans, GamePanel.getBaseDelta());
+			return true;
+		}
+		return false;
 	}
 
 	//TODO: track if something is moving better

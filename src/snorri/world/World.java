@@ -127,9 +127,8 @@ public class World implements Playable {
 		}
 		
 		col.updateAround(this, d, ((FocusedWindow) Main.getWindow()).getFocus());
-		col.recalculate(); //TODO: verify the tree is good
 		
-		//debugging
+		//this is for detecting duplicate entities
 		for (Entity ent : col.getAllEntities()) {
 			if (ent instanceof Unit) {
 				((Unit) ent).resetUpdated();
@@ -137,19 +136,14 @@ public class World implements Playable {
 		}
 				
 		for (Collider p : colliders) {
-
 			p.update(this, d);
-
 			for (Entity hit : col.getAllCollisions(p)) {
 				if (hit != null) {
 					p.onCollision(new CollisionEvent(p, hit, this));
 				}
 			}
-
 		}
 		
-		col.recalculate(); //TODO: recalculate in any spells that change things
-
 		while (!deleteQ.isEmpty()) {
 			deleteHard(deleteQ.poll());
 		}

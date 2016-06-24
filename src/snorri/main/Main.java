@@ -108,7 +108,8 @@ public class Main {
 	
 	public static void launchGame() {
 		
-		//setWindow(new LoadingScreen());
+		setWindow(new LoadingScreen());
+		frame.revalidate();
 		Main.log("loading screen go here");
 		
 		TerrainGenerator ter = new TerrainGenerator(400, 300);

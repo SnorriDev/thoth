@@ -197,8 +197,6 @@ public class EntityGroup extends Entity {
 			set(entities.get(0));
 		}
 
-		// TODO: points getting deleted not related to this
-
 	}
 
 	private int getMaxRadius(Entity[] boundary) {
@@ -311,9 +309,7 @@ public class EntityGroup extends Entity {
 			return true;
 		}
 
-		Iterator<Entity> iter = getChildren();
-		while (iter.hasNext()) {
-			Entity child = iter.next();
+		for (Entity child : entities.toArray(new Entity[0])) {
 			if (child instanceof EntityGroup && ((EntityGroup) child).delete(e)) {
 				if (((EntityGroup) child).isEmpty()) {
 					remove(child);
@@ -348,6 +344,7 @@ public class EntityGroup extends Entity {
 
 	}
 
+	@Deprecated
 	public boolean move(Entity e, Vector trans) {
 
 		if (trans.notInPlane()) {
