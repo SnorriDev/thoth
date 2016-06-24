@@ -94,15 +94,22 @@ public class Main {
 		return f;
 	}
 
-	public static void launchGame(World world) {
+	private static void setWindow(GamePanel newWindow) {
 		frame.getContentPane().remove(window);
-		window = new GameWindow(world);		
+		window = newWindow;
 		frame.getContentPane().add(window, BorderLayout.CENTER);
 		frame.getContentPane().revalidate();
 		window.requestFocus();
 	}
 	
+	public static void launchGame(World world) {
+		setWindow(new GameWindow(world));
+	}
+	
 	public static void launchGame() {
+		
+		//setWindow(new LoadingScreen());
+		Main.log("loading screen go here");
 		
 		TerrainGenerator ter = new TerrainGenerator(400, 300);
 		launchGame(ter.genWorld());

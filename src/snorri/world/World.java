@@ -51,6 +51,7 @@ public class World implements Playable {
 		addHard(new Enemy(new Vector(600, 600), this.getFocus()));
 
 		Main.log("new world created!");
+		
 	}
 
 	public World(String folderName) throws FileNotFoundException, IOException {
@@ -89,7 +90,11 @@ public class World implements Playable {
 		for (int i = 0; i < 80; i++) {
 			Vector spawnPos = l.getGoodSpawn(level.getDimensions().random());
 			if (spawnPos != null) { //spawning enemies at null positions is gross and caused lots of issues
+				int oldSize = getEntityTree().getAllEntities().size();
 				addHard(new Enemy(spawnPos, p));
+				if (getEntityTree().getAllEntities().size() - oldSize > 1) {
+					Main.log(i + " has " + (getEntityTree().getAllEntities().size() - oldSize - 1) + " extra units");
+				}
 			}
 		}
 
@@ -116,6 +121,10 @@ public class World implements Playable {
 
 		//TODO: recalculate could be causing issues.. duplication?
 		//print pointers of objects that get updated?
+		
+		if (!(Main.getWindow() instanceof FocusedWindow)) {
+			return;
+		}
 		
 		col.updateAround(this, d, ((FocusedWindow) Main.getWindow()).getFocus());
 		col.recalculate(); //TODO: verify the tree is good
