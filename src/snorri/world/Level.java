@@ -289,8 +289,8 @@ public class Level {
 	
 	private void saveSubGraphs(File f) throws FileNotFoundException, IOException {
 		
-		//TODO: track when we do and don't need to save
-		Main.log("recomputing graphs before save");
+		//TODO: track when we do and don't need to do this
+		Main.log("recomputing sub-graphs before save...");
 		computePathfinding();
 		
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f));

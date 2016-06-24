@@ -33,7 +33,7 @@ import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
 
-//TODO: show selected texture at top of selected texture menu ¿can this be done?idk
+//TODO: show selected texture at top of selected texture menu ï¿½can this be done?idk
 //TODO: add image to world feature
 //TODO: figure out why fill overflows
 
@@ -76,8 +76,6 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 		canUndo = false;
 		canRedo = false;
-
-		Main.log(ClassFinder.find("snorri.entities").get(0).getSimpleName());
 	}
 
 	private void createMenu() {

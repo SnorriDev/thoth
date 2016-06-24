@@ -34,6 +34,13 @@ public class World implements Playable {
 		this(300, 300);
 	}
 
+	/**
+	 * constructor to create a blank world in the level editor
+	 * @param width
+	 * 	width of the new world
+	 * @param height
+	 * 	height of the new world
+	 */
 	public World(int width, int height) {
 
 		Main.log("creating new world of size " + width + " x " + height + "...");
