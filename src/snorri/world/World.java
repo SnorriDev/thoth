@@ -61,7 +61,7 @@ public class World implements Playable {
 	public World(File file) throws FileNotFoundException, IOException {
 		
 		load(file);
-		level.computePathfinding();
+		level.computePathability();
 		colliders = new CopyOnWriteArrayList<Collider>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();

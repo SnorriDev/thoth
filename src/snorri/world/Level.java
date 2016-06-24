@@ -7,6 +7,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -139,6 +141,10 @@ public class Level {
 		}
 		return;
 	}
+	
+	private static String getNameWithoutExtension(File f) {
+		return f.getName().substring(0, f.getName().lastIndexOf('.'));
+	}
 
 	public void load(File file) throws FileNotFoundException, IOException {
 
@@ -165,6 +171,8 @@ public class Level {
 		}
 
 		is.close();
+		
+		loadSubGraphs(new File(file.getParentFile(), getNameWithoutExtension(file) + "-graphs.dat"));
 
 		Main.log("load complete!");
 		return;
@@ -191,6 +199,8 @@ public class Level {
 		}
 
 		os.close();
+		
+		saveSubGraphs(new File(file.getParentFile(), getNameWithoutExtension(file) + "-graphs.dat"));
 
 		Main.log("save complete!");
 		return;
@@ -200,7 +210,11 @@ public class Level {
 		return new Rectangle(i * Tile.WIDTH, j * Tile.WIDTH, Tile.WIDTH, Tile.WIDTH);
 	}
 	
-	private void computePathability() {
+	/**
+	 * computes whether tiles in the map are context-pathable
+	 * this is FAR less computationally intensive than computing all sub-graphs
+	 */
+	public void computePathability() {
 		Main.log("computing pathfinding grid...");
 		for (int i = 0; i < dim.getX(); i++) {
 			for (int j = 0; j < dim.getY(); j++) {
@@ -253,6 +267,36 @@ public class Level {
 		return false;
 		
 	}
+	
+	@SuppressWarnings("unchecked")
+	private void loadSubGraphs(File f) throws FileNotFoundException, IOException {
+		
+		if (! f.exists()) {
+			Main.log("graph data not found in world; computing it from scratch");
+			computeConnectedSubGraphs();
+			return;
+		}
+		
+		ObjectInputStream in = new ObjectInputStream(new FileInputStream(f));
+		try {
+			connectedSubGraphs = (ArrayList<ArrayList<Vector>>) in.readObject();
+		} catch (ClassNotFoundException e) {
+			Main.error("recalculating corrupted pathfinding data");
+			computeConnectedSubGraphs();
+		}
+		in.close();
+	}
+	
+	private void saveSubGraphs(File f) throws FileNotFoundException, IOException {
+		
+		//TODO: track when we do and don't need to save
+		Main.log("recomputing graphs before save");
+		computePathfinding();
+		
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f));
+		out.writeObject(connectedSubGraphs);
+		out.close();
+	}
 
 	private void computeConnectedSubGraphs() {
 		
@@ -300,7 +344,7 @@ public class Level {
 		while (!searchQ.isEmpty()) {
 			
 			pos = searchQ.poll();
-			if (visited[pos.getX()][pos.getY()] || !isContextPathable(pos)) {
+			if (!isContextPathable(pos) || visited[pos.getX()][pos.getY()]) {
 				continue;
 			}
 						
