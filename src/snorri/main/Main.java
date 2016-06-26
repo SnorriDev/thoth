@@ -1,7 +1,6 @@
 package snorri.main;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.FileDialog;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -100,6 +99,7 @@ public class Main {
 		window = newWindow;
 		frame.getContentPane().add(window, BorderLayout.CENTER);
 		frame.getContentPane().revalidate();
+		window.validate();
 		frame.getContentPane().repaint();
 		window.requestFocusInWindow();
 	}
@@ -109,24 +109,29 @@ public class Main {
 	}
 	
 	public static void launchGame() {
-		
-		setWindow(new LoadingScreen());
-		window.setVisible(true);
-		for (Component c : frame.getContentPane().getComponents()) {
-			Main.log(c);
-		}
-		Main.log("loading screen goes here");
-		window.revalidate();
-		window.repaint();
-		window.paintImmediately(getBounds());
-		
-		TerrainGenerator ter = new TerrainGenerator(400, 300);
-		launchGame(ter.genWorld());
+				
+		loadInto(new Runnable() {
+			@Override
+			public void run() {
+				TerrainGenerator ter = new TerrainGenerator(400, 300);
+				launchGame(ter.genWorld());
+			}
+		});
 		
 	}
 
 	public static void launchEditor() {
 		setWindow(new LevelEditor());
+	}
+	
+	/**
+	 * show a loading screen while the thread runs
+	 * @param proc
+	 * 	a Runnable whose run() method will be invoked. run() should change the screen to something cooler when it's done
+	 */
+	public static void loadInto(Runnable proc) {
+		setWindow(new LoadingScreen());
+		new Thread(proc).start();
 	}
 	
 	public static JFrame getFrame() {
