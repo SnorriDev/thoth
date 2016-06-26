@@ -57,7 +57,7 @@ public class Unit extends Entity {
 
 	public void walk(World world, Vector direction, double deltaTime) {
 		moveHard(world, direction, getSpeed() * deltaTime);
-		world.getEntityTree().recalculate();
+		world.getEntityTree().recalculate(this);
 	}
 	
 	public void walkTo(World world, Vector target, double deltaTime) {

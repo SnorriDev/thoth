@@ -14,19 +14,20 @@ public class LoadingScreen extends GamePanel {
 
 	public LoadingScreen() {
 		add(new JTextField("Loading..."));
+		setVisible(true);
+		setFocusable(true);
 	}
 	
 	@Override
 	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		Main.log("painting");
-		g.fillRect(0, 0, Main.getBounds().width, Main.getBounds().height);
-		g.drawString("Loading...", 50, 50);
+//		g.fillRect(0, 0, getBounds().width, getBounds().height);
+//		g.drawString("Loading...", 50, 50);
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

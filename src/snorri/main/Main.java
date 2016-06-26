@@ -1,6 +1,7 @@
 package snorri.main;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.FileDialog;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -99,7 +100,8 @@ public class Main {
 		window = newWindow;
 		frame.getContentPane().add(window, BorderLayout.CENTER);
 		frame.getContentPane().revalidate();
-		window.requestFocus();
+		frame.getContentPane().repaint();
+		window.requestFocusInWindow();
 	}
 	
 	public static void launchGame(World world) {
@@ -109,23 +111,22 @@ public class Main {
 	public static void launchGame() {
 		
 		setWindow(new LoadingScreen());
-		frame.revalidate();
-		Main.log("loading screen go here");
+		window.setVisible(true);
+		for (Component c : frame.getContentPane().getComponents()) {
+			Main.log(c);
+		}
+		Main.log("loading screen goes here");
+		window.revalidate();
+		window.repaint();
+		window.paintImmediately(getBounds());
 		
 		TerrainGenerator ter = new TerrainGenerator(400, 300);
 		launchGame(ter.genWorld());
 		
-		//launchGame(new World());
 	}
 
 	public static void launchEditor() {
-
-		frame.getContentPane().remove(window);
-		window = new LevelEditor();
-		frame.getContentPane().add(window, BorderLayout.CENTER);
-		frame.getContentPane().revalidate();
-		window.requestFocus();
-
+		setWindow(new LevelEditor());
 	}
 	
 	public static JFrame getFrame() {

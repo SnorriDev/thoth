@@ -180,6 +180,10 @@ public class EntityGroup extends Entity {
 		return false;
 
 	}
+	
+	public Entity[] getSafeArray() {
+		return entities.toArray(new Entity[0]);
+	}
 
 	public void setEnclosing() {
 
@@ -280,7 +284,7 @@ public class EntityGroup extends Entity {
 //			return;
 //		}
 
-		for (Entity child : entities.toArray(new Entity[0])) {
+		for (Entity child : getSafeArray()) {
 			
 			if (child instanceof EntityGroup && child.intersects(e, REACH)) {
 				remove(child);
@@ -288,7 +292,8 @@ public class EntityGroup extends Entity {
 				insert(child);
 				return;
 			}
-
+			
+			//this might not always work as intended
 			//we are preserving structure when inserting EntityGroups, not "merging" them
 			if (e instanceof EntityGroup && child.intersects(e, REACH)) {
 				delete(child);
@@ -425,8 +430,11 @@ public class EntityGroup extends Entity {
 
 	}
 
+	@Deprecated
+	//this doesn't really work
 	public void recalculate() {
 
+		//TODO rewrite so that we merge intersecting EntityGroups
 		for (Entity e : entities) {
 			if (e instanceof EntityGroup) {
 				((EntityGroup) e).recalculate();
@@ -436,6 +444,15 @@ public class EntityGroup extends Entity {
 		setEnclosing();
 
 	}
+	
+	public void recalculate(Entity update) {
+		
+		delete(update);
+		insert(update);
+		
+	}
+	
+	
 
 	@Override
 	public void renderAround(FocusedWindow g, Graphics gr) {
