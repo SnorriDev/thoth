@@ -14,24 +14,29 @@ public class ClassFinder {
 	private static final char DIR_SEPARATOR = '/';
 	private static final String CLASS_FILE_SUFFIX = ".class";
 
-	public static List<Class<? extends Entity>> find(String scannedPackage) {
+	
+	public static File getPackageFolder(String scannedPackage) {
 		String scannedPath = "/" + scannedPackage.replace(PKG_SEPARATOR, DIR_SEPARATOR);
 		String scannedDir = ClassFinder.class.getResource(scannedPath).toString().replace("file:", "");
 		try {
-			File dir = new File(URLDecoder.decode(scannedDir, "UTF-8")); // allows directories with spaces
-			List<Class<? extends Entity>> classes = new ArrayList<Class<? extends Entity>>();
-			if (!dir.isDirectory()) {
-				Main.error("could not find class " + scannedPackage);
-				return null;
-			}
-			for (File file : dir.listFiles()) {
-				classes.addAll(find(file, scannedPackage));
-			}
-			return classes;
+			return new File(URLDecoder.decode(scannedDir, "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
-			Main.error("issue loading class " + scannedPackage);
+			Main.error("package " + scannedPackage + " not found");
 			return null;
 		}
+	}
+	
+	public static List<Class<? extends Entity>> find(String scannedPackage) {
+		File dir = getPackageFolder(scannedPackage); // allows directories with spaces
+		List<Class<? extends Entity>> classes = new ArrayList<Class<? extends Entity>>();
+		if (!dir.isDirectory()) {
+			Main.error("could not find class " + scannedPackage);
+			return null;
+		}
+		for (File file : dir.listFiles()) {
+			classes.addAll(find(file, scannedPackage));
+		}
+		return classes;
 	}
 
 	@SuppressWarnings("unchecked")

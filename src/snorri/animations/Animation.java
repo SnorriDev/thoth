@@ -2,7 +2,14 @@ package snorri.animations;
 
 import java.awt.Image;
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+
+import javax.imageio.ImageIO;
 
 import snorri.main.Main;
 
@@ -16,7 +23,7 @@ public class Animation implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private Image[] frames;
+	protected Image[] frames;
 	private int currentFrame = 0;
 	private boolean hasCycled = false;
 	
@@ -27,12 +34,69 @@ public class Animation implements Serializable {
 		}
 		
 		File[] frames = folder.listFiles();
-		this.frames = new Image[frames.length];
+		Arrays.sort(frames, new Comparator<File>() {
+			@Override
+			public int compare(File f1, File f2) {
+				return f1.getName().compareTo(f2.getName());
+			}
+		});
 		
+		ArrayList<Image> tempFrames = new ArrayList<Image>();
 		for (int i = 0; i < frames.length; i++) {
-			this.frames[i] = Main.getImageResource(frames[i].getPath());
+			
+			if (!frames[i].getName().endsWith(".png")) {
+				continue;
+			}
+			
+			try {
+				tempFrames.add(ImageIO.read(frames[i]));
+			} catch (IOException e) {
+				Main.error("animation frame " + frames[i].getName() + " could not be loaded");
+			}
 		}
 		
+		this.frames = new Image[tempFrames.size()];
+		for (Image im : tempFrames) {
+			int i = 0;
+			this.frames[i] = im;
+			i++;
+		}
+		
+	}
+	
+	/**
+	 * load an animation from a path (not package name)
+	 * @param
+	 * 	path
+	 * @throws URISyntaxException 
+	 */
+	
+	public static Animation getAnimationResource(String str) {
+			try {
+				return new Animation(new File(Animation.class.getResource(str).toURI()));
+			} catch (URISyntaxException e) {
+				Main.error("could not find animation " + str);
+				return null;
+			}
+	}
+	
+	/**
+	 * construct a 1-frame animation
+	 */
+	public Animation(Image image) {
+		if (image == null) {
+			return;
+		}
+		frames = new Image[1];
+		frames[0] = image;
+	}
+	
+	/**
+	 * @return
+	 *  a 1-frame animation made from image at path
+	 */
+	public static Animation getStaticAnimation(String path) {
+		return new Animation(Main.getImageResource(path));
 	}
 	
 	/**

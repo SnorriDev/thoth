@@ -206,13 +206,16 @@ public class Entity implements Nominal, Serializable {
 		if (animation == null) {
 			return;
 		}
-		
+				
 		Image sprite = animation.getSprite();
 		if (sprite == null) {
 			return;
 		}
 		
-		gr.drawImage(animation.getSprite(), pos.getX() - sprite.getWidth(null) + g.getBounds().width / 2, pos.getY() - sprite.getHeight(null) + g.getBounds().height / 2, null);
+		Vector rel = pos.copy().sub(g.getFocus().getPos());
+		gr.drawImage(sprite, rel.getX() + (g.getBounds().width - sprite.getWidth(null)) / 2, rel.getY() + (g.getBounds().height - sprite.getHeight(null)) / 2, sprite.getWidth(null), sprite.getHeight(null), null);
+
+		renderHitbox(g, gr);
 		
 	}
 

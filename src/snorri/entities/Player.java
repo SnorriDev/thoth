@@ -3,6 +3,7 @@ package snorri.entities;
 import java.awt.Graphics;
 import java.awt.Image;
 
+import snorri.animations.Animation;
 import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
@@ -31,6 +32,7 @@ public class Player extends Unit {
 		
 		super(pos);
 		inventory = new Inventory(this);
+		animation = Animation.getAnimationResource("/textures/animations/unit/idle");
 		
 		//test inventory
 		inventory.setWeapon((Weapon) Item.newItem(ItemType.SLING));

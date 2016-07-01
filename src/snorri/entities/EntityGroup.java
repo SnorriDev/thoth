@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ConcurrentModificationException;
-import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import snorri.main.FocusedWindow;
@@ -42,19 +41,17 @@ public class EntityGroup extends Entity {
 
 		this(r1);
 		
-		//need to check if things are intersecting each other in the constructor?
-
 		if (r1.intersects(r2)) {
 			if (r1 instanceof EntityGroup && r2 instanceof EntityGroup) {
 				((EntityGroup) r1).merge((EntityGroup) r2);
 				set(r1);
 				return;
 			} else if (r1 instanceof EntityGroup) {
-				((EntityGroup) r1).add(r2);
+				((EntityGroup) r1).insert(r2);
 				set(r1);
 				return;
 			} else if (r2 instanceof EntityGroup) {
-				((EntityGroup) r2).add(r1);// this fix?
+				((EntityGroup) r2).insert(r1);// this fix?
 				set(r2);
 				return;
 			}
@@ -116,10 +113,6 @@ public class EntityGroup extends Entity {
 		pos = new Vector((int) ((d * e - b * f) / det), (int) ((-c * e + a * f) / det));
 		r = p1.distance(pos) + Integer.max(e3.r, Integer.max(e1.r, e2.r));
 
-	}
-
-	private Iterator<Entity> getChildren() {
-		return entities.iterator();
 	}
 
 	public CopyOnWriteArrayList<Entity> getAllEntities() {
@@ -314,7 +307,7 @@ public class EntityGroup extends Entity {
 			return true;
 		}
 
-		for (Entity child : entities.toArray(new Entity[0])) {
+		for (Entity child : getSafeArray()) {
 			if (child instanceof EntityGroup && ((EntityGroup) child).delete(e)) {
 				if (((EntityGroup) child).isEmpty()) {
 					remove(child);
@@ -334,10 +327,7 @@ public class EntityGroup extends Entity {
 	 */
 	public void merge(EntityGroup group) {
 
-		Iterator<Entity> iter = group.getChildren();
-
-		while (iter.hasNext()) {
-			Entity next = iter.next();
+		for (Entity next : getSafeArray()) {
 
 			if (next instanceof EntityGroup) {
 				merge((EntityGroup) next);
@@ -369,9 +359,8 @@ public class EntityGroup extends Entity {
 			return false;
 		}
 
-		delete(e);
 		e.pos = pos.copy();
-		insert(e);
+		recalculate(e);
 		return true;
 
 	}
@@ -447,8 +436,10 @@ public class EntityGroup extends Entity {
 	
 	public void recalculate(Entity update) {
 		
-		delete(update);
-		insert(update);
+		if (delete(update)) {
+			insert(update);
+		}
+		setEnclosing();
 		
 	}
 	

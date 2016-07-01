@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import snorri.entities.Unit;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.pathfinding.PathNode;
@@ -365,12 +366,70 @@ public class Level {
 		computePathability();
 		computeConnectedSubGraphs();
 	}
+	
+	public void setTileGrid(Vector v, Tile newTile) {
+		setTileGrid(v.getX(), v.getY(), newTile);
+	}
+	
+	/**
+	 * only use this method to update to pathable tiles
+	 * @param v
+	 * 	position, in grid coordinates
+	 * @param newTile
+	 * 	the new tile to place at this position
+	 */
+	public void setPathableGrid(Vector v, Tile newTile) {		
+		
+		//change the tile
+		Tile oldTile = getTileGrid(v);
+		setTileGrid(v, newTile);
+		
+		if (oldTile.isPathable() == newTile.isPathable()) {
+			return;
+		}
+					
+		//recalculate context pathability on "nearby" tiles
+		for (int x = (v.getX() * Tile.WIDTH - Unit.RADIUS) / Tile.WIDTH; x <= (v.getX() * Tile.WIDTH + Unit.RADIUS) / Tile.WIDTH; x++) {
+			for (int y = (v.getY() * Tile.WIDTH - Unit.RADIUS) / Tile.WIDTH; y <= (v.getY() * Tile.WIDTH + Unit.RADIUS) / Tile.WIDTH; y++) {
+				map[x][y].computeSurroundingsPathable(x, y, this);			
+			}
+		}
+		
+		//union-ize all the graphs to which a neighbor belongs
+		ArrayList<Vector> union = new ArrayList<Vector>();
+		for (Vector trans : PathNode.NEIGHBORS) {
+			Vector pos = v.copy().add(trans);
+			if (isContextPathable(pos)) {
+				for (ArrayList<Vector> graph : connectedSubGraphs) {
+					if (graph.contains(pos)) {
+						union.addAll(graph);
+						connectedSubGraphs.remove(graph);
+					}
+				}
+			}
+		}
+		connectedSubGraphs.add(union);
+			
+	}
+	
+	/**
+	 * equivalent to setPathableGrid in global coordinates
+	 * only use this method to update to pathable tiles
+	 * @param v
+	 * 	position, in global coordinates
+	 * @param t
+	 * 	the new tile to place at this position
+	 */
+	public void setPathable(Vector v, Tile t) {
+		setPathableGrid(v.copy().toGridPos(), t);
+	}
 
 	public Vector getGoodSpawn(int startX, int startY) {
 		for (int x = startX; x < dim.getX(); x++) {
 			for (int y = startY; y < dim.getY(); y++) {
-				if (isContextPathable(x, y) && isContextPathable(x - 2, y - 2) && isContextPathable(x + 2, y - 2)
-						&& isContextPathable(x - 2, y + 2) && isContextPathable(x + 2, y + 2)) {
+				//TODO: rewrite this in terms of Unit.RADIUS
+				if (isContextPathable(x, y) && isContextPathable(x - 3, y - 3) && isContextPathable(x + 3, y - 3)
+						&& isContextPathable(x - 3, y + 3) && isContextPathable(x + 3, y + 3)) {
 					return new Vector(x, y).toGlobalPos();
 				}
 			}
