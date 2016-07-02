@@ -40,4 +40,10 @@ public class Campaign implements Playable {
 		
 	}
 
+	@Override
+	public void save(File f, boolean recomputeGraphs) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

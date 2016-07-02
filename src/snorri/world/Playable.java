@@ -20,6 +20,8 @@ public interface Playable {
 
 	public void save(File folder) throws IOException;
 	
+	public void save(File f, boolean recomputeGraphs) throws IOException;
+	
 	default void load(String folderName) throws FileNotFoundException, IOException {
 		load(new File(folderName));
 	}

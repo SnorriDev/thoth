@@ -180,6 +180,10 @@ public class Level {
 	}
 
 	public void save(File file) throws IOException {
+		save(file, true);
+	}
+	
+	public void save(File file, boolean saveGraphs) throws IOException {
 
 		Main.log("saving " + file.getName() + "...");
 
@@ -201,7 +205,9 @@ public class Level {
 
 		os.close();
 		
-		saveSubGraphs(new File(file.getParentFile(), getNameWithoutExtension(file) + "-graphs.dat"));
+		if (saveGraphs) {
+			saveSubGraphs(new File(file.getParentFile(), getNameWithoutExtension(file) + "-graphs.dat"));
+		}
 
 		Main.log("save complete!");
 		return;

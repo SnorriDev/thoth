@@ -446,7 +446,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	public void autosaveUndo() {
 		try {
-			world.save(new File("./worlds/.undo1"));
+			world.save(new File("./worlds/.undo1"), false);
 			Main.log("autosaved for undo");
 			canUndo = true;
 			canRedo = false;

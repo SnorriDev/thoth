@@ -230,6 +230,11 @@ public class World implements Playable {
 
 	@Override
 	public void save(File f) throws IOException {
+		save(f, true);
+	}
+	
+	@Override
+	public void save(File f, boolean recomputeGraphs) throws IOException {
 
 		if (f.exists() && !f.isDirectory()) {
 			Main.error("tried to save world " + f.getName() + " to non-directory");
@@ -243,7 +248,7 @@ public class World implements Playable {
 
 		String path = f.getPath();
 		col.saveEntities(new File(path, "entities.dat"));
-		level.save(new File(path, "level.dat"));
+		level.save(new File(path, "level.dat"), recomputeGraphs);
 
 	}
 

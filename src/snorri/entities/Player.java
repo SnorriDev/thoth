@@ -32,7 +32,7 @@ public class Player extends Unit {
 		
 		super(pos);
 		inventory = new Inventory(this);
-		animation = Animation.getAnimationResource("/textures/animations/unit/idle");
+		animation = new Animation("/textures/animations/unit/idle");
 		
 		//test inventory
 		inventory.setWeapon((Weapon) Item.newItem(ItemType.SLING));

@@ -96,7 +96,8 @@ public class Tile {
 		SAND(true, new Image[] {
 			Main.getImageResource("/textures/tiles/sand00.png"),
 			Main.getImageResource("/textures/tiles/sand01.png"),
-			Main.getImageResource("/textures/tiles/sand02.png")}),
+			Main.getImageResource("/textures/tiles/sand02.png"),
+			Main.getImageResource("/textures/tiles/sand03.png")}),
 		WALL(false, new Image[] {
 			Main.getImageResource("/textures/tiles/wall00.png"),
 			Main.getImageResource("/textures/tiles/wall01.png"),

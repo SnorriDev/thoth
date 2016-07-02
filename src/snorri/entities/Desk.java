@@ -1,5 +1,6 @@
 package snorri.entities;
 
+import snorri.animations.Animation;
 import snorri.world.Vector;
 
 public class Desk extends Entity {
@@ -13,6 +14,7 @@ public class Desk extends Entity {
 	
 	public Desk(Vector pos) {
 		super(pos, 5);
+		animation = new Animation("/textures/objects/desk.png");
 	}
 
 }
