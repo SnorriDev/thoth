@@ -13,7 +13,7 @@ public class Desk extends Entity {
 	public static final int INTERACT_RANGE = 5;
 	
 	public Desk(Vector pos) {
-		super(pos, 5);
+		super(pos, 30);
 		animation = new Animation("/textures/objects/desk.png");
 	}
 
