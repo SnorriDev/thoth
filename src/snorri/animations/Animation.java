@@ -32,7 +32,6 @@ public class Animation implements Serializable {
 
 	/**
 	 * load an animation from a path (not package name)
-	 * 
 	 * @param path
 	 * @throws URISyntaxException
 	 */
@@ -99,6 +98,13 @@ public class Animation implements Serializable {
 	private void writeObject(ObjectOutputStream out) throws IOException {
 		Main.log("writing object");
 		out.writeObject(getPath());
+	}
+	
+	/**
+	 * set the animation back to the initial frame
+	 */
+	public void restart() {
+		currentFrame = 0;
 	}
 
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {

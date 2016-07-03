@@ -115,6 +115,9 @@ public class EntityGroup extends Entity {
 
 	}
 
+	/**
+	 * @return the collection of entities in the world
+	 */
 	public CopyOnWriteArrayList<Entity> getAllEntities() {
 		CopyOnWriteArrayList<Entity> res = new CopyOnWriteArrayList<Entity>();
 		for (Entity e : entities) {
@@ -154,15 +157,23 @@ public class EntityGroup extends Entity {
 
 	}
 
-	// blind-add an entity to the group
-	// adjust average
+	/**
+	 * blind-add an entity to the group
+	 * @param n
+	 * 	the entity to add
+	 */
 	private void add(Entity n) {
 		entities.add(n);
 		setEnclosing();
 	}
 
-	// blind-remove an entity from group
-	// adjust average and return whether or not it is empty
+	/**
+	 * blind remove an entity from the group
+	 * @param n
+	 * 	the entity to remove
+	 * @return
+	 * 	whether or not something was removed
+	 */
 	private boolean remove(Entity n) {
 
 		if (entities.remove(n)) {
@@ -174,6 +185,9 @@ public class EntityGroup extends Entity {
 
 	}
 	
+	/**
+	 * @return an array containing the entities in this group
+	 */
 	public Entity[] getSafeArray() {
 		return entities.toArray(new Entity[0]);
 	}
@@ -190,7 +204,8 @@ public class EntityGroup extends Entity {
 
 		r += getMaxRadius(points);
 
-		if (entities.size() == 1 && spatialEquals(entities.get(0))) {
+		//TODO: equals vs spatialEquals here
+		if (entities.size() == 1 && equals(entities.get(0))) {
 			set(entities.get(0));
 		}
 
@@ -418,29 +433,12 @@ public class EntityGroup extends Entity {
 		}
 
 	}
-
-	@Deprecated
-	//this doesn't really work
-	public void recalculate() {
-
-		//TODO rewrite so that we merge intersecting EntityGroups
-		for (Entity e : entities) {
-			if (e instanceof EntityGroup) {
-				((EntityGroup) e).recalculate();
-			}
-		}
-
-		setEnclosing();
-
-	}
 	
 	public void recalculate(Entity update) {
-		
 		if (delete(update)) {
 			insert(update);
 		}
 		setEnclosing();
-		
 	}
 	
 	
@@ -478,19 +476,32 @@ public class EntityGroup extends Entity {
 		}
 	}
 
-	public void updateAround(World world, double d, Entity focus) {
+	/**
+	 * update in a radius around a target entity
+	 * @param world
+	 * 	the world where the update is taking place
+	 * @param deltaTime
+	 * 	time since the last update (in seconds)
+	 * @param focus
+	 * 	the entity to update around
+	 */
+	public void updateAround(World world, double deltaTime, Entity focus) {
+		
 		for (Entity e : entities) {
 			if (e.intersects(new Entity(focus.pos, UPDATE_RADIUS))) {
 				if (e instanceof EntityGroup) {
-					((EntityGroup) e).updateAround(world, d, focus);
+					((EntityGroup) e).updateAround(world, deltaTime, focus);
 				} else {
-					e.update(world, d);
+					e.update(world, deltaTime);
 				}
 			}
 		}
 	}
 
-	@Override
+	/**
+	 * use updateAround instead
+	 */
+	@Deprecated @Override
 	public void update(World world, double d) {
 		for (Entity e : entities) {
 			e.update(world, d);

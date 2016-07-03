@@ -162,7 +162,7 @@ public class World implements Playable {
 	}
 
 	public void render(FocusedWindow g, Graphics gr, boolean showOutlands) {
-
+		
 		level.renderMap(g, gr, showOutlands);
 		col.renderAround(g, gr);
 

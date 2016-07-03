@@ -99,7 +99,6 @@ public class Main {
 		window = newWindow;
 		frame.getContentPane().add(window, BorderLayout.CENTER);
 		frame.getContentPane().revalidate();
-		window.validate();
 		frame.getContentPane().repaint();
 		window.requestFocusInWindow();
 	}

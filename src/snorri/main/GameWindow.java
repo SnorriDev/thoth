@@ -61,6 +61,11 @@ public class GameWindow extends FocusedWindow {
 	
 	@Override
 	public void paintComponent(Graphics g){
+		
+		if (focus == null) {
+			return;
+		}
+		
 		super.paintComponent(g);
 		universe.getCurrentWorld().render(this, g, true);
 		focus.getInventory().render(this, g);
