@@ -144,7 +144,7 @@ public class EntityGroup extends Entity {
 
 		for (Entity e2 : entities) {
 			if (e2 instanceof EntityGroup) {
-				if (e2.contains(e)) {
+				if (e2.intersects(e)) {
 					return true;
 				}
 			}

@@ -3,7 +3,7 @@ package snorri.entities;
 import snorri.events.CollisionEvent;
 import snorri.world.Vector;
 
-public class Explosion extends Collider {
+public class Explosion extends Detector {
 
 	private static final long serialVersionUID = 1L;
 	private double damage = 100;

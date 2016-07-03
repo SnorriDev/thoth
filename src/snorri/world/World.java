@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import snorri.entities.Collider;
+import snorri.entities.Detector;
 import snorri.entities.Enemy;
 import snorri.entities.Entity;
 import snorri.entities.EntityGroup;
@@ -26,7 +26,7 @@ public class World implements Playable {
 	
 	private Level level;
 	private EntityGroup col;
-	private CopyOnWriteArrayList<Collider> colliders;
+	private CopyOnWriteArrayList<Detector> colliders;
 	private Queue<Entity> deleteQ;
 	private Queue<Entity> addQ;
 
@@ -47,7 +47,7 @@ public class World implements Playable {
 		level = new Level(width, height); // TODO: pass a level file to read
 		//level.computePathfinding();
 		col = new EntityGroup();
-		colliders = new CopyOnWriteArrayList<Collider>();
+		colliders = new CopyOnWriteArrayList<Detector>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
 		
@@ -69,7 +69,7 @@ public class World implements Playable {
 		
 		load(file);
 		level.computePathability();
-		colliders = new CopyOnWriteArrayList<Collider>();
+		colliders = new CopyOnWriteArrayList<Detector>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
 		
@@ -86,7 +86,7 @@ public class World implements Playable {
 		Main.log("creating new world of size " + l.getDimensions().getX() + " x " + l.getDimensions().getY() + "...");
 		level = l;
 		col = new EntityGroup();
-		colliders = new CopyOnWriteArrayList<Collider>();
+		colliders = new CopyOnWriteArrayList<Detector>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
 
@@ -142,7 +142,7 @@ public class World implements Playable {
 			}
 		}
 				
-		for (Collider p : colliders) {
+		for (Detector p : colliders) {
 			p.update(this, d);
 			for (Entity hit : col.getAllCollisions(p)) {
 				if (hit != null) {
@@ -166,7 +166,7 @@ public class World implements Playable {
 		level.renderMap(g, gr, showOutlands);
 		col.renderAround(g, gr);
 
-		for (Collider p : colliders.toArray(new Collider[0])) {
+		for (Detector p : colliders.toArray(new Detector[0])) {
 			p.renderAround(g, gr);
 		}
 
@@ -191,8 +191,8 @@ public class World implements Playable {
 
 	public void addHard(Entity e) {
 
-		if (e instanceof Collider) {
-			colliders.add((Collider) e);
+		if (e instanceof Detector) {
+			colliders.add((Detector) e);
 			return;
 		}
 
@@ -220,7 +220,7 @@ public class World implements Playable {
 	 */
 	public boolean deleteHard(Entity e) {
 
-		if (e instanceof Collider) {
+		if (e instanceof Detector) {
 			return colliders.remove(e);
 		}
 

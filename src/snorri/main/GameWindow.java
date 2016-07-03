@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-import snorri.entities.Collider;
+import snorri.entities.Detector;
 import snorri.entities.Desk;
 import snorri.entities.Entity;
 import snorri.entities.Player;
@@ -93,7 +93,7 @@ public class GameWindow extends FocusedWindow {
 		}
 		
 		if (e.getKeyChar() == Key.SPACE.getChar()) {
-			Collider interactRegion = new Collider(getFocus().getPos(), getFocus().getRadius() + Desk.INTERACT_RANGE);
+			Detector interactRegion = new Detector(getFocus().getPos(), getFocus().getRadius() + Desk.INTERACT_RANGE);
 			//could make this more efficient potentially by making a new method
 			//also move to its own thing for organization?
 			for (Entity entity : universe.getCurrentWorld().getEntityTree().getAllCollisions(interactRegion)) {

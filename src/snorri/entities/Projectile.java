@@ -8,7 +8,7 @@ import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Projectile extends Collider {
+public class Projectile extends Detector {
 
 	private static final long serialVersionUID = 1L;
 
