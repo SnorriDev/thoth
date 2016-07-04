@@ -27,6 +27,7 @@ public class GameWindow extends FocusedWindow {
 	
 	private Playable universe;
 	private Player focus;
+	private boolean paused;
 	private long lastTime;
 		
 	public GameWindow(Playable universe, Player focus) {
@@ -34,6 +35,7 @@ public class GameWindow extends FocusedWindow {
 		this.universe = universe;
 		this.focus = focus;
 		lastTime = getTimestamp();
+		paused = false;
 	}
 	
 	public GameWindow(Playable universe) {
@@ -55,6 +57,11 @@ public class GameWindow extends FocusedWindow {
 			Main.log("high delta time detected (" + deltaTime + " sec)");
 		}
 		
+		if (paused) {
+			//TODO draw menu when paused or something
+			return;
+		}
+		
 		universe.getCurrentWorld().update(deltaTime);
 		repaint();
 				
@@ -62,16 +69,13 @@ public class GameWindow extends FocusedWindow {
 	
 	@Override
 	public void paintComponent(Graphics g){
-		
 		if (focus == null) {
 			return;
 		}
-		
 		super.paintComponent(g);
 		universe.getCurrentWorld().render(this, g, true);
 		focus.getInventory().render(this, g);
-		focus.renderHealthBar(g);
-				
+		focus.renderHealthBar(g);			
 	}
 	
 	public Player getFocus() {
@@ -83,17 +87,19 @@ public class GameWindow extends FocusedWindow {
 		return universe.getCurrentWorld();
 	}
 	
-	public void keyTyped(KeyEvent e) {
+	@Override
+	public void keyPressed(KeyEvent e) {
 		
-		if (e.getKeyChar() == Key.Q.getChar()) {
-			//TODO: it takes a while to DECIDE that there is no path somewhere.
-			//perhaps circumvent this by storing a variable reachableFromSpawn in each Tile
-			//we could also terminate the search after a certain amount of time
-			//alternatively, if it's running in another thread, it doesn't really matter that much
-			//perhaps add more pathfinding stuff here
+		super.keyPressed(e);
+		if (Key.ESC.isPressed(e)) {
+			togglePause();
 		}
 		
-		if (e.getKeyChar() == Key.SPACE.getChar()) {
+		if (focus == null || focus.isDead()) {
+			return;
+		}
+		
+		if (Key.SPACE.isPressed(e)) {
 			Detector interactRegion = new Detector(getFocus().getPos(), Unit.RADIUS + Desk.INTERACT_RANGE);
 			//could make this more efficient potentially by making a new method
 			//also move to its own thing for organization?
@@ -104,32 +110,31 @@ public class GameWindow extends FocusedWindow {
 				}
 			}
 		}
-		
-		if (e.getKeyChar() == Key.ONE.getChar()) {
+				
+		if (Key.ONE.isPressed(e)) {
 			focus.getInventory().selectOrb(0);
 		}
-		
-		if (e.getKeyChar() == Key.TWO.getChar()) {
+		if (Key.TWO.isPressed(e)) {
 			focus.getInventory().selectOrb(1);
 		}
-		
-		if (e.getKeyChar() == Key.THREE.getChar()) {
+		if (Key.THREE.isPressed(e)) {
 			focus.getInventory().usePapyrus(0);
 		}
-		
-		if (e.getKeyChar() == Key.FOUR.getChar()) {
+		if (Key.FOUR.isPressed(e)) {
 			focus.getInventory().usePapyrus(1);
 		}
-		
-		if (e.getKeyChar() == Key.FIVE.getChar()) {
+		if (Key.FIVE.isPressed(e)) {
 			focus.getInventory().usePapyrus(2);
 		}
 		
-//		if (e.getKeyChar() == Key.Q.getChar()) {
-//			//Cast a spell with space bar for debugging purposes	
-//			Spell.castWTFMode("bm m=f", new SpellEvent(this, getFocus()));	
-//		}
-		
+	}
+	
+	public void togglePause() {
+		paused = !paused;
+	}
+	
+	public boolean isPaused() {
+		return paused;
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -177,6 +182,11 @@ public class GameWindow extends FocusedWindow {
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
 	}
 	
 }
