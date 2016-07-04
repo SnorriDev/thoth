@@ -2,6 +2,7 @@ package snorri.entities;
 
 import java.util.ArrayDeque;
 
+import snorri.animations.Animation;
 import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
@@ -36,6 +37,7 @@ public class Enemy extends Unit implements Pathfinder {
 		super(pos);
 		this.target = target;
 		inventory = new Inventory(this);
+		animation = new Animation("/textures/animations/mummy/idle");
 		setOrb((Orb) Item.newItem(ItemType.PELLET));
 		setWeapon((Weapon) Item.newItem(ItemType.SLOW_SLING));
 	}

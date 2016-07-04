@@ -9,6 +9,7 @@ import snorri.animations.Animation;
 import snorri.collisions.CircleCollider;
 import snorri.collisions.Collider;
 import snorri.inventory.Timer;
+import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.semantics.Nominal;
@@ -137,7 +138,9 @@ public class Entity implements Nominal, Serializable {
 	
 	public void renderAround(FocusedWindow g, Graphics gr) {
 		
-		collider.render(g, gr);
+		if (Debug.SHOW_COLLIDERS) {
+			collider.render(g, gr);
+		}
 		
 		if (animation == null) {
 			return;
@@ -150,8 +153,6 @@ public class Entity implements Nominal, Serializable {
 		
 		Vector rel = pos.copy().sub(g.getFocus().getPos());
 		gr.drawImage(sprite, rel.getX() + (g.getBounds().width - sprite.getWidth(null)) / 2, rel.getY() + (g.getBounds().height - sprite.getHeight(null)) / 2, sprite.getWidth(null), sprite.getHeight(null), null);
-
-		collider.render(g, gr);
 		
 	}
 
