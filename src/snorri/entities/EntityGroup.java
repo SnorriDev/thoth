@@ -12,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.util.ConcurrentModificationException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import snorri.collisions.CircleCollider;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.world.Vector;
@@ -21,7 +22,6 @@ public class EntityGroup extends Entity {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int REACH = 0;
 	private static final int UPDATE_RADIUS = 4000;
 
 	// TODO: within each EntityGroup, store entities in a PriorityQueue
@@ -33,6 +33,7 @@ public class EntityGroup extends Entity {
 	// can make this stuff more elegant
 	public EntityGroup(Entity root) {
 		super(root);
+		collider = new CircleCollider(pos, root.collider.getMaxWidth());
 		entities = new CopyOnWriteArrayList<Entity>();
 		entities.add(root);
 	}
@@ -57,6 +58,8 @@ public class EntityGroup extends Entity {
 			}
 		}
 
+		//TODO: figure out what to do here
+		
 		entities.add(r2);
 
 		// compute axis vector between the two centers
@@ -64,10 +67,10 @@ public class EntityGroup extends Entity {
 		axis.sub(r1.pos);
 
 		// compute the new radius
-		r = (r1.pos.distance(r2.pos) + r1.r + r2.r) / 2;
+		((CircleCollider) collider).setRadius((r1.pos.distance(r2.pos) + r1.collider.getMaxWidth() + r2.collider.getMaxWidth()) / 2);
 
 		// scale the axis to the vector from r1 center to the new center
-		axis.scale(r - r1.r);
+		axis.scale(collider.getMaxWidth() - r1.collider.getMaxWidth());
 		pos.add(axis);
 
 	}
@@ -111,7 +114,7 @@ public class EntityGroup extends Entity {
 		double det = a * d - b * c;
 
 		pos = new Vector((int) ((d * e - b * f) / det), (int) ((-c * e + a * f) / det));
-		r = p1.distance(pos) + Integer.max(e3.r, Integer.max(e1.r, e2.r));
+		((CircleCollider) collider).setRadius(p1.distance(pos) + Math.max(e3.collider.getMaxWidth(), Math.max(e1.collider.getMaxWidth(), e2.collider.getMaxWidth())));
 
 	}
 
@@ -194,15 +197,14 @@ public class EntityGroup extends Entity {
 
 	public void setEnclosing() {
 
-		Entity[] points = (Entity[]) entities.toArray(new Entity[] {});
+		Entity[] points = getSafeArray();
 		Entity[] boundary = new Entity[3];
 
 		EntityGroup enclosing = getEnclosing(points, points.length, boundary, 0);
 
 		pos = (enclosing.pos == null) ? null : enclosing.pos.copy();
-		r = enclosing.r + REACH; // "MARGIN"
-
-		r += getMaxRadius(points);
+		((CircleCollider) collider).setRadius(enclosing.collider.getMaxWidth());
+		((CircleCollider) collider).increaseRadius(getMaxRadius(points));
 
 		//TODO: equals vs spatialEquals here
 		if (entities.size() == 1 && equals(entities.get(0))) {
@@ -214,8 +216,8 @@ public class EntityGroup extends Entity {
 	private int getMaxRadius(Entity[] boundary) {
 		int max = 0;
 		for (int i = 0; i < boundary.length; i++) {
-			if (boundary[i] != null && !contains(boundary[i]) && Double.isFinite(boundary[i].r)) {
-				max = boundary[i].r > max ? boundary[i].r : max;
+			if (boundary[i] != null && !contains(boundary[i]) && Double.isFinite(boundary[i].collider.getMaxWidth())) {
+				max = boundary[i].collider.getMaxWidth() > max ? boundary[i].collider.getMaxWidth() : max;
 			}
 		}
 		return max;
@@ -278,7 +280,7 @@ public class EntityGroup extends Entity {
 			return;
 		}
 
-		if (!intersects(e, REACH)) {
+		if (!intersects(e)) {
 			EntityGroup group = new EntityGroup();
 			group.set(this);
 			set(new EntityGroup(group, e));
@@ -294,7 +296,7 @@ public class EntityGroup extends Entity {
 
 		for (Entity child : getSafeArray()) {
 			
-			if (child instanceof EntityGroup && child.intersects(e, REACH)) {
+			if (child instanceof EntityGroup && child.intersects(e)) {
 				remove(child);
 				((EntityGroup) child).insert(e);
 				insert(child);
@@ -303,7 +305,7 @@ public class EntityGroup extends Entity {
 			
 			//this might not always work as intended
 			//we are preserving structure when inserting EntityGroups, not "merging" them
-			if (e instanceof EntityGroup && child.intersects(e, REACH)) {
+			if (e instanceof EntityGroup && child.intersects(e)) {
 				delete(child);
 				((EntityGroup) e).insert(child);
 				insert(e);
@@ -427,7 +429,7 @@ public class EntityGroup extends Entity {
 	private void set(Entity e) {
 
 		pos = e.pos;
-		r = e.r;
+		((CircleCollider) collider).setRadius(e.collider.getMaxWidth());
 		if (e instanceof EntityGroup) {
 			entities = ((EntityGroup) e).entities;
 		}
@@ -437,8 +439,10 @@ public class EntityGroup extends Entity {
 	public void recalculate(Entity update) {
 		if (delete(update)) {
 			insert(update);
+			setEnclosing();
+		} else {
+			Main.error("move failed on " + update);
 		}
-		setEnclosing();
 	}
 	
 	

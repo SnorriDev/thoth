@@ -1,5 +1,6 @@
 package snorri.entities;
 
+import snorri.collisions.RectCollider;
 import snorri.events.SpellEvent;
 import snorri.main.Main;
 import snorri.world.Vector;
@@ -19,7 +20,7 @@ public class Unit extends Entity {
 	private boolean hasUpdated = false;
 	
 	public Unit(Vector pos) {
-		super(pos, RADIUS);
+		super(pos, new RectCollider(pos, new Vector(43, 80)));
 		health = MAX_HEALTH;
 	}
 	

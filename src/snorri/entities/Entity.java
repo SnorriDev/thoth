@@ -6,6 +6,8 @@ import java.awt.Rectangle;
 import java.io.Serializable;
 
 import snorri.animations.Animation;
+import snorri.collisions.CircleCollider;
+import snorri.collisions.Collider;
 import snorri.inventory.Timer;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
@@ -18,8 +20,8 @@ import snorri.world.World;
 public class Entity implements Nominal, Serializable {
 
 	private static final long serialVersionUID = 1L;
+	protected Collider collider;
 	protected Vector pos;
-	protected int r;
 	protected Animation animation;
 	
 	//TODO: entities that ignore collisions (with a boolean?)
@@ -32,20 +34,23 @@ public class Entity implements Nominal, Serializable {
 			Main.error("spawned non-EntityGroup at null using other entity: " + this.getClass().getSimpleName());
 			return;
 		}
-		
 		this.pos = e.pos.copy();
-		this.r = e.r;
+		this.collider = e.collider.cloneOnto(this);
 		
 	}
 	
 	public Entity(Vector pos, int r) {
+		this(pos, new CircleCollider(pos, r));
+	}
+	
+	public Entity(Vector pos, Collider collider) {
 		
 		if (pos == null && !(this instanceof EntityGroup)) {
 			Main.error("spawned non-EntityGroup at null: " + this.getClass().getSimpleName());
 		}
 		
 		this.pos = pos;
-		this.r = r;
+		this.collider = collider.cloneOnto(this); //so we dont get weird entangled positions
 	}
 	
 	public Entity(Vector pos) {
@@ -54,10 +59,6 @@ public class Entity implements Nominal, Serializable {
 
 	public Vector getPos() {
 		return pos;
-	}
-	
-	public int getRadius() {
-		return r;
 	}
 	
 	public Animation getAnimation() {
@@ -71,49 +72,17 @@ public class Entity implements Nominal, Serializable {
 	public boolean isBurning() {
 		return ! burnTimer.isOffCooldown();
 	}
-
+	
 	public boolean intersects(Vector pos1) {
-		return pos.distance(pos1) <= r;
+		return collider.intersects(pos1);
 	}
 	
 	public boolean intersects(Entity e) {
-		return e.pos.distance(pos) <= r + e.r;
-	}
-	
-	public boolean intersects(Entity e, int rad) {
-		if (pos == null || e.pos == null) {
-			return true;
-		}
-		return e.pos.distance(pos) <= r + e.r + rad;
+		return collider.intersects(e.collider);
 	}
 	
 	public boolean intersects(Rectangle rect) {
-		
-		if (pos == null) {
-			return true;
-		}
-		
-		Vector circleDistance = new Vector(rect.getX(), rect.getY()).add(new Vector(rect).divide(2)).sub(pos).abs();
-		
-		if (circleDistance.getX() > rect.getWidth() / 2 + r) {
-			return false;
-		}
-		
-		if (circleDistance.getY() > rect.getHeight() / 2 + r) {
-			return false;
-		}
-		
-		if (circleDistance.getX() <= rect.getWidth() / 2) {
-			return true;
-		}
-		
-		if (circleDistance.getY() <= rect.getHeight() / 2) {
-			return true;
-		}
-		
-		double cornerDistance = new Vector(rect).divide(2).distance(circleDistance);
-		return cornerDistance <= r;
-		
+		return collider.intersects(rect);
 	}
 	
 	public boolean intersectsWall(World world) {
@@ -122,8 +91,8 @@ public class Entity implements Nominal, Serializable {
 	
 	public boolean intersectsWall(Level level) {
 
-		for (int i = (pos.getX() - r) / Tile.WIDTH - 1; i <= (pos.getX() + r) / Tile.WIDTH; i++) {
-			for (int j = (pos.getY() - r) / Tile.WIDTH - 1; j <= (pos.getY() + r) / Tile.WIDTH; j++) {
+		for (int i = (pos.getX() - collider.getMaxWidth()) / Tile.WIDTH - 1; i <= (pos.getX() + collider.getMaxWidth()) / Tile.WIDTH; i++) {
+			for (int j = (pos.getY() - collider.getMaxWidth()) / Tile.WIDTH - 1; j <= (pos.getY() + collider.getMaxWidth()) / Tile.WIDTH; j++) {
 				
 				if (! intersects(Level.getRectange(i, j))) {
 					continue;
@@ -142,17 +111,7 @@ public class Entity implements Nominal, Serializable {
 	}
 	
 	public boolean contains(Entity e) {
-		if (pos == null || e.pos == null) {
-			return true;
-		}
-		return e.pos.distance(pos) + e.r <= r;
-	}
-	
-	public boolean contains(Entity e, int rad) {
-		if (pos == null || e.pos == null) {
-			return true;
-		}
-		return e.pos.distance(pos) + e.r <= r + rad;
+		return collider.contains(e.collider);
 	}
 	
 	protected void traverse(int depth) {
@@ -168,7 +127,7 @@ public class Entity implements Nominal, Serializable {
 	}
 	
 	public String toString() {
-		return this.getClass().getSimpleName() + "{pos: " + pos.toString() + ", r: " + r + "}";
+		return this.getClass().getSimpleName() + "{pos: " + pos + ", col: " + collider + "}";
 	}
 	
 	//TODO: make this into a boolean so we can know whether or not to recalculate collision bubbles
@@ -176,32 +135,9 @@ public class Entity implements Nominal, Serializable {
 		burnTimer.update(d);
 	}
 	
-	public void renderHitbox(FocusedWindow g, Graphics gr) {
-		//for some reason this is causing concurrent modification issues
-		if (pos == null || g.getFocus().getPos() == null) {
-			return;
-		}
-		Vector rel = pos.copy().sub(g.getFocus().getPos());
-		//the issue is in this draw oval line! wtf (concurrent modification of graphics?)
-		gr.drawOval(rel.getX() - r + g.getBounds().width / 2, rel.getY() - r + g.getBounds().height / 2, 2 * r, 2 * r);
-	}
-	
-	/**
-	 * @param e
-	 * 	other
-	 * @return
-	 * 	whether the two entities are spatially equivalent (same radius and position)
-	 */
-	public boolean spatialEquals(Entity e) {
-		if (e.pos == null) {
-			return pos == null;
-		}
-		return e.pos.equals(pos) && e.r == r;
-	}
-	
 	public void renderAround(FocusedWindow g, Graphics gr) {
 		
-		renderHitbox(g, gr);
+		collider.render(g, gr);
 		
 		if (animation == null) {
 			return;
@@ -215,7 +151,7 @@ public class Entity implements Nominal, Serializable {
 		Vector rel = pos.copy().sub(g.getFocus().getPos());
 		gr.drawImage(sprite, rel.getX() + (g.getBounds().width - sprite.getWidth(null)) / 2, rel.getY() + (g.getBounds().height - sprite.getHeight(null)) / 2, sprite.getWidth(null), sprite.getHeight(null), null);
 
-		renderHitbox(g, gr);
+		collider.render(g, gr);
 		
 	}
 
@@ -246,7 +182,7 @@ public class Entity implements Nominal, Serializable {
 			return true;
 		}
 		
-		return new Entity(pos.copy().add(dir), r).intersectsWall(world);
+		return new Entity(pos.copy().add(dir), collider).intersectsWall(world);
 		
 	}
 	

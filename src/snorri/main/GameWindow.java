@@ -10,6 +10,7 @@ import snorri.entities.Detector;
 import snorri.entities.Desk;
 import snorri.entities.Entity;
 import snorri.entities.Player;
+import snorri.entities.Unit;
 import snorri.keyboard.Key;
 import snorri.world.Playable;
 import snorri.world.Vector;
@@ -93,7 +94,7 @@ public class GameWindow extends FocusedWindow {
 		}
 		
 		if (e.getKeyChar() == Key.SPACE.getChar()) {
-			Detector interactRegion = new Detector(getFocus().getPos(), getFocus().getRadius() + Desk.INTERACT_RANGE);
+			Detector interactRegion = new Detector(getFocus().getPos(), Unit.RADIUS + Desk.INTERACT_RANGE);
 			//could make this more efficient potentially by making a new method
 			//also move to its own thing for organization?
 			for (Entity entity : universe.getCurrentWorld().getEntityTree().getAllCollisions(interactRegion)) {
