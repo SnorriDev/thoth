@@ -112,7 +112,7 @@ public class Main {
 		loadInto(new Runnable() {
 			@Override
 			public void run() {
-				TerrainGenerator ter = new TerrainGenerator(400, 300);
+				TerrainGenerator ter = new TerrainGenerator(200, 200);
 				launchGame(ter.genWorld());
 			}
 		});

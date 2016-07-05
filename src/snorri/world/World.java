@@ -94,14 +94,10 @@ public class World implements Playable {
 		
 		Player p = new Player(l.getGoodSpawn(level.getDimensions().random()));
 		addHard(p);
-		for (int i = 0; i < 80; i++) {
+		for (int i = 0; i < 40; i++) {
 			Vector spawnPos = l.getGoodSpawn(level.getDimensions().random());
 			if (spawnPos != null) { //spawning enemies at null positions is gross and caused lots of issues
-				int oldSize = getEntityTree().getAllEntities().size();
 				addHard(new Enemy(spawnPos, p));
-				if (getEntityTree().getAllEntities().size() - oldSize > 1) {
-					Main.log(i + " has " + (getEntityTree().getAllEntities().size() - oldSize - 1) + " extra units");
-				}
 			}
 		}
 
