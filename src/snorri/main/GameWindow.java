@@ -39,7 +39,7 @@ public class GameWindow extends FocusedWindow {
 	}
 	
 	public GameWindow(Playable universe) {
-		this(universe, universe.getFocus());
+		this(universe, universe.computeFocus());
 	}
 	
 	@Override

@@ -25,8 +25,6 @@ public class Entity implements Nominal, Serializable {
 	protected Vector pos;
 	protected Animation animation;
 	
-	//TODO: entities that ignore collisions (with a boolean?)
-	
 	private Timer burnTimer = new Timer(5);
 	private boolean flying;
 

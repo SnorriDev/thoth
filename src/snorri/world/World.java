@@ -55,7 +55,7 @@ public class World implements Playable {
 
 		// temporary
 		addHard(new Player(DEFAULT_SPAWN.copy()));
-		addHard(new Enemy(new Vector(600, 600), this.getFocus()));
+		addHard(new Enemy(new Vector(600, 600), this.computeFocus()));
 
 		Main.log("new world created!");
 		
@@ -75,7 +75,7 @@ public class World implements Playable {
 		
 		Pathfinding.setWorld(this);
 		
-		if (getFocus() == null) {
+		if (computeFocus() == null) {
 			Main.error("world without player detected");
 		}
 		
@@ -187,7 +187,7 @@ public class World implements Playable {
 
 	public void addHard(Entity e) {
 
-		if (e instanceof Detector) {
+		if (e instanceof Detector && !((Detector) e).isTreeMember()) {
 			colliders.add((Detector) e);
 			return;
 		}
@@ -215,13 +215,10 @@ public class World implements Playable {
 	 *            the entity to delete
 	 */
 	public boolean deleteHard(Entity e) {
-
-		if (e instanceof Detector) {
+		if (e instanceof Detector && !((Detector) e).isTreeMember()) {
 			return colliders.remove(e);
 		}
-
 		return col.delete(e);
-
 	}
 
 	@Override
@@ -266,8 +263,11 @@ public class World implements Playable {
 
 	}
 
+	/**
+	 * search through all the entities to find the first player
+	 */
 	@Override
-	public Player getFocus() {
+	public Player computeFocus() {
 		for (Entity e : col.getAllEntities()) {
 			if (e instanceof Player) {
 				return (Player) e;

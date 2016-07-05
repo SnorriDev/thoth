@@ -14,7 +14,7 @@ public interface Playable {
 	
 	public void update(double deltaTime);
 
-	public Player getFocus();
+	public Player computeFocus();
 
 	public void load(File folder) throws FileNotFoundException, IOException;
 

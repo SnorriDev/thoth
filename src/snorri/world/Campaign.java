@@ -23,7 +23,7 @@ public class Campaign implements Playable {
 	}
 
 	@Override
-	public Player getFocus() {
+	public Player computeFocus() {
 		// TODO Auto-generated method stub
 		return null;
 	}

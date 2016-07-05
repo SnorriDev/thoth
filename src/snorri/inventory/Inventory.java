@@ -18,6 +18,7 @@ public class Inventory implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Unit player;
+	private FullInventory fullInventory;
 	
 	private Weapon weaponSlot;
 	private Armor armorSlot;
@@ -32,6 +33,7 @@ public class Inventory implements Serializable {
 
 	public Inventory(Unit player) {
 		this.player = player;
+		fullInventory = new FullInventory();
 		orbSlots = new Orb[ORB_SLOTS];
 		papyrusSlots = new Papyrus[PAPYRUS_SLOTS];
 	}
@@ -58,6 +60,10 @@ public class Inventory implements Serializable {
 			}
 		}
 		
+	}
+
+	public FullInventory getFullInventory() {
+		return fullInventory;
 	}
 
 	public void addOrb(Orb newProjectile) {

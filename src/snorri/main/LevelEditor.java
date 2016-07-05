@@ -419,7 +419,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			autosaveUndo();
 
 			if (selectedEntityClass.equals(Player.class)) {
-				world.deleteHard(world.getFocus()); // don't need to check null
+				world.deleteHard(world.computeFocus()); // don't need to check null
 			}
 
 			world.addHard(selectedEntityClass.getConstructor(Vector.class).newInstance(this.getMousePosAbsolute()));
