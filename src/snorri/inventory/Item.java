@@ -15,7 +15,6 @@ public abstract class Item implements Droppable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	protected int quantity = 1; // default value
 	protected Node spell; // spell/enchantment associated with the item
 	protected String nickname; //name which the player gives the item so they know what it does
 	protected ItemType type; // what type of item it is; you can get ID, maxQuantity, enchantable from this
@@ -140,40 +139,16 @@ public abstract class Item implements Droppable {
 	public Timer getTimer() {
 		return timer;
 	}
-
-	// returns quantity of item
-	public int getQuantity() {
-		return quantity;
-	}
-
-	/**
-	 * attempts to change the quantity of the item
-	 * @return
-	 * 	false iff illegal
-	 */
-	public boolean setQuantity(int amount) {
-		if (amount <= 0) {
-			return false;
-		}
-		quantity = Math.min(type.getMaxQuantity(), amount);
-		return true;
-	}
-	
-	public boolean isFullStack() {
-		return quantity == type.getMaxQuantity();
-	}
 	
 	/**
 	 * attempt to stack an item onto this one
+	 * this should only really be relevant for consumables
 	 * @return
-	 * 	whether or not anything was added
+	 * 	whether or not anything was done
 	 */
 	@Override
 	public boolean stack(Droppable other) {
-		if (!equals(other) || isFullStack()) {
-			return false;
-		}
-		return setQuantity(quantity + ((Item) other).quantity);
+		return false;
 	}
 
 	@Override
