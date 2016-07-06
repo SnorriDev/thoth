@@ -7,17 +7,20 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import snorri.entities.Detector;
+import snorri.entities.Drop;
 import snorri.entities.Enemy;
 import snorri.entities.Entity;
 import snorri.entities.EntityGroup;
 import snorri.entities.Player;
 import snorri.entities.Unit;
-import snorri.events.CollisionEvent;
+import snorri.inventory.VocabDrop;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
+import snorri.parser.Lexicon;
 import snorri.pathfinding.Pathfinding;
 
 public class World implements Playable {
@@ -100,6 +103,16 @@ public class World implements Playable {
 				addHard(new Enemy(spawnPos, p));
 			}
 		}
+		
+		Set<String> drops = Lexicon.getELang();
+		for (String possibleDrop : drops) {
+			if (Math.random() > 0.5) {
+				Vector spawnPos = l.getGoodSpawn(level.getDimensions().random());
+				if (spawnPos != null) { //spawning enemies at null positions is gross and caused lots of issues
+					addHard(new Drop(spawnPos, new VocabDrop(possibleDrop)));
+				}
+			}
+		}
 
 		Main.log("new world created!");
 	}
@@ -140,11 +153,6 @@ public class World implements Playable {
 				
 		for (Detector p : colliders) {
 			p.update(this, d);
-			for (Entity hit : col.getAllCollisions(p)) {
-				if (hit != null) {
-					p.onCollision(new CollisionEvent(p, hit, this));
-				}
-			}
 		}
 		
 		while (!deleteQ.isEmpty()) {

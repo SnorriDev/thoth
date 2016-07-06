@@ -1,5 +1,6 @@
 package snorri.parser;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -60,7 +61,7 @@ public class Lexicon {
 		lexicon.put("xft", new StaticDef(Prep.class, new RightOf())); //in front of
 		lexicon.put("Hna", new StaticDef(Prep.class, new With())); //with
 		lexicon.put("mhAw", new StaticDef(Prep.class, null)); //around
-				
+		
 		//Nouns
 		lexicon.put("jAm", new StaticDef(Noun.class, TileType.TREE)); //tree
 		lexicon.put("ssn", new StaticDef(Noun.class, Flower.class)); //flower, gotta make this an entity
@@ -120,6 +121,14 @@ public class Lexicon {
 		
 	public static Set<Entry<String, Definition>> getAllTerminals() {
 		return lexicon.entrySet();
+	}
+	
+	public static Set<String> getELang() {
+		return lexicon.keySet();
+	}
+	
+	public static Collection<Definition> getILang() {
+		return lexicon.values();
 	}
 	
 }

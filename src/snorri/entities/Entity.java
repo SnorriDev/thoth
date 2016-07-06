@@ -24,6 +24,7 @@ public class Entity implements Nominal, Serializable {
 	protected Collider collider;
 	protected Vector pos;
 	protected Animation animation;
+	protected boolean ignoreCollisions = false;
 	
 	private Timer burnTimer = new Timer(5);
 	private boolean flying;
@@ -244,6 +245,10 @@ public class Entity implements Nominal, Serializable {
 		this.pos.add(dir);
 		return true;
 		
+	}
+	
+	public boolean shouldIgnoreCollisions() {
+		return ignoreCollisions;
 	}
 
 }

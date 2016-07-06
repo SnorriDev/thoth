@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import snorri.animations.Animation;
-import snorri.inventory.Droppable;
+import snorri.inventory.FullInventory;
 import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
@@ -72,13 +72,6 @@ public class Player extends Unit {
 		
 	}
 	
-	public void unlock(Droppable drop) {
-		if (drop instanceof Item) {
-			inventory.getFullInventory().unlock((Item) drop);
-		}
-		//TODO unlocks for lexicon
-	}
-	
 	public Inventory getInventory() {
 		return inventory;
 	}
@@ -106,6 +99,10 @@ public class Player extends Unit {
 			pos.add(HEART.getWidth(null), 0);
 		}
 		
+	}
+
+	public FullInventory getFullInventory() {
+		return inventory.getFullInventory();
 	}
 
 }

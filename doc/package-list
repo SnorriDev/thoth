@@ -1,4 +1,5 @@
 snorri.animations
+snorri.collisions
 snorri.entities
 snorri.events
 snorri.inventory
@@ -8,4 +9,5 @@ snorri.nonterminals
 snorri.parser
 snorri.pathfinding
 snorri.semantics
+snorri.terrain
 snorri.world

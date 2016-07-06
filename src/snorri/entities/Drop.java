@@ -11,10 +11,11 @@ public class Drop extends Detector {
 	private final Droppable prize;
 	
 	public Drop(Vector pos, Droppable prize) {
-		super(pos, 20);
+		super(pos, 30);
 		this.prize = prize;
 		treeMember = true;
 		age = -1;
+		ignoreCollisions = true;
 	}
 	
 	public Droppable getPrize() {
@@ -24,8 +25,8 @@ public class Drop extends Detector {
 	@Override
 	public void onCollision(CollisionEvent e) {
 		if (e.getTarget() instanceof Player) {
-			Main.log("you received " + getPrize());
-			((Player) e.getTarget()).unlock(getPrize());
+			Main.log("you acquired " + getPrize());
+			((Player) e.getTarget()).getFullInventory().add(getPrize());
 			e.getWorld().delete(this);
 		}
 	}

@@ -386,6 +386,10 @@ public class EntityGroup extends Entity {
 
 		for (Entity child : entities) {
 
+			if (child.shouldIgnoreCollisions()) {
+				continue;
+			}
+			
 			if (child instanceof EntityGroup) {
 				Entity result = ((EntityGroup) child).getFirstCollision(c);
 				if (result == null) {
@@ -411,6 +415,10 @@ public class EntityGroup extends Entity {
 
 		for (Entity child : entities) {
 
+			if (child.shouldIgnoreCollisions()) {
+				continue;
+			}
+			
 			if (child instanceof EntityGroup) {
 				result.addAll(((EntityGroup) child).getAllCollisions(c));
 				continue;

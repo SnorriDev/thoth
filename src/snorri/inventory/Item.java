@@ -3,7 +3,6 @@ package snorri.inventory;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.io.Serializable;
 
 import snorri.entities.Entity;
 import snorri.events.SpellEvent;
@@ -12,7 +11,7 @@ import snorri.main.Main;
 import snorri.parser.Node;
 import snorri.world.Vector;
 
-public abstract class Item implements Serializable {
+public abstract class Item implements Droppable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -31,14 +30,14 @@ public abstract class Item implements Serializable {
 	public enum ItemType {
 
 		EMPTY,
-		PAPYRUS(Papyrus.class, Main.getImageResource("/textures/items/papyrus.png")),
+		PAPYRUS(5, Papyrus.class, Main.getImageResource("/textures/items/papyrus.png")),
 		HELMET(Armor.class, Main.getImageResource("/textures/items/helmet.png"), 2d),
 		SLING(Weapon.class, Main.getImageResource("/textures/items/bow.png"), 34d, 0.3),
-		PELLET(Orb.class, Main.getImageResource("/textures/items/pellet.png")),
+		PELLET(5, Orb.class, Main.getImageResource("/textures/items/pellet.png")),
 		SLOW_SLING(Weapon.class, Main.getImageResource("/textures/items/bow.png"), 34d, 2d);
 
 		private Class<? extends Item> c;
-		private int maxQuantity = 1;
+		private int maxQuantity = 1; //number of inventory slots; use Consumable class with data field for charges
 		private boolean enchantable = true;
 		private Object[] args;
 		private Image texture;
@@ -147,24 +146,54 @@ public abstract class Item implements Serializable {
 		return quantity;
 	}
 
-	// attempts to change the quantity of the item
-	// returns false iff it is illegal
+	/**
+	 * attempts to change the quantity of the item
+	 * @return
+	 * 	false iff illegal
+	 */
 	public boolean setQuantity(int amount) {
-
 		if (amount <= 0) {
 			return false;
 		}
-
-		if (amount <= type.getMaxQuantity()) {
-			quantity = amount;
-			return true;
+		quantity = Math.min(type.getMaxQuantity(), amount);
+		return true;
+	}
+	
+	public boolean isFullStack() {
+		return quantity == type.getMaxQuantity();
+	}
+	
+	/**
+	 * attempt to stack an item onto this one
+	 * @return
+	 * 	whether or not anything was added
+	 */
+	@Override
+	public boolean stack(Droppable other) {
+		if (!equals(other) || isFullStack()) {
+			return false;
 		}
-
-		return false;
-
+		return setQuantity(quantity + ((Item) other).quantity);
 	}
 
-	// changes the spell on the item iff it's enchantable
+	@Override
+	public boolean equals(Object other) {
+		//TODO perhaps check if spell and nickname are equal?
+		//this will require equality for spells, which could be hard
+		if (!(other instanceof Item)) {
+			return false;
+		}
+		return type == ((Item) other).type;
+	}
+	
+	@Override
+	public int getMaxQuantity() {
+		return type.getMaxQuantity();
+	}
+	
+	/**
+	 * changes the spell on the item iff it's enchantable
+	 */
 	public boolean setSpell(Node newSpell) {
 		
 		if (! type.isEnchantable()) {

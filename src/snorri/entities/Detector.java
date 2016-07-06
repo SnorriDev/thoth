@@ -25,13 +25,22 @@ public class Detector extends Entity {
 	
 	@Override
 	public void update(World world, double deltaTime) {
+		
+		for (Entity hit : world.getEntityTree().getAllCollisions(this)) {
+			if (hit != null) {
+				onCollision(new CollisionEvent(this, hit, world));
+			}
+		}
+		
 		if (age == -1) {
 			return;
 		}
+		
 		age += deltaTime;
 		if (age > getLifeSpan()) {
 			world.delete(this);
 		}
+		
 	}
 	
 	protected float getLifeSpan() {
