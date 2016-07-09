@@ -1,8 +1,11 @@
 package snorri.inventory;
 
+import java.awt.Graphics;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import snorri.main.GameWindow;
 
 
 public class FullInventory extends ArrayList<Droppable> implements Serializable {
@@ -49,6 +52,11 @@ public class FullInventory extends ArrayList<Droppable> implements Serializable 
 	 */
 	public boolean has(Droppable drop) {
 		return contains(drop);
+	}
+
+	public void render(GameWindow window, Graphics gr) {
+		// TODO Auto-generated method stub
+		
 	}
 		
 	//TODO Toby do stuff here!!

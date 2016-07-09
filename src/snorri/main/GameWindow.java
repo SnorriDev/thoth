@@ -1,7 +1,6 @@
 package snorri.main;
 
 import java.awt.Graphics;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -27,7 +26,7 @@ public class GameWindow extends FocusedWindow {
 	
 	private Playable universe;
 	private Player focus;
-	private boolean paused;
+	private boolean paused, editingInventory;
 	private long lastTime;
 		
 	public GameWindow(Playable universe, Player focus) {
@@ -36,6 +35,7 @@ public class GameWindow extends FocusedWindow {
 		this.focus = focus;
 		lastTime = getTimestamp();
 		paused = false;
+		editingInventory = false;
 	}
 	
 	public GameWindow(Playable universe) {
@@ -57,7 +57,7 @@ public class GameWindow extends FocusedWindow {
 			Main.log("high delta time detected (" + deltaTime + " sec)");
 		}
 		
-		if (paused) {
+		if (isPaused() || isEditingInventory()) {
 			//TODO draw menu when paused or something
 			return;
 		}
@@ -69,13 +69,25 @@ public class GameWindow extends FocusedWindow {
 	
 	@Override
 	public void paintComponent(Graphics g){
+		
 		if (focus == null) {
 			return;
 		}
 		super.paintComponent(g);
 		universe.getCurrentWorld().render(this, g, true);
 		focus.getInventory().render(this, g);
-		focus.renderHealthBar(g);			
+		focus.renderHealthBar(g);
+		
+		//draw inventory HUD over game background
+		if (isEditingInventory()) {
+			focus.getFullInventory().render(this, g);
+		}
+		
+		//draw pause HUD over inventory HUD
+		if (isPaused()) {
+			//TODO draw pause HUD
+		}
+		
 	}
 	
 	public Player getFocus() {
@@ -135,6 +147,10 @@ public class GameWindow extends FocusedWindow {
 	
 	public boolean isPaused() {
 		return paused;
+	}
+	
+	public boolean isEditingInventory() {
+		return editingInventory;
 	}
 
 	public void mousePressed(MouseEvent e) {

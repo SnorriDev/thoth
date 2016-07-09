@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 import snorri.main.FocusedWindow;
 
-public class Vector implements Serializable {
+public class Vector implements Serializable, Comparable<Vector> {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -205,6 +205,14 @@ public class Vector implements Serializable {
 	public boolean isInBounds(Level level) {
 		Vector dim = level.getDimensions();
 		return getX() >= 0 && getX() < dim.getX() && getY() >= 0 && getY() < dim.getY();
+	}
+
+	/**
+	 * use this to sort by magnitude
+	 */
+	@Override
+	public int compareTo(Vector o) {
+		return Double.compare(magnitude(), o.magnitude());
 	}
 		
 }
