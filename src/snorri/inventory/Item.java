@@ -31,9 +31,11 @@ public abstract class Item implements Droppable {
 		EMPTY,
 		PAPYRUS(5, Papyrus.class, Main.getImageResource("/textures/items/papyrus.png")),
 		HELMET(Armor.class, Main.getImageResource("/textures/items/helmet.png"), 2d),
-		SLING(Weapon.class, Main.getImageResource("/textures/items/bow.png"), 34d, 0.3),
+		SLING(Weapon.class, Main.getImageResource("/textures/items/sling.png"), 34d, 0.3),
 		PELLET(5, Orb.class, Main.getImageResource("/textures/items/pellet.png")),
-		SLOW_SLING(Weapon.class, Main.getImageResource("/textures/items/bow.png"), 34d, 2d);
+		SLOW_SLING(Weapon.class, Main.getImageResource("/textures/items/sling.png"), 34d, 2d),
+		BOW(Weapon.class, Main.getImageResource("/textures/item/bow.png"), 75d, 0.5),
+		ARROW(5, Orb.class, Main.getImageResource("/textures/item/arrow.png"));
 
 		private Class<? extends Item> c;
 		private int maxQuantity = 1; //number of inventory slots; use Consumable class with data field for charges
