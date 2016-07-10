@@ -2,13 +2,15 @@ package snorri.collisions;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.io.Serializable;
 
 import snorri.entities.Entity;
 import snorri.main.FocusedWindow;
 import snorri.world.Vector;
 
-public abstract class Collider {
+public abstract class Collider implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	protected Vector pos;
 	
 	protected Collider(Vector pos) {

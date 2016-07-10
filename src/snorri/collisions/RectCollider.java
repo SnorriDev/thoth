@@ -9,6 +9,7 @@ import snorri.world.Vector;
 
 public class RectCollider extends Collider {
 
+	private static final long serialVersionUID = 1L;
 	private Vector dim;
 	
 	/**

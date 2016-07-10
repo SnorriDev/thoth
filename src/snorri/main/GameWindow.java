@@ -17,6 +17,11 @@ import snorri.world.World;
 
 public class GameWindow extends FocusedWindow {
 	
+	//https://docs.oracle.com/javase/7/docs/api/javax/swing/JLayeredPane.html
+	//http://stackoverflow.com/questions/8776540/painting-over-the-top-of-components-in-swing
+	//TODO perhaps restructure all this stuff
+	//TODO rather than having a render method for pause HUD, override paintComponent and paint other things (buttons)
+	
 	/**
 	 * Main game window
 	 */
@@ -80,7 +85,8 @@ public class GameWindow extends FocusedWindow {
 		
 		//draw inventory HUD over game background
 		if (isEditingInventory()) {
-			focus.getFullInventory().render(this, g);
+			//TODO: figure out how to do this
+			focus.getFullInventory().paint(null);
 		}
 		
 		//draw pause HUD over inventory HUD

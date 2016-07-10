@@ -1,11 +1,11 @@
 package snorri.inventory;
 
-import java.awt.Graphics;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import snorri.main.GameWindow;
+import javax.swing.JComponent;
+
 
 
 public class FullInventory extends ArrayList<Droppable> implements Serializable {
@@ -42,21 +42,16 @@ public class FullInventory extends ArrayList<Droppable> implements Serializable 
 	 * 	the word of interest represented as a string
 	 */
 	public boolean knowsWord(String word) {
-		return has(new VocabDrop(word));
-	}
-	
-	/**
-	 * whether a player has the specified Droppable in their inventory
-	 * @param drop
-	 * 	the droppable (item or vocabulary) to test for
-	 */
-	public boolean has(Droppable drop) {
-		return contains(drop);
+		return contains(new VocabDrop(word));
 	}
 
-	public void render(GameWindow window, Graphics gr) {
-		// TODO Auto-generated method stub
-		
+	/**
+	 * paint the full inventory at a specified component
+	 * @param component
+	 * 		the target JComponent which will be the inventory interface
+	 */
+	public void paint(JComponent component) {
+		//TODO write this
 	}
 		
 	//TODO Toby do stuff here!!

@@ -9,6 +9,7 @@ import snorri.world.Vector;
 
 public class CircleCollider extends Collider {
 
+	private static final long serialVersionUID = 1L;
 	private int r;
 
 	public CircleCollider(Vector pos, int r) {
