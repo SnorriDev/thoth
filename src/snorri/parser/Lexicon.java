@@ -16,14 +16,17 @@ import snorri.semantics.Be;
 import snorri.semantics.Boom;
 import snorri.semantics.Burn;
 import snorri.semantics.Definition;
+import snorri.semantics.DegreeModifierDef;
 import snorri.semantics.FirstObjectPronoun;
 import snorri.semantics.FirstSuffixPronoun;
 import snorri.semantics.Flood;
 import snorri.semantics.Fly;
+import snorri.semantics.Greatly;
 import snorri.semantics.Heal;
 import snorri.semantics.LeftOf;
 import snorri.semantics.Move;
 import snorri.semantics.Nominal.AbstractSemantics;
+import snorri.semantics.Not;
 import snorri.semantics.RightOf;
 import snorri.semantics.SecondObjectPronoun;
 import snorri.semantics.SecondSuffixPronoun;
@@ -61,6 +64,12 @@ public class Lexicon {
 		lexicon.put("xft", new StaticDef(Prep.class, new RightOf())); //in front of
 		lexicon.put("Hna", new StaticDef(Prep.class, new With())); //with
 		lexicon.put("mhAw", new StaticDef(Prep.class, null)); //around
+		
+		//Adverbs
+		lexicon.put("nn", new Not());
+		lexicon.put("aAw", new Greatly());
+		lexicon.put("wrt", new DegreeModifierDef(1));
+		lexicon.put("er", new DegreeModifierDef(2)); //TODO is this correct enough usage?
 		
 		//Nouns
 		lexicon.put("jAm", new StaticDef(Noun.class, TileType.TREE)); //tree
@@ -104,10 +113,8 @@ public class Lexicon {
 		lexicon.put("bm", new Boom());
 		lexicon.put("mAX", new Burn());
 		lexicon.put("nD", new Heal()); //literally means "protect"
-		lexicon.put("pA", new Fly());
-		
-//		lexicon.put("mAA", new StaticDef(TransVerb.class, null)); //see
-//		lexicon.put("sDm", new StaticDef(TransVerb.class, null)); //hear
+		lexicon.put("pA", new Fly());	
+		lexicon.put("mAA", new See()); //see
 		
 		Grammar.loadLexicon();
 		

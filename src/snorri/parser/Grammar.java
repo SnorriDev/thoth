@@ -7,6 +7,9 @@ import java.util.Map.Entry;
 
 import snorri.main.Main;
 import snorri.nonterminals.AbstractNoun;
+import snorri.nonterminals.Adverb;
+import snorri.nonterminals.DegreeModifier;
+import snorri.nonterminals.AdverbPhrase;
 import snorri.nonterminals.Command;
 import snorri.nonterminals.IntransVerb;
 import snorri.nonterminals.Sentence;
@@ -43,9 +46,13 @@ public class Grammar {
 		rules.add(new Rule(new Object[] {Prep.class, NounPhrase.class}, PrepPhrase.class));
 		rules.add(new Rule(new Object[] {Prep.class, SuffixPronoun.class}, PrepPhrase.class));
 		
+		rules.add(new Rule(new Object[] {Adverb.class}, AdverbPhrase.class));
+		rules.add(new Rule(new Object[] {DegreeModifier.class, Adverb.class}, AdverbPhrase.class));
+		rules.add(new Rule(new Object[] {PrepPhrase.class}, AdverbPhrase.class));
+		
 		rules.add(new Rule(new Object[] {Statement.class}, Sentence.class));
 		rules.add(new Rule(new Object[] {Command.class}, Sentence.class));
-		rules.add(new Rule(new Object[] {Sentence.class, PrepPhrase.class}, Sentence.class));
+		rules.add(new Rule(new Object[] {Sentence.class, AdverbPhrase.class}, Sentence.class));
 		
 		Main.log("CFG with " + rules.size() + " high-level rules loaded");
 		

@@ -12,7 +12,7 @@ public class Sentence extends NonTerminal {
 			return children.get(0).getMeaning(e);
 		}
 		
-		if (children.get(0) instanceof PrepPhrase) {
+		if (children.get(0) instanceof AdverbPhrase) {
 			return children.get(1).getMeaning((SpellEvent) children.get(0).getMeaning(e));
 		}
 		

@@ -41,7 +41,7 @@ public class Player extends Unit {
 		
 		inventory.addPapyrus((Papyrus) Item.newItem(ItemType.PAPYRUS));
 		inventory.addPapyrus((Papyrus) Item.newItem(ItemType.PAPYRUS));
-		inventory.getPapyrus(0).setSpell(Grammar.parseString("pA"));
+		inventory.getPapyrus(0).setSpell(Grammar.parseString("pA wrt aAw"));
 		inventory.getPapyrus(1).setSpell(Grammar.parseString("nD wi"));
 		
 		inventory.addOrb((Orb) Item.newItem(ItemType.PELLET));
