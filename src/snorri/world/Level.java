@@ -432,8 +432,16 @@ public class Level {
 
 	public Vector getGoodSpawn(int startX, int startY) {
 		for (int x = startX; x < dim.getX(); x++) {
-			for (int y = startY; y < dim.getY(); y++) {
-				//TODO: rewrite this in terms of Unit.RADIUS
+			changeStart: for (int y = startY; y < dim.getY(); y++) {
+				
+				for (int x1 = (x * Tile.WIDTH - Unit.RADIUS) / Tile.WIDTH; x1 <= (x * Tile.WIDTH + Unit.RADIUS) / Tile.WIDTH; x1++) {
+					for (int y1 = (y * Tile.WIDTH - Unit.RADIUS) / Tile.WIDTH; y1 <= (y * Tile.WIDTH + Unit.RADIUS) / Tile.WIDTH; y1++) {
+						if (!isContextPathable(x1, y1)) {
+							continue changeStart;
+						}
+					}
+				}
+				
 				if (isContextPathable(x, y) && isContextPathable(x - 3, y - 3) && isContextPathable(x + 3, y - 3)
 						&& isContextPathable(x - 3, y + 3) && isContextPathable(x + 3, y + 3)) {
 					return new Vector(x, y).toGlobalPos();

@@ -9,7 +9,7 @@ public class Unit extends Entity {
 
 	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 100;
-	public static final int RADIUS = 40;
+	public static final int RADIUS = 60;
 	protected static final double MAX_HEALTH = 100;
 	private static final double BURN_DOT = 8d;
 	
