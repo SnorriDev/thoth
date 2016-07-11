@@ -16,7 +16,6 @@ import snorri.entities.Enemy;
 import snorri.entities.Entity;
 import snorri.entities.EntityGroup;
 import snorri.entities.Player;
-import snorri.entities.Unit;
 import snorri.inventory.VocabDrop;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
@@ -143,17 +142,12 @@ public class World implements Playable {
 		}
 		
 		col.updateAround(this, d, ((FocusedWindow) Main.getWindow()).getFocus());
-		
-		//this is for detecting duplicate entities
-		for (Entity ent : col.getAllEntities()) {
-			if (ent instanceof Unit) {
-				((Unit) ent).resetUpdated();
-			}
-		}
 				
 		for (Detector p : colliders) {
 			p.update(this, d);
 		}
+		
+		//TODO can probably get rid of these queues
 		
 		while (!deleteQ.isEmpty()) {
 			deleteHard(deleteQ.poll());

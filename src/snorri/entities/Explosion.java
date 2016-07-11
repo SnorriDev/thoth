@@ -1,29 +1,37 @@
 package snorri.entities;
 
+import snorri.animations.Animation;
 import snorri.events.CollisionEvent;
 import snorri.world.Vector;
+import snorri.world.World;
 
 public class Explosion extends Detector {
 
 	private static final long serialVersionUID = 1L;
 	private double damage = 100;
 	
-	public Explosion(Vector pos) {
-		super(pos, 30);
-	}
-	
 	public Explosion(Vector pos, int r) {
 		super(pos, r);
+		animation = new Animation(Animation.EXPLOSION);
+	}
+	
+	public Explosion(Vector pos) {
+		this(pos, 10);
 	}
 	
 	public Explosion(Vector pos, int r, double damage) {
-		super(pos, r);
+		this(pos, r);
 		this.damage = damage;
 	}
 	
 	public Explosion(Vector pos, double damage) {
 		this(pos);
 		this.damage = damage;
+	}
+	
+	@Override
+	public void update(World world, double deltaTime) {
+		super.update(world, deltaTime);
 	}
 
 	@Override
@@ -34,8 +42,8 @@ public class Explosion extends Detector {
 	}
 	
 	@Override
-	protected float getLifeSpan() {
-		return 0.3f;
+	protected boolean shouldDespawn() {
+		return animation == null || animation.hasCycled();
 	}
 
 }

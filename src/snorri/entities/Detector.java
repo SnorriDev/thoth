@@ -26,25 +26,29 @@ public class Detector extends Entity {
 	@Override
 	public void update(World world, double deltaTime) {
 		
+		if (age != -1) {
+			age += deltaTime;
+		}
+		
+		if (shouldDespawn()) {
+			world.delete(this);
+			return;
+		}
+		
 		for (Entity hit : world.getEntityTree().getAllCollisions(this)) {
 			if (hit != null) {
 				onCollision(new CollisionEvent(this, hit, world));
 			}
 		}
 		
-		if (age == -1) {
-			return;
-		}
-		
-		age += deltaTime;
-		if (age > getLifeSpan()) {
-			world.delete(this);
-		}
-		
 	}
 	
-	protected float getLifeSpan() {
+	protected double getLifeSpan() {
 		return 4;
+	}
+	
+	protected boolean shouldDespawn() {
+		return age > getLifeSpan();
 	}
 	
 	/**

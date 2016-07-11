@@ -94,6 +94,7 @@ public class Main {
 		return f;
 	}
 
+	//TODO: here we use LayeredPane instead of ContentPane
 	private static void setWindow(GamePanel newWindow) {
 		frame.getContentPane().remove(window);
 		window = newWindow;
@@ -136,5 +137,5 @@ public class Main {
 	public static JFrame getFrame() {
 		return frame;
 	}
-
+	
 }

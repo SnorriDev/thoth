@@ -161,7 +161,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			rbMenuItem.addActionListener(this);
 			groupEntities.add(rbMenuItem);
 			menu.add(rbMenuItem);
-
+			
 			firstEntity = false;
 			i++;
 		}
@@ -510,4 +510,5 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	public World getWorld() {
 		return world;
 	}
+	
 }

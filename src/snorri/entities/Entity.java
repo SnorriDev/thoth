@@ -34,7 +34,7 @@ public class Entity implements Nominal, Serializable {
 			Main.error("spawned non-EntityGroup at null using other entity: " + this.getClass().getSimpleName());
 			return;
 		}
-		this.pos = e.pos.copy();
+		this.pos = (e.pos == null) ? null : e.pos.copy();
 		this.collider = e.collider.cloneOnto(this);
 		
 	}

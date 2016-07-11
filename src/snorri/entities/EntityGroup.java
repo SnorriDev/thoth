@@ -499,6 +499,10 @@ public class EntityGroup extends Entity {
 	 */
 	public void updateAround(World world, double deltaTime, Entity focus) {
 		
+		if (focus == null) {
+			return;
+		}
+		
 		for (Entity e : entities) {
 			if (e.intersects(new Entity(focus.pos, UPDATE_RADIUS))) {
 				if (e instanceof EntityGroup) {

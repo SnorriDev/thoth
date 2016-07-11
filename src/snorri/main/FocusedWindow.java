@@ -57,4 +57,5 @@ public abstract class FocusedWindow extends GamePanel implements MouseListener, 
 	}
 
 	public abstract World getWorld();
+		
 }

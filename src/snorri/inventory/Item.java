@@ -246,18 +246,15 @@ public abstract class Item implements Droppable {
 		Image border = getBorder(selected);
 		Image icon = type.getTexture();
 		
-		Vector iconPos = pos.copy();
-		iconPos.add(new Vector((border.getWidth(null) - icon.getWidth(null)) / 2, (border.getHeight(null) - icon.getHeight(null)) / 2));
-		
-		//TODO: show cooldown
-				
+		Vector iconPos = pos.copy().add(new Vector(border.getWidth(null) - icon.getWidth(null), border.getWidth(null) - icon.getWidth(null)).divide(2));
+						
 		if (selected) {
 			g.drawImage(border, pos.getX(), pos.getY(), null);
 			g.drawImage(icon, iconPos.getX(), iconPos.getY(), null);
 		} else {
 			g.drawImage(icon, iconPos.getX(), iconPos.getY(), null);
 			g.drawImage(border, pos.getX(), pos.getY(), null);
-			if (timer != null) { //TODO: instanceof Cooldownable
+			if (timer != null) { //TODO: instanceof Cooldownable?
 				g.setColor(getCooldownColor());
 				g.fillArc(iconPos.getX(), iconPos.getY(), ICON_SIZE, ICON_SIZE, 90, this.getTimer().getRatio(360));
 				g.setColor(Color.BLACK);

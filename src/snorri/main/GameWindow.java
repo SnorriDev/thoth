@@ -40,7 +40,7 @@ public class GameWindow extends FocusedWindow {
 		this.focus = focus;
 		lastTime = getTimestamp();
 		paused = false;
-		editingInventory = false;
+		editingInventory = false;		
 	}
 	
 	public GameWindow(Playable universe) {
@@ -49,7 +49,7 @@ public class GameWindow extends FocusedWindow {
 	
 	@Override
 	protected void onFrame() {
-		
+				
 		if (universe.getCurrentWorld() == null) {
 			return;
 		}
@@ -160,6 +160,10 @@ public class GameWindow extends FocusedWindow {
 	}
 
 	public void mousePressed(MouseEvent e) {
+		
+		if (focus == null) {
+			return;
+		}
 		
 		if (e.getButton() == 1) {
 			//TODO: put this stuff in a shoot function, shoot with mouse

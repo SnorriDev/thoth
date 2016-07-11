@@ -18,12 +18,19 @@ import snorri.main.Main;
 public class Animation implements Serializable {
 
 	/**
-	 * stores all the animation frames as Images (PNGS) to convert SWFs to PNGs,
-	 * use swfrender can cycle through frames sequentially by calling
-	 * getSprite()
+	 * stores all the animation frames as Images (PNGS)
+	 * to convert SWFs to PNGs, use the swfrender utility
+	 * getSprite() should be used to iterate over frames
 	 */
+	
+	//TODO load all animations statically at the beginning and copy them
 
 	private static final long serialVersionUID = 1L;
+	
+	public static final Animation EXPLOSION = new Animation("/textures/animations/explosion");
+	public static final Animation MUMMY_IDLE = new Animation("/textures/animations/mummy/idle");
+	public static final Animation SPARKLE = new Animation("/textures/animations/sparkle");
+	public static final Animation UNIT_IDLE = new Animation("/textures/animations/unit/idle");
 
 	protected Image[] frames;
 	private int currentFrame = 0;
@@ -48,6 +55,10 @@ public class Animation implements Serializable {
 			Main.error("could not find animation " + str);
 		}
 	}
+	
+	public Animation(Animation other) {
+		set(other);
+	}
 
 	private void loadFolder(File folder) {
 
@@ -69,7 +80,7 @@ public class Animation implements Serializable {
 			if (!frames[i].getName().endsWith(".png")) {
 				continue;
 			}
-
+			
 			try {
 				tempFrames.add(ImageIO.read(frames[i]));
 			} catch (IOException e) {
@@ -78,8 +89,8 @@ public class Animation implements Serializable {
 		}
 
 		this.frames = new Image[tempFrames.size()];
+		int i = 0;
 		for (Image im : tempFrames) {
-			int i = 0;
 			this.frames[i] = im;
 			i++;
 		}
@@ -96,8 +107,11 @@ public class Animation implements Serializable {
 
 	// only save the path to the animation folder/image
 	private void writeObject(ObjectOutputStream out) throws IOException {
-		Main.log("writing object");
 		out.writeObject(getPath());
+	}
+
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		set(new Animation((String) in.readObject()));
 	}
 	
 	/**
@@ -105,10 +119,6 @@ public class Animation implements Serializable {
 	 */
 	public void restart() {
 		currentFrame = 0;
-	}
-
-	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		set(new Animation((String) in.readObject()));
 	}
 
 	private void set(Animation animation) {
@@ -143,6 +153,11 @@ public class Animation implements Serializable {
 	 */
 	public boolean hasCycled() {
 		return hasCycled;
+	}
+	
+	@Override
+	public String toString() {
+		return "Animation{len: " + frames.length + ", cur: " + currentFrame + "}";
 	}
 
 }

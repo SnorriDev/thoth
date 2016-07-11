@@ -37,7 +37,7 @@ public class Enemy extends Unit implements Pathfinder {
 		super(pos);
 		this.target = target;
 		inventory = new Inventory(this);
-		animation = new Animation("/textures/animations/mummy/idle");
+		animation = new Animation(Animation.MUMMY_IDLE);
 		setOrb((Orb) Item.newItem(ItemType.PELLET));
 		setWeapon((Weapon) Item.newItem(ItemType.SLOW_SLING));
 	}

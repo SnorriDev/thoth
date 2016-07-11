@@ -1,5 +1,6 @@
 package snorri.entities;
 
+import snorri.animations.Animation;
 import snorri.events.CollisionEvent;
 import snorri.inventory.Droppable;
 import snorri.main.Main;
@@ -11,11 +12,12 @@ public class Drop extends Detector {
 	private final Droppable prize;
 	
 	public Drop(Vector pos, Droppable prize) {
-		super(pos, 30);
+		super(pos, 15);
 		this.prize = prize;
 		treeMember = true;
 		age = -1;
 		ignoreCollisions = true;
+		animation = new Animation(Animation.SPARKLE);
 	}
 	
 	public Droppable getPrize() {
