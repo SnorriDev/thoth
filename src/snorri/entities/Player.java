@@ -55,7 +55,7 @@ public class Player extends Unit {
 		if (Debug.LOG_FOCUS) {
 			Main.log("main player updated");
 		}
-		
+				
 		super.update(world, deltaTime);
 		inventory.update(deltaTime);
 		walk(world, ((GameWindow) Main.getWindow()).getMovementVector(), deltaTime);

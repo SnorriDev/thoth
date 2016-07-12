@@ -5,7 +5,11 @@ import java.awt.Graphics;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -96,12 +100,14 @@ public class World implements Playable {
 		
 		Player p = new Player(l.getGoodSpawn(level.getDimensions().random()));
 		addHard(p);
+		List<Entity> enemies = new ArrayList<>();
 		for (int i = 0; i < 40; i++) {
 			Vector spawnPos = l.getGoodSpawn(level.getDimensions().random());
 			if (spawnPos != null) { //spawning enemies at null positions is gross and caused lots of issues
-				addHard(new Enemy(spawnPos, p));
+				enemies.add(new Enemy(spawnPos, p));
 			}
 		}
+		addAllHard(enemies);
 		
 		Set<String> drops = Lexicon.getELang();
 		for (String possibleDrop : drops) {
@@ -196,6 +202,25 @@ public class World implements Playable {
 
 		col.insert(e);
 
+	}
+	
+	/**
+	 * uses a magnitude-sort heuristic to add a list of entities
+	 * in an order that will produce a nicer tree structure
+	 * @param ents
+	 * 	the list of entities to be added
+	 * 	this list will be sorted into the order in which the entities are added
+	 */
+	public void addAllHard(List<Entity> ents) {
+		Collections.sort(ents, new Comparator<Entity>() {
+			@Override
+			public int compare(Entity o1, Entity o2) {
+				return o1.getPos().compareTo(o2.getPos());
+			}
+		});
+		for (Entity e : ents) {
+			addHard(e);
+		}
 	}
 
 	/**
