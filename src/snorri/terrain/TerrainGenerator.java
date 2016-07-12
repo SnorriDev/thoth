@@ -19,8 +19,8 @@ public class TerrainGenerator {
 	
 	public enum Biome {
 		
-		DEEP(-0.1, new Tile(TileType.WATER, 0)),
-		WATER(0, new Tile(TileType.WATER, 1)),
+		DEEP(-0.1, new Tile(TileType.WATER, 1)),
+		WATER(0, new Tile(TileType.WATER, 0)),
 		MARSH(0.1, new Tile(TileType.GRASS, 1)),
 		SWAMP(0.2, new Tile(TileType.GRASS, 0)),
 		SAND(0.3, new Tile(TileType.SAND, 0)),
