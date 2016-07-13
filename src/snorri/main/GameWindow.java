@@ -29,6 +29,7 @@ public class GameWindow extends FocusedWindow {
 	
 	public static final int MARGIN = 20;
 	
+	private final PauseOverlay pauseOverlay;
 	private Playable universe;
 	private Player focus;
 	private boolean paused, editingInventory;
@@ -40,7 +41,8 @@ public class GameWindow extends FocusedWindow {
 		this.focus = focus;
 		lastTime = getTimestamp();
 		paused = false;
-		editingInventory = false;		
+		editingInventory = false;
+		pauseOverlay = new PauseOverlay(this);
 	}
 	
 	public GameWindow(Playable universe) {
@@ -153,6 +155,11 @@ public class GameWindow extends FocusedWindow {
 	}
 	
 	public void togglePause() {
+		if (paused) {
+			Main.setOverlay(null);
+		} else {
+			Main.setOverlay(pauseOverlay);
+		}
 		paused = !paused;
 	}
 	

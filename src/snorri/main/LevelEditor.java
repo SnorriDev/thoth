@@ -187,6 +187,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		return wh;
 	}
 	
+	//replace this with a sleek overlay HUD instead of a popup window?
 	/**
 	 * a general method for making GUI dialogs
 	 * @param title

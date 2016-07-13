@@ -38,9 +38,14 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 
 	protected JButton createButton(String text) {
 		JButton button = new JButton(text);
-		add(button);
 		button.setSelected(false);
 		button.addActionListener(this);
+		return button;
+	}
+	
+	protected JButton createButton(String text, Vector size) {
+		JButton button = createButton(text);
+		button.setSize(size.getX(), size.getY());
 		return button;
 	}
 
