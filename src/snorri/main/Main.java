@@ -44,7 +44,7 @@ public class Main {
 		frame.getContentPane().add(getLayeredPane(), BorderLayout.CENTER);
 		//FOR FULL SCREEN: frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-		setWindow(new MainMenu());
+		launchMenu();
 
 	}
 
@@ -147,6 +147,11 @@ public class Main {
 		return pane;
 	}
 
+	public static void launchMenu() {
+		setOverlay(null);
+		setWindow(new MainMenu());
+	}
+	
 	public static void launchGame(World world) {
 		setWindow(new GameWindow(world));
 	}

@@ -11,6 +11,7 @@ import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.entities.Unit;
 import snorri.keyboard.Key;
+import snorri.overlay.PauseOverlay;
 import snorri.world.Playable;
 import snorri.world.Vector;
 import snorri.world.World;
