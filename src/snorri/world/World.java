@@ -98,6 +98,8 @@ public class World implements Playable {
 
 		Pathfinding.setWorld(this);
 		
+		//TODO pick the graph the player is in and only spawn there.
+		
 		Player p = new Player(l.getGoodSpawn(level.getDimensions().random()));
 		addHard(p);
 		List<Entity> enemies = new ArrayList<>();
@@ -246,11 +248,6 @@ public class World implements Playable {
 			return colliders.remove(e);
 		}
 		return col.delete(e);
-	}
-
-	@Override
-	public void save(File f) throws IOException {
-		save(f, true);
 	}
 	
 	@Override

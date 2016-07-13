@@ -104,6 +104,8 @@ public class SpellEvent {
 	
 	/**
 	 * use this to reduce healing and damage on continuous spells
+	 * this method should also be used for controlling physical size
+	 * (for example, the radius of an explosion)
 	 * @param amount
 	 * 	the amount before modifiers are applied
 	 * @return
@@ -124,24 +126,8 @@ public class SpellEvent {
 		return amount * speedModifier;
 	}
 	
-	/**
-	 * use this to get modified sizes and scales
-	 * @param amount
-	 * 	the amount before modifiers are applied
-	 * @return
-	 * 	the modified amount
-	 */
-	public double modifySize(double amount) {
-		return amount * sizeModifier;
-	}
-	
 	public SpellEvent scaleHealthInteractionModifier(double scale) {
 		healthInteractModifier *= scale;
-		return this;
-	}
-	
-	public SpellEvent scaleSizeModifier(double scale) {
-		sizeModifier *= scale;
 		return this;
 	}
 	

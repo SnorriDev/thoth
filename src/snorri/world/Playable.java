@@ -18,7 +18,9 @@ public interface Playable {
 
 	public void load(File folder) throws FileNotFoundException, IOException;
 
-	public void save(File folder) throws IOException;
+	default void save(File f) throws IOException {
+		save(f, false);
+	}
 	
 	public void save(File f, boolean recomputeGraphs) throws IOException;
 	
@@ -39,7 +41,7 @@ public interface Playable {
 		}
 		
 		try {
-			save(f);
+			save(f, true);
 		} catch (IOException er) {
 			Main.error("cannot save world " + f.getName() + "; are all objects serializable?");
 			er.printStackTrace(); //see what is non-serializable

@@ -138,4 +138,8 @@ public class Main {
 		return frame;
 	}
 	
+	public static String removeExtension(String fileName) {
+		return fileName.replaceFirst("[.][^.]+$", "");
+	}
+	
 }

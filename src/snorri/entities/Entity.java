@@ -250,5 +250,9 @@ public class Entity implements Nominal, Serializable {
 	public boolean shouldIgnoreCollisions() {
 		return ignoreCollisions;
 	}
+	
+	public void setPos(Vector pos) {
+		this.pos = pos.copy();
+	}
 
 }

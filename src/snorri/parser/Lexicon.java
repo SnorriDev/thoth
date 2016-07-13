@@ -15,6 +15,7 @@ import snorri.semantics.At;
 import snorri.semantics.Be;
 import snorri.semantics.Boom;
 import snorri.semantics.Burn;
+import snorri.semantics.Damage;
 import snorri.semantics.Definition;
 import snorri.semantics.DegreeModifierDef;
 import snorri.semantics.FirstObjectPronoun;
@@ -114,7 +115,8 @@ public class Lexicon {
 		lexicon.put("mAX", new Burn());
 		lexicon.put("nD", new Heal()); //literally means "protect"
 		lexicon.put("pA", new Fly());	
-		lexicon.put("mAA", new See()); //see
+		lexicon.put("mAA", new See());
+		lexicon.put("pH", new Damage());
 		
 		Grammar.loadLexicon();
 		

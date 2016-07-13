@@ -7,6 +7,7 @@ import java.awt.event.MouseListener;
 
 import snorri.entities.Entity;
 import snorri.keyboard.KeyStates;
+import snorri.world.Playable;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -57,5 +58,7 @@ public abstract class FocusedWindow extends GamePanel implements MouseListener, 
 	}
 
 	public abstract World getWorld();
+
+	public abstract Playable getUniverse();
 		
 }

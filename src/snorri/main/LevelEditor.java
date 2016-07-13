@@ -29,6 +29,7 @@ import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.keyboard.Key;
 import snorri.world.Level;
+import snorri.world.Playable;
 import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -508,6 +509,11 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	@Override
 	public World getWorld() {
+		return world;
+	}
+
+	@Override
+	public Playable getUniverse() {
 		return world;
 	}
 	

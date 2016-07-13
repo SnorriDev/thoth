@@ -106,6 +106,11 @@ public class GameWindow extends FocusedWindow {
 	}
 	
 	@Override
+	public Playable getUniverse() {
+		return universe;
+	}
+	
+	@Override
 	public void keyPressed(KeyEvent e) {
 		
 		super.keyPressed(e);
