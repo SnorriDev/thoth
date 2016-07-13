@@ -94,8 +94,11 @@ public class Campaign implements Playable {
 		}
 		
 		worlds = new World[WorldId.values().length];
-		for (int i = 0; i < worlds.length; i++) {
-			worlds[i] = new World(new File(folder, Main.removeExtension(folder.getName()) + "-" + i));
+		for (File f : folder.listFiles()) {
+			WorldId id = WorldId.valueOf(f.getName());
+			if (id != null) {
+				worlds[id.ordinal()] = new World(f);
+			}
 		}
 		
 	}
@@ -108,7 +111,7 @@ public class Campaign implements Playable {
 		}
 		
 		for (int i = 0; i < worlds.length; i++) {
-			worlds[i].save(new File(f, Main.removeExtension(f.getName()) + "-" + i));
+			worlds[i].save(new File(f, WorldId.values()[i].name()));
 		}
 		
 	}
