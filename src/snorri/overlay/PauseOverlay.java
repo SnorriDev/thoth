@@ -25,6 +25,7 @@ public class PauseOverlay extends GamePanel implements KeyListener {
 		setLayout(new GridBagLayout());
 		JPanel menu = new JPanel(new GridLayout(0, 1));
 		menu.setOpaque(false);
+		menu.add(createButton("Save"));
 		menu.add(createButton("Back"));
 		menu.add(createButton("Quit"));
 		add(menu, new GridBagConstraints());
@@ -34,6 +35,9 @@ public class PauseOverlay extends GamePanel implements KeyListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand().equals("Save")) {
+			window.getUniverse().wrapSave();
+		}
 		if (e.getActionCommand().equals("Back")) {
 			window.togglePause();
 		}
