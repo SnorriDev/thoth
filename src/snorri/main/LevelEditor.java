@@ -21,13 +21,14 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import snorri.entities.Entity;
 import snorri.entities.Player;
+import snorri.entities.Portal;
 import snorri.keyboard.Key;
+import snorri.world.Campaign.WorldId;
 import snorri.world.Level;
 import snorri.world.Playable;
 import snorri.world.Tile;
@@ -170,35 +171,43 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		Main.getFrame().setJMenuBar(menuBar);
 	}
 
-	private boolean isInteger(String input) {
-		try {
-			Integer.parseInt(input);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
-	}
-
+	//TODO: take input HashMap; save answers into it and return pointer to it 
 	private int[] whDialog() {
 		int[] wh = { -1, -1 };
-		JTextField w = new JTextField("300");
-		JTextField h = new JTextField("300");
-		JPanel panel = new JPanel(new GridLayout(0, 1));
-		panel.add(new JLabel("Width:"));
-		panel.add(w);
-		panel.add(new JLabel("Height:"));
-		panel.add(h);
-		int option = JOptionPane.showConfirmDialog(null, panel, "Enter Width & Height", JOptionPane.PLAIN_MESSAGE);
-		if (option == JOptionPane.CLOSED_OPTION) {
+		DialogMap inputs = new DialogMap();
+		inputs.put("Width", "150");
+		inputs.put("Height", "150");
+		if (dialog("World Dimensions", inputs) == null) {
 			return null;
 		}
 
-		if (isInteger(w.getText()) && isInteger(h.getText())) {
-			wh[0] = Integer.parseInt(w.getText());
-			wh[1] = Integer.parseInt(h.getText());
-		}
+		wh[0] = inputs.getInteger("Width");
+		wh[1] = inputs.getInteger("Height");
 
 		return wh;
+	}
+	
+	/**
+	 * a general method for making GUI dialogs
+	 * @param title
+	 * 	the title of the window
+	 * @param inputs
+	 * 	a dialog map of inputs and textfields;
+	 * as a side effect, this map will be updated,
+	 * and a pointer to it is return by the method
+	 * @return a pointer to the modified DialogMap
+	 */
+	private DialogMap dialog(String title, DialogMap inputs) {
+		JPanel panel = new JPanel(new GridLayout(0, 2));
+		for (String key : inputs.keySet()) {
+			panel.add(new JLabel(key));
+			panel.add(inputs.get(key));
+		}
+		int option = JOptionPane.showConfirmDialog(null, panel, title, JOptionPane.PLAIN_MESSAGE);
+		if (option == JOptionPane.CLOSED_OPTION) {
+			return null;
+		}
+		return inputs;
 	}
 
 	@Override
@@ -416,13 +425,27 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	}
 
 	public void spawnEntity() {
+		
+		autosaveUndo();
+
+		if (selectedEntityClass.equals(Player.class)) {
+			world.deleteHard(world.computeFocus()); // don't need to check null
+		}
+		
+		//TODO auto-detect options for constructor; have method that gives them?
+		
 		try {
-			autosaveUndo();
-
-			if (selectedEntityClass.equals(Player.class)) {
-				world.deleteHard(world.computeFocus()); // don't need to check null
+			
+			if (selectedEntityClass.equals(Portal.class)) {
+				DialogMap inputs = new DialogMap();
+				inputs.put("World", WorldId.SPAWN_TOWN.name());
+				inputs.put("X", "" + focus.getPos().getX());
+				inputs.put("Y", "" + focus.getPos().getY());
+				dialog("Portal Destination", inputs);
+				Vector dest = new Vector(inputs.getDouble("X"), inputs.getDouble("Y"));
+				world.addHard(selectedEntityClass.getConstructor(Vector.class, String.class, Vector.class).newInstance(this.getMousePosAbsolute(), inputs.getText("World"), dest));
 			}
-
+			
 			world.addHard(selectedEntityClass.getConstructor(Vector.class).newInstance(this.getMousePosAbsolute()));
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| SecurityException e) {

@@ -23,6 +23,10 @@ public class Portal extends Detector {
 		ignoreCollisions = true;
 	}
 	
+	public Portal(Vector pos, String world, Vector dest) {
+		this(pos, WorldId.fromString(world), dest);
+	}
+	
 	@Override
 	public void onCollision(CollisionEvent e) {
 		Playable universe = ((GameWindow) Main.getWindow()).getUniverse();

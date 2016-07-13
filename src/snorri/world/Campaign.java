@@ -8,6 +8,7 @@ import java.util.Arrays;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.main.Main;
+import snorri.main.Util;
 
 public class Campaign implements Playable {
 
@@ -22,8 +23,18 @@ public class Campaign implements Playable {
 		PYRAMIDS,
 		NILE,
 		UNDERWORLD;
+
+		//read a string representation as a number or an enum name
+		public static WorldId fromString(String world) {
+			Integer parse = Util.getInteger(world);
+			if (parse == null) {
+				return valueOf(world);
+			}
+			return values()[parse];
+		}
+		
 	}
-	
+		
 	public Campaign(File f) throws FileNotFoundException, IOException  {
 		load(f);
 	}
@@ -89,7 +100,7 @@ public class Campaign implements Playable {
 	public void load(File folder) throws FileNotFoundException, IOException {
 		
 		if (!folder.isDirectory()) {
-			Main.error("campaign path is not a folder");
+			Main.error("path for campaign is not a folder");
 			throw new IOException();
 		}
 		
