@@ -217,6 +217,7 @@ public class EntityGroup extends Entity {
 		int max = 0;
 		for (Entity b : boundary) {
 			if (b != null && !contains(b)) {
+				Main.log(b.collider.getMaxRadius());
 				max = b.collider.getMaxRadius() > max ? b.collider.getMaxRadius() : max;
 			}
 		}

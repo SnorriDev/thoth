@@ -47,66 +47,29 @@ public class RectCollider extends Collider {
 		return pos.copy().add(dim.getX() / 2, -dim.getY() / 2);
 	}
 	
-	public Rectangle getRect() {
+	@Override
+	public Rectangle getShape() {
 		Vector top = getTopLeft();
 		return new Rectangle(top.getX(), top.getY(), dim.getX(), dim.getY());
 	}
 
 	@Override
-	protected boolean intersects(CircleCollider other) {
-		if (other == null) {
-			return false;
-		}
-		return other.intersects(this);
-	}
-
-	@Override
-	protected boolean intersects(RectCollider other) {
-		return getRect().intersects(other.getRect());
-	}
-
-	//TODO: we can potentially combine these contains methods so that they don't differentiate
-	
-	@Override
-	protected boolean contains(CircleCollider other) {
-		return getRect().contains(other.getBoundingRect());
-	}
-
-	@Override
-	protected boolean contains(RectCollider other) {
-		return getRect().contains(other.getRect());
-	}
-
-	@Override
-	public boolean intersects(Vector pos) {
-		Vector lower = getTopLeft();
-		Vector upper = getBottomRight();
-		return lower.getX() <= pos.getX() && pos.getX() <= upper.getX() &&
-				lower.getY() <= pos.getY() && pos.getY() <= upper.getY();
-		
-	}
-
-	@Override
 	public void render(FocusedWindow g, Graphics gr) {
-		//TODO: turn all gr into Graphics2D objects?
 		if (pos == null || g.getFocus().getPos() == null) {
 			return;
 		}
 		Vector rel = pos.copy().sub(g.getFocus().getPos());
-		Rectangle rect = getRect();
-		gr.drawRect(rel.getX() + g.getCenter().getX() - rect.width / 2, rel.getY() + g.getCenter().getY() - rect.height / 2, rect.width, rect.height);
+		Rectangle rect = getShape();
+		int x = (int) (rel.getX() + g.getCenter().getX() - rect.getWidth() / 2);
+		int y = (int) (rel.getY() + g.getCenter().getY() - rect.getHeight() / 2);
+		gr.drawRect(x, y, (int) rect.getWidth(), (int) rect.getHeight());
 	}
 
 	@Override
 	public Collider cloneOnto(Entity root) {
 		return new RectCollider(root.getPos(), dim.copy());
 	}
-
-	@Override
-	public boolean intersects(Rectangle rect) {
-		return getRect().intersects(rect);
-	}
-
+	
 	@Override
 	public int getMaxRadius() {
 		return (int) Math.sqrt(getWidth() * getWidth() + getHeight() * getHeight());
@@ -115,6 +78,11 @@ public class RectCollider extends Collider {
 	@Override
 	public String toString() {
 		return dim.getY() + "x" + dim.getX();
+	}
+	
+	@Override
+	public RectCollider copy() {
+		return new RectCollider(pos, dim.copy());
 	}
 
 }

@@ -2,6 +2,7 @@ package snorri.world;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.Point2D;
 import java.io.Serializable;
 
 import snorri.main.FocusedWindow;
@@ -213,6 +214,12 @@ public class Vector implements Serializable, Comparable<Vector> {
 	@Override
 	public int compareTo(Vector o) {
 		return Double.compare(magnitude(), o.magnitude());
+	}
+	
+	//TODO maybe should have just used these instead of vectors lol
+	
+	public Point2D getPoint() {
+		return new Point(getX(), getY());
 	}
 		
 }

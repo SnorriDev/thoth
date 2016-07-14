@@ -22,6 +22,7 @@ import snorri.entities.Entity;
 import snorri.entities.EntityGroup;
 import snorri.entities.Player;
 import snorri.inventory.VocabDrop;
+import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.parser.Lexicon;
@@ -104,15 +105,13 @@ public class World implements Playable {
 		Player p = new Player(l.getGoodSpawn(level.getDimensions().random()));
 		addHard(p);
 		List<Entity> enemies = new ArrayList<>();
-		for (int i = 0; i < 40; i++) {
+		for (int i = 0; i < 5; i++) {
 			Vector spawnPos = l.getGoodSpawn(level.getDimensions().random());
 			if (spawnPos != null) { //spawning enemies at null positions is gross and caused lots of issues
 				enemies.add(new Enemy(spawnPos, p));
-				addHard(new Enemy(spawnPos, p));
 			}
 		}
-		//addAllHard(enemies);
-		col.traverse();
+		addAllHard(enemies);
 		
 		Set<String> drops = Lexicon.getELang();
 		for (String possibleDrop : drops) {
@@ -159,6 +158,9 @@ public class World implements Playable {
 			return;
 		}
 		
+		if (Debug.LOG_WORLD) {
+			Main.log("world update");
+		}
 		col.updateAround(this, d, ((FocusedWindow) Main.getWindow()).getFocus());
 				
 		for (Detector p : colliders) {
@@ -232,6 +234,7 @@ public class World implements Playable {
 		});
 		for (Entity e : ents) {
 			addHard(e);
+			col.traverse();
 		}
 	}
 

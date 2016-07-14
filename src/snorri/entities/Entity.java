@@ -36,7 +36,6 @@ public class Entity implements Nominal, Serializable {
 		}
 		this.pos = (e.pos == null) ? null : e.pos.copy();
 		this.collider = e.collider.cloneOnto(this);
-		
 	}
 	
 	public Entity(Vector pos, int r) {
