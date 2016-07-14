@@ -11,18 +11,15 @@ import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.entities.Unit;
 import snorri.keyboard.Key;
+import snorri.overlay.DeathOverlay;
+import snorri.overlay.InventoryOverlay;
 import snorri.overlay.PauseOverlay;
 import snorri.world.Playable;
 import snorri.world.Vector;
 import snorri.world.World;
 
 public class GameWindow extends FocusedWindow {
-	
-	//https://docs.oracle.com/javase/7/docs/api/javax/swing/JLayeredPane.html
-	//http://stackoverflow.com/questions/8776540/painting-over-the-top-of-components-in-swing
-	//TODO perhaps restructure all this stuff
-	//TODO rather than having a render method for pause HUD, override paintComponent and paint other things (buttons)
-	
+		
 	/**
 	 * Main game window
 	 */
@@ -30,10 +27,9 @@ public class GameWindow extends FocusedWindow {
 	
 	public static final int MARGIN = 20;
 	
-	private final PauseOverlay pauseOverlay;
 	private Playable universe;
 	private Player focus;
-	private boolean paused, editingInventory;
+	private boolean paused, editingInventory, hasDied;
 	private long lastTime;
 		
 	public GameWindow(Playable universe, Player focus) {
@@ -43,7 +39,7 @@ public class GameWindow extends FocusedWindow {
 		lastTime = getTimestamp();
 		paused = false;
 		editingInventory = false;
-		pauseOverlay = new PauseOverlay(this);
+		hasDied = false;
 	}
 	
 	public GameWindow(Playable universe) {
@@ -66,8 +62,12 @@ public class GameWindow extends FocusedWindow {
 		}
 		
 		if (isPaused() || isEditingInventory()) {
-			//TODO draw menu when paused or something
 			return;
+		}
+		
+		if (!hasDied && focus != null && focus.isDead()) {
+			hasDied = true;
+			Main.setOverlay(new DeathOverlay());
 		}
 		
 		universe.getCurrentWorld().update(deltaTime);
@@ -85,17 +85,6 @@ public class GameWindow extends FocusedWindow {
 		universe.getCurrentWorld().render(this, g, true);
 		focus.getInventory().render(this, g);
 		focus.renderHealthBar(g);
-		
-		//draw inventory HUD over game background
-		if (isEditingInventory()) {
-			//TODO: figure out how to do this
-			focus.getFullInventory().paint(null);
-		}
-		
-		//draw pause HUD over inventory HUD
-		if (isPaused()) {
-			//TODO draw pause HUD
-		}
 		
 	}
 	
@@ -118,10 +107,10 @@ public class GameWindow extends FocusedWindow {
 		
 		super.keyPressed(e);
 		if (Key.ESC.isPressed(e)) {
-			togglePause();
+			pause();
 		}
 		
-		if (focus == null || focus.isDead()) {
+		if (focus == null || hasDied) {
 			return;
 		}
 		
@@ -131,7 +120,7 @@ public class GameWindow extends FocusedWindow {
 			//also move to its own thing for organization?
 			for (Entity entity : universe.getCurrentWorld().getEntityTree().getAllCollisions(interactRegion)) {
 				if (entity instanceof Desk) {
-					Main.log("interacting with a desk");
+					openInventory();
 					return;
 				}
 			}
@@ -155,13 +144,24 @@ public class GameWindow extends FocusedWindow {
 		
 	}
 	
-	public void togglePause() {
-		if (paused) {
-			Main.setOverlay(null);
-		} else {
-			Main.setOverlay(pauseOverlay);
-		}
-		paused = !paused;
+	public synchronized void pause() {
+		paused = true;
+		Main.setOverlay(new PauseOverlay(this));
+	}
+	
+	public synchronized void unpause() {
+		paused = false;
+		Main.setOverlay(null);
+	}
+	
+	public synchronized void openInventory() {
+		editingInventory = true;
+		Main.setOverlay(new InventoryOverlay(this, focus.getInventory()));
+	}
+	
+	public synchronized void closeInventory() {
+		editingInventory = false;
+		Main.setOverlay(null);
 	}
 	
 	public boolean isPaused() {

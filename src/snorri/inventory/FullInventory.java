@@ -4,10 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import javax.swing.JComponent;
-
-
-
 public class FullInventory extends ArrayList<Droppable> implements Serializable {
 
 	/**
@@ -43,15 +39,6 @@ public class FullInventory extends ArrayList<Droppable> implements Serializable 
 	 */
 	public boolean knowsWord(String word) {
 		return contains(new VocabDrop(word));
-	}
-
-	/**
-	 * paint the full inventory at a specified component
-	 * @param component
-	 * 		the target JComponent which will be the inventory interface
-	 */
-	public void paint(JComponent component) {
-		//TODO write this
 	}
 		
 	//TODO Toby do stuff here!!

@@ -17,9 +17,9 @@ import snorri.terrain.TerrainGenerator;
 import snorri.world.World;
 
 public class Main {
-
+			
 	private static GamePanel window;
-	private static JComponent overlay;
+	private static JComponent outerOverlay;
 	
 	private static JFrame frame;
 	private static JLayeredPane pane;
@@ -123,26 +123,26 @@ public class Main {
 	}
 	
 	/**
-	 * set the HUD which should appear over the game screen
+	 * set the outer HUD which should appear over the game screen
 	 * @param newOverlay
 	 * the new HUD overlay
 	 */
 	public static final void setOverlay(JComponent newOverlay) {
-		if (overlay != null) {
-			getLayeredPane().remove(overlay);
+		if (outerOverlay != null) {
+			getLayeredPane().remove(outerOverlay);
 			getLayeredPane().revalidate();
 		}
 		if (newOverlay != null) {
-			overlay = newOverlay;
-			overlay.setVisible(true);
-			overlay.setBounds(frame.getBounds());
-			getLayeredPane().add(overlay, JLayeredPane.PALETTE_LAYER);
+			outerOverlay = newOverlay;
+			outerOverlay.setVisible(true);
+			outerOverlay.setBounds(frame.getBounds());
+			getLayeredPane().add(outerOverlay, JLayeredPane.PALETTE_LAYER);
 			getLayeredPane().revalidate();
 			getLayeredPane().repaint();
-			overlay.requestFocusInWindow();
+			outerOverlay.requestFocusInWindow();
 		}
 	}
-		
+	
 	public static JLayeredPane getLayeredPane() {
 		return pane;
 	}

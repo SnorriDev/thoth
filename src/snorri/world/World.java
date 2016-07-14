@@ -14,6 +14,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import snorri.entities.Desk;
 import snorri.entities.Detector;
 import snorri.entities.Drop;
 import snorri.entities.Enemy;
@@ -118,6 +119,13 @@ public class World implements Playable {
 				if (spawnPos != null) { //spawning enemies at null positions is gross and caused lots of issues
 					addHard(new Drop(spawnPos, new VocabDrop(possibleDrop)));
 				}
+			}
+		}
+		
+		for (int i = 0; i < 4; i++) {
+			Vector spawnPos = l.getGoodSpawn(level.getDimensions().random());
+			if (spawnPos != null) { //spawning enemies at null positions is gross and caused lots of issues
+				addHard(new Desk(spawnPos));
 			}
 		}
 

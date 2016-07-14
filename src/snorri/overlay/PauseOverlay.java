@@ -39,7 +39,7 @@ public class PauseOverlay extends GamePanel implements KeyListener {
 			window.getUniverse().wrapSave();
 		}
 		if (e.getActionCommand().equals("Back")) {
-			window.togglePause();
+			window.unpause();
 		}
 		if (e.getActionCommand().equals("Quit")) {
 			//TODO save
@@ -47,10 +47,11 @@ public class PauseOverlay extends GamePanel implements KeyListener {
 		}
 	}
 	
+	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (Key.ESC.isPressed(e)) {
-			window.togglePause();
+			window.unpause();
 		}
 	}
 
