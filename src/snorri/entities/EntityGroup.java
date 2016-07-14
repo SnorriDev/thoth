@@ -58,13 +58,12 @@ public class EntityGroup extends Entity {
 			}
 		}
 
-		//TODO: figure out what to do here
+		//TODO: there might be some kind of issue here
 		
 		entities.add(r2);
 
 		// compute axis vector between the two centers
-		Vector axis = r2.pos.copy();
-		axis.sub(r1.pos);
+		Vector axis = r2.pos.copy().sub(r1.pos);
 
 		// compute the new radius
 		((CircleCollider) collider).setRadius((r1.pos.distance(r2.pos) + r1.collider.getMaxRadius() + r2.collider.getMaxRadius()) / 2);
@@ -206,7 +205,6 @@ public class EntityGroup extends Entity {
 		((CircleCollider) collider).setRadius(enclosing.collider.getMaxRadius());
 		((CircleCollider) collider).increaseRadius(getMaxRadius(points));
 
-		//TODO: equals vs spatialEquals here
 		if (entities.size() == 1 && equals(entities.get(0))) {
 			set(entities.get(0));
 		}
@@ -217,7 +215,6 @@ public class EntityGroup extends Entity {
 		int max = 0;
 		for (Entity b : boundary) {
 			if (b != null && !contains(b)) {
-				Main.log(b.collider.getMaxRadius());
 				max = b.collider.getMaxRadius() > max ? b.collider.getMaxRadius() : max;
 			}
 		}
@@ -281,13 +278,14 @@ public class EntityGroup extends Entity {
 			return;
 		}
 
-		if (!intersects(e)) {
+		//e.collider.getInscribing()
+		if (!intersects(e.collider)) {
 			EntityGroup group = new EntityGroup();
 			group.set(this);
 			set(new EntityGroup(group, e));
 			return;
 		}
-
+		
 //		if (e instanceof EntityGroup) {
 //			for (Entity child : ((EntityGroup) e).entities) {
 //				insert(child);
@@ -436,13 +434,11 @@ public class EntityGroup extends Entity {
 	}
 
 	private void set(Entity e) {
-
 		pos = e.pos;
-		((CircleCollider) collider).setRadius(e.collider.getMaxRadius());
+		collider = new CircleCollider(pos, e.collider.getMaxRadius());
 		if (e instanceof EntityGroup) {
 			entities = ((EntityGroup) e).entities;
 		}
-
 	}
 	
 	public void recalculate(Entity update) {

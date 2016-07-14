@@ -99,26 +99,28 @@ public class World implements Playable {
 		addQ = new LinkedList<Entity>();
 
 		Pathfinding.setWorld(this);
+		l.computePathfinding();
 		
 		//TODO pick the graph the player is in and only spawn there.
 		
+		List<Entity> toBeSpawned = new ArrayList<>();
+		
 		Player p = new Player(l.getGoodSpawn(level.getDimensions().random()));
 		addHard(p);
-		List<Entity> enemies = new ArrayList<>();
-		for (int i = 0; i < 5; i++) {
+		
+		for (int i = 0; i < 40; i++) {
 			Vector spawnPos = l.getGoodSpawn(level.getDimensions().random());
 			if (spawnPos != null) { //spawning enemies at null positions is gross and caused lots of issues
-				enemies.add(new Enemy(spawnPos, p));
+				toBeSpawned.add(new Enemy(spawnPos, p));
 			}
 		}
-		addAllHard(enemies);
 		
 		Set<String> drops = Lexicon.getELang();
 		for (String possibleDrop : drops) {
 			if (Math.random() > 0.5) {
 				Vector spawnPos = l.getGoodSpawn(level.getDimensions().random());
 				if (spawnPos != null) { //spawning enemies at null positions is gross and caused lots of issues
-					addHard(new Drop(spawnPos, new VocabDrop(possibleDrop)));
+					toBeSpawned.add(new Drop(spawnPos, new VocabDrop(possibleDrop)));
 				}
 			}
 		}
@@ -126,9 +128,11 @@ public class World implements Playable {
 		for (int i = 0; i < 4; i++) {
 			Vector spawnPos = l.getGoodSpawn(level.getDimensions().random());
 			if (spawnPos != null) { //spawning enemies at null positions is gross and caused lots of issues
-				addHard(new Desk(spawnPos));
+				toBeSpawned.add(new Desk(spawnPos));
 			}
 		}
+		
+		addAllHard(toBeSpawned, p);
 
 		Main.log("new world created!");
 	}
@@ -225,16 +229,18 @@ public class World implements Playable {
 	 * 	the list of entities to be added
 	 * 	this list will be sorted into the order in which the entities are added
 	 */
-	public void addAllHard(List<Entity> ents) {
+	public void addAllHard(List<Entity> ents, Entity focus) {
 		Collections.sort(ents, new Comparator<Entity>() {
 			@Override
 			public int compare(Entity o1, Entity o2) {
-				return o1.getPos().compareTo(o2.getPos());
+				return Double.compare(o1.getPos().distance(focus.getPos()), o2.getPos().distance(focus.getPos()));
 			}
 		});
 		for (Entity e : ents) {
+			Main.log("starting traverse..");
 			addHard(e);
 			col.traverse();
+			Main.log("traverse done!");
 		}
 	}
 

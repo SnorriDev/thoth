@@ -49,8 +49,9 @@ public class RectCollider extends Collider {
 	
 	@Override
 	public Rectangle getShape() {
-		Vector top = getTopLeft();
-		return new Rectangle(top.getX(), top.getY(), dim.getX(), dim.getY());
+		return new Rectangle(pos.getX() - dim.getX() / 2, pos.getY() - dim.getY() / 2, dim.getX(), dim.getY());
+//		Vector top = getTopLeft();
+//		return new Rectangle(top.getX(), top.getY(), dim.getX(), dim.getY());
 	}
 
 	@Override
@@ -72,12 +73,12 @@ public class RectCollider extends Collider {
 	
 	@Override
 	public int getMaxRadius() {
-		return (int) Math.sqrt(getWidth() * getWidth() + getHeight() * getHeight());
+		return (int) (Math.sqrt(getWidth() * getWidth() + getHeight() * getHeight()) + 1);
 	}
 	
 	@Override
 	public String toString() {
-		return dim.getY() + "x" + dim.getX();
+		return dim.getY() + "x" + dim.getX() + "(r" + getMaxRadius() + ")";
 	}
 	
 	@Override

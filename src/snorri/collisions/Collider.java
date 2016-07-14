@@ -11,9 +11,6 @@ import snorri.main.FocusedWindow;
 import snorri.world.Vector;
 
 public abstract class Collider implements Serializable {
-
-	//TODO
-	// use awt.Shape and Area instead of this javafx bullshit
 	
 	private static final long serialVersionUID = 1L;
 	protected Vector pos;
@@ -27,19 +24,6 @@ public abstract class Collider implements Serializable {
 	public Vector getPos() {
 		return pos;
 	}
-	
-//	/**
-//	 * @return whether this collider is intersecting another one
-//	 */
-//	public boolean intersects(Collider other) {
-//		if (other instanceof CircleCollider) {
-//			return intersects((CircleCollider) other);
-//		}
-//		if (other instanceof RectCollider) {
-//			return intersects((RectCollider) other);
-//		}
-//		return false;
-//	}
 		
 	/**
 	 * @return whether other is contained in this collider
@@ -49,7 +33,7 @@ public abstract class Collider implements Serializable {
 	}
 	
 	public final boolean contains(Shape other) {
-		if (pos == null) { //TODO figure out how we want to do null
+		if (pos == null) {
 			return true;
 		}
 		Area a = new Area(other);
@@ -86,6 +70,21 @@ public abstract class Collider implements Serializable {
 	
 	public abstract int getMaxRadius();
 	
+	public CircleCollider getInscribing() {
+		int r = getMaxRadius();
+		return new CircleCollider(pos, r);
+	}
+	
 	public abstract Collider copy();
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof Collider) {
+			Area a1 = new Area(getShape());
+			Area a2 = new Area(((Collider) other).getShape());
+			return a1.equals(a2);
+		}
+		return false;
+	}
 	
 }

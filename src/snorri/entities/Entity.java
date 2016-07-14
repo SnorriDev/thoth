@@ -2,7 +2,7 @@ package snorri.entities;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Rectangle;
+import java.awt.Shape;
 import java.io.Serializable;
 
 import snorri.animations.Animation;
@@ -29,27 +29,23 @@ public class Entity implements Nominal, Serializable {
 	private Timer burnTimer = new Timer(5);
 	private boolean flying;
 
-	public Entity(Entity e) {
-		if (e.pos == null && !(this instanceof EntityGroup)) {
-			Main.error("spawned non-EntityGroup at null using other entity: " + this.getClass().getSimpleName());
-			return;
-		}
-		this.pos = (e.pos == null) ? null : e.pos.copy();
-		this.collider = e.collider.cloneOnto(this);
-	}
-	
-	public Entity(Vector pos, int r) {
-		this(pos, new CircleCollider(pos, r));
-	}
-	
 	public Entity(Vector pos, Collider collider) {
 		
 		if (pos == null && !(this instanceof EntityGroup)) {
 			Main.error("spawned non-EntityGroup at null: " + this.getClass().getSimpleName());
 		}
 		
-		this.pos = pos;
+		this.pos = (pos == null) ? null : pos.copy();
 		this.collider = collider.cloneOnto(this); //so we dont get weird entangled positions
+		
+	}
+	
+	public Entity(Entity e) {
+		this(e.pos, e.collider); //TODO change so that the copying happens here
+	}
+	
+	public Entity(Vector pos, int r) {
+		this(pos, new CircleCollider(pos, r));
 	}
 	
 	public Entity(Vector pos) {
@@ -77,11 +73,15 @@ public class Entity implements Nominal, Serializable {
 	}
 	
 	public boolean intersects(Entity e) {
-		return collider.intersects(e.collider);
+		return intersects(e.collider);
 	}
 	
-	public boolean intersects(Rectangle rect) {
-		return collider.intersects(rect);
+	public boolean intersects(Collider c) {
+		return intersects(c.getShape());
+	}
+	
+	public boolean intersects(Shape shape) {
+		return collider.intersects(shape);
 	}
 	
 	public boolean intersectsWall(World world) {

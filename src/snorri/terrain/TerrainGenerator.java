@@ -60,7 +60,6 @@ public class TerrainGenerator {
 	
 	public World genWorld() {
 		World world = new World(genLevel());
-		world.getLevel().computePathfinding();
 		return world;
 	}
 	
