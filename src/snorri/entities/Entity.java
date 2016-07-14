@@ -91,8 +91,8 @@ public class Entity implements Nominal, Serializable {
 	
 	public boolean intersectsWall(Level level) {
 
-		for (int i = (pos.getX() - collider.getMaxWidth()) / Tile.WIDTH - 1; i <= (pos.getX() + collider.getMaxWidth()) / Tile.WIDTH; i++) {
-			for (int j = (pos.getY() - collider.getMaxWidth()) / Tile.WIDTH - 1; j <= (pos.getY() + collider.getMaxWidth()) / Tile.WIDTH; j++) {
+		for (int i = (pos.getX() - collider.getMaxRadius()) / Tile.WIDTH - 1; i <= (pos.getX() + collider.getMaxRadius()) / Tile.WIDTH; i++) {
+			for (int j = (pos.getY() - collider.getMaxRadius()) / Tile.WIDTH - 1; j <= (pos.getY() + collider.getMaxRadius()) / Tile.WIDTH; j++) {
 				
 				if (! intersects(Level.getRectange(i, j))) {
 					continue;

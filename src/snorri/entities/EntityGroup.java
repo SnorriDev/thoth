@@ -33,7 +33,7 @@ public class EntityGroup extends Entity {
 	// can make this stuff more elegant
 	public EntityGroup(Entity root) {
 		super(root);
-		collider = new CircleCollider(pos, root.collider.getMaxWidth());
+		collider = new CircleCollider(pos, root.collider.getMaxRadius());
 		entities = new CopyOnWriteArrayList<Entity>();
 		entities.add(root);
 	}
@@ -67,10 +67,10 @@ public class EntityGroup extends Entity {
 		axis.sub(r1.pos);
 
 		// compute the new radius
-		((CircleCollider) collider).setRadius((r1.pos.distance(r2.pos) + r1.collider.getMaxWidth() + r2.collider.getMaxWidth()) / 2);
+		((CircleCollider) collider).setRadius((r1.pos.distance(r2.pos) + r1.collider.getMaxRadius() + r2.collider.getMaxRadius()) / 2);
 
 		// scale the axis to the vector from r1 center to the new center
-		axis.scale(collider.getMaxWidth() - r1.collider.getMaxWidth());
+		axis.scale(collider.getMaxRadius() - r1.collider.getMaxRadius());
 		pos.add(axis);
 
 	}
@@ -114,7 +114,7 @@ public class EntityGroup extends Entity {
 		double det = a * d - b * c;
 
 		pos = new Vector((int) ((d * e - b * f) / det), (int) ((-c * e + a * f) / det));
-		((CircleCollider) collider).setRadius(p1.distance(pos) + Math.max(e3.collider.getMaxWidth(), Math.max(e1.collider.getMaxWidth(), e2.collider.getMaxWidth())));
+		((CircleCollider) collider).setRadius(p1.distance(pos) + Math.max(e3.collider.getMaxRadius(), Math.max(e1.collider.getMaxRadius(), e2.collider.getMaxRadius())));
 
 	}
 
@@ -203,7 +203,7 @@ public class EntityGroup extends Entity {
 		EntityGroup enclosing = getEnclosing(points, points.length, boundary, 0);
 
 		pos = (enclosing.pos == null) ? null : enclosing.pos.copy();
-		((CircleCollider) collider).setRadius(enclosing.collider.getMaxWidth());
+		((CircleCollider) collider).setRadius(enclosing.collider.getMaxRadius());
 		((CircleCollider) collider).increaseRadius(getMaxRadius(points));
 
 		//TODO: equals vs spatialEquals here
@@ -215,9 +215,9 @@ public class EntityGroup extends Entity {
 
 	private int getMaxRadius(Entity[] boundary) {
 		int max = 0;
-		for (int i = 0; i < boundary.length; i++) {
-			if (boundary[i] != null && !contains(boundary[i]) && Double.isFinite(boundary[i].collider.getMaxWidth())) {
-				max = boundary[i].collider.getMaxWidth() > max ? boundary[i].collider.getMaxWidth() : max;
+		for (Entity b : boundary) {
+			if (b != null && !contains(b)) {
+				max = b.collider.getMaxRadius() > max ? b.collider.getMaxRadius() : max;
 			}
 		}
 		return max;
@@ -437,7 +437,7 @@ public class EntityGroup extends Entity {
 	private void set(Entity e) {
 
 		pos = e.pos;
-		((CircleCollider) collider).setRadius(e.collider.getMaxWidth());
+		((CircleCollider) collider).setRadius(e.collider.getMaxRadius());
 		if (e instanceof EntityGroup) {
 			entities = ((EntityGroup) e).entities;
 		}

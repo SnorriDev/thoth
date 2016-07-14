@@ -108,9 +108,11 @@ public class World implements Playable {
 			Vector spawnPos = l.getGoodSpawn(level.getDimensions().random());
 			if (spawnPos != null) { //spawning enemies at null positions is gross and caused lots of issues
 				enemies.add(new Enemy(spawnPos, p));
+				addHard(new Enemy(spawnPos, p));
 			}
 		}
-		addAllHard(enemies);
+		//addAllHard(enemies);
+		col.traverse();
 		
 		Set<String> drops = Lexicon.getELang();
 		for (String possibleDrop : drops) {

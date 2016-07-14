@@ -66,6 +66,6 @@ public abstract class Collider implements Serializable {
 	
 	public abstract Collider cloneOnto(Entity root);
 	
-	public abstract int getMaxWidth();
+	public abstract int getMaxRadius();
 	
 }

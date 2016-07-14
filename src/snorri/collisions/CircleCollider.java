@@ -119,7 +119,7 @@ public class CircleCollider extends Collider {
 	}
 
 	@Override
-	public int getMaxWidth() {
+	public int getMaxRadius() {
 		return r;
 	}
 	

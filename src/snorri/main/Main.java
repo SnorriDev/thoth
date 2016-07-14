@@ -132,8 +132,8 @@ public class Main {
 			getLayeredPane().remove(outerOverlay);
 			getLayeredPane().revalidate();
 		}
+		outerOverlay = newOverlay;
 		if (newOverlay != null) {
-			outerOverlay = newOverlay;
 			outerOverlay.setVisible(true);
 			outerOverlay.setBounds(frame.getBounds());
 			getLayeredPane().add(outerOverlay, JLayeredPane.PALETTE_LAYER);

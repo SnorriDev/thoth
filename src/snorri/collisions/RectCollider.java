@@ -23,6 +23,14 @@ public class RectCollider extends Collider {
 		this.dim = dim;
 	}
 	
+	public int getWidth() {
+		return dim.getX() / 2;
+	}
+	
+	public int getHeight() {
+		return dim.getY() / 2;
+	}
+	
 	public Vector getTopLeft() {
 		return pos.copy().sub(dim.copy().divide(2));
 	}
@@ -100,8 +108,8 @@ public class RectCollider extends Collider {
 	}
 
 	@Override
-	public int getMaxWidth() {
-		return (int) Math.sqrt(dim.getX() * dim.getX() + dim.getY() * dim.getY());
+	public int getMaxRadius() {
+		return (int) Math.sqrt(getWidth() * getWidth() + getHeight() * getHeight());
 	}
 	
 	@Override
