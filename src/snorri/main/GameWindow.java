@@ -110,7 +110,7 @@ public class GameWindow extends FocusedWindow {
 			pause();
 		}
 		
-		if (focus == null || hasDied) {
+		if (focus == null || focus.isDead()) {
 			return;
 		}
 		

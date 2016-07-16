@@ -162,7 +162,6 @@ public class Main {
 				TerrainGenerator ter = new TerrainGenerator(200, 200);
 				World world = ter.genWorld();
 				launchGame(world);
-				Main.log("playing world " + world);
 			}
 		});
 
