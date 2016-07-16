@@ -25,9 +25,7 @@ public class Pathfinding {
 			@Override
 			public void run() {
 				ArrayDeque<PathNode> stack = findPath(start, goal);
-				if (stack != null) {
-					p.setPath(stack);
-				}
+				p.setPath(stack);
 			}
 		}).start();
 	}

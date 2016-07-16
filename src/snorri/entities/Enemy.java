@@ -103,7 +103,7 @@ public class Enemy extends Unit implements Pathfinder {
 			
 			if (path != null) {
 				
-				if (target.pos.distanceSquared(lastSeenPos) > CHANGE_PATH_MARGIN * CHANGE_PATH_MARGIN) {
+				if (world.getLevel().isContextPathable(target.pos) && target.pos.distanceSquared(lastSeenPos) > CHANGE_PATH_MARGIN * CHANGE_PATH_MARGIN) {
 					stopPath(); //path will be recalculated if it's still in range
 				}
 				else if (canShootAt(world, target)) {
@@ -124,8 +124,12 @@ public class Enemy extends Unit implements Pathfinder {
 //			}
 //		}
 		
-		if (path == null && !recalculatingPath && (target == null || target.pos.distanceSquared(pos) <= seekRange * seekRange)) {
+		if (path == null && !recalculatingPath && (pos.distanceSquared(target.pos) <= seekRange * seekRange)) {
 			startPath();
+		}
+		
+		if (path == null) {
+			Main.log(recalculatingPath);
 		}
 		
 		inventory.update(deltaTime);
@@ -150,10 +154,14 @@ public class Enemy extends Unit implements Pathfinder {
 
 	@Override
 	public void setPath(ArrayDeque<PathNode> stack) {
+		recalculatingPath = false;
 		if (stack != null) {
 			path = stack;
 		}
-		recalculatingPath = false;
+	}
+	
+	public void recalculatePath() {
+		recalculatingPath = true;
 	}
 	
 	public void startPath() {
