@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import snorri.entities.Flower;
-import snorri.main.Main;
 import snorri.nonterminals.AbstractNoun;
 import snorri.nonterminals.Noun;
 import snorri.nonterminals.Prep;
@@ -124,7 +123,6 @@ public class Lexicon {
 		lexicon.put("jr", new ConditionalDef());
 		
 		Grammar.loadLexicon();
-		Main.log(Grammar.parseString("in jr ini=f"));
 		
 	}
 	
