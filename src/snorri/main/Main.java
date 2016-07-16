@@ -1,7 +1,8 @@
 package snorri.main;
 
-import java.awt.BorderLayout;
 import java.awt.FileDialog;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
@@ -35,13 +36,12 @@ public class Main {
 		frame.setSize(1800, 900);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		frame.setLocationRelativeTo(null);
 		
 		pane = new JLayeredPane();
 		getLayeredPane().setOpaque(true);
 		
-		frame.getContentPane().setLayout(new BorderLayout());  
-		frame.getContentPane().add(getLayeredPane(), BorderLayout.CENTER);
+		frame.getContentPane().setLayout(new GridLayout(0,1));  
+		frame.getContentPane().add(getLayeredPane());
 		//FOR FULL SCREEN: frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		launchMenu();
