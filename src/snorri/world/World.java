@@ -105,36 +105,36 @@ public class World implements Playable {
 		
 		List<Entity> toBeSpawned = new ArrayList<>();
 		
-		Player p = new Player(l.getGoodSpawn(level.getDimensions().random()));
+		Player p = new Player(getRandomSpawnPos());
 		addHard(p);
 		
 		for (int i = 0; i < 40; i++) {
-			Vector spawnPos = l.getGoodSpawn(level.getDimensions().random());
-			if (spawnPos != null) { //spawning enemies at null positions is gross and caused lots of issues
-				toBeSpawned.add(new Enemy(spawnPos, p));
-			}
+			toBeSpawned.add(new Enemy(getRandomSpawnPos(), p));
 		}
 		
 		Set<String> drops = Lexicon.getELang();
 		for (String possibleDrop : drops) {
 			if (Math.random() > 0.2) {
-				Vector spawnPos = l.getGoodSpawn(level.getDimensions().random());
-				if (spawnPos != null) { //spawning enemies at null positions is gross and caused lots of issues
-					toBeSpawned.add(new Drop(spawnPos, new VocabDrop(possibleDrop)));
-				}
+				toBeSpawned.add(new Drop(getRandomSpawnPos(), new VocabDrop(possibleDrop)));
 			}
 		}
 		
 		for (int i = 0; i < 10; i++) {
-			Vector spawnPos = l.getGoodSpawn(level.getDimensions().random());
-			if (spawnPos != null) { //spawning enemies at null positions is gross and caused lots of issues
-				toBeSpawned.add(new Desk(spawnPos));
-			}
+			toBeSpawned.add(new Desk(getRandomSpawnPos()));
 		}
 		
 		addAllHard(toBeSpawned, p);
 
 		Main.log("new world created!");
+	}
+	
+	public Vector getRandomSpawnPos() {
+		while (true) {
+			Vector pos = level.getGoodSpawn(level.getDimensions().random());
+			if (pos != null) {
+				return pos;
+			}
+		}
 	}
 
 	public static World wrapLoad() {
@@ -238,10 +238,10 @@ public class World implements Playable {
 			}
 		});
 		for (Entity e : ents) {
-			Main.log("starting traverse..");
 			addHard(e);
-			col.traverse();
-			Main.log("traverse done!");
+			if (Debug.LOG_ADD_HARD) {
+				col.traverse();
+			}
 		}
 	}
 

@@ -1,7 +1,6 @@
 package snorri.main;
 
 import java.awt.FileDialog;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -157,12 +156,13 @@ public class Main {
 	}
 
 	public static void launchGame() {
-
 		loadInto(new Runnable() {
 			@Override
 			public void run() {
 				TerrainGenerator ter = new TerrainGenerator(200, 200);
-				launchGame(ter.genWorld());
+				World world = ter.genWorld();
+				launchGame(world);
+				Main.log("playing world " + world);
 			}
 		});
 

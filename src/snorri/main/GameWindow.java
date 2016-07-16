@@ -49,10 +49,6 @@ public class GameWindow extends FocusedWindow {
 	@Override
 	protected void onFrame() {
 				
-		if (universe == null || universe.getCurrentWorld() == null) {
-			return;
-		}
-				
 		long time = getTimestamp();
 		double deltaTime = (time - lastTime) / 1000000000d;
 		lastTime = time;
@@ -68,6 +64,10 @@ public class GameWindow extends FocusedWindow {
 		if (!hasDied && focus != null && focus.isDead()) {
 			hasDied = true;
 			Main.setOverlay(new DeathOverlay());
+		}
+		
+		if (universe == null || universe.getCurrentWorld() == null) {
+			return;
 		}
 		
 		universe.getCurrentWorld().update(deltaTime);

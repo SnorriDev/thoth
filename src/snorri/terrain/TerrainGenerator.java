@@ -59,8 +59,7 @@ public class TerrainGenerator {
 	}
 	
 	public World genWorld() {
-		World world = new World(genLevel());
-		return world;
+		return new World(genLevel());
 	}
 	
 	protected double[][] genHeightMap(double[] frequencies, double smoothness, double elevation) {

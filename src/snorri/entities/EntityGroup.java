@@ -305,12 +305,12 @@ public class EntityGroup extends Entity {
 			
 			//this might not always work as intended
 			//we are preserving structure when inserting EntityGroups, not "merging" them
-			if (e instanceof EntityGroup && child.intersects(e)) {
-				delete(child);
-				((EntityGroup) e).insert(child);
-				insert(e);
-				return;
-			}
+//			if (e instanceof EntityGroup && child.intersects(e)) {
+//				delete(child);
+//				((EntityGroup) e).insert(child);
+//				insert(e);
+//				return;
+//			}
 
 		}
 
@@ -376,8 +376,9 @@ public class EntityGroup extends Entity {
 			return false;
 		}
 
+		delete(e); //can't just recalc after
 		e.pos = pos.copy();
-		recalculate(e);
+		insert(e);
 		return true;
 
 	}
@@ -438,7 +439,6 @@ public class EntityGroup extends Entity {
 		pos = e.pos;
 		((CircleCollider) collider).setRadius(e.collider.getMaxRadius());
 		//^this line is what enables/disables shit
-		//TODO figure this out real god
 		//PROBABLY have to fix insert method?
 		if (e instanceof EntityGroup) {
 			entities = ((EntityGroup) e).entities;

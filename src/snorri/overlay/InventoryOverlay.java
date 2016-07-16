@@ -3,11 +3,14 @@ package snorri.overlay;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -39,7 +42,7 @@ import snorri.main.Main;
 import snorri.nonterminals.NonTerminal;
 import snorri.parser.Grammar;
 
-public class InventoryOverlay extends GamePanel implements KeyListener, ListSelectionListener, DocumentListener {
+public class InventoryOverlay extends GamePanel implements KeyListener, MouseListener, ListSelectionListener, DocumentListener {
 
 	/**
 	 * the GUI interface for editing inventory and spells
@@ -47,6 +50,7 @@ public class InventoryOverlay extends GamePanel implements KeyListener, ListSele
 	
 	private static final long serialVersionUID = 1L;
 
+	@SuppressWarnings("unused")
 	private final Inventory inv;
 	private final FullInventory fullInv;
 	private final GameWindow window;
@@ -67,7 +71,6 @@ public class InventoryOverlay extends GamePanel implements KeyListener, ListSele
 	//StyledEditorKit
 	
 	private static class ItemCellRenderer implements ListCellRenderer<Item> {
-		
 		@Override
 		public Component getListCellRendererComponent(JList<? extends Item> list, Item item, int index, boolean isSelected,
 				boolean cellHasFocus) {
@@ -77,7 +80,6 @@ public class InventoryOverlay extends GamePanel implements KeyListener, ListSele
 			label.setOpaque(true);
 			return label;
 		}
-		
 	}
 	
 	public InventoryOverlay(GameWindow window, Inventory inventory) {
@@ -156,7 +158,15 @@ public class InventoryOverlay extends GamePanel implements KeyListener, ListSele
 		vocabInfo.setBorder(BorderFactory.createLineBorder(BORDER, 5));
 		
 		for (VocabDrop drop : fullInv.getVocab()) {
-			vocabInfo.add(new JLabel(drop.getOrthography()));
+			JPanel wordPanel = new JPanel();
+			wordPanel.setBackground(SELECTED_BG);
+			JLabel orth = new JLabel(drop.getOrthography());
+			orth.setFont(new Font(orth.getFont().getName(), Font.BOLD, 20));
+			JLabel pos = new JLabel(drop.getMeaning().getPOS().getSimpleName());
+			pos.setFont(new Font(pos.getFont().getName(), Font.ITALIC, 16));
+			wordPanel.add(orth);
+			wordPanel.add(pos);
+			vocabInfo.add(wordPanel);
 		}
 		
 		c.fill = GridBagConstraints.BASELINE;
@@ -229,6 +239,34 @@ public class InventoryOverlay extends GamePanel implements KeyListener, ListSele
 	@Override
 	public void changedUpdate(DocumentEvent e) {
 		checkParse(e);
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

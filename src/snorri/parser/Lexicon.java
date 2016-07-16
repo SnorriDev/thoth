@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import snorri.entities.Flower;
+import snorri.main.Main;
 import snorri.nonterminals.AbstractNoun;
 import snorri.nonterminals.Noun;
 import snorri.nonterminals.Prep;
@@ -15,6 +16,7 @@ import snorri.semantics.At;
 import snorri.semantics.Be;
 import snorri.semantics.Boom;
 import snorri.semantics.Burn;
+import snorri.semantics.ConditionalDef;
 import snorri.semantics.Damage;
 import snorri.semantics.Definition;
 import snorri.semantics.DegreeModifierDef;
@@ -118,7 +120,11 @@ public class Lexicon {
 		lexicon.put("mAA", new See());
 		lexicon.put("pH", new Damage());
 		
+		//Conditionals
+		lexicon.put("jr", new ConditionalDef());
+		
 		Grammar.loadLexicon();
+		Main.log(Grammar.parseString("in jr ini=f"));
 		
 	}
 	

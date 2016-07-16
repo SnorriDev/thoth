@@ -11,6 +11,7 @@ import snorri.nonterminals.Adverb;
 import snorri.nonterminals.DegreeModifier;
 import snorri.nonterminals.AdverbPhrase;
 import snorri.nonterminals.Command;
+import snorri.nonterminals.Conditional;
 import snorri.nonterminals.IntransVerb;
 import snorri.nonterminals.Sentence;
 import snorri.nonterminals.NonTerminal;
@@ -34,7 +35,7 @@ public class Grammar {
 		rules.add(new Rule(new Object[] {TransVerb.class, SuffixPronoun.class, NounPhrase.class}, Statement.class));
 		rules.add(new Rule(new Object[] {IntransVerb.class, SuffixPronoun.class}, Statement.class));
 		
-		rules.add(new Rule(new Object[] {Command.class, "jr", Statement.class}, Command.class));
+		rules.add(new Rule(new Object[] {Command.class, Conditional.class, Statement.class}, Command.class));
 		rules.add(new Rule(new Object[] {TransVerb.class, NounPhrase.class}, Command.class));
 		rules.add(new Rule(new Object[] {IntransVerb.class}, Command.class));
 		
