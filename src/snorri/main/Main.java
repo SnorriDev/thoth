@@ -164,7 +164,6 @@ public class Main {
 				launchGame(world);
 			}
 		});
-
 	}
 
 	public static void launchEditor() {

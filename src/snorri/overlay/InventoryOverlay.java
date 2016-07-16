@@ -142,6 +142,7 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 		
 		enchantButton = createButton("Enchant");
 		enchantButton.setEnabled(false);
+		enchantButton.addKeyListener(this);
 		inputPanel.add(enchantButton);
 		
 		c.fill = GridBagConstraints.CENTER;

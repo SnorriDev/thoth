@@ -21,6 +21,7 @@ import snorri.entities.Enemy;
 import snorri.entities.Entity;
 import snorri.entities.EntityGroup;
 import snorri.entities.Player;
+import snorri.entities.Unit;
 import snorri.inventory.VocabDrop;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
@@ -31,6 +32,7 @@ import snorri.pathfinding.Pathfinding;
 public class World implements Playable {
 
 	private static final Vector DEFAULT_SPAWN = new Vector(100, 100);
+	private static final int RANDOM_SPAWN_ATTEMPTS = 10000;
 	
 	private Level level;
 	private EntityGroup col;
@@ -128,13 +130,20 @@ public class World implements Playable {
 		Main.log("new world created!");
 	}
 	
-	public Vector getRandomSpawnPos() {
-		while (true) {
+	//TODO input the unit as an arg?
+	public Vector getRandomSpawnPos(int radius) {
+		for (int i = 0; i < RANDOM_SPAWN_ATTEMPTS; i++) {
 			Vector pos = level.getGoodSpawn(level.getDimensions().random());
-			if (pos != null) {
+			if (pos != null && col.getFirstCollision(new Entity(pos, radius)) == null) {
 				return pos;
 			}
 		}
+		Main.error("could not find suitable spawn");
+		return null;
+	}
+	
+	public Vector getRandomSpawnPos() {
+		return getRandomSpawnPos(Unit.RADIUS);
 	}
 
 	public static World wrapLoad() {

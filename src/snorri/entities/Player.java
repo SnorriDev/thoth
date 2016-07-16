@@ -14,7 +14,6 @@ import snorri.inventory.Weapon;
 import snorri.main.Debug;
 import snorri.main.GameWindow;
 import snorri.main.Main;
-import snorri.parser.Grammar;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -37,13 +36,9 @@ public class Player extends Unit {
 		
 		//default weapons
 		Weapon sling = (Weapon) Item.newItem(ItemType.SLING);
-		sling.setSpell(Grammar.parseString("nD wi er aAw"));
 		Papyrus p1 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
-		p1.setSpell(Grammar.parseString("pA wrt aAw"));
 		Papyrus p2 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
-		p2.setSpell(Grammar.parseString("nD wi"));
 		Orb orb = (Orb) Item.newItem(ItemType.PELLET);
-		orb.setSpell(Grammar.parseString("bm m=k"));
 		
 		//add items to full inventory
 		inventory.getFullInventory().add(sling);
