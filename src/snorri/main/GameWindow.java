@@ -49,7 +49,7 @@ public class GameWindow extends FocusedWindow {
 	@Override
 	protected void onFrame() {
 				
-		if (universe.getCurrentWorld() == null) {
+		if (universe == null || universe.getCurrentWorld() == null) {
 			return;
 		}
 				

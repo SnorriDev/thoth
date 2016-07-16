@@ -1,5 +1,6 @@
 package snorri.nonterminals;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import snorri.parser.Node;
@@ -22,6 +23,16 @@ public abstract class NonTerminal implements Node {
 		//TODO: traverse full sentence
 		//java 8 makes this nice lol
 		return getClass().getSimpleName();
+	}
+	
+	//TODO override this in special cases with equal signs
+	@Override
+	public String getOrthography() {
+		List<String> strings = new ArrayList<String>();
+		for (Node child : children) {
+			strings.add(child.getOrthography());
+		}
+		return String.join(" ", strings);
 	}
 
 	@Deprecated

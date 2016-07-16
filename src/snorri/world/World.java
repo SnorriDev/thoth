@@ -117,7 +117,7 @@ public class World implements Playable {
 		
 		Set<String> drops = Lexicon.getELang();
 		for (String possibleDrop : drops) {
-			if (Math.random() > 0.5) {
+			if (Math.random() > 0.2) {
 				Vector spawnPos = l.getGoodSpawn(level.getDimensions().random());
 				if (spawnPos != null) { //spawning enemies at null positions is gross and caused lots of issues
 					toBeSpawned.add(new Drop(spawnPos, new VocabDrop(possibleDrop)));
@@ -125,7 +125,7 @@ public class World implements Playable {
 			}
 		}
 		
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 10; i++) {
 			Vector spawnPos = l.getGoodSpawn(level.getDimensions().random());
 			if (spawnPos != null) { //spawning enemies at null positions is gross and caused lots of issues
 				toBeSpawned.add(new Desk(spawnPos));

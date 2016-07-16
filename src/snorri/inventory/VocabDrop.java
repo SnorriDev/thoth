@@ -3,7 +3,7 @@ package snorri.inventory;
 import snorri.parser.Lexicon;
 import snorri.semantics.Definition;
 
-public class VocabDrop implements Droppable {
+public class VocabDrop implements Droppable, Comparable<VocabDrop> {
 
 	private static final long serialVersionUID = 1L;
 	private String orthography;
@@ -41,6 +41,11 @@ public class VocabDrop implements Droppable {
 	@Override
 	public String toString() {
 		return orthography;
+	}
+
+	@Override
+	public int compareTo(VocabDrop other) {
+		return getOrthography().compareTo(other.getOrthography());
 	}
 	
 }

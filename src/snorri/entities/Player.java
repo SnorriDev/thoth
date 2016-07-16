@@ -35,17 +35,27 @@ public class Player extends Unit {
 		inventory = new Inventory(this);
 		animation = new Animation(Animation.UNIT_IDLE);
 		
-		//test inventory
-		inventory.setWeapon((Weapon) Item.newItem(ItemType.SLING));
-		inventory.getWeapon().setSpell(Grammar.parseString("nD wi er aAw"));
+		//default weapons
+		Weapon sling = (Weapon) Item.newItem(ItemType.SLING);
+		sling.setSpell(Grammar.parseString("nD wi er aAw"));
+		Papyrus p1 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
+		p1.setSpell(Grammar.parseString("pA wrt aAw"));
+		Papyrus p2 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
+		p2.setSpell(Grammar.parseString("nD wi"));
+		Orb orb = (Orb) Item.newItem(ItemType.PELLET);
+		orb.setSpell(Grammar.parseString("bm m=k"));
 		
-		inventory.addPapyrus((Papyrus) Item.newItem(ItemType.PAPYRUS));
-		inventory.addPapyrus((Papyrus) Item.newItem(ItemType.PAPYRUS));
-		inventory.getPapyrus(0).setSpell(Grammar.parseString("pA wrt aAw"));
-		inventory.getPapyrus(1).setSpell(Grammar.parseString("nD wi"));
+		//add items to full inventory
+		inventory.getFullInventory().add(sling);
+		inventory.getFullInventory().add(p1);
+		inventory.getFullInventory().add(p2);
+		inventory.getFullInventory().add(orb);
 		
-		inventory.addOrb((Orb) Item.newItem(ItemType.PELLET));
-		inventory.getOrb(0).setSpell(Grammar.parseString("bm m=k"));
+		//equip items in inventory
+		inventory.setWeapon(sling);
+		inventory.addPapyrus(p1);
+		inventory.addPapyrus(p2);
+		inventory.addOrb(orb);
 		
 	}
 	

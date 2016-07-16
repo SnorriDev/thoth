@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 
+import javax.swing.ImageIcon;
+
 import snorri.entities.Entity;
 import snorri.events.SpellEvent;
 import snorri.main.GameWindow;
@@ -20,6 +22,7 @@ public abstract class Item implements Droppable {
 	protected ItemType type; // what type of item it is; you can get ID, maxQuantity, enchantable from this
 	
 	private static final int ICON_SIZE = 64;
+	private static final int SMALL_ICON_SIZE = 32;
 	
 	private static final Image DEFAULT_BORDER = Main.getImageResource("/textures/hud/itemBorder.png");
 	private static final Color DEFAULT_COOLDOWN_COLOR = new Color(156, 134, 73, 200);
@@ -81,6 +84,11 @@ public abstract class Item implements Droppable {
 		
 		public Image getTexture() {
 			return texture;
+		}
+		
+		public ImageIcon getIcon() {
+			Image texture = getTexture();
+			return new ImageIcon(texture.getScaledInstance(SMALL_ICON_SIZE, (int) (((double) texture.getHeight(null)) / texture.getWidth(null) * SMALL_ICON_SIZE), Image.SCALE_SMOOTH));
 		}
 		
 		public boolean isEnchantable() {

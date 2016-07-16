@@ -28,7 +28,7 @@ public class EntityGroup extends Entity {
 	// nice PriorityQueue from
 	// https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/package-summary.html
 	
-	CopyOnWriteArrayList<Entity> entities;
+	private CopyOnWriteArrayList<Entity> entities;
 
 	// can make this stuff more elegant
 	public EntityGroup(Entity root) {
@@ -58,12 +58,13 @@ public class EntityGroup extends Entity {
 			}
 		}
 
-		//TODO: there might be some kind of issue here
+		//TODO: figure out what to do here
 		
 		entities.add(r2);
 
 		// compute axis vector between the two centers
-		Vector axis = r2.pos.copy().sub(r1.pos);
+		Vector axis = r2.pos.copy();
+		axis.sub(r1.pos);
 
 		// compute the new radius
 		((CircleCollider) collider).setRadius((r1.pos.distance(r2.pos) + r1.collider.getMaxRadius() + r2.collider.getMaxRadius()) / 2);
@@ -205,6 +206,7 @@ public class EntityGroup extends Entity {
 		((CircleCollider) collider).setRadius(enclosing.collider.getMaxRadius());
 		((CircleCollider) collider).increaseRadius(getMaxRadius(points));
 
+		//TODO: equals vs spatialEquals here
 		if (entities.size() == 1 && equals(entities.get(0))) {
 			set(entities.get(0));
 		}
@@ -213,9 +215,9 @@ public class EntityGroup extends Entity {
 
 	private int getMaxRadius(Entity[] boundary) {
 		int max = 0;
-		for (Entity b : boundary) {
-			if (b != null && !contains(b)) {
-				max = b.collider.getMaxRadius() > max ? b.collider.getMaxRadius() : max;
+		for (int i = 0; i < boundary.length; i++) {
+			if (boundary[i] != null && !contains(boundary[i]) && Double.isFinite(boundary[i].collider.getMaxRadius())) {
+				max = boundary[i].collider.getMaxRadius() > max ? boundary[i].collider.getMaxRadius() : max;
 			}
 		}
 		return max;
@@ -278,14 +280,13 @@ public class EntityGroup extends Entity {
 			return;
 		}
 
-		//e.collider.getInscribing()
-		if (!intersects(e.collider)) {
+		if (!intersects(e)) {
 			EntityGroup group = new EntityGroup();
 			group.set(this);
 			set(new EntityGroup(group, e));
 			return;
 		}
-		
+
 //		if (e instanceof EntityGroup) {
 //			for (Entity child : ((EntityGroup) e).entities) {
 //				insert(child);
@@ -435,7 +436,10 @@ public class EntityGroup extends Entity {
 
 	private void set(Entity e) {
 		pos = e.pos;
-		collider = new CircleCollider(pos, e.collider.getMaxRadius());
+		((CircleCollider) collider).setRadius(e.collider.getMaxRadius());
+		//^this line is what enables/disables shit
+		//TODO figure this out real god
+		//PROBABLY have to fix insert method?
 		if (e instanceof EntityGroup) {
 			entities = ((EntityGroup) e).entities;
 		}

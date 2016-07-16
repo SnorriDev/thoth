@@ -19,7 +19,7 @@ public class Terminal implements Node {
 		return orthography.equals(other);
 	}
 	
-	public Object getOrthography() {
+	public String getOrthography() {
 		return orthography;
 	}
 	

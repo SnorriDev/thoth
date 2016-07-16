@@ -2,7 +2,9 @@ package snorri.inventory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class FullInventory extends ArrayList<Droppable> implements Serializable {
 
@@ -39,6 +41,38 @@ public class FullInventory extends ArrayList<Droppable> implements Serializable 
 	 */
 	public boolean knowsWord(String word) {
 		return contains(new VocabDrop(word));
+	}
+	
+	/**
+	 * @see knowsWord
+	 */
+	public boolean knowsWords(List<String> words) {
+		for (String word : words) {
+			if (!knowsWord(word)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public Item[] getItems() {
+		return (Item[]) getArray(new Item[0]);
+	}
+	
+	public VocabDrop[] getVocab() {
+		VocabDrop[] res = (VocabDrop[]) getArray(new VocabDrop[0]);
+		Arrays.sort(res);
+		return res;
+	}
+	
+	public Droppable[] getArray(Droppable[] arr) {
+		List<Droppable> list = new ArrayList<>(); 
+		for (Droppable d : this) {
+			if (arr.getClass().getComponentType().isInstance(d)) {
+				list.add((Droppable) d);
+			}
+		}
+		return list.toArray(arr);
 	}
 		
 	//TODO Toby do stuff here!!
