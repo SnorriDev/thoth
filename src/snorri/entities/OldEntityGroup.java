@@ -3,26 +3,22 @@ package snorri.entities;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ConcurrentModificationException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import snorri.collisions.CircleCollider;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
+import snorri.world.EntityGroup;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class EntityGroup extends Entity {
+
+public class OldEntityGroup extends Entity implements EntityGroup {
 
 	private static final long serialVersionUID = 1L;
-
-	private static final int UPDATE_RADIUS = 4000;
 
 	// TODO: within each EntityGroup, store entities in a PriorityQueue
 	// nice PriorityQueue from
@@ -31,28 +27,28 @@ public class EntityGroup extends Entity {
 	private CopyOnWriteArrayList<Entity> entities;
 
 	// can make this stuff more elegant
-	public EntityGroup(Entity root) {
+	public OldEntityGroup(Entity root) {
 		super(root);
 		collider = new CircleCollider(pos, root.collider.getMaxRadius());
 		entities = new CopyOnWriteArrayList<Entity>();
 		entities.add(root);
 	}
 
-	public EntityGroup(Entity r1, Entity r2) {
+	public OldEntityGroup(Entity r1, Entity r2) {
 
 		this(r1);
 		
 		if (r1.intersects(r2)) {
-			if (r1 instanceof EntityGroup && r2 instanceof EntityGroup) {
-				((EntityGroup) r1).merge((EntityGroup) r2);
+			if (r1 instanceof OldEntityGroup && r2 instanceof OldEntityGroup) {
+				((OldEntityGroup) r1).merge((OldEntityGroup) r2);
 				set(r1);
 				return;
-			} else if (r1 instanceof EntityGroup) {
-				((EntityGroup) r1).insert(r2);
+			} else if (r1 instanceof OldEntityGroup) {
+				((OldEntityGroup) r1).insert(r2);
 				set(r1);
 				return;
-			} else if (r2 instanceof EntityGroup) {
-				((EntityGroup) r2).insert(r1);// this fix?
+			} else if (r2 instanceof OldEntityGroup) {
+				((OldEntityGroup) r2).insert(r1);// this fix?
 				set(r2);
 				return;
 			}
@@ -75,22 +71,22 @@ public class EntityGroup extends Entity {
 
 	}
 
-	public EntityGroup() {
+	public OldEntityGroup() {
 		super(null, 0);
 		entities = new CopyOnWriteArrayList<Entity>();
 	}
 
-	public EntityGroup(File file) throws FileNotFoundException, IOException {
+	public OldEntityGroup(File file) throws FileNotFoundException, IOException {
 		this();
 		loadEntities(file);
 	}
 
-	public EntityGroup(Vector center, int rad) {
+	public OldEntityGroup(Vector center, int rad) {
 		super(center, rad);
 		entities = new CopyOnWriteArrayList<Entity>();
 	}
 
-	public EntityGroup(Entity e1, Entity e2, Entity e3) {
+	public OldEntityGroup(Entity e1, Entity e2, Entity e3) {
 
 		// make slightly better by not treating EntityGroups as points? nah
 		// need to check if the things intersect each other in the constructor?
@@ -124,8 +120,8 @@ public class EntityGroup extends Entity {
 	public CopyOnWriteArrayList<Entity> getAllEntities() {
 		CopyOnWriteArrayList<Entity> res = new CopyOnWriteArrayList<Entity>();
 		for (Entity e : entities) {
-			if (e instanceof EntityGroup) {
-				res.addAll(((EntityGroup) e).getAllEntities());
+			if (e instanceof OldEntityGroup) {
+				res.addAll(((OldEntityGroup) e).getAllEntities());
 				continue;
 			}
 			res.add(e);
@@ -133,20 +129,10 @@ public class EntityGroup extends Entity {
 		return res;
 	}
 
-	/**
-	 * this method does not just search immediate children, but all entities which are transitively children of the root EntityGroup
-	 * @return
-	 * 	a randomly selected entity with all entities having equal probability
-	 */
-	public Entity getRandomEntity() {
-		CopyOnWriteArrayList<Entity> all = getAllEntities();
-		return all.get((int) (Math.random() * all.size()));
-	}
-
 	public boolean hasChild(Entity e) {
 
 		for (Entity e2 : entities) {
-			if (e2 instanceof EntityGroup) {
+			if (e2 instanceof OldEntityGroup) {
 				if (e2.intersects(e)) {
 					return true;
 				}
@@ -200,7 +186,7 @@ public class EntityGroup extends Entity {
 		Entity[] points = getSafeArray();
 		Entity[] boundary = new Entity[3];
 
-		EntityGroup enclosing = getEnclosing(points, points.length, boundary, 0);
+		OldEntityGroup enclosing = getEnclosing(points, points.length, boundary, 0);
 
 		pos = (enclosing.pos == null) ? null : enclosing.pos.copy();
 		((CircleCollider) collider).setRadius(enclosing.collider.getMaxRadius());
@@ -228,26 +214,26 @@ public class EntityGroup extends Entity {
 	 * 
 	 * @return an EntityGroup which encloses all the other entities
 	 */
-	private static EntityGroup getEnclosing(Entity[] points, int n, Entity[] boundary, int b) {
+	private static OldEntityGroup getEnclosing(Entity[] points, int n, Entity[] boundary, int b) {
 
 		if (points.length == 0) {
-			return new EntityGroup();
+			return new OldEntityGroup();
 		}
 
 		if (n == 0 && b == 2) {
-			return new EntityGroup(boundary[0], boundary[1]);
+			return new OldEntityGroup(boundary[0], boundary[1]);
 		}
 		if (n == 1 && b == 0) {
-			return new EntityGroup(points[0]);
+			return new OldEntityGroup(points[0]);
 		}
 		if (n == 1 && b == 1) {
-			return new EntityGroup(boundary[0], points[0]);
+			return new OldEntityGroup(boundary[0], points[0]);
 		}
 		if (b == 3) {
-			return new EntityGroup(boundary[0], boundary[1], boundary[2]);
+			return new OldEntityGroup(boundary[0], boundary[1], boundary[2]);
 		}
 
-		EntityGroup circle = getEnclosing(points, n - 1, boundary, b);
+		OldEntityGroup circle = getEnclosing(points, n - 1, boundary, b);
 
 		// TODO: figure out what to do. contains?
 		// this is it
@@ -266,25 +252,25 @@ public class EntityGroup extends Entity {
 		return entities.isEmpty();
 	}
 
-	public void insert(Entity e) {
+	public boolean insert(Entity e) {
 
 		// TODO: can we make this even better?
 
 		if (pos == null) {
-			set(new EntityGroup(e));
-			return;
+			set(new OldEntityGroup(e));
+			return true;
 		}
 
 		if (entities.size() == 1) {
-			set(new EntityGroup(entities.get(0), e));
-			return;
+			set(new OldEntityGroup(entities.get(0), e));
+			return true;
 		}
 
 		if (!intersects(e)) {
-			EntityGroup group = new EntityGroup();
+			OldEntityGroup group = new OldEntityGroup();
 			group.set(this);
-			set(new EntityGroup(group, e));
-			return;
+			set(new OldEntityGroup(group, e));
+			return true;
 		}
 
 //		if (e instanceof EntityGroup) {
@@ -296,11 +282,11 @@ public class EntityGroup extends Entity {
 
 		for (Entity child : getSafeArray()) {
 			
-			if (child instanceof EntityGroup && child.intersects(e)) {
+			if (child instanceof OldEntityGroup && child.intersects(e)) {
 				remove(child);
-				((EntityGroup) child).insert(e);
+				((OldEntityGroup) child).insert(e);
 				insert(child);
-				return;
+				return true;
 			}
 			
 			//this might not always work as intended
@@ -315,6 +301,7 @@ public class EntityGroup extends Entity {
 		}
 
 		add(e);
+		return true;
 
 	}
 
@@ -325,8 +312,8 @@ public class EntityGroup extends Entity {
 		}
 
 		for (Entity child : getSafeArray()) {
-			if (child instanceof EntityGroup && ((EntityGroup) child).delete(e)) {
-				if (((EntityGroup) child).isEmpty()) {
+			if (child instanceof OldEntityGroup && ((OldEntityGroup) child).delete(e)) {
+				if (((OldEntityGroup) child).isEmpty()) {
 					remove(child);
 				}
 				return true;
@@ -342,12 +329,12 @@ public class EntityGroup extends Entity {
 	 * @param group
 	 * 	the group of entities to be merged into this one
 	 */
-	public void merge(EntityGroup group) {
+	public void merge(OldEntityGroup group) {
 
 		for (Entity next : getSafeArray()) {
 
-			if (next instanceof EntityGroup) {
-				merge((EntityGroup) next);
+			if (next instanceof OldEntityGroup) {
+				merge((OldEntityGroup) next);
 			} else {
 				insert(next);
 			}
@@ -370,19 +357,6 @@ public class EntityGroup extends Entity {
 
 	}
 
-	public boolean teleportTo(Entity e, Vector pos) {
-
-		if (pos.notInPlane()) {
-			return false;
-		}
-
-		delete(e); //can't just recalc after
-		e.pos = pos.copy();
-		insert(e);
-		return true;
-
-	}
-
 	public Entity getFirstCollision(Entity c) {
 
 		for (Entity child : entities) {
@@ -391,8 +365,8 @@ public class EntityGroup extends Entity {
 				continue;
 			}
 			
-			if (child instanceof EntityGroup) {
-				Entity result = ((EntityGroup) child).getFirstCollision(c);
+			if (child instanceof OldEntityGroup) {
+				Entity result = ((OldEntityGroup) child).getFirstCollision(c);
 				if (result == null) {
 					continue;
 				}
@@ -420,8 +394,8 @@ public class EntityGroup extends Entity {
 				continue;
 			}
 			
-			if (child instanceof EntityGroup) {
-				result.addAll(((EntityGroup) child).getAllCollisions(c));
+			if (child instanceof OldEntityGroup) {
+				result.addAll(((OldEntityGroup) child).getAllCollisions(c));
 				continue;
 			}
 
@@ -440,8 +414,8 @@ public class EntityGroup extends Entity {
 		((CircleCollider) collider).setRadius(e.collider.getMaxRadius());
 		//^this line is what enables/disables shit
 		//PROBABLY have to fix insert method?
-		if (e instanceof EntityGroup) {
-			entities = ((EntityGroup) e).entities;
+		if (e instanceof OldEntityGroup) {
+			entities = ((OldEntityGroup) e).entities;
 		}
 	}
 	
@@ -454,8 +428,6 @@ public class EntityGroup extends Entity {
 		}
 	}
 	
-	
-
 	@Override
 	public void renderAround(FocusedWindow g, Graphics gr) {
 		Vector playerPos = g.getFocus().getPos();
@@ -502,9 +474,9 @@ public class EntityGroup extends Entity {
 		}
 		
 		for (Entity e : entities) {
-			if (e.intersects(new Entity(focus.pos, UPDATE_RADIUS))) {
-				if (e instanceof EntityGroup) {
-					((EntityGroup) e).updateAround(world, deltaTime, focus);
+			if (e.intersects(new Entity(focus.pos, World.UPDATE_RADIUS))) {
+				if (e instanceof OldEntityGroup) {
+					((OldEntityGroup) e).updateAround(world, deltaTime, focus);
 				} else {
 					e.update(world, deltaTime);
 				}
@@ -520,34 +492,6 @@ public class EntityGroup extends Entity {
 		for (Entity e : entities) {
 			e.update(world, d);
 		}
-	}
-
-	public void saveEntities(File file) throws IOException {
-		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
-		for (Entity e : getAllEntities()) {
-			out.writeObject(e);
-		}
-		out.close();
-	}
-
-	/**
-	 * Add all entities stored in a file to this EntityGroup
-	 * 
-	 * @param file
-	 *            file to read
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 */
-	public void loadEntities(File file) throws FileNotFoundException, IOException {
-		ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
-		while (true) {
-			try {
-				add((Entity) in.readObject());
-			} catch (Exception e) {
-				break;
-			}
-		}
-		in.close();
 	}
 
 }

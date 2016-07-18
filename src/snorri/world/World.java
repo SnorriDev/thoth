@@ -19,8 +19,9 @@ import snorri.entities.Detector;
 import snorri.entities.Drop;
 import snorri.entities.Enemy;
 import snorri.entities.Entity;
-import snorri.entities.EntityGroup;
+import snorri.entities.OldEntityGroup;
 import snorri.entities.Player;
+import snorri.entities.QuadTree;
 import snorri.entities.Unit;
 import snorri.inventory.VocabDrop;
 import snorri.main.Debug;
@@ -33,6 +34,7 @@ public class World implements Playable {
 
 	private static final Vector DEFAULT_SPAWN = new Vector(100, 100);
 	private static final int RANDOM_SPAWN_ATTEMPTS = 10000;
+	public static final int UPDATE_RADIUS = 4000;
 	
 	private Level level;
 	private EntityGroup col;
@@ -56,7 +58,7 @@ public class World implements Playable {
 		Main.log("creating new world of size " + width + " x " + height + "...");
 		level = new Level(width, height); // TODO: pass a level file to read
 		//level.computePathfinding();
-		col = new EntityGroup();
+		col = new OldEntityGroup();
 		colliders = new CopyOnWriteArrayList<Detector>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
@@ -95,10 +97,13 @@ public class World implements Playable {
 
 		Main.log("creating new world of size " + l.getDimensions().getX() + " x " + l.getDimensions().getY() + "...");
 		level = l;
-		col = new EntityGroup();
+		col = new OldEntityGroup();
 		colliders = new CopyOnWriteArrayList<Detector>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
+		
+		QuadTree g = QuadTree.coverLevel(level.getDimensions().copy().toGlobalPos());
+		Main.log("generated quad entity group with height " + g.getHeight());
 
 		Pathfinding.setWorld(this);
 		l.computePathfinding();
@@ -311,7 +316,7 @@ public class World implements Playable {
 			throw new IOException();
 		}
 
-		col = new EntityGroup(new File(f, "entities.dat"));
+		col = new OldEntityGroup(new File(f, "entities.dat"));
 		level = new Level(new File(f, "level.dat"));
 
 	}

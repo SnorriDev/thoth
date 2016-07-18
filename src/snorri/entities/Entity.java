@@ -31,7 +31,7 @@ public class Entity implements Nominal, Serializable {
 
 	public Entity(Vector pos, Collider collider) {
 		
-		if (pos == null && !(this instanceof EntityGroup)) {
+		if (pos == null && !(this instanceof OldEntityGroup)) {
 			Main.error("spawned non-EntityGroup at null: " + this.getClass().getSimpleName());
 		}
 		

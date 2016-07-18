@@ -11,7 +11,9 @@ public class Move extends VerbDef {
 	@Override
 	public boolean exec(Object obj) {
 		if (obj instanceof Entity) {
-			e.getWorld().getEntityTree().teleportTo((Entity) obj, e.getDestination());
+			e.getWorld().getEntityTree().delete((Entity) obj);
+			((Entity) obj).setPos(e.getDestination().copy());
+			e.getWorld().getEntityTree().insert((Entity) obj);
 			return true;
 		}
 		return false;
