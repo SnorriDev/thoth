@@ -15,7 +15,7 @@ import snorri.world.EntityGroup;
 import snorri.world.Vector;
 import snorri.world.World;
 
-
+@Deprecated
 public class OldEntityGroup extends Entity implements EntityGroup {
 
 	private static final long serialVersionUID = 1L;

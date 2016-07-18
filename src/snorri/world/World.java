@@ -19,7 +19,6 @@ import snorri.entities.Detector;
 import snorri.entities.Drop;
 import snorri.entities.Enemy;
 import snorri.entities.Entity;
-import snorri.entities.OldEntityGroup;
 import snorri.entities.Player;
 import snorri.entities.QuadTree;
 import snorri.entities.Unit;
@@ -58,7 +57,7 @@ public class World implements Playable {
 		Main.log("creating new world of size " + width + " x " + height + "...");
 		level = new Level(width, height); // TODO: pass a level file to read
 		//level.computePathfinding();
-		col = new OldEntityGroup();
+		col = QuadTree.coverLevel(level);
 		colliders = new CopyOnWriteArrayList<Detector>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
@@ -97,14 +96,11 @@ public class World implements Playable {
 
 		Main.log("creating new world of size " + l.getDimensions().getX() + " x " + l.getDimensions().getY() + "...");
 		level = l;
-		col = new OldEntityGroup();
+		col = QuadTree.coverLevel(level);
 		colliders = new CopyOnWriteArrayList<Detector>();
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
 		
-		QuadTree g = QuadTree.coverLevel(level.getDimensions().copy().toGlobalPos());
-		Main.log("generated quad entity group with height " + g.getHeight());
-
 		Pathfinding.setWorld(this);
 		l.computePathfinding();
 		
@@ -316,8 +312,9 @@ public class World implements Playable {
 			throw new IOException();
 		}
 
-		col = new OldEntityGroup(new File(f, "entities.dat"));
 		level = new Level(new File(f, "level.dat"));
+		col = QuadTree.coverLevel(level);
+		col.loadEntities(new File(f, "entities.dat"));
 
 	}
 

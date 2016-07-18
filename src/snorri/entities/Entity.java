@@ -30,14 +30,8 @@ public class Entity implements Nominal, Serializable {
 	private boolean flying;
 
 	public Entity(Vector pos, Collider collider) {
-		
-		if (pos == null && !(this instanceof OldEntityGroup)) {
-			Main.error("spawned non-EntityGroup at null: " + this.getClass().getSimpleName());
-		}
-		
 		this.pos = (pos == null) ? null : pos.copy();
-		this.collider = collider.cloneOnto(this); //so we dont get weird entangled positions
-		
+		this.collider = collider.cloneOnto(this); //so we don't get weird entangled positions
 	}
 	
 	public Entity(Entity e) {

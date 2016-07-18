@@ -10,6 +10,7 @@ import snorri.collisions.RectCollider;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.world.EntityGroup;
+import snorri.world.Level;
 import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -35,9 +36,14 @@ public class QuadTree extends Entity implements EntityGroup {
 		}
 	}
 
-	public static QuadTree coverLevel(Vector dim) {
-		Vector pos = dim.copy().divide(2);
-		return new QuadTree(pos, new RectCollider(pos, dim.copy()));
+	/**
+	 * Create a quad tree with dimensions <code>dim</code>.
+	 * @param dim
+	 * the dimensions to cover, in grid coordinates
+	 */
+	public static QuadTree coverLevel(Level l) {
+		Vector pos = l.getDimensions().copy().toGlobalPos().divide(2);
+		return new QuadTree(pos, new RectCollider(pos, l.getDimensions().copy().toGlobalPos()));
 	}
 
 	private QuadTree getSubQuad(int x, int y) {
@@ -75,7 +81,7 @@ public class QuadTree extends Entity implements EntityGroup {
 		if (!inChild) {
 			entities.add(e);
 		}
-		isEmpty = true;
+		isEmpty = false;
 		return true;
 
 	}
@@ -90,7 +96,7 @@ public class QuadTree extends Entity implements EntityGroup {
 
 		// TODO use isEmpty to make even better
 
-		if (!contains(e)) {
+		if (isEmpty() || !contains(e)) {
 			return false;
 		}
 
@@ -181,9 +187,11 @@ public class QuadTree extends Entity implements EntityGroup {
 				e.update(world, deltaTime);
 			}
 		}
-		for (QuadTree node : nodes) {
-			if (node.intersects(updateRange)) {
-				node.updateAround(world, deltaTime, focus);
+		if (nodes != null) {
+			for (QuadTree node : nodes) {
+				if (node.intersects(updateRange)) {
+					node.updateAround(world, deltaTime, focus);
+				}
 			}
 		}
 
@@ -200,9 +208,11 @@ public class QuadTree extends Entity implements EntityGroup {
 				e.renderAround(window, gr);
 			}
 		}
-		for (QuadTree node : nodes) {
-			if (node.intersects(view)) {
-				node.renderAround(window, gr);
+		if (nodes != null) {
+			for (QuadTree node : nodes) {
+				if (node.intersects(view)) {
+					node.renderAround(window, gr);
+				}
 			}
 		}
 	}
@@ -211,8 +221,10 @@ public class QuadTree extends Entity implements EntityGroup {
 	public List<Entity> getAllEntities() {
 		List<Entity> result = new ArrayList<>();
 		result.addAll(entities);
-		for (QuadTree node : nodes) {
-			result.addAll(node.getAllEntities());
+		if (nodes != null) {
+			for (QuadTree node : nodes) {
+				result.addAll(node.getAllEntities());
+			}
 		}
 		return result;
 	}
