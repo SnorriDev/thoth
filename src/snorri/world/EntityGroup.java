@@ -27,8 +27,6 @@ public interface EntityGroup {
 
 	public void renderAround(FocusedWindow g, Graphics gr);
 
-	public void traverse();
-
 	/**
 	 * This method does not just search immediate children, but all entities which are transitively children of the root EntityGroup
 	 * @return a randomly selected entity with all entities having equal probability

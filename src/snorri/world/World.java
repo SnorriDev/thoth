@@ -249,9 +249,6 @@ public class World implements Playable {
 		});
 		for (Entity e : ents) {
 			addHard(e);
-			if (Debug.LOG_ADD_HARD) {
-				col.traverse();
-			}
 		}
 	}
 

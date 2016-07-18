@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import snorri.collisions.RectCollider;
+import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.world.EntityGroup;
@@ -117,16 +118,16 @@ public class QuadTree extends Entity implements EntityGroup {
 
 	public List<Entity> getAllCollisions(Entity e) {
 		List<Entity> out = new ArrayList<>();
-		if (nodes != null) {
-			for (QuadTree node : nodes) {
-				if (node.intersects(e)) {
-					out.addAll(node.getAllCollisions(e));
-				}
-			}
-		}
 		for (Entity each : entities) {
 			if (each.intersects(e)) {
 				out.add(each);
+			}
+		}
+		if (nodes != null) {
+			for (QuadTree node : nodes) {
+				if (!node.isEmpty() && node.intersects(e)) {
+					out.addAll(node.getAllCollisions(e));
+				}
 			}
 		}
 		return out;
@@ -135,7 +136,7 @@ public class QuadTree extends Entity implements EntityGroup {
 	public Entity getFirstCollision(Entity e) {
 		if (nodes != null) {
 			for (QuadTree node : nodes) {
-				if (node.intersects(e)) {
+				if (!node.isEmpty() && node.intersects(e)) {
 					Entity col = node.getFirstCollision(e);
 					if (col != null) {
 						return col;
@@ -199,6 +200,11 @@ public class QuadTree extends Entity implements EntityGroup {
 
 	@Override
 	public void renderAround(FocusedWindow window, Graphics gr) {
+		
+		if (Debug.RENDER_TREE) {
+			collider.render(window, gr);
+		}
+		
 		Vector playerPos = window.getFocus().getPos();
 		Vector dim = window.getDimensions();
 		Rectangle view = new Rectangle(playerPos.getX() - dim.getX() / 2, playerPos.getY() - dim.getY() / 2, dim.getX(),
