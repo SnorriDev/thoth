@@ -23,6 +23,10 @@ public class RectCollider extends Collider {
 		this.dim = dim;
 	}
 	
+	public Vector getDimensions() {
+		return dim;
+	}
+	
 	public int getWidth() {
 		return dim.getX() / 2;
 	}

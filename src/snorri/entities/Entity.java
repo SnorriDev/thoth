@@ -253,5 +253,9 @@ public class Entity implements Nominal, Serializable {
 	public void setPos(Vector pos) {
 		this.pos = pos.copy();
 	}
+	
+	public Collider getCollider() {
+		return collider;
+	}
 
 }
