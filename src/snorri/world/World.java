@@ -110,7 +110,7 @@ public class World implements Playable {
 		Player p = new Player(getRandomSpawnPos());
 		addHard(p);
 		
-		for (int i = 0; i < 40; i++) {
+		for (int i = 0; i < 20; i++) {
 			toBeSpawned.add(new Enemy(getRandomSpawnPos(), p));
 		}
 		

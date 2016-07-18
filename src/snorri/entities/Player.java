@@ -85,9 +85,13 @@ public class Player extends Unit {
 		return getHealth() / MAX_HEALTH * HEALTH_RES;
 	}
 	
+	public Vector getHealthBarPos() {
+		return new Vector(((GameWindow) Main.getWindow()).getDimensions().getX() - GameWindow.MARGIN - HEALTH_RES * HEART.getWidth(null), GameWindow.MARGIN);
+	}
+	
 	public void renderHealthBar(Graphics g) {
 		
-		Vector pos = new Vector(((GameWindow) Main.getWindow()).getDimensions().getX() - GameWindow.MARGIN - HEALTH_RES * HEART.getWidth(null), GameWindow.MARGIN);
+		Vector pos = getHealthBarPos();
 		
 		for (int i = 0; i < HEALTH_RES; i++) {
 			

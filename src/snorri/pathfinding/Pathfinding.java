@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
+import snorri.main.Debug;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -32,6 +33,10 @@ public class Pathfinding {
 	
 	//TODO: can still tweak a bit to introduce more optimal routes, random variation, diagonal movement, etc.
 	public static ArrayDeque<PathNode> findPath(Vector start, Vector goal) {
+		
+		if (Debug.DISABLE_PATHFINDING) {
+			return null;
+		}
 		
 		//do this to avoid lots of unnecessary computation
 		if (!world.getLevel().arePathConnected(start, goal)) {

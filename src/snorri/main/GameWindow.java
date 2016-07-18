@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import snorri.entities.Detector;
 import snorri.entities.Desk;
@@ -29,6 +31,7 @@ public class GameWindow extends FocusedWindow {
 	
 	private Playable universe;
 	private Player focus;
+	private Queue<DialogMessage> dialogQ;
 	private boolean paused, editingInventory, hasDied;
 	private long lastTime;
 		
@@ -36,6 +39,7 @@ public class GameWindow extends FocusedWindow {
 		super();
 		this.universe = universe;
 		this.focus = focus;
+		dialogQ = new LinkedList<DialogMessage>();
 		lastTime = getTimestamp();
 		paused = false;
 		editingInventory = false;
@@ -57,6 +61,10 @@ public class GameWindow extends FocusedWindow {
 			Main.log("high delta time detected (" + deltaTime + " sec)");
 		}
 		
+		if (dialogQ.peek() != null && dialogQ.peek().update(deltaTime)) {
+			dialogQ.poll();
+		}
+		
 		if (isPaused() || isEditingInventory()) {
 			return;
 		}
@@ -70,8 +78,8 @@ public class GameWindow extends FocusedWindow {
 			return;
 		}
 		
-		universe.getCurrentWorld().update(deltaTime);
 		repaint();
+		universe.getCurrentWorld().update(deltaTime);
 				
 	}
 	
@@ -81,15 +89,24 @@ public class GameWindow extends FocusedWindow {
 		if (focus == null) {
 			return;
 		}
+		
 		super.paintComponent(g);
 		universe.getCurrentWorld().render(this, g, true);
 		focus.getInventory().render(this, g);
 		focus.renderHealthBar(g);
 		
+		if (dialogQ.peek() != null) {
+			dialogQ.peek().render(this, g);
+		}
+		
 	}
 	
 	public Player getFocus() {
 		return focus;
+	}
+	
+	public void showDialog(String msg) {
+		dialogQ.add(new DialogMessage(msg));
 	}
 	
 	@Override

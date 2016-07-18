@@ -11,9 +11,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
+import snorri.entities.Entity;
 import snorri.entities.Unit;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
@@ -28,6 +31,7 @@ public class Level {
 	private Vector dim;
 	
 	private ArrayList<ArrayList<Vector>> connectedSubGraphs;
+	private HashMap<Vector, List<Vector>> graphHash;
 
 	// not that indexing conventions are Cartesian, not matrix-based
 
@@ -236,6 +240,11 @@ public class Level {
 		return t != null && t.isPathable();
 	}
 	
+	/**
+	 * @param pos
+	 * the tile position in grid coordinates
+	 * @return whether this tile is context pathable
+	 */
 	public boolean isContextPathable(Vector pos) {
 		Tile t = getTileGrid(pos);
 		return t != null && t.isContextPathable();
@@ -251,7 +260,19 @@ public class Level {
 		return t != null && t.canShootOver();
 	}
 	
+	public List<Vector> getGraph(Entity e) {
+		return getGraph(e.getPos().copy().toGridPos());
+	}
+	
+	public List<Vector> getGraph(Vector pos) {
+		return graphHash.get(pos);
+	}
+	
 	public boolean arePathConnected(Vector p1, Vector p2) {
+		
+		if (!isContextPathable(p1) || !isContextPathable(p2)) {
+			return false;
+		}
 		
 		ArrayList<Vector> v = new ArrayList<Vector>();
 		v.add(p1);
@@ -287,6 +308,7 @@ public class Level {
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream(f));
 		try {
 			connectedSubGraphs = (ArrayList<ArrayList<Vector>>) in.readObject();
+			computeGraphHash();
 		} catch (ClassNotFoundException e) {
 			Main.error("recalculating corrupted pathfinding data");
 			computeConnectedSubGraphs();
@@ -338,6 +360,20 @@ public class Level {
 		
 		Main.log(connectedSubGraphs.size() + " sub-graph(s) computed!");
 		
+		computeGraphHash();
+		
+	}
+	
+	//TODO update the hash when we do dynamic level changes
+	private void computeGraphHash() {
+		graphHash = new HashMap<Vector, List<Vector>>();
+		for (List<Vector> graph : connectedSubGraphs) {
+			for (Vector v : graph) {
+				graphHash.put(v, graph);
+			}
+		}
+		
+		Main.log("position -> graph hash table set");
 	}
 	
 	private ArrayList<Vector> computeConnectedSubGraph(Vector start) {

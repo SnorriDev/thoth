@@ -57,5 +57,9 @@ public class Timer implements Serializable {
 		cooldown = attackDelay;
 		currentTime = cooldown;
 	}
+
+	public Object getTime() {
+		return currentTime;
+	}
 	
 }

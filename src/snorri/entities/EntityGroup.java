@@ -460,19 +460,16 @@ public class EntityGroup extends Entity {
 	public void renderAround(FocusedWindow g, Graphics gr) {
 		Vector playerPos = g.getFocus().getPos();
 		Vector dim = g.getDimensions();
-		Rectangle view = new Rectangle(playerPos.getX() - dim.getX() / 2, playerPos.getY() - dim.getY() / 2, dim.getX(),
-				dim.getY());
-		synchronized (this) {
-			try {
-				for (Entity e : entities.toArray(new Entity[0])) {
-					if (e.intersects(view)) {
-						// the is in renderHitbox (Entity)
-						e.renderAround(g, gr);
-					}
+		Rectangle view = new Rectangle(playerPos.getX() - dim.getX() / 2, playerPos.getY() - dim.getY() / 2, dim.getX(), dim.getY());
+		try {
+			for (Entity e : entities.toArray(new Entity[0])) {
+				if (e.intersects(view)) {
+					// the is in renderHitbox (Entity)
+					e.renderAround(g, gr);
 				}
-			} catch (ConcurrentModificationException e) {
-				Main.error("concurrent modification detected");
 			}
+		} catch (ConcurrentModificationException e) {
+			Main.error("concurrent modification detected");
 		}
 	}
 

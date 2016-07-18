@@ -216,6 +216,16 @@ public class Vector implements Serializable, Comparable<Vector> {
 		return Double.compare(magnitude(), o.magnitude());
 	}
 	
+	/**
+	 * used in the pos -> graph hash
+	 * note that this is only meaningful for
+	 * integral vectors defined in grid coordinates
+	 */
+	@Override
+	public int hashCode() {
+		return Level.MAX_SIZE * getY() + getX();
+	}
+	
 	//TODO maybe should have just used these instead of vectors lol
 	
 	public Point2D getPoint() {

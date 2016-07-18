@@ -3,6 +3,7 @@ package snorri.entities;
 import snorri.animations.Animation;
 import snorri.events.CollisionEvent;
 import snorri.inventory.Droppable;
+import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.world.Vector;
 
@@ -27,7 +28,9 @@ public class Drop extends Detector {
 	@Override
 	public void onCollision(CollisionEvent e) {
 		if (e.getTarget() instanceof Player) {
-			Main.log("you acquired " + getPrize());
+			if (Main.getWindow() instanceof GameWindow) {
+				((GameWindow) Main.getWindow()).showDialog(getPrize() + " acquired!");
+			}
 			((Player) e.getTarget()).getFullInventory().add(getPrize());
 			e.getWorld().delete(this);
 		}

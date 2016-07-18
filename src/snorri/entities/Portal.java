@@ -1,5 +1,6 @@
 package snorri.entities;
 
+import snorri.animations.Animation;
 import snorri.events.CollisionEvent;
 import snorri.main.GameWindow;
 import snorri.main.Main;
@@ -19,6 +20,7 @@ public class Portal extends Detector {
 		this.world = world;
 		this.dest = dest;
 		treeMember = true;
+		animation = new Animation("/textures/objects/tomb.png");
 		age = -1;
 		ignoreCollisions = true;
 	}

@@ -1,6 +1,7 @@
 package snorri.entities;
 
 import java.util.ArrayDeque;
+import java.util.List;
 
 import snorri.animations.Animation;
 import snorri.inventory.Inventory;
@@ -20,9 +21,12 @@ public class Enemy extends Unit implements Pathfinder {
 
 	private static final long serialVersionUID = 1L;
 	private static final double APPROACH_MARGIN = 15;
-	private static final double CHANGE_PATH_MARGIN = 200;
+	private static final double CHANGE_PATH_MARGIN = 350;
 	
 	private Vector lastSeenPos;
+	private List<Vector> graph;
+	private List<Vector> targetGraph;
+	private boolean initialGraphFound = false;
 	private boolean recalculatingPath = false;
 	
 	protected double seekRange = 1000;
@@ -68,6 +72,10 @@ public class Enemy extends Unit implements Pathfinder {
 	 */
 	public boolean canShootAt(World world, Entity target) {
 		
+		if (target.pos.distanceSquared(pos) > attackRange * attackRange) {
+			return false;
+		}
+		
 		Vector step = target.pos.copy().sub(pos).normalize();
 		Vector tempPos = pos.copy();
 		
@@ -99,42 +107,43 @@ public class Enemy extends Unit implements Pathfinder {
 	@Override
 	public void update(World world, double deltaTime) {
 		
-		if (target != null) {
-			
-			if (path != null) {
-				
-				if (world.getLevel().isContextPathable(target.pos) && target.pos.distanceSquared(lastSeenPos) > CHANGE_PATH_MARGIN * CHANGE_PATH_MARGIN) {
-					stopPath(); //path will be recalculated if it's still in range
-				}
-				else if (canShootAt(world, target)) {
-					shootAt(world, target);
-				}
-				else {
-					follow(world, deltaTime);
-				}
-				
-			}
-						
-		}
-//		else {
-//			if (canShootAt(world, target)) {
-//				shootAt(world, target);
-//			} else {
-//				walkTo(world, lastSeenPos, deltaTime);
-//			}
-//		}
-		
-		if (path == null && !recalculatingPath && (pos.distanceSquared(target.pos) <= seekRange * seekRange)) {
-			startPath();
-		}
-		
-		if (path == null) {
-			Main.log(recalculatingPath);
-		}
-		
 		inventory.update(deltaTime);
 		super.update(world, deltaTime);
 		
+		if (target == null) {
+			return;
+		}
+							
+		if (canShootAt(world, target)) {
+			shootAt(world, target);
+			return;
+		}
+		
+		//the pathfinding is mad efficient, but something else is hella laggy
+		
+		if (path != null) {
+			
+			if (target.pos.distanceSquared(lastSeenPos) > CHANGE_PATH_MARGIN * CHANGE_PATH_MARGIN
+					&& (targetGraph = world.getLevel().getGraph(this)) == graph) {
+				stopPath();
+			} else {
+				follow(world, deltaTime);
+			}
+
+		} else if (!recalculatingPath && (pos.distanceSquared(target.pos) <= seekRange * seekRange)) {
+
+			if (!initialGraphFound) {
+				graph = world.getLevel().getGraph(this);
+				targetGraph = world.getLevel().getGraph(target);
+				initialGraphFound = true;
+			}
+			
+			if (graph != null && graph == targetGraph) {
+				startPath();
+			}
+
+		}
+				
 	}
 
 	private void follow(World world, double deltaTime) {
