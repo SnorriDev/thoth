@@ -174,17 +174,17 @@ public class QuadTree extends Entity implements EntityGroup {
 		return out;
 	}
 	
-	public PriorityQueue<Entity> getAllCollisions(Rectangle r) {
+	public PriorityQueue<Entity> getRenderQueue(Rectangle r) {
 		PriorityQueue<Entity> out = new PriorityQueue<>();
 		for (Entity each : entities) {
-			if (!each.shouldIgnoreCollisions() && each.intersects(r)) {
+			if (each.intersects(r)) {
 				out.add(each);
 			}
 		}
 		if (nodes != null) {
 			for (QuadTree node : nodes) {
 				if (!node.isEmpty() && node.intersects(r)) {
-					out.addAll(node.getAllCollisions(r));
+					out.addAll(node.getRenderQueue(r));
 				}
 			}
 		}
@@ -279,7 +279,7 @@ public class QuadTree extends Entity implements EntityGroup {
 		Rectangle view = new Rectangle(playerPos.getX() - dim.getX() / 2, playerPos.getY() - dim.getY() / 2, dim.getX(),
 				dim.getY());
 		
-		for (Entity e : this.getAllCollisions(view)) {
+		for (Entity e : this.getRenderQueue(view)) {
 			e.renderAround(window, gr);
 		}
 		

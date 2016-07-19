@@ -192,14 +192,11 @@ public class World implements Playable {
 	}
 
 	public void render(FocusedWindow g, Graphics gr, boolean showOutlands) {
-		
 		level.renderMap(g, gr, showOutlands);
-		col.renderAround(g, gr);
-
 		for (Detector p : colliders.toArray(new Detector[0])) {
 			p.renderAround(g, gr);
 		}
-
+		col.renderAround(g, gr);
 	}
 
 	public EntityGroup getEntityTree() {
