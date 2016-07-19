@@ -103,7 +103,7 @@ public class QuadTree extends Entity implements EntityGroup {
 
 		if (nodes != null) {
 			for (QuadTree node : nodes) {
-				if (node.contains(e)) {
+				if (!node.isEmpty() && node.contains(e)) {
 					boolean out = node.delete(e);
 					calculateEmpty();
 					return out;
@@ -190,7 +190,7 @@ public class QuadTree extends Entity implements EntityGroup {
 		}
 		if (nodes != null) {
 			for (QuadTree node : nodes) {
-				if (node.intersects(updateRange)) {
+				if (!node.isEmpty() && node.intersects(updateRange)) {
 					node.updateAround(world, deltaTime, focus);
 				}
 			}
@@ -229,7 +229,9 @@ public class QuadTree extends Entity implements EntityGroup {
 		result.addAll(entities);
 		if (nodes != null) {
 			for (QuadTree node : nodes) {
-				result.addAll(node.getAllEntities());
+				if (!node.isEmpty()) {
+					result.addAll(node.getAllEntities());
+				}
 			}
 		}
 		return result;

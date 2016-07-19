@@ -6,8 +6,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -126,7 +124,7 @@ public class World implements Playable {
 			toBeSpawned.add(new Desk(getRandomSpawnPos()));
 		}
 		
-		addAllHard(toBeSpawned, p);
+		addAllHard(toBeSpawned);
 
 		Main.log("new world created!");
 	}
@@ -234,19 +232,9 @@ public class World implements Playable {
 	}
 	
 	/**
-	 * uses a magnitude-sort heuristic to add a list of entities
-	 * in an order that will produce a nicer tree structure
-	 * @param ents
-	 * 	the list of entities to be added
-	 * 	this list will be sorted into the order in which the entities are added
+	 * Add a bunch of things to the world
 	 */
-	public void addAllHard(List<Entity> ents, Entity focus) {
-		Collections.sort(ents, new Comparator<Entity>() {
-			@Override
-			public int compare(Entity o1, Entity o2) {
-				return Double.compare(o1.getPos().distance(focus.getPos()), o2.getPos().distance(focus.getPos()));
-			}
-		});
+	public void addAllHard(List<Entity> ents) {
 		for (Entity e : ents) {
 			addHard(e);
 		}
