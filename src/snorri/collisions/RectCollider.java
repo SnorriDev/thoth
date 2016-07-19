@@ -18,9 +18,13 @@ public class RectCollider extends Collider {
 	 * @param dim
 	 * 	the dimensions of the rectangle
 	 */
-	public RectCollider(Vector pos, Vector dim) {
-		super(pos);
+	public RectCollider(Vector dim) {
 		this.dim = dim;
+	}
+	
+	public RectCollider(Entity e, Vector dim) {
+		this(dim);
+		setFocus(e);
 	}
 	
 	public Vector getDimensions() {
@@ -36,30 +40,30 @@ public class RectCollider extends Collider {
 	}
 	
 	public Vector getTopLeft() {
-		return pos.copy().sub(dim.copy().divide(2));
+		return getPos().copy().sub(dim.copy().divide(2));
 	}
 	
 	public Vector getBottomRight() {
-		return pos.copy().add(dim.copy().divide(2));
+		return getPos().copy().add(dim.copy().divide(2));
 	}
 	
 	public Vector getTopRight() {
-		return pos.copy().add(-dim.getX() / 2, dim.getY() / 2);
+		return getPos().copy().add(-dim.getX() / 2, dim.getY() / 2);
 	}
 	
 	public Vector getBottomLeft() {
-		return pos.copy().add(dim.getX() / 2, -dim.getY() / 2);
+		return getPos().copy().add(dim.getX() / 2, -dim.getY() / 2);
 	}
 	
 	@Override
 	public Rectangle getShape() {
+		Vector pos = getPos();
 		return new Rectangle(pos.getX() - dim.getX() / 2, pos.getY() - dim.getY() / 2, dim.getX(), dim.getY());
-//		Vector top = getTopLeft();
-//		return new Rectangle(top.getX(), top.getY(), dim.getX(), dim.getY());
 	}
 
 	@Override
 	public void render(FocusedWindow g, Graphics gr) {
+		Vector pos = getPos();
 		if (pos == null || g.getFocus().getPos() == null) {
 			return;
 		}
@@ -72,7 +76,7 @@ public class RectCollider extends Collider {
 
 	@Override
 	public Collider cloneOnto(Entity root) {
-		return new RectCollider(root.getPos(), dim.copy());
+		return new RectCollider(root, dim.copy());
 	}
 	
 	@Override
@@ -87,7 +91,7 @@ public class RectCollider extends Collider {
 	
 	@Override
 	public RectCollider copy() {
-		return new RectCollider(pos, dim.copy());
+		return new RectCollider(focus, dim.copy());
 	}
 
 }

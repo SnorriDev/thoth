@@ -16,7 +16,7 @@ public class Unit extends Entity {
 	private double health;
 		
 	public Unit(Vector pos) {
-		super(pos, new RectCollider(pos, new Vector(43, 80)));
+		super(pos, new RectCollider(new Vector(43, 80)));
 		health = MAX_HEALTH;
 	}
 	
@@ -41,9 +41,7 @@ public class Unit extends Entity {
 	}
 
 	public void walk(World world, Vector direction, double deltaTime) {
-		world.getEntityTree().delete(this);
 		moveHard(world, direction, getSpeed() * deltaTime);
-		world.getEntityTree().insert(this);
 	}
 	
 	public void walkTo(World world, Vector target, double deltaTime) {

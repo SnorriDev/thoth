@@ -64,7 +64,7 @@ public class GameWindow extends FocusedWindow {
 		if (dialogQ != null && dialogQ.peek() != null && dialogQ.peek().update(deltaTime)) {
 			dialogQ.poll();
 		}
-		
+				
 		if (isPaused() || isEditingInventory()) {
 			return;
 		}

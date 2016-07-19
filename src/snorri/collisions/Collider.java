@@ -13,16 +13,16 @@ import snorri.world.Vector;
 public abstract class Collider implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-	protected Vector pos;
+	protected Entity focus;
 	
-	protected Collider(Vector pos) {
-		this.pos = pos;
+	public void setFocus(Entity focus) {
+		this.focus = focus;
 	}
 	
 	public abstract Shape getShape();
 	
 	public Vector getPos() {
-		return pos;
+		return focus.getPos();
 	}
 		
 	/**
@@ -33,7 +33,7 @@ public abstract class Collider implements Serializable {
 	}
 	
 	public final boolean contains(Shape other) {
-		if (pos == null) {
+		if (getPos() == null) {
 			return true;
 		}
 		Area a = new Area(other);
@@ -45,14 +45,14 @@ public abstract class Collider implements Serializable {
 	 * @return whether this collider intersects a point given by pos
 	 */
 	public final boolean intersects(Vector pos) {
-		if (this.pos == null) {
+		if (getPos() == null) {
 			return true;
 		}
 		return getShape().contains(pos.getPoint());
 	}
 	
 	public final boolean intersects(Shape other) {
-		if (pos == null) {
+		if (getPos() == null) {
 			return true;
 		}
 		Area a = new Area(getShape());
@@ -72,7 +72,7 @@ public abstract class Collider implements Serializable {
 	
 	public CircleCollider getInscribing() {
 		int r = getMaxRadius();
-		return new CircleCollider(pos, r);
+		return new CircleCollider(focus, r);
 	}
 	
 	public abstract Collider copy();

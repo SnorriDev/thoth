@@ -18,32 +18,37 @@ import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Entity implements Nominal, Serializable {
+public class Entity implements Nominal, Serializable, Comparable<Entity> {
 
 	private static final long serialVersionUID = 1L;
 	protected Collider collider;
 	protected Vector pos;
 	protected Animation animation;
 	protected boolean ignoreCollisions = false;
+	protected int z;
 	
 	private Timer burnTimer = new Timer(5);
 	private boolean flying;
 
+	/**
+	 * This method will automatically set the collider focus to the entity
+	 */
 	public Entity(Vector pos, Collider collider) {
 		this.pos = (pos == null) ? null : pos.copy();
-		this.collider = collider.cloneOnto(this); //so we don't get weird entangled positions
+		this.collider = collider.cloneOnto(this);
+		z = 0;
 	}
 	
 	public Entity(Entity e) {
-		this(e.pos, e.collider); //TODO change so that the copying happens here
+		this(e.pos, e.collider);
 	}
 	
 	public Entity(Vector pos, int r) {
-		this(pos, new CircleCollider(pos, r));
+		this(pos, new CircleCollider(r));
 	}
 	
 	public Entity(Vector pos) {
-		this(pos, 2);
+		this(pos, null);
 	}
 
 	public Vector getPos() {
@@ -95,7 +100,7 @@ public class Entity implements Nominal, Serializable {
 				if (t == null || !t.isPathable()) {
 					return true;
 				}
-								
+
 			}
 		}
 		
@@ -235,7 +240,7 @@ public class Entity implements Nominal, Serializable {
 			
 		}
 		
-		this.pos.add(dir);
+		world.getEntityTree().move(this, pos.copy().add(dir));
 		return true;
 		
 	}
@@ -250,6 +255,11 @@ public class Entity implements Nominal, Serializable {
 	
 	public Collider getCollider() {
 		return collider;
+	}
+
+	@Override
+	public int compareTo(Entity other) {
+		return Integer.compare(z, other.z);
 	}
 
 }

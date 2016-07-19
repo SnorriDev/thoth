@@ -64,5 +64,7 @@ public interface EntityGroup {
 	}
 
 	public List<Entity> getAllEntities();
+
+	public void move(Entity obj, Vector newPos);
 	
 }

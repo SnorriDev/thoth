@@ -174,8 +174,8 @@ public class World implements Playable {
 		if (Debug.LOG_WORLD) {
 			Main.log("world update");
 		}
-		col.updateAround(this, d, ((FocusedWindow) Main.getWindow()).getFocus());
-				
+		
+		col.updateAround(this, d, ((FocusedWindow) Main.getWindow()).getFocus());		
 		for (Detector p : colliders) {
 			p.update(this, d);
 		}
@@ -185,7 +185,6 @@ public class World implements Playable {
 		while (!deleteQ.isEmpty()) {
 			deleteHard(deleteQ.poll());
 		}
-
 		while (!addQ.isEmpty()) {
 			addHard(addQ.poll());
 		}

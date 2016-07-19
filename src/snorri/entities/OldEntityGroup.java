@@ -29,7 +29,7 @@ public class OldEntityGroup extends Entity implements EntityGroup {
 	// can make this stuff more elegant
 	public OldEntityGroup(Entity root) {
 		super(root);
-		collider = new CircleCollider(pos, root.collider.getMaxRadius());
+		collider = new CircleCollider(this, root.collider.getMaxRadius());
 		entities = new CopyOnWriteArrayList<Entity>();
 		entities.add(root);
 	}
@@ -343,17 +343,15 @@ public class OldEntityGroup extends Entity implements EntityGroup {
 
 	}
 
-	@Deprecated
-	public boolean move(Entity e, Vector trans) {
+	public void move(Entity e, Vector trans) {
 
 		if (trans.notInPlane()) {
-			return false;
+			return;
 		}
 
 		delete(e);
 		e.pos.add(trans);
 		insert(e);
-		return true;
 
 	}
 

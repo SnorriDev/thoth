@@ -13,9 +13,13 @@ public class CircleCollider extends Collider {
 	private static final long serialVersionUID = 1L;
 	private int r;
 
-	public CircleCollider(Vector pos, int r) {
-		super(pos);
+	public CircleCollider(int r) {
 		this.r = r;
+	}
+	
+	public CircleCollider(Entity e, int r) {
+		this(r);
+		setFocus(e);
 	}
 	
 	public void setRadius(int r) {
@@ -31,16 +35,19 @@ public class CircleCollider extends Collider {
 	}
 	
 	public Rectangle getBoundingRect() {
+		Vector pos = getPos();
 		return new Rectangle(pos.getX() - r, pos.getY() - r, 2 * r, 2 * r);
 	}
 	
 	@Override
 	public Ellipse2D getShape() {
+		Vector pos = getPos();
 		return new Ellipse2D.Double(pos.x - r, pos.y - r, 2 * r, 2 * r);
 	}
 
 	@Override
 	public void render(FocusedWindow g, Graphics gr) {
+		Vector pos = getPos();
 		if (pos == null || g.getFocus().getPos() == null) {
 			return;
 		}
@@ -50,7 +57,7 @@ public class CircleCollider extends Collider {
 
 	@Override
 	public Collider cloneOnto(Entity root) {
-		return new CircleCollider(root.getPos(), getRadius());
+		return new CircleCollider(root, getRadius());
 	}
 
 	@Override
@@ -65,7 +72,7 @@ public class CircleCollider extends Collider {
 	
 	@Override
 	public CircleCollider copy() {
-		return new CircleCollider(pos, r);
+		return new CircleCollider(focus, r);
 	}
 
 }

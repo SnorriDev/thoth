@@ -3,6 +3,7 @@ package snorri.entities;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -20,14 +21,25 @@ public class QuadTree extends Entity implements EntityGroup {
 
 	private static final long serialVersionUID = 1L;
 
+	private static HashMap<Entity, QuadTree> nodeMap;
+	
+	static {
+		nodeMap = new HashMap<>();
+	}
+	
 	private CopyOnWriteArrayList<Entity> entities; // the entities in this level
+	private QuadTree parent;
 	private QuadTree[] nodes; // if this is a leaf, then nodes == null
 	private boolean isEmpty;
 
-	public QuadTree(Vector pos, RectCollider collider) {
+	//TODO
+	//hashmap mapping entity to quadtree
+	
+	public QuadTree(Vector pos, RectCollider collider, QuadTree parent) {
 		super(pos, collider);
 		isEmpty = true;
 		entities = new CopyOnWriteArrayList<Entity>();
+		this.parent = parent;
 		if (getRectCollider().getWidth() / 2 >= Tile.WIDTH) {
 			nodes = new QuadTree[4];
 			nodes[0] = getSubQuad(-1, -1);
@@ -44,20 +56,25 @@ public class QuadTree extends Entity implements EntityGroup {
 	 */
 	public static QuadTree coverLevel(Level l) {
 		Vector pos = l.getDimensions().copy().toGlobalPos().divide(2);
-		return new QuadTree(pos, new RectCollider(pos, l.getDimensions().copy().toGlobalPos()));
+		return new QuadTree(pos, new RectCollider(l.getDimensions().copy().toGlobalPos()), null);
 	}
 
 	private QuadTree getSubQuad(int x, int y) {
 		Vector newDim = getRectCollider().getDimensions().copy().divide(2);
 		Vector newPos = pos.copy().add(x * newDim.getX() / 2, y * newDim.getY() / 2);
-		RectCollider newCol = new RectCollider(newPos, newDim);
-		return new QuadTree(newPos, newCol);
+		RectCollider newCol = new RectCollider(newDim);
+		return new QuadTree(newPos, newCol, this);
 	}
 
 	private RectCollider getRectCollider() {
 		return (RectCollider) collider;
 	}
 
+	public synchronized void add(Entity e) {
+		entities.add(e);
+		nodeMap.put(e, this);
+	}
+	
 	/**
 	 * Attempt to insert an entity into the QuadTree.
 	 * 
@@ -80,7 +97,7 @@ public class QuadTree extends Entity implements EntityGroup {
 			}
 		}
 		if (!inChild) {
-			entities.add(e);
+			add(e);
 		}
 		isEmpty = false;
 		return true;
@@ -96,6 +113,12 @@ public class QuadTree extends Entity implements EntityGroup {
 	public boolean delete(Entity e) {
 
 		// TODO use isEmpty to make even better
+		
+//		QuadTree local = nodeMap.get(e);
+//		if (local == null) {
+//			return false;
+//		}
+//		return local.entities.remove(e);
 
 		if (isEmpty() || !contains(e)) {
 			return false;
@@ -115,6 +138,12 @@ public class QuadTree extends Entity implements EntityGroup {
 		return out;
 
 	}
+	
+	public void move(Entity e, Vector newPos) {
+		delete(e);
+		e.setPos(newPos.copy());
+		insert(e);
+	}
 
 	public List<Entity> getAllCollisions(Entity e) {
 		List<Entity> out = new ArrayList<>();
@@ -125,7 +154,7 @@ public class QuadTree extends Entity implements EntityGroup {
 		}
 		if (nodes != null) {
 			for (QuadTree node : nodes) {
-				if (!node.isEmpty() && node.intersects(e)) {
+				if (!node.isEmpty() && node.intersects(e) && !node.ignoreCollisions) {
 					out.addAll(node.getAllCollisions(e));
 				}
 			}
@@ -136,7 +165,7 @@ public class QuadTree extends Entity implements EntityGroup {
 	public Entity getFirstCollision(Entity e) {
 		if (nodes != null) {
 			for (QuadTree node : nodes) {
-				if (!node.isEmpty() && node.intersects(e)) {
+				if (!node.isEmpty() && node.intersects(e) && !node.ignoreCollisions) {
 					Entity col = node.getFirstCollision(e);
 					if (col != null) {
 						return col;
@@ -159,6 +188,10 @@ public class QuadTree extends Entity implements EntityGroup {
 		}
 	}
 
+	public QuadTree getParent() {
+		return parent;
+	}
+	
 	public boolean isEmpty() {
 		return isEmpty;
 	}
