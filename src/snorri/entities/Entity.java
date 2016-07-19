@@ -21,6 +21,10 @@ import snorri.world.World;
 public class Entity implements Nominal, Serializable, Comparable<Entity> {
 
 	private static final long serialVersionUID = 1L;
+	protected static final int DEFAULT_LAYER = 0;
+	protected static final int UNIT_LAYER = 3;
+	protected static final int PLAYER_LAYER = 4;
+	
 	protected Collider collider;
 	protected Vector pos;
 	protected Animation animation;
@@ -35,8 +39,12 @@ public class Entity implements Nominal, Serializable, Comparable<Entity> {
 	 */
 	public Entity(Vector pos, Collider collider) {
 		this.pos = (pos == null) ? null : pos.copy();
-		this.collider = collider.cloneOnto(this);
-		z = 0;
+		if (collider == null) {
+			Main.error("spawning entity with null collider: " + this);
+		} else {
+			this.collider = collider.cloneOnto(this);
+		}
+		z = DEFAULT_LAYER;
 	}
 	
 	public Entity(Entity e) {
@@ -48,7 +56,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity> {
 	}
 	
 	public Entity(Vector pos) {
-		this(pos, null);
+		this(pos, 0);
 	}
 
 	public Vector getPos() {
@@ -109,7 +117,10 @@ public class Entity implements Nominal, Serializable, Comparable<Entity> {
 	}
 	
 	public boolean contains(Entity e) {
-		return collider.contains(e.collider);
+		if (e == null) {
+			return false;
+		}
+		return collider != null && collider.contains(e.collider);
 	}
 	
 	protected void traverse(int depth) {
@@ -135,7 +146,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity> {
 	
 	public void renderAround(FocusedWindow g, Graphics gr) {
 		
-		if (Debug.SHOW_COLLIDERS) {
+		if (Debug.SHOW_COLLIDERS || animation == null) {
 			collider.render(g, gr);
 		}
 		

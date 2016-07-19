@@ -79,21 +79,26 @@ public class GameWindow extends FocusedWindow {
 		}
 		
 		repaint();
-		universe.getCurrentWorld().update(deltaTime);
+		synchronized (this) {
+			universe.getCurrentWorld().update(deltaTime);
+		}
 				
 	}
 	
 	@Override
 	public void paintComponent(Graphics g){
-		
+				
 		if (focus == null) {
 			return;
 		}
 		
 		super.paintComponent(g);
-		universe.getCurrentWorld().render(this, g, true);
-		focus.getInventory().render(this, g);
-		focus.renderHealthBar(g);
+		
+		synchronized (this) {
+			universe.getCurrentWorld().render(this, g, true);
+			focus.getInventory().render(this, g);
+			focus.renderHealthBar(g);
+		}
 		
 		if (dialogQ.peek() != null) {
 			dialogQ.peek().render(this, g);

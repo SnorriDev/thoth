@@ -33,6 +33,7 @@ public class Player extends Unit {
 		super(pos);
 		inventory = new Inventory(this);
 		animation = new Animation(Animation.UNIT_IDLE);
+		z = PLAYER_LAYER;
 		
 		//default weapons
 		Weapon sling = (Weapon) Item.newItem(ItemType.SLING);

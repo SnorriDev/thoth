@@ -15,7 +15,7 @@ public class Debug {
 	public static final boolean SHOW_WEAPON_OUTPUT = false;
 	public static final boolean SHOW_ORB_OUTPUT = false;
 	public static final boolean DISABLE_PATHFINDING = false;
-	public static final boolean SHOW_COLLIDERS = true;
+	public static final boolean SHOW_COLLIDERS = false;
 
 	public static void castWTFMode(String s, SpellEvent e) {
 		Node spell = Grammar.parseString(s);

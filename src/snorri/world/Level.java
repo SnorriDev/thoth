@@ -122,6 +122,7 @@ public class Level {
 	}
 	
 	public void renderMap(FocusedWindow g, Graphics gr, boolean renderOutside) {
+				
 		int cushion = 4;
 		int scaleFactor = 2;
 		int minX = g.getFocus().getPos().getX() / Tile.WIDTH - g.getDimensions().getX() / Tile.WIDTH / scaleFactor - cushion;
@@ -144,7 +145,7 @@ public class Level {
 				}
 			}
 		}
-		return;
+		
 	}
 	
 	private static String getNameWithoutExtension(File f) {

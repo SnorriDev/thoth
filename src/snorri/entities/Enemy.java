@@ -48,7 +48,7 @@ public class Enemy extends Unit implements Pathfinder {
 	
 	//can only use this when we are in GameWindow with Player
 	public Enemy(Vector pos) {
-		this(pos, ((FocusedWindow) Main.getWindow()).getWorld().computeFocus());
+		this(pos, ((FocusedWindow) Main.getWindow()).getFocus());
 	}
 		
 	public void setTarget(Entity target) {

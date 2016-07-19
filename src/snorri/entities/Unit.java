@@ -18,11 +18,13 @@ public class Unit extends Entity {
 	public Unit(Vector pos) {
 		super(pos, new RectCollider(new Vector(43, 80)));
 		health = MAX_HEALTH;
+		z = UNIT_LAYER;
 	}
 	
 	public Unit(Unit unit) {
 		super(unit);
 		health = unit.health;
+		z = UNIT_LAYER;
 	}
 
 	@Override
@@ -41,7 +43,7 @@ public class Unit extends Entity {
 	}
 
 	public void walk(World world, Vector direction, double deltaTime) {
-		moveHard(world, direction, getSpeed() * deltaTime);
+		moveHard(world, direction.copy().normalize(), getSpeed() * deltaTime);
 	}
 	
 	public void walkTo(World world, Vector target, double deltaTime) {

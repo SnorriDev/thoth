@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import snorri.collisions.RectCollider;
@@ -77,7 +78,6 @@ public class QuadTree extends Entity implements EntityGroup {
 	
 	/**
 	 * Attempt to insert an entity into the QuadTree.
-	 * 
 	 * @return <code>true</code> iff insertion is successful in this node or in
 	 *         a child node
 	 */
@@ -112,50 +112,79 @@ public class QuadTree extends Entity implements EntityGroup {
 	 */
 	public boolean delete(Entity e) {
 
-		// TODO use isEmpty to make even better
+		// TODO can still make insert better
 		
-//		QuadTree local = nodeMap.get(e);
-//		if (local == null) {
-//			return false;
-//		}
-//		return local.entities.remove(e);
-
-		if (isEmpty() || !contains(e)) {
+		QuadTree local = nodeMap.get(e);
+		if (local == null) {
 			return false;
 		}
-
-		if (nodes != null) {
-			for (QuadTree node : nodes) {
-				if (!node.isEmpty() && node.contains(e)) {
-					boolean out = node.delete(e);
-					calculateEmpty();
-					return out;
-				}
-			}
-		}
-		boolean out = entities.remove(e);
-		calculateEmpty();
+		boolean out = local.entities.remove(e);
+		local.calculateEmptyRec();
 		return out;
+
+//		if (isEmpty() || !contains(e)) {
+//			return false;
+//		}
+//
+//		if (nodes != null) {
+//			for (QuadTree node : nodes) {
+//				if (!node.isEmpty() && node.contains(e)) {
+//					boolean out = node.delete(e);
+//					calculateEmpty();
+//					return out;
+//				}
+//			}
+//		}
+//		boolean out = entities.remove(e);
+//		calculateEmpty();
+//		return out;
 
 	}
 	
 	public void move(Entity e, Vector newPos) {
-		delete(e);
+		QuadTree node = nodeMap.get(e);
 		e.setPos(newPos.copy());
-		insert(e);
+		if (!node.contains(e)) {
+			delete(e);
+			insert(e);
+		}
+	}
+	
+	@Deprecated @SuppressWarnings("unused")
+	private void backInsert(Entity e) {
+		if (!insert(e) && getParent() != null) {
+			getParent().backInsert(e);
+		}
 	}
 
 	public List<Entity> getAllCollisions(Entity e) {
 		List<Entity> out = new ArrayList<>();
 		for (Entity each : entities) {
-			if (each.intersects(e)) {
+			if (!each.shouldIgnoreCollisions() && each.intersects(e)) {
 				out.add(each);
 			}
 		}
 		if (nodes != null) {
 			for (QuadTree node : nodes) {
-				if (!node.isEmpty() && node.intersects(e) && !node.ignoreCollisions) {
+				if (!node.isEmpty() && node.intersects(e)) {
 					out.addAll(node.getAllCollisions(e));
+				}
+			}
+		}
+		return out;
+	}
+	
+	public PriorityQueue<Entity> getAllCollisions(Rectangle r) {
+		PriorityQueue<Entity> out = new PriorityQueue<>();
+		for (Entity each : entities) {
+			if (!each.shouldIgnoreCollisions() && each.intersects(r)) {
+				out.add(each);
+			}
+		}
+		if (nodes != null) {
+			for (QuadTree node : nodes) {
+				if (!node.isEmpty() && node.intersects(r)) {
+					out.addAll(node.getAllCollisions(r));
 				}
 			}
 		}
@@ -165,7 +194,7 @@ public class QuadTree extends Entity implements EntityGroup {
 	public Entity getFirstCollision(Entity e) {
 		if (nodes != null) {
 			for (QuadTree node : nodes) {
-				if (!node.isEmpty() && node.intersects(e) && !node.ignoreCollisions) {
+				if (!node.isEmpty() && node.intersects(e)) {
 					Entity col = node.getFirstCollision(e);
 					if (col != null) {
 						return col;
@@ -174,7 +203,7 @@ public class QuadTree extends Entity implements EntityGroup {
 			}
 		}
 		for (Entity each : entities) {
-			if (each.intersects(e)) {
+			if (!each.shouldIgnoreCollisions() && each.intersects(e)) {
 				return each;
 			}
 		}
@@ -185,6 +214,13 @@ public class QuadTree extends Entity implements EntityGroup {
 		isEmpty = entities.isEmpty();
 		if (nodes != null) {
 			isEmpty &= nodes[0].isEmpty && nodes[1].isEmpty && nodes[2].isEmpty && nodes[3].isEmpty;
+		}
+	}
+	
+	private void calculateEmptyRec() {
+		calculateEmpty();
+		if (isEmpty() && getParent() != null) {
+			getParent().calculateEmpty();
 		}
 	}
 
@@ -242,18 +278,11 @@ public class QuadTree extends Entity implements EntityGroup {
 		Vector dim = window.getDimensions();
 		Rectangle view = new Rectangle(playerPos.getX() - dim.getX() / 2, playerPos.getY() - dim.getY() / 2, dim.getX(),
 				dim.getY());
-		for (Entity e : entities) {
-			if (e.intersects(view)) {
-				e.renderAround(window, gr);
-			}
+		
+		for (Entity e : this.getAllCollisions(view)) {
+			e.renderAround(window, gr);
 		}
-		if (nodes != null) {
-			for (QuadTree node : nodes) {
-				if (!node.isEmpty() && node.intersects(view)) {
-					node.renderAround(window, gr);
-				}
-			}
-		}
+		
 	}
 
 	@Override
