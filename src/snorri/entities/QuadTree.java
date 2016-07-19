@@ -216,7 +216,7 @@ public class QuadTree extends Entity implements EntityGroup {
 		}
 		if (nodes != null) {
 			for (QuadTree node : nodes) {
-				if (node.intersects(view)) {
+				if (!node.isEmpty() && node.intersects(view)) {
 					node.renderAround(window, gr);
 				}
 			}
