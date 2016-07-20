@@ -10,13 +10,13 @@ import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLDecoder;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.UIManager;
-import javax.swing.plaf.FontUIResource;
 
 import snorri.parser.Lexicon;
 import snorri.terrain.TerrainGenerator;
@@ -79,7 +79,7 @@ public class Main {
 
 	public static void setupFont() {
 		customFont = loadFont("/fonts/thothDefault.ttf");
-		setUIFont(getCustomFont(20));
+		UIManager.put("Button.font", getCustomFont(20));
 		Main.log("default font loaded");
 	}
 	
@@ -87,14 +87,11 @@ public class Main {
 		return customFont.deriveFont(Font.PLAIN, size);
 	}
 
-	public static void setUIFont(Font f) {
-		UIManager.put("Button.font", new FontUIResource(f));
-	}
-
 	public static Font loadFont(String path) {
 		try {
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			Font f = Font.createFont(Font.TRUETYPE_FONT, new File(Main.class.getResource(path).getFile()));
+			String nicePath = URLDecoder.decode(Main.class.getResource(path).getFile(), "UTF-8");
+			Font f = Font.createFont(Font.TRUETYPE_FONT, new File(nicePath));
 			ge.registerFont(f);
 			return f;
 		} catch (IOException | FontFormatException e) {
