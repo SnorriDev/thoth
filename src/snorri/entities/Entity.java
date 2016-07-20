@@ -56,7 +56,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity> {
 	}
 	
 	public Entity(Vector pos) {
-		this(pos, 0);
+		this(pos, 1);
 	}
 
 	public Vector getPos() {

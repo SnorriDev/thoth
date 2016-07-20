@@ -2,7 +2,6 @@ package snorri.overlay;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -13,6 +12,7 @@ import snorri.keyboard.Key;
 import snorri.main.GamePanel;
 import snorri.main.GameWindow;
 import snorri.main.Main;
+import snorri.main.MenuPanel;
 
 public class PauseOverlay extends GamePanel implements KeyListener {
 
@@ -23,7 +23,7 @@ public class PauseOverlay extends GamePanel implements KeyListener {
 	public PauseOverlay(GameWindow window) {
 		setOpaque(false);
 		setLayout(new GridBagLayout());
-		JPanel menu = new JPanel(new GridLayout(0, 1));
+		JPanel menu = new MenuPanel();
 		menu.setOpaque(false);
 		menu.add(createButton("Save"));
 		menu.add(createButton("Back"));

@@ -101,7 +101,6 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		menu.add(menuItem);
 
 		menuItem = new JMenuItem("Save", KeyEvent.VK_S);
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
@@ -457,7 +456,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	}
 
 	public void deleteEntity() {
-		Entity deletableEntity = world.getEntityTree().getFirstCollision(new Entity(this.getMousePosAbsolute(), 0));
+		Entity deletableEntity = world.getEntityTree().getFirstCollision(new Entity(this.getMousePosAbsolute()));
 		if (!(deletableEntity instanceof Player)) {
 			autosaveUndo();
 			world.deleteHard(deletableEntity);

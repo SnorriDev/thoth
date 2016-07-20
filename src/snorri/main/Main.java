@@ -1,6 +1,9 @@
 package snorri.main;
 
 import java.awt.FileDialog;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -11,18 +14,22 @@ import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.UIManager;
+import javax.swing.plaf.FontUIResource;
 
 import snorri.parser.Lexicon;
 import snorri.terrain.TerrainGenerator;
 import snorri.world.World;
 
 public class Main {
-			
+
 	private static GamePanel window;
 	private static JComponent outerOverlay;
-	
+
 	private static JFrame frame;
 	private static JLayeredPane pane;
+	
+	private static Font customFont;
 
 	public static void main(String[] args) {
 
@@ -31,17 +38,19 @@ public class Main {
 		System.setProperty("apple.awt.fileDialogForDirectories", "true");
 		System.setProperty("windows.awt.fileDialogForDirectories", "true");
 
+		setupFont();
+		
 		frame = new JFrame("Spoken Word");
 		frame.setSize(1800, 900);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		
+
 		pane = new JLayeredPane();
 		getLayeredPane().setOpaque(true);
-		
-		frame.getContentPane().setLayout(new GridLayout(0,1));  
+
+		frame.getContentPane().setLayout(new GridLayout(0, 1));
 		frame.getContentPane().add(getLayeredPane());
-		//FOR FULL SCREEN: frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		// FOR FULL SCREEN: frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		launchMenu();
 
@@ -65,6 +74,32 @@ public class Main {
 
 	public static GamePanel getWindow() {
 		return window;
+	}
+
+	public static void setupFont() {
+		customFont = loadFont("/fonts/thothDefault.ttf");
+		setUIFont(getCustomFont(20));
+		Main.log("default font loaded");
+	}
+	
+	public static Font getCustomFont(float size) {
+		return customFont.deriveFont(Font.PLAIN, size);
+	}
+
+	public static void setUIFont(Font f) {
+		UIManager.put("Button.font", new FontUIResource(f));
+	}
+
+	public static Font loadFont(String path) {
+		try {
+			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			Font f = Font.createFont(Font.TRUETYPE_FONT, new File(Main.class.getResource(path).getFile()));
+			ge.registerFont(f);
+			return f;
+		} catch (IOException | FontFormatException e) {
+			Main.error("font not found at " + path);
+			return null;
+		}
 	}
 
 	public static Image getImageResource(String path) {
@@ -104,8 +139,9 @@ public class Main {
 
 	/**
 	 * display the window in the main JFrame
+	 * 
 	 * @param newWindow
-	 * the new window to display
+	 *            the new window to display
 	 */
 	public static final void setWindow(GamePanel newWindow) {
 		if (window != null) {
@@ -120,11 +156,12 @@ public class Main {
 		getLayeredPane().repaint();
 		window.requestFocusInWindow();
 	}
-	
+
 	/**
 	 * set the outer HUD which should appear over the game screen
+	 * 
 	 * @param newOverlay
-	 * the new HUD overlay
+	 *            the new HUD overlay
 	 */
 	public static final void setOverlay(JComponent newOverlay) {
 		if (outerOverlay != null) {
@@ -141,7 +178,7 @@ public class Main {
 			outerOverlay.requestFocusInWindow();
 		}
 	}
-	
+
 	public static JLayeredPane getLayeredPane() {
 		return pane;
 	}
@@ -150,7 +187,7 @@ public class Main {
 		setOverlay(null);
 		setWindow(new MainMenu());
 	}
-	
+
 	public static void launchGame(World world) {
 		setWindow(new GameWindow(world));
 	}
