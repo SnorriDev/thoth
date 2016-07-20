@@ -19,9 +19,17 @@ public interface EntityGroup {
 	
 	public boolean delete(Entity e);
 
-	public Entity getFirstCollision(Entity e);
+	public Entity getFirstCollision(Entity entity, boolean hitAll);
 	
-	public List<Entity> getAllCollisions(Entity e);
+	default Entity getFirstCollision(Entity e) {
+		return getFirstCollision(e, false);
+	}
+	
+	public List<Entity> getAllCollisions(Entity e, boolean hitAll);
+	
+	default List<Entity> getAllCollisions(Entity e) {
+		return getAllCollisions(e, false);
+	}
 
 	public void updateAround(World world, double d, Entity focus);
 

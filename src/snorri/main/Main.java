@@ -9,6 +9,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -137,6 +138,14 @@ public class Main {
 		return f;
 	}
 
+	public static String getHTMLGlyph(String raw) {
+		URL url = Main.class.getResource("/textures/hieroglyphs/" + raw + ".png");
+		if (url == null) {
+			return null;
+		}
+		return "<img src=\'" + url.toString() + "'/>";
+	}
+	
 	/**
 	 * display the window in the main JFrame
 	 * 

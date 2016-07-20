@@ -21,6 +21,10 @@ public class Drop extends Detector {
 		animation = new Animation(Animation.SPARKLE);
 	}
 	
+	public Drop(Vector pos, String prize) {
+		this(pos, Droppable.fromString(prize));
+	}
+	
 	public Droppable getPrize() {
 		return prize;
 	}

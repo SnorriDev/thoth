@@ -10,6 +10,7 @@ import snorri.entities.Entity;
 import snorri.events.SpellEvent;
 import snorri.main.GameWindow;
 import snorri.main.Main;
+import snorri.main.Util;
 import snorri.parser.Node;
 import snorri.world.Vector;
 
@@ -113,6 +114,21 @@ public abstract class Item implements Droppable {
 				return c.getConstructor(ItemType.class).newInstance(this);
 			} catch (Exception e) {
 				Main.error("invalid parameters specified for " + this.toString());
+				return null;
+			}
+		}
+		
+		public static ItemType fromString(String raw) {
+			Integer i = -1;
+			try {
+				if ((i = Util.getInteger(raw)) == null) {
+						return valueOf(raw);
+				}
+				return values()[i];
+			} catch (IllegalArgumentException e) {
+				return null;
+			} catch (IndexOutOfBoundsException e) {
+				Main.error("invalid item number " + i + " specified");
 				return null;
 			}
 		}

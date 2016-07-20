@@ -157,17 +157,18 @@ public class QuadTree extends Entity implements EntityGroup {
 		}
 	}
 
-	public List<Entity> getAllCollisions(Entity e) {
+	@Override
+	public List<Entity> getAllCollisions(Entity e, boolean hitAll) {
 		List<Entity> out = new ArrayList<>();
 		for (Entity each : entities) {
-			if (!each.shouldIgnoreCollisions() && each.intersects(e)) {
+			if ((hitAll || !each.shouldIgnoreCollisions()) && each.intersects(e)) {
 				out.add(each);
 			}
 		}
 		if (nodes != null) {
 			for (QuadTree node : nodes) {
 				if (!node.isEmpty() && node.intersects(e)) {
-					out.addAll(node.getAllCollisions(e));
+					out.addAll(node.getAllCollisions(e, hitAll));
 				}
 			}
 		}
@@ -191,11 +192,11 @@ public class QuadTree extends Entity implements EntityGroup {
 		return out;
 	}
 
-	public Entity getFirstCollision(Entity e) {
+	public Entity getFirstCollision(Entity e, boolean hitAll) {
 		if (nodes != null) {
 			for (QuadTree node : nodes) {
 				if (!node.isEmpty() && node.intersects(e)) {
-					Entity col = node.getFirstCollision(e);
+					Entity col = node.getFirstCollision(e, hitAll);
 					if (col != null) {
 						return col;
 					}
@@ -203,7 +204,7 @@ public class QuadTree extends Entity implements EntityGroup {
 			}
 		}
 		for (Entity each : entities) {
-			if (!each.shouldIgnoreCollisions() && each.intersects(e)) {
+			if ((hitAll || !each.shouldIgnoreCollisions()) && each.intersects(e)) {
 				return each;
 			}
 		}
@@ -279,8 +280,9 @@ public class QuadTree extends Entity implements EntityGroup {
 		Rectangle view = new Rectangle(playerPos.getX() - dim.getX() / 2, playerPos.getY() - dim.getY() / 2, dim.getX(),
 				dim.getY());
 		
-		for (Entity e : this.getRenderQueue(view)) {
-			e.renderAround(window, gr);
+		PriorityQueue<Entity> renderQueue = getRenderQueue(view);
+		while (!renderQueue.isEmpty()) {
+			renderQueue.poll().renderAround(window, gr);
 		}
 		
 	}

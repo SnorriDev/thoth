@@ -24,6 +24,7 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
+import snorri.entities.Drop;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.entities.Portal;
@@ -81,20 +82,25 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	}
 
 	private void createMenu() {
-		// Create the menu bar.
+
 		menuBar = new JMenuBar();
 
-		// Build the first menu.
 		menu = new JMenu("File");
 		menu.setMnemonic(KeyEvent.VK_F);
 		menuBar.add(menu);
 
-		// a group of JMenuItems
 		menuItem = new JMenuItem("New", KeyEvent.VK_N);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
+//		menuItem = new JMenuItem("Generate", KeyEvent.VK_G);
+//		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));
+//		menuItem.addActionListener(this);
+//		menu.add(menuItem);
+		
+		//TODO select a generator from the generate list to make a new world
+		
 		menuItem = new JMenuItem("Open", KeyEvent.VK_O);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
@@ -436,6 +442,8 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		
 		try {
 			
+			Vector spawnPos = getMousePosAbsolute();
+			
 			if (selectedEntityClass.equals(Portal.class)) {
 				DialogMap inputs = new DialogMap();
 				inputs.put("World", WorldId.SPAWN_TOWN.name());
@@ -443,10 +451,18 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				inputs.put("Y", "" + focus.getPos().getY());
 				dialog("Portal Destination", inputs);
 				Vector dest = new Vector(inputs.getDouble("X"), inputs.getDouble("Y"));
-				world.addHard(selectedEntityClass.getConstructor(Vector.class, String.class, Vector.class).newInstance(this.getMousePosAbsolute(), inputs.getText("World"), dest));
+				world.addHard(selectedEntityClass.getConstructor(Vector.class, String.class, Vector.class).newInstance(spawnPos, inputs.getText("World"), dest));
+			} else if (selectedEntityClass.equals(Drop.class)) {
+				DialogMap inputs = new DialogMap();
+				inputs.put("Prize", "Enter item name/id or vocab word");
+				dialog("Drop Reward", inputs);
+				world.addHard(selectedEntityClass.getConstructor(Vector.class, String.class).newInstance(spawnPos, inputs.getText("Prize")));
 			}
 			
-			world.addHard(selectedEntityClass.getConstructor(Vector.class).newInstance(this.getMousePosAbsolute()));
+			else {
+				world.addHard(selectedEntityClass.getConstructor(Vector.class).newInstance(spawnPos));
+			}
+			
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| SecurityException e) {
 			e.printStackTrace();
@@ -456,7 +472,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	}
 
 	public void deleteEntity() {
-		Entity deletableEntity = world.getEntityTree().getFirstCollision(new Entity(this.getMousePosAbsolute()));
+		Entity deletableEntity = world.getEntityTree().getFirstCollision(new Entity(this.getMousePosAbsolute()), true);
 		if (!(deletableEntity instanceof Player)) {
 			autosaveUndo();
 			world.deleteHard(deletableEntity);

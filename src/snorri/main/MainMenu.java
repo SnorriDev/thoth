@@ -12,16 +12,14 @@ public class MainMenu extends GamePanel {
 	private static final long serialVersionUID = 1L;
 		
 	public MainMenu() {
-		
-		//setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		
+				
 		JPanel menu = new MenuPanel();
 		
 		JLabel title = new JLabel("The Book of Thoth");
 		title.setFont(Main.getCustomFont(80));
 		menu.add(title);
 		
-		menu.add(new JLabel(""));
+		menu.add(new JLabel("")); //for spacing
 		
 		menu.add(createButton("New Story"));
 		menu.add(createButton("Continue Story"));
