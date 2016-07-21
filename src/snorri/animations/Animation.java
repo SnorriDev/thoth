@@ -44,18 +44,14 @@ public class Animation implements Serializable {
 	 */
 
 	public Animation(String str) {
-		try {
-			if (str.endsWith(".png")) {
-				loadImage(Main.getImageResource(str));
-			} else {
-				loadFolder(new File(Animation.class.getResource(str).toURI()));
-			}
-			path = str;
-		} catch (URISyntaxException e) {
-			Main.error("could not find animation " + str);
+		if (str.endsWith(".png")) {
+			loadImage(Main.getImageResource(str));
+		} else {
+			loadFolder(Main.getPath(str));
 		}
+		path = str;
 	}
-	
+
 	public Animation(Animation other) {
 		set(other);
 	}

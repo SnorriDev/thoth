@@ -10,7 +10,6 @@ import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.net.URLDecoder;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -76,6 +75,14 @@ public class Main {
 	public static GamePanel getWindow() {
 		return window;
 	}
+	
+	public static File getDir() {
+		return new File(".");
+	}
+	
+	public static File getPath(String path) {
+		return new File(getDir(), path);
+	}
 
 	public static void setupFont() {
 		customFont = loadFont("/fonts/thothDefault.ttf");
@@ -90,8 +97,8 @@ public class Main {
 	public static Font loadFont(String path) {
 		try {
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			String nicePath = URLDecoder.decode(Main.class.getResource(path).getFile(), "UTF-8");
-			Font f = Font.createFont(Font.TRUETYPE_FONT, new File(nicePath));
+			File fontFile = getPath(path);
+			Font f = Font.createFont(Font.TRUETYPE_FONT, fontFile);
 			ge.registerFont(f);
 			return f;
 		} catch (IOException | FontFormatException e) {
@@ -102,7 +109,7 @@ public class Main {
 
 	public static Image getImageResource(String path) {
 		try {
-			return ImageIO.read(Main.class.getResource(path));
+			return ImageIO.read(getPath(path));
 		} catch (IllegalArgumentException e) {
 			Main.error("unable to find image " + path);
 			return null;
