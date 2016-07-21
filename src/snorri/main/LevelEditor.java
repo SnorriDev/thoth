@@ -70,7 +70,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		super();
 
 		selectedTile = new Tile(0, 0);
-		selectedEntityClass = ClassFinder.find("snorri.entities").get(0);
+		selectedEntityClass = Entity.SPAWNABLE.get(0);
 		createMenu();
 
 		repaint();
@@ -154,7 +154,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		menu.setMnemonic(KeyEvent.VK_E);
 		menuBar.add(menu);
 
-		List<Class<? extends Entity>> entityClassList = ClassFinder.find("snorri.entities");
+		List<Class<? extends Entity>> entityClassList = Entity.SPAWNABLE;
 		ButtonGroup groupEntities = new ButtonGroup();
 
 		boolean firstEntity = true;

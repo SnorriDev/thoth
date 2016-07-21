@@ -4,6 +4,10 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Shape;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import snorri.animations.Animation;
 import snorri.collisions.CircleCollider;
@@ -21,6 +25,29 @@ import snorri.world.World;
 public class Entity implements Nominal, Serializable, Comparable<Entity> {
 
 	private static final long serialVersionUID = 1L;
+	
+	public static final List<Class<? extends Entity>> SPAWNABLE = new ArrayList<Class<? extends Entity>>();
+	
+	static {
+		
+		SPAWNABLE.add(Desk.class);
+		SPAWNABLE.add(Drop.class);
+		SPAWNABLE.add(Enemy.class);
+		SPAWNABLE.add(Explosion.class);
+		SPAWNABLE.add(Flower.class);
+		SPAWNABLE.add(Player.class);
+		SPAWNABLE.add(Portal.class);
+		SPAWNABLE.add(Unit.class);
+		
+		Collections.sort(SPAWNABLE, new Comparator<Class<? extends Entity>>() {
+			@Override
+			public int compare(Class<? extends Entity> o1, Class<? extends Entity> o2) {
+				return o1.getSimpleName().compareTo(o2.getSimpleName());
+			}
+		});
+		
+	}
+	
 	protected static final int DEFAULT_LAYER = 0;
 	protected static final int UNIT_LAYER = 3;
 	protected static final int PLAYER_LAYER = 4;
