@@ -1,12 +1,20 @@
 package snorri.terrain;
 
+import java.util.Set;
+
+import snorri.entities.Desk;
+import snorri.entities.Drop;
+import snorri.entities.Enemy;
+import snorri.entities.Player;
+import snorri.inventory.VocabDrop;
+import snorri.parser.Lexicon;
 import snorri.world.Level;
 import snorri.world.Tile;
 import snorri.world.Tile.TileType;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class TerrainGenerator {
+public class TerrainGen {
 
 	protected static final double[] DEFAULT_FREQUENCIES = new double[] {1, 2, 3, 4, 5, 8};
 	protected static final double DEFAULT_SMOOTHNESS = 1.2;
@@ -50,16 +58,37 @@ public class TerrainGenerator {
 		
 	}
 	
-	public TerrainGenerator(Vector dim) {
+	public TerrainGen(Vector dim) {
 		this.dim = dim;
 	}
 	
-	public TerrainGenerator(int x, int y) {
+	public TerrainGen(int x, int y) {
 		this(new Vector(x, y));
 	}
 	
 	public World genWorld() {
-		return new World(genLevel());
+		
+		World world = new World(genLevel());
+				
+		Player p = new Player(world.getRandomSpawnPos());
+		world.addHard(p);
+		
+		for (int i = 0; i < 20; i++) {
+			world.addHard(new Enemy(world.getRandomSpawnPos(), p));
+		}
+		
+		Set<String> drops = Lexicon.getELang();
+		for (String possibleDrop : drops) {
+			if (Math.random() > 0.2) {
+				world.addHard(new Drop(world.getRandomSpawnPos(), new VocabDrop(possibleDrop)));
+			}
+		}
+		
+		for (int i = 0; i < 10; i++) {
+			world.addHard(new Desk(world.getRandomSpawnPos()));
+		}
+				
+		return world;
 	}
 	
 	protected double[][] genHeightMap(double[] frequencies, double smoothness, double elevation) {

@@ -1,5 +1,6 @@
 package snorri.world;
 
+import java.awt.FileDialog;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.io.File;
@@ -21,9 +22,10 @@ import snorri.entities.Unit;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.pathfinding.PathNode;
+import snorri.terrain.DungeonGen;
 import snorri.world.Tile.TileType;
 
-public class Level {
+public class Level implements Editable {
 
 	public static final int MAX_SIZE = 1024;
 	
@@ -63,8 +65,11 @@ public class Level {
 		load(file);
 	}
 	
-	//for resizing
+	/**
+	 * Constructor used for resizing
+	 */
 	private Level(Level l, int newWidth, int newHeight) {
+		
 		map = new Tile[newWidth][newHeight];
 		dim = new Vector(newWidth, newHeight);
 		
@@ -78,9 +83,57 @@ public class Level {
 				map[i][j] = l.map[i][j];
 			}
 		}
+		
 	}
 	
-	public Level resize(int newWidth, int newHeight) {
+	public Level getTransposed() {
+		Level t = new Level(dim.getInverted());
+		for (int x = 0; x < dim.getX(); x++) {
+			for (int y = 0; y < dim.getY(); y++) {
+				t.setTileGrid(y, x, getNewTileGrid(x, y));
+			}
+		}
+		return t;
+	}
+	
+	/**
+	 * Flip the level on the x axis.
+	 * Using this method and <code>getTransposed()</code>, one can produce levels
+	 * with a door facing out from all four sides if a door exists.
+	 */
+	public Level getXReflected() {
+		Level f = new Level(dim);
+		for (int x = 0; x < dim.getX(); x++) {
+			for (int y = 0; y < dim.getY(); y++) {
+				f.setTileGrid(dim.getX() - 1 - x, y, getNewTileGrid(x, y));
+			}
+		}
+		return f;
+	}
+	
+	@Override
+	public void resize(int newWidth, int newHeight) {
+		
+		Tile[][] newMap = new Tile[newWidth][newHeight];
+		Vector newDim = new Vector(newWidth, newHeight);
+		
+		for (int i = 0; i < newDim.getX(); i++) {
+			for (int j = 0; j < newDim.getY(); j++) {
+				newMap[i][j] = new Tile(TileType.SAND);
+			}
+		}
+		for (int i = 0; i < newDim.getX() && i < dim.getX(); i++) {
+			for (int j = 0; j < newDim.getY() && j < dim.getY(); j++) {
+				newMap[i][j] = map[i][j];
+			}
+		}
+		
+		map = newMap;
+		dim = newDim;
+		
+	}
+	
+	public Level getResized(int newWidth, int newHeight) {
 		return new Level(this, newWidth, newHeight);
 	}
 
@@ -103,7 +156,6 @@ public class Level {
 		return getTile(v.getX(), v.getY());
 	}
 	
-	//TODO: we probably don't need this
 	public Tile getNewTileGrid(int x, int y) {
 		if (x < 0 || x >= map.length || y < 0 || y >= map[x].length) {
 			return null;
@@ -129,7 +181,8 @@ public class Level {
 		return dim;
 	}
 	
-	public void renderMap(FocusedWindow g, Graphics gr, boolean renderOutside) {
+	@Override
+	public void render(FocusedWindow g, Graphics gr, boolean renderOutside) {
 				
 		int cushion = 4;
 		int scaleFactor = 2;
@@ -496,6 +549,65 @@ public class Level {
 	
 	public Vector getGoodSpawn(Vector v) {
 		return getGoodSpawn(v.getX(), v.getY());
+	}
+
+	@Override
+	public Level getLevel() {
+		return this;
+	}
+
+	public static Level wrapLoad() {
+		
+		File file = Main.getFileDialog("Select file to load", FileDialog.LOAD, true);
+
+		if (file == null) {
+			return null;
+		}
+
+		try {
+			return new Level(file);
+		} catch (IOException er) {
+			Main.error("error opening world " + file.getName());
+			return null;
+		}
+		
+	}
+
+	/**
+	 * Helper function for fill door which might have broader utility.
+	 */
+	public boolean isBg(int x, int y, TileType bg) {
+		return getTileGrid(x, y) == null ||
+				getTileGrid(x, y).getType() == bg;
+	}
+	
+	/**
+	 * For use in world generation. Fill in a door in a dungeon.
+	 * @param pos
+	 * The position of the door
+	 * @param bg
+	 * The background tile type (used for orientation)
+	 */
+	public void fillDoor(Vector pos, Tile fill, TileType bg) {
+		
+		Vector dir;
+		
+		if (isBg(pos.getX() + 1, pos.getY(), bg) || isBg(pos.getX() - 1, pos.getY(), bg)) {
+			dir = new Vector(0, 1);
+		} else if (isBg(pos.getX(), pos.getY() + 1, bg) || isBg(pos.getX(), pos.getY() - 1, bg)) {
+			dir = new Vector(1, 0);
+		} else {
+			return;
+		}
+		
+		for (int i = -DungeonGen.DOOR_WIDTH / 2; i <= DungeonGen.DOOR_WIDTH / 2; i++) {
+			setTileGrid(dir.copy().multiply(i).add(pos), new Tile(fill));
+		}
+		
+//		for (dir.multiply(-DungeonGen.DOOR_WIDTH / 2); dir.magnitude() <= DungeonGen.DOOR_WIDTH / 2; dir.incr()) {
+//			setTileGrid(pos.copy().add(dir), new Tile(fill));
+//		}
+		
 	}
 	
 }

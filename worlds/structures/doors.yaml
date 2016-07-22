@@ -1,4 +1,19 @@
+spawn:
+  !struct
+  doors:
+    - !door {x: 29, y: 7}
+  start: !spawn {x: 7, y: 7}
 mainRoom:
-  - !door
-    x: 0
-    y: 0
+  !struct
+  doors:
+    - !door {x: 0, y: 7}
+    - !door {x: 7, y: 29}
+    - !door {x: 40, y: 29}
+    - !door {x: 49, y: 12}
+    - !door {x: 22, y: 0}
+  spawns:
+    - !spawn {x: 10, y: 10}
+burialChamber:
+  !struct
+  doors:
+    - !door {x: 15, y: 39}

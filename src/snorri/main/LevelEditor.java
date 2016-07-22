@@ -30,6 +30,7 @@ import snorri.entities.Player;
 import snorri.entities.Portal;
 import snorri.keyboard.Key;
 import snorri.world.Campaign.WorldId;
+import snorri.world.Editable;
 import snorri.world.Level;
 import snorri.world.Playable;
 import snorri.world.Tile;
@@ -46,7 +47,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	private static final int SCALE_FACTOR = 10;
 
-	private World world;
+	private Editable env;
 	private Entity focus;
 	private Tile selectedTile;
 	private Class<? extends Entity> selectedEntityClass;
@@ -103,6 +104,11 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		
 		menuItem = new JMenuItem("Open", KeyEvent.VK_O);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Open Level", KeyEvent.VK_L);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
@@ -239,27 +245,33 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			}
 
 			if (wh != null && wh[0] > 0 && wh[1] > 0 && wh[0] <= Level.MAX_SIZE && wh[1] <= Level.MAX_SIZE) {
-				world = new World(wh[0], wh[1]);
+				env = new World(wh[0], wh[1]);
 			} else {
-				world = new World();
+				env = new World();
 			}
 			break;
 		case "Open":
 			World w1 = World.wrapLoad();
 			if (w1 != null) {
-				world = w1;
+				env = w1;
+			}
+			break;
+		case "Open Level":
+			Level l1 = Level.wrapLoad();
+			if (l1 != null) {
+				env = l1;
 			}
 			break;
 		case "Save":
 
-			if (world == null) {
+			if (env == null) {
 				return;
 			}
 
-			world.wrapSave();
+			env.wrapSave();
 			break;
 		case "Resize":
-			if (world == null) {
+			if (env == null) {
 				return;
 			}
 
@@ -272,14 +284,14 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			resize(whNew[0], whNew[1]);
 			break;
 		case "Undo":
-			if (world == null || !canUndo) {
+			if (env == null || !canUndo) {
 				Main.error("unable to undo");
 				return;
 			}
 			undo();
 			break;
 		case "Redo":
-			if (world == null || !canRedo) {
+			if (env == null || !canRedo) {
 				Main.error("unable to redo");
 				return;
 			}
@@ -295,17 +307,24 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 		super.paintComponent(gr);
 
-		if (world == null) {
+		if (env == null) {
 			return;
 		}
 
-		world.render(this, gr, false);
+		env.render(this, gr, false);
+		renderMousePos(gr);
+		
+	}
+	
+	private void renderMousePos(Graphics gr) {
+		String gridPos = getMousePosAbsolute().toGridPos().toIntString();
+		gr.drawString("grid: " + gridPos, 20, 20);
 	}
 
 	@Override
 	protected void onFrame() {
 
-		if (world != null) {
+		if (env != null) {
 			canGoLeft = true;
 			canGoRight = true;
 			canGoUp = true;
@@ -314,13 +333,13 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			if (focus.getPos().getX() <= -SCALE_FACTOR) {
 				canGoLeft = false;
 			}
-			if (focus.getPos().getX() >= world.getLevel().getDimensions().getX() * Tile.WIDTH + SCALE_FACTOR) {
+			if (focus.getPos().getX() >= env.getLevel().getDimensions().getX() * Tile.WIDTH + SCALE_FACTOR) {
 				canGoRight = false;
 			}
 			if (focus.getPos().getY() <= -SCALE_FACTOR) {
 				canGoUp = false;
 			}
-			if (focus.getPos().getY() >= world.getLevel().getDimensions().getY() * Tile.WIDTH + SCALE_FACTOR) {
+			if (focus.getPos().getY() >= env.getLevel().getDimensions().getY() * Tile.WIDTH + SCALE_FACTOR) {
 				canGoDown = false;
 			}
 
@@ -343,7 +362,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				int x = location.getX();
 				int y = location.getY();
 
-				world.getLevel().setTile(x, y, new Tile(selectedTile));
+				env.getLevel().setTile(x, y, new Tile(selectedTile));
 			}
 		}
 
@@ -358,7 +377,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (world != null) {
+		if (env != null) {
 			if (SwingUtilities.isRightMouseButton(e)) {
 				fill();
 			}
@@ -377,7 +396,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (world != null) {
+		if (env != null) {
 			if (SwingUtilities.isLeftMouseButton(e)) {
 				isClicking = true;
 			}
@@ -407,11 +426,11 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		int x = location.getX() / Tile.WIDTH;
 		int y = location.getY() / Tile.WIDTH;
 
-		Tile t = world.getLevel().getNewTileGrid(x, y);
-		if (selectedTile != null && world.getLevel().getNewTileGrid(x, y) != null && t != null
+		Tile t = env.getLevel().getNewTileGrid(x, y);
+		if (selectedTile != null && env.getLevel().getNewTileGrid(x, y) != null && t != null
 				&& !t.equals(selectedTile)) {
 			autosaveUndo();
-			world.getLevel().setTileGrid(x, y, selectedTile);
+			env.getLevel().setTileGrid(x, y, selectedTile);
 			fill_helper(x + 1, y, t);
 			fill_helper(x - 1, y, t);
 			fill_helper(x, y + 1, t);
@@ -420,9 +439,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	}
 
 	public void fill_helper(int x, int y, Tile t) {
-		if (selectedTile != null && world.getLevel().getNewTileGrid(x, y) != null && t != null
-				&& world.getLevel().getNewTileGrid(x, y).equals(t)) {
-			world.getLevel().setTileGrid(x, y, selectedTile);
+		if (selectedTile != null && env.getLevel().getNewTileGrid(x, y) != null && t != null
+				&& env.getLevel().getNewTileGrid(x, y).equals(t)) {
+			env.getLevel().setTileGrid(x, y, selectedTile);
 			fill_helper(x + 1, y, t);
 			fill_helper(x - 1, y, t);
 			fill_helper(x, y + 1, t);
@@ -431,6 +450,12 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	}
 
 	public void spawnEntity() {
+		
+		if (!(env instanceof World)) {
+			Main.error("tried to spawn entity in non-world");
+			return;
+		}
+		World world = (World) env;
 		
 		autosaveUndo();
 
@@ -472,6 +497,13 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	}
 
 	public void deleteEntity() {
+		
+		if (!(env instanceof World)) {
+			Main.error("tried to delete entity in non-world");
+			return;
+		}
+		World world = (World) env;
+		
 		Entity deletableEntity = world.getEntityTree().getFirstCollision(new Entity(this.getMousePosAbsolute()), true);
 		if (!(deletableEntity instanceof Player)) {
 			autosaveUndo();
@@ -481,12 +513,12 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	public void resize(int newWidth, int newHeight) {
 		autosaveUndo();
-		world.resize(newWidth, newHeight);
+		env.resize(newWidth, newHeight);
 	}
 
 	public void autosaveUndo() {
 		try {
-			world.save(new File("./worlds/.undo1"), false);
+			env.save(new File("./worlds/.undo1"), false);
 			Main.log("autosaved for undo");
 			canUndo = true;
 			canRedo = false;
@@ -499,7 +531,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	public void autosaveRedo() {
 		try {
-			world.save(new File("./worlds/.redo1"));
+			env.save(new File("./worlds/.redo1"));
 			Main.log("autosaved for redo");
 			canUndo = false;
 			canRedo = true;
@@ -515,7 +547,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		if (canUndo) {
 			try {
 				autosaveRedo();
-				world.load(new File("./worlds/.undo1"));
+				env.load(new File("./worlds/.undo1"));
 				canUndo = false;
 				canRedo = true;
 				Main.log("undo!");
@@ -532,7 +564,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	public void redo() {
 		if (canRedo) {
 			try {
-				world.load(new File("./worlds/.redo1"));
+				env.load(new File("./worlds/.redo1"));
 				Main.log("redo!");
 				canUndo = true;
 				canRedo = false;
@@ -548,12 +580,18 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	@Override
 	public World getWorld() {
-		return world;
+		if (env instanceof World) {
+			return (World) env;
+		}
+		return null;
 	}
 
 	@Override
 	public Playable getUniverse() {
-		return world;
+		if (env instanceof Playable) {
+			return (Playable) env;
+		}
+		return null;
 	}
 	
 }

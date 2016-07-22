@@ -124,7 +124,7 @@ public class Enemy extends Unit implements Pathfinder {
 		if (path != null) {
 			
 			if (target.pos.distanceSquared(lastSeenPos) > CHANGE_PATH_MARGIN * CHANGE_PATH_MARGIN
-					&& (targetGraph = world.getLevel().getGraph(this)) == graph) {
+					&& (targetGraph = world.getLevel().getGraph(this)) == graph && graph != null) {
 				stopPath();
 			} else {
 				follow(world, deltaTime);

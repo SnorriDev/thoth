@@ -19,7 +19,7 @@ import javax.swing.UIManager;
 
 import snorri.parser.Lexicon;
 import snorri.terrain.DungeonGen;
-import snorri.terrain.TerrainGenerator;
+import snorri.terrain.TerrainGen;
 import snorri.world.World;
 
 public class Main {
@@ -36,13 +36,8 @@ public class Main {
 
 		Lexicon.init();
 
-		System.setProperty("apple.awt.fileDialogForDirectories", "true");
-		System.setProperty("windows.awt.fileDialogForDirectories", "true");
-
 		setupFont();
-		
-		Main.log(DungeonGen.structures);
-		
+				
 		frame = new JFrame("Spoken Word");
 		frame.setSize(1800, 900);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -122,6 +117,10 @@ public class Main {
 	}
 
 	public static File getFileDialog(String msg, int flag) {
+		return getFileDialog(msg, flag, false);
+	}
+	
+	public static File getFileDialog(String msg, int flag, boolean isLevel) {
 		FileDialog fd = new FileDialog(frame, msg, flag);
 		fd.setVisible(true);
 
@@ -131,13 +130,13 @@ public class Main {
 
 		File f = new File(fd.getDirectory(), fd.getFile());
 
-		// if they select an image, return that
-		if (fd.getFile().endsWith("png")) {
+		// if they select an image (or we are editing a level, not a world), don't grab the folder
+		if (fd.getFile().endsWith("png") || isLevel) {
 			return f;
 		}
-
-		// if they select a file that's not an image, return that directory
-		if (f.exists() && !f.isDirectory()) {
+		
+		// otherwise return that directory
+		if (!f.isDirectory()) {
 			return new File(fd.getDirectory());
 		}
 
@@ -212,7 +211,8 @@ public class Main {
 		loadInto(new Runnable() {
 			@Override
 			public void run() {
-				TerrainGenerator ter = new TerrainGenerator(200, 200);
+				//TerrainGenerator ter = new TerrainGenerator(200, 200);
+				TerrainGen ter = new DungeonGen(200, 200);
 				World world = ter.genWorld();
 				launchGame(world);
 			}

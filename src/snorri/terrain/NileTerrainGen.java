@@ -2,7 +2,7 @@ package snorri.terrain;
 
 import snorri.world.Vector;
 
-public class NileTerrainGen extends TerrainGenerator {
+public class NileTerrainGen extends TerrainGen {
 
 	private int centerX;
 	

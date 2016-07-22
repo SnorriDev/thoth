@@ -139,8 +139,13 @@ public class Vector implements Serializable, Comparable<Vector> {
 		return new Vector(this);
 	}
 	
+	@Override
 	public String toString() {
 		return "(x: " + x + ", y: " + y + ")";
+	}
+	
+	public String toIntString() {
+		return "(x: " + getX() + ", y: " + getY() + ")";
 	}
 	
 	/**
@@ -237,6 +242,38 @@ public class Vector implements Serializable, Comparable<Vector> {
 	
 	public Point2D getPoint() {
 		return new Point(getX(), getY());
+	}
+	
+	public Vector incr() {
+		if (x != 0) {
+			x += 1;
+		}
+		if (y != 0) {
+			y += 1;
+		}
+		return this;
+	}
+
+	public Vector invert() {
+		double temp = y;
+		y = x;
+		x = temp;
+		return this;
+	}
+	
+	/**
+	 * Unlike other vector operations, <code>getInverted()</code> does not have any side effect.
+	 * @see <code>Vector.invert()</code>
+	 */
+	public Vector getInverted() {
+		return new Vector(y, x);
+	}
+	
+	/**
+	 * @see <code>getInverted()</code>
+	 */
+	public Vector getXReflected(Vector dim) {
+		return new Vector(dim.getX() - 1 - x, y);
 	}
 		
 }

@@ -9,14 +9,14 @@ public class Unit extends Entity {
 
 	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 100;
-	public static final int RADIUS = 60;
+	public static final int RADIUS = 46, RADIUS_X = 21, RADIUS_Y = 40;
 	protected static final double MAX_HEALTH = 100;
 	private static final double BURN_DOT = 8d;
 	
 	private double health;
 		
 	public Unit(Vector pos) {
-		super(pos, new RectCollider(new Vector(43, 80)));
+		super(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)));
 		health = MAX_HEALTH;
 		z = UNIT_LAYER;
 	}

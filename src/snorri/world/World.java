@@ -5,31 +5,25 @@ import java.awt.Graphics;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import snorri.entities.Desk;
 import snorri.entities.Detector;
-import snorri.entities.Drop;
 import snorri.entities.Enemy;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.entities.QuadTree;
 import snorri.entities.Unit;
-import snorri.inventory.VocabDrop;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
-import snorri.parser.Lexicon;
 import snorri.pathfinding.Pathfinding;
 
-public class World implements Playable {
+public class World implements Playable, Editable {
 
-	private static final Vector DEFAULT_SPAWN = new Vector(100, 100);
+	public static final Vector DEFAULT_SPAWN = new Vector(100, 100);
 	private static final int RANDOM_SPAWN_ATTEMPTS = 10000;
 	public static final int UPDATE_RADIUS = 4000;
 	
@@ -102,33 +96,9 @@ public class World implements Playable {
 		Pathfinding.setWorld(this);
 		l.computePathfinding();
 		
-		//TODO pick the graph the player is in and only spawn there.
-		
-		List<Entity> toBeSpawned = new ArrayList<>();
-		
-		Player p = new Player(getRandomSpawnPos());
-		addHard(p);
-		
-		for (int i = 0; i < 20; i++) {
-			toBeSpawned.add(new Enemy(getRandomSpawnPos(), p));
-		}
-		
-		Set<String> drops = Lexicon.getELang();
-		for (String possibleDrop : drops) {
-			if (Math.random() > 0.2) {
-				toBeSpawned.add(new Drop(getRandomSpawnPos(), new VocabDrop(possibleDrop)));
-			}
-		}
-		
-		for (int i = 0; i < 10; i++) {
-			toBeSpawned.add(new Desk(getRandomSpawnPos()));
-		}
-		
-		addAllHard(toBeSpawned);
-
 		Main.log("new world created!");
 	}
-	
+
 	//TODO input the unit as an arg?
 	public Vector getRandomSpawnPos(int radius) {
 		for (int i = 0; i < RANDOM_SPAWN_ATTEMPTS; i++) {
@@ -191,8 +161,9 @@ public class World implements Playable {
 
 	}
 
+	@Override
 	public void render(FocusedWindow g, Graphics gr, boolean showOutlands) {
-		level.renderMap(g, gr, showOutlands);
+		level.render(g, gr, showOutlands);
 		for (Detector p : colliders.toArray(new Detector[0])) {
 			p.renderAround(g, gr);
 		}
@@ -318,7 +289,7 @@ public class World implements Playable {
 	}
 	
 	public void resize(int newWidth, int newHeight) {
-		level = level.resize(newWidth, newHeight);
+		level = level.getResized(newWidth, newHeight);
 	}
 
 }
