@@ -20,6 +20,13 @@ public class Vector implements Serializable, Comparable<Vector> {
 	
 	public double x, y;
 	
+	/**
+	 * no argument constructor used for reading
+	 * door positions from YAML
+	 */
+	public Vector() {
+	}
+	
 	public Vector(double x, double y) {
 		this.x = x;
 		this.y = y;

@@ -35,20 +35,28 @@ public class Level {
 
 	// not that indexing conventions are Cartesian, not matrix-based
 
-	public Level(int width, int height) {
+	public Level(int width, int height, TileType bg) {
 		map = new Tile[width][height];
 		dim = new Vector(width, height);
 
 		for (int i = 0; i < dim.getX(); i++) {
 			for (int j = 0; j < dim.getY(); j++) {
-				map[i][j] = new Tile(TileType.SAND);
+				map[i][j] = new Tile(bg);
 			}
 		}
 		
 	}
 	
+	public Level(Vector v, TileType bg) {
+		this(v.getX(), v.getY(), bg);
+	}
+	
+	public Level(int width, int height) {
+		this(width, height, TileType.SAND);
+	}
+	
 	public Level(Vector v) {
-		this(v.getX(), v.getY());
+		this(v, TileType.SAND);
 	}
 
 	public Level(File file) throws FileNotFoundException, IOException {

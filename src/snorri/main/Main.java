@@ -18,6 +18,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.UIManager;
 
 import snorri.parser.Lexicon;
+import snorri.terrain.DungeonGen;
 import snorri.terrain.TerrainGenerator;
 import snorri.world.World;
 
@@ -39,6 +40,8 @@ public class Main {
 		System.setProperty("windows.awt.fileDialogForDirectories", "true");
 
 		setupFont();
+		
+		Main.log(DungeonGen.structures);
 		
 		frame = new JFrame("Spoken Word");
 		frame.setSize(1800, 900);

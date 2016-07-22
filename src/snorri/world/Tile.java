@@ -103,7 +103,10 @@ public class Tile {
 			Main.getImageResource("/textures/tiles/wall01.png"),
 			Main.getImageResource("/textures/tiles/wall02.png"),
 			Main.getImageResource("/textures/tiles/wall03.png"),
-			Main.getImageResource("/textures/tiles/wall04.png")}),
+			Main.getImageResource("/textures/tiles/wall04.png"),
+			Main.getImageResource("/textures/tiles/wall05.png"),
+			Main.getImageResource("/textures/tiles/wall06.png"),
+			Main.getImageResource("/textures/tiles/wall07.png")}),
 		TREE(false, Main.getImageResource("/textures/tiles/tree00.png")),
 		FOUNDATION(false, Main.getImageResource("/textures/tiles/default00.png")),
 		HUT(false, Main.getImageResource("/textures/tiles/default00.png")),
@@ -116,7 +119,9 @@ public class Tile {
 			Main.getImageResource("/textures/tiles/lava02.png")}),
 		GRASS(true, new Image[] {
 			Main.getImageResource("/textures/tiles/grass00.png"),
-			Main.getImageResource("/textures/tiles/grass01.png")});
+			Main.getImageResource("/textures/tiles/grass01.png")}),
+		VOID(false, Main.getImageResource("/textures/tiles/void00.png")),
+		COLUMN(false, Main.getImageResource("/textures/tiles/column00.png"));
 		
 		private boolean	pathable, canShootOver;
 		private Image[]	textures;
