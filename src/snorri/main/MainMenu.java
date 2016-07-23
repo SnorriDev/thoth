@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import snorri.terrain.DungeonGen;
+import snorri.terrain.TerrainGen;
 import snorri.world.World;
 
 public class MainMenu extends GamePanel {
@@ -21,8 +23,8 @@ public class MainMenu extends GamePanel {
 		
 		menu.add(new JLabel("")); //for spacing
 		
-		menu.add(createButton("New Story"));
-		menu.add(createButton("Continue Story"));
+		menu.add(createButton("Random Delta"));
+		menu.add(createButton("Random Dungeon"));
 		menu.add(createButton("Load World"));
 		menu.add(createButton("World Editor"));
 		add(menu);
@@ -33,8 +35,11 @@ public class MainMenu extends GamePanel {
 	public void actionPerformed(ActionEvent e) {
 
 		switch (e.getActionCommand()) {
-		case "New Story":
-			Main.launchGame();
+		case "Random Delta":
+			Main.launchGame(new TerrainGen(200, 200));
+			break;
+		case "Random Dungeon":
+			Main.launchGame(new DungeonGen(200, 200));
 			break;
 		case "Load World":
 			World w2 = World.wrapLoad();

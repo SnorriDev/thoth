@@ -310,8 +310,10 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		if (env == null) {
 			return;
 		}
-
-		env.render(this, gr, false);
+		
+		synchronized (this) { //TODO make render method synchronized?
+			env.render(this, gr, false);
+		}
 		renderMousePos(gr);
 		
 	}
@@ -324,46 +326,50 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	@Override
 	protected void onFrame() {
 
-		if (env != null) {
-			canGoLeft = true;
-			canGoRight = true;
-			canGoUp = true;
-			canGoDown = true;
-
-			if (focus.getPos().getX() <= -SCALE_FACTOR) {
-				canGoLeft = false;
+		synchronized (this) {
+		
+			if (env != null) {
+				canGoLeft = true;
+				canGoRight = true;
+				canGoUp = true;
+				canGoDown = true;
+	
+				if (focus.getPos().getX() <= -SCALE_FACTOR) {
+					canGoLeft = false;
+				}
+				if (focus.getPos().getX() >= env.getLevel().getDimensions().getX() * Tile.WIDTH + SCALE_FACTOR) {
+					canGoRight = false;
+				}
+				if (focus.getPos().getY() <= -SCALE_FACTOR) {
+					canGoUp = false;
+				}
+				if (focus.getPos().getY() >= env.getLevel().getDimensions().getY() * Tile.WIDTH + SCALE_FACTOR) {
+					canGoDown = false;
+				}
+	
+				if (states.getMovementVector().getX() < 0 && !canGoLeft) {
+					focus.getPos().sub(states.getMovementVector().getProjectionX().scale(SCALE_FACTOR));
+				}
+				if (states.getMovementVector().getX() > 0 && !canGoRight) {
+					focus.getPos().sub(states.getMovementVector().getProjectionX().scale(SCALE_FACTOR));
+				}
+				if (states.getMovementVector().getY() < 0 && !canGoUp) {
+					focus.getPos().sub(states.getMovementVector().getProjectionY().scale(SCALE_FACTOR));
+				}
+				if (states.getMovementVector().getY() > 0 && !canGoDown) {
+					focus.getPos().sub(states.getMovementVector().getProjectionY().scale(SCALE_FACTOR));
+				}
+				focus.getPos().add(states.getMovementVector().scale(SCALE_FACTOR));
+	
+				if (isClicking) {
+					Vector location = getMousePosAbsolute().copy();
+					int x = location.getX();
+					int y = location.getY();
+	
+					env.getLevel().setTile(x, y, new Tile(selectedTile));
+				}
 			}
-			if (focus.getPos().getX() >= env.getLevel().getDimensions().getX() * Tile.WIDTH + SCALE_FACTOR) {
-				canGoRight = false;
-			}
-			if (focus.getPos().getY() <= -SCALE_FACTOR) {
-				canGoUp = false;
-			}
-			if (focus.getPos().getY() >= env.getLevel().getDimensions().getY() * Tile.WIDTH + SCALE_FACTOR) {
-				canGoDown = false;
-			}
-
-			if (states.getMovementVector().getX() < 0 && !canGoLeft) {
-				focus.getPos().sub(states.getMovementVector().getProjectionX().scale(SCALE_FACTOR));
-			}
-			if (states.getMovementVector().getX() > 0 && !canGoRight) {
-				focus.getPos().sub(states.getMovementVector().getProjectionX().scale(SCALE_FACTOR));
-			}
-			if (states.getMovementVector().getY() < 0 && !canGoUp) {
-				focus.getPos().sub(states.getMovementVector().getProjectionY().scale(SCALE_FACTOR));
-			}
-			if (states.getMovementVector().getY() > 0 && !canGoDown) {
-				focus.getPos().sub(states.getMovementVector().getProjectionY().scale(SCALE_FACTOR));
-			}
-			focus.getPos().add(states.getMovementVector().scale(SCALE_FACTOR));
-
-			if (isClicking) {
-				Vector location = getMousePosAbsolute().copy();
-				int x = location.getX();
-				int y = location.getY();
-
-				env.getLevel().setTile(x, y, new Tile(selectedTile));
-			}
+		
 		}
 
 		repaint();

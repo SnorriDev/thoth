@@ -61,7 +61,7 @@ public class GameWindow extends FocusedWindow {
 			Main.log("high delta time detected (" + deltaTime + " sec)");
 		}
 		
-		if (dialogQ.peek() != null && dialogQ.peek().update(deltaTime)) {
+		if (dialogQ != null && dialogQ.peek() != null && dialogQ.peek().update(deltaTime)) {
 			dialogQ.poll();
 		}
 				

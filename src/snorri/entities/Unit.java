@@ -8,7 +8,7 @@ import snorri.world.World;
 public class Unit extends Entity {
 
 	private static final long serialVersionUID = 1L;
-	private static final int BASE_SPEED = 100;
+	private static final int BASE_SPEED = 120;
 	public static final int RADIUS = 46, RADIUS_X = 21, RADIUS_Y = 40;
 	protected static final double MAX_HEALTH = 100;
 	private static final double BURN_DOT = 8d;

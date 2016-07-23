@@ -132,14 +132,15 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 		craftingSpace.add(inputPanel);
 		
 		field = new JEditorPane();
-		field.setEditorKit(new HieroglyphicEditorKit());
+		field.setContentType("text/html");
+		//field.setEditorKit(new HieroglyphicEditorKit());
 		field.setPreferredSize(new Dimension(650, 100));
 		field.setBorder(BorderFactory.createLineBorder(BORDER));
 		field.setBackground(SELECTED_BG);
 		field.getDocument().addDocumentListener(this);
 		field.addKeyListener(this);
 		inputPanel.add(field);
-		
+				
 		enchantButton = createButton("Enchant");
 		enchantButton.setEnabled(false);
 		enchantButton.addKeyListener(this);
@@ -211,8 +212,10 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 		inputPanel.setVisible(true);
 		if (list.getSelectedValue().getSpell() == null) {
 			field.setText("enter spell here...");
+			field.revalidate();
 		} else {
 			field.setText(list.getSelectedValue().getSpell().getOrthography());
+			field.revalidate();
 		}
 		craftingSpace.revalidate();
 	}

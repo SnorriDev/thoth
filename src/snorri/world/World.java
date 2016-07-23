@@ -24,7 +24,7 @@ import snorri.pathfinding.Pathfinding;
 public class World implements Playable, Editable {
 
 	public static final Vector DEFAULT_SPAWN = new Vector(100, 100);
-	private static final int RANDOM_SPAWN_ATTEMPTS = 10000;
+	private static final int RANDOM_SPAWN_ATTEMPTS = 100;
 	public static final int UPDATE_RADIUS = 4000;
 	
 	private Level level;

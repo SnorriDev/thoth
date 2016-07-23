@@ -22,6 +22,9 @@ public class Structure {
 		DEFAULT_CHILDREN = new ArrayList<String>();
 		DEFAULT_CHILDREN.add("mainRoom");
 		DEFAULT_CHILDREN.add("burialChamber");
+		DEFAULT_CHILDREN.add("bigMainRoom");
+		DEFAULT_CHILDREN.add("treasury");
+		//DEFAULT_CHILDREN.add("junction");
 //		TODO
 //		burial chamber
 //		annex

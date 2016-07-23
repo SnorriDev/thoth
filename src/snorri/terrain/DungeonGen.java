@@ -93,7 +93,7 @@ public class DungeonGen extends TerrainGen {
 			
 		};
 		
-		start = new Vector(1, dim.getY() / 2);
+		start = dim.copy().divide(2);
 		if (Math.random() > 0.5) {
 			Main.log("inverting start");
 			start.invert();
@@ -120,7 +120,7 @@ public class DungeonGen extends TerrainGen {
 					}
 				}
 			}
-			l.fillDoor(pos, new Tile(TileType.WALL, 4), TileType.VOID);
+			l.fillDoor(pos, new Tile(TileType.WALL, 4), TileType.SAND);
 		}
 		
 		return l;

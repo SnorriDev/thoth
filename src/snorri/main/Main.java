@@ -18,7 +18,6 @@ import javax.swing.JLayeredPane;
 import javax.swing.UIManager;
 
 import snorri.parser.Lexicon;
-import snorri.terrain.DungeonGen;
 import snorri.terrain.TerrainGen;
 import snorri.world.World;
 
@@ -29,7 +28,7 @@ public class Main {
 
 	private static JFrame frame;
 	private static JLayeredPane pane;
-	
+
 	private static Font customFont;
 
 	public static void main(String[] args) {
@@ -37,7 +36,7 @@ public class Main {
 		Lexicon.init();
 
 		setupFont();
-				
+
 		frame = new JFrame("Spoken Word");
 		frame.setSize(1800, 900);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -73,11 +72,11 @@ public class Main {
 	public static GamePanel getWindow() {
 		return window;
 	}
-	
+
 	public static File getDir() {
 		return new File(".");
 	}
-	
+
 	public static File getPath(String path) {
 		return new File(getDir(), path);
 	}
@@ -87,7 +86,7 @@ public class Main {
 		UIManager.put("Button.font", getCustomFont(20));
 		Main.log("default font loaded");
 	}
-	
+
 	public static Font getCustomFont(float size) {
 		return customFont.deriveFont(Font.PLAIN, size);
 	}
@@ -119,7 +118,7 @@ public class Main {
 	public static File getFileDialog(String msg, int flag) {
 		return getFileDialog(msg, flag, false);
 	}
-	
+
 	public static File getFileDialog(String msg, int flag, boolean isLevel) {
 		FileDialog fd = new FileDialog(frame, msg, flag);
 		fd.setVisible(true);
@@ -130,11 +129,12 @@ public class Main {
 
 		File f = new File(fd.getDirectory(), fd.getFile());
 
-		// if they select an image (or we are editing a level, not a world), don't grab the folder
+		// if they select an image (or we are editing a level, not a world),
+		// don't grab the folder
 		if (fd.getFile().endsWith("png") || isLevel) {
 			return f;
 		}
-		
+
 		// otherwise return that directory
 		if (!f.isDirectory()) {
 			return new File(fd.getDirectory());
@@ -151,7 +151,7 @@ public class Main {
 		}
 		return "<img src=\'" + url.toString() + "'/>";
 	}
-	
+
 	/**
 	 * display the window in the main JFrame
 	 * 
@@ -206,17 +206,18 @@ public class Main {
 	public static void launchGame(World world) {
 		setWindow(new GameWindow(world));
 	}
-
-	public static void launchGame() {
+	
+	public static void launchGame(TerrainGen gen) {
 		loadInto(new Runnable() {
 			@Override
 			public void run() {
-				//TerrainGenerator ter = new TerrainGenerator(200, 200);
-				TerrainGen ter = new DungeonGen(200, 200);
-				World world = ter.genWorld();
-				launchGame(world);
+				launchGame(gen.genWorld());
 			}
 		});
+	}
+
+	public static void launchGame() {
+		launchGame(new TerrainGen(200, 200));
 	}
 
 	public static void launchEditor() {

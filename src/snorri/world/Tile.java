@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
 
-import snorri.entities.Entity;
 import snorri.entities.Unit;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
@@ -14,11 +13,11 @@ public class Tile {
 	
 	public static final int	WIDTH	= 16;
 									
-	private TileType		type;
-	private int				style;
+	private TileType type;
+	private int style;
 	private boolean surroundingsPathable = true;
 	private boolean reachable;
-	
+
 	public Tile(TileType type) {
 		this.type = type;
 		style = 0;

@@ -576,25 +576,27 @@ public class Level implements Editable {
 	/**
 	 * Helper function for fill door which might have broader utility.
 	 */
-	public boolean isBg(int x, int y, TileType bg) {
+	public boolean isBg(int x, int y, TileType wall, TileType floor) {
 		return getTileGrid(x, y) == null ||
-				getTileGrid(x, y).getType() == bg;
+				(getTileGrid(x, y).getType() != floor && getTileGrid(x, y).getType() != wall);
 	}
 	
 	/**
 	 * For use in world generation. Fill in a door in a dungeon.
 	 * @param pos
 	 * The position of the door
-	 * @param bg
+	 * @param floor
 	 * The background tile type (used for orientation)
 	 */
-	public void fillDoor(Vector pos, Tile fill, TileType bg) {
+	public void fillDoor(Vector pos, Tile fill, TileType floor) {
 		
 		Vector dir;
 		
-		if (isBg(pos.getX() + 1, pos.getY(), bg) || isBg(pos.getX() - 1, pos.getY(), bg)) {
+		//TODO change this to detect NOT FLOOR, not BACKGROUND
+		
+		if (isBg(pos.getX() + 1, pos.getY(), fill.getType(), floor) || isBg(pos.getX() - 1, pos.getY(), fill.getType(), floor)) {
 			dir = new Vector(0, 1);
-		} else if (isBg(pos.getX(), pos.getY() + 1, bg) || isBg(pos.getX(), pos.getY() - 1, bg)) {
+		} else if (isBg(pos.getX(), pos.getY() + 1, fill.getType(), floor) || isBg(pos.getX(), pos.getY() - 1, fill.getType(), floor)) {
 			dir = new Vector(1, 0);
 		} else {
 			return;
