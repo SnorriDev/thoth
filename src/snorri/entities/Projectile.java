@@ -1,5 +1,6 @@
 package snorri.entities;
 
+import snorri.animations.Animation;
 import snorri.events.CollisionEvent;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
@@ -21,8 +22,9 @@ public class Projectile extends Detector {
 	private Orb orb;
 	
 	public Projectile(Entity root, Vector rootVelocity, Vector path, Weapon weapon, Orb orb) {
-		super(root.getPos().copy(), 2); //radius of a projectile is 1
+		super(root.getPos().copy(), 3); //radius of a projectile is 1
 		velocity = rootVelocity.copy().add(path.copy().scale(PROJECTILE_SPEED));
+		animation = new Animation("/textures/objects/pellet.png");
 		this.root = root;
 		this.weapon = weapon;
 		this.orb = orb;
