@@ -70,7 +70,7 @@ public class Grammar {
 	}
 	
 	public static List<String> getWords(String input) {
-		return Arrays.asList(input.replaceAll("\\.",  "").split(" +|="));
+		return Arrays.asList(input.replaceAll("\\.",  "").split("\\s+|="));
 	}
 	
 	public static Node parseString(String input) {

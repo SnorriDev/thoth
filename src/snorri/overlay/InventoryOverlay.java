@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -28,8 +30,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
 
 import snorri.inventory.FullInventory;
 import snorri.inventory.Inventory;
@@ -42,7 +42,7 @@ import snorri.main.Main;
 import snorri.nonterminals.NonTerminal;
 import snorri.parser.Grammar;
 
-public class InventoryOverlay extends GamePanel implements KeyListener, MouseListener, ListSelectionListener, DocumentListener {
+public class InventoryOverlay extends GamePanel implements KeyListener, MouseListener, ListSelectionListener, DocumentListener, FocusListener {
 
 	/**
 	 * the GUI interface for editing inventory and spells
@@ -60,7 +60,7 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 	private final JPanel inputPanel;
 	private final JButton enchantButton;
 	private final JEditorPane field;
-	
+		
 	private static final Color NORMAL_BG = new Color(255, 179, 71);
 	private static final Color SELECTED_BG = new Color(255, 150, 71);
 	private static final Color BORDER = new Color(255, 130, 71);
@@ -82,12 +82,40 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 		}
 	}
 	
+//	private class HieroglyphFilter extends DocumentFilter {
+//				
+//		@Override
+//		public void insertString(FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
+//			super.insertString(fb, offset, text, attr);
+//			wordInserted(offset);
+//		}
+//		
+//		private void wordInserted(int offset) {
+//			
+//			Main.log("word inserted");
+//			SwingUtilities.invokeLater(new Runnable() {
+//				@Override
+//				public void run() {
+//					String raw = field.getText();
+//					for (String glyph : htmlGlyphs) {
+//						raw = raw.replaceAll(glyph, Main.getHTMLGlyph(glyph));
+//					}
+//					field.setText(raw);
+//					Main.log("what's good fam");
+//					//TODO try with document instead of "setText"
+//				}
+//			});
+//			
+//		}
+//		
+//	}
+	
 	public InventoryOverlay(GameWindow window, Inventory inventory) {
 		
 		this.window = window;
 		inv = inventory;
 		fullInv = inventory.getFullInventory();
-		
+				
 		JPanel panel = new JPanel(new GridBagLayout());
 		panel.setPreferredSize(new Dimension(1000, 618)); //golden ratio
 		GridBagConstraints c = new GridBagConstraints();
@@ -133,12 +161,13 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 		
 		field = new JEditorPane();
 		field.setContentType("text/html");
-		//field.setEditorKit(new HieroglyphicEditorKit());
+		//((AbstractDocument) field.getDocument()).setDocumentFilter(new HieroglyphFilter());
 		field.setPreferredSize(new Dimension(650, 100));
 		field.setBorder(BorderFactory.createLineBorder(BORDER));
 		field.setBackground(SELECTED_BG);
 		field.getDocument().addDocumentListener(this);
 		field.addKeyListener(this);
+		field.addFocusListener(this);
 		inputPanel.add(field);
 				
 		enchantButton = createButton("Enchant");
@@ -178,17 +207,27 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 		panel.add(vocabInfo, c);
 		
 		add(panel);
+				
+	}
 		
+	public String getTagless() {
+		return field.getText()
+				.replaceAll("<[^>]+>", "").replaceAll("\\s\\s", " ").trim(); //crude html strip
 	}
 	
 	public List<String> getWords() {
-		return Grammar.getWords(field.getText());
+		return Grammar.getWords(getTagless());
+	}
+	
+	public String extractSpell() {
+		return String.join(" ", Grammar.getWords(field.getText()));
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Enchant")) {
-			list.getSelectedValue().setSpell(Grammar.parseString(field.getText()));
+			list.getSelectedValue().setSpell(Grammar.parseString(getTagless()));
+			setGlyphs();
 		}
 	}
 
@@ -200,41 +239,47 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-	}
-
-	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		inputPanel.setVisible(true);
-		if (list.getSelectedValue().getSpell() == null) {
-			field.setText("enter spell here...");
-			field.revalidate();
-		} else {
-			field.setText(list.getSelectedValue().getSpell().getOrthography());
-			field.revalidate();
-		}
+		setGlyphs();
 		craftingSpace.revalidate();
 	}
-
-	private void checkParse(DocumentEvent e) {
-		Document d = e.getDocument();
-		try {
-			String text = d.getText(0, d.getLength());
-			enchantButton.setEnabled(Grammar.parseString(text) instanceof NonTerminal && fullInv.knowsWords(getWords()));
-		} catch (BadLocationException e1) {
-			Main.error("very weird error reading hieroglyphics input");
+	
+	private void setGlyphs() {
+		if (list.getSelectedValue().getSpell() == null) {
+			field.setText("<p>enter spell here...</p>");
+		} else {
+			field.setText(Hieroglyphics.transliterate(list.getSelectedValue().getSpell().getOrthography()));
 		}
 	}
+
+	//TODO
+	//show img's when box is not focused
+	//convert to plaintext on focus
+	//back to hypertext on unfocus
+	//when you hit enchant, remove focus
 	
+	private void checkParse(DocumentEvent e) {
+		Main.log(field.getText());
+		String text = getTagless();
+		enchantButton.setEnabled(Grammar.parseString(text) instanceof NonTerminal);
+		//enchantButton.setEnabled(Grammar.parseString(text) instanceof NonTerminal && fullInv.knowsWords(Grammar.getWords(text)));
+	}
+
 	@Override
 	public void insertUpdate(DocumentEvent e) {
 		checkParse(e);
 	}
 
+	@Override
+	public void focusGained(FocusEvent e) {
+		if (list.getSelectedValue().getSpell() == null) {
+			field.setText("");
+			return;
+		}
+		field.setText(list.getSelectedValue().getSpell().getOrthography());
+	}
+	
 	@Override
 	public void removeUpdate(DocumentEvent e) {
 		checkParse(e);
@@ -244,23 +289,22 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 	public void changedUpdate(DocumentEvent e) {
 		checkParse(e);
 	}
+	
+	@Override
+	public void focusLost(FocusEvent e) {
+	}
+	
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -269,8 +313,14 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+	}
+	
+	@Override
+	public void keyReleased(KeyEvent e) {
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
 	}
 
 }

@@ -9,7 +9,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.net.MalformedURLException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -145,11 +145,16 @@ public class Main {
 	}
 
 	public static String getHTMLGlyph(String raw) {
-		URL url = Main.class.getResource("/textures/hieroglyphs/" + raw + ".png");
-		if (url == null) {
+		File f = getPath("/textures/hieroglyphs/" + raw + ".png");
+		if (!f.exists()) {
 			return null;
 		}
-		return "<img src=\'" + url.toString() + "'/>";
+		try {
+			return "<img src=\'" + f.toURI().toURL() + "'/>";
+		} catch (MalformedURLException e) {
+			Main.error("bad URL for file " + raw);
+			return null;
+		}
 	}
 
 	/**

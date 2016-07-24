@@ -23,8 +23,8 @@ public class MainMenu extends GamePanel {
 		
 		menu.add(new JLabel("")); //for spacing
 		
-		menu.add(createButton("Random Delta"));
-		menu.add(createButton("Random Dungeon"));
+		menu.add(createButton("Nile Adventure"));
+		menu.add(createButton("Dungeon Adventure"));
 		menu.add(createButton("Load World"));
 		menu.add(createButton("World Editor"));
 		add(menu);
@@ -35,10 +35,10 @@ public class MainMenu extends GamePanel {
 	public void actionPerformed(ActionEvent e) {
 
 		switch (e.getActionCommand()) {
-		case "Random Delta":
+		case "Nile Adventure":
 			Main.launchGame(new TerrainGen(200, 200));
 			break;
-		case "Random Dungeon":
+		case "Dungeon Adventure":
 			Main.launchGame(new DungeonGen(200, 200));
 			break;
 		case "Load World":
