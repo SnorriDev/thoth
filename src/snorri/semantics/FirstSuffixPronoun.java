@@ -14,6 +14,11 @@ public class FirstSuffixPronoun extends Definition {
 		return e.getFirstPerson();
 	}
 
+	@Override
+	public String getShortDesc() {
+		return "I";
+	}
+
 	
 	
 }

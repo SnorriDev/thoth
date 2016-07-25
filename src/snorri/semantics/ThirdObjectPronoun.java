@@ -14,4 +14,9 @@ public class ThirdObjectPronoun extends Definition {
 		return e.getThirdPerson();
 	}
 
+	@Override
+	public String getShortDesc() {
+		return "it";
+	}
+
 }

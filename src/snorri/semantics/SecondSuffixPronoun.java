@@ -13,5 +13,10 @@ public class SecondSuffixPronoun extends Definition {
 	public Object getMeaning(SpellEvent e) {
 		return e.getSecondPerson();
 	}
+
+	@Override
+	public String getShortDesc() {
+		return "you";
+	}
 	
 }

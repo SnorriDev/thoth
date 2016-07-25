@@ -22,4 +22,9 @@ public class Fly extends VerbDef {
 		return false;
 	}
 
+	@Override
+	public String getShortDesc() {
+		return "fly";
+	}
+
 }

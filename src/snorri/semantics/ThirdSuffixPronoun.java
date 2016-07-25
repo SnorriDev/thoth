@@ -13,5 +13,10 @@ public class ThirdSuffixPronoun extends Definition {
 	public Object getMeaning(SpellEvent e) {
 		return e.getThirdPerson();
 	}
+
+	@Override
+	public String getShortDesc() {
+		return "it";
+	}
 	
 }

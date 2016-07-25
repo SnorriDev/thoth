@@ -13,5 +13,10 @@ public class ConditionalDef extends Definition {
 	public Object getMeaning(SpellEvent e) {
 		return null;
 	}
+	
+	@Override
+	public String getShortDesc() {
+		return "if";
+	}
 
 }

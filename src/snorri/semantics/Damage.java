@@ -24,4 +24,9 @@ public class Damage extends VerbDef {
 		return false;
 	}
 
+	@Override
+	public String getShortDesc() {
+		return "hurt";
+	}
+
 }

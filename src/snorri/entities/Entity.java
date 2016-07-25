@@ -162,7 +162,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity> {
 		traverse(0);
 	}
 	
-	public String toString() {
+	public String toStringDebug() {
 		return this.getClass().getSimpleName() + "{pos: " + pos + ", col: " + collider + "}";
 	}
 	
@@ -298,6 +298,11 @@ public class Entity implements Nominal, Serializable, Comparable<Entity> {
 	@Override
 	public int compareTo(Entity other) {
 		return Integer.compare(z, other.z);
+	}
+	
+	@Override
+	public String toString() {
+		return getClass().getSimpleName().toLowerCase();
 	}
 
 }

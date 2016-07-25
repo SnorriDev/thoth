@@ -19,4 +19,9 @@ public class To extends PrepDef {
 		
 	}
 
+	@Override
+	public String getShortDesc() {
+		return "to";
+	}
+
 }

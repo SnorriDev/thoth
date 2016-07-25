@@ -180,6 +180,11 @@ public class Tile {
 			return textures.length;
 		}
 		
+		@Override
+		public String toString() {
+			return name();
+		}
+		
 	}
 
 	public String toNumericString() {

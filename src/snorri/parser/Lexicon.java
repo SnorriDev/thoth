@@ -9,7 +9,6 @@ import java.util.Set;
 import snorri.entities.Flower;
 import snorri.nonterminals.AbstractNoun;
 import snorri.nonterminals.Noun;
-import snorri.nonterminals.Prep;
 import snorri.semantics.Above;
 import snorri.semantics.At;
 import snorri.semantics.Be;
@@ -32,6 +31,7 @@ import snorri.semantics.Not;
 import snorri.semantics.RightOf;
 import snorri.semantics.SecondObjectPronoun;
 import snorri.semantics.SecondSuffixPronoun;
+import snorri.semantics.See;
 import snorri.semantics.StaticDef;
 import snorri.semantics.ThirdObjectPronoun;
 import snorri.semantics.ThirdSuffixPronoun;
@@ -58,14 +58,14 @@ public class Lexicon {
 		lexicon = new HashMap<String, Definition>();
 		
 		//Prepositions
-		lexicon.put("n", new StaticDef(Prep.class, new To())); //to
-		lexicon.put("m", new StaticDef(Prep.class, new At())); //in
-		lexicon.put("Xr", new StaticDef(Prep.class, new Under())); //under
-		lexicon.put("tp", new StaticDef(Prep.class, new Above())); //above
-		lexicon.put("HA", new StaticDef(Prep.class, new LeftOf())); //behind
-		lexicon.put("xft", new StaticDef(Prep.class, new RightOf())); //in front of
-		lexicon.put("Hna", new StaticDef(Prep.class, new With())); //with
-		lexicon.put("mhAw", new StaticDef(Prep.class, null)); //around
+		lexicon.put("n", new To()); //to
+		lexicon.put("m", new At()); //in
+		lexicon.put("Xr", new Under()); //under
+		lexicon.put("tp", new Above()); //above
+		lexicon.put("HA", new LeftOf()); //behind
+		lexicon.put("xft", new RightOf()); //in front of
+		lexicon.put("Hna", new With()); //with
+		//lexicon.put("mhAw", null); //around
 		
 		//Adverbs
 		lexicon.put("nn", new Not());

@@ -17,4 +17,9 @@ public class StaticDef extends Definition {
 		return meaning;
 	}
 
+	@Override
+	public String getShortDesc() {
+		return meaning.toString();
+	}
+
 }

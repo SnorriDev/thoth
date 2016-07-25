@@ -4,9 +4,10 @@ import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -31,6 +32,42 @@ public class Main {
 
 	private static Font customFont;
 
+	public static class ResizeListener implements ComponentListener {
+
+		public ResizeListener() {
+		}
+		
+		@Override
+		public void componentResized(ComponentEvent e) {
+			resize();
+		}
+
+		@Override
+		public void componentMoved(ComponentEvent e) {
+			resize();
+		}
+
+		@Override
+		public void componentShown(ComponentEvent e) {
+		}
+
+		@Override
+		public void componentHidden(ComponentEvent e) {
+		}
+		
+		private void resize() {
+			resize(window);
+			resize(outerOverlay);
+		}
+		
+		private static void resize(JComponent component) {
+			if (component != null) {
+				component.setBounds(frame.getContentPane().getBounds());
+			}
+		}
+		
+	}
+	
 	public static void main(String[] args) {
 
 		Lexicon.init();
@@ -39,14 +76,15 @@ public class Main {
 
 		frame = new JFrame("Spoken Word");
 		frame.setSize(1800, 900);
+		frame.addComponentListener(new Main.ResizeListener());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 
 		pane = new JLayeredPane();
 		getLayeredPane().setOpaque(true);
 
-		frame.getContentPane().setLayout(new GridLayout(0, 1));
 		frame.getContentPane().add(getLayeredPane());
+		//frame.setLocationRelativeTo(null);
 		// FOR FULL SCREEN: frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		launchMenu();
@@ -170,7 +208,7 @@ public class Main {
 		}
 		window = newWindow;
 		window.setVisible(true);
-		window.setBounds(frame.getBounds());
+		ResizeListener.resize(window);
 		getLayeredPane().add(window, JLayeredPane.DEFAULT_LAYER);
 		getLayeredPane().revalidate();
 		getLayeredPane().repaint();
@@ -191,7 +229,7 @@ public class Main {
 		outerOverlay = newOverlay;
 		if (newOverlay != null) {
 			outerOverlay.setVisible(true);
-			outerOverlay.setBounds(frame.getBounds());
+			ResizeListener.resize(outerOverlay);
 			getLayeredPane().add(outerOverlay, JLayeredPane.PALETTE_LAYER);
 			getLayeredPane().revalidate();
 			getLayeredPane().repaint();

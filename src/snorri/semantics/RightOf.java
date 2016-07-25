@@ -21,4 +21,9 @@ public class RightOf extends PrepDef {
 		
 	}
 
+	@Override
+	public String getShortDesc() {
+		return "right of";
+	}
+
 }

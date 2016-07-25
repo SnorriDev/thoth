@@ -21,4 +21,9 @@ public class Under extends PrepDef {
 		
 	}
 
+	@Override
+	public String getShortDesc() {
+		return "under";
+	}
+
 }

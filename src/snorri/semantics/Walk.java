@@ -36,4 +36,9 @@ public class Walk extends VerbDef {
 		return true;
 	}
 
+	@Override
+	public String getShortDesc() {
+		return "walk";
+	}
+
 }

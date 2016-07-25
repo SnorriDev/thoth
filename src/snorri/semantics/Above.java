@@ -21,4 +21,9 @@ public class Above extends PrepDef {
 		
 	}
 
+	@Override
+	public String getShortDesc() {
+		return "above";
+	}
+
 }

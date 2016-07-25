@@ -24,4 +24,9 @@ public class Heal extends VerbDef {
 		return false;
 	}
 
+	@Override
+	public String getShortDesc() {
+		return "heal";
+	}
+
 }

@@ -17,4 +17,9 @@ public class DegreeModifierDef extends Definition {
 		return degree;
 	}
 
+	@Override
+	public String getShortDesc() {
+		return "degree: " + degree;
+	}
+
 }

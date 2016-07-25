@@ -1,10 +1,9 @@
-package snorri.parser;
+package snorri.semantics;
 
 import java.awt.Rectangle;
 
 import snorri.entities.Entity;
 import snorri.main.Main;
-import snorri.semantics.VerbDef;
 import snorri.world.Vector;
 
 public class See extends VerbDef {
@@ -27,6 +26,11 @@ public class See extends VerbDef {
 			return ((Entity) obj).intersects(visionRect);
 		}
 		return false;
+	}
+
+	@Override
+	public String getShortDesc() {
+		return "see";
 	}
 
 }

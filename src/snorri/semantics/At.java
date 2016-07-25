@@ -19,4 +19,9 @@ public class At extends PrepDef {
 		
 	}
 
+	@Override
+	public String getShortDesc() {
+		return "at";
+	}
+
 }

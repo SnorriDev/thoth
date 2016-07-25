@@ -9,4 +9,9 @@ public class Not extends AdverbDef {
 		return e.getNegated();
 	}
 
+	@Override
+	public String getShortDesc() {
+		return "not";
+	}
+
 }

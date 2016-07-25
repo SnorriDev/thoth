@@ -192,11 +192,14 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 			JPanel wordPanel = new JPanel();
 			wordPanel.setBackground(SELECTED_BG);
 			JLabel orth = new JLabel(drop.getOrthography());
-			orth.setFont(new Font(orth.getFont().getName(), Font.BOLD, 20));
+			orth.setFont(new Font(orth.getFont().getName(), Font.BOLD, 16));
 			JLabel pos = new JLabel(drop.getMeaning().getPOS().getSimpleName());
-			pos.setFont(new Font(pos.getFont().getName(), Font.ITALIC, 16));
+			pos.setFont(new Font(pos.getFont().getName(), Font.ITALIC, 12));
+			JLabel desc = new JLabel(drop.getMeaning().getShortDesc());
+			desc.setFont(new Font(pos.getFont().getName(), Font.PLAIN, 14));
 			wordPanel.add(orth);
 			wordPanel.add(pos);
+			wordPanel.add(desc);
 			vocabInfo.add(wordPanel);
 		}
 		
@@ -260,10 +263,9 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 	//when you hit enchant, remove focus
 	
 	private void checkParse(DocumentEvent e) {
-		Main.log(field.getText());
 		String text = getTagless();
-		enchantButton.setEnabled(Grammar.parseString(text) instanceof NonTerminal);
-		//enchantButton.setEnabled(Grammar.parseString(text) instanceof NonTerminal && fullInv.knowsWords(Grammar.getWords(text)));
+		Main.log(Grammar.parseString(text));
+		enchantButton.setEnabled(Grammar.parseString(text) instanceof NonTerminal && fullInv.knowsWords(Grammar.getWords(text)));
 	}
 
 	@Override

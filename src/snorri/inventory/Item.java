@@ -132,6 +132,11 @@ public abstract class Item implements Droppable {
 				return null;
 			}
 		}
+		
+		@Override
+		public String toString() {
+			return name().toLowerCase();
+		}
 
 	}
 	

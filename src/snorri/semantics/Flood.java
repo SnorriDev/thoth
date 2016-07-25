@@ -7,6 +7,10 @@ import snorri.world.Tile.TileType;
 
 public class Flood extends Definition {
 
+	/*
+	 * TODO: redo how this stuff works
+	 */
+	
 	public Flood() {
 		super(Noun.class);
 	}
@@ -37,6 +41,11 @@ public class Flood extends Definition {
 		
 		return false;
 		
+	}
+
+	@Override
+	public String getShortDesc() {
+		return "flood";
 	}
 
 }

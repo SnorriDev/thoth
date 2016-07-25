@@ -7,18 +7,25 @@ public class Burn extends VerbDef {
 	//TODO: maybe this verb is actually transitive?
 	
 	public Burn() {
-		super(false);
+		super(true);
 	}
 
 	@Override
 	public boolean exec(Object obj) {
-		e.getSecondPerson().burn();
+		if (obj instanceof Entity) {
+			((Entity) obj).burn();
+		}
 		return true;
 	}
 
 	@Override
 	public boolean eval(Object subj, Object obj) {
-		return subj instanceof Entity && ((Entity) subj).isBurning();
+		return obj instanceof Entity && ((Entity) obj).isBurning();
+	}
+
+	@Override
+	public String getShortDesc() {
+		return "burn";
 	}
 
 }

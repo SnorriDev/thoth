@@ -21,4 +21,9 @@ public class LeftOf extends PrepDef {
 		
 	}
 
+	@Override
+	public String getShortDesc() {
+		return "left of";
+	}
+
 }

@@ -20,6 +20,11 @@ public class Boom extends VerbDef {
 	public boolean eval(Object subj, Object obj) {
 		return false;
 	}
+
+	@Override
+	public String getShortDesc() {
+		return "boom!";
+	}
 	
 	//TODO: boom whenever we return false?
 

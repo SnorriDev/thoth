@@ -23,6 +23,18 @@ public abstract class Definition {
 	
 	public abstract Object getMeaning(SpellEvent e);
 
+	/**
+	 * @return a short one or two-word description of this word
+	 */
+	public abstract String getShortDesc();
+	
+	/**
+	 * @return a longer description of what this word does
+	 */
+	public String getLongDesc() {
+		return null;
+	}
+	
 	public boolean altersMovement() {
 		return false;
 	}
