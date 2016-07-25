@@ -23,6 +23,11 @@ public class Hieroglyphics {
 		
 		if (dir.exists()) {
 			for (File glyph : dir.listFiles()) {
+				
+				if (!glyph.getName().endsWith("png")) {
+					continue;
+				}
+				
 				htmlGlyphs.add(Util.removeExtension(glyph.getName()));
 			}
 			Collections.sort(htmlGlyphs, new Comparator<String>() {
@@ -31,7 +36,6 @@ public class Hieroglyphics {
 					return Integer.compare(s2.length(), s1.length()); //longer first
 				}
 			});
-			Main.log(Main.getHTMLGlyph(htmlGlyphs.get(0)));
 			Main.log(htmlGlyphs.size() + " HTML glyphs loaded");
 		} else {
 			Main.error("could not find HTML glyph directory");

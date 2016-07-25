@@ -148,6 +148,14 @@ public class Tile {
 			canShootOver = swimmable;
 		}
 		
+		public boolean isLiquid() {
+			return !pathable && canShootOver;
+		}
+		
+		public boolean isChangable() {
+			return pathable || canShootOver;
+		}
+		
 		public static TileType byId(int id) {
 			return values()[id];
 		}
@@ -180,9 +188,25 @@ public class Tile {
 			return textures.length;
 		}
 		
+		//TODO move this to an interface Named
 		@Override
 		public String toString() {
-			return name();
+			return name().toLowerCase();
+		}
+		
+		@Override
+		public Object get(World world, AbstractSemantics attr) {
+			
+			if (attr == AbstractSemantics.FLOOD && isLiquid()) {
+				return new Tile(this);
+			}
+			
+			if (attr == AbstractSemantics.STORM && this == SAND) {
+				return new Tile(this, 3);
+			}
+			
+			return Nominal.super.get(world, attr);
+			
 		}
 		
 	}

@@ -36,9 +36,9 @@ import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.VocabDrop;
 import snorri.keyboard.Key;
+import snorri.main.Debug;
 import snorri.main.GamePanel;
 import snorri.main.GameWindow;
-import snorri.main.Main;
 import snorri.nonterminals.NonTerminal;
 import snorri.parser.Grammar;
 
@@ -64,12 +64,7 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 	private static final Color NORMAL_BG = new Color(255, 179, 71);
 	private static final Color SELECTED_BG = new Color(255, 150, 71);
 	private static final Color BORDER = new Color(255, 130, 71);
-	
-	//JEditorPane for HTML
-	//or TextArea? TextField
-	//TODO use JEditorPane with StyleContext
-	//StyledEditorKit
-	
+		
 	private static class ItemCellRenderer implements ListCellRenderer<Item> {
 		@Override
 		public Component getListCellRendererComponent(JList<? extends Item> list, Item item, int index, boolean isSelected,
@@ -150,6 +145,7 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 		craftingSpace = new JPanel();
 		craftingSpace.setLayout(new BoxLayout(craftingSpace, BoxLayout.Y_AXIS));
 		craftingSpace.setPreferredSize(new Dimension(700, 250));
+		craftingSpace.addKeyListener(this);
 		craftingSpace.setBackground(NORMAL_BG);
 		craftingSpace.setBorder(BorderFactory.createLineBorder(BORDER, 5));
 		
@@ -231,6 +227,7 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 		if (e.getActionCommand().equals("Enchant")) {
 			list.getSelectedValue().setSpell(Grammar.parseString(getTagless()));
 			setGlyphs();
+			list.requestFocus();
 		}
 	}
 
@@ -255,17 +252,15 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 			field.setText(Hieroglyphics.transliterate(list.getSelectedValue().getSpell().getOrthography()));
 		}
 	}
-
-	//TODO
-	//show img's when box is not focused
-	//convert to plaintext on focus
-	//back to hypertext on unfocus
-	//when you hit enchant, remove focus
 	
 	private void checkParse(DocumentEvent e) {
 		String text = getTagless();
-		Main.log(Grammar.parseString(text));
-		enchantButton.setEnabled(Grammar.parseString(text) instanceof NonTerminal && fullInv.knowsWords(Grammar.getWords(text)));
+		if (Debug.ALL_HIEROGLYPHS_UNLOCKED) {
+			enchantButton.setEnabled(Grammar.parseString(text) instanceof NonTerminal);
+		} else {
+			enchantButton.setEnabled(Grammar.parseString(text) instanceof NonTerminal && fullInv.knowsWords(Grammar.getWords(text)));
+	
+		}
 	}
 
 	@Override

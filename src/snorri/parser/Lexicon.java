@@ -15,12 +15,12 @@ import snorri.semantics.Be;
 import snorri.semantics.Boom;
 import snorri.semantics.Burn;
 import snorri.semantics.ConditionalDef;
+import snorri.semantics.CreateObject;
 import snorri.semantics.Damage;
 import snorri.semantics.Definition;
 import snorri.semantics.DegreeModifierDef;
 import snorri.semantics.FirstObjectPronoun;
 import snorri.semantics.FirstSuffixPronoun;
-import snorri.semantics.Flood;
 import snorri.semantics.Fly;
 import snorri.semantics.Greatly;
 import snorri.semantics.Heal;
@@ -77,8 +77,8 @@ public class Lexicon {
 		lexicon.put("jAm", new StaticDef(Noun.class, TileType.TREE)); //tree
 		lexicon.put("ssn", new StaticDef(Noun.class, Flower.class)); //flower, gotta make this an entity
 		lexicon.put("mw", new StaticDef(Noun.class, TileType.WATER));
+		lexicon.put("Say", new StaticDef(Noun.class, TileType.SAND));
 		lexicon.put("xt", new StaticDef(Noun.class, TileType.LAVA)); //technically this is fire
-		lexicon.put("Axt", new Flood()); //TODO: flood as noun
 		lexicon.put("bit", new StaticDef(Noun.class, null)); //TODO: bee
 		
 		lexicon.put("st", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
@@ -87,6 +87,8 @@ public class Lexicon {
 		lexicon.put("rn", new StaticDef(AbstractNoun.class, AbstractSemantics.NAME));
 		lexicon.put("nb", new StaticDef(AbstractNoun.class, AbstractSemantics.SOURCE)); //means lord literally
 		lexicon.put("nbt", new StaticDef(AbstractNoun.class, AbstractSemantics.SOURCE)); //means lord literally
+		lexicon.put("Axt", new StaticDef(AbstractNoun.class, AbstractSemantics.FLOOD));
+		lexicon.put("Da", new StaticDef(AbstractNoun.class, AbstractSemantics.STORM));
 		
 		//cactus, reeds
 		//words for "create" sxpr "build/create"; qmA "create"; two levels of building
@@ -118,6 +120,8 @@ public class Lexicon {
 		lexicon.put("pA", new Fly());	
 		lexicon.put("mAA", new See());
 		lexicon.put("pH", new Damage());
+		lexicon.put("qmA", new CreateObject());
+		//lexicon.put("sxpr", new CreateUnit());
 		
 		//Conditionals
 		lexicon.put("jr", new ConditionalDef());

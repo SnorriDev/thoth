@@ -26,7 +26,7 @@ public class SpellEvent {
 	public SpellEvent(GameWindow window, Entity secondPerson) {
 		this.secondPerson = secondPerson;
 		this.window = window;
-		loc = getFirstPerson().getPos().copy(); //TODO getting this null at beginning
+		loc = getSecondPerson().getPos().copy();
 		dest = getThirdPerson().getPos().copy();
 	}
 	

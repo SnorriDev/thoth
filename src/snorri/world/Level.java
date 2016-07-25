@@ -486,6 +486,11 @@ public class Level implements Editable {
 		
 		//change the tile
 		Tile oldTile = getTileGrid(v);
+		
+		if (oldTile == null || newTile == null) {
+			return;
+		}
+		
 		setTileGrid(v, newTile);
 		
 		if (oldTile.isPathable() == newTile.isPathable()) {
@@ -591,9 +596,7 @@ public class Level implements Editable {
 	public void fillDoor(Vector pos, Tile fill, TileType floor) {
 		
 		Vector dir;
-		
-		//TODO change this to detect NOT FLOOR, not BACKGROUND
-		
+				
 		if (isBg(pos.getX() + 1, pos.getY(), fill.getType(), floor) || isBg(pos.getX() - 1, pos.getY(), fill.getType(), floor)) {
 			dir = new Vector(0, 1);
 		} else if (isBg(pos.getX(), pos.getY() + 1, fill.getType(), floor) || isBg(pos.getX(), pos.getY() - 1, fill.getType(), floor)) {
@@ -610,6 +613,18 @@ public class Level implements Editable {
 //			setTileGrid(pos.copy().add(dir), new Tile(fill));
 //		}
 		
+	}
+
+	public void setTile(Vector pos, Tile tile) {
+		setTile(pos.getX(), pos.getY(), tile);
+	}
+	
+	public void wrapTileUpdate(Vector pos, Tile tile) {	
+		if (tile.isPathable()) {
+			setPathable(pos, tile);
+		} else {
+			setTile(pos, tile); //TODO implement a good function here
+		}
 	}
 	
 }

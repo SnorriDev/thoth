@@ -62,6 +62,7 @@ public class Main {
 		
 		private static void resize(JComponent component) {
 			if (component != null) {
+				//component.setSize(frame.getContentPane().getSize());
 				component.setBounds(frame.getContentPane().getBounds());
 			}
 		}

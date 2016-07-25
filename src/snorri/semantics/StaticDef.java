@@ -19,6 +19,9 @@ public class StaticDef extends Definition {
 
 	@Override
 	public String getShortDesc() {
+		if (meaning == null) {
+			return "unknown";
+		}
 		return meaning.toString();
 	}
 

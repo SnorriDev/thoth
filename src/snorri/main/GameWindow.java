@@ -168,24 +168,24 @@ public class GameWindow extends FocusedWindow {
 		
 	}
 	
-	public synchronized void pause() {
-		paused = true;
+	public void pause() {
 		Main.setOverlay(new PauseOverlay(this));
+		paused = true;
 	}
 	
-	public synchronized void unpause() {
+	public void unpause() {
+		Main.setOverlay(null);
 		paused = false;
-		Main.setOverlay(null);
 	}
 	
-	public synchronized void openInventory() {
-		editingInventory = true;
+	public void openInventory() {
 		Main.setOverlay(new InventoryOverlay(this, focus.getInventory()));
+		editingInventory = true;
 	}
 	
-	public synchronized void closeInventory() {
-		editingInventory = false;
+	public void closeInventory() {
 		Main.setOverlay(null);
+		editingInventory = false;
 	}
 	
 	public boolean isPaused() {

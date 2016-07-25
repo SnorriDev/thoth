@@ -37,6 +37,9 @@ public class TerrainGen {
 		MOUNTAIN(Double.MAX_VALUE, new Tile(TileType.SAND, 0));
 		
 		public static final Biome[] DEFAULT = Biome.values();
+//		public static final Biome[] NETHER = new Biome[] {
+//				
+//		}
 		
 		//TODO: use some other variable like moisture for height
 		//TODO: multiple, randomly selected tile types
