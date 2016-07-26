@@ -2,12 +2,12 @@ package snorri.entities;
 
 import snorri.world.Vector;
 
-public class Flower extends Plant {
+public class Plant extends Entity {
 
 	private static final long serialVersionUID = 1L;
 
-	public Flower(Vector pos) {
-		super(pos);
+	public Plant(Vector pos) {
+		super(pos, 3);
 	}
 
 }

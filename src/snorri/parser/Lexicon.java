@@ -23,6 +23,7 @@ import snorri.semantics.FirstObjectPronoun;
 import snorri.semantics.FirstSuffixPronoun;
 import snorri.semantics.Fly;
 import snorri.semantics.Greatly;
+import snorri.semantics.Grow;
 import snorri.semantics.Heal;
 import snorri.semantics.LeftOf;
 import snorri.semantics.Move;
@@ -92,7 +93,7 @@ public class Lexicon {
 		
 		//cactus, reeds
 		//words for "create" sxpr "build/create"; qmA "create"; two levels of building
-						
+		
 		//Suffix Pronouns
 		lexicon.put("i", new FirstSuffixPronoun());
 		lexicon.put("k", new SecondSuffixPronoun());
@@ -121,6 +122,7 @@ public class Lexicon {
 		lexicon.put("mAA", new See());
 		lexicon.put("pH", new Damage());
 		lexicon.put("qmA", new CreateObject());
+		lexicon.put("rd", new Grow());
 		//lexicon.put("sxpr", new CreateUnit());
 		
 		//Conditionals
