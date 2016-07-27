@@ -626,5 +626,10 @@ public class Level implements Editable {
 			setTile(pos, tile); //TODO implement a good function here
 		}
 	}
+
+	@Override
+	public List<Entity> getEntities() {
+		return new ArrayList<Entity>();
+	}
 	
 }

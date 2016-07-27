@@ -22,7 +22,7 @@ import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Entity implements Nominal, Serializable, Comparable<Entity> {
+public class Entity implements Nominal, Serializable, Comparable<Entity>, Cloneable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -38,6 +38,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity> {
 		SPAWNABLE.add(Player.class);
 		SPAWNABLE.add(Portal.class);
 		SPAWNABLE.add(Unit.class);
+		SPAWNABLE.add(Sarcophagus.class);
 		
 		Collections.sort(SPAWNABLE, new Comparator<Class<? extends Entity>>() {
 			@Override
@@ -303,6 +304,18 @@ public class Entity implements Nominal, Serializable, Comparable<Entity> {
 	@Override
 	public String toString() {
 		return getClass().getSimpleName().toLowerCase();
+	}
+	
+	public Entity copy() {
+		try {
+			Entity copy = (Entity) clone();
+			copy.setPos(copy.getPos().copy());
+			return copy;
+		} catch (CloneNotSupportedException e) {
+			Main.log("issue cloning object");
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

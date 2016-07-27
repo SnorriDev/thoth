@@ -291,5 +291,32 @@ public class World implements Playable, Editable {
 	public void resize(int newWidth, int newHeight) {
 		level = level.getResized(newWidth, newHeight);
 	}
+	
+	@Override
+	public World getTransposed() {
+		World w = new World(level.getTransposed());
+		for (Entity e : col.getAllEntities()) {
+			Entity e2 = e.copy();
+			e2.getPos().invert();
+			w.addHard(e2);
+		}
+		return w;
+	}
+	
+	@Override
+	public World getXReflected() {
+		World w = new World(level.getXReflected());
+		for (Entity e : col.getAllEntities()) {
+			Entity e2 = e.copy();
+			e2.getPos().getXReflected(level.getDimensions().copy().toGlobalPos());
+			w.addHard(e2);
+		}
+		return w;
+	}
+
+	@Override
+	public List<Entity> getEntities() {
+		return col.getAllEntities();
+	}
 
 }

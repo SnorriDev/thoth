@@ -231,7 +231,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		}
 
 		if (e.getActionCommand().startsWith("spawn")) {
-			selectedEntityClass = ClassFinder.find("snorri.entities")
+			selectedEntityClass = Entity.SPAWNABLE
 					.get(Integer.parseInt(e.getActionCommand().substring(5)));
 			return;
 		}
@@ -491,6 +491,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			}
 			
 			else {
+				Main.log(selectedEntityClass);
 				world.addHard(selectedEntityClass.getConstructor(Vector.class).newInstance(spawnPos));
 			}
 			
@@ -511,10 +512,10 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		World world = (World) env;
 		
 		Entity deletableEntity = world.getEntityTree().getFirstCollision(new Entity(this.getMousePosAbsolute()), true);
-		if (!(deletableEntity instanceof Player)) {
-			autosaveUndo();
-			world.deleteHard(deletableEntity);
-		}
+		
+		autosaveUndo();
+		world.deleteHard(deletableEntity);
+
 	}
 
 	public void resize(int newWidth, int newHeight) {

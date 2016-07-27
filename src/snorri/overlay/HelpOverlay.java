@@ -3,6 +3,7 @@ package snorri.overlay;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 
+import javax.swing.BorderFactory;
 import javax.swing.JTextPane;
 
 import snorri.main.GameWindow;
@@ -20,6 +21,8 @@ public class HelpOverlay extends Overlay {
 		display.setContentType("text/html");
 		display.setEditable(false);
 		display.addKeyListener(this);
+		display.setBorder(BorderFactory.createLineBorder(BORDER));
+		display.setBackground(NORMAL_BG);
 		display.setMinimumSize(window.getSize());
 		try {
 			display.setPage(Main.getPath("/info/index.html").toURI().toURL());
@@ -33,8 +36,6 @@ public class HelpOverlay extends Overlay {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

@@ -14,6 +14,7 @@ import java.util.Queue;
 import net.sourceforge.yamlbeans.YamlException;
 import net.sourceforge.yamlbeans.YamlReader;
 import snorri.entities.Enemy;
+import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.main.Main;
 import snorri.world.Editable;
@@ -29,7 +30,9 @@ public class DungeonGen extends TerrainGen {
 	public static final int DOOR_WIDTH = 7;
 	
 	protected static HashMap<String, Structure> structures;
+	
 	protected Vector start;
+	protected Queue<Entity> spawnQ;
 	
 	static {
 		
@@ -79,25 +82,22 @@ public class DungeonGen extends TerrainGen {
 		List<Rectangle> filledRegions = new ArrayList<Rectangle>();
 		Queue<Vector> doorQ = new LinkedList<Vector>();
 		List<Structure> children = new ArrayList<Structure>() {
-
 			private static final long serialVersionUID = 1L;
-
 			@Override
 			public boolean add(Structure s) {
 				Structure r = s.getXReflected();
 				return super.add(s) && super.add(r) &&
 						super.add(r.getTransposed()) && super.add(s.getTransposed());
-			}
-			
-			//TODO flip as well as transpose
-			
+			}			
 		};
 		
+		spawnQ = new LinkedList<Entity>();
 		start = dim.copy().divide(2);
 		if (Math.random() > 0.5) {
 			Main.log("inverting start");
 			start.invert();
 		}
+		
 		doorQ.add(start);
 		children.add(structures.get("spawn"));
 		
@@ -108,7 +108,7 @@ public class DungeonGen extends TerrainGen {
 			//TODO match with door pos on other thing
 			for (Structure s : children) {
 				for (Vector drawPos : s.getStarts(pos)) {
-					if (s.drawAt(l, filledRegions, drawPos)) {
+					if (s.drawAt(l, filledRegions, spawnQ, drawPos)) {
 						if (!startSet) {
 							start = drawPos.copy().add(s.start);
 							startSet = true;
@@ -137,6 +137,9 @@ public class DungeonGen extends TerrainGen {
 			if (pos != null) {
 				world.addHard(new Enemy(pos, p));
 			}
+		}
+		while (!spawnQ.isEmpty()) {
+			world.addHard(spawnQ.poll());
 		}
 		return world;
 	}

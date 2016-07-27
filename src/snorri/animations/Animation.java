@@ -27,6 +27,7 @@ public class Animation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	//TODO: move these into respective classes?
 	public static final Animation EXPLOSION = new Animation("/textures/animations/explosion");
 	public static final Animation MUMMY_IDLE = new Animation("/textures/animations/mummy/idle");
 	public static final Animation SPARKLE = new Animation("/textures/animations/sparkle");

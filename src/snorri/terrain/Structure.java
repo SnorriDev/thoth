@@ -4,7 +4,9 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Queue;
 
+import snorri.entities.Entity;
 import snorri.main.Main;
 import snorri.world.Editable;
 import snorri.world.Level;
@@ -65,7 +67,7 @@ public class Structure {
 		
 		Structure newStruct = new Structure();
 		
-		newStruct.setTemplate(getLevel().getTransposed()); //TODO change positions of entities/add this method to Editable
+		newStruct.setTemplate(template.getTransposed()); //TODO change positions of entities/add this method to Editable
 		for (Vector door : doors) {
 			newStruct.doors.add(door.getInverted());
 		}
@@ -89,7 +91,7 @@ public class Structure {
 			newStruct.doors.add(spawn.getXReflected(getLevel().getDimensions()));
 		}
 		newStruct.start = (start == null) ? null : start.getXReflected(getLevel().getDimensions());
-		newStruct.setTemplate(getLevel().getXReflected());
+		newStruct.setTemplate(template.getXReflected());
 		
 		return newStruct;
 		
@@ -139,7 +141,7 @@ public class Structure {
 	 * If we can, filledRegions will be updated, and the level wil be modified.
 	 * @return whether or not the structure was drawn
 	 */
-	public boolean drawAt(Level l, List<Rectangle> filledRegions, Vector pos) {
+	public boolean drawAt(Level l, List<Rectangle> filledRegions, Queue<Entity> spawnQ, Vector pos) {
 		
 		Vector levelDim = l.getDimensions();
 		Vector dim = getLevel().getDimensions();
@@ -168,6 +170,12 @@ public class Structure {
 			for (int y = 0; y < dim.getY(); y++) {
 				l.setTileGrid(pos.getX() + x, pos.getY() + y, getLevel().getNewTileGrid(x, y));
 			}
+		}
+		
+		Vector global = pos.copy().toGlobalPos();
+		for (Entity e : template.getEntities()) {
+			e.getPos().add(global);
+			spawnQ.add(e);
 		}
 		
 		return true;

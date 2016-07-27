@@ -3,6 +3,9 @@ spawn:
   doors:
     - !door {x: 29, y: 7}
   start: !spawn {x: 7, y: 7}
+  children:
+    - 'mainRoom'
+    - 'bigMainRoom'
 mainRoom:
   !struct
   doors:

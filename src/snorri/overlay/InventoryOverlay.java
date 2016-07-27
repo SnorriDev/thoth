@@ -1,6 +1,5 @@
 package snorri.overlay;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -55,10 +54,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private final JPanel inputPanel;
 	private final JButton enchantButton;
 	private final JEditorPane field;
-		
-	private static final Color NORMAL_BG = new Color(255, 179, 71);
-	private static final Color SELECTED_BG = new Color(255, 150, 71);
-	private static final Color BORDER = new Color(255, 130, 71);
 		
 	private static class ItemCellRenderer implements ListCellRenderer<Item> {
 		@Override

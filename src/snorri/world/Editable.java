@@ -1,7 +1,9 @@
 package snorri.world;
 
 import java.awt.Graphics;
+import java.util.List;
 
+import snorri.entities.Entity;
 import snorri.main.FocusedWindow;
 
 public interface Editable extends Savable {
@@ -12,8 +14,10 @@ public interface Editable extends Savable {
 
 	public void resize(int newWidth, int newHeight);
 	
-//	public Editable getTransposed();
-//	
-//	public Editable getXReflected();
+	public Editable getTransposed();
 	
+	public Editable getXReflected();
+
+	public List<Entity> getEntities();
+		
 }
