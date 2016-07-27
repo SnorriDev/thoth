@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Shape;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -306,13 +307,29 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		return getClass().getSimpleName().toLowerCase();
 	}
 	
-	public Entity copy() {		
+	@Override @Deprecated
+	public Entity clone() {		
 		try {
-			Entity copy = (Entity) clone();
-			copy.setPos(copy.getPos().copy());
+			Entity copy = (Entity) super.clone();
+			copy.pos = copy.pos.copy();
+			copy.collider = copy.collider.cloneOnto(this);
 			return copy;
 		} catch (CloneNotSupportedException e) {
-			Main.log("issue cloning object");
+			Main.log("issue cloning entity " + this);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	//TODO override this in methods that need it
+	public Entity copy() {
+		try {
+			Entity newEnt = getClass().getConstructor(Vector.class).newInstance(pos.copy());
+			newEnt.collider = collider.cloneOnto(newEnt);
+			newEnt.animation = new Animation(animation);
+			return newEnt;
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
+			Main.error("could not find valid constructor for entity " + this);
 			e.printStackTrace();
 			return null;
 		}

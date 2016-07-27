@@ -139,7 +139,7 @@ public class DungeonGen extends TerrainGen {
 			}
 		}
 		while (!spawnQ.isEmpty()) {
-			world.addHard(spawnQ.poll());
+			world.addHard(spawnQ.poll()); //yikes this copy shenanigans
 		}
 		return world;
 	}

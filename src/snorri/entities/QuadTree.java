@@ -245,7 +245,7 @@ public class QuadTree extends Entity implements EntityGroup {
 	}
 
 	@Override
-	public void updateAround(World world, double deltaTime, Entity focus) {
+	public synchronized void updateAround(World world, double deltaTime, Entity focus) {
 
 		if (focus == null) {
 			return;
@@ -269,7 +269,7 @@ public class QuadTree extends Entity implements EntityGroup {
 	}
 
 	@Override
-	public void renderAround(FocusedWindow window, Graphics gr) {
+	public synchronized void renderAround(FocusedWindow window, Graphics gr) {
 		
 		if (Debug.RENDER_TREE) {
 			collider.render(window, gr);

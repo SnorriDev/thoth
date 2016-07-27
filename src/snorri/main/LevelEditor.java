@@ -130,6 +130,11 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Quit", KeyEvent.VK_Q);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
 
 		// Tile Selection Menu
 		menu = new JMenu("Select Tile");
@@ -296,6 +301,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				return;
 			}
 			redo();
+			break;
+		case "Quit":
+			Main.setWindow(new MainMenu());
 		}
 
 		repaint();
@@ -491,7 +499,6 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			}
 			
 			else {
-				Main.log(selectedEntityClass);
 				world.addHard(selectedEntityClass.getConstructor(Vector.class).newInstance(spawnPos));
 			}
 			

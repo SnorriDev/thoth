@@ -174,8 +174,9 @@ public class Structure {
 		
 		Vector global = pos.copy().toGlobalPos();
 		for (Entity e : template.getEntities()) {
-			e.getPos().add(global);
-			spawnQ.add(e);
+			Entity e2 = e.copy();
+			e2.getPos().add(global);
+			spawnQ.add(e2);
 		}
 		
 		return true;
