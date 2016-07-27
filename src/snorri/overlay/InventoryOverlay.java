@@ -9,8 +9,6 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
@@ -35,14 +33,12 @@ import snorri.inventory.FullInventory;
 import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.VocabDrop;
-import snorri.keyboard.Key;
 import snorri.main.Debug;
-import snorri.main.GamePanel;
 import snorri.main.GameWindow;
 import snorri.nonterminals.NonTerminal;
 import snorri.parser.Grammar;
 
-public class InventoryOverlay extends GamePanel implements KeyListener, MouseListener, ListSelectionListener, DocumentListener, FocusListener {
+public class InventoryOverlay extends Overlay implements MouseListener, ListSelectionListener, DocumentListener, FocusListener {
 
 	/**
 	 * the GUI interface for editing inventory and spells
@@ -53,7 +49,6 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 	@SuppressWarnings("unused")
 	private final Inventory inv;
 	private final FullInventory fullInv;
-	private final GameWindow window;
 	
 	private final JList<Item> list;
 	private final JPanel craftingSpace;
@@ -77,37 +72,9 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 		}
 	}
 	
-//	private class HieroglyphFilter extends DocumentFilter {
-//				
-//		@Override
-//		public void insertString(FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
-//			super.insertString(fb, offset, text, attr);
-//			wordInserted(offset);
-//		}
-//		
-//		private void wordInserted(int offset) {
-//			
-//			Main.log("word inserted");
-//			SwingUtilities.invokeLater(new Runnable() {
-//				@Override
-//				public void run() {
-//					String raw = field.getText();
-//					for (String glyph : htmlGlyphs) {
-//						raw = raw.replaceAll(glyph, Main.getHTMLGlyph(glyph));
-//					}
-//					field.setText(raw);
-//					Main.log("what's good fam");
-//					//TODO try with document instead of "setText"
-//				}
-//			});
-//			
-//		}
-//		
-//	}
-	
 	public InventoryOverlay(GameWindow window, Inventory inventory) {
 		
-		this.window = window;
+		super(window);
 		inv = inventory;
 		fullInv = inventory.getFullInventory();
 				
@@ -118,7 +85,6 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 		setLayout(new GridBagLayout());
 		panel.setBackground(NORMAL_BG);
 		setOpaque(false);
-		addKeyListener(this);
 		
 		//filter item panel
 		list = new JList<Item>(fullInv.getItems());
@@ -232,13 +198,6 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {
-		if (Key.ESC.isPressed(e)) {
-			window.closeInventory();
-		}
-	}
-
-	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		inputPanel.setVisible(true);
 		setGlyphs();
@@ -310,14 +269,6 @@ public class InventoryOverlay extends GamePanel implements KeyListener, MouseLis
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-	}
-	
-	@Override
-	public void keyReleased(KeyEvent e) {
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
 	}
 
 }

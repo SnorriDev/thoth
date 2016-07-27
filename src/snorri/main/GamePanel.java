@@ -11,7 +11,7 @@ import snorri.world.Vector;
 public abstract class GamePanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private static final int FRAME_DELTA = 33; //30 FPS (20 -> 50 FPS
+	private static final int FRAME_DELTA = 15; //33 -> 30 FPS (20 -> 50 FPS
 
 	public static double getBaseDelta() {
 		return FRAME_DELTA / 1000d;

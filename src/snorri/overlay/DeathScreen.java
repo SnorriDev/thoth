@@ -9,11 +9,11 @@ import javax.swing.JPanel;
 import snorri.main.GamePanel;
 import snorri.main.Main;
 
-public class DeathOverlay extends GamePanel {
+public class DeathScreen extends GamePanel {
 
 	private static final long serialVersionUID = 1L;
 	
-	public DeathOverlay() {
+	public DeathScreen() {
 		setLayout(new GridBagLayout());
 		setOpaque(false);
 		JPanel panel = new JPanel(new GridLayout(0, 1));
@@ -27,6 +27,6 @@ public class DeathOverlay extends GamePanel {
 		if (e.getActionCommand().equals("Main Menu")) {
 			Main.launchMenu();
 		}
-	}
+	} 
 
 }

@@ -13,7 +13,7 @@ import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.entities.Unit;
 import snorri.keyboard.Key;
-import snorri.overlay.DeathOverlay;
+import snorri.overlay.DeathScreen;
 import snorri.overlay.InventoryOverlay;
 import snorri.overlay.PauseOverlay;
 import snorri.world.Playable;
@@ -32,7 +32,7 @@ public class GameWindow extends FocusedWindow {
 	private Playable universe;
 	private Player focus;
 	private Queue<DialogMessage> dialogQ;
-	private boolean paused, editingInventory, hasDied;
+	private boolean paused, hasDied;
 	private long lastTime;
 		
 	public GameWindow(Playable universe, Player focus) {
@@ -42,7 +42,6 @@ public class GameWindow extends FocusedWindow {
 		dialogQ = new LinkedList<DialogMessage>();
 		lastTime = getTimestamp();
 		paused = false;
-		editingInventory = false;
 		hasDied = false;
 	}
 	
@@ -65,13 +64,13 @@ public class GameWindow extends FocusedWindow {
 			dialogQ.poll();
 		}
 				
-		if (isPaused() || isEditingInventory()) {
+		if (isPaused()) {
 			return;
 		}
 		
 		if (!hasDied && focus != null && focus.isDead()) {
 			hasDied = true;
-			Main.setOverlay(new DeathOverlay());
+			Main.setOverlay(new DeathScreen());
 		}
 		
 		if (universe == null || universe.getCurrentWorld() == null) {
@@ -180,20 +179,11 @@ public class GameWindow extends FocusedWindow {
 	
 	public void openInventory() {
 		Main.setOverlay(new InventoryOverlay(this, focus.getInventory()));
-		editingInventory = true;
-	}
-	
-	public void closeInventory() {
-		Main.setOverlay(null);
-		editingInventory = false;
+		paused = true;
 	}
 	
 	public boolean isPaused() {
 		return paused;
-	}
-	
-	public boolean isEditingInventory() {
-		return editingInventory;
 	}
 
 	public void mousePressed(MouseEvent e) {

@@ -241,7 +241,10 @@ public abstract class Item implements Droppable {
 	
 	@Override
 	public String toString() {
-		return type.toString() + "{" + nickname + "}";
+		if (nickname == null) {
+			return type.toString();
+		}
+		return type.toString() + " (" + nickname + ")";
 	}
 	
 	public void setNickname(String s) {
