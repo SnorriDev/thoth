@@ -39,7 +39,7 @@ public class DungeonGen extends TerrainGen {
 		structures = new HashMap<>();
 
 		try {
-			Main.log("loading structures...");
+			Main.log("loading dungeon structures...");
 			YamlReader reader = new YamlReader(new FileReader(Main.getPath("/worlds/structures/doors.yaml")));
 			reader.getConfig().setClassTag("door", Vector.class);
 			reader.getConfig().setClassTag("spawn", Vector.class);

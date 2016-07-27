@@ -306,7 +306,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		return getClass().getSimpleName().toLowerCase();
 	}
 	
-	public Entity copy() {
+	public Entity copy() {		
 		try {
 			Entity copy = (Entity) clone();
 			copy.setPos(copy.getPos().copy());

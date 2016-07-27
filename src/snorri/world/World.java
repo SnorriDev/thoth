@@ -93,7 +93,7 @@ public class World implements Playable, Editable {
 		deleteQ = new LinkedList<Entity>();
 		addQ = new LinkedList<Entity>();
 		
-		Pathfinding.setWorld(this);
+		Pathfinding.setWorld(this); //TODO make pathfinding not static
 		l.computePathfinding();
 		
 		Main.log("new world created!");
@@ -297,7 +297,9 @@ public class World implements Playable, Editable {
 		World w = new World(level.getTransposed());
 		for (Entity e : col.getAllEntities()) {
 			Entity e2 = e.copy();
+			Main.log(e2.getPos());
 			e2.getPos().invert();
+			Main.log(e2.getPos());
 			w.addHard(e2);
 		}
 		return w;

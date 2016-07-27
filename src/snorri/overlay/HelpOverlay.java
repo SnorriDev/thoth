@@ -1,5 +1,6 @@
 package snorri.overlay;
 
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 
@@ -17,13 +18,14 @@ public class HelpOverlay extends Overlay {
 		
 		super(window);
 		
+		setLayout(new GridBagLayout());
+		
 		JTextPane display = new JTextPane();
 		display.setContentType("text/html");
 		display.setEditable(false);
 		display.addKeyListener(this);
 		display.setBorder(BorderFactory.createLineBorder(BORDER));
 		display.setBackground(NORMAL_BG);
-		display.setMinimumSize(window.getSize());
 		try {
 			display.setPage(Main.getPath("/info/index.html").toURI().toURL());
 		} catch (IOException e) {
