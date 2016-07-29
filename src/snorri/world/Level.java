@@ -643,18 +643,24 @@ public class Level implements Editable {
 	 * Returns an array of bitmasks (4 maximum).
 	 * Excess space in the array is null.
 	 */
-	public Mask[] getBitMasks(Vector pos) {
+	public Mask[] getBitMasks(int x, int y) {
 		Mask[] masks = new Mask[4];
 		
 		
-		if (getTileGrid(pos) == null || pos == null) {
+		if (getTileGrid(x, y) == null) {
 			return masks;
 		}
 		
 		int bitVal = 1;
 		for (Vector v : Mask.NEIGHBORS) {
-			Tile t = getTileGrid(pos.copy().add(v));
-			if (getTileGrid(pos).compareTo(t) < 0) {
+			Tile t = getTileGrid(v.copy().add(x, y));
+			if (t == null) {
+				continue;
+			}
+			if (getTileGrid(x, y).compareTo(t) != 0) {
+				Main.log("not equal stuff");
+			}
+			if (getTileGrid(x, y).compareTo(t) < 0) {
 				BufferedImage texture = t.getTexture();
 				for (int j = 0; j < masks.length; j++) {
 					if (masks[j] == null) {
@@ -674,7 +680,7 @@ public class Level implements Editable {
 	private void setBitMasks() {
 		for (int x = 0; x < dim.getX(); x++) {
 			for (int y = 0; y < dim.getY(); y++) {
-				getTileGrid(x, y).setBitMasks(getBitMasks(new Vector(x, y)));
+				getTileGrid(x, y).setBitMasks(getBitMasks(x, y));
 			}
 		}
 	}

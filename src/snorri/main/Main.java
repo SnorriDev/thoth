@@ -25,7 +25,7 @@ import snorri.world.World;
 public class Main {
 
 	private static GamePanel window;
-	private static JComponent outerOverlay;
+	private static GamePanel outerOverlay;
 
 	private static JFrame frame;
 	private static JLayeredPane pane;
@@ -204,6 +204,7 @@ public class Main {
 	 */
 	public static final void setWindow(GamePanel newWindow) {
 		if (window != null) {
+			window.stop();
 			getLayeredPane().remove(window);
 			getLayeredPane().revalidate();
 		}
@@ -222,8 +223,9 @@ public class Main {
 	 * @param newOverlay
 	 *            the new HUD overlay
 	 */
-	public static final void setOverlay(JComponent newOverlay) {
+	public static final void setOverlay(GamePanel newOverlay) {
 		if (outerOverlay != null) {
+			outerOverlay.stop();
 			getLayeredPane().remove(outerOverlay);
 			getLayeredPane().revalidate();
 		}

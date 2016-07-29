@@ -2,7 +2,6 @@ package snorri.overlay;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 

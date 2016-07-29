@@ -2,7 +2,6 @@ package snorri.masking;
 
 import java.awt.image.BufferedImage;
 
-import snorri.main.Main;
 import snorri.main.Util;
 import snorri.world.Vector;
 

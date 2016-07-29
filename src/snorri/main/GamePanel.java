@@ -12,6 +12,8 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final int FRAME_DELTA = 15; //33 -> 30 FPS (20 -> 50 FPS
+	
+	private boolean stopped = false;
 
 	public static double getBaseDelta() {
 		return FRAME_DELTA / 1000d;
@@ -22,7 +24,7 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 		SwingWorker<Object, Object> sw = new SwingWorker<Object, Object>() {
 			@Override
 			protected Object doInBackground() throws Exception {
-				while (true) {
+				while (!stopped) {
 					try {
 						onFrame();
 					} catch (Exception e) {
@@ -30,10 +32,15 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 					}
 					Thread.sleep(FRAME_DELTA);
 				}
+				return null;
 			}
 		};
 
 		sw.execute();
+	}
+	
+	public void stop() {
+		stopped = true;
 	}
 
 	protected JButton createButton(String text) {

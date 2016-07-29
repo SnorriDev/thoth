@@ -6,7 +6,6 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-import snorri.audio.Audio;
 import snorri.entities.Entity;
 import snorri.events.SpellEvent;
 import snorri.main.GameWindow;
@@ -36,10 +35,10 @@ public abstract class Item implements Droppable {
 		EMPTY,
 		PAPYRUS(5, Papyrus.class, Main.getImageResource("/textures/items/papyrus.png")),
 		HELMET(Armor.class, Main.getImageResource("/textures/items/helmet.png"), 2d),
-		SLING(Weapon.class, Main.getImageResource("/textures/items/sling.png"), 34d, 0.3, "/sound/arrow.wav"),
+		SLING(Weapon.class, Main.getImageResource("/textures/items/sling.png"), 34d, 0.45, "/sound/arrow.wav"),
 		PELLET(5, Orb.class, Main.getImageResource("/textures/items/pellet.png")),
 		SLOW_SLING(Weapon.class, Main.getImageResource("/textures/items/sling.png"), 34d, 2d, "/sound/arrow.wav"),
-		BOW(Weapon.class, Main.getImageResource("/textures/items/bow.png"), 75d, 0.5, "/sound/arrow.wav"),
+		BOW(Weapon.class, Main.getImageResource("/textures/items/bow.png"), 75d, 0.6, "/sound/arrow.wav"),
 		ARROW(5, Orb.class, Main.getImageResource("/textures/items/arrow.png"));
 
 		private Class<? extends Item> c;

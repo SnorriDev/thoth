@@ -276,9 +276,6 @@ public class Tile implements Comparable<Tile> {
 	 */
 	@Override
 	public int compareTo(Tile o) {
-		if (o == null) {
-			return 1;
-		}
 		if (type == o.type) {
 			return Integer.compare(style, o.style);
 		}
