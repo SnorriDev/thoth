@@ -18,6 +18,7 @@ import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.semantics.Nominal;
+import snorri.triggers.Trigger;
 import snorri.world.Level;
 import snorri.world.Tile;
 import snorri.world.Vector;
@@ -59,6 +60,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	protected Animation animation;
 	protected boolean ignoreCollisions = false;
 	protected int z;
+	protected String tag;
 	
 	private Timer burnTimer = new Timer(5);
 	private boolean flying;
@@ -333,6 +335,15 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+		Trigger.setTag(tag, this);
 	}
 
 }

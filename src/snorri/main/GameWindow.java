@@ -77,10 +77,10 @@ public class GameWindow extends FocusedWindow {
 			return;
 		}
 		
-		repaint();
 		synchronized (this) {
 			universe.getCurrentWorld().update(deltaTime);
 		}
+		repaint();
 				
 	}
 	
@@ -95,9 +95,9 @@ public class GameWindow extends FocusedWindow {
 		
 		synchronized (this) {
 			universe.getCurrentWorld().render(this, g, true);
-			focus.getInventory().render(this, g);
-			focus.renderHealthBar(g);
 		}
+		focus.getInventory().render(this, g);
+		focus.renderHealthBar(g);
 		
 		int i = 0;
 		for (DialogMessage msg : dialogQ) {

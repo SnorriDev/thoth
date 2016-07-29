@@ -3,6 +3,7 @@ package snorri.inventory;
 import java.awt.Graphics;
 import java.io.Serializable;
 
+import snorri.audio.Audio;
 import snorri.entities.Projectile;
 import snorri.entities.Unit;
 import snorri.main.GameWindow;
@@ -109,6 +110,7 @@ public class Inventory implements Serializable {
 		}
 		
 		if (weaponSlot.getTimer().activate()) {
+			Audio.playSound(Audio.ARROW);
 			world.add(new Projectile(focus, movement, dir, weaponSlot, getSelectedOrb()));
 			return true;
 		}

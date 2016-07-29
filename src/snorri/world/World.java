@@ -132,7 +132,7 @@ public class World implements Playable, Editable {
 		
 	}
 
-	public void update(double d) {
+	public synchronized void update(double d) {
 
 		//TODO: recalculate could be causing issues.. duplication?
 		//print pointers of objects that get updated?
@@ -162,8 +162,10 @@ public class World implements Playable, Editable {
 	}
 
 	@Override
-	public void render(FocusedWindow g, Graphics gr, boolean showOutlands) {
+	public synchronized void render(FocusedWindow g, Graphics gr, boolean showOutlands) {
+		
 		level.render(g, gr, showOutlands);
+		
 		for (Detector p : colliders.toArray(new Detector[0])) {
 			p.renderAround(g, gr);
 		}

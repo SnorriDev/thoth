@@ -60,7 +60,7 @@ public class Player extends Unit {
 	
 	@Override
 	public void update(World world, double deltaTime) {
-		
+				
 		if (Debug.LOG_FOCUS) {
 			Main.log("main player updated");
 		}
@@ -68,6 +68,7 @@ public class Player extends Unit {
 		super.update(world, deltaTime);
 		inventory.update(deltaTime);
 		walk(world, ((GameWindow) Main.getWindow()).getMovementVector(), deltaTime);
+				
 	}
 	
 	@Override

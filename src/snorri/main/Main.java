@@ -170,7 +170,7 @@ public class Main {
 
 		// if they select an image (or we are editing a level, not a world),
 		// don't grab the folder
-		if (fd.getFile().endsWith("png") || isLevel) {
+		if (fd.getFile().endsWith("png") || fd.getFile().endsWith("wav") || isLevel) {
 			return f;
 		}
 

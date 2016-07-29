@@ -104,6 +104,8 @@ public class Enemy extends Unit implements Pathfinder {
 		inventory.tryToShoot(world, this, Vector.ZERO.copy(), e.getPos().copy().sub(pos));
 	}
 	
+	//TODO don't walk into each other
+	
 	@Override
 	public void update(World world, double deltaTime) {
 		

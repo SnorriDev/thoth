@@ -1,6 +1,7 @@
 package snorri.entities;
 
 import snorri.events.CollisionEvent;
+import snorri.triggers.Trigger;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -21,6 +22,11 @@ public class Detector extends Entity {
 	}
 
 	public void onCollision(CollisionEvent e) {
+		
+		if (tag != null) {
+			Trigger.TriggerType.COLLISION.activate(this);
+		}
+		
 	}
 	
 	@Override
