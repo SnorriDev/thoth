@@ -79,7 +79,7 @@ public class World implements Playable, Editable {
 		Pathfinding.setWorld(this);
 		
 		if (computeFocus() == null) {
-			Main.error("world without player detected");
+			Main.log("world without player detected");
 		}
 		
 	}

@@ -4,10 +4,10 @@ import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -143,7 +143,7 @@ public class Main {
 		}
 	}
 
-	public static Image getImageResource(String path) {
+	public static BufferedImage getImageResource(String path) {
 		try {
 			return ImageIO.read(getPath(path));
 		} catch (IllegalArgumentException e) {

@@ -14,7 +14,27 @@ import snorri.main.Main;
 
 public class Audio {
 
-	public static final File ARROW = Main.getPath("/sound/arrow.wav");
+	private static class AudioListener implements LineListener {
+		private boolean done = false;
+
+		@Override
+		public synchronized void update(LineEvent event) {
+			Type eventType = event.getType();
+			if (eventType == Type.STOP || eventType == Type.CLOSE) {
+				done = true;
+				notifyAll();
+			}
+		}
+
+		public synchronized void waitUntilDone() throws InterruptedException {
+			while (!done) {
+				wait();
+			}
+		}
+
+	}
+
+	//private static final AudioListener listener = new AudioListener();
 
 	// private static AudioInputStream loadPath(String path) {
 	// try {
@@ -29,41 +49,40 @@ public class Audio {
 	// }
 	// }
 
-	public static synchronized void playSound(File f) {
-		class AudioListener implements LineListener {
-			private boolean done = false;
+	// TODO store sound effects in clips
+	// rather than re-reading them,
 
-			@Override
-			public synchronized void update(LineEvent event) {
-				Type eventType = event.getType();
-				if (eventType == Type.STOP || eventType == Type.CLOSE) {
-					done = true;
-					notifyAll();
-				}
-			}
-
-			public synchronized void waitUntilDone() throws InterruptedException {
-				while (!done) {
-					wait();
-				}
-			}
-			
+	public static synchronized Clip getClip(String path) {
+		try {
+			Clip clip = AudioSystem.getClip();
+			clip.open(AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(Main.getPath(path)))));
+			return clip;
+		} catch (Exception e) {
+			Main.error("could not load clip " + path);
+			e.printStackTrace();
+			return null;
 		}
-		AudioListener listener = new AudioListener();
+		
+	}
+	
+	public static Clip getArrowClip() {
+		return getClip("/sound/arrow.wav");
+	}
+
+	public static synchronized void playClip(Clip clip) {
 		new Thread(new Runnable() {
+			@Override
 			public void run() {
-				Clip clip = null;
 				try {
-					clip = AudioSystem.getClip();
-					clip.open(AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(f))));
+					AudioListener listener = new AudioListener();
+					clip.addLineListener(listener);
 					clip.start();
 					listener.waitUntilDone();
+					clip.stop();
+					clip.setFramePosition(0);
 				} catch (Exception e) {
-					Main.error("could not play audio file");
+					Main.error("could not play clip");
 					e.printStackTrace();
-				} finally {
-					if (clip != null)
-						clip.close();
 				}
 			}
 		}).start();

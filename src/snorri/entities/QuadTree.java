@@ -9,7 +9,6 @@ import java.util.PriorityQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import snorri.collisions.RectCollider;
-import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.world.EntityGroup;
@@ -176,6 +175,7 @@ public class QuadTree extends Entity implements EntityGroup {
 	}
 	
 	public PriorityQueue<Entity> getRenderQueue(Rectangle r) {
+		
 		PriorityQueue<Entity> out = new PriorityQueue<>();
 		for (Entity each : entities) {
 			if (each.intersects(r)) {
@@ -270,10 +270,6 @@ public class QuadTree extends Entity implements EntityGroup {
 
 	@Override
 	public void renderAround(FocusedWindow window, Graphics gr) {
-		
-		if (Debug.RENDER_TREE) {
-			collider.render(window, gr);
-		}
 		
 		Vector playerPos = window.getFocus().getPos();
 		Vector dim = window.getDimensions();

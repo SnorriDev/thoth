@@ -110,7 +110,7 @@ public class Inventory implements Serializable {
 		}
 		
 		if (weaponSlot.getTimer().activate()) {
-			Audio.playSound(Audio.ARROW);
+			Audio.playClip(weaponSlot.getClip());
 			world.add(new Projectile(focus, movement, dir, weaponSlot, getSelectedOrb()));
 			return true;
 		}

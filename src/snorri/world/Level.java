@@ -3,6 +3,7 @@ package snorri.world;
 import java.awt.FileDialog;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -19,8 +20,10 @@ import java.util.Queue;
 
 import snorri.entities.Entity;
 import snorri.entities.Unit;
+import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
+import snorri.masking.Mask;
 import snorri.pathfinding.PathNode;
 import snorri.terrain.DungeonGen;
 import snorri.world.Tile.TileType;
@@ -47,6 +50,8 @@ public class Level implements Editable {
 			}
 		}
 		
+		setBitMasks();
+		
 	}
 	
 	public Level(Vector v, TileType bg) {
@@ -63,6 +68,7 @@ public class Level implements Editable {
 
 	public Level(File file) throws FileNotFoundException, IOException {
 		load(file);
+		setBitMasks();
 	}
 	
 	/**
@@ -389,6 +395,7 @@ public class Level implements Editable {
 		out.close();
 	}
 
+	@SuppressWarnings("unused")
 	private void computeConnectedSubGraphs() {
 		
 		connectedSubGraphs = new ArrayList<ArrayList<Vector>>();
@@ -399,7 +406,7 @@ public class Level implements Editable {
 			tile: for (int y = 0; y < dim.getY(); y++) {
 				
 				double percent = 100 * (1.0 * x * dim.getY() + y) / (dim.getX() * dim.getY());
-				if (percent % 20 == 0) {
+				if (Debug.LOG_COMPUTE_GRAPHS && percent % 20 == 0) {
 					Main.log("\t" + (int) percent + "% of tiles checked");
 				}
 				
@@ -630,6 +637,46 @@ public class Level implements Editable {
 	@Override
 	public List<Entity> getEntities() {
 		return new ArrayList<Entity>();
+	}
+	
+	/**
+	 * Returns an array of bitmasks (4 maximum).
+	 * Excess space in the array is null.
+	 */
+	public Mask[] getBitMasks(Vector pos) {
+		Mask[] masks = new Mask[4];
+		
+		
+		if (getTileGrid(pos) == null || pos == null) {
+			return masks;
+		}
+		
+		int bitVal = 1;
+		for (Vector v : Mask.NEIGHBORS) {
+			Tile t = getTileGrid(pos.copy().add(v));
+			if (getTileGrid(pos).compareTo(t) < 0) {
+				BufferedImage texture = t.getTexture();
+				for (int j = 0; j < masks.length; j++) {
+					if (masks[j] == null) {
+						masks[j] = new Mask(texture, bitVal);
+					} else if (masks[j].hasTexture(texture)) {
+						masks[j].add(bitVal);
+					}
+				}
+			}
+			bitVal *= 2;
+		}
+		
+		return masks;
+		
+	}
+	
+	private void setBitMasks() {
+		for (int x = 0; x < dim.getX(); x++) {
+			for (int y = 0; y < dim.getY(); y++) {
+				getTileGrid(x, y).setBitMasks(getBitMasks(new Vector(x, y)));
+			}
+		}
 	}
 	
 }

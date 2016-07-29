@@ -1,5 +1,8 @@
 package snorri.inventory;
 
+import javax.sound.sampled.Clip;
+
+import snorri.audio.Audio;
 import snorri.entities.Entity;
 import snorri.events.SpellEvent;
 import snorri.main.GameWindow;
@@ -9,9 +12,12 @@ public class Weapon extends Item {
 
 	private static final long serialVersionUID = 1L;
 
+	private Clip clip;
+	
 	public Weapon(ItemType t) {
 		super(t);
 		timer = new Timer(getBaseCooldown());
+		clip = Audio.getClip((String) type.getProperty(2));
 	}
 	
 	//retrieve the sharpness for this weapon from the ItemType
@@ -21,6 +27,10 @@ public class Weapon extends Item {
 	
 	public double getBaseCooldown() {
 		return (double) type.getProperty(1);
+	}
+	
+	public Clip getClip() {
+		return clip;
 	}
 	
 	public void setCustomTimer(Timer timer) {

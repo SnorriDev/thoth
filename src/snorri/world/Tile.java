@@ -1,15 +1,17 @@
 package snorri.world;
 
 import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import snorri.entities.Unit;
+import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
+import snorri.masking.Mask;
 import snorri.semantics.Nominal;
 
-public class Tile {
+public class Tile implements Comparable<Tile> {
 	
 	public static final int	WIDTH	= 16;
 									
@@ -17,6 +19,8 @@ public class Tile {
 	private int style;
 	private boolean surroundingsPathable = true;
 	private boolean reachable;
+	
+	private Mask[] bitMasks;
 
 	public Tile(TileType type) {
 		this.type = type;
@@ -71,11 +75,24 @@ public class Tile {
 	
 	public void drawTile(FocusedWindow g, Graphics gr, Vector v) {
 		Vector relPos = v.getRelPos(g);
-		gr.drawImage(type.getTexture(style), relPos.getX(), (int)relPos.getY(), g);
-		return;
+		gr.drawImage(type.getTexture(style), relPos.getX(), relPos.getY(), g);
+		
+		if (Debug.HIDE_MASKS || bitMasks == null) {
+			return;
+		}
+		
+		//TODO g vs. null as ImageObserver
+		for (Mask m : bitMasks) {
+			if (m == null) {
+				break;
+			}
+			Main.log("yo");
+			gr.drawImage(m.getTexture(), relPos.getX(), relPos.getY(), g);
+		}
+		
 	}
 	
-	public Image getTexture() {
+	public BufferedImage getTexture() {
 		return type.getTexture(style);
 	}
 	
@@ -93,12 +110,12 @@ public class Tile {
 	
 	public enum TileType implements Nominal {
 												
-		SAND(true, new Image[] {
+		SAND(true, new BufferedImage[] {
 			Main.getImageResource("/textures/tiles/sand00.png"),
 			Main.getImageResource("/textures/tiles/sand01.png"),
 			Main.getImageResource("/textures/tiles/sand02.png"),
 			Main.getImageResource("/textures/tiles/sand03.png")}),
-		WALL(false, new Image[] {
+		WALL(false, new BufferedImage[] {
 			Main.getImageResource("/textures/tiles/wall00.png"),
 			Main.getImageResource("/textures/tiles/wall01.png"),
 			Main.getImageResource("/textures/tiles/wall02.png"),
@@ -110,40 +127,40 @@ public class Tile {
 		TREE(false, Main.getImageResource("/textures/tiles/tree00.png")),
 		FOUNDATION(false, Main.getImageResource("/textures/tiles/default00.png")),
 		HUT(false, Main.getImageResource("/textures/tiles/default00.png")),
-		WATER(false, true, new Image[] {
+		WATER(false, true, new BufferedImage[] {
 			Main.getImageResource("/textures/tiles/water00.png"),
 			Main.getImageResource("/textures/tiles/water01.png")}),
-		LAVA(false, true, new Image[] {
+		LAVA(false, true, new BufferedImage[] {
 			Main.getImageResource("/textures/tiles/lava00.png"),
 			Main.getImageResource("/textures/tiles/lava01.png"),
 			Main.getImageResource("/textures/tiles/lava02.png")}),
-		GRASS(true, new Image[] {
+		GRASS(true, new BufferedImage[] {
 			Main.getImageResource("/textures/tiles/grass00.png"),
 			Main.getImageResource("/textures/tiles/grass01.png")}),
 		VOID(false, Main.getImageResource("/textures/tiles/void00.png")),
 		COLUMN(false, Main.getImageResource("/textures/tiles/column00.png"));
 		
 		private boolean	pathable, canShootOver;
-		private Image[]	textures;
+		private BufferedImage[]	textures;
 									
 		TileType() {
 			this(true);
 		}
 		TileType(boolean pathable) {
-			this(pathable, new Image[] {Main.getImageResource("/textures/tiles/default00.png")});
+			this(pathable, new BufferedImage[] {Main.getImageResource("/textures/tiles/default00.png")});
 		}
 		
-		TileType(boolean pathable, Image texture) {
-			this(pathable, new Image[] {texture});
+		TileType(boolean pathable, BufferedImage texture) {
+			this(pathable, new BufferedImage[] {texture});
 		}
 		
-		TileType(boolean pathable, Image[] textures) {
+		TileType(boolean pathable, BufferedImage[] textures) {
 			this.pathable = pathable;
 			this.textures = textures;
 			canShootOver = pathable;
 		}
 		
-		TileType(boolean pathable, boolean swimmable, Image[] textures) {
+		TileType(boolean pathable, boolean swimmable, BufferedImage[] textures) {
 			this(pathable, textures);
 			canShootOver = swimmable;
 		}
@@ -172,11 +189,11 @@ public class Tile {
 			return canShootOver; //TODO: maybe change this to store more info
 		}
 		
-		public Image[] getTextures() {
+		public BufferedImage[] getTextures() {
 			return textures;
 		}
 		
-		public Image getTexture(int index) {
+		public BufferedImage getTexture(int index) {
 			if (index >= textures.length) {
 				Main.error("texture not found, index out of bounds, returning default texture");
 				return Main.getImageResource("/textures/tiles/default00.png");
@@ -252,6 +269,24 @@ public class Tile {
 
 	public boolean canShootOver() {
 		return type.canShootOver();
+	}
+
+	/**
+	 * Use this for deciding which tile to override while bitmasking
+	 */
+	@Override
+	public int compareTo(Tile o) {
+		if (o == null) {
+			return 1;
+		}
+		if (type == o.type) {
+			return Integer.compare(style, o.style);
+		}
+		return type.compareTo(o.type);
+	}
+	
+	public void setBitMasks(Mask[] bitMasks) {
+		this.bitMasks = bitMasks;
 	}
 	
 }
