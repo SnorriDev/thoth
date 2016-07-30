@@ -3,7 +3,6 @@ package snorri.world;
 import java.awt.FileDialog;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -49,8 +48,6 @@ public class Level implements Editable {
 				map[i][j] = new Tile(bg);
 			}
 		}
-		
-		setBitMasks();
 		
 	}
 	
@@ -152,6 +149,7 @@ public class Level implements Editable {
 			return;
 		}
 		map[x][y] = t;
+		t.setBitMasks(getBitMasks(x, y));
 	}
 
 	public Tile getTile(int x, int y) {
@@ -474,6 +472,7 @@ public class Level implements Editable {
 	}
 
 	public void computePathfinding() {
+		setBitMasks(); //this is thrown in here
 		computePathability();
 		computeConnectedSubGraphs();
 	}
@@ -632,6 +631,7 @@ public class Level implements Editable {
 		} else {
 			setTile(pos, tile); //TODO implement a good function here
 		}
+		//TODO could update bitmasks even more efficiently, but this should be fine
 	}
 
 	@Override
@@ -646,26 +646,25 @@ public class Level implements Editable {
 	public Mask[] getBitMasks(int x, int y) {
 		Mask[] masks = new Mask[4];
 		
-		
-		if (getTileGrid(x, y) == null) {
+		Tile tile = getTileGrid(x, y);
+		//TODO get the atTop stuff working
+		//update bitmasks
+		if (tile == null || tile.getType().isAtTop()) {
 			return masks;
 		}
 		
 		int bitVal = 1;
 		for (Vector v : Mask.NEIGHBORS) {
 			Tile t = getTileGrid(v.copy().add(x, y));
-			if (t == null) {
+			if (t == null || t.getType().isAtTop()) {
 				continue;
 			}
-			if (getTileGrid(x, y).compareTo(t) != 0) {
-				Main.log("not equal stuff");
-			}
-			if (getTileGrid(x, y).compareTo(t) < 0) {
-				BufferedImage texture = t.getTexture();
+			if (tile.compareTo(t) < 0) {
 				for (int j = 0; j < masks.length; j++) {
 					if (masks[j] == null) {
-						masks[j] = new Mask(texture, bitVal);
-					} else if (masks[j].hasTexture(texture)) {
+						masks[j] = new Mask(t);
+					}
+					if (masks[j].hasTile(t)) {
 						masks[j].add(bitVal);
 					}
 				}
@@ -677,7 +676,7 @@ public class Level implements Editable {
 		
 	}
 	
-	private void setBitMasks() {
+	public void setBitMasks() {
 		for (int x = 0; x < dim.getX(); x++) {
 			for (int y = 0; y < dim.getY(); y++) {
 				getTileGrid(x, y).setBitMasks(getBitMasks(x, y));

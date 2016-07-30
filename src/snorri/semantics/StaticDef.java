@@ -22,6 +22,9 @@ public class StaticDef extends Definition {
 		if (meaning == null) {
 			return "unknown";
 		}
+		if (meaning instanceof Class<?>) {
+			return ((Class<?>) meaning).getSimpleName().toLowerCase();
+		}
 		return meaning.toString();
 	}
 

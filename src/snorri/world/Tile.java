@@ -17,8 +17,7 @@ public class Tile implements Comparable<Tile> {
 									
 	private TileType type;
 	private int style;
-	private boolean surroundingsPathable = true;
-	private boolean reachable;
+	private boolean reachable, surroundingsPathable = true;
 	
 	private Mask[] bitMasks;
 
@@ -81,12 +80,13 @@ public class Tile implements Comparable<Tile> {
 			return;
 		}
 		
+		//Main.log("drawing bit masks");
+		
 		//TODO g vs. null as ImageObserver
 		for (Mask m : bitMasks) {
 			if (m == null) {
 				break;
 			}
-			Main.log("yo");
 			gr.drawImage(m.getTexture(), relPos.getX(), relPos.getY(), g);
 		}
 		
@@ -102,7 +102,7 @@ public class Tile implements Comparable<Tile> {
 	}
 	
 	public boolean equals(Tile t) {
-		if (t == null || this == null) {
+		if (t == null) {
 			return false;
 		}
 		return (type.getId() == t.getType().getId() && style == t.getStyle());
@@ -123,7 +123,7 @@ public class Tile implements Comparable<Tile> {
 			Main.getImageResource("/textures/tiles/wall04.png"),
 			Main.getImageResource("/textures/tiles/wall05.png"),
 			Main.getImageResource("/textures/tiles/wall06.png"),
-			Main.getImageResource("/textures/tiles/wall07.png")}),
+			Main.getImageResource("/textures/tiles/wall07.png")}, true),
 		TREE(false, Main.getImageResource("/textures/tiles/tree00.png")),
 		FOUNDATION(false, Main.getImageResource("/textures/tiles/default00.png")),
 		HUT(false, Main.getImageResource("/textures/tiles/default00.png")),
@@ -138,9 +138,9 @@ public class Tile implements Comparable<Tile> {
 			Main.getImageResource("/textures/tiles/grass00.png"),
 			Main.getImageResource("/textures/tiles/grass01.png")}),
 		VOID(false, Main.getImageResource("/textures/tiles/void00.png")),
-		COLUMN(false, Main.getImageResource("/textures/tiles/column00.png"));
+		COLUMN(false, Main.getImageResource("/textures/tiles/column00.png"), true);
 		
-		private boolean	pathable, canShootOver;
+		private boolean	pathable, canShootOver, atTop;
 		private BufferedImage[]	textures;
 									
 		TileType() {
@@ -158,11 +158,22 @@ public class Tile implements Comparable<Tile> {
 			this.pathable = pathable;
 			this.textures = textures;
 			canShootOver = pathable;
+			atTop = false;
 		}
 		
 		TileType(boolean pathable, boolean swimmable, BufferedImage[] textures) {
 			this(pathable, textures);
 			canShootOver = swimmable;
+		}
+		
+		TileType(boolean pathable, BufferedImage[] textures, boolean atTop) {
+			this(pathable , textures);
+			atTop = true;
+		}
+		
+		TileType(boolean pathable, BufferedImage texture, boolean atTop) {
+			this(pathable , texture);
+			atTop = true;
 		}
 		
 		public boolean isLiquid() {
@@ -226,6 +237,10 @@ public class Tile implements Comparable<Tile> {
 			
 		}
 		
+		public boolean isAtTop() {
+			return atTop;
+		}
+		
 	}
 
 	public String toNumericString() {
@@ -276,14 +291,17 @@ public class Tile implements Comparable<Tile> {
 	 */
 	@Override
 	public int compareTo(Tile o) {
-		if (type == o.type) {
+		if (type.isAtTop() || o.type.isAtTop()) {
+			return 1;
+		}
+		if (type.equals(o.type)) {
 			return Integer.compare(style, o.style);
 		}
 		return type.compareTo(o.type);
 	}
 	
-	public void setBitMasks(Mask[] bitMasks) {
-		this.bitMasks = bitMasks;
+	public void setBitMasks(Mask[] b) {
+		bitMasks = b;
 	}
 	
 }
