@@ -168,12 +168,12 @@ public class Tile implements Comparable<Tile> {
 		
 		TileType(boolean pathable, BufferedImage[] textures, boolean atTop) {
 			this(pathable , textures);
-			atTop = true;
+			this.atTop = atTop;
 		}
 		
 		TileType(boolean pathable, BufferedImage texture, boolean atTop) {
 			this(pathable , texture);
-			atTop = true;
+			this.atTop = atTop;
 		}
 		
 		public boolean isLiquid() {
@@ -288,12 +288,11 @@ public class Tile implements Comparable<Tile> {
 
 	/**
 	 * Use this for deciding which tile to override while bitmasking
+	 * TODO This should use a custom ordering for optimal appearance,
+	 * not just the default enumeration
 	 */
 	@Override
 	public int compareTo(Tile o) {
-		if (type.isAtTop() || o.type.isAtTop()) {
-			return 1;
-		}
 		if (type.equals(o.type)) {
 			return Integer.compare(style, o.style);
 		}
@@ -302,6 +301,14 @@ public class Tile implements Comparable<Tile> {
 	
 	public void setBitMasks(Mask[] b) {
 		bitMasks = b;
+	}
+	
+	public void setBitMasks(Level l, int x, int y) {
+		setBitMasks(l.getBitMasks(x, y));
+	}
+	
+	public void setBitMasks(Level l, Vector pos) {
+		setBitMasks(l, pos.getX(), pos.getY());
 	}
 	
 }

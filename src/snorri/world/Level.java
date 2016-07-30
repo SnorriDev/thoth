@@ -149,7 +149,7 @@ public class Level implements Editable {
 			return;
 		}
 		map[x][y] = t;
-		t.setBitMasks(getBitMasks(x, y));
+		updateMasksGrid(new Vector(x, y));
 	}
 
 	public Tile getTile(int x, int y) {
@@ -472,7 +472,7 @@ public class Level implements Editable {
 	}
 
 	public void computePathfinding() {
-		setBitMasks(); //this is thrown in here
+		//setBitMasks(); //this is thrown in here
 		computePathability();
 		computeConnectedSubGraphs();
 	}
@@ -631,7 +631,19 @@ public class Level implements Editable {
 		} else {
 			setTile(pos, tile); //TODO implement a good function here
 		}
+		
+		updateMasksGrid(pos.copy().toGridPos());
 		//TODO could update bitmasks even more efficiently, but this should be fine
+	}
+	
+	private void updateMasksGrid(Vector pos) {
+		getTileGrid(pos).setBitMasks(this, pos);
+		for (Vector trans : Mask.NEIGHBORS) {
+			Vector p = pos.copy().add(trans);
+			if (getTileGrid(p) != null) {
+				getTileGrid(p).setBitMasks(this, p);
+			}
+		}
 	}
 
 	@Override
@@ -653,13 +665,10 @@ public class Level implements Editable {
 			return masks;
 		}
 		
-		int bitVal = 1;
+		short bitVal = 1;
 		for (Vector v : Mask.NEIGHBORS) {
 			Tile t = getTileGrid(v.copy().add(x, y));
-			if (t == null || t.getType().isAtTop()) {
-				continue;
-			}
-			if (tile.compareTo(t) < 0) {
+			if (t != null && !t.getType().isAtTop() && tile.compareTo(t) > 0) {
 				for (int j = 0; j < masks.length; j++) {
 					if (masks[j] == null) {
 						masks[j] = new Mask(t);

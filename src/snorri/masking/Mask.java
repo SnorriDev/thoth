@@ -16,7 +16,7 @@ public class Mask {
 	
 	private final Tile tile;
 	private BufferedImage texture;
-	private int bitmask;
+	private short bitmask;
 	
 	public Mask(Tile tile) {
 		this.tile = tile;
