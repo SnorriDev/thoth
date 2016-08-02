@@ -138,7 +138,10 @@ public class Tile implements Comparable<Tile> {
 			Main.getImageResource("/textures/tiles/grass00.png"),
 			Main.getImageResource("/textures/tiles/grass01.png")}),
 		VOID(false, Main.getImageResource("/textures/tiles/void00.png")),
-		COLUMN(false, Main.getImageResource("/textures/tiles/column00.png"), true);
+		COLUMN(false, new BufferedImage[] {
+			Main.getImageResource("/textures/tiles/column00.png"),
+			Main.getImageResource("/textures/tiles/column01.png")}, true),
+		DOOR(false, Main.getImageResource("/textures/tiles/door00.png"));
 		
 		private boolean	pathable, canShootOver, atTop;
 		private BufferedImage[]	textures;

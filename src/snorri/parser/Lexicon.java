@@ -29,6 +29,7 @@ import snorri.semantics.LeftOf;
 import snorri.semantics.Move;
 import snorri.semantics.Nominal.AbstractSemantics;
 import snorri.semantics.Not;
+import snorri.semantics.Open;
 import snorri.semantics.RightOf;
 import snorri.semantics.SecondObjectPronoun;
 import snorri.semantics.SecondSuffixPronoun;
@@ -123,6 +124,7 @@ public class Lexicon {
 		lexicon.put("pH", new Damage());
 		lexicon.put("qmA", new CreateObject());
 		lexicon.put("rd", new Grow());
+		lexicon.put("wn", new Open());
 		//lexicon.put("sxpr", new CreateUnit());
 		
 		//Conditionals
