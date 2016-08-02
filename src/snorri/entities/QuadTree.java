@@ -40,7 +40,7 @@ public class QuadTree extends Entity implements EntityGroup {
 		isEmpty = true;
 		entities = new CopyOnWriteArrayList<Entity>();
 		this.parent = parent;
-		if (getRectCollider().getWidth() / 2 >= Tile.WIDTH) {
+		if (getRectCollider().getRadiusX() / 2 >= Tile.WIDTH) {
 			nodes = new QuadTree[4];
 			nodes[0] = getSubQuad(-1, -1);
 			nodes[1] = getSubQuad(1, -1);
@@ -160,7 +160,7 @@ public class QuadTree extends Entity implements EntityGroup {
 	public List<Entity> getAllCollisions(Entity e, boolean hitAll) {
 		List<Entity> out = new ArrayList<>();
 		for (Entity each : entities) {
-			if ((hitAll || !each.shouldIgnoreCollisions()) && each.intersects(e)) {
+			if ((hitAll || !each.shouldIgnoreCollisions()) && each.intersects(e) && !each.equals(e)) {
 				out.add(each);
 			}
 		}
@@ -204,7 +204,7 @@ public class QuadTree extends Entity implements EntityGroup {
 			}
 		}
 		for (Entity each : entities) {
-			if ((hitAll || !each.shouldIgnoreCollisions()) && each.intersects(e)) {
+			if ((hitAll || !each.shouldIgnoreCollisions()) && each.intersects(e) && !each.equals(e)) {
 				return each;
 			}
 		}
@@ -300,6 +300,26 @@ public class QuadTree extends Entity implements EntityGroup {
 	@Override
 	public void traverse() {
 		Main.log("traverse not yet implemented for QuadTree");
+	}
+
+	@Override
+	public Entity getFirstCollisionOtherThan(Entity e, Entity other) {
+		if (nodes != null) {
+			for (QuadTree node : nodes) {
+				if (!node.isEmpty() && node.intersects(e)) {
+					Entity col = node.getFirstCollisionOtherThan(e, other);
+					if (col != null) {
+						return col;
+					}
+				}
+			}
+		}
+		for (Entity each : entities) {
+			if (!each.shouldIgnoreCollisions() && each.intersects(e) && !each.equals(other)) {
+				return each;
+			}
+		}
+		return null;
 	}
 
 }

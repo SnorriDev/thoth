@@ -75,4 +75,14 @@ public class CircleCollider extends Collider {
 		return new CircleCollider(focus, r);
 	}
 
+	@Override
+	public int getRadiusX() {
+		return r;
+	}
+
+	@Override
+	public int getRadiusY() {
+		return r;
+	}
+
 }

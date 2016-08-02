@@ -12,6 +12,8 @@ import snorri.world.Vector;
 public class Portal extends Detector {
 	
 	private static final long serialVersionUID = 1L;
+	private static final Animation ANIMATION = new Animation("/textures/objects/tomb.png");
+	
 	private final WorldId world;
 	private final Vector dest;
 	
@@ -20,7 +22,7 @@ public class Portal extends Detector {
 		this.world = world;
 		this.dest = dest;
 		treeMember = true;
-		animation = new Animation("/textures/objects/tomb.png");
+		animation = new Animation(ANIMATION);
 		age = -1;
 		ignoreCollisions = true;
 	}

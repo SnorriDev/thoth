@@ -17,7 +17,7 @@ public class Tile implements Comparable<Tile> {
 									
 	private TileType type;
 	private int style;
-	private boolean reachable, surroundingsPathable = true;
+	private boolean reachable, surroundingsPathable = true, occupied = false;
 	
 	private Mask[] bitMasks;
 
@@ -252,7 +252,7 @@ public class Tile implements Comparable<Tile> {
 	}
 	
 	public boolean isContextPathable() {
-		return isPathable() && surroundingsPathable;
+		return isPathable() && surroundingsPathable && !occupied;
 	}
 	
 	//figure out if we can stand on this block at the very beginning
@@ -309,6 +309,10 @@ public class Tile implements Comparable<Tile> {
 	
 	public void setBitMasks(Level l, Vector pos) {
 		setBitMasks(l, pos.getX(), pos.getY());
+	}
+
+	public void setOccupied(boolean flag) {
+		occupied = flag;
 	}
 	
 }

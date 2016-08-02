@@ -19,6 +19,8 @@ import snorri.world.World;
 
 public class Player extends Unit {
 
+	private static final Animation UNIT_IDLE = new Animation("/textures/animations/unit/idle");
+	
 	private static final Image HEART = Main.getImageResource("/textures/hud/heart.png");
 	private static final Image HALF_HEART = Main.getImageResource("/textures/hud/halfHeart.png");
 	private static final Image GREY_HEART = Main.getImageResource("/textures/hud/greyHeart.png");
@@ -32,7 +34,7 @@ public class Player extends Unit {
 		
 		super(pos);
 		inventory = new Inventory(this);
-		animation = new Animation(Animation.UNIT_IDLE);
+		animation = new Animation(UNIT_IDLE);
 		z = PLAYER_LAYER;
 		
 		//default weapons

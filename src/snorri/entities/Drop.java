@@ -10,6 +10,8 @@ import snorri.world.Vector;
 public class Drop extends Detector {
 	
 	private static final long serialVersionUID = 1L;
+	public static final Animation SPARKLE = new Animation("/textures/animations/sparkle");
+	
 	private final Droppable prize;
 	
 	public Drop(Vector pos, Droppable prize) {
@@ -18,7 +20,7 @@ public class Drop extends Detector {
 		treeMember = true;
 		age = -1;
 		ignoreCollisions = true;
-		animation = new Animation(Animation.SPARKLE);
+		animation = new Animation(SPARKLE);
 	}
 	
 	public Drop(Vector pos, String prize) {

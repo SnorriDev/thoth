@@ -19,6 +19,8 @@ import snorri.world.World;
 
 public class Enemy extends Unit implements Pathfinder {
 
+	private static final Animation MUMMY_IDLE = new Animation("/textures/animations/mummy/idle");
+	
 	private static final long serialVersionUID = 1L;
 	private static final double APPROACH_MARGIN = 15;
 	private static final double CHANGE_PATH_MARGIN = 350;
@@ -41,7 +43,7 @@ public class Enemy extends Unit implements Pathfinder {
 		super(pos);
 		this.target = target;
 		inventory = new Inventory(this);
-		animation = new Animation(Animation.MUMMY_IDLE);
+		animation = new Animation(MUMMY_IDLE);
 		setOrb((Orb) Item.newItem(ItemType.PELLET));
 		setWeapon((Weapon) Item.newItem(ItemType.SLOW_SLING));
 	}

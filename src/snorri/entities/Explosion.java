@@ -8,11 +8,13 @@ import snorri.world.World;
 public class Explosion extends Detector {
 
 	private static final long serialVersionUID = 1L;
+	private static final Animation ANIMATION = new Animation("/textures/animations/explosion");
+	
 	private double damage = 100;
 	
 	public Explosion(Vector pos, int r) {
 		super(pos, r);
-		animation = new Animation(Animation.EXPLOSION);
+		animation = new Animation(ANIMATION);
 	}
 	
 	public Explosion(Vector pos) {

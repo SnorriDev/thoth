@@ -70,6 +70,10 @@ public abstract class Collider implements Serializable {
 	
 	public abstract int getMaxRadius();
 	
+	public abstract int getRadiusX();
+	
+	public abstract int getRadiusY();
+	
 	public CircleCollider getInscribing() {
 		int r = getMaxRadius();
 		return new CircleCollider(focus, r);

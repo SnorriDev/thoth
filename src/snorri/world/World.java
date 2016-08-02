@@ -191,13 +191,17 @@ public class World implements Playable, Editable {
 
 	public void addHard(Entity e) {
 
+		if (e.isStaticObject()) {
+			level.addEntity(e);
+		}
+		
 		if (e instanceof Detector && !((Detector) e).isTreeMember()) {
 			colliders.add((Detector) e);
 			return;
 		}
 
 		col.insert(e);
-
+		
 	}
 	
 	/**
@@ -228,6 +232,11 @@ public class World implements Playable, Editable {
 	 *            the entity to delete
 	 */
 	public boolean deleteHard(Entity e) {
+		
+		if (e.isStaticObject()) {
+			level.removeEntity(e);
+		}
+		
 		if (e instanceof Detector && !((Detector) e).isTreeMember()) {
 			return colliders.remove(e);
 		}

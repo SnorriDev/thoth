@@ -10,11 +10,13 @@ public class Desk extends Entity {
 	 * Press space to interact with them
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final Animation ANIMATION = new Animation("/textures/objects/desk.png");
 	public static final int INTERACT_RANGE = 5;
 	
 	public Desk(Vector pos) {
-		super(pos, 30);
-		animation = new Animation("/textures/objects/desk.png");
+		super(pos, 22);
+		staticObject = true;
+		animation = new Animation(ANIMATION);
 	}
 
 }

@@ -31,11 +31,13 @@ public class RectCollider extends Collider {
 		return dim;
 	}
 	
-	public int getWidth() {
+	@Override
+	public int getRadiusX() {
 		return dim.getX() / 2;
 	}
 	
-	public int getHeight() {
+	@Override
+	public int getRadiusY() {
 		return dim.getY() / 2;
 	}
 	
@@ -81,7 +83,7 @@ public class RectCollider extends Collider {
 	
 	@Override
 	public int getMaxRadius() {
-		return (int) (Math.sqrt(getWidth() * getWidth() + getHeight() * getHeight()) + 1);
+		return (int) (Math.sqrt(getRadiusX() * getRadiusX() + getRadiusY() * getRadiusY()) + 1);
 	}
 	
 	@Override

@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import snorri.collisions.Collider;
 import snorri.entities.Entity;
 import snorri.entities.Unit;
 import snorri.main.Debug;
@@ -504,8 +505,8 @@ public class Level implements Editable {
 		}
 					
 		//recalculate context pathability on "nearby" tiles
-		for (int x = (v.getX() * Tile.WIDTH - Unit.RADIUS) / Tile.WIDTH; x <= (v.getX() * Tile.WIDTH + Unit.RADIUS) / Tile.WIDTH; x++) {
-			for (int y = (v.getY() * Tile.WIDTH - Unit.RADIUS) / Tile.WIDTH; y <= (v.getY() * Tile.WIDTH + Unit.RADIUS) / Tile.WIDTH; y++) {
+		for (int x = (v.getX() * Tile.WIDTH - Unit.RADIUS_X) / Tile.WIDTH; x <= (v.getX() * Tile.WIDTH + Unit.RADIUS_X) / Tile.WIDTH; x++) {
+			for (int y = (v.getY() * Tile.WIDTH - Unit.RADIUS_Y) / Tile.WIDTH; y <= (v.getY() * Tile.WIDTH + Unit.RADIUS_Y) / Tile.WIDTH; y++) {
 				map[x][y].computeSurroundingsPathable(x, y, this);			
 			}
 		}
@@ -689,6 +690,34 @@ public class Level implements Editable {
 		for (int x = 0; x < dim.getX(); x++) {
 			for (int y = 0; y < dim.getY(); y++) {
 				getTileGrid(x, y).setBitMasks(getBitMasks(x, y));
+			}
+		}
+	}
+
+	//TODO this could definitely be made more efficient
+	
+	public void addEntity(Entity e) {
+		Main.log("hello" + e);
+		int x = e.getPos().getX();
+		int y = e.getPos().getY();
+		Collider c = e.getCollider();
+		for (int x1 = (x - c.getRadiusX()) / Tile.WIDTH; x1 <= (x + c.getRadiusX()) / Tile.WIDTH; x1++) {
+			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH; y1++) {
+				Main.log(x1 + ", " + y1);
+				if (getTileGrid(x1, y1) != null)
+					getTileGrid(x1, y1).setOccupied(true);
+			}
+		}
+	}
+	
+	public void removeEntity(Entity e) {
+		int x = e.getPos().getX();
+		int y = e.getPos().getY();
+		Collider c = e.getCollider();
+		for (int x1 = (x - c.getRadiusX()) / Tile.WIDTH; x1 <= (x + c.getRadiusX()) / Tile.WIDTH; x1++) {
+			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH; y1++) {
+				if (getTileGrid(x1, y1) != null)
+					getTileGrid(x1, y1).setOccupied(false);
 			}
 		}
 	}

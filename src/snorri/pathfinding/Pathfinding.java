@@ -31,6 +31,10 @@ public class Pathfinding {
 		}).start();
 	}
 	
+	public static World getWorld() {
+		return world;
+	}
+	
 	//TODO: can still tweak a bit to introduce more optimal routes, random variation, diagonal movement, etc.
 	public static ArrayDeque<PathNode> findPath(Vector start, Vector goal) {
 		

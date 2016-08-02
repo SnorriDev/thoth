@@ -74,5 +74,7 @@ public interface EntityGroup {
 	public List<Entity> getAllEntities();
 
 	public void move(Entity obj, Vector newPos);
+
+	public Entity getFirstCollisionOtherThan(Entity e, Entity other);
 	
 }

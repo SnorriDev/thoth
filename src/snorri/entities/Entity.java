@@ -58,7 +58,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	protected Collider collider;
 	protected Vector pos;
 	protected Animation animation;
-	protected boolean ignoreCollisions = false;
+	protected boolean ignoreCollisions = false, staticObject = false;
 	protected int z;
 	protected String tag;
 	
@@ -96,6 +96,10 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	
 	public Animation getAnimation() {
 		return animation;
+	}
+	
+	protected void makeStatic() {
+		staticObject = true;
 	}
 	
 	public void burn() {
@@ -215,15 +219,20 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	 * if dir is zero, then this function will always return false
 	 * @return whether moving in direction dir would bring entity into wall
 	 */
-	public boolean wouldIntersectWall(World world, Vector dir) {
-		//TODO: perhaps this is using lots of memory
+	private boolean wouldIntersectSomething(World world, Vector dir) {
+		//TODO: also check if we would intersect an enemy
 		
 		if (dir.equals(Vector.ZERO)) {
 			return true;
 		}
 		
-		return new Entity(pos.copy().add(dir), collider).intersectsWall(world);
-		
+		return wouldIntersectSomethingAt(world, pos.copy().add(dir));
+				
+	}
+	
+	public boolean wouldIntersectSomethingAt(World world, Vector pos) {
+		Entity newEnt = new Entity(pos, collider);
+		return newEnt.intersectsWall(world) || world.getEntityTree().getFirstCollisionOtherThan(newEnt, this) != null;
 	}
 	
 	public void startFlying() {
@@ -257,21 +266,21 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			return false;
 		}
 				
-		if (!flying && wouldIntersectWall(world, dir)) {
+		if (!flying && wouldIntersectSomething(world, dir)) {
 			
 			//see if we're hitting only one wall
-			if (! wouldIntersectWall(world, dir.getProjectionX())) {
+			if (! wouldIntersectSomething(world, dir.getProjectionX())) {
 				dir = dir.getProjectionX();
 			}
-			else if (! wouldIntersectWall(world, dir.getProjectionY())) {
+			else if (! wouldIntersectSomething(world, dir.getProjectionY())) {
 				dir = dir.getProjectionY();
 			}
 			
 			//see if we're hitting a corner
-			else if (! wouldIntersectWall(world, dir.getProjection(Vector.DOWN_LEFT))) {
+			else if (! wouldIntersectSomething(world, dir.getProjection(Vector.DOWN_LEFT))) {
 				dir = dir.getProjection(Vector.DOWN_LEFT);
 			}
-			else if (! wouldIntersectWall(world, dir.getProjection(Vector.DOWN_RIGHT))) {
+			else if (! wouldIntersectSomething(world, dir.getProjection(Vector.DOWN_RIGHT))) {
 				dir = dir.getProjection(Vector.DOWN_RIGHT);
 			}
 			
@@ -344,6 +353,10 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public void setTag(String tag) {
 		this.tag = tag;
 		Trigger.setTag(tag, this);
+	}
+
+	public boolean isStaticObject() {
+		return staticObject;
 	}
 
 }
