@@ -68,7 +68,7 @@ public class Trigger {
 		this(getByTag(tag), actions);
 	}
 		
-	public void load(File file) {
+	public static List<Trigger> load(File file) {
 		
 		try {
 			YamlReader reader = new YamlReader(new FileReader(file));

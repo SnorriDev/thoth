@@ -101,14 +101,11 @@ public class PathNode implements Comparable<PathNode> {
 	}
 
 	public double distance(PathNode neighbor) {
-		//return 1d;
-		//return gridPos.copy().distance(neighbor.gridPos);
 		Vector d = gridPos.copy().sub(neighbor.gridPos).abs();
 		return d.x + d.y;
 	}
 	
 	//no diagonal movement
-	//TODO: move this to PathNode maybe
 	public double getHeuristic(Vector goal) {
 		Vector d = gridPos.copy().sub(goal).abs();
 		return D * (d.x + d.y) + (D2 - 2 * D) * Double.min(d.x, d.y);

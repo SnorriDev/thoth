@@ -312,6 +312,7 @@ public class Tile implements Comparable<Tile> {
 	}
 
 	public void setOccupied(boolean flag) {
+		Main.log("set occupied: " + flag);
 		occupied = flag;
 	}
 	

@@ -98,10 +98,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		return animation;
 	}
 	
-	protected void makeStatic() {
-		staticObject = true;
-	}
-	
 	public void burn() {
 		burnTimer.hardReset();
 	}

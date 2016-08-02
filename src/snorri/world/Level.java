@@ -697,17 +697,18 @@ public class Level implements Editable {
 	//TODO this could definitely be made more efficient
 	
 	public void addEntity(Entity e) {
-		Main.log("hello" + e);
 		int x = e.getPos().getX();
 		int y = e.getPos().getY();
 		Collider c = e.getCollider();
 		for (int x1 = (x - c.getRadiusX()) / Tile.WIDTH; x1 <= (x + c.getRadiusX()) / Tile.WIDTH; x1++) {
 			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH; y1++) {
-				Main.log(x1 + ", " + y1);
-				if (getTileGrid(x1, y1) != null)
+				if (getTileGrid(x1, y1) != null && c.intersects(getRectange(x1, y1))) {
 					getTileGrid(x1, y1).setOccupied(true);
+					Main.log(getTileGrid(x1, y1).isContextPathable());
+				}
 			}
 		}
+		
 	}
 	
 	public void removeEntity(Entity e) {
