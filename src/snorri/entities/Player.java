@@ -63,6 +63,7 @@ public class Player extends Unit {
 				
 		if (Debug.LOG_FOCUS) {
 			Main.log("main player updated");
+			//Main.log("\tstanding in graph " + world.getLevel().getGraph(pos.copy().toGridPos()));
 		}
 				
 		super.update(world, deltaTime);

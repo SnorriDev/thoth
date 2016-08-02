@@ -1,7 +1,9 @@
 package snorri.semantics;
 
 import snorri.entities.Entity;
+import snorri.masking.Mask;
 import snorri.world.Vector;
+import snorri.world.Level;
 import snorri.world.Tile;
 import snorri.world.Tile.TileType;
 
@@ -20,10 +22,7 @@ public class Open extends VerbDef {
 	public boolean exec(Object obj) {
 		if (obj instanceof Entity) {
 			Vector tilePos = ((Entity) obj).getPos().copy().toGridPos();
-			if (e.getWorld().getLevel().getTileGrid(tilePos).getType() == TileType.DOOR) {
-				e.getWorld().getLevel().wrapTileUpdate(tilePos, new Tile(REPLACEMENT_TILE));
-				return true;
-			}
+			return openDoor(e.getWorld().getLevel(), tilePos);
 		}
 		return false;
 	}
@@ -38,7 +37,21 @@ public class Open extends VerbDef {
 		}
 		return false;
 	}
-
+	
+	//TODO wrapTileUpdate is broken
+	
+	private static boolean openDoor(Level l, Vector pos) {
+		if (l.getTileGrid(pos).getType() == TileType.DOOR) {
+			//l.setTileGrid(pos, new Tile(REPLACEMENT_TILE));
+			l.wrapGridUpdate(pos, new Tile(REPLACEMENT_TILE));
+			for (Vector trans : Mask.NEIGHBORS) {
+				openDoor(l, pos.copy().add(trans));
+			}
+			return true;
+		}
+		return false;
+	}
+	
 	@Override
 	public String getShortDesc() {
 		// TODO Auto-generated method stub
