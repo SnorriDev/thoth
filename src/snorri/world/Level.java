@@ -36,7 +36,7 @@ public class Level implements Editable {
 	private Vector dim;
 	
 	private ArrayList<ArrayList<Vector>> connectedSubGraphs;
-	private HashMap<Vector, List<Vector>> graphHash;
+	private HashMap<Vector, ArrayList<Vector>> graphHash;
 
 	// not that indexing conventions are Cartesian, not matrix-based
 
@@ -327,11 +327,11 @@ public class Level implements Editable {
 		return t != null && t.canShootOver();
 	}
 	
-	public List<Vector> getGraph(Entity e) {
+	public ArrayList<Vector> getGraph(Entity e) {
 		return getGraph(e.getPos().copy().toGridPos());
 	}
 	
-	public List<Vector> getGraph(Vector pos) {
+	public ArrayList<Vector> getGraph(Vector pos) {
 		return graphHash.get(pos);
 	}
 	
@@ -345,7 +345,7 @@ public class Level implements Editable {
 		v.add(p1);
 		v.add(p2);
 		
-		for (ArrayList<Vector> graph : connectedSubGraphs) {
+		for (List<Vector> graph : connectedSubGraphs) {
 			
 			//we found them in the same connected graph
 			if (graph.containsAll(v)) {
@@ -434,8 +434,8 @@ public class Level implements Editable {
 	
 	//TODO update the hash when we do dynamic level changes
 	private void computeGraphHash() {
-		graphHash = new HashMap<Vector, List<Vector>>();
-		for (List<Vector> graph : connectedSubGraphs) {
+		graphHash = new HashMap<Vector, ArrayList<Vector>>();
+		for (ArrayList<Vector> graph : connectedSubGraphs) {
 			for (Vector v : graph) {
 				graphHash.put(v, graph);
 			}
@@ -473,7 +473,6 @@ public class Level implements Editable {
 	}
 
 	public void computePathfinding() {
-		//setBitMasks(); //this is thrown in here
 		computePathability();
 		computeConnectedSubGraphs();
 	}
@@ -494,7 +493,7 @@ public class Level implements Editable {
 		//change the tile
 		Tile oldTile = getTileGrid(v);
 		
-		if (oldTile == null || newTile == null) {
+		if (oldTile == null) {
 			return;
 		}
 		
@@ -505,47 +504,78 @@ public class Level implements Editable {
 		}
 					
 		//recalculate context pathability on "nearby" tiles
-		for (int x = (v.getX() * Tile.WIDTH - Unit.RADIUS_X) / Tile.WIDTH; x <= (v.getX() * Tile.WIDTH + Unit.RADIUS_X) / Tile.WIDTH; x++) {
-			for (int y = (v.getY() * Tile.WIDTH - Unit.RADIUS_Y) / Tile.WIDTH; y <= (v.getY() * Tile.WIDTH + Unit.RADIUS_Y) / Tile.WIDTH; y++) {
-				map[x][y].computeSurroundingsPathable(x, y, this);			
+		updateSurroundingContext(v);
+				
+//		Main.log(connectedSubGraphs.size());
+		
+		//update graphs to reflect the changes
+		for (int x = (v.getX() * Tile.WIDTH - Unit.RADIUS_X) / Tile.WIDTH - 2; x <= (v.getX() * Tile.WIDTH + Unit.RADIUS_X) / Tile.WIDTH + 2; x++) {
+			for (int y = (v.getY() * Tile.WIDTH - Unit.RADIUS_Y) / Tile.WIDTH - 2; y <= (v.getY() * Tile.WIDTH + Unit.RADIUS_Y) / Tile.WIDTH + 2; y++) {
+				
+				Vector pos = new Vector(x, y);
+				if (isContextPathable(pos) && getGraph(pos) == null) {
+					List<ArrayList<Vector>> graphs = new ArrayList<>();
+					for (Vector trans : PathNode.NEIGHBORS) {
+						Vector p = pos.copy().add(trans);
+						if (getGraph(p) != null && !graphs.contains(getGraph(p))) {
+							graphs.add(getGraph(p));
+						}
+					}
+					ArrayList<Vector> newGraph = mergeGraphs(graphs);
+					newGraph.add(pos);
+					graphHash.put(pos, newGraph);
+				}
+				
 			}
 		}
 		
-		//union-ize all the graphs to which a neighbor belongs
-		ArrayList<Vector> union = new ArrayList<Vector>();
-		for (Vector trans : PathNode.NEIGHBORS) {
-			Vector pos = v.copy().add(trans);
-			if (isContextPathable(pos)) {
-				for (ArrayList<Vector> graph : connectedSubGraphs) {
-					if (graph.contains(pos)) {
-						union.addAll(graph);
-						connectedSubGraphs.remove(graph);
-					}
-				}
-			}
-		}
-		connectedSubGraphs.add(union);
-			
+//		Main.log(connectedSubGraphs.size());
+//		for (List<Vector> graph : connectedSubGraphs) {
+//			Main.log(graph.size());
+//		}
+					
 	}
 	
 	/**
-	 * equivalent to setPathableGrid in global coordinates
-	 * only use this method to update to pathable tiles
+	 * Update the context pathability of surrounding tiles.
 	 * @param v
-	 * 	position, in global coordinates
-	 * @param t
-	 * 	the new tile to place at this position
+	 * The position around which to update, in grid coordinates
 	 */
-	public void setPathable(Vector v, Tile t) {
-		setPathableGrid(v.copy().toGridPos(), t);
+	private void updateSurroundingContext(Vector v) {
+		for (int x = (v.getX() * Tile.WIDTH - Unit.RADIUS_X) / Tile.WIDTH - 1; x <= (v.getX() * Tile.WIDTH + Unit.RADIUS_X) / Tile.WIDTH + 1; x++) {
+			for (int y = (v.getY() * Tile.WIDTH - Unit.RADIUS_Y) / Tile.WIDTH - 1; y <= (v.getY() * Tile.WIDTH + Unit.RADIUS_Y) / Tile.WIDTH + 1; y++) {
+				map[x][y].computeSurroundingsPathable(x, y, this);			
+			}
+		}
+	}
+	
+	/**
+	 * Merge graphs into one big graph.
+	 * Ignores duplicate graphs and graphs which are not in connectedSubGraphs.
+	 * @return the merged graph
+	 */
+	private ArrayList<Vector> mergeGraphs(List<ArrayList<Vector>> graphs) {
+		ArrayList<Vector> union = new ArrayList<>();
+		for (ArrayList<Vector> graph : graphs) {
+			if (connectedSubGraphs.remove(graph)) {
+				union.addAll(graph);
+			}
+		}
+		if (!union.isEmpty()) {
+			for (Vector v : union) {
+				graphHash.put(v, union);
+			}
+			connectedSubGraphs.add(union);
+		}
+		return union;
 	}
 
 	public Vector getGoodSpawn(int startX, int startY) {
 		for (int x = startX; x < dim.getX(); x++) {
 			changeStart: for (int y = startY; y < dim.getY(); y++) {
 				
-				for (int x1 = (x * Tile.WIDTH - 2 * Unit.RADIUS) / Tile.WIDTH; x1 <= (x * Tile.WIDTH + 2 * Unit.RADIUS) / Tile.WIDTH; x1++) {
-					for (int y1 = (y * Tile.WIDTH - 2 * Unit.RADIUS) / Tile.WIDTH; y1 <= (y * Tile.WIDTH + 2 * Unit.RADIUS) / Tile.WIDTH; y1++) {
+				for (int x1 = (x * Tile.WIDTH - 2 * Unit.RADIUS_X) / Tile.WIDTH; x1 <= (x * Tile.WIDTH + 2 * Unit.RADIUS_X) / Tile.WIDTH; x1++) {
+					for (int y1 = (y * Tile.WIDTH - 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1 <= (y * Tile.WIDTH + 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
 						if (!isContextPathable(x1, y1)) {
 							continue changeStart;
 						}
@@ -626,15 +656,16 @@ public class Level implements Editable {
 		setTile(pos.getX(), pos.getY(), tile);
 	}
 	
-	public void wrapTileUpdate(Vector pos, Tile tile) {	
+	public void wrapGridUpdate(Vector pos, Tile tile) {	
 		if (tile.isPathable()) {
-			setPathable(pos, tile);
+			setPathableGrid(pos, tile);
 		} else {
-			setTile(pos, tile); //TODO implement a good function here
-		}
-		
-		updateMasksGrid(pos.copy().toGridPos());
-		//TODO could update bitmasks even more efficiently, but this should be fine
+			setTileGrid(pos, tile); //TODO implement a good function here
+		}		
+	}
+	
+	public void wrapUpdate(Vector pos, Tile tile) {
+		wrapGridUpdate(pos.copy().toGridPos(), tile);
 	}
 	
 	private void updateMasksGrid(Vector pos) {

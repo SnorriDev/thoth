@@ -76,6 +76,9 @@ public class Trigger {
 			Main.error("trigger file " + file.getName() + " does not exist");
 		}
 		
+		//TODO write this
+		return null;
+		
 	}
 	
 	public static void setTag(String tag, Entity e) {

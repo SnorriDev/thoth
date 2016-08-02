@@ -18,7 +18,7 @@ public class CreateObject extends VerbDef {
 				return false;
 			}
 			
-			e.getWorld().getLevel().wrapTileUpdate(e.getLocative(), (Tile) obj);
+			e.getWorld().getLevel().wrapUpdate(e.getLocative(), (Tile) obj);
 			return true;
 		}
 		

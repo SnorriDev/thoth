@@ -1,5 +1,6 @@
 package snorri.world;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -73,15 +74,25 @@ public class Tile implements Comparable<Tile> {
 	}
 	
 	public void drawTile(FocusedWindow g, Graphics gr, Vector v) {
+		
 		Vector relPos = v.getRelPos(g);
+		
+		if (Debug.RENDER_GRAPHS) {
+			if (g.getWorld().getLevel().getGraph(v) != null) {
+				Color c = new Color(g.getWorld().getLevel().getGraph(v).hashCode());
+				gr.setColor(c);
+				gr.drawRect(relPos.getX(), relPos.getY(), Tile.WIDTH, Tile.WIDTH);
+				gr.setColor(Color.BLACK);
+				return;
+			}
+		}
+		
 		gr.drawImage(type.getTexture(style), relPos.getX(), relPos.getY(), g);
 		
 		if (Debug.HIDE_MASKS || bitMasks == null) {
 			return;
 		}
-		
-		//Main.log("drawing bit masks");
-		
+				
 		//TODO g vs. null as ImageObserver
 		for (Mask m : bitMasks) {
 			if (m == null) {
@@ -138,7 +149,10 @@ public class Tile implements Comparable<Tile> {
 			Main.getImageResource("/textures/tiles/grass00.png"),
 			Main.getImageResource("/textures/tiles/grass01.png")}),
 		VOID(false, Main.getImageResource("/textures/tiles/void00.png")),
-		COLUMN(false, Main.getImageResource("/textures/tiles/column00.png"), true);
+		COLUMN(false, new BufferedImage[] {
+			Main.getImageResource("/textures/tiles/column00.png"),
+			Main.getImageResource("/textures/tiles/column01.png")}, true),
+		DOOR(false, Main.getImageResource("/textures/tiles/door00.png"), true);
 		
 		private boolean	pathable, canShootOver, atTop;
 		private BufferedImage[]	textures;

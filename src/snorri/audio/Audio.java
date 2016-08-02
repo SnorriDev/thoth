@@ -65,5 +65,9 @@ public class Audio {
 			}
 		}).start();
 	}
+	
+	public static void playClip(ClipWrapper wrapper) {
+		playClip(wrapper.getClip());
+	}
 
 }
