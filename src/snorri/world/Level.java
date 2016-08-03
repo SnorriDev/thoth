@@ -503,6 +503,9 @@ public class Level implements Editable {
 	 */
 	private void setUnpathableGrid(Vector v, Tile newTile) {
 		
+		Queue<Vector> startPoints = new LinkedList<>();
+		List<ArrayList<Vector>> graphs = new ArrayList<>(); //TODO make sure this works as intended
+		
 		//update graphs to reflect the changes
 		for (int x = (v.getX() * Tile.WIDTH - Unit.RADIUS_X) / Tile.WIDTH - 2; x <= (v.getX() * Tile.WIDTH + Unit.RADIUS_X) / Tile.WIDTH + 2; x++) {
 			for (int y = (v.getY() * Tile.WIDTH - Unit.RADIUS_Y) / Tile.WIDTH - 2; y <= (v.getY() * Tile.WIDTH + Unit.RADIUS_Y) / Tile.WIDTH + 2; y++) {
@@ -511,9 +514,18 @@ public class Level implements Editable {
 					ArrayList<Vector> graph = getGraph(pos);
 					graph.remove(pos);
 					graphHash.remove(pos);
-					splitGraph(graph, new LinkedList<>(PathNode.getNeighbors(pos)));
+				}
+				if (isContextPathable(pos)) {
+					startPoints.add(pos);
+					if (!graphs.contains(getGraph(pos))) {
+						graphs.add(getGraph(pos));
+					}
 				}
 			}
+		}
+		
+		for (ArrayList<Vector> graph : graphs) {
+			splitGraph(graph, new LinkedList<>(startPoints));
 		}
 		
 	}
@@ -560,18 +572,21 @@ public class Level implements Editable {
 		
 		while (!q.isEmpty()) {
 			Vector pos = q.poll();
-			if (!visited[pos.getX()][pos.getY()]) {
+			if (isContextPathable(pos) && !visited[pos.getX()][pos.getY()]
+					&& graph.contains(pos)) { //need this in multiple graph case
 				graphs.add(computeConnectedSubGraph(pos, visited));
 			}
 		}
 		
-		if (graphs.size() == 1) {
+		if (graphs.size() <= 1) {
 			return;
 		}
 		
+		Main.log(graphs.size());
+		
 		connectedSubGraphs.remove(graph);
-		connectedSubGraphs.addAll(graphs);
 		for (ArrayList<Vector> g : graphs) {
+			connectedSubGraphs.add(g);
 			for (Vector v : g) {
 				graphHash.put(v, g);
 			}
@@ -685,9 +700,7 @@ public class Level implements Editable {
 		} else {
 			setUnpathableGrid(pos, newTile);
 		}
-		
-		Main.log("# graphs " + connectedSubGraphs.size());
-		
+				
 	}
 	
 	public void wrapUpdate(Vector pos, Tile tile) {
