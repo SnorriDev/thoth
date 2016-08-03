@@ -261,6 +261,8 @@ public class Main {
 			}
 		});
 	}
+	
+	//TODO set up loading screens well
 
 	public static void launchGame() {
 		launchGame(new TerrainGen(200, 200));

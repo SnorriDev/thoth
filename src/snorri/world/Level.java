@@ -34,7 +34,7 @@ public class Level implements Editable {
 	private Tile[][] map;
 	private Vector dim;
 	
-	private ArrayList<ArrayList<Vector>> connectedSubGraphs;
+	private List<ArrayList<Vector>> connectedSubGraphs;
 	private HashMap<Vector, ArrayList<Vector>> graphHash;
 
 	// not that indexing conventions are Cartesian, not matrix-based
@@ -335,31 +335,10 @@ public class Level implements Editable {
 	}
 	
 	public boolean arePathConnected(Vector p1, Vector p2) {
-		
 		if (!isContextPathable(p1) || !isContextPathable(p2)) {
 			return false;
 		}
-		
-		ArrayList<Vector> v = new ArrayList<Vector>();
-		v.add(p1);
-		v.add(p2);
-		
-		for (List<Vector> graph : connectedSubGraphs) {
-			
-			//we found them in the same connected graph
-			if (graph.containsAll(v)) {
-				return true;
-			}
-			
-			//we found one in the graph, but not the other
-			if (graph.contains(p1) || graph.contains(p2)) {
-				return false;
-			}
-			
-		}
-		
-		return false;
-		
+		return getGraph(p1) == getGraph(p2);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -397,29 +376,23 @@ public class Level implements Editable {
 	private void computeConnectedSubGraphs() {
 		
 		connectedSubGraphs = new ArrayList<ArrayList<Vector>>();
+		boolean[][] visited = new boolean[dim.getX()][dim.getY()];
 		
 		Main.log("computing connected sub-graphs...");
 		
 		for (int x = 0; x < dim.getX(); x++) {
-			tile: for (int y = 0; y < dim.getY(); y++) {
+			for (int y = 0; y < dim.getY(); y++) {
 				
 				double percent = 100 * (1.0 * x * dim.getY() + y) / (dim.getX() * dim.getY());
 				if (Debug.LOG_COMPUTE_GRAPHS && percent % 20 == 0) {
 					Main.log("\t" + (int) percent + "% of tiles checked");
 				}
 				
-				if (! isContextPathable(x, y)) {
+				if (!isContextPathable(x, y) || visited[x][y]) {
 					continue;
 				}
-				
-				Vector pos = new Vector(x, y);
-				for (ArrayList<Vector> graph : connectedSubGraphs) {
-					if (graph.contains(pos)) {
-						continue tile;
-					}
-				}
 								
-				connectedSubGraphs.add(computeConnectedSubGraph(pos));
+				connectedSubGraphs.add(computeConnectedSubGraph(new Vector(x, y), visited));
 				Main.log("\tfound new sub-graph");
 				
 			}
@@ -443,13 +416,20 @@ public class Level implements Editable {
 		Main.log("position -> graph hash table set");
 	}
 	
-	private ArrayList<Vector> computeConnectedSubGraph(Vector start) {
+	/**
+	 * @param start
+	 * the tile around which to compute a sub-graph
+	 * @param visited
+	 * a 2D boolean array which will be modified to reflect
+	 * the tiles which have been visited
+	 * @return the sub-graph as an ArrayList
+	 */
+	private ArrayList<Vector> computeConnectedSubGraph(Vector start, boolean[][] visited) {
 		
 		ArrayList<Vector> graph = new ArrayList<Vector>();
 		Queue<Vector> searchQ = new LinkedList<Vector>();
 		searchQ.add(start);	
 		Vector pos;
-		boolean[][] visited = new boolean[dim.getX()][dim.getY()];
 		
 		while (!searchQ.isEmpty()) {
 			
@@ -461,8 +441,8 @@ public class Level implements Editable {
 			visited[pos.getX()][pos.getY()] = true;
 			graph.add(pos);
 			
-			for (Vector v : PathNode.NEIGHBORS) {
-				searchQ.add(pos.copy().add(v));
+			for (Vector v : PathNode.getNeighbors(pos)) {
+				searchQ.add(v);
 			}
 			
 		}
@@ -481,30 +461,13 @@ public class Level implements Editable {
 	}
 	
 	/**
-	 * only use this method to update to pathable tiles
+	 * update graphs when we insert a pathable tile
 	 * @param v
 	 * 	position, in grid coordinates
 	 * @param newTile
 	 * 	the new tile to place at this position
 	 */
 	public void setPathableGrid(Vector v, Tile newTile) {		
-		
-		//change the tile
-		Tile oldTile = getTileGrid(v);
-		
-		if (oldTile == null) {
-			return;
-		}
-		
-		setTileGrid(v, newTile);
-		
-		if (oldTile.isPathable() == newTile.isPathable()) {
-			return;
-		}
-					
-		//recalculate context pathability on "nearby" tiles
-		updateSurroundingContext(v);
-				
 //		Main.log(connectedSubGraphs.size());
 		
 		//update graphs to reflect the changes
@@ -514,8 +477,7 @@ public class Level implements Editable {
 				Vector pos = new Vector(x, y);
 				if (isContextPathable(pos) && getGraph(pos) == null) {
 					List<ArrayList<Vector>> graphs = new ArrayList<>();
-					for (Vector trans : PathNode.NEIGHBORS) {
-						Vector p = pos.copy().add(trans);
+					for (Vector p : PathNode.getNeighbors(pos)) {
 						if (getGraph(p) != null && !graphs.contains(getGraph(p))) {
 							graphs.add(getGraph(p));
 						}
@@ -533,6 +495,27 @@ public class Level implements Editable {
 //			Main.log(graph.size());
 //		}
 					
+	}
+	
+	/**
+	 * Update graphs when we insert an unpathable tile
+	 * @see <code>setPathableGrid</code>
+	 */
+	private void setUnpathableGrid(Vector v, Tile newTile) {
+		
+		//update graphs to reflect the changes
+		for (int x = (v.getX() * Tile.WIDTH - Unit.RADIUS_X) / Tile.WIDTH - 2; x <= (v.getX() * Tile.WIDTH + Unit.RADIUS_X) / Tile.WIDTH + 2; x++) {
+			for (int y = (v.getY() * Tile.WIDTH - Unit.RADIUS_Y) / Tile.WIDTH - 2; y <= (v.getY() * Tile.WIDTH + Unit.RADIUS_Y) / Tile.WIDTH + 2; y++) {
+				Vector pos = new Vector(x, y);
+				if (!isContextPathable(pos) && getGraph(pos) != null) {
+					ArrayList<Vector> graph = getGraph(pos);
+					graph.remove(pos);
+					graphHash.remove(pos);
+					splitGraph(graph, new LinkedList<>(PathNode.getNeighbors(pos)));
+				}
+			}
+		}
+		
 	}
 	
 	/**
@@ -567,6 +550,33 @@ public class Level implements Editable {
 			connectedSubGraphs.add(union);
 		}
 		return union;
+	}
+	
+	private void splitGraph(ArrayList<Vector> graph, Queue<Vector> q) {
+		
+		List<ArrayList<Vector>> graphs = new ArrayList<>();
+		boolean[][] visited = new boolean[dim.getX()][dim.getY()];
+		//TODO implement this boolean array check in computeConnectedSubGraphs() as well
+		
+		while (!q.isEmpty()) {
+			Vector pos = q.poll();
+			if (!visited[pos.getX()][pos.getY()]) {
+				graphs.add(computeConnectedSubGraph(pos, visited));
+			}
+		}
+		
+		if (graphs.size() == 1) {
+			return;
+		}
+		
+		connectedSubGraphs.remove(graph);
+		connectedSubGraphs.addAll(graphs);
+		for (ArrayList<Vector> g : graphs) {
+			for (Vector v : g) {
+				graphHash.put(v, g);
+			}
+		}
+		
 	}
 
 	public Vector getGoodSpawn(int startX, int startY) {
@@ -655,12 +665,29 @@ public class Level implements Editable {
 		setTile(pos.getX(), pos.getY(), tile);
 	}
 	
-	public void wrapGridUpdate(Vector pos, Tile tile) {	
-		if (tile.isPathable()) {
-			setPathableGrid(pos, tile);
+	public void wrapGridUpdate(Vector pos, Tile newTile) {
+		
+		Tile oldTile = getTileGrid(pos);
+		
+		if (oldTile == null) {
+			return;
+		}
+		
+		setTileGrid(pos, newTile);
+		updateSurroundingContext(pos); //update context pathability on nearby tiles
+		
+		if (oldTile.isPathable() == newTile.isPathable()) {
+			return;
+		}
+		
+		if (newTile.isPathable()) {
+			setPathableGrid(pos, newTile);
 		} else {
-			setTileGrid(pos, tile); //TODO implement a good function here
-		}		
+			setUnpathableGrid(pos, newTile);
+		}
+		
+		Main.log("# graphs " + connectedSubGraphs.size());
+		
 	}
 	
 	public void wrapUpdate(Vector pos, Tile tile) {
@@ -690,8 +717,6 @@ public class Level implements Editable {
 		Mask[] masks = new Mask[4];
 		
 		Tile tile = getTileGrid(x, y);
-		//TODO get the atTop stuff working
-		//update bitmasks
 		if (tile == null || tile.getType().isAtTop()) {
 			return masks;
 		}

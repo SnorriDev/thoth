@@ -1,7 +1,9 @@
 package snorri.pathfinding;
 
 import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import snorri.main.FocusedWindow;
@@ -98,6 +100,14 @@ public class PathNode implements Comparable<PathNode> {
 		
 		return neighbors;
 		
+	}
+	
+	public static List<Vector> getNeighbors(Vector pos) {
+		List<Vector> out = new ArrayList<>();
+		for (Vector trans : NEIGHBORS) {
+			out.add(pos.copy().add(trans));
+		}
+		return out;
 	}
 
 	public double distance(PathNode neighbor) {
