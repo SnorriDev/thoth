@@ -54,8 +54,7 @@ public class Open extends VerbDef {
 	
 	@Override
 	public String getShortDesc() {
-		// TODO Auto-generated method stub
-		return null;
+		return "open";
 	}
 
 }

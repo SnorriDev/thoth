@@ -152,7 +152,8 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			orth.setFont(new Font(orth.getFont().getName(), Font.BOLD, 16));
 			JLabel pos = new JLabel(drop.getMeaning().getPOS().getSimpleName());
 			pos.setFont(new Font(pos.getFont().getName(), Font.ITALIC, 12));
-			JLabel desc = new JLabel(drop.getMeaning().getShortDesc());
+			String d = drop.getMeaning().getShortDesc();
+			JLabel desc = new JLabel(d == null ? "unknown" : d);
 			desc.setFont(new Font(pos.getFont().getName(), Font.PLAIN, 14));
 			wordPanel.add(orth);
 			wordPanel.add(pos);
