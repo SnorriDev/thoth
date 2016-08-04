@@ -304,11 +304,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		return Integer.compare(z, other.z);
 	}
 	
-	@Override
-	public String toString() {
-		return getClass().getSimpleName().toLowerCase();
-	}
-	
 	@Override @Deprecated
 	public Entity clone() {		
 		try {

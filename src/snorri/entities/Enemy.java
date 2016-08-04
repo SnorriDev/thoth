@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.List;
 
 import snorri.animations.Animation;
+import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
@@ -17,7 +18,7 @@ import snorri.pathfinding.Pathfinding;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Enemy extends Unit implements Pathfinder {
+public class Enemy extends Unit implements Pathfinder, Carrier {
 
 	private static final long serialVersionUID = 1L;
 	private static final double APPROACH_MARGIN = 15;
@@ -44,6 +45,9 @@ public class Enemy extends Unit implements Pathfinder {
 		animation = new Animation(Animation.MUMMY_IDLE);
 		setOrb((Orb) Item.newItem(ItemType.PELLET));
 		setWeapon((Weapon) Item.newItem(ItemType.SLOW_SLING));
+		getFullInventory().add(inventory.getOrb(0));
+		getFullInventory().add(inventory.getWeapon());
+		//TODO make this automatic
 	}
 	
 	//can only use this when we are in GameWindow with Player
@@ -189,6 +193,11 @@ public class Enemy extends Unit implements Pathfinder {
 	public void stopPath() {
 		path = null;
 		recalculatingPath = false;
+	}
+
+	@Override
+	public Inventory getInventory() {
+		return inventory;
 	}
 
 }

@@ -28,6 +28,7 @@ import snorri.entities.Drop;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.entities.Portal;
+import snorri.inventory.Carrier;
 import snorri.keyboard.Key;
 import snorri.world.Campaign.WorldId;
 import snorri.world.Editable;
@@ -424,12 +425,15 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) {
-		if (arg0.getKeyChar() == Key.E.getChar()) {
+	public void keyTyped(KeyEvent e) {
+		if (e.getKeyChar() == Key.E.getChar()) {
 			spawnEntity();
 		}
-		if (arg0.getKeyChar() == Key.DELETE.getChar()) {
+		if (e.getKeyChar() == Key.DELETE.getChar()) {
 			deleteEntity();
+		}
+		if (e.getKeyChar() == Key.I.getChar()) {
+			openEntityInventory();
 		}
 
 	}
@@ -464,7 +468,22 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		}
 	}
 
-	public void spawnEntity() {
+	private void openEntityInventory() {
+		
+		if (!(env instanceof World)) {
+			return;
+		}
+		
+		World world = (World) env;
+		Entity ent = world.getEntityTree().getFirstCollision(new Entity(getMousePosAbsolute()), true);
+		
+		if (ent instanceof Carrier) {
+			openInventory(((Carrier) ent).getInventory());
+		}
+		
+	}
+	
+	private void spawnEntity() {
 		
 		if (!(env instanceof World)) {
 			Main.error("tried to spawn entity in non-world");
@@ -511,7 +530,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		}
 	}
 
-	public void deleteEntity() {
+	private void deleteEntity() {
 		
 		if (!(env instanceof World)) {
 			Main.error("tried to delete entity in non-world");
@@ -519,7 +538,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		}
 		World world = (World) env;
 		
-		Entity deletableEntity = world.getEntityTree().getFirstCollision(new Entity(this.getMousePosAbsolute()), true);
+		Entity deletableEntity = world.getEntityTree().getFirstCollision(new Entity(getMousePosAbsolute()), true);
 		
 		autosaveUndo();
 		world.deleteHard(deletableEntity);

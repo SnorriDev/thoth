@@ -9,6 +9,7 @@ import snorri.entities.Unit;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
+import snorri.main.Util;
 import snorri.masking.Mask;
 import snorri.semantics.Nominal;
 
@@ -230,10 +231,10 @@ public class Tile implements Comparable<Tile> {
 			return textures.length;
 		}
 		
-		//TODO move this to an interface Named
+		//TODO could make this an interface
 		@Override
 		public String toString() {
-			return name().toLowerCase();
+			return Util.clean(name());
 		}
 		
 		@Override

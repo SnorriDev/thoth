@@ -33,4 +33,8 @@ public class Util {
 		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
 	}
 	
+	public static String clean(String constant) {
+		return constant.toLowerCase().replace('_', ' ');
+	}
+	
 }

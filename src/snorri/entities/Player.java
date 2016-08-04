@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import snorri.animations.Animation;
-import snorri.inventory.FullInventory;
+import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
@@ -17,7 +17,7 @@ import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Player extends Unit {
+public class Player extends Unit implements Carrier {
 
 	private static final Image HEART = Main.getImage("/textures/hud/heart.png");
 	private static final Image HALF_HEART = Main.getImage("/textures/hud/halfHeart.png");
@@ -83,6 +83,7 @@ public class Player extends Unit {
 		
 	}
 	
+	@Override
 	public Inventory getInventory() {
 		return inventory;
 	}
@@ -114,10 +115,6 @@ public class Player extends Unit {
 			pos.add(HEART.getWidth(null), 0);
 		}
 		
-	}
-
-	public FullInventory getFullInventory() {
-		return inventory.getFullInventory();
 	}
 
 }
