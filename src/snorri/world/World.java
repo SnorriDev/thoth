@@ -320,5 +320,15 @@ public class World implements Playable, Editable {
 	public List<Entity> getEntities() {
 		return col.getAllEntities();
 	}
+	
+	/**
+	 * Check if a tile is occupied by any entity
+	 * @param pos
+	 * The tile in grid coordinates
+	 */
+	public boolean tileHasEntity(Vector pos) {
+		Entity hit = getEntityTree().getFirstCollision(Level.getRectangle(pos.getX(), pos.getY()), true);
+		return hit != null;
+	}
 
 }

@@ -283,7 +283,7 @@ public class Level implements Editable {
 		return;
 	}
 	
-	public static Rectangle getRectange(int i, int j) {
+	public static Rectangle getRectangle(int i, int j) {
 		return new Rectangle(i * Tile.WIDTH, j * Tile.WIDTH, Tile.WIDTH, Tile.WIDTH);
 	}
 	
