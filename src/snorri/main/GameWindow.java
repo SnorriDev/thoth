@@ -15,8 +15,6 @@ import snorri.entities.Unit;
 import snorri.inventory.Droppable;
 import snorri.keyboard.Key;
 import snorri.overlay.DeathScreen;
-import snorri.overlay.InventoryOverlay;
-import snorri.overlay.PauseOverlay;
 import snorri.world.Playable;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -33,7 +31,7 @@ public class GameWindow extends FocusedWindow {
 	private Playable universe;
 	private Player focus;
 	private Queue<DropMessage> dialogQ;
-	private boolean paused, hasDied;
+	private boolean hasDied;
 	private long lastTime;
 		
 	public GameWindow(Playable universe, Player focus) {
@@ -42,7 +40,6 @@ public class GameWindow extends FocusedWindow {
 		this.focus = focus;
 		dialogQ = new LinkedList<DropMessage>();
 		lastTime = getTimestamp();
-		paused = false;
 		hasDied = false;
 	}
 	
@@ -167,23 +164,8 @@ public class GameWindow extends FocusedWindow {
 		
 	}
 	
-	public void pause() {
-		Main.setOverlay(new PauseOverlay(this));
-		paused = true;
-	}
-	
-	public void unpause() {
-		Main.setOverlay(null);
-		paused = false;
-	}
-	
 	public void openInventory() {
-		Main.setOverlay(new InventoryOverlay(this, focus.getInventory()));
-		paused = true;
-	}
-	
-	public boolean isPaused() {
-		return paused;
+		openInventory(focus.getInventory());
 	}
 
 	public void mousePressed(MouseEvent e) {

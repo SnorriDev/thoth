@@ -34,7 +34,7 @@ import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.VocabDrop;
 import snorri.main.Debug;
-import snorri.main.GameWindow;
+import snorri.main.FocusedWindow;
 import snorri.nonterminals.NonTerminal;
 import snorri.parser.Grammar;
 
@@ -68,9 +68,9 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		}
 	}
 	
-	public InventoryOverlay(GameWindow window, Inventory inventory) {
+	public InventoryOverlay(FocusedWindow focusedWindow, Inventory inventory) {
 		
-		super(window);
+		super(focusedWindow);
 		inv = inventory;
 		fullInv = inventory.getFullInventory();
 				

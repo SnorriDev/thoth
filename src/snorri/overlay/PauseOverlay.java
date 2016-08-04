@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JPanel;
 
-import snorri.main.GameWindow;
+import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.main.MenuPanel;
 
@@ -14,8 +14,8 @@ public class PauseOverlay extends Overlay {
 
 	private static final long serialVersionUID = 1L;
 	
-	public PauseOverlay(GameWindow window) {
-		super(window);
+	public PauseOverlay(FocusedWindow focusedWindow) {
+		super(focusedWindow);
 		setLayout(new GridBagLayout());
 		JPanel menu = new MenuPanel();
 		menu.setOpaque(false);
