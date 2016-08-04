@@ -75,7 +75,7 @@ public class Tile implements Comparable<Tile> {
 	
 	public void drawTile(FocusedWindow g, Graphics gr, Vector v) {
 		
-		Vector relPos = v.getRelPos(g);
+		Vector relPos = v.getRelPosGrid(g);
 		
 		if (Debug.RENDER_GRAPHS) {
 			if (g.getWorld().getLevel().getGraph(v) != null) {

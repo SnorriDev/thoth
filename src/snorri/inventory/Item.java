@@ -3,9 +3,11 @@ package snorri.inventory;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 
+import snorri.animations.Animation;
 import snorri.entities.Entity;
 import snorri.events.SpellEvent;
 import snorri.main.GameWindow;
@@ -24,6 +26,7 @@ public abstract class Item implements Droppable {
 	
 	private static final int ICON_SIZE = 64;
 	private static final int SMALL_ICON_SIZE = 32;
+	private static final int ENTITY_SIZE = 48;
 	
 	private static final Image DEFAULT_BORDER = Main.getImage("/textures/hud/itemBorder.png");
 	private static final Color DEFAULT_COOLDOWN_COLOR = new Color(156, 134, 73, 200);
@@ -152,6 +155,16 @@ public abstract class Item implements Droppable {
 	@Override
 	public Image getTexture() {
 		return type.getTexture();
+	}
+	
+	@Override
+	public Animation getAnimation() {
+		Image scaled = this.getTexture().getScaledInstance(ENTITY_SIZE, -1, Image.SCALE_SMOOTH);
+		BufferedImage img = new BufferedImage(scaled.getWidth(null), scaled.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = img.getGraphics();
+		g.drawImage(scaled, 0, 0, null);
+		g.dispose();
+		return new Animation(img);
 	}
 	
 	public void updateCooldown(double deltaTime) {

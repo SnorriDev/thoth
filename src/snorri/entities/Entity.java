@@ -1,8 +1,8 @@
 package snorri.entities;
 
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Shape;
+import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -185,13 +185,13 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			return;
 		}
 				
-		Image sprite = animation.getSprite();
+		BufferedImage sprite = animation.getSprite();
 		if (sprite == null) {
 			return;
 		}
 		
 		Vector rel = pos.copy().sub(g.getFocus().getPos());
-		gr.drawImage(sprite, rel.getX() + (g.getBounds().width - sprite.getWidth(null)) / 2, rel.getY() + (g.getBounds().height - sprite.getHeight(null)) / 2, sprite.getWidth(null), sprite.getHeight(null), null);
+		gr.drawImage(sprite, rel.getX() + (g.getBounds().width - sprite.getWidth()) / 2, rel.getY() + (g.getBounds().height - sprite.getHeight()) / 2, sprite.getWidth(), sprite.getHeight(), null);
 		
 	}
 

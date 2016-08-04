@@ -3,6 +3,7 @@ package snorri.inventory;
 import java.awt.Image;
 import java.io.Serializable;
 
+import snorri.animations.Animation;
 import snorri.inventory.Item.ItemType;
 import snorri.parser.Lexicon;
 
@@ -25,5 +26,9 @@ public interface Droppable extends Serializable {
 	public boolean stack(Droppable other);
 
 	public Image getTexture();
+
+	default Animation getAnimation() {
+		return new Animation(Animation.SPARKLE);
+	}
 	
 }

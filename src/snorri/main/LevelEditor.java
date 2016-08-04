@@ -303,6 +303,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			redo();
 			break;
 		case "Quit":
+			Main.getFrame().setJMenuBar(null);
 			Main.setWindow(new MainMenu());
 		}
 

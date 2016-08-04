@@ -1,6 +1,6 @@
 package snorri.animations;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -33,7 +33,7 @@ public class Animation implements Serializable {
 	public static final Animation SPARKLE = new Animation("/textures/animations/sparkle");
 	public static final Animation UNIT_IDLE = new Animation("/textures/animations/unit/idle");
 
-	protected Image[] frames;
+	protected BufferedImage[] frames;
 	private int currentFrame = 0;
 	private boolean hasCycled = false;
 	private String path;
@@ -51,6 +51,10 @@ public class Animation implements Serializable {
 			loadFolder(Main.getFile(str));
 		}
 		path = str;
+	}
+	
+	public Animation(BufferedImage image) {
+		loadImage(image);
 	}
 
 	public Animation(Animation other) {
@@ -71,7 +75,7 @@ public class Animation implements Serializable {
 			}
 		});
 
-		ArrayList<Image> tempFrames = new ArrayList<Image>();
+		ArrayList<BufferedImage> tempFrames = new ArrayList<>();
 		for (int i = 0; i < frames.length; i++) {
 
 			if (!frames[i].getName().endsWith(".png")) {
@@ -85,30 +89,51 @@ public class Animation implements Serializable {
 			}
 		}
 
-		this.frames = new Image[tempFrames.size()];
+		this.frames = new BufferedImage[tempFrames.size()];
 		int i = 0;
-		for (Image im : tempFrames) {
+		for (BufferedImage im : tempFrames) {
 			this.frames[i] = im;
 			i++;
 		}
 
 	}
 
-	private void loadImage(Image image) {
+	private void loadImage(BufferedImage image) {
 		if (image == null) {
 			return;
 		}
-		frames = new Image[1];
+		frames = new BufferedImage[1];
 		frames[0] = image;
 	}
 
 	// only save the path to the animation folder/image
 	private void writeObject(ObjectOutputStream out) throws IOException {
-		out.writeObject(getPath());
+		
+		out.writeObject(getPath() == null ? "..." : getPath());
+		
+		// for image animations that were not read from a file
+		if (path == null) {
+			ImageIO.write(frames[0], "png", out);
+		}
+		
 	}
 
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		set(new Animation((String) in.readObject()));
+		
+		String read = (String) in.readObject();
+		
+		if (read.equals("...")) { //signifies "nowhere"
+			BufferedImage im = ImageIO.read(in);
+			if (im != null) {
+				set(new Animation(im));
+			} else {
+				Main.error("could not load custom frame in animation");
+			}
+			return;
+		}
+		
+		set(new Animation((String) read));
+		
 	}
 	
 	/**
@@ -134,7 +159,7 @@ public class Animation implements Serializable {
 	 * 
 	 * @return the current image
 	 */
-	public Image getSprite() {
+	public BufferedImage getSprite() {
 
 		if (currentFrame == frames.length) {
 			currentFrame = 0;

@@ -18,11 +18,12 @@ public class Hieroglyphs {
 
 	//TODO redo this with a hieroglyph object
 	//private static List<String> glyphs;
-	private static HashMap<String, Image> glyphIcons = new HashMap<>();
+	private static final HashMap<String, Image> glyphIcons;
 	
 	static {
 		
 		Main.log("loading HTML glyphs...");
+		glyphIcons = new HashMap<>();
 		
 		File dir = Main.getFile("/textures/hieroglyphs");
 		
