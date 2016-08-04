@@ -19,9 +19,9 @@ import snorri.world.World;
 
 public class Player extends Unit {
 
-	private static final Image HEART = Main.getImageResource("/textures/hud/heart.png");
-	private static final Image HALF_HEART = Main.getImageResource("/textures/hud/halfHeart.png");
-	private static final Image GREY_HEART = Main.getImageResource("/textures/hud/greyHeart.png");
+	private static final Image HEART = Main.getImage("/textures/hud/heart.png");
+	private static final Image HALF_HEART = Main.getImage("/textures/hud/halfHeart.png");
+	private static final Image GREY_HEART = Main.getImage("/textures/hud/greyHeart.png");
 	private static final int HEALTH_RES = 20;
 	
 	private static final long serialVersionUID = 1L;

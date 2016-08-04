@@ -27,7 +27,7 @@ public class HelpOverlay extends Overlay {
 		display.setBorder(BorderFactory.createLineBorder(BORDER));
 		display.setBackground(NORMAL_BG);
 		try {
-			display.setPage(Main.getPath("/info/index.html").toURI().toURL());
+			display.setPage(Main.getFile("/info/index.html").toURI().toURL());
 		} catch (IOException e) {
 			Main.error("could not find HTML info page");
 			e.printStackTrace();

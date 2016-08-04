@@ -40,18 +40,18 @@ public class DungeonGen extends TerrainGen {
 
 		try {
 			Main.log("loading dungeon structures...");
-			YamlReader reader = new YamlReader(new FileReader(Main.getPath("/worlds/structures/doors.yaml")));
+			YamlReader reader = new YamlReader(new FileReader(Main.getFile("/worlds/structures/doors.yaml")));
 			reader.getConfig().setClassTag("door", Vector.class);
 			reader.getConfig().setClassTag("spawn", Vector.class);
 			reader.getConfig().setClassTag("struct", Structure.class);
 			structures = (HashMap<String, Structure>) reader.read();
 			for (String key : structures.keySet()) {
 				Editable l;
-				File levelFile = Main.getPath("/worlds/structures/" + key + ".dat");
+				File levelFile = Main.getFile("/worlds/structures/" + key + ".dat");
 				if (levelFile.exists()) {
 					l = new Level(levelFile);
 				} else {
-					l = new World(Main.getPath("/worlds/structures/" + key));
+					l = new World(Main.getFile("/worlds/structures/" + key));
 				}
 				structures.get(key).setTemplate(l);
 			}

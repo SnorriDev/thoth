@@ -10,7 +10,6 @@ import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -116,7 +115,7 @@ public class Main {
 		return new File(".");
 	}
 
-	public static File getPath(String path) {
+	public static File getFile(String path) {
 		return new File(getDir(), path);
 	}
 
@@ -133,7 +132,7 @@ public class Main {
 	public static Font loadFont(String path) {
 		try {
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			File fontFile = getPath(path);
+			File fontFile = getFile(path);
 			Font f = Font.createFont(Font.TRUETYPE_FONT, fontFile);
 			ge.registerFont(f);
 			return f;
@@ -143,13 +142,14 @@ public class Main {
 		}
 	}
 
-	public static BufferedImage getImageResource(String path) {
+	public static BufferedImage getImage(String path) {
 		try {
-			return ImageIO.read(getPath(path));
+			return ImageIO.read(getFile(path));
 		} catch (IllegalArgumentException e) {
 			Main.error("unable to find image " + path);
 			return null;
 		} catch (IOException e) {
+			Main.error("issue loading image " + path);
 			return null;
 		}
 	}
@@ -181,19 +181,6 @@ public class Main {
 
 		// if the file is a directory or doesn't exist, return it
 		return f;
-	}
-
-	public static String getHTMLGlyph(String raw) {
-		File f = getPath("/textures/hieroglyphs/" + raw + ".png");
-		if (!f.exists()) {
-			return null;
-		}
-		try {
-			return "<img src=\'" + f.toURI().toURL() + "'/>";
-		} catch (MalformedURLException e) {
-			Main.error("bad URL for file " + raw);
-			return null;
-		}
 	}
 
 	/**

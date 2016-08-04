@@ -12,8 +12,8 @@ public class Papyrus extends Item {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final Image PAPYRUS_BORDER = Main.getImageResource("/textures/hud/papyrusBorderInactive.png");
-	private static final Image PAPYRUS_BORDER_SELECTED = Main.getImageResource("/textures/hud/papyrusBorder.png");
+	private static final Image PAPYRUS_BORDER = Main.getImage("/textures/hud/papyrusBorderInactive.png");
+	private static final Image PAPYRUS_BORDER_SELECTED = Main.getImage("/textures/hud/papyrusBorder.png");
 	private static final Color PAPYRUS_COOLDOWN_COLOR = new Color(118, 45, 50, 150);
 	
 	public Papyrus(ItemType t) {

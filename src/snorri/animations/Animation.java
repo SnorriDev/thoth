@@ -46,9 +46,9 @@ public class Animation implements Serializable {
 
 	public Animation(String str) {
 		if (str.endsWith(".png")) {
-			loadImage(Main.getImageResource(str));
+			loadImage(Main.getImage(str));
 		} else {
-			loadFolder(Main.getPath(str));
+			loadFolder(Main.getFile(str));
 		}
 		path = str;
 	}

@@ -12,6 +12,7 @@ import snorri.entities.Desk;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.entities.Unit;
+import snorri.inventory.Droppable;
 import snorri.keyboard.Key;
 import snorri.overlay.DeathScreen;
 import snorri.overlay.InventoryOverlay;
@@ -31,7 +32,7 @@ public class GameWindow extends FocusedWindow {
 	
 	private Playable universe;
 	private Player focus;
-	private Queue<DialogMessage> dialogQ;
+	private Queue<DropMessage> dialogQ;
 	private boolean paused, hasDied;
 	private long lastTime;
 		
@@ -39,7 +40,7 @@ public class GameWindow extends FocusedWindow {
 		super();
 		this.universe = universe;
 		this.focus = focus;
-		dialogQ = new LinkedList<DialogMessage>();
+		dialogQ = new LinkedList<DropMessage>();
 		lastTime = getTimestamp();
 		paused = false;
 		hasDied = false;
@@ -99,10 +100,9 @@ public class GameWindow extends FocusedWindow {
 		focus.getInventory().render(this, g);
 		focus.renderHealthBar(g);
 		
-		int i = 0;
-		for (DialogMessage msg : dialogQ) {
-			msg.render(this, g, i);
-			i++;
+		int xTrans = 0;
+		for (DropMessage msg : dialogQ) {
+			xTrans += msg.render(this, g, xTrans);
 		}
 		
 	}
@@ -111,8 +111,8 @@ public class GameWindow extends FocusedWindow {
 		return focus;
 	}
 	
-	public void showDialog(String msg) {
-		dialogQ.add(new DialogMessage(msg));
+	public void showDialog(Droppable drop) {
+		dialogQ.add(new DropMessage(drop));
 	}
 	
 	@Override

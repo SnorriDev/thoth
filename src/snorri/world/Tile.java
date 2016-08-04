@@ -122,37 +122,37 @@ public class Tile implements Comparable<Tile> {
 	public enum TileType implements Nominal {
 												
 		SAND(true, new BufferedImage[] {
-			Main.getImageResource("/textures/tiles/sand00.png"),
-			Main.getImageResource("/textures/tiles/sand01.png"),
-			Main.getImageResource("/textures/tiles/sand02.png"),
-			Main.getImageResource("/textures/tiles/sand03.png")}),
+			Main.getImage("/textures/tiles/sand00.png"),
+			Main.getImage("/textures/tiles/sand01.png"),
+			Main.getImage("/textures/tiles/sand02.png"),
+			Main.getImage("/textures/tiles/sand03.png")}),
 		WALL(false, new BufferedImage[] {
-			Main.getImageResource("/textures/tiles/wall00.png"),
-			Main.getImageResource("/textures/tiles/wall01.png"),
-			Main.getImageResource("/textures/tiles/wall02.png"),
-			Main.getImageResource("/textures/tiles/wall03.png"),
-			Main.getImageResource("/textures/tiles/wall04.png"),
-			Main.getImageResource("/textures/tiles/wall05.png"),
-			Main.getImageResource("/textures/tiles/wall06.png"),
-			Main.getImageResource("/textures/tiles/wall07.png")}, true),
-		TREE(false, Main.getImageResource("/textures/tiles/tree00.png")),
-		FOUNDATION(false, Main.getImageResource("/textures/tiles/default00.png")),
-		HUT(false, Main.getImageResource("/textures/tiles/default00.png")),
+			Main.getImage("/textures/tiles/wall00.png"),
+			Main.getImage("/textures/tiles/wall01.png"),
+			Main.getImage("/textures/tiles/wall02.png"),
+			Main.getImage("/textures/tiles/wall03.png"),
+			Main.getImage("/textures/tiles/wall04.png"),
+			Main.getImage("/textures/tiles/wall05.png"),
+			Main.getImage("/textures/tiles/wall06.png"),
+			Main.getImage("/textures/tiles/wall07.png")}, true),
+		TREE(false, Main.getImage("/textures/tiles/tree00.png")),
+		FOUNDATION(false, Main.getImage("/textures/tiles/default00.png")),
+		HUT(false, Main.getImage("/textures/tiles/default00.png")),
 		WATER(false, true, new BufferedImage[] {
-			Main.getImageResource("/textures/tiles/water00.png"),
-			Main.getImageResource("/textures/tiles/water01.png")}),
+			Main.getImage("/textures/tiles/water00.png"),
+			Main.getImage("/textures/tiles/water01.png")}),
 		LAVA(false, true, new BufferedImage[] {
-			Main.getImageResource("/textures/tiles/lava00.png"),
-			Main.getImageResource("/textures/tiles/lava01.png"),
-			Main.getImageResource("/textures/tiles/lava02.png")}),
+			Main.getImage("/textures/tiles/lava00.png"),
+			Main.getImage("/textures/tiles/lava01.png"),
+			Main.getImage("/textures/tiles/lava02.png")}),
 		GRASS(true, new BufferedImage[] {
-			Main.getImageResource("/textures/tiles/grass00.png"),
-			Main.getImageResource("/textures/tiles/grass01.png")}),
-		VOID(false, Main.getImageResource("/textures/tiles/void00.png")),
+			Main.getImage("/textures/tiles/grass00.png"),
+			Main.getImage("/textures/tiles/grass01.png")}),
+		VOID(false, Main.getImage("/textures/tiles/void00.png")),
 		COLUMN(false, new BufferedImage[] {
-			Main.getImageResource("/textures/tiles/column00.png"),
-			Main.getImageResource("/textures/tiles/column01.png")}, true),
-		DOOR(false, Main.getImageResource("/textures/tiles/door00.png"), true);
+			Main.getImage("/textures/tiles/column00.png"),
+			Main.getImage("/textures/tiles/column01.png")}, true),
+		DOOR(false, Main.getImage("/textures/tiles/door00.png"), true);
 		
 		private boolean	pathable, canShootOver, atTop;
 		private BufferedImage[]	textures;
@@ -161,7 +161,7 @@ public class Tile implements Comparable<Tile> {
 			this(true);
 		}
 		TileType(boolean pathable) {
-			this(pathable, new BufferedImage[] {Main.getImageResource("/textures/tiles/default00.png")});
+			this(pathable, new BufferedImage[] {Main.getImage("/textures/tiles/default00.png")});
 		}
 		
 		TileType(boolean pathable, BufferedImage texture) {
@@ -221,7 +221,7 @@ public class Tile implements Comparable<Tile> {
 		public BufferedImage getTexture(int index) {
 			if (index >= textures.length) {
 				Main.error("texture not found, index out of bounds, returning default texture");
-				return Main.getImageResource("/textures/tiles/default00.png");
+				return Main.getImage("/textures/tiles/default00.png");
 			}
 			return textures[index];
 		}

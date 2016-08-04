@@ -28,6 +28,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import snorri.hieroglyphs.Hieroglyphs;
 import snorri.inventory.FullInventory;
 import snorri.inventory.Inventory;
 import snorri.inventory.Item;
@@ -148,6 +149,8 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		for (VocabDrop drop : fullInv.getVocab()) {
 			JPanel wordPanel = new JPanel();
 			wordPanel.setBackground(SELECTED_BG);
+			
+			JLabel icon = new JLabel(Hieroglyphs.getIcon(drop.getOrthography()));
 			JLabel orth = new JLabel(drop.getOrthography());
 			orth.setFont(new Font(orth.getFont().getName(), Font.BOLD, 16));
 			JLabel pos = new JLabel(drop.getMeaning().getPOS().getSimpleName());
@@ -155,6 +158,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			String d = drop.getMeaning().getShortDesc();
 			JLabel desc = new JLabel(d == null ? "unknown" : d);
 			desc.setFont(new Font(pos.getFont().getName(), Font.PLAIN, 14));
+			wordPanel.add(icon);
 			wordPanel.add(orth);
 			wordPanel.add(pos);
 			wordPanel.add(desc);
@@ -204,7 +208,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		if (list.getSelectedValue().getSpell() == null) {
 			field.setText("<p>enter spell here...</p>");
 		} else {
-			field.setText(Hieroglyphics.transliterate(list.getSelectedValue().getSpell().getOrthography()));
+			field.setText(Hieroglyphs.transliterate(list.getSelectedValue().getSpell().getOrthography()));
 		}
 	}
 	

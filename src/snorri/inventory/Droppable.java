@@ -1,5 +1,6 @@
 package snorri.inventory;
 
+import java.awt.Image;
 import java.io.Serializable;
 
 import snorri.inventory.Item.ItemType;
@@ -20,7 +21,9 @@ public interface Droppable extends Serializable {
 	
 	public int getMaxQuantity();
 	
-	//TODO use this method to update charges on consumables, etc.
+	//use this method to update charges on consumables, etc.
 	public boolean stack(Droppable other);
+
+	public Image getTexture();
 	
 }

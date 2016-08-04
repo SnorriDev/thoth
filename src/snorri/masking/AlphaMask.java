@@ -8,7 +8,7 @@ import snorri.world.Tile;
 
 public class AlphaMask {
 	
-	private static final BufferedImage FULL_IMAGE = Main.getImageResource("/textures/alphaMasks.png");
+	private static final BufferedImage FULL_IMAGE = Main.getImage("/textures/alphaMasks.png");
 	private static final AlphaMask[] MASKS = new AlphaMask[16];
 	
 	static {

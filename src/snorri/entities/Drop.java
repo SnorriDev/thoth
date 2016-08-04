@@ -33,7 +33,7 @@ public class Drop extends Detector {
 	public void onCollision(CollisionEvent e) {
 		if (e.getTarget() instanceof Player) {
 			if (Main.getWindow() instanceof GameWindow) {
-				((GameWindow) Main.getWindow()).showDialog(getPrize() + " acquired!");
+				((GameWindow) Main.getWindow()).showDialog(getPrize());
 			}
 			((Player) e.getTarget()).getFullInventory().add(getPrize());
 			e.getWorld().delete(this);

@@ -25,7 +25,7 @@ public abstract class Item implements Droppable {
 	private static final int ICON_SIZE = 64;
 	private static final int SMALL_ICON_SIZE = 32;
 	
-	private static final Image DEFAULT_BORDER = Main.getImageResource("/textures/hud/itemBorder.png");
+	private static final Image DEFAULT_BORDER = Main.getImage("/textures/hud/itemBorder.png");
 	private static final Color DEFAULT_COOLDOWN_COLOR = new Color(156, 134, 73, 200);
 	
 	protected Timer timer;
@@ -33,13 +33,13 @@ public abstract class Item implements Droppable {
 	public enum ItemType {
 
 		EMPTY,
-		PAPYRUS(5, Papyrus.class, Main.getImageResource("/textures/items/papyrus.png")),
-		HELMET(Armor.class, Main.getImageResource("/textures/items/helmet.png"), 2d),
-		SLING(Weapon.class, Main.getImageResource("/textures/items/sling.png"), 34d, 0.45, "/sound/arrow.wav"),
-		PELLET(5, Orb.class, Main.getImageResource("/textures/items/pellet.png")),
-		SLOW_SLING(Weapon.class, Main.getImageResource("/textures/items/sling.png"), 34d, 2d, "/sound/arrow.wav"),
-		BOW(Weapon.class, Main.getImageResource("/textures/items/bow.png"), 75d, 0.6, "/sound/arrow.wav"),
-		ARROW(5, Orb.class, Main.getImageResource("/textures/items/arrow.png"));
+		PAPYRUS(5, Papyrus.class, Main.getImage("/textures/items/papyrus.png")),
+		HELMET(Armor.class, Main.getImage("/textures/items/helmet.png"), 2d),
+		SLING(Weapon.class, Main.getImage("/textures/items/sling.png"), 34d, 0.45, "/sound/arrow.wav"),
+		PELLET(5, Orb.class, Main.getImage("/textures/items/pellet.png")),
+		SLOW_SLING(Weapon.class, Main.getImage("/textures/items/sling.png"), 34d, 2d, "/sound/arrow.wav"),
+		BOW(Weapon.class, Main.getImage("/textures/items/bow.png"), 75d, 0.6, "/sound/arrow.wav"),
+		ARROW(5, Orb.class, Main.getImage("/textures/items/arrow.png"));
 
 		private Class<? extends Item> c;
 		private int maxQuantity = 1; //number of inventory slots; use Consumable class with data field for charges
@@ -147,6 +147,11 @@ public abstract class Item implements Droppable {
 	// returns the item type
 	public ItemType getType() {
 		return type;
+	}
+	
+	@Override
+	public Image getTexture() {
+		return type.getTexture();
 	}
 	
 	public void updateCooldown(double deltaTime) {
