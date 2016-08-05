@@ -425,14 +425,17 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {
-		if (e.getKeyChar() == Key.E.getChar()) {
+	public void keyPressed(KeyEvent e) {
+		
+		super.keyPressed(e);
+		
+		if (Key.E.isPressed(e)) {
 			spawnEntity();
 		}
-		if (e.getKeyChar() == Key.DELETE.getChar()) {
+		if (Key.DELETE.isPressed(e)) {
 			deleteEntity();
 		}
-		if (e.getKeyChar() == Key.I.getChar()) {
+		if (Key.I.isPressed(e)) {
 			openEntityInventory();
 		}
 
@@ -626,6 +629,12 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			return (Playable) env;
 		}
 		return null;
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

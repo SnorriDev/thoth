@@ -20,7 +20,7 @@ public enum Key {
 	
 	Q(81, 'q'), //general debuggin
 	E(69, 'e'), //spawn entity
-	DELETE(88, 'x'), //delete entity
+	DELETE(8, ' '), //delete entity
 	I(73, 'i'); //open entity inventory
 	
 	private int id;

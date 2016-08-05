@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
@@ -33,6 +34,7 @@ import snorri.inventory.FullInventory;
 import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.VocabDrop;
+import snorri.keyboard.Key;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.nonterminals.NonTerminal;
@@ -49,6 +51,8 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	@SuppressWarnings("unused")
 	private final Inventory inv;
 	private final FullInventory fullInv;
+	
+	private boolean editMode;
 	
 	private final JList<Item> list;
 	private final JPanel craftingSpace;
@@ -69,10 +73,15 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	}
 	
 	public InventoryOverlay(FocusedWindow focusedWindow, Inventory inventory) {
+		this(focusedWindow, inventory, false);
+	}
+	
+	public InventoryOverlay(FocusedWindow focusedWindow, Inventory inventory, boolean editMode) {
 		
 		super(focusedWindow);
 		inv = inventory;
 		fullInv = inventory.getFullInventory();
+		this.editMode = editMode;
 				
 		JPanel panel = new JPanel(new GridBagLayout());
 		panel.setPreferredSize(new Dimension(1000, 618)); //golden ratio
@@ -244,6 +253,25 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	@Override
 	public void changedUpdate(DocumentEvent e) {
 		checkParse(e);
+	}
+	
+	@Override
+	public void keyPressed(KeyEvent e) {
+		
+		super.keyPressed(e);
+		
+		if (!editMode) {
+			return;
+		}
+		
+		if (Key.E.isPressed(e)) {
+			//add something
+		}
+		
+		if (Key.DELETE.isPressed(e)) {
+			//remove selected word/vocab?
+		}
+		
 	}
 	
 	@Override
