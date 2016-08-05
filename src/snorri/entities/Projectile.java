@@ -13,7 +13,7 @@ public class Projectile extends Detector {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int PROJECTILE_SPEED = 350;
+	private static final int PROJECTILE_SPEED = 360;
 		
 	private Vector velocity;
 	private Entity root;

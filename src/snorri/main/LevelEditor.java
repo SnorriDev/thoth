@@ -72,7 +72,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		super();
 
 		selectedTile = new Tile(0, 0);
-		selectedEntityClass = Entity.SPAWNABLE.get(0);
+		selectedEntityClass = Entity.EDIT_SPAWNABLE.get(0);
 		createMenu();
 
 		repaint();
@@ -166,7 +166,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		menu.setMnemonic(KeyEvent.VK_E);
 		menuBar.add(menu);
 
-		List<Class<? extends Entity>> entityClassList = Entity.SPAWNABLE;
+		List<Class<? extends Entity>> entityClassList = Entity.EDIT_SPAWNABLE;
 		ButtonGroup groupEntities = new ButtonGroup();
 
 		boolean firstEntity = true;
@@ -237,7 +237,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		}
 
 		if (e.getActionCommand().startsWith("spawn")) {
-			selectedEntityClass = Entity.SPAWNABLE
+			selectedEntityClass = Entity.EDIT_SPAWNABLE
 					.get(Integer.parseInt(e.getActionCommand().substring(5)));
 			return;
 		}
@@ -499,9 +499,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		
 		//TODO auto-detect options for constructor; have method that gives them?
 		
+		Vector spawnPos = getMousePosAbsolute();
+		
 		try {
-			
-			Vector spawnPos = getMousePosAbsolute();
 			
 			if (selectedEntityClass.equals(Portal.class)) {
 				DialogMap inputs = new DialogMap();

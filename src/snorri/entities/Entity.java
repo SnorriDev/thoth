@@ -28,21 +28,29 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 
 	private static final long serialVersionUID = 1L;
 	
-	public static final List<Class<? extends Entity>> SPAWNABLE = new ArrayList<Class<? extends Entity>>();
+	public static final List<Class<? extends Entity>> SPAWNABLE; //a list of ents spawnable using CreateObject
+	public static final List<Class<? extends Entity>> EDIT_SPAWNABLE; //a list of ents spawnable in level editor
 	
 	static {
 		
-		SPAWNABLE.add(Desk.class);
-		SPAWNABLE.add(Drop.class);
-		SPAWNABLE.add(Enemy.class);
-		SPAWNABLE.add(Explosion.class);
-		SPAWNABLE.add(Flower.class);
-		SPAWNABLE.add(Player.class);
-		SPAWNABLE.add(Portal.class);
-		SPAWNABLE.add(Unit.class);
-		SPAWNABLE.add(Sarcophagus.class);
+		SPAWNABLE = new ArrayList<>();
 		
-		Collections.sort(SPAWNABLE, new Comparator<Class<? extends Entity>>() {
+		SPAWNABLE.add(Urn.class);
+		
+		EDIT_SPAWNABLE = new ArrayList<>(SPAWNABLE);
+		
+		EDIT_SPAWNABLE.add(Desk.class);
+		EDIT_SPAWNABLE.add(Drop.class);
+		EDIT_SPAWNABLE.add(Enemy.class);
+		EDIT_SPAWNABLE.add(Explosion.class);
+		EDIT_SPAWNABLE.add(Flower.class);
+		EDIT_SPAWNABLE.add(Player.class);
+		EDIT_SPAWNABLE.add(Portal.class);
+		EDIT_SPAWNABLE.add(Unit.class);
+		EDIT_SPAWNABLE.add(Sarcophagus.class);
+		
+		
+		Collections.sort(EDIT_SPAWNABLE, new Comparator<Class<? extends Entity>>() {
 			@Override
 			public int compare(Class<? extends Entity> o1, Class<? extends Entity> o2) {
 				return o1.getSimpleName().compareTo(o2.getSimpleName());
@@ -88,6 +96,21 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	
 	public Entity(Vector pos) {
 		this(pos, 1);
+	}
+	
+	public static boolean canSpawn(Class<?> obj) {
+		return SPAWNABLE.contains(obj);
+	}
+	
+	public static boolean spawnNew(World world, Vector pos, Class<? extends Entity> c) {
+		try {
+			world.addHard(c.getConstructor(Vector.class).newInstance(pos));
+			return true;
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	public Vector getPos() {

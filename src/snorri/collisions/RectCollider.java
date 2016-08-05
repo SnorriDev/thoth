@@ -22,6 +22,10 @@ public class RectCollider extends Collider {
 		this.dim = dim;
 	}
 	
+	public RectCollider(int width, int height) {
+		this(new Vector(width, height));
+	}
+	
 	public RectCollider(Entity e, Vector dim) {
 		this(dim);
 		setFocus(e);

@@ -116,5 +116,10 @@ public class Player extends Unit implements Carrier {
 		}
 		
 	}
+	
+	@Override
+	protected int getSpeed() {
+		return 160;
+	}
 
 }

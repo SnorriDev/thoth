@@ -98,7 +98,7 @@ public class GameWindow extends FocusedWindow {
 		focus.renderHealthBar(g);
 		
 		int xTrans = 0;
-		for (DropMessage msg : dialogQ) {
+		for (DropMessage msg : dialogQ.toArray(new DropMessage[0])) {
 			xTrans += msg.render(this, g, xTrans);
 		}
 		

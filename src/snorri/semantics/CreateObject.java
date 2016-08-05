@@ -1,15 +1,16 @@
 package snorri.semantics;
 
+import snorri.entities.Entity;
 import snorri.world.Tile;
 import snorri.world.Vector;
 
 public class CreateObject extends VerbDef {
-
+	
 	public CreateObject() {
 		super(true);
 	}
 
-	@Override
+	@Override @SuppressWarnings("unchecked")
 	public boolean exec(Object obj) {
 		
 		if (obj instanceof Tile) {
@@ -22,7 +23,7 @@ public class CreateObject extends VerbDef {
 			//check if there is an entity in the way
 			if (!((Tile) obj).isPathable() && tile.isPathable()) {
 				Vector pos = e.getLocative().copy().toGridPos();
-				if (e.getWorld().tileHasEntity(pos)) {
+				if (e.getWorld().tileHasEntity(pos)) { //could move this out, but want to allow pathable tiles to be placed
 					return false;
 				}
 			}
@@ -31,7 +32,12 @@ public class CreateObject extends VerbDef {
 			return true;
 		}
 		
-		//create code?
+		if (obj instanceof Class<?> && Entity.canSpawn((Class<?>) obj)) {
+			if (e.getWorld().tileHasEntity(e.getLocative().copy().toGridPos())) {
+				return false;
+			}
+			return Entity.spawnNew(e.getWorld(), e.getLocative(), (Class<? extends Entity>) obj);
+		}
 		
 		return false;
 		
