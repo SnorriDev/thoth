@@ -54,7 +54,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	
 	private static final long serialVersionUID = 1L;
 
-	@SuppressWarnings("unused")
 	private final Inventory inv;
 	private final FullInventory fullInv;
 		
@@ -242,7 +241,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	}
 	
 	private void delete(Droppable d) {
-		fullInv.remove(d);
+		inv.remove(d);
 		if (d instanceof Item) {
 			model.removeElement((Item) d);
 		}

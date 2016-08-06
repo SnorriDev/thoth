@@ -87,6 +87,4 @@ public class FullInventory extends ArrayList<Droppable> implements Serializable 
 		return list.toArray(arr);
 	}
 		
-	//TODO Toby do stuff here!!
-
 }

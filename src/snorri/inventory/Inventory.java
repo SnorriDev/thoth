@@ -214,5 +214,32 @@ public class Inventory implements Serializable {
 	private void drawItemContainer(Graphics g, Vector pos, Item item, Class<? extends Item> slotType) {
 		drawItemContainer(g, pos, item, slotType, !(item == null || !item.canUse()));
 	}
+	
+	public void remove(Droppable d) {
+		
+		if (d instanceof Item) {
+		
+			if (weaponSlot.equals(d)) {
+				weaponSlot = null;
+			}
+			if (armorSlot.equals(d)) {
+				armorSlot = null;
+			}
+			for (Orb orbSlot : orbSlots) {
+				if (orbSlot.equals(d)) {
+					orbSlot = null;
+				}
+			}
+			for (Papyrus papyrusSlot : papyrusSlots) {
+				if (papyrusSlot.equals(d)) {
+					papyrusSlot = null;
+				}
+			}
+		
+		}
+		
+		fullInventory.remove(d);
+		
+	}
 
 }
