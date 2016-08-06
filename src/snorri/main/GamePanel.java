@@ -1,8 +1,11 @@
 package snorri.main;
 
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
@@ -37,6 +40,29 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 		};
 
 		sw.execute();
+	}
+	
+	/**
+	 * a general method for making GUI dialogs
+	 * @param title
+	 * 	the title of the window
+	 * @param inputs
+	 * 	a dialog map of inputs and textfields;
+	 * as a side effect, this map will be updated,
+	 * and a pointer to it is return by the method
+	 * @return a pointer to the modified DialogMap
+	 */
+	protected DialogMap dialog(String title, DialogMap inputs) {
+		JPanel panel = new JPanel(new GridLayout(0, 2));
+		for (String key : inputs.keySet()) {
+			panel.add(new JLabel(key));
+			panel.add(inputs.get(key));
+		}
+		int option = JOptionPane.showConfirmDialog(null, panel, title, JOptionPane.PLAIN_MESSAGE);
+		if (option == JOptionPane.CLOSED_OPTION) {
+			return null;
+		}
+		return inputs;
 	}
 	
 	public void stop() {

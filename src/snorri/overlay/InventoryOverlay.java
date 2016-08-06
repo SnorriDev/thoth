@@ -5,16 +5,20 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
@@ -30,12 +34,14 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import snorri.hieroglyphs.Hieroglyphs;
+import snorri.inventory.Droppable;
 import snorri.inventory.FullInventory;
 import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.VocabDrop;
 import snorri.keyboard.Key;
 import snorri.main.Debug;
+import snorri.main.DialogMap;
 import snorri.main.FocusedWindow;
 import snorri.nonterminals.NonTerminal;
 import snorri.parser.Grammar;
@@ -51,14 +57,16 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	@SuppressWarnings("unused")
 	private final Inventory inv;
 	private final FullInventory fullInv;
-	
-	private boolean editMode;
-	
+		
 	private final JList<Item> list;
 	private final JPanel craftingSpace;
 	private final JPanel inputPanel;
+	private final JPanel vocabBox;
 	private final JButton enchantButton;
 	private final JEditorPane field;
+	
+	private final DefaultListModel<Item> model;
+	private final Map<String, JComponent> vocabModel;
 		
 	private static class ItemCellRenderer implements ListCellRenderer<Item> {
 		@Override
@@ -81,7 +89,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		super(focusedWindow);
 		inv = inventory;
 		fullInv = inventory.getFullInventory();
-		this.editMode = editMode;
 				
 		JPanel panel = new JPanel(new GridBagLayout());
 		panel.setPreferredSize(new Dimension(1000, 618)); //golden ratio
@@ -92,7 +99,8 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		setOpaque(false);
 		
 		//filter item panel
-		list = new JList<Item>(fullInv.getItems());
+		model = fullInv.getItemModel();
+		list = new JList<Item>(model);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setLayoutOrientation(JList.VERTICAL);
 		list.setBackground(NORMAL_BG);
@@ -128,7 +136,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 		field = new JEditorPane();
 		field.setContentType("text/html");
-		//((AbstractDocument) field.getDocument()).setDocumentFilter(new HieroglyphFilter());
 		field.setPreferredSize(new Dimension(650, 100));
 		field.setBorder(BorderFactory.createLineBorder(BORDER));
 		field.setBackground(SELECTED_BG);
@@ -154,24 +161,23 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		vocabInfo.setPreferredSize(new Dimension(700, 368));
 		vocabInfo.setBackground(NORMAL_BG);
 		vocabInfo.setBorder(BorderFactory.createLineBorder(BORDER, 5));
+		vocabInfo.setLayout(new GridLayout(0, 1));
+		
+		vocabBox = new JPanel();
+		vocabModel = new HashMap<>();
+		vocabBox.setOpaque(false);
 		
 		for (VocabDrop drop : fullInv.getVocab()) {
-			JPanel wordPanel = new JPanel();
-			wordPanel.setBackground(SELECTED_BG);
-			
-			JLabel icon = new JLabel(Hieroglyphs.getIcon(drop.getOrthography()));
-			JLabel orth = new JLabel(drop.getOrthography());
-			orth.setFont(new Font(orth.getFont().getName(), Font.BOLD, 16));
-			JLabel pos = new JLabel(drop.getMeaning().getPOS().getSimpleName());
-			pos.setFont(new Font(pos.getFont().getName(), Font.ITALIC, 12));
-			String d = drop.getMeaning().getShortDesc();
-			JLabel desc = new JLabel(d == null ? "unknown" : d);
-			desc.setFont(new Font(pos.getFont().getName(), Font.PLAIN, 14));
-			wordPanel.add(icon);
-			wordPanel.add(orth);
-			wordPanel.add(pos);
-			wordPanel.add(desc);
-			vocabInfo.add(wordPanel);
+			addWordPanel(drop);
+		}
+		
+		vocabInfo.add(vocabBox);
+		if (editMode) {
+			JComponent buttons = new JPanel();
+			buttons.setOpaque(false);
+			buttons.add(createButton("Add"));
+			buttons.add(createButton("Delete"));
+			vocabInfo.add(buttons);
 		}
 		
 		c.fill = GridBagConstraints.BASELINE;
@@ -197,13 +203,94 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		return String.join(" ", Grammar.getWords(field.getText()));
 	}
 	
+	private void redrawVocab() {
+		//TODO update vocab
+	}
+	
+	private void addWordPanel(VocabDrop drop) {
+		
+		JPanel wordPanel = new JPanel();
+		wordPanel.setBackground(SELECTED_BG);
+		
+		JLabel icon = new JLabel(Hieroglyphs.getIcon(drop.getOrthography()));
+		JLabel orth = new JLabel(drop.getOrthography());
+		orth.setFont(new Font(orth.getFont().getName(), Font.BOLD, 16));
+		JLabel pos = new JLabel(drop.getMeaning().getPOS().getSimpleName());
+		pos.setFont(new Font(pos.getFont().getName(), Font.ITALIC, 12));
+		String d = drop.getMeaning().getShortDesc();
+		JLabel desc = new JLabel(d == null ? "unknown" : d);
+		desc.setFont(new Font(pos.getFont().getName(), Font.PLAIN, 14));
+		wordPanel.add(icon);
+		wordPanel.add(orth);
+		wordPanel.add(pos);
+		wordPanel.add(desc);
+		
+		vocabModel.put(drop.getOrthography(), wordPanel);
+		vocabBox.add(wordPanel);
+		
+	}
+	
+	private void add(Droppable d) {
+		fullInv.add(d);
+		if (d instanceof Item) {
+			model.addElement((Item) d);
+		}
+		if (d instanceof VocabDrop) {
+			addWordPanel((VocabDrop) d);
+			vocabBox.revalidate();
+		}
+	}
+	
+	private void delete(Droppable d) {
+		fullInv.remove(d);
+		if (d instanceof Item) {
+			model.removeElement((Item) d);
+		}
+		if (d instanceof VocabDrop) {
+			vocabBox.remove(vocabModel.get(((VocabDrop) d).getOrthography()));
+			vocabModel.remove(((VocabDrop) d).getOrthography());
+			vocabBox.revalidate();
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Enchant")) {
 			list.getSelectedValue().setSpell(Grammar.parseString(getTagless()));
 			setGlyphs();
-			list.requestFocus();
 		}
+		if (e.getActionCommand().equals("Add")) {
+			
+			DialogMap inputs = new DialogMap();
+			inputs.put("Droppable", "Enter word or item here");
+			dialog("Enter droppable to add to inventory", inputs);
+			
+			add(Droppable.fromString(inputs.getText("Droppable")));
+			redrawVocab();
+		}
+		if (e.getActionCommand().equals("Delete")) {
+			
+			DialogMap inputs = new DialogMap();
+			inputs.put("Word", "Enter here...");
+			dialog("Enter word to remove from inventory", inputs);
+			
+			delete(Droppable.fromString(inputs.getText("Word")));
+			redrawVocab();
+		}
+		
+		list.requestFocus();
+		
+	}
+	
+	@Override
+	public void keyPressed(KeyEvent e) {
+		
+		super.keyPressed(e);
+		
+		if (Key.DELETE.isPressed(e) && list.getSelectedValue() != null) {
+			delete(list.getSelectedValue());
+		}
+		
 	}
 
 	@Override
@@ -253,25 +340,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	@Override
 	public void changedUpdate(DocumentEvent e) {
 		checkParse(e);
-	}
-	
-	@Override
-	public void keyPressed(KeyEvent e) {
-		
-		super.keyPressed(e);
-		
-		if (!editMode) {
-			return;
-		}
-		
-		if (Key.E.isPressed(e)) {
-			//add something
-		}
-		
-		if (Key.DELETE.isPressed(e)) {
-			//remove selected word/vocab?
-		}
-		
 	}
 	
 	@Override

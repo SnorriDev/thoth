@@ -46,6 +46,11 @@ public abstract class FocusedWindow extends GamePanel implements MouseListener, 
 		paused = true;
 	}
 	
+	public void editInventory(Inventory inv) {
+		Main.setOverlay(new InventoryOverlay(this, inv, true));
+		paused = true;
+	}
+	
 	public boolean isPaused() {
 		return paused;
 	}
