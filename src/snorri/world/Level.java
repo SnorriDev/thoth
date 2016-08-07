@@ -19,7 +19,6 @@ import java.util.Queue;
 
 import snorri.entities.Entity;
 import snorri.entities.Unit;
-import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.masking.Mask;
@@ -292,13 +291,11 @@ public class Level implements Editable {
 	 * this is FAR less computationally intensive than computing all sub-graphs
 	 */
 	public void computePathability() {
-		Main.log("computing pathfinding grid...");
 		for (int i = 0; i < dim.getX(); i++) {
 			for (int j = 0; j < dim.getY(); j++) {
 				map[i][j].computeSurroundingsPathable(i, j, this);
 			}
 		}
-		Main.log("pathfinding grid computed!");
 	}
 	
 	public boolean isPathable(Vector pos) {
@@ -372,33 +369,24 @@ public class Level implements Editable {
 		out.close();
 	}
 
-	@SuppressWarnings("unused")
 	private void computeConnectedSubGraphs() {
 		
 		connectedSubGraphs = new ArrayList<ArrayList<Vector>>();
 		boolean[][] visited = new boolean[dim.getX()][dim.getY()];
-		
-		Main.log("computing connected sub-graphs...");
-		
+				
 		for (int x = 0; x < dim.getX(); x++) {
 			for (int y = 0; y < dim.getY(); y++) {
-				
-				double percent = 100 * (1.0 * x * dim.getY() + y) / (dim.getX() * dim.getY());
-				if (Debug.LOG_COMPUTE_GRAPHS && percent % 20 == 0) {
-					Main.log("\t" + (int) percent + "% of tiles checked");
-				}
 				
 				if (!isContextPathable(x, y) || visited[x][y]) {
 					continue;
 				}
 								
 				connectedSubGraphs.add(computeConnectedSubGraph(new Vector(x, y), visited));
-				Main.log("\tfound new sub-graph");
 				
 			}
 		}
 		
-		Main.log(connectedSubGraphs.size() + " sub-graph(s) computed!");
+		Main.log("found " + connectedSubGraphs.size() + "sub-graphs in level");
 		
 		computeGraphHash();
 		

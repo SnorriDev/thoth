@@ -14,7 +14,6 @@ public class Debug {
 	public static final boolean SHOW_ORB_OUTPUT = false;
 	public static final boolean DISABLE_PATHFINDING = false;
 	public static final boolean SHOW_COLLIDERS = false;
-	public static final boolean LOG_COMPUTE_GRAPHS = false;
 	public static final boolean HIDE_MASKS = false;
 
 	public static void castWTFMode(String s, SpellEvent e) {
