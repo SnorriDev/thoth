@@ -1,0 +1,12 @@
+onStart:
+  events:
+    - TIMELINE:
+        object: start
+  actions:
+    - BROADCAST:
+        msg: helloWorld
+        
+helloWorld:
+  actions:
+    - BROADCAST:
+        msg: nothing

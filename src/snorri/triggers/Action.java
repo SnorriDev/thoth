@@ -67,7 +67,7 @@ public abstract class Action {
 		
 	}
 	
-	public static Runnable getNew(String key, World world, Map<String, Object> args) {
+	public static Runnable getRunnable(String key, World world, Map<String, Object> args) {
 		Actions a = Actions.valueOf(key);
 		return (a == null) ? null : a.build(world, args);
 	}

@@ -3,6 +3,8 @@ package snorri.main;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
+import java.util.Collection;
+import java.util.Collections;
 
 public class Util {
 
@@ -35,6 +37,10 @@ public class Util {
 	
 	public static String clean(String constant) {
 		return constant.toLowerCase().replace('_', ' ');
+	}
+	
+	public static Collection<Object> safe(Collection<Object> c) {
+		return c == null ? Collections.emptyList() : c;
 	}
 	
 }

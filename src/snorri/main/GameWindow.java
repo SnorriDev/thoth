@@ -15,6 +15,7 @@ import snorri.entities.Unit;
 import snorri.inventory.Droppable;
 import snorri.keyboard.Key;
 import snorri.overlay.DeathScreen;
+import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Playable;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -48,6 +49,11 @@ public class GameWindow extends FocusedWindow {
 	}
 	
 	@Override
+	protected void onStart() {
+		TriggerType.TIMELINE.activate("start");
+	}
+	
+	@Override
 	protected void onFrame() {
 				
 		long time = getTimestamp();
@@ -67,6 +73,7 @@ public class GameWindow extends FocusedWindow {
 		}
 		
 		if (!hasDied && focus != null && focus.isDead()) {
+			TriggerType.TIMELINE.activate("death");
 			hasDied = true;
 			Main.setOverlay(new DeathScreen());
 		}
@@ -126,6 +133,11 @@ public class GameWindow extends FocusedWindow {
 	public void keyPressed(KeyEvent e) {
 		
 		super.keyPressed(e);
+		
+		if (focus == null || focus.isDead()) {
+			return;
+		}
+		
 		if (Key.ESC.isPressed(e)) {
 			pause();
 		}

@@ -27,6 +27,7 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 		SwingWorker<Object, Object> sw = new SwingWorker<Object, Object>() {
 			@Override
 			protected Object doInBackground() throws Exception {
+				onStart();
 				while (!stopped) {
 					try {
 						onFrame();
@@ -91,11 +92,15 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 		return getDimensions().divide(2);
 	}
 
+	protected void onStart() {
+	}
+	
 	protected void onFrame() {
-
 	}
 
-	// returns nanosecond-accurate time
+	/**
+	 * @return nanosecond-accurate time
+	 */
 	protected long getTimestamp() {
 		return System.nanoTime();
 	}

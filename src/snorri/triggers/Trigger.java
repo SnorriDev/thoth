@@ -19,15 +19,15 @@ import snorri.world.World;
 public class Trigger {
 
 	private static final Map<String, Entity> tags = new HashMap<>();
-	private static final List<Trigger> triggers = new ArrayList<>();
+	//private static final List<Trigger> triggers = new ArrayList<>();
 	
-	private final Queue<Runnable> actions;
+	private final Queue<Runnable> runnableActions;
 	private final String name;
 	private final HashMap<TriggerType, Object> objects;
 	
 	public enum TriggerType {
 	
-		START,
+		TIMELINE,
 		BROADCAST,
 		COLLISION,
 		DOOR_OPEN;
@@ -69,23 +69,27 @@ public class Trigger {
 		
 		this.name = name;
 		
-		actions = new LinkedList<>();
+		runnableActions = new LinkedList<>();
 		for (Map<String, Map<String, Object>> action : data.get("actions")) {
 			Entry<String, Map<String, Object>> e = getFirstEntry(action);
-			actions.add(Action.getNew(e.getKey(), world, e.getValue()));
+			runnableActions.add(Action.getRunnable(e.getKey(), world, e.getValue()));
 		}
 		
 		objects = new HashMap<>();
-		for (Map<String, Map<String, Object>> event : data.get("events")) {
-			Entry<String, Map<String, Object>> e = getFirstEntry(event);
-			TriggerType type = TriggerType.valueOf(e.getKey());
-			if (type == null) {
-				Main.error("unknown event type " + e.getKey());
-				return;
+		if (data.get("events") != null) {
+			for (Map<String, Map<String, Object>> event : data.get("events")) {
+				Entry<String, Map<String, Object>> e = getFirstEntry(event);
+				TriggerType type = TriggerType.valueOf(e.getKey());
+				if (type == null) {
+					Main.error("unknown event type " + e.getKey());
+					return;
+				}
+				objects.put(type, e.getValue().get("object"));
+				type.add(this);
 			}
-			objects.put(type, e.getValue().get("object"));
-			type.add(this);
 		}
+		objects.put(TriggerType.BROADCAST, name);
+		TriggerType.BROADCAST.add(this);
 
 	}
 	
@@ -101,7 +105,8 @@ public class Trigger {
 			for (Entry<String, Object> rawTrigger : rawTriggers.entrySet()) {
 				String name = rawTrigger.getKey();
 				Map<String, List<Map<String, Map<String, Object>>>> data = (Map<String, List<Map<String, Map<String, Object>>>>) rawTrigger.getValue();
-				triggers.add(new Trigger(world, name, data));
+				new Trigger(world, name, data);
+				//triggers.add(new Trigger(world, name, data));
 			}
 		} catch (FileNotFoundException e) {
 			Main.error("could not find trigger file " + triggerFile);
@@ -109,9 +114,7 @@ public class Trigger {
 			Main.error("could not parse YAML");
 			e.printStackTrace();
 		}
-		
-		Main.log(triggers);
-		
+				
 	}
 	
 	public Object getObject(TriggerType type) {
@@ -131,12 +134,12 @@ public class Trigger {
 	}
 	
 	/**
-	 * Execute the 
+	 * Execute the action queue
 	 */
 	private void exec() {
-		while (!actions.isEmpty()) {
-			actions.poll().run();
-			//new Thread().start(); if we want to do async
+		while (!runnableActions.isEmpty()) {
+			Main.log("firing trigger " + name + "...");
+			runnableActions.poll().run();
 		}
 	}
 	
