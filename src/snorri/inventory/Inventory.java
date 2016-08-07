@@ -67,24 +67,40 @@ public class Inventory implements Serializable {
 		return fullInventory;
 	}
 
-	public void addOrb(Orb newProjectile) {
+	public boolean addOrb(Orb newProjectile) {
 		for (int i = 0; i < ORB_SLOTS; i++) {
 			if (orbSlots[i] == null) {
 				orbSlots[i] = newProjectile;
-				return;
+				return true;
 			}
 		}
-		Main.error("all projectile slots full, cannot add projectile");
+		return false;
 	}
 
-	public void addPapyrus(Papyrus newPapyrus) {
+	public boolean addPapyrus(Papyrus newPapyrus) {
 		for (int i = 0; i < PAPYRUS_SLOTS; i++) {
 			if (papyrusSlots[i] == null) {
 				papyrusSlots[i] = newPapyrus;
-				return;
+				return true;
 			}
 		}
-		Main.error("all papyrus slots full, cannot add papyrus");
+		return false;
+	}
+	
+	public boolean addWeapon(Weapon newWeapon) {
+		if (weaponSlot == null) {
+			weaponSlot = newWeapon;
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean addArmor(Armor newArmor) {
+		if (armorSlot == null) {
+			armorSlot = newArmor;
+			return true;
+		}
+		return false;
 	}
 	
 	public void usePapyrus(int i) {
@@ -215,24 +231,47 @@ public class Inventory implements Serializable {
 		drawItemContainer(g, pos, item, slotType, !(item == null || !item.canUse()));
 	}
 	
-	public void remove(Droppable d) {
+	private boolean compare(Droppable d1, Droppable d2, boolean specific) {
+		return (specific && d1 == d2) || (!specific && d1.equals(d2));
+	}
+	
+	public void add(Droppable d) {
 		
+		if (d instanceof Papyrus) {
+			addPapyrus((Papyrus) d);
+		}
+		if (d instanceof Orb) {
+			addOrb((Orb) d);
+		}
+		if (d instanceof Weapon) {
+			addWeapon((Weapon) d);
+		}
+		if (d instanceof Armor) {
+			addArmor((Armor) d);
+		}
+		
+		fullInventory.add(d);
+
+	}
+	
+	public void remove(Droppable d, boolean specific) {
+				
 		if (d instanceof Item) {
-		
-			if (weaponSlot.equals(d)) {
+			
+			if (compare(d, weaponSlot, specific)) {
 				weaponSlot = null;
 			}
-			if (armorSlot.equals(d)) {
+			if (compare(d, armorSlot, specific)) {
 				armorSlot = null;
 			}
-			for (Orb orbSlot : orbSlots) {
-				if (orbSlot.equals(d)) {
-					orbSlot = null;
+			for (int i = 0; i < orbSlots.length; i++) {
+				if (compare(d, orbSlots[i], specific)) {
+					orbSlots[i] = null;
 				}
 			}
-			for (Papyrus papyrusSlot : papyrusSlots) {
-				if (papyrusSlot.equals(d)) {
-					papyrusSlot = null;
+			for (int i = 0; i < papyrusSlots.length; i++) {
+				if (compare(d, papyrusSlots[i], specific)) {
+					papyrusSlots[i] = null;
 				}
 			}
 		

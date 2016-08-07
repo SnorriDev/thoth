@@ -42,19 +42,12 @@ public class Player extends Unit implements Carrier {
 		Papyrus p1 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
 		Papyrus p2 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
 		
-		//add items to full inventory
-		inventory.getFullInventory().add(sling);
-		inventory.getFullInventory().add(o1);
-		inventory.getFullInventory().add(o2);
-		inventory.getFullInventory().add(p1);
-		inventory.getFullInventory().add(p2);
-		
 		//equip items in inventory
-		inventory.setWeapon(sling);
-		inventory.addOrb(o1);
-		inventory.addOrb(o2);
-		inventory.addPapyrus(p1);
-		inventory.addPapyrus(p2);
+		inventory.add(sling);
+		inventory.add(o1);
+		inventory.add(o2);
+		inventory.add(p1);
+		inventory.add(p2);
 		
 	}
 	

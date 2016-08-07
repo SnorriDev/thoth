@@ -407,7 +407,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		if (Key.DELETE.isPressed(e)) {
 			deleteEntity();
 		}
-		if (Key.I.isPressed(e)) {
+		if (Key.SPACE.isPressed(e)) {
 			openEntityInventory();
 		}
 

@@ -2,7 +2,6 @@ package snorri.terrain;
 
 import java.awt.Rectangle;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,10 +39,7 @@ public class DungeonGen extends TerrainGen {
 
 		try {
 			Main.log("loading dungeon structures...");
-			YamlReader reader = new YamlReader(new FileReader(Main.getFile("/worlds/structures/doors.yaml")));
-			reader.getConfig().setClassTag("door", Vector.class);
-			reader.getConfig().setClassTag("spawn", Vector.class);
-			reader.getConfig().setClassTag("struct", Structure.class);
+			YamlReader reader = Main.getYamlReader("/worlds/structures/doors.yaml");
 			structures = (HashMap<String, Structure>) reader.read();
 			for (String key : structures.keySet()) {
 				Editable l;

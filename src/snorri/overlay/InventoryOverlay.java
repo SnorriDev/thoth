@@ -230,7 +230,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	}
 	
 	private void add(Droppable d) {
-		fullInv.add(d);
+		inv.add(d);
 		if (d instanceof Item) {
 			model.addElement((Item) d);
 		}
@@ -240,8 +240,8 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		}
 	}
 	
-	private void delete(Droppable d) {
-		inv.remove(d);
+	private void delete(Droppable d, boolean specific) {
+		inv.remove(d, specific);
 		if (d instanceof Item) {
 			model.removeElement((Item) d);
 		}
@@ -273,7 +273,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			inputs.put("Word", "Enter here...");
 			dialog("Enter word to remove from inventory", inputs);
 			
-			delete(Droppable.fromString(inputs.getText("Word")));
+			delete(Droppable.fromString(inputs.getText("Word")), false);
 			redrawVocab();
 		}
 		
@@ -287,7 +287,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		super.keyPressed(e);
 		
 		if (Key.DELETE.isPressed(e) && list.getSelectedValue() != null) {
-			delete(list.getSelectedValue());
+			delete(list.getSelectedValue(), true);
 		}
 		
 	}
@@ -300,6 +300,11 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	}
 	
 	private void setGlyphs() {
+		
+		if (list.getSelectedValue() == null) {
+			return;
+		}
+		
 		if (list.getSelectedValue().getSpell() == null) {
 			field.setText("<p>enter spell here...</p>");
 		} else {

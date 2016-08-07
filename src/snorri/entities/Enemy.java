@@ -43,10 +43,8 @@ public class Enemy extends Unit implements Pathfinder, Carrier {
 		this.target = target;
 		inventory = new Inventory(this);
 		animation = new Animation(Animation.MUMMY_IDLE);
-		setOrb((Orb) Item.newItem(ItemType.PELLET));
-		setWeapon((Weapon) Item.newItem(ItemType.SLOW_SLING));
-		getFullInventory().add(inventory.getOrb(0));
-		getFullInventory().add(inventory.getWeapon());
+		getInventory().add(Item.newItem(ItemType.PELLET));
+		getInventory().add(Item.newItem(ItemType.SLOW_SLING));
 		//TODO make this automatic
 	}
 	

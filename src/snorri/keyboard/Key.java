@@ -18,10 +18,11 @@ public enum Key {
 	SPACE(32, ' '),
 	ESC(27, ' '),
 	
-	Q(81, 'q'), //general debuggin
 	E(69, 'e'), //spawn entity
 	DELETE(8, ' '), //delete entity
-	I(73, 'i'); //open entity inventory
+	
+	Q(81, 'q'), //UNUSED
+	I(73, 'i'); //UNUSED
 	
 	private int id;
 	private char ch;

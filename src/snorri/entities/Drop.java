@@ -34,7 +34,7 @@ public class Drop extends Detector {
 			if (Main.getWindow() instanceof GameWindow) {
 				((GameWindow) Main.getWindow()).showDialog(getPrize());
 			}
-			((Player) e.getTarget()).getFullInventory().add(getPrize());
+			((Player) e.getTarget()).getInventory().add(getPrize());
 			e.getWorld().delete(this);
 		}
 	}

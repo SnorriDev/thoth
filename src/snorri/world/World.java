@@ -20,6 +20,7 @@ import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.pathfinding.Pathfinding;
+import snorri.triggers.Trigger;
 
 public class World implements Playable, Editable {
 
@@ -269,6 +270,11 @@ public class World implements Playable, Editable {
 		level = new Level(new File(f, "level.dat"));
 		col = QuadTree.coverLevel(level);
 		col.loadEntities(new File(f, "entities.dat"));
+		
+		File triggerFile = new File(f, "triggers.yml");
+		if (triggerFile.exists()) {
+			Trigger.load(triggerFile, this);
+		}
 
 	}
 

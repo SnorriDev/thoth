@@ -9,6 +9,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -17,8 +19,11 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.UIManager;
 
+import net.sourceforge.yamlbeans.YamlReader;
 import snorri.parser.Lexicon;
+import snorri.terrain.Structure;
 import snorri.terrain.TerrainGen;
+import snorri.world.Vector;
 import snorri.world.World;
 
 public class Main {
@@ -152,6 +157,19 @@ public class Main {
 			Main.error("issue loading image " + path);
 			return null;
 		}
+	}
+	
+	public static YamlReader getYamlReader(File f) throws FileNotFoundException {
+		YamlReader reader = new YamlReader(new FileReader(f));
+		reader.getConfig().setClassTag("door", Vector.class);
+		reader.getConfig().setClassTag("spawn", Vector.class);
+		reader.getConfig().setClassTag("vector", Vector.class);
+		reader.getConfig().setClassTag("struct", Structure.class);
+		return reader;
+	}
+	
+	public static YamlReader getYamlReader(String path) throws FileNotFoundException {
+		return getYamlReader(getFile(path));
 	}
 
 	public static File getFileDialog(String msg, int flag) {
