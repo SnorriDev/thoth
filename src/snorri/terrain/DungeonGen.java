@@ -90,7 +90,6 @@ public class DungeonGen extends TerrainGen {
 		spawnQ = new LinkedList<Entity>();
 		start = dim.copy().divide(2);
 		if (Math.random() > 0.5) {
-			Main.log("inverting start");
 			start.invert();
 		}
 		
@@ -101,7 +100,6 @@ public class DungeonGen extends TerrainGen {
 		nextDoor: while (!doorQ.isEmpty()) {
 			Collections.shuffle(children);
 			Vector pos = doorQ.poll();
-			//TODO match with door pos on other thing
 			for (Structure s : children) {
 				for (Vector drawPos : s.getStarts(pos)) {
 					if (s.drawAt(l, filledRegions, spawnQ, drawPos)) {
