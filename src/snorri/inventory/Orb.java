@@ -11,8 +11,8 @@ public class Orb extends Item {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final Image ORB_BORDER = Main.getImageResource("/textures/hud/projectileBorderInactive.png");
-	private static final Image ORB_BORDER_SELECTED = Main.getImageResource("/textures/hud/projectileBorder.png");
+	private static final Image ORB_BORDER = Main.getImage("/textures/hud/projectileBorderInactive.png");
+	private static final Image ORB_BORDER_SELECTED = Main.getImage("/textures/hud/projectileBorder.png");
 	private static final Color ORB_COOLDOWN_COLOR = new Color(1, 69, 101, 150);
 	
 	public Orb(ItemType t) {

@@ -20,7 +20,6 @@ import java.util.Queue;
 import snorri.collisions.Collider;
 import snorri.entities.Entity;
 import snorri.entities.Unit;
-import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.masking.Mask;
@@ -284,7 +283,7 @@ public class Level implements Editable {
 		return;
 	}
 	
-	public static Rectangle getRectange(int i, int j) {
+	public static Rectangle getRectangle(int i, int j) {
 		return new Rectangle(i * Tile.WIDTH, j * Tile.WIDTH, Tile.WIDTH, Tile.WIDTH);
 	}
 	
@@ -293,13 +292,11 @@ public class Level implements Editable {
 	 * this is FAR less computationally intensive than computing all sub-graphs
 	 */
 	public void computePathability() {
-		Main.log("computing pathfinding grid...");
 		for (int i = 0; i < dim.getX(); i++) {
 			for (int j = 0; j < dim.getY(); j++) {
 				map[i][j].computeSurroundingsPathable(i, j, this);
 			}
 		}
-		Main.log("pathfinding grid computed!");
 	}
 	
 	public boolean isPathable(Vector pos) {
@@ -373,33 +370,24 @@ public class Level implements Editable {
 		out.close();
 	}
 
-	@SuppressWarnings("unused")
 	private void computeConnectedSubGraphs() {
 		
 		connectedSubGraphs = new ArrayList<ArrayList<Vector>>();
 		boolean[][] visited = new boolean[dim.getX()][dim.getY()];
-		
-		Main.log("computing connected sub-graphs...");
-		
+				
 		for (int x = 0; x < dim.getX(); x++) {
 			for (int y = 0; y < dim.getY(); y++) {
-				
-				double percent = 100 * (1.0 * x * dim.getY() + y) / (dim.getX() * dim.getY());
-				if (Debug.LOG_COMPUTE_GRAPHS && percent % 20 == 0) {
-					Main.log("\t" + (int) percent + "% of tiles checked");
-				}
 				
 				if (!isContextPathable(x, y) || visited[x][y]) {
 					continue;
 				}
 								
 				connectedSubGraphs.add(computeConnectedSubGraph(new Vector(x, y), visited));
-				Main.log("\tfound new sub-graph");
 				
 			}
 		}
 		
-		Main.log(connectedSubGraphs.size() + " sub-graph(s) computed!");
+		Main.log("found " + connectedSubGraphs.size() + "sub-graphs in level");
 		
 		computeGraphHash();
 		
@@ -771,7 +759,7 @@ public class Level implements Editable {
 		Collider c = e.getCollider();
 		for (int x1 = (x - c.getRadiusX()) / Tile.WIDTH; x1 <= (x + c.getRadiusX()) / Tile.WIDTH; x1++) {
 			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH; y1++) {
-				if (getTileGrid(x1, y1) != null && c.intersects(getRectange(x1, y1))) {
+				if (getTileGrid(x1, y1) != null && c.intersects(getRectangle(x1, y1))) {
 					getTileGrid(x1, y1).setOccupied(true);
 					Main.log(getTileGrid(x1, y1).isContextPathable());
 				}

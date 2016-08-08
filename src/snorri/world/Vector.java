@@ -47,10 +47,17 @@ public class Vector implements Serializable, Comparable<Vector> {
 		this.y = v.y;
 	}
 	
+	/**
+	 * Note: this method is intended for
+	 * vectors in grid coordinates
+	 */
+	public Vector getRelPosGrid(FocusedWindow g) {
+		return copy().multiply(Tile.WIDTH).getRelPos(g);
+	}
+	
 	public Vector getRelPos(FocusedWindow g) {
 		Vector focusPos = g.getFocus().getPos();
-		Vector relPos = this.multiply(Tile.WIDTH).sub(focusPos).add(g.getDimensions().divide(2));
-		return relPos;
+		return copy().sub(focusPos).add(g.getDimensions().divide(2));
 	}
 
 	public int getX() {

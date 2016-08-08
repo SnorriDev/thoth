@@ -1,5 +1,8 @@
 package snorri.inventory;
 
+import java.awt.Image;
+
+import snorri.hieroglyphs.Hieroglyphs;
 import snorri.parser.Lexicon;
 import snorri.semantics.Definition;
 
@@ -46,6 +49,11 @@ public class VocabDrop implements Droppable, Comparable<VocabDrop> {
 	@Override
 	public int compareTo(VocabDrop other) {
 		return getOrthography().compareTo(other.getOrthography());
+	}
+
+	@Override
+	public Image getTexture() {
+		return Hieroglyphs.getImage(orthography);
 	}
 	
 }

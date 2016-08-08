@@ -1,5 +1,6 @@
 package snorri.semantics;
 
+import snorri.main.Util;
 import snorri.world.World;
 
 public interface Nominal {
@@ -9,7 +10,7 @@ public interface Nominal {
 
 		@Override
 		public String toString() {
-			return name().toLowerCase();
+			return Util.clean(name());
 		}
 		
 	}

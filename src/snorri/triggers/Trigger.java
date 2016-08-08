@@ -2,27 +2,32 @@ package snorri.triggers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Queue;
 
+import net.sourceforge.yamlbeans.YamlException;
 import net.sourceforge.yamlbeans.YamlReader;
 import snorri.entities.Entity;
 import snorri.main.Main;
+import snorri.world.World;
 
 public class Trigger {
 
-	private static final Map<String, Entity> tags = new HashMap<String, Entity>();
+	private static final Map<String, Entity> tags = new HashMap<>();
+	//private static final List<Trigger> triggers = new ArrayList<>();
 	
-	private final Queue<Runnable> actions;
-	private final Object object;
+	private final Queue<Runnable> runnableActions;
+	private final String name;
+	private final HashMap<TriggerType, Object> objects;
 	
 	public enum TriggerType {
 	
-		START,
+		TIMELINE,
 		BROADCAST,
 		COLLISION,
 		DOOR_OPEN;
@@ -39,13 +44,17 @@ public class Trigger {
 		
 		public void activate(Object object) {
 			for (Trigger t : active.toArray(new Trigger[0])) {
-				if (t.object.equals(object)) {
+				if (t.getObject(this).equals(object)) {
 					t.exec();
 					remove(t);
 				}
 			}
 		}
 		
+	}
+	
+	private Entry<String, Map<String, Object>> getFirstEntry(Map<String, Map<String, Object>> map) {
+		return map.entrySet().iterator().next();
 	}
 	
 	/**
@@ -56,29 +65,65 @@ public class Trigger {
 	 * For example, for an on collision trigger, this would be the
 	 * Entity of interest.
 	 */
-	public Trigger(Object object, Queue<Runnable> actions) {
-		this.actions = actions;
-		this.object = object;
-	}
-	
-	/**
-	 * @see <code>Trigger(Object, Runnable)</code>
-	 */
-	public Trigger(String tag, Queue<Runnable> actions) {
-		this(getByTag(tag), actions);
-	}
+	public Trigger(World world, String name, Map<String, List<Map<String, Map<String, Object>>>> data) {
 		
-	public static List<Trigger> load(File file) {
+		this.name = name;
 		
-		try {
-			YamlReader reader = new YamlReader(new FileReader(file));
-		} catch (FileNotFoundException e) {
-			Main.error("trigger file " + file.getName() + " does not exist");
+		runnableActions = new LinkedList<>();
+		for (Map<String, Map<String, Object>> action : data.get("actions")) {
+			Entry<String, Map<String, Object>> e = getFirstEntry(action);
+			runnableActions.add(Action.getRunnable(e.getKey(), world, e.getValue()));
 		}
 		
-		//TODO write this
-		return null;
+		objects = new HashMap<>();
+		if (data.get("events") != null) {
+			for (Map<String, Map<String, Object>> event : data.get("events")) {
+				Entry<String, Map<String, Object>> e = getFirstEntry(event);
+				TriggerType type = TriggerType.valueOf(e.getKey());
+				if (type == null) {
+					Main.error("unknown event type " + e.getKey());
+					return;
+				}
+				objects.put(type, e.getValue().get("object"));
+				type.add(this);
+			}
+		}
+		objects.put(TriggerType.BROADCAST, name);
+		TriggerType.BROADCAST.add(this);
+
+	}
+	
+
+	@SuppressWarnings("unchecked")
+	public static void load(File triggerFile, World world) {
 		
+		try {
+			YamlReader reader = Main.getYamlReader(triggerFile);
+			Map<String, Object> rawTriggers = (Map<String, Object>) reader.read();
+			if (rawTriggers == null) {
+				return;
+			}
+			for (Entry<String, Object> rawTrigger : rawTriggers.entrySet()) {
+				String name = rawTrigger.getKey();
+				Map<String, List<Map<String, Map<String, Object>>>> data = (Map<String, List<Map<String, Map<String, Object>>>>) rawTrigger.getValue();
+				new Trigger(world, name, data);
+				//triggers.add(new Trigger(world, name, data));
+			}
+		} catch (FileNotFoundException e) {
+			Main.error("could not find trigger file " + triggerFile);
+		} catch (YamlException e) {
+			Main.error("could not parse YAML");
+			e.printStackTrace();
+		}
+				
+	}
+	
+	public Object getObject(TriggerType type) {
+		return objects.get(type);
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public static void setTag(String tag, Entity e) {
@@ -90,12 +135,12 @@ public class Trigger {
 	}
 	
 	/**
-	 * Execute the 
+	 * Execute the action queue
 	 */
 	private void exec() {
-		while (!actions.isEmpty()) {
-			actions.poll().run();
-			//new Thread().start(); if we want to do async
+		while (!runnableActions.isEmpty()) {
+			Main.log("firing trigger " + name + "...");
+			runnableActions.poll().run();
 		}
 	}
 	

@@ -1,6 +1,7 @@
 package snorri.world;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -76,5 +77,7 @@ public interface EntityGroup {
 	public void move(Entity obj, Vector newPos);
 
 	public Entity getFirstCollisionOtherThan(Entity e, Entity other);
+
+	public Entity getFirstCollision(Rectangle rectangle, boolean hitAll);
 	
 }

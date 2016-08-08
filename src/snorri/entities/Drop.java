@@ -1,6 +1,5 @@
 package snorri.entities;
 
-import snorri.animations.Animation;
 import snorri.events.CollisionEvent;
 import snorri.inventory.Droppable;
 import snorri.main.GameWindow;
@@ -10,9 +9,9 @@ import snorri.world.Vector;
 public class Drop extends Detector {
 	
 	private static final long serialVersionUID = 1L;
-	public static final Animation SPARKLE = new Animation("/textures/animations/sparkle");
 	
 	private final Droppable prize;
+
 	
 	public Drop(Vector pos, Droppable prize) {
 		super(pos, 15);
@@ -20,7 +19,7 @@ public class Drop extends Detector {
 		treeMember = true;
 		age = -1;
 		ignoreCollisions = true;
-		animation = new Animation(SPARKLE);
+		animation = prize.getAnimation();
 	}
 	
 	public Drop(Vector pos, String prize) {
@@ -35,9 +34,9 @@ public class Drop extends Detector {
 	public void onCollision(CollisionEvent e) {
 		if (e.getTarget() instanceof Player) {
 			if (Main.getWindow() instanceof GameWindow) {
-				((GameWindow) Main.getWindow()).showDialog(getPrize() + " acquired!");
+				((GameWindow) Main.getWindow()).showDialog(getPrize());
 			}
-			((Player) e.getTarget()).getFullInventory().add(getPrize());
+			((Player) e.getTarget()).getInventory().add(getPrize());
 			e.getWorld().delete(this);
 		}
 	}

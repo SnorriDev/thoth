@@ -36,7 +36,7 @@ public class Audio {
 	public static synchronized Clip getClip(String path) {
 		try {
 			Clip clip = AudioSystem.getClip();
-			clip.open(AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(Main.getPath(path)))));
+			clip.open(AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(Main.getFile(path)))));
 			return clip;
 		} catch (Exception e) {
 			Main.error("could not load clip " + path);

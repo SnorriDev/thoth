@@ -17,7 +17,7 @@ public class LoadingScreen extends GamePanel {
 
 	public LoadingScreen() {
 		label = new JLabel("Loading...");
-		add(new JLabel(new ImageIcon(Main.getImageResource("/textures/conceptArt/figure.png"))));
+		add(new JLabel(new ImageIcon(Main.getImage("/textures/conceptArt/figure.png"))));
 		add(label);
 		setVisible(true);
 		setFocusable(true);

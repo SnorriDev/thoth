@@ -1,7 +1,6 @@
 package snorri.main;
 
 import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -14,12 +13,9 @@ import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -28,6 +24,7 @@ import snorri.entities.Drop;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.entities.Portal;
+import snorri.inventory.Carrier;
 import snorri.keyboard.Key;
 import snorri.world.Campaign.WorldId;
 import snorri.world.Editable;
@@ -71,7 +68,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		super();
 
 		selectedTile = new Tile(0, 0);
-		selectedEntityClass = Entity.SPAWNABLE.get(0);
+		selectedEntityClass = Entity.EDIT_SPAWNABLE.get(0);
 		createMenu();
 
 		repaint();
@@ -165,7 +162,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		menu.setMnemonic(KeyEvent.VK_E);
 		menuBar.add(menu);
 
-		List<Class<? extends Entity>> entityClassList = Entity.SPAWNABLE;
+		List<Class<? extends Entity>> entityClassList = Entity.EDIT_SPAWNABLE;
 		ButtonGroup groupEntities = new ButtonGroup();
 
 		boolean firstEntity = true;
@@ -202,30 +199,6 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 		return wh;
 	}
-	
-	//replace this with a sleek overlay HUD instead of a popup window?
-	/**
-	 * a general method for making GUI dialogs
-	 * @param title
-	 * 	the title of the window
-	 * @param inputs
-	 * 	a dialog map of inputs and textfields;
-	 * as a side effect, this map will be updated,
-	 * and a pointer to it is return by the method
-	 * @return a pointer to the modified DialogMap
-	 */
-	private DialogMap dialog(String title, DialogMap inputs) {
-		JPanel panel = new JPanel(new GridLayout(0, 2));
-		for (String key : inputs.keySet()) {
-			panel.add(new JLabel(key));
-			panel.add(inputs.get(key));
-		}
-		int option = JOptionPane.showConfirmDialog(null, panel, title, JOptionPane.PLAIN_MESSAGE);
-		if (option == JOptionPane.CLOSED_OPTION) {
-			return null;
-		}
-		return inputs;
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -236,7 +209,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		}
 
 		if (e.getActionCommand().startsWith("spawn")) {
-			selectedEntityClass = Entity.SPAWNABLE
+			selectedEntityClass = Entity.EDIT_SPAWNABLE
 					.get(Integer.parseInt(e.getActionCommand().substring(5)));
 			return;
 		}
@@ -303,6 +276,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			redo();
 			break;
 		case "Quit":
+			Main.getFrame().setJMenuBar(null);
 			Main.setWindow(new MainMenu());
 		}
 
@@ -423,12 +397,18 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) {
-		if (arg0.getKeyChar() == Key.E.getChar()) {
+	public void keyPressed(KeyEvent e) {
+		
+		super.keyPressed(e);
+		
+		if (Key.E.isPressed(e)) {
 			spawnEntity();
 		}
-		if (arg0.getKeyChar() == Key.DELETE.getChar()) {
+		if (Key.DELETE.isPressed(e)) {
 			deleteEntity();
+		}
+		if (Key.SPACE.isPressed(e)) {
+			openEntityInventory();
 		}
 
 	}
@@ -463,7 +443,22 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		}
 	}
 
-	public void spawnEntity() {
+	private void openEntityInventory() {
+		
+		if (!(env instanceof World)) {
+			return;
+		}
+		
+		World world = (World) env;
+		Entity ent = world.getEntityTree().getFirstCollision(new Entity(getMousePosAbsolute()), true);
+		
+		if (ent instanceof Carrier) {
+			editInventory(((Carrier) ent).getInventory());
+		}
+		
+	}
+	
+	private void spawnEntity() {
 		
 		if (!(env instanceof World)) {
 			Main.error("tried to spawn entity in non-world");
@@ -479,9 +474,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		
 		//TODO auto-detect options for constructor; have method that gives them?
 		
+		Vector spawnPos = getMousePosAbsolute();
+		
 		try {
-			
-			Vector spawnPos = getMousePosAbsolute();
 			
 			if (selectedEntityClass.equals(Portal.class)) {
 				DialogMap inputs = new DialogMap();
@@ -510,7 +505,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		}
 	}
 
-	public void deleteEntity() {
+	private void deleteEntity() {
 		
 		if (!(env instanceof World)) {
 			Main.error("tried to delete entity in non-world");
@@ -518,7 +513,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		}
 		World world = (World) env;
 		
-		Entity deletableEntity = world.getEntityTree().getFirstCollision(new Entity(this.getMousePosAbsolute()), true);
+		Entity deletableEntity = world.getEntityTree().getFirstCollision(new Entity(getMousePosAbsolute()), true);
 		
 		autosaveUndo();
 		world.deleteHard(deletableEntity);
@@ -606,6 +601,12 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			return (Playable) env;
 		}
 		return null;
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

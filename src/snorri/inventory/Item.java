@@ -3,9 +3,11 @@ package snorri.inventory;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 
+import snorri.animations.Animation;
 import snorri.entities.Entity;
 import snorri.events.SpellEvent;
 import snorri.main.GameWindow;
@@ -24,8 +26,9 @@ public abstract class Item implements Droppable {
 	
 	private static final int ICON_SIZE = 64;
 	private static final int SMALL_ICON_SIZE = 32;
+	private static final int ENTITY_SIZE = 48;
 	
-	private static final Image DEFAULT_BORDER = Main.getImageResource("/textures/hud/itemBorder.png");
+	private static final Image DEFAULT_BORDER = Main.getImage("/textures/hud/itemBorder.png");
 	private static final Color DEFAULT_COOLDOWN_COLOR = new Color(156, 134, 73, 200);
 	
 	protected Timer timer;
@@ -33,13 +36,13 @@ public abstract class Item implements Droppable {
 	public enum ItemType {
 
 		EMPTY,
-		PAPYRUS(5, Papyrus.class, Main.getImageResource("/textures/items/papyrus.png")),
-		HELMET(Armor.class, Main.getImageResource("/textures/items/helmet.png"), 2d),
-		SLING(Weapon.class, Main.getImageResource("/textures/items/sling.png"), 34d, 0.45, "/sound/arrow.wav"),
-		PELLET(5, Orb.class, Main.getImageResource("/textures/items/pellet.png")),
-		SLOW_SLING(Weapon.class, Main.getImageResource("/textures/items/sling.png"), 34d, 2d, "/sound/arrow.wav"),
-		BOW(Weapon.class, Main.getImageResource("/textures/items/bow.png"), 75d, 0.6, "/sound/arrow.wav"),
-		ARROW(5, Orb.class, Main.getImageResource("/textures/items/arrow.png"));
+		PAPYRUS(5, Papyrus.class, Main.getImage("/textures/items/papyrus.png")),
+		HELMET(Armor.class, Main.getImage("/textures/items/helmet.png"), 2d),
+		SLING(Weapon.class, Main.getImage("/textures/items/sling.png"), 34d, 0.45, "/sound/arrow.wav"),
+		PELLET(5, Orb.class, Main.getImage("/textures/items/pellet.png")),
+		SLOW_SLING(Weapon.class, Main.getImage("/textures/items/sling.png"), 34d, 2d, "/sound/arrow.wav"),
+		BOW(Weapon.class, Main.getImage("/textures/items/bow.png"), 75d, 0.6, "/sound/arrow.wav"),
+		ARROW(5, Orb.class, Main.getImage("/textures/items/arrow.png"));
 
 		private Class<? extends Item> c;
 		private int maxQuantity = 1; //number of inventory slots; use Consumable class with data field for charges
@@ -135,7 +138,7 @@ public abstract class Item implements Droppable {
 		
 		@Override
 		public String toString() {
-			return name().toLowerCase();
+			return Util.clean(name());
 		}
 
 	}
@@ -147,6 +150,21 @@ public abstract class Item implements Droppable {
 	// returns the item type
 	public ItemType getType() {
 		return type;
+	}
+	
+	@Override
+	public Image getTexture() {
+		return type.getTexture();
+	}
+	
+	@Override
+	public Animation getAnimation() {
+		Image scaled = this.getTexture().getScaledInstance(ENTITY_SIZE, -1, Image.SCALE_SMOOTH);
+		BufferedImage img = new BufferedImage(scaled.getWidth(null), scaled.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = img.getGraphics();
+		g.drawImage(scaled, 0, 0, null);
+		g.dispose();
+		return new Animation(img);
 	}
 	
 	public void updateCooldown(double deltaTime) {

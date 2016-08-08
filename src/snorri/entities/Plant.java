@@ -1,13 +1,14 @@
 package snorri.entities;
 
+import snorri.collisions.Collider;
 import snorri.world.Vector;
 
-public class Plant extends Entity {
+public abstract class Plant extends Entity {
 
 	private static final long serialVersionUID = 1L;
-
-	public Plant(Vector pos) {
-		super(pos, 3);
+	
+	public Plant(Vector pos, Collider collider) {
+		super(pos, collider);
 	}
 
 }

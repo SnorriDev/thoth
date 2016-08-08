@@ -12,10 +12,10 @@ import snorri.entities.Desk;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.entities.Unit;
+import snorri.inventory.Droppable;
 import snorri.keyboard.Key;
 import snorri.overlay.DeathScreen;
-import snorri.overlay.InventoryOverlay;
-import snorri.overlay.PauseOverlay;
+import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Playable;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -31,22 +31,26 @@ public class GameWindow extends FocusedWindow {
 	
 	private Playable universe;
 	private Player focus;
-	private Queue<DialogMessage> dialogQ;
-	private boolean paused, hasDied;
+	private Queue<DropMessage> dialogQ;
+	private boolean hasDied;
 	private long lastTime;
 		
 	public GameWindow(Playable universe, Player focus) {
 		super();
 		this.universe = universe;
 		this.focus = focus;
-		dialogQ = new LinkedList<DialogMessage>();
+		dialogQ = new LinkedList<DropMessage>();
 		lastTime = getTimestamp();
-		paused = false;
 		hasDied = false;
 	}
 	
 	public GameWindow(Playable universe) {
 		this(universe, universe.computeFocus());
+	}
+	
+	@Override
+	protected void onStart() {
+		TriggerType.TIMELINE.activate("start");
 	}
 	
 	@Override
@@ -69,6 +73,7 @@ public class GameWindow extends FocusedWindow {
 		}
 		
 		if (!hasDied && focus != null && focus.isDead()) {
+			TriggerType.TIMELINE.activate("death");
 			hasDied = true;
 			Main.setOverlay(new DeathScreen());
 		}
@@ -99,10 +104,9 @@ public class GameWindow extends FocusedWindow {
 		focus.getInventory().render(this, g);
 		focus.renderHealthBar(g);
 		
-		int i = 0;
-		for (DialogMessage msg : dialogQ) {
-			msg.render(this, g, i);
-			i++;
+		int xTrans = 0;
+		for (DropMessage msg : dialogQ.toArray(new DropMessage[0])) {
+			xTrans += msg.render(this, g, xTrans);
 		}
 		
 	}
@@ -111,8 +115,8 @@ public class GameWindow extends FocusedWindow {
 		return focus;
 	}
 	
-	public void showDialog(String msg) {
-		dialogQ.add(new DialogMessage(msg));
+	public void showDialog(Droppable drop) {
+		dialogQ.add(new DropMessage(drop));
 	}
 	
 	@Override
@@ -129,6 +133,11 @@ public class GameWindow extends FocusedWindow {
 	public void keyPressed(KeyEvent e) {
 		
 		super.keyPressed(e);
+		
+		if (focus == null || focus.isDead()) {
+			return;
+		}
+		
 		if (Key.ESC.isPressed(e)) {
 			pause();
 		}
@@ -167,23 +176,8 @@ public class GameWindow extends FocusedWindow {
 		
 	}
 	
-	public void pause() {
-		Main.setOverlay(new PauseOverlay(this));
-		paused = true;
-	}
-	
-	public void unpause() {
-		Main.setOverlay(null);
-		paused = false;
-	}
-	
 	public void openInventory() {
-		Main.setOverlay(new InventoryOverlay(this, focus.getInventory()));
-		paused = true;
-	}
-	
-	public boolean isPaused() {
-		return paused;
+		openInventory(focus.getInventory());
 	}
 
 	public void mousePressed(MouseEvent e) {

@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.DefaultListModel;
+
 public class FullInventory extends ArrayList<Droppable> implements Serializable {
 
 	/**
@@ -55,6 +57,16 @@ public class FullInventory extends ArrayList<Droppable> implements Serializable 
 		return true;
 	}
 
+	public DefaultListModel<Item> getItemModel() {
+		DefaultListModel<Item> out = new DefaultListModel<>();
+		for (Droppable d : this) {
+			if (d instanceof Item) {
+				out.addElement((Item) d);
+			}
+		}
+		return out;
+	}
+	
 	public Item[] getItems() {
 		return (Item[]) getArray(new Item[0]);
 	}
@@ -75,6 +87,4 @@ public class FullInventory extends ArrayList<Droppable> implements Serializable 
 		return list.toArray(arr);
 	}
 		
-	//TODO Toby do stuff here!!
-
 }

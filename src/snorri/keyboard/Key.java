@@ -16,11 +16,13 @@ public enum Key {
 	FIVE(53, '5'),
 	
 	SPACE(32, ' '),
+	ESC(27, ' '),
 	
-	Q(81, 'q'), //debugging key
-	E(69, 'e'), //spawn entity key
-	DELETE(88, 'x'), //delete entity key
-	ESC(27, ' '); //pause key
+	E(69, 'e'), //spawn entity
+	DELETE(8, ' '), //delete entity
+	
+	Q(81, 'q'), //UNUSED
+	I(73, 'i'); //UNUSED
 	
 	private int id;
 	private char ch;

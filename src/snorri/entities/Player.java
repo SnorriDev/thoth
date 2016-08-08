@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import snorri.animations.Animation;
-import snorri.inventory.FullInventory;
+import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
@@ -17,13 +17,14 @@ import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Player extends Unit {
+public class Player extends Unit implements Carrier {
 
 	private static final Animation UNIT_IDLE = new Animation("/textures/animations/unit/idle");
 	
-	private static final Image HEART = Main.getImageResource("/textures/hud/heart.png");
-	private static final Image HALF_HEART = Main.getImageResource("/textures/hud/halfHeart.png");
-	private static final Image GREY_HEART = Main.getImageResource("/textures/hud/greyHeart.png");
+	private static final Image HEART = Main.getImage("/textures/hud/heart.png");
+	private static final Image HALF_HEART = Main.getImage("/textures/hud/halfHeart.png");
+	private static final Image GREY_HEART = Main.getImage("/textures/hud/greyHeart.png");
+
 	private static final int HEALTH_RES = 20;
 	
 	private static final long serialVersionUID = 1L;
@@ -44,19 +45,12 @@ public class Player extends Unit {
 		Papyrus p1 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
 		Papyrus p2 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
 		
-		//add items to full inventory
-		inventory.getFullInventory().add(sling);
-		inventory.getFullInventory().add(o1);
-		inventory.getFullInventory().add(o2);
-		inventory.getFullInventory().add(p1);
-		inventory.getFullInventory().add(p2);
-		
 		//equip items in inventory
-		inventory.setWeapon(sling);
-		inventory.addOrb(o1);
-		inventory.addOrb(o2);
-		inventory.addPapyrus(p1);
-		inventory.addPapyrus(p2);
+		inventory.add(sling);
+		inventory.add(o1);
+		inventory.add(o2);
+		inventory.add(p1);
+		inventory.add(p2);
 		
 	}
 	
@@ -85,6 +79,7 @@ public class Player extends Unit {
 		
 	}
 	
+	@Override
 	public Inventory getInventory() {
 		return inventory;
 	}
@@ -117,9 +112,10 @@ public class Player extends Unit {
 		}
 		
 	}
-
-	public FullInventory getFullInventory() {
-		return inventory.getFullInventory();
+	
+	@Override
+	protected int getSpeed() {
+		return 160;
 	}
 
 }

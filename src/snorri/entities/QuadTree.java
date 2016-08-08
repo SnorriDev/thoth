@@ -210,6 +210,28 @@ public class QuadTree extends Entity implements EntityGroup {
 		}
 		return null;
 	}
+	
+	/**
+	 * used to check for entities in tiles
+	 */
+	public Entity getFirstCollision(Rectangle rect, boolean hitAll) {
+		if (nodes != null) {
+			for (QuadTree node : nodes) {
+				if (!node.isEmpty() && node.intersects(rect)) {
+					Entity col = node.getFirstCollision(rect, hitAll);
+					if (col != null) {
+						return col;
+					}
+				}
+			}
+		}
+		for (Entity each : entities) {
+			if ((hitAll || !each.shouldIgnoreCollisions()) && each.intersects(rect)) {
+				return each;
+			}
+		}
+		return null;
+	}
 
 	public void calculateEmpty() {
 		isEmpty = entities.isEmpty();
