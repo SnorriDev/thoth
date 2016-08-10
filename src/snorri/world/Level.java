@@ -321,7 +321,8 @@ public class Level implements Editable {
 	
 	public boolean canShootOver(Vector pos) {
 		Tile t = getTileGrid(pos);
-		return t != null && t.canShootOver();
+		return t != null && t.canShootOver() && !t.isOccupied();
+		//TODO should be be able to shoot over occupied tiles?
 	}
 	
 	public ArrayList<Vector> getGraph(Entity e) {
@@ -765,6 +766,7 @@ public class Level implements Editable {
 				
 				if (getTileGrid(x1, y1) != null && c.intersects(getRectangle(x1, y1))) {
 					getTileGrid(x1, y1).setOccupied(true);
+					getTileGrid(x1, y1).computeSurroundingsPathable(x1, y1, this);
 				}
 				
 			}
