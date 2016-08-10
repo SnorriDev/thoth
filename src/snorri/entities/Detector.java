@@ -1,15 +1,15 @@
 package snorri.entities;
 
 import snorri.events.CollisionEvent;
-import snorri.triggers.Trigger;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Detector extends Entity {
+public abstract class Detector extends Entity {
 
 	private static final long serialVersionUID = 1L;
 	protected float age; //set age to -1 to make it not despawn
 	protected boolean treeMember = false;
+	protected String msg;
 	
 	public Detector(Vector pos, int r) {
 		super(pos, r);
@@ -21,13 +21,7 @@ public class Detector extends Entity {
 		age = 0;
 	}
 
-	public void onCollision(CollisionEvent e) {
-		
-		if (tag != null) {
-			Trigger.TriggerType.COLLISION.activate(this);
-		}
-		
-	}
+	public abstract void onCollision(CollisionEvent e);
 	
 	@Override
 	public void update(World world, double deltaTime) {

@@ -48,6 +48,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		EDIT_SPAWNABLE.add(Portal.class);
 		EDIT_SPAWNABLE.add(Unit.class);
 		EDIT_SPAWNABLE.add(Sarcophagus.class);
+		EDIT_SPAWNABLE.add(Listener.class);
 		
 		
 		Collections.sort(EDIT_SPAWNABLE, new Comparator<Class<? extends Entity>>() {
@@ -193,7 +194,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		return this.getClass().getSimpleName() + "{pos: " + pos + ", col: " + collider + "}";
 	}
 	
-	//TODO: make this into a boolean so we can know whether or not to recalculate collision bubbles
 	public void update(World world, double d) {
 		burnTimer.update(d);
 	}

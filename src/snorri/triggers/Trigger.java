@@ -29,7 +29,6 @@ public class Trigger {
 	
 		TIMELINE,
 		BROADCAST,
-		COLLISION,
 		DOOR_OPEN;
 		
 		private List<Trigger> active = new ArrayList<Trigger>();

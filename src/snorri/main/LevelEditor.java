@@ -22,6 +22,7 @@ import javax.swing.SwingUtilities;
 
 import snorri.entities.Drop;
 import snorri.entities.Entity;
+import snorri.entities.Listener;
 import snorri.entities.Player;
 import snorri.entities.Portal;
 import snorri.inventory.Carrier;
@@ -34,7 +35,6 @@ import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
 
-//TODO: show selected texture at top of selected texture menu �can this be done?idk
 //TODO: add image to world feature
 //TODO: figure out why fill overflows
 
@@ -184,7 +184,6 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		Main.getFrame().setJMenuBar(menuBar);
 	}
 
-	//TODO: take input HashMap; save answers into it and return pointer to it 
 	private int[] whDialog() {
 		int[] wh = { -1, -1 };
 		DialogMap inputs = new DialogMap();
@@ -413,8 +412,6 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	}
 
-	// TOBY do stuff here!
-
 	public void fill() {
 		Vector location = getMousePosAbsolute().copy();
 		int x = location.getX() / Tile.WIDTH;
@@ -491,6 +488,12 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				inputs.put("Prize", "Enter item name/id or vocab word");
 				dialog("Drop Reward", inputs);
 				world.addHard(selectedEntityClass.getConstructor(Vector.class, String.class).newInstance(spawnPos, inputs.getText("Prize")));
+			} else if (selectedEntityClass.equals(Listener.class)) {
+				DialogMap inputs = new DialogMap();
+				inputs.put("Radius", "40");
+				inputs.put("Trigger", "See triggers.yml");
+				dialog("Configure Detector", inputs);
+				world.addHard(selectedEntityClass.getConstructor(Vector.class, int.class, String.class).newInstance(spawnPos, inputs.getInteger("Radius"), inputs.getText("Trigger")));
 			}
 			
 			else {
