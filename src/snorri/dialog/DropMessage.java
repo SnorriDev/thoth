@@ -1,36 +1,22 @@
-package snorri.main;
+package snorri.dialog;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
 import snorri.inventory.Droppable;
-import snorri.inventory.Timer;
+import snorri.main.GameWindow;
 import snorri.world.Vector;
 
-public class DropMessage {
-
-	private static final double LENGTH = 2.5;
-	private static final int TRANS_DOWN = 46;
-	private static final int HEIGHT = 23;
-	private static final float FONT_SIZE = 23;
+public class DropMessage extends Message {
 	
 	private final Droppable drop;
-	private final Timer timer;
 	
 	public DropMessage(Droppable drop) {
+		super();
 		this.drop = drop;
-		timer = new Timer(LENGTH);
-		timer.hardReset();
 	}
-	
-	//TODO take image icon input
-	
-	public boolean update(double deltaTime) {
-		timer.update(deltaTime);
-		return timer.isOffCooldown();
-	}
-	
+		
 	/**
 	 * @return the height of the line
 	 */
@@ -40,12 +26,12 @@ public class DropMessage {
 		Font oldFont = gr.getFont();
 		gr.setFont(oldFont.deriveFont(FONT_SIZE));
 		if (drop.getTexture() == null) {
-			gr.drawString(drop.toString() + " acquired", pos.getX(), pos.getY());
+			gr.drawString(drop.toString() + " acquired", pos.getX() + HEIGHT / 2, pos.getY() + HEIGHT / 2);
 			return HEIGHT;
 		} else {
 			gr.drawImage(drop.getTexture(), pos.getX(), pos.getY(), null);
 			gr.drawString(" acquired", drop.getTexture().getWidth(null) + pos.getX(), pos.getY() + drop.getTexture().getHeight(null) / 2);
-			return drop.getTexture().getHeight(null);
+			return drop.getTexture().getHeight(null) + IMAGE_BUFFER;
 		}
 	}	
 }

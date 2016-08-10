@@ -332,6 +332,10 @@ public class Level implements Editable {
 		return graphHash.get(pos);
 	}
 	
+	public ArrayList<Vector> getGraph(int x, int y) {
+		return graphHash.get(new Vector(x, y));
+	}
+	
 	public boolean arePathConnected(Vector p1, Vector p2) {
 		if (!isContextPathable(p1) || !isContextPathable(p2)) {
 			return false;
@@ -453,11 +457,8 @@ public class Level implements Editable {
 	 * update graphs when we insert a pathable tile
 	 * @param v
 	 * 	position, in grid coordinates
-	 * @param newTile
-	 * 	the new tile to place at this position
 	 */
-	public void setPathableGrid(Vector v, Tile newTile) {		
-//		Main.log(connectedSubGraphs.size());
+	public void setPathableGrid(Vector v) {		
 		
 		//update graphs to reflect the changes
 		for (int x = (v.getX() * Tile.WIDTH - Unit.RADIUS_X) / Tile.WIDTH - 2; x <= (v.getX() * Tile.WIDTH + Unit.RADIUS_X) / Tile.WIDTH + 2; x++) {
@@ -490,7 +491,7 @@ public class Level implements Editable {
 	 * Update graphs when we insert an unpathable tile
 	 * @see <code>setPathableGrid</code>
 	 */
-	private void setUnpathableGrid(Vector v, Tile newTile) {
+	private void setUnpathableGrid(Vector v) {
 		
 		Queue<Vector> startPoints = new LinkedList<>();
 		List<ArrayList<Vector>> graphs = new ArrayList<>(); //TODO make sure this works as intended
@@ -685,9 +686,9 @@ public class Level implements Editable {
 		}
 		
 		if (newTile.isPathable()) {
-			setPathableGrid(pos, newTile);
+			setPathableGrid(pos);
 		} else {
-			setUnpathableGrid(pos, newTile);
+			setUnpathableGrid(pos);
 		}
 				
 	}
@@ -757,27 +758,65 @@ public class Level implements Editable {
 		int x = e.getPos().getX();
 		int y = e.getPos().getY();
 		Collider c = e.getCollider();
+				
+		//mark all tiles which are occupied
 		for (int x1 = (x - c.getRadiusX()) / Tile.WIDTH; x1 <= (x + c.getRadiusX()) / Tile.WIDTH; x1++) {
 			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH; y1++) {
+				
 				if (getTileGrid(x1, y1) != null && c.intersects(getRectangle(x1, y1))) {
 					getTileGrid(x1, y1).setOccupied(true);
-					Main.log(getTileGrid(x1, y1).isContextPathable());
 				}
+				
+			}
+		}
+		
+		//update all tiles in range of occupied tiles
+		for (int x1 = (x - c.getRadiusX() - Unit.RADIUS_X) / Tile.WIDTH; x1 <= (x + c.getRadiusX() + Unit.RADIUS_X) / Tile.WIDTH; x1++) {
+			for (int y1 = (y - c.getRadiusY() - Unit.RADIUS_Y) / Tile.WIDTH; y1 <= (y + c.getRadiusY() + Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
+				
+				if (getTileGrid(x1, y1) == null) {
+					continue;
+				}
+				
+				getTileGrid(x1, y1).computeSurroundingsPathable(x1, y1, this);
+				if (!getTileGrid(x1, y1).isContextPathable()) {
+					setUnpathableGrid(new Vector(x1, y1));
+				}
+				
 			}
 		}
 		
 	}
 	
+	/**
+	 * @deprecated This method is not fully implemented. Make sure we implement it before we use it!
+	 */
+	@Deprecated
 	public void removeEntity(Entity e) {
+		
 		int x = e.getPos().getX();
 		int y = e.getPos().getY();
 		Collider c = e.getCollider();
+		
 		for (int x1 = (x - c.getRadiusX()) / Tile.WIDTH; x1 <= (x + c.getRadiusX()) / Tile.WIDTH; x1++) {
 			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH; y1++) {
 				if (getTileGrid(x1, y1) != null)
 					getTileGrid(x1, y1).setOccupied(false);
+					setPathableGrid(new Vector(x1, y1));
 			}
 		}
+
+//		// update context pathability around the occupied tiles
+//		for (int x1 = (x - c.getRadiusX() - Unit.RADIUS_X) / Tile.WIDTH; x1 <= (x + c.getRadiusX() + Unit.RADIUS_X)
+//				/ Tile.WIDTH; x1++) {
+//			for (int y1 = (y - c.getRadiusY() - Unit.RADIUS_Y) / Tile.WIDTH; y1 <= (y + c.getRadiusY() + Unit.RADIUS_Y)
+//					/ Tile.WIDTH; y1++) {
+//				getTileGrid(x1, y1).computeSurroundingsPathable(x1, y1, this);
+//				if (isContextPathable(x1, y1)) {
+//					graphHash.put(new Vector(x1, y1), getGraph(x1, y1));
+//				}
+//			}
+//		}
 	}
 	
 }

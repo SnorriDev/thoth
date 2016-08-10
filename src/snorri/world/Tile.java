@@ -1,6 +1,5 @@
 package snorri.world;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -80,10 +79,10 @@ public class Tile implements Comparable<Tile> {
 		
 		if (Debug.RENDER_GRAPHS) {
 			if (g.getWorld().getLevel().getGraph(v) != null) {
-				Color c = new Color(g.getWorld().getLevel().getGraph(v).hashCode());
-				gr.setColor(c);
+				//Color c = new Color(g.getWorld().getLevel().getGraph(v).hashCode());
+				//gr.setColor(c);
 				gr.drawRect(relPos.getX(), relPos.getY(), Tile.WIDTH, Tile.WIDTH);
-				gr.setColor(Color.BLACK);
+				//gr.setColor(Color.BLACK);
 				return;
 			}
 		}
@@ -267,7 +266,11 @@ public class Tile implements Comparable<Tile> {
 	}
 	
 	public boolean isContextPathable() {
-		return isPathable() && surroundingsPathable && !occupied;
+		return isPathable() && surroundingsPathable;
+	}
+	
+	public boolean isOccupied() {
+		return occupied;
 	}
 	
 	//figure out if we can stand on this block at the very beginning
@@ -279,7 +282,7 @@ public class Tile implements Comparable<Tile> {
 			for (int j = (y * Tile.WIDTH - Unit.RADIUS_Y) / Tile.WIDTH; j <= (y * Tile.WIDTH + Unit.RADIUS_Y) / Tile.WIDTH; j++) {
 				
 				Tile t = level.getTileGrid(i, j);
-				if (t == null || !t.isPathable()) {
+				if (t == null || !t.isPathable() || t.isOccupied()) {
 					surroundingsPathable = false;
 					return;
 				}
@@ -327,7 +330,6 @@ public class Tile implements Comparable<Tile> {
 	}
 
 	public void setOccupied(boolean flag) {
-		Main.log("set occupied: " + flag);
 		occupied = flag;
 	}
 	

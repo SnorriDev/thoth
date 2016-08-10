@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import snorri.entities.Detector;
+import snorri.dialog.DropMessage;
+import snorri.dialog.Message;
 import snorri.entities.Desk;
 import snorri.entities.Entity;
 import snorri.entities.Player;
@@ -31,7 +33,7 @@ public class GameWindow extends FocusedWindow {
 	
 	private Playable universe;
 	private Player focus;
-	private Queue<DropMessage> dialogQ;
+	private Queue<Message> dialogQ;
 	private boolean hasDied;
 	private long lastTime;
 		
@@ -39,7 +41,7 @@ public class GameWindow extends FocusedWindow {
 		super();
 		this.universe = universe;
 		this.focus = focus;
-		dialogQ = new LinkedList<DropMessage>();
+		dialogQ = new LinkedList<>();
 		lastTime = getTimestamp();
 		hasDied = false;
 	}
@@ -105,7 +107,7 @@ public class GameWindow extends FocusedWindow {
 		focus.renderHealthBar(g);
 		
 		int xTrans = 0;
-		for (DropMessage msg : dialogQ.toArray(new DropMessage[0])) {
+		for (Message msg : dialogQ.toArray(new Message[0])) {
 			xTrans += msg.render(this, g, xTrans);
 		}
 		
@@ -134,15 +136,11 @@ public class GameWindow extends FocusedWindow {
 		
 		super.keyPressed(e);
 		
-		if (focus == null || focus.isDead()) {
-			return;
-		}
-		
 		if (Key.ESC.isPressed(e)) {
 			pause();
 		}
 		
-		if (focus == null || focus.isDead()) {
+		if (focus == null || focus.isDead() || isPaused()) {
 			return;
 		}
 		

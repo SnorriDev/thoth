@@ -232,6 +232,7 @@ public class World implements Playable, Editable {
 	 * @param e
 	 *            the entity to delete
 	 */
+	@SuppressWarnings("deprecation")
 	public boolean deleteHard(Entity e) {
 		
 		if (e.isStaticObject()) {

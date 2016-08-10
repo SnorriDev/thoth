@@ -93,6 +93,12 @@ public class Enemy extends Unit implements Pathfinder, Carrier {
 				return false;
 			}
 			
+			Entity col;
+			if ((col = world.getEntityTree().getFirstCollision(new Entity(tempPos))) != null
+					&& col != this && col != target) {
+				return false;
+			}
+			
 			tempPos.add(step);	
 		}
 
