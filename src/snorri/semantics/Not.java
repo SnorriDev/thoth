@@ -10,7 +10,7 @@ public class Not extends AdverbDef {
 	}
 
 	@Override
-	public String getShortDesc() {
+	public String toString() {
 		return "not";
 	}
 

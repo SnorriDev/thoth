@@ -20,6 +20,7 @@ public enum Key {
 	
 	E(69, 'e'), //spawn entity
 	DELETE(8, ' '), //delete entity
+	T(84, 't'), //edit entity tag
 	
 	Q(81, 'q'), //UNUSED
 	I(73, 'i'); //UNUSED

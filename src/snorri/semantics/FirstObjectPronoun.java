@@ -15,7 +15,7 @@ public class FirstObjectPronoun extends Definition {
 	}
 
 	@Override
-	public String getShortDesc() {
+	public String toString() {
 		return "me";
 	}
 

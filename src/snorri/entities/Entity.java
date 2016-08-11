@@ -17,6 +17,7 @@ import snorri.inventory.Timer;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
+import snorri.main.Util;
 import snorri.semantics.Nominal;
 import snorri.triggers.Trigger;
 import snorri.world.Level;
@@ -183,15 +184,20 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		for (int i = 0; i < depth; i++) {
 			indent += "  ";
 		}
-		Main.log(indent + this.toString());
+		Main.log(indent + toString());
 	}
 	
 	public void traverse() {
 		traverse(0);
 	}
 	
+	@Override
+	public String toString() {
+		return getTag() == null ? Util.clean(this.getClass().getSimpleName()) : getTag();
+	}
+	
 	public String toStringDebug() {
-		return this.getClass().getSimpleName() + "{pos: " + pos + ", col: " + collider + "}";
+		return toString() + "{pos: " + pos + ", col: " + collider + "}";
 	}
 	
 	public void update(World world, double d) {

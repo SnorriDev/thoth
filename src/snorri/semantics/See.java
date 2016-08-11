@@ -29,7 +29,7 @@ public class See extends VerbDef {
 	}
 
 	@Override
-	public String getShortDesc() {
+	public String toString() {
 		return "see";
 	}
 

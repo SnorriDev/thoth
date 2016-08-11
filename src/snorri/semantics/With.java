@@ -13,7 +13,7 @@ public class With extends PrepDef {
 	}
 
 	@Override
-	public String getShortDesc() {
+	public String toString() {
 		return "with";
 	}
 

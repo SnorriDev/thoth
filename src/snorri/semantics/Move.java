@@ -33,7 +33,7 @@ public class Move extends VerbDef {
 	}
 
 	@Override
-	public String getShortDesc() {
+	public String toString() {
 		return "teleport";
 	}
 

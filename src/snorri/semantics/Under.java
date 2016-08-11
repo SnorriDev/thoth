@@ -22,7 +22,7 @@ public class Under extends PrepDef {
 	}
 
 	@Override
-	public String getShortDesc() {
+	public String toString() {
 		return "under";
 	}
 

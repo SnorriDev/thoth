@@ -25,7 +25,7 @@ public class Be extends VerbDef {
 	}
 
 	@Override
-	public String getShortDesc() {
+	public String toString() {
 		return "be";
 	}
 

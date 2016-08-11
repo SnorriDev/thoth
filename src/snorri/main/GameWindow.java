@@ -117,7 +117,12 @@ public class GameWindow extends FocusedWindow {
 	}
 	
 	public void showDialog(Droppable drop) {
-		dialogQ.add(new DropMessage(drop));
+		showDialog(new DropMessage(drop));
+	}
+	
+	public void showDialog(Message m) {
+		Main.log(m.toString());
+		dialogQ.add(m);
 	}
 	
 	@Override

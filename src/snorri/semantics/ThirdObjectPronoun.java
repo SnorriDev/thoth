@@ -15,7 +15,7 @@ public class ThirdObjectPronoun extends Definition {
 	}
 
 	@Override
-	public String getShortDesc() {
+	public String toString() {
 		return "it";
 	}
 

@@ -30,4 +30,10 @@ public class KeyStates {
 		return new Vector(getInt(Key.D) - getInt(Key.A), getInt(Key.S) - getInt(Key.W));
 	}
 	
+	public void purge() {
+		for (int i = 0; i < 256; i ++) {
+			states[i] = false;
+		}
+	}
+	
 }

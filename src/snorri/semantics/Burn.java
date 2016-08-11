@@ -24,7 +24,7 @@ public class Burn extends VerbDef {
 	}
 
 	@Override
-	public String getShortDesc() {
+	public String toString() {
 		return "burn";
 	}
 

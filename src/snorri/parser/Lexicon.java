@@ -31,6 +31,7 @@ import snorri.semantics.Move;
 import snorri.semantics.Nominal.AbstractSemantics;
 import snorri.semantics.Not;
 import snorri.semantics.Open;
+import snorri.semantics.Pray;
 import snorri.semantics.RightOf;
 import snorri.semantics.SecondObjectPronoun;
 import snorri.semantics.SecondSuffixPronoun;
@@ -42,6 +43,7 @@ import snorri.semantics.To;
 import snorri.semantics.Under;
 import snorri.semantics.Walk;
 import snorri.semantics.With;
+import snorri.semantics.Write;
 import snorri.world.Tile.TileType;
 
 public class Lexicon {
@@ -84,6 +86,7 @@ public class Lexicon {
 		lexicon.put("xt", new StaticDef(Noun.class, TileType.LAVA)); //technically this is fire
 		lexicon.put("snbt", new StaticDef(Noun.class, Urn.class));
 		lexicon.put("bit", new StaticDef(Noun.class, null)); //TODO: bee
+		lexicon.put("DHwty", new StaticDef(Noun.class, "DHwty")); //TODO icon; name of Thoth
 		
 		lexicon.put("st", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
 		lexicon.put("iry", new StaticDef(AbstractNoun.class, AbstractSemantics.WEAPON));
@@ -127,6 +130,8 @@ public class Lexicon {
 		lexicon.put("qmA", new CreateObject());
 		lexicon.put("rd", new Grow());
 		lexicon.put("wn", new Open());
+		lexicon.put("sS", new Write()); //TODO icon
+		lexicon.put("dbH", new Pray());
 		//lexicon.put("sxpr", new CreateUnit());
 		
 		//Conditionals

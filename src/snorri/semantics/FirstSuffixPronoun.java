@@ -15,7 +15,7 @@ public class FirstSuffixPronoun extends Definition {
 	}
 
 	@Override
-	public String getShortDesc() {
+	public String toString() {
 		return "I";
 	}
 

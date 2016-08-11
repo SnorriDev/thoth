@@ -29,6 +29,7 @@ public class Trigger {
 	
 		TIMELINE,
 		BROADCAST,
+		PRAY, //like broadcast, but callable by the player
 		DOOR_OPEN;
 		
 		private List<Trigger> active = new ArrayList<Trigger>();
@@ -45,9 +46,18 @@ public class Trigger {
 			for (Trigger t : active.toArray(new Trigger[0])) {
 				if (t.getObject(this).equals(object)) {
 					t.exec();
-					remove(t);
+					remove(t); //maybe no?
 				}
 			}
+		}
+
+		public boolean contains(Object obj) {
+			for (Trigger a : active) {
+				if (a.getObject(this).equals(obj)) {
+					return true;
+				}
+			}
+			return false;
 		}
 		
 	}
@@ -83,6 +93,9 @@ public class Trigger {
 					Main.error("unknown event type " + e.getKey());
 					return;
 				}
+				if (type == TriggerType.BROADCAST) {
+					continue;
+				}
 				objects.put(type, e.getValue().get("object"));
 				type.add(this);
 			}
@@ -108,6 +121,9 @@ public class Trigger {
 				new Trigger(world, name, data);
 				//triggers.add(new Trigger(world, name, data));
 			}
+			
+			Main.log(rawTriggers.size() + " triggers loaded");
+			
 		} catch (FileNotFoundException e) {
 			Main.error("could not find trigger file " + triggerFile);
 		} catch (YamlException e) {

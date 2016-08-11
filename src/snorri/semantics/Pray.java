@@ -1,19 +1,17 @@
 package snorri.semantics;
 
-import snorri.entities.Unit;
+import snorri.triggers.Trigger.TriggerType;
 
-public class Heal extends VerbDef {
+public class Pray extends VerbDef {
 
-	private static final double AMOUNT = 10;
-	
-	public Heal() {
+	public Pray() {
 		super(true);
 	}
 
 	@Override
 	public boolean exec(Object obj) {
-		if (obj instanceof Unit) {
-			((Unit) obj).heal(AMOUNT, e);
+		if (obj instanceof String) {
+			TriggerType.PRAY.activate(obj);
 			return true;
 		}
 		return false;
@@ -21,12 +19,12 @@ public class Heal extends VerbDef {
 
 	@Override
 	public boolean eval(Object subj, Object obj) {
-		return false;
+		return TriggerType.PRAY.contains(obj);
 	}
 
 	@Override
 	public String toString() {
-		return "heal";
+		return "pray";
 	}
 
 }

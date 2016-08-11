@@ -26,7 +26,7 @@ public abstract class Definition {
 	/**
 	 * @return a short one or two-word description of this word
 	 */
-	public abstract String getShortDesc();
+	public abstract String toString();
 	
 	/**
 	 * @return a longer description of what this word does

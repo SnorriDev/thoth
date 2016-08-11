@@ -216,7 +216,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		orth.setFont(new Font(orth.getFont().getName(), Font.BOLD, 16));
 		JLabel pos = new JLabel(drop.getMeaning().getPOS().getSimpleName());
 		pos.setFont(new Font(pos.getFont().getName(), Font.ITALIC, 12));
-		String d = drop.getMeaning().getShortDesc();
+		String d = drop.getMeaning().toString();
 		JLabel desc = new JLabel(d == null ? "unknown" : d);
 		desc.setFont(new Font(pos.getFont().getName(), Font.PLAIN, 14));
 		wordPanel.add(icon);
@@ -254,7 +254,8 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Enchant")) {
+		
+		if (e.getActionCommand().equals("Enchant") && list.getSelectedValue() != null) {
 			list.getSelectedValue().setSpell(Grammar.parseString(getTagless()));
 			setGlyphs();
 		}
@@ -286,7 +287,8 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 		super.keyPressed(e);
 		
-		if (Key.DELETE.isPressed(e) && list.getSelectedValue() != null) {
+		if (Key.DELETE.isPressed(e) && list.getSelectedValue() != null &&
+				e.getSource() != field) {
 			delete(list.getSelectedValue(), true);
 		}
 		

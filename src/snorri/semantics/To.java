@@ -20,7 +20,7 @@ public class To extends PrepDef {
 	}
 
 	@Override
-	public String getShortDesc() {
+	public String toString() {
 		return "to";
 	}
 

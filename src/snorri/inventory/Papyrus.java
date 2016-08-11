@@ -24,11 +24,8 @@ public class Papyrus extends Item {
 	public boolean tryToActivate(Unit player) {
 		
 		if (timer.activate()) {
-			Object output = useSpellOn(player);
-//			if (Main.getWindow() instanceof GameWindow) {
-//				Main.getWindow().showDialog(new DropMessage(output)); TODO new message type
-//			}
-			Main.log("spell output: " + output);
+			Object o = useSpellOn(player);
+			Main.log("spell output: " + o);
 			return true;
 		}
 		

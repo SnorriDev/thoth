@@ -75,7 +75,9 @@ public class SpellEvent {
 	}
 	
 	public Entity getThirdPerson() {
-		return new Entity(window.getMousePosAbsolute());
+		Entity e = new Entity(window.getMousePosAbsolute());
+		Entity col = getWorld().getEntityTree().getFirstCollision(e, true);
+		return col == null ? e : col;
 	}
 	
 	public Vector getLocative() {

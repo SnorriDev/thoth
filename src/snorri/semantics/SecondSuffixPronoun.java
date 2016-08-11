@@ -15,7 +15,7 @@ public class SecondSuffixPronoun extends Definition {
 	}
 
 	@Override
-	public String getShortDesc() {
+	public String toString() {
 		return "you";
 	}
 	

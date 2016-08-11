@@ -23,7 +23,7 @@ public class Fly extends VerbDef {
 	}
 
 	@Override
-	public String getShortDesc() {
+	public String toString() {
 		return "fly";
 	}
 

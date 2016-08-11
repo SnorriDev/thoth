@@ -9,4 +9,12 @@ onStart:
 helloWorld:
   actions:
     - BROADCAST:
-        msg: nothing
+        msg: fuck with me
+
+thothPrayer:
+  events:
+    - PRAY:
+        object: DHwty
+  actions:
+    - BROADCAST:
+        msg: fuck wit me

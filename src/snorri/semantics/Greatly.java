@@ -10,7 +10,7 @@ public class Greatly extends AdverbDef {
 	}
 
 	@Override
-	public String getShortDesc() {
+	public String toString() {
 		return "greatly";
 	}
 	

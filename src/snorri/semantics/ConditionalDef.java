@@ -15,7 +15,7 @@ public class ConditionalDef extends Definition {
 	}
 	
 	@Override
-	public String getShortDesc() {
+	public String toString() {
 		return "if";
 	}
 

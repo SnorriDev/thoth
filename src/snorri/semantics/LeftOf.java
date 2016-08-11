@@ -22,7 +22,7 @@ public class LeftOf extends PrepDef {
 	}
 
 	@Override
-	public String getShortDesc() {
+	public String toString() {
 		return "left of";
 	}
 

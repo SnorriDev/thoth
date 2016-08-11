@@ -22,7 +22,7 @@ public class Boom extends VerbDef {
 	}
 
 	@Override
-	public String getShortDesc() {
+	public String toString() {
 		return "boom!";
 	}
 	

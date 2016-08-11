@@ -406,6 +406,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		if (Key.DELETE.isPressed(e)) {
 			deleteEntity();
 		}
+		if (Key.T.isPressed(e)) {
+			editEntityTag();
+		}
 		if (Key.SPACE.isPressed(e)) {
 			openEntityInventory();
 		}
@@ -445,13 +448,32 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		if (!(env instanceof World)) {
 			return;
 		}
-		
 		World world = (World) env;
 		Entity ent = world.getEntityTree().getFirstCollision(new Entity(getMousePosAbsolute()), true);
 		
 		if (ent instanceof Carrier) {
 			editInventory(((Carrier) ent).getInventory());
 		}
+		
+	}
+	
+	private void editEntityTag() {
+		
+		if (!(env instanceof World)) {
+			return;
+		}
+		World world = (World) env;
+		Entity ent = world.getEntityTree().getFirstCollision(new Entity(getMousePosAbsolute()), true);
+		
+		if (ent == null) {
+			return;
+		}
+		
+		DialogMap inputs = new DialogMap();
+		inputs.put("Tag", ent.getTag());
+		dialog("Edit Entity Tag", inputs);
+		String tag = inputs.getText("Tag");
+		ent.setTag(tag.isEmpty() ? null : tag);
 		
 	}
 	

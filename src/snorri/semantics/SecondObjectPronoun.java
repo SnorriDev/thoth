@@ -15,7 +15,7 @@ public class SecondObjectPronoun extends Definition {
 	}
 
 	@Override
-	public String getShortDesc() {
+	public String toString() {
 		return "you";
 	}
 

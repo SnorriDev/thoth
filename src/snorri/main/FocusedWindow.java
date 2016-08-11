@@ -33,6 +33,7 @@ public abstract class FocusedWindow extends GamePanel implements MouseListener, 
 	
 	public void pause() {
 		Main.setOverlay(new PauseOverlay(this));
+		states.purge();
 		paused = true;
 	}
 	
@@ -43,11 +44,13 @@ public abstract class FocusedWindow extends GamePanel implements MouseListener, 
 	
 	public void openInventory(Inventory inv) {
 		Main.setOverlay(new InventoryOverlay(this, inv));
+		states.purge();
 		paused = true;
 	}
 	
 	public void editInventory(Inventory inv) {
 		Main.setOverlay(new InventoryOverlay(this, inv, true));
+		states.purge();
 		paused = true;
 	}
 	

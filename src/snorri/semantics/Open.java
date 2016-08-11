@@ -53,7 +53,7 @@ public class Open extends VerbDef {
 	}
 	
 	@Override
-	public String getShortDesc() {
+	public String toString() {
 		return "open";
 	}
 
