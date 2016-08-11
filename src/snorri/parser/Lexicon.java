@@ -9,6 +9,7 @@ import java.util.Set;
 import snorri.entities.Flower;
 import snorri.entities.Urn;
 import snorri.nonterminals.AbstractNoun;
+import snorri.nonterminals.Name;
 import snorri.nonterminals.Noun;
 import snorri.semantics.Above;
 import snorri.semantics.At;
@@ -86,7 +87,6 @@ public class Lexicon {
 		lexicon.put("xt", new StaticDef(Noun.class, TileType.LAVA)); //technically this is fire
 		lexicon.put("snbt", new StaticDef(Noun.class, Urn.class));
 		lexicon.put("bit", new StaticDef(Noun.class, null)); //TODO: bee
-		lexicon.put("DHwty", new StaticDef(Noun.class, "DHwty")); //TODO icon; name of Thoth
 		
 		lexicon.put("st", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
 		lexicon.put("iry", new StaticDef(AbstractNoun.class, AbstractSemantics.WEAPON));
@@ -97,9 +97,9 @@ public class Lexicon {
 		lexicon.put("Axt", new StaticDef(AbstractNoun.class, AbstractSemantics.FLOOD));
 		lexicon.put("Da", new StaticDef(AbstractNoun.class, AbstractSemantics.STORM));
 		
-		//cactus, reeds
-		//words for "create" sxpr "build/create"; qmA "create"; two levels of building
-		
+		//Names
+		lexicon.put("DHwty", new StaticDef(Name.class, "DHwty")); //TODO icon; name of Thoth
+				
 		//Suffix Pronouns
 		lexicon.put("i", new FirstSuffixPronoun());
 		lexicon.put("k", new SecondSuffixPronoun());

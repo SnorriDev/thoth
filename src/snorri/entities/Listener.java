@@ -1,6 +1,10 @@
 package snorri.entities;
 
+import java.awt.Graphics;
+
 import snorri.events.CollisionEvent;
+import snorri.main.FocusedWindow;
+import snorri.main.LevelEditor;
 import snorri.triggers.Trigger;
 import snorri.world.Vector;
 
@@ -15,7 +19,7 @@ public class Listener extends Detector {
 
 	public Listener(Vector pos, int r, String msg) {
 		super(pos, r);
-		this.msg = msg;
+		tag = msg;
 		treeMember = true;
 		age = -1;
 		ignoreCollisions = true;
@@ -29,10 +33,17 @@ public class Listener extends Detector {
 	@Override
 	public void onCollision(CollisionEvent e) {
 
-		if (msg != null && (target == e.getTarget() || (target == null && e.getTarget() instanceof Player))) {
-			Trigger.TriggerType.BROADCAST.activate(msg);
+		if (tag != null && (target == e.getTarget() || (target == null && e.getTarget() instanceof Player))) {
+			Trigger.TriggerType.BROADCAST.activate(tag);
 		}
 
+	}
+	
+	@Override
+	public void renderAround(FocusedWindow g, Graphics gr) {
+		if (g instanceof LevelEditor) {
+			super.renderAround(g, gr);
+		}
 	}
 	
 }

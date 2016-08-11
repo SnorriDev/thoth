@@ -1,11 +1,14 @@
 package snorri.main;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.Queue;
+
+import javax.swing.UIManager;
 
 import snorri.dialog.DropMessage;
 import snorri.dialog.Message;
@@ -16,6 +19,7 @@ import snorri.entities.Unit;
 import snorri.inventory.Droppable;
 import snorri.keyboard.Key;
 import snorri.overlay.DeathScreen;
+import snorri.triggers.Trigger;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Playable;
 import snorri.world.Vector;
@@ -35,6 +39,8 @@ public class GameWindow extends FocusedWindow {
 	private Queue<Message> dialogQ;
 	private boolean hasDied;
 	private long lastTime;
+	
+	private String objective;
 		
 	public GameWindow(Playable universe, Player focus) {
 		super();
@@ -51,6 +57,7 @@ public class GameWindow extends FocusedWindow {
 	
 	@Override
 	protected void onStart() {
+		Trigger.waitUntilLoaded();
 		TriggerType.TIMELINE.activate("start");
 	}
 	
@@ -105,6 +112,13 @@ public class GameWindow extends FocusedWindow {
 		focus.getInventory().render(this, g);
 		focus.renderHealthBar(g);
 		
+		g.setFont(UIManager.getFont("Label.font"));
+		if (objective != null) {
+			g.setColor(new Color(127, 130, 98));
+			Vector objPos = getFocus().getHealthBarPos().add(0, 43);
+			g.drawString(objective, objPos.getX(), objPos.getY());
+		}
+		
 		int xTrans = 0;
 		for (Message msg : dialogQ.toArray(new Message[0])) {
 			xTrans += msg.render(this, g, xTrans);
@@ -133,6 +147,10 @@ public class GameWindow extends FocusedWindow {
 	@Override
 	public Playable getUniverse() {
 		return universe;
+	}
+	
+	public void setObjective(String text) {
+		objective = text;
 	}
 	
 	@Override

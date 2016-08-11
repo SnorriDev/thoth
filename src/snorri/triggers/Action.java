@@ -3,6 +3,9 @@ package snorri.triggers;
 import java.util.Map;
 
 import snorri.entities.Entity;
+import snorri.main.GamePanel;
+import snorri.main.GameWindow;
+import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -50,6 +53,39 @@ public abstract class Action {
 					@Override
 					public void run() {
 						//show msg on screen
+					}
+				};
+			}
+		}),
+		
+		SET_OBJECTIVE(new Action() {
+			@Override
+			public Runnable build(World world, Map<String, Object> args) {
+				return new Runnable() {
+					@Override
+					public void run() {
+						GamePanel window = Main.getWindow();
+						if (window instanceof GameWindow) {
+							((GameWindow) window).setObjective((String) args.get("msg"));
+						}
+					}
+				};
+			}
+		}),
+		
+		SPAWN_ENTITY(new Action() {
+			@Override
+			public Runnable build(World world, Map<String, Object> args) {
+				final Class<? extends Entity> type = Entity.getSpawnableByName((String) args.get("type"));
+				return new Runnable() {
+					@Override
+					public void run() {
+						if (type == null) {
+							Main.error("tried to spawn null entity type in trigger action");
+							return;
+						}
+						Entity e = Entity.spawnNew(world, (Vector) args.get("pos"), type);
+						e.setTag((String) args.get("tag"));
 					}
 				};
 			}

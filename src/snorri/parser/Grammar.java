@@ -13,6 +13,7 @@ import snorri.nonterminals.AdverbPhrase;
 import snorri.nonterminals.Command;
 import snorri.nonterminals.Conditional;
 import snorri.nonterminals.IntransVerb;
+import snorri.nonterminals.Name;
 import snorri.nonterminals.Sentence;
 import snorri.nonterminals.NonTerminal;
 import snorri.nonterminals.Noun;
@@ -41,6 +42,7 @@ public class Grammar {
 		
 		rules.add(new Rule(new Object[] {AbstractNoun.class}, NounPhrase.class));
 		rules.add(new Rule(new Object[] {Noun.class}, NounPhrase.class));
+		rules.add(new Rule(new Object[] {Name.class}, Noun.class));
 		rules.add(new Rule(new Object[] {AbstractNoun.class, NounPhrase.class}, NounPhrase.class));
 		rules.add(new Rule(new Object[] {AbstractNoun.class, SuffixPronoun.class}, NounPhrase.class));
 		

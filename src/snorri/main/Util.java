@@ -1,5 +1,7 @@
 package snorri.main;
 
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
@@ -41,6 +43,15 @@ public class Util {
 	
 	public static Collection<Object> safe(Collection<Object> c) {
 		return c == null ? Collections.emptyList() : c;
+	}
+	
+	public static BufferedImage resize(Image image, int newWidth, int newHeight) {
+		Image scaled = image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+		BufferedImage img = new BufferedImage(scaled.getWidth(null), scaled.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = img.getGraphics();
+		g.drawImage(scaled, 0, 0, null);
+		g.dispose();
+		return img;
 	}
 	
 }

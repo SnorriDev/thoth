@@ -2,6 +2,7 @@ package snorri.semantics;
 
 import snorri.entities.Entity;
 import snorri.masking.Mask;
+import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.Level;
 import snorri.world.Tile;
@@ -37,12 +38,10 @@ public class Open extends VerbDef {
 		}
 		return false;
 	}
-	
-	//TODO wrapTileUpdate is broken
-	
+		
 	private static boolean openDoor(Level l, Vector pos) {
 		if (l.getTileGrid(pos).getType() == TileType.DOOR) {
-			//l.setTileGrid(pos, new Tile(REPLACEMENT_TILE));
+			TriggerType.DOOR_OPEN.activate(pos);
 			l.wrapGridUpdate(pos, new Tile(REPLACEMENT_TILE));
 			for (Vector trans : Mask.NEIGHBORS) {
 				openDoor(l, pos.copy().add(trans));

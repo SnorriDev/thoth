@@ -8,6 +8,7 @@ import snorri.entities.Projectile;
 import snorri.entities.Unit;
 import snorri.main.GameWindow;
 import snorri.main.Main;
+import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -251,6 +252,7 @@ public class Inventory implements Serializable {
 		}
 		
 		fullInventory.add(d);
+		TriggerType.ACQUIRE.activate(d.toString());
 
 	}
 	

@@ -3,7 +3,6 @@ package snorri.inventory;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 
@@ -159,12 +158,7 @@ public abstract class Item implements Droppable {
 	
 	@Override
 	public Animation getAnimation() {
-		Image scaled = this.getTexture().getScaledInstance(ENTITY_SIZE, -1, Image.SCALE_SMOOTH);
-		BufferedImage img = new BufferedImage(scaled.getWidth(null), scaled.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-		Graphics g = img.getGraphics();
-		g.drawImage(scaled, 0, 0, null);
-		g.dispose();
-		return new Animation(img);
+		return new Animation(Util.resize(getTexture(), ENTITY_SIZE, -1));
 	}
 	
 	public void updateCooldown(double deltaTime) {

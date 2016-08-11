@@ -3,18 +3,55 @@ onStart:
     - TIMELINE:
         object: start
   actions:
-    - BROADCAST:
-        msg: helloWorld
+    - SET_OBJECTIVE:
+        msg: Explore the Temple of Thoth
         
-helloWorld:
+onZone1:
   actions:
-    - BROADCAST:
-        msg: fuck with me
+    - SET_OBJECTIVE:
+        msg: Write a spell to open the door
 
-thothPrayer:
+onDoorOpen:
+  events:
+    - DOOR_OPEN:
+        object: !door {x: 66, y: 43}
+  actions:
+    - SET_OBJECTIVE:
+        msg: Arm yourself
+        
+onPickup:
+  events:
+    - ACQUIRE:
+        object: sling
+  actions:
+    - SET_OBJECTIVE:
+        msg: kill the pharaoh's soldiers
+    - SPAWN_ENTITY:
+        type: enemy
+        pos: !spawn {x: 1904, y: 400}
+        tag: enemy1
+    - SPAWN_ENTITY:
+        type: enemy
+        pos: !spawn {x: 2032, y: 400}
+        tag: enemy2
+
+onKill:
+  events:
+    - KILL:
+        object: enemy2
+  actions:
+    - SET_OBJECTIVE:
+        msg: proceed through the maze
+
+onZone2:
+  actions:
+    - SET_OBJECTIVE:
+        msg: find the sacred name on the statue and pray to it
+
+prayThoth:
   events:
     - PRAY:
         object: DHwty
   actions:
-    - BROADCAST:
-        msg: fuck wit me
+    - SET_OBJECTIVE:
+        msg: you have beaten the tutorial!

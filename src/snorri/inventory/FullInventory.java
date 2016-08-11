@@ -8,6 +8,9 @@ import java.util.List;
 
 import javax.swing.DefaultListModel;
 
+import snorri.nonterminals.Name;
+import snorri.parser.Lexicon;
+
 public class FullInventory extends ArrayList<Droppable> implements Serializable {
 
 	/**
@@ -42,7 +45,7 @@ public class FullInventory extends ArrayList<Droppable> implements Serializable 
 	 * 	the word of interest represented as a string
 	 */
 	public boolean knowsWord(String word) {
-		return contains(new VocabDrop(word));
+		return contains(new VocabDrop(word)) || Name.class.equals(Lexicon.lookup(word).getPOS());
 	}
 	
 	/**

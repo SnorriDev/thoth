@@ -100,18 +100,28 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		this(pos, 1);
 	}
 	
+	public static Class<? extends Entity> getSpawnableByName(String name) {
+		for (Class<? extends Entity> c : Entity.EDIT_SPAWNABLE) {
+			if (Util.clean(c.getSimpleName()).equals(name)) {
+				return c;
+			}
+		}
+		return null;
+	}
+	
 	public static boolean canSpawn(Class<?> obj) {
 		return SPAWNABLE.contains(obj);
 	}
 	
-	public static boolean spawnNew(World world, Vector pos, Class<? extends Entity> c) {
+	public static Entity spawnNew(World world, Vector pos, Class<? extends Entity> c) {
 		try {
-			world.addHard(c.getConstructor(Vector.class).newInstance(pos));
-			return true;
+			Entity e = c.getConstructor(Vector.class).newInstance(pos);
+			world.addHard(e);
+			return e;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 	}
 

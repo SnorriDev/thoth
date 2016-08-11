@@ -25,12 +25,16 @@ public class Trigger {
 	private final String name;
 	private final HashMap<TriggerType, Object> objects;
 	
+	private static boolean loaded = false;
+	
 	public enum TriggerType {
 	
 		TIMELINE,
 		BROADCAST,
 		PRAY, //like broadcast, but callable by the player
-		DOOR_OPEN;
+		DOOR_OPEN,
+		ACQUIRE,
+		KILL;
 		
 		private List<Trigger> active = new ArrayList<Trigger>();
 		
@@ -122,6 +126,7 @@ public class Trigger {
 				//triggers.add(new Trigger(world, name, data));
 			}
 			
+			loaded = true;
 			Main.log(rawTriggers.size() + " triggers loaded");
 			
 		} catch (FileNotFoundException e) {
@@ -131,6 +136,12 @@ public class Trigger {
 			e.printStackTrace();
 		}
 				
+	}
+	
+	public static void waitUntilLoaded() {
+		while (!loaded) { }
+		loaded = false;
+		return;
 	}
 	
 	public Object getObject(TriggerType type) {

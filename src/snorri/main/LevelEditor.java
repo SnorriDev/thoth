@@ -513,9 +513,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			} else if (selectedEntityClass.equals(Listener.class)) {
 				DialogMap inputs = new DialogMap();
 				inputs.put("Radius", "40");
-				inputs.put("Trigger", "See triggers.yml");
+				inputs.put("Tag", "Trigger to activate");
 				dialog("Configure Detector", inputs);
-				world.addHard(selectedEntityClass.getConstructor(Vector.class, int.class, String.class).newInstance(spawnPos, inputs.getInteger("Radius"), inputs.getText("Trigger")));
+				world.addHard(selectedEntityClass.getConstructor(Vector.class, int.class, String.class).newInstance(spawnPos, inputs.getInteger("Radius"), inputs.getText("Tag")));
 			}
 			
 			else {

@@ -9,7 +9,6 @@ public abstract class Detector extends Entity {
 	private static final long serialVersionUID = 1L;
 	protected float age; //set age to -1 to make it not despawn
 	protected boolean treeMember = false;
-	protected String msg;
 	
 	public Detector(Vector pos, int r) {
 		super(pos, r);

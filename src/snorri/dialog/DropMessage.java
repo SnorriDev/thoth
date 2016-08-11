@@ -10,7 +10,7 @@ public class DropMessage extends Message {
 	private final Droppable drop;
 	
 	public DropMessage(Droppable drop) {
-		super();
+		super(drop.getTexture());
 		this.drop = drop;
 	}
 	
@@ -27,7 +27,7 @@ public class DropMessage extends Message {
 		if (drop.getTexture() == null) {
 			return drawLine(gr, window, xTrans);
 		} else {
-			return drawLineWithIcon(drop.getTexture(), " acquired", gr, window, xTrans);
+			return drawLineWithIcon(" acquired", gr, window, xTrans);
 		}
 	}	
 }

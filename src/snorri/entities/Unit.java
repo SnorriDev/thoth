@@ -2,6 +2,7 @@ package snorri.entities;
 
 import snorri.collisions.RectCollider;
 import snorri.events.SpellEvent;
+import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -36,6 +37,7 @@ public class Unit extends Entity {
 		
 		if (isDead()) {
 			world.delete(this);
+			TriggerType.KILL.activate(tag);
 		}
 		
 		super.update(world, deltaTime);

@@ -1,29 +1,37 @@
 package snorri.dialog;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 
 import snorri.inventory.Timer;
 import snorri.main.GameWindow;
+import snorri.main.Util;
 import snorri.world.Vector;
 
 public abstract class Message {
 
 	protected static final double LENGTH = 2.5;
-	protected static final int TRANS_DOWN = 46;
+	protected static final int TRANS_DOWN = 56;
 	protected static final int HEIGHT = 28;
 	protected static final int IMAGE_BUFFER = 5;
-	protected static final float FONT_SIZE = 23;
+	protected static final int ICON_SIZE = 20;
 	
 	protected final Timer timer;
-	
 	protected boolean success = true;
+	
+	private Image icon;
 
 	protected Message() {
 		timer = new Timer(LENGTH);
 		timer.hardReset();
+	}
+	
+	protected Message(Image image) {
+		this();
+		if (image != null) {
+			icon = Util.resize(image, -1, 20);
+		}
 	}
 	
 	public boolean update(double deltaTime) {
@@ -43,21 +51,17 @@ public abstract class Message {
 	
 	protected int drawLine(Graphics gr, GameWindow window, int xTrans) {
 		gr.setColor(success ? Color.GREEN : Color.RED);
-		Font oldFont = gr.getFont();
-		gr.setFont(oldFont.deriveFont(FONT_SIZE));
 		Vector pos = getPos(window, xTrans);
 		gr.drawString(this.toString(), pos.getX() + HEIGHT / 2, pos.getY() + HEIGHT / 2);
 		return HEIGHT;
 	}
 	
-	protected int drawLineWithIcon(Image image, String line, Graphics gr, GameWindow window, int xTrans) {
+	protected int drawLineWithIcon(String line, Graphics gr, GameWindow window, int xTrans) {
 		gr.setColor(success ? Color.GREEN : Color.RED);
-		Font oldFont = gr.getFont();
-		gr.setFont(oldFont.deriveFont(FONT_SIZE));
 		Vector pos = getPos(window, xTrans);
-		gr.drawImage(image, pos.getX(), pos.getY(), null);
-		gr.drawString(line, image.getWidth(null) + pos.getX(), pos.getY() + image.getHeight(null) / 2);
-		return image.getHeight(null) + IMAGE_BUFFER;
+		gr.drawImage(icon, pos.getX(), pos.getY(), null);
+		gr.drawString(line, icon.getWidth(null) + IMAGE_BUFFER + pos.getX(), pos.getY() + icon.getHeight(null) / 2);
+		return icon.getHeight(null) + IMAGE_BUFFER;
 	}
 		
 }

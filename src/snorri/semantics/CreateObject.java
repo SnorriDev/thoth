@@ -36,7 +36,7 @@ public class CreateObject extends VerbDef {
 			if (e.getWorld().tileHasEntity(e.getLocative().copy().toGridPos())) {
 				return false;
 			}
-			return Entity.spawnNew(e.getWorld(), e.getLocative(), (Class<? extends Entity>) obj);
+			return Entity.spawnNew(e.getWorld(), e.getLocative(), (Class<? extends Entity>) obj) != null;
 		}
 		
 		return false;

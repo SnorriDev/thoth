@@ -19,7 +19,7 @@ public class Pray extends VerbDef {
 
 	@Override
 	public boolean eval(Object subj, Object obj) {
-		return TriggerType.PRAY.contains(obj);
+		return obj instanceof String && TriggerType.PRAY.contains(obj);
 	}
 
 	@Override
