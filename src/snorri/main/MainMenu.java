@@ -1,6 +1,7 @@
 package snorri.main;
 
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,6 +24,7 @@ public class MainMenu extends GamePanel {
 		
 		menu.add(new JLabel("")); //for spacing
 		
+		menu.add(createButton("Tutorial"));
 		menu.add(createButton("Nile Adventure"));
 		menu.add(createButton("Dungeon Adventure"));
 		menu.add(createButton("Load World"));
@@ -35,6 +37,13 @@ public class MainMenu extends GamePanel {
 	public void actionPerformed(ActionEvent e) {
 
 		switch (e.getActionCommand()) {
+		case "Tutorial":
+			try {
+				Main.launchGame(new World(Main.getFile("/worlds/tutorial")));
+			} catch (IOException e1) {
+				Main.error("could not load tutorial world");
+			}
+			break;
 		case "Nile Adventure":
 			Main.launchGame(new TerrainGen(200, 200));
 			break;

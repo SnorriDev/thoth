@@ -98,6 +98,12 @@ public class GameWindow extends FocusedWindow {
 	}
 	
 	@Override
+	public void stop() {
+		Trigger.purge(getWorld()); //TODO purge all triggers from the universe?
+		super.stop();
+	}
+	
+	@Override
 	public void paintComponent(Graphics g){
 				
 		if (focus == null) {

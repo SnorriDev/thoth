@@ -23,9 +23,10 @@ public class Trigger {
 	
 	private final Queue<Runnable> runnableActions;
 	private final String name;
+	private final World world;
 	private final HashMap<TriggerType, Object> objects;
 	
-	private static boolean loaded = false;
+	private static boolean loaded = true;
 	
 	public enum TriggerType {
 	
@@ -44,6 +45,16 @@ public class Trigger {
 		
 		public void remove(Trigger t) {
 			active.remove(t);
+		}
+		
+		public void clear(World world) {
+			Trigger[] arr = active.toArray(new Trigger[0]);
+			for (int i = 0; i < active.size(); i++) {
+				if (arr[i].getWorld().equals(world)) {
+					active.remove(i);
+					i--;
+				}
+			}
 		}
 		
 		public void activate(Object object) {
@@ -81,6 +92,7 @@ public class Trigger {
 	public Trigger(World world, String name, Map<String, List<Map<String, Map<String, Object>>>> data) {
 		
 		this.name = name;
+		this.world = world;
 		
 		runnableActions = new LinkedList<>();
 		for (Map<String, Map<String, Object>> action : data.get("actions")) {
@@ -114,6 +126,7 @@ public class Trigger {
 	public static void load(File triggerFile, World world) {
 		
 		try {
+			loaded = false;
 			YamlReader reader = Main.getYamlReader(triggerFile);
 			Map<String, Object> rawTriggers = (Map<String, Object>) reader.read();
 			if (rawTriggers == null) {
@@ -126,7 +139,6 @@ public class Trigger {
 				//triggers.add(new Trigger(world, name, data));
 			}
 			
-			loaded = true;
 			Main.log(rawTriggers.size() + " triggers loaded");
 			
 		} catch (FileNotFoundException e) {
@@ -134,13 +146,14 @@ public class Trigger {
 		} catch (YamlException e) {
 			Main.error("could not parse YAML");
 			e.printStackTrace();
+		} finally {
+			loaded = true;
 		}
 				
 	}
 	
 	public static void waitUntilLoaded() {
 		while (!loaded) { }
-		loaded = false;
 		return;
 	}
 	
@@ -150,6 +163,10 @@ public class Trigger {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public World getWorld() {
+		return world;
 	}
 	
 	public static void setTag(String tag, Entity e) {
@@ -167,6 +184,12 @@ public class Trigger {
 		while (!runnableActions.isEmpty()) {
 			Main.log("firing trigger " + name + "...");
 			runnableActions.poll().run();
+		}
+	}
+
+	public static void purge(World world) {
+		for (TriggerType type : TriggerType.values()) {
+			type.clear(world);
 		}
 	}
 	
