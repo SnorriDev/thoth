@@ -2,7 +2,6 @@ package snorri.triggers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,21 +12,19 @@ import java.util.Queue;
 import net.sourceforge.yamlbeans.YamlException;
 import net.sourceforge.yamlbeans.YamlReader;
 import snorri.entities.Entity;
+import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.world.World;
 
 public class Trigger {
 
 	private static final Map<String, Entity> tags = new HashMap<>();
-	//private static final List<Trigger> triggers = new ArrayList<>();
 	
 	private final Queue<Runnable> runnableActions;
 	private final String name;
 	private final World world;
 	private final HashMap<TriggerType, Object> objects;
-	
-	private static boolean loaded = true;
-	
+			
 	public enum TriggerType {
 	
 		TIMELINE,
@@ -37,42 +34,15 @@ public class Trigger {
 		ACQUIRE,
 		KILL;
 		
-		private List<Trigger> active = new ArrayList<Trigger>();
-		
-		public void add(Trigger t) {
-			active.add(t);
-		}
-		
-		public void remove(Trigger t) {
-			active.remove(t);
-		}
-		
-		public void clear(World world) {
-			Trigger[] arr = active.toArray(new Trigger[0]);
-			for (int i = 0; i < active.size(); i++) {
-				if (arr[i].getWorld().equals(world)) {
-					active.remove(i);
-					i--;
-				}
-			}
-		}
-		
+		//TODO deprecate this static version
 		public void activate(Object object) {
-			for (Trigger t : active.toArray(new Trigger[0])) {
-				if (t.getObject(this).equals(object)) {
-					t.exec();
-					remove(t); //maybe no?
-				}
+			
+			if (!(Main.getWindow() instanceof GameWindow)) {
+				return;
 			}
-		}
+			World w = ((GameWindow) Main.getWindow()).getWorld();
+			w.getTriggerMap().activate(this, object);
 
-		public boolean contains(Object obj) {
-			for (Trigger a : active) {
-				if (a.getObject(this).equals(obj)) {
-					return true;
-				}
-			}
-			return false;
 		}
 		
 	}
@@ -82,6 +52,7 @@ public class Trigger {
 	}
 	
 	/**
+	 * @param triggers 
 	 * @param action
 	 * The action to be run when this trigger is activated
 	 * @param object
@@ -89,7 +60,7 @@ public class Trigger {
 	 * For example, for an on collision trigger, this would be the
 	 * Entity of interest.
 	 */
-	public Trigger(World world, String name, Map<String, List<Map<String, Map<String, Object>>>> data) {
+	public Trigger(World world, String name, Map<String, List<Map<String, Map<String, Object>>>> data, TriggerMap triggers) {
 		
 		this.name = name;
 		this.world = world;
@@ -113,30 +84,30 @@ public class Trigger {
 					continue;
 				}
 				objects.put(type, e.getValue().get("object"));
-				type.add(this);
+				triggers.add(type, this);
 			}
 		}
 		objects.put(TriggerType.BROADCAST, name);
-		TriggerType.BROADCAST.add(this);
+		triggers.add(TriggerType.BROADCAST, this);
 
 	}
 	
 
 	@SuppressWarnings("unchecked")
-	public static void load(File triggerFile, World world) {
+	public static TriggerMap load(File triggerFile, World world) {
+		
+		TriggerMap triggers = new TriggerMap();
 		
 		try {
-			loaded = false;
 			YamlReader reader = Main.getYamlReader(triggerFile);
 			Map<String, Object> rawTriggers = (Map<String, Object>) reader.read();
 			if (rawTriggers == null) {
-				return;
+				return triggers;
 			}
 			for (Entry<String, Object> rawTrigger : rawTriggers.entrySet()) {
 				String name = rawTrigger.getKey();
 				Map<String, List<Map<String, Map<String, Object>>>> data = (Map<String, List<Map<String, Map<String, Object>>>>) rawTrigger.getValue();
-				new Trigger(world, name, data);
-				//triggers.add(new Trigger(world, name, data));
+				new Trigger(world, name, data, triggers);
 			}
 			
 			Main.log(rawTriggers.size() + " triggers loaded");
@@ -147,14 +118,11 @@ public class Trigger {
 			Main.error("could not parse YAML");
 			e.printStackTrace();
 		} finally {
-			loaded = true;
+			triggers.setLoaded();
 		}
+		
+		return triggers;
 				
-	}
-	
-	public static void waitUntilLoaded() {
-		while (!loaded) { }
-		return;
 	}
 	
 	public Object getObject(TriggerType type) {
@@ -180,16 +148,10 @@ public class Trigger {
 	/**
 	 * Execute the action queue
 	 */
-	private void exec() {
+	public void exec() {
+		Main.log("firing trigger " + name + "...");
 		while (!runnableActions.isEmpty()) {
-			Main.log("firing trigger " + name + "...");
 			runnableActions.poll().run();
-		}
-	}
-
-	public static void purge(World world) {
-		for (TriggerType type : TriggerType.values()) {
-			type.clear(world);
 		}
 	}
 	

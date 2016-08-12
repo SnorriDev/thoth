@@ -21,6 +21,7 @@ import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.pathfinding.Pathfinding;
 import snorri.triggers.Trigger;
+import snorri.triggers.TriggerMap;
 
 public class World implements Playable, Editable {
 
@@ -33,6 +34,8 @@ public class World implements Playable, Editable {
 	private CopyOnWriteArrayList<Detector> colliders;
 	private Queue<Entity> deleteQ;
 	private Queue<Entity> addQ;
+	
+	private TriggerMap triggers;
 
 	public World() {
 		this(300, 300);
@@ -283,7 +286,7 @@ public class World implements Playable, Editable {
 		
 		File triggerFile = new File(f, "triggers.yml");
 		if (triggerFile.exists()) {
-			Trigger.load(triggerFile, this);
+			triggers = Trigger.load(triggerFile, this);
 		}
 
 	}
@@ -345,6 +348,10 @@ public class World implements Playable, Editable {
 	public boolean tileHasEntity(Vector pos) {
 		Entity hit = getEntityTree().getFirstCollision(Level.getRectangle(pos.getX(), pos.getY()), true);
 		return hit != null;
+	}
+
+	public TriggerMap getTriggerMap() {
+		return triggers;
 	}
 
 }

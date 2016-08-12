@@ -406,8 +406,6 @@ public class Level implements Editable {
 				graphHash.put(v, graph);
 			}
 		}
-		
-		Main.log("position -> graph hash table set");
 	}
 	
 	/**
