@@ -210,6 +210,8 @@ public class GameWindow extends FocusedWindow {
 		
 		if (e.getButton() == 1) {
 			//TODO: put this stuff in a shoot function, shoot with mouse
+			//Make sure that projectile shoots as long as mouse is held
+			//Add in arrow keys as alt fire
 			
 			Vector dir = getMousePosRelative().copy().normalize();
 			
