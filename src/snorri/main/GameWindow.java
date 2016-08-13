@@ -19,7 +19,6 @@ import snorri.entities.Unit;
 import snorri.inventory.Droppable;
 import snorri.keyboard.Key;
 import snorri.overlay.DeathScreen;
-import snorri.triggers.TriggerMap;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Playable;
 import snorri.world.Vector;
@@ -57,13 +56,12 @@ public class GameWindow extends FocusedWindow {
 	
 	@Override
 	protected void onStart() {
-		//Main.log("start");
-		//TODO figure this out
-		TriggerMap triggers = getWorld().getTriggerMap();
-		while (triggers != null && !triggers.isLoaded()) { }
-		//Main.log("end for");
-		getWorld().getTriggerMap().activate(TriggerType.TIMELINE, "start");
-		//TriggerType.TIMELINE.activate("start");
+		while (true) {
+			if (TriggerType.TIMELINE.activate("start")) {
+				break;
+			}
+		}
+		Main.log("activated start");
 	}
 	
 	@Override

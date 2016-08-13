@@ -35,13 +35,18 @@ public class Trigger {
 		KILL;
 		
 		//TODO deprecate this static version
-		public void activate(Object object) {
+		public boolean activate(Object object) {
 			
 			if (!(Main.getWindow() instanceof GameWindow)) {
-				return;
+				return false;
 			}
-			World w = ((GameWindow) Main.getWindow()).getWorld();
-			w.getTriggerMap().activate(this, object);
+			
+			TriggerMap map = ((GameWindow) Main.getWindow()).getWorld().getTriggerMap();
+			if (map == null) {
+				return true; //the world has no triggers
+			}
+			map.activate(this, object);
+			return true;
 
 		}
 		

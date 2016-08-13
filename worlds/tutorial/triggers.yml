@@ -17,7 +17,7 @@ onDoorOpen:
         object: !door {x: 66, y: 43}
   actions:
     - SET_OBJECTIVE:
-        msg: Arm yourself
+        msg: arm yourself with a sling
         
 onPickup:
   events:

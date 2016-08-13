@@ -67,6 +67,8 @@ public abstract class Action {
 						GamePanel window = Main.getWindow();
 						if (window instanceof GameWindow) {
 							((GameWindow) window).setObjective((String) args.get("msg"));
+						} else {
+							Main.error("Setting objective in non-GameWindow");
 						}
 					}
 				};
