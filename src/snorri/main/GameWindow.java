@@ -61,7 +61,6 @@ public class GameWindow extends FocusedWindow {
 				break;
 			}
 		}
-		Main.log("activated start");
 	}
 	
 	@Override

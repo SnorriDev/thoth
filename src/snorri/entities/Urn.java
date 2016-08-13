@@ -10,7 +10,7 @@ public class Urn extends Entity {
 	private static final Animation ANIMATION = new Animation("/textures/objects/urn.png");
 	
 	public Urn(Vector pos) {
-		super(pos, new RectCollider(new Vector(10, 13)));
+		super(pos, new RectCollider(new Vector(10, 26)));
 		animation = new Animation(ANIMATION);
 	}
 

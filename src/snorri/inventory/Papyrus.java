@@ -25,6 +25,7 @@ public class Papyrus extends Item {
 		
 		if (timer.activate()) {
 			Object o = useSpellOn(player);
+			//TODO show errors from messages
 			Main.log("spell output: " + o);
 			return true;
 		}
