@@ -34,7 +34,10 @@ public class Trigger {
 		ACQUIRE,
 		KILL;
 		
-		//TODO deprecate this static version
+		/**
+		 * Wrapper for activating triggers
+		 * @return whether or not the triggers were fully loaded before activation
+		 */
 		public boolean activate(Object object) {
 			
 			if (!(Main.getWindow() instanceof GameWindow)) {
