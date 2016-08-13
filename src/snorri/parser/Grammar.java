@@ -93,7 +93,13 @@ public class Grammar {
 		return null;
 	}
 	
-	//create tree of nonterminals recursively by matching ltr
+	public static boolean isValidSentence(Node node) {
+		return node instanceof Sentence;
+	}
+	
+	/**
+	 * create tree of nonterminals recursively by matching ltr
+	 */
 	public static Node parseRec(List<Node> nodes) throws InstantiationException, IllegalAccessException {
 	
 		if (nodes.size() == 1 && nodes.get(0) instanceof Sentence) {

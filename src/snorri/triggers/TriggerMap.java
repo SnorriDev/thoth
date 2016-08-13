@@ -33,7 +33,7 @@ public class TriggerMap extends HashMap<Trigger.TriggerType, ArrayList<Trigger>>
 		for (Trigger t : get(type).toArray(new Trigger[0])) {
 			if (t.getObject(type).equals(object)) {
 				t.exec();
-				remove(t);
+				get(type).remove(t);
 			}
 		}
 	}

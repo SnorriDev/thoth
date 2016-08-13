@@ -78,7 +78,7 @@ public class Main {
 		Lexicon.init();
 
 		setupFont();
-
+		
 		frame = new JFrame("Spoken Word");
 		frame.setSize(1800, 900);
 		frame.addComponentListener(new Main.ResizeListener());

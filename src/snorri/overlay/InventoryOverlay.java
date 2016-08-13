@@ -43,7 +43,6 @@ import snorri.keyboard.Key;
 import snorri.main.Debug;
 import snorri.main.DialogMap;
 import snorri.main.FocusedWindow;
-import snorri.nonterminals.NonTerminal;
 import snorri.parser.Grammar;
 
 public class InventoryOverlay extends Overlay implements MouseListener, ListSelectionListener, DocumentListener, FocusListener {
@@ -317,9 +316,9 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private void checkParse(DocumentEvent e) {
 		String text = getTagless();
 		if (Debug.ALL_HIEROGLYPHS_UNLOCKED) {
-			enchantButton.setEnabled(Grammar.parseString(text) instanceof NonTerminal);
+			enchantButton.setEnabled(Grammar.isValidSentence(Grammar.parseString(text)));
 		} else {
-			enchantButton.setEnabled(Grammar.parseString(text) instanceof NonTerminal && fullInv.knowsWords(Grammar.getWords(text)));
+			enchantButton.setEnabled(Grammar.isValidSentence(Grammar.parseString(text)) && fullInv.knowsWords(Grammar.getWords(text)));
 	
 		}
 	}
