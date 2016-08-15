@@ -14,7 +14,7 @@ public class Projectile extends Detector {
 	private static final long serialVersionUID = 1L;
 
 	private static final Animation ANIMATION = new Animation("/textures/objects/pellet.png");
-	private static final int PROJECTILE_SPEED = 350;
+	private static final int PROJECTILE_SPEED = 450;
 		
 	private Vector velocity;
 	private Entity root;

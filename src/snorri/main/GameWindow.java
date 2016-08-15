@@ -186,29 +186,6 @@ public class GameWindow extends FocusedWindow {
 		openInventory(focus.getInventory());
 	}
 
-	public void mousePressed(MouseEvent e) {
-		
-		if (focus == null) {
-			return;
-		}
-		
-		if (e.getButton() == 1) {
-			//TODO: put this stuff in a shoot function, shoot with mouse
-			//Make sure that projectile shoots as long as mouse is held
-			//Add in arrow keys as alt fire
-			
-			Vector dir = getMousePosRelative().copy().normalize();
-			
-			if (dir.notInPlane()) {
-				return;
-			}
-			
-			focus.getInventory().tryToShoot(universe.getCurrentWorld(), focus, states.getMovementVector(), dir);
-			
-		}
-		
-	}
-
 	@Override
 	public void mouseClicked(MouseEvent e) {
 	}
@@ -219,10 +196,6 @@ public class GameWindow extends FocusedWindow {
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
 	}
 
 	@Override

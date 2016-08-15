@@ -12,6 +12,7 @@ import snorri.inventory.Orb;
 import snorri.inventory.Papyrus;
 import snorri.inventory.Weapon;
 import snorri.main.Debug;
+import snorri.main.FocusedWindow;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.world.Vector;
@@ -59,13 +60,22 @@ public class Player extends Unit implements Carrier {
 				
 		if (Debug.LOG_FOCUS) {
 			Main.log("main player updated");
-			//Main.log("\tstanding in graph " + world.getLevel().getGraph(pos.copy().toGridPos()));
 		}
-				
+		
+		FocusedWindow window = (FocusedWindow) Main.getWindow();
 		super.update(world, deltaTime);
 		inventory.update(deltaTime);
-		walk(world, ((GameWindow) Main.getWindow()).getMovementVector(), deltaTime);
-				
+		walk(world, window.getMovementVector(), deltaTime);
+		
+		Vector movement = window.getMovementVector();
+		if (window.isShooting()) {
+			Vector dir = window.getMousePosRelative().copy().normalize();
+			inventory.tryToShoot(world, this, movement.copy(), dir);
+		}
+		inventory.tryToShoot(world, this, movement.copy(), window.getAltFireVector());
+		
+		//TODO figure out what to do about momentum
+		
 	}
 	
 	@Override

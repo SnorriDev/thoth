@@ -127,7 +127,7 @@ public class Inventory implements Serializable {
 	
 	public boolean tryToShoot(World world, Unit focus, Vector movement, Vector dir) {
 		
-		if (weaponSlot == null) {
+		if (weaponSlot == null || dir.equals(Vector.ZERO) || dir.notInPlane()) {
 			return false;
 		}
 		

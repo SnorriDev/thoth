@@ -2,12 +2,17 @@ package snorri.keyboard;
 
 import java.awt.event.KeyEvent;
 
-public enum Key {
+public enum Key implements Binding {
 	
 	W(87, 'w'),
 	A(65, 'a'),
 	S(83, 's'),
 	D(68, 'd'),
+	
+	LEFT_FIRE(37, ' '),
+	UP_FIRE(38, ' '),
+	RIGHT_FIRE(39, ' '),
+	DOWN_FIRE(40, ' '),
 	
 	ONE(49, '1'),
 	TWO(50, '2'),

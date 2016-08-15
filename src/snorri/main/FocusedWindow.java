@@ -3,11 +3,13 @@ package snorri.main;
 import java.awt.MouseInfo;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import snorri.entities.Entity;
 import snorri.inventory.Inventory;
 import snorri.keyboard.KeyStates;
+import snorri.keyboard.MouseButton;
 import snorri.overlay.InventoryOverlay;
 import snorri.overlay.PauseOverlay;
 import snorri.world.Playable;
@@ -76,16 +78,36 @@ public abstract class FocusedWindow extends GamePanel implements MouseListener, 
 		return getMousePosRelative().add(getFocus().getPos());
 	}
 	
+	@Override
 	public void keyPressed(KeyEvent e) {
 		states.set(e.getKeyCode(), true);
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 		states.set(e.getKeyCode(), false);
 	}
 	
+	@Override
+	public void mousePressed(MouseEvent e) {
+		states.setMouseButton(e.getButton(), true);
+	}
+	
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		states.setMouseButton(e.getButton(), false);
+	}
+	
 	public Vector getMovementVector() {
 		return states.getMovementVector();
+	}
+	
+	public Vector getAltFireVector() {
+		return states.getAltFireVector();
+	}
+	
+	public boolean isShooting() {
+		return states.get(MouseButton.SHOOT);
 	}
 
 	public abstract World getWorld();

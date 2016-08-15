@@ -5,21 +5,35 @@ import snorri.world.Vector;
 public class KeyStates {
 
 	private boolean[] states;
+	private boolean[] mouseStates;
 	
 	public KeyStates() {
 		states = new boolean[256];
+		mouseStates = new boolean[100];
 	}
 	
 	public void set(int id, boolean state) {
 		states[id] = state;
 	}
 	
-	public boolean get(final Key key) {
-		return states[key.getCode()];
+	public void setMouseButton(int num, boolean state) {
+		mouseStates[num] = state;
+	}
+	
+	public boolean get(final Binding key) {
+		if (key instanceof Key) {
+			return get(((Key) key).getCode());
+		} else {
+			return getMouseButton(((MouseButton) key).getNum());
+		}
 	}
 	
 	public boolean get(final int keyCode) {
 		return states[keyCode];
+	}
+	
+	public boolean getMouseButton(final int num) {
+		return mouseStates[num];
 	}
 	
 	private int getInt(final Key key) {
@@ -30,9 +44,16 @@ public class KeyStates {
 		return new Vector(getInt(Key.D) - getInt(Key.A), getInt(Key.S) - getInt(Key.W));
 	}
 	
+	public Vector getAltFireVector() {
+		return new Vector(getInt(Key.RIGHT_FIRE) - getInt(Key.LEFT_FIRE), getInt(Key.DOWN_FIRE) - getInt(Key.UP_FIRE));
+	}
+	
 	public void purge() {
-		for (int i = 0; i < 256; i ++) {
+		for (int i = 0; i < states.length; i ++) {
 			states[i] = false;
+		}
+		for (int i = 0; i < mouseStates.length; i++) {
+			mouseStates[i] = false;
 		}
 	}
 	
