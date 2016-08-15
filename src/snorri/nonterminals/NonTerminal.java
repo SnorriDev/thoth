@@ -20,8 +20,6 @@ public abstract class NonTerminal implements Node {
 	
 	@Override
 	public String toString() {
-		//TODO: traverse full sentence
-		//java 8 makes this nice lol
 		return getClass().getSimpleName();
 	}
 	

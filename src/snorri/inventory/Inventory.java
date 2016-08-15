@@ -5,11 +5,13 @@ import java.awt.event.KeyEvent;
 import java.io.Serializable;
 
 import snorri.audio.Audio;
+import snorri.entities.Player;
 import snorri.entities.Projectile;
 import snorri.entities.Unit;
 import snorri.keyboard.Key;
 import snorri.main.GameWindow;
 import snorri.main.Main;
+import snorri.parser.Grammar;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -268,6 +270,16 @@ public class Inventory implements Serializable {
 		}
 		
 		TriggerType.ACQUIRE.activate(d.toString());
+		
+		if (d instanceof Item && ((Item) d).getSpell() != null) {
+			for (String word : Grammar.getWords(((Item) d).getSpell().getOrthography())) {
+				add(new VocabDrop(word));
+			}
+		}
+		
+		if (Main.getWindow() instanceof GameWindow && player instanceof Player) {
+			((GameWindow) Main.getWindow()).showDialog(d);
+		}
 		return fullInventory.add(d);
 
 	}

@@ -33,7 +33,7 @@ public class Enemy extends Unit implements Pathfinder, Carrier {
 	private boolean recalculatingPath = false;
 	
 	protected double seekRange = 1000;
-	protected double attackRange = 600;
+	protected double attackRange = 450;
 	
 	protected Inventory inventory;
 	protected Entity target;

@@ -4,12 +4,12 @@ onStart:
         object: start
   actions:
     - SET_OBJECTIVE:
-        msg: Explore the Temple of Thoth
+        msg: explore the Temple of Thoth
         
 onZone1:
   actions:
     - SET_OBJECTIVE:
-        msg: Write a spell to open the door
+        msg: write a spell to open the door
 
 onDoorOpen:
   events:
@@ -46,7 +46,7 @@ onKill:
 onZone2:
   actions:
     - SET_OBJECTIVE:
-        msg: find the sacred name on the statue and pray to it
+        msg: find the name on the urn and pray to it
 
 prayThoth:
   events:

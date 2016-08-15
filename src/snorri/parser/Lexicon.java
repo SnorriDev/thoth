@@ -109,7 +109,6 @@ public class Lexicon {
 		
 		//Object Pronouns
 		lexicon.put("wi", new FirstObjectPronoun());
-		lexicon.put("w", new FirstObjectPronoun());
 		lexicon.put("tn", new SecondObjectPronoun());
 		lexicon.put("sw", new ThirdObjectPronoun());
 		lexicon.put("sy", new ThirdObjectPronoun());

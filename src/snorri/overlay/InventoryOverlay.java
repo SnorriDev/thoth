@@ -168,14 +168,13 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 		//vocab info space
 		JComponent vocabInfo = new JPanel();
-		vocabInfo.setPreferredSize(new Dimension(700, 368));
 		vocabInfo.setBackground(NORMAL_BG);
-		vocabInfo.setBorder(BorderFactory.createLineBorder(BORDER, 5));
 		vocabInfo.setLayout(new GridLayout(0, 1));
 		
 		vocabBox = new JPanel();
-		vocabModel = new HashMap<>();
+		vocabBox.setLayout(new WrapLayout());
 		vocabBox.setOpaque(false);
+		vocabModel = new HashMap<>();
 		
 		for (VocabDrop drop : fullInv.getVocab()) {
 			addWordPanel(drop);
@@ -190,11 +189,15 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			vocabInfo.add(buttons);
 		}
 		
+		scrollPane = new JScrollPane(vocabInfo);
+		scrollPane.setPreferredSize(new Dimension(700, 368));
+		scrollPane.setBorder(BorderFactory.createLineBorder(BORDER, 5));
+		
 		c.fill = GridBagConstraints.BASELINE;
 		c.gridheight = 1;
 		c.gridx = 1;
 		c.gridy = 1;
-		panel.add(vocabInfo, c);
+		panel.add(scrollPane, c);
 		
 		add(panel);
 				
