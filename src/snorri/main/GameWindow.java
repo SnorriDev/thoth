@@ -92,9 +92,7 @@ public class GameWindow extends FocusedWindow {
 			return;
 		}
 		
-		synchronized (this) {
-			universe.getCurrentWorld().update(deltaTime);
-		}
+		universe.getCurrentWorld().update(deltaTime);
 		repaint();
 				
 	}
@@ -108,9 +106,7 @@ public class GameWindow extends FocusedWindow {
 		
 		super.paintComponent(g);
 		
-		synchronized (this) {
-			universe.getCurrentWorld().render(this, g, true);
-		}
+		universe.getCurrentWorld().render(this, g, true);
 		focus.getInventory().render(this, g);
 		focus.renderHealthBar(g);
 		

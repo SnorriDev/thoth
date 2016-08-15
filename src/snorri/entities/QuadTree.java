@@ -70,7 +70,7 @@ public class QuadTree extends Entity implements EntityGroup {
 		return (RectCollider) collider;
 	}
 
-	public synchronized void add(Entity e) {
+	public void add(Entity e) {
 		entities.add(e);
 		nodeMap.put(e, this);
 	}

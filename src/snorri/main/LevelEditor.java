@@ -292,9 +292,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			return;
 		}
 		
-		synchronized (this) { //TODO make render method synchronized?
-			env.render(this, gr, false);
-		}
+		env.render(this, gr, false);
 		renderMousePos(gr);
 		
 	}
