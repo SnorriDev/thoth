@@ -49,6 +49,8 @@ public class Level implements Editable {
 			}
 		}
 		
+		computePathfinding();
+		
 	}
 	
 	public Level(Vector v, TileType bg) {

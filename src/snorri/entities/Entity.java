@@ -37,6 +37,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		SPAWNABLE = new ArrayList<>();
 		
 		SPAWNABLE.add(Urn.class);
+		SPAWNABLE.add(Spike.class);
 		
 		EDIT_SPAWNABLE = new ArrayList<>(SPAWNABLE);
 		

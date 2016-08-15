@@ -1,5 +1,6 @@
 package snorri.entities;
 
+import snorri.collisions.Collider;
 import snorri.events.CollisionEvent;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -17,6 +18,11 @@ public abstract class Detector extends Entity {
 	
 	public Detector(Entity e) {
 		super(e);
+		age = 0;
+	}
+
+	public Detector(Vector pos, Collider collider) {
+		super(pos, collider);
 		age = 0;
 	}
 

@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import snorri.entities.Flower;
+import snorri.entities.Spike;
 import snorri.entities.Urn;
 import snorri.nonterminals.AbstractNoun;
 import snorri.nonterminals.Name;
@@ -87,6 +88,7 @@ public class Lexicon {
 		lexicon.put("xt", new StaticDef(Noun.class, TileType.LAVA)); //technically this is fire
 		lexicon.put("snbt", new StaticDef(Noun.class, Urn.class));
 		lexicon.put("bit", new StaticDef(Noun.class, null)); //TODO: bee
+		lexicon.put("Hnyt", new StaticDef(Noun.class, Spike.class)); //TODO: spike
 		
 		lexicon.put("st", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
 		lexicon.put("iry", new StaticDef(AbstractNoun.class, AbstractSemantics.WEAPON));
