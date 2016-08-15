@@ -69,6 +69,8 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	
 	private final SortedListModel<Item> model;
 	private final Map<String, JComponent> vocabModel;
+	
+	private boolean editMode;
 		
 	private class ItemCellRenderer implements ListCellRenderer<Item> {
 		@Override
@@ -95,6 +97,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		inv = inventory;
 		fullInv = inventory.getFullInventory();
 		
+		this.editMode = editMode;
 		Droppable.setInventoryForComparison(inv);
 				
 		JPanel panel = new JPanel(new GridBagLayout());
@@ -237,14 +240,14 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 	}
 	
-	private void add(Droppable d) {
+	private boolean add(Droppable d) {
 		
 		if (d == null) {
 			Main.error("adding null item to inventory");
 		}
 		
 		if (!inv.add(d)) {
-			return;
+			return false;
 		}
 		
 		if (d instanceof Item) {
@@ -254,12 +257,15 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			addWordPanel((VocabDrop) d);
 			vocabBox.revalidate();
 		}
+		
+		return true;
+		
 	}
 	
-	private void delete(Droppable d, boolean specific) {
+	private boolean delete(Droppable d, boolean specific) {
 		
 		if (!inv.remove(d, specific)) {
-			return;
+			return false;
 		}
 		
 		if (d instanceof Item) {
@@ -270,6 +276,9 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			vocabModel.remove(((VocabDrop) d).getOrthography());
 			vocabBox.revalidate();
 		}
+		
+		return true;
+		
 	}
 	
 	@Override
@@ -306,19 +315,12 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	public void keyPressed(KeyEvent e) {
 		
 		super.keyPressed(e);
-		
-		if (e.getSource() == field || list.getSelectedValue() == null) {
-			return;
-		}
-		
-		if (Key.DELETE.isPressed(e)) {
-			delete(list.getSelectedValue(), true);
-		}
-		
+				
 		if (list.getSelectedValue() instanceof Orb) {
 			for (int i = 0; i < Inventory.ORB_KEYS.length; i++) {
 				if (Inventory.ORB_KEYS[i].isPressed(e)) {
 					inv.setOrb(i, (Orb) list.getSelectedValue());
+					model.redraw();
 				}
 			}
 		}
@@ -327,6 +329,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			for (int i = 0; i < Inventory.PAPYRUS_KEYS.length; i++) {
 				if (Inventory.PAPYRUS_KEYS[i].isPressed(e)) {
 					inv.setPapyrus(i, (Papyrus) list.getSelectedValue());
+					model.redraw();
 				}
 			}
 		}
@@ -335,12 +338,23 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			
 			if (list.getSelectedValue() instanceof Weapon) {
 				inv.setWeapon((Weapon) list.getSelectedValue());
+				model.redraw();
 			}
 			
 			if (list.getSelectedValue() instanceof Armor) {
 				inv.setArmor((Armor) list.getSelectedValue());
+				model.redraw();
 			}
 			
+		}
+		
+		if (e.getSource() == field || list.getSelectedValue() == null || !editMode) {
+			return;
+		}
+		
+		if (Key.DELETE.isPressed(e)) {
+			delete(list.getSelectedValue(), true);
+			model.redraw();
 		}
 			
 	}

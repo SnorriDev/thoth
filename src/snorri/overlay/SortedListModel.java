@@ -32,6 +32,10 @@ public class SortedListModel<E> extends AbstractListModel<E> {
 			fireContentsChanged(this, 0, getSize());
 		}
 	}
+	
+	public void redraw() {
+		fireContentsChanged(this, 0, getSize());
+	}
 
 	public void addAll(E[] elements) {
 		Collection<E> c = Arrays.asList(elements);

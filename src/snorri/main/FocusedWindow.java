@@ -8,6 +8,7 @@ import java.awt.event.MouseListener;
 
 import snorri.entities.Entity;
 import snorri.inventory.Inventory;
+import snorri.keyboard.Key;
 import snorri.keyboard.KeyStates;
 import snorri.keyboard.MouseButton;
 import snorri.overlay.InventoryOverlay;
@@ -102,12 +103,30 @@ public abstract class FocusedWindow extends GamePanel implements MouseListener, 
 		return states.getMovementVector();
 	}
 	
-	public Vector getAltFireVector() {
-		return states.getAltFireVector();
-	}
-	
-	public boolean isShooting() {
-		return states.get(MouseButton.SHOOT);
+	public Vector getShotDirection() {
+		
+		if (states.get(MouseButton.SHOOT)) {
+			return getMousePosRelative().copy().normalize();
+		}
+		
+		if (states.get(Key.SHOOT_LEFT)) {
+			return new Vector(-1, 0);
+		}
+		
+		if (states.get(Key.SHOOT_RIGHT)) {
+			return new Vector(1, 0);
+		}
+		
+		if (states.get(Key.SHOOT_DOWN)) {
+			return new Vector(0, 1);
+		}
+		
+		if (states.get(Key.SHOOT_UP)) {
+			return new Vector(0, -1);
+		}
+		
+		return null;
+		
 	}
 
 	public abstract World getWorld();

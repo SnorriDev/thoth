@@ -96,7 +96,7 @@ public class Lexicon {
 		lexicon.put("nbt", new StaticDef(AbstractNoun.class, AbstractSemantics.SOURCE)); //means lord literally
 		lexicon.put("Axt", new StaticDef(AbstractNoun.class, AbstractSemantics.FLOOD));
 		lexicon.put("Da", new StaticDef(AbstractNoun.class, AbstractSemantics.STORM));
-		
+				
 		//Names
 		lexicon.put("DHwty", new StaticDef(Name.class, "DHwty")); //TODO icon; name of Thoth
 				

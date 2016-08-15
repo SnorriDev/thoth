@@ -127,7 +127,7 @@ public class Inventory implements Serializable {
 	
 	public boolean tryToShoot(World world, Unit focus, Vector movement, Vector dir) {
 		
-		if (weaponSlot == null || dir.equals(Vector.ZERO) || dir.notInPlane()) {
+		if (weaponSlot == null ||  dir == null || dir.equals(Vector.ZERO) || dir.notInPlane()) {
 			return false;
 		}
 		
@@ -188,7 +188,6 @@ public class Inventory implements Serializable {
 			papyrusSlots[oldI] = null;
 		}
 		papyrusSlots[slot] = newPapyrus;
-		return;
 	}
 	
 	public Orb getSelectedOrb() {

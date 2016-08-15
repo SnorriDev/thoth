@@ -24,6 +24,7 @@ public class DeathScreen extends GamePanel {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Main.log("clicked button");
 		if (e.getActionCommand().equals("Main Menu")) {
 			Main.launchMenu();
 		}
