@@ -1,11 +1,13 @@
 package snorri.inventory;
 
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.io.Serializable;
 
 import snorri.audio.Audio;
 import snorri.entities.Projectile;
 import snorri.entities.Unit;
+import snorri.keyboard.Key;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.triggers.Trigger.TriggerType;
@@ -27,6 +29,9 @@ public class Inventory implements Serializable {
 	private Orb[] orbSlots;
 	private Papyrus[] papyrusSlots;
 	private int selectedOrb = 0;
+	
+	public static final Key[] ORB_KEYS = new Key[] {Key.ONE, Key.TWO};
+	public static final Key[] PAPYRUS_KEYS = new Key[] {Key.THREE, Key.FOUR, Key.FIVE};
 
 	private static final int ORB_SLOTS = 2;
 	private static final int PAPYRUS_SLOTS = 3;
@@ -35,7 +40,7 @@ public class Inventory implements Serializable {
 
 	public Inventory(Unit player) {
 		this.player = player;
-		fullInventory = new FullInventory();
+		fullInventory = new FullInventory(this);
 		orbSlots = new Orb[ORB_SLOTS];
 		papyrusSlots = new Papyrus[PAPYRUS_SLOTS];
 	}
@@ -157,6 +162,10 @@ public class Inventory implements Serializable {
 			Main.error("slot out of range");
 			return;
 		}
+		int oldI = getIndex(newProjectile);
+		if (oldI != Integer.MAX_VALUE) {
+			orbSlots[oldI] = null;
+		}
 		orbSlots[slot] = newProjectile;
 		return;
 	}
@@ -173,6 +182,10 @@ public class Inventory implements Serializable {
 		if (slot < 0 || slot >= PAPYRUS_SLOTS) {
 			Main.error("slot out of range");
 			return;
+		}
+		int oldI = getIndex(newPapyrus);
+		if (oldI != Integer.MAX_VALUE) {
+			papyrusSlots[oldI] = null;
 		}
 		papyrusSlots[slot] = newPapyrus;
 		return;
@@ -236,7 +249,11 @@ public class Inventory implements Serializable {
 		return (specific && d1 == d2) || (!specific && d1.equals(d2));
 	}
 	
-	public void add(Droppable d) {
+	public boolean add(Droppable d) {
+		
+		if (d == null) {
+			return false;
+		}
 		
 		if (d instanceof Papyrus) {
 			addPapyrus((Papyrus) d);
@@ -251,12 +268,12 @@ public class Inventory implements Serializable {
 			addArmor((Armor) d);
 		}
 		
-		fullInventory.add(d);
 		TriggerType.ACQUIRE.activate(d.toString());
+		return fullInventory.add(d);
 
 	}
 	
-	public void remove(Droppable d, boolean specific) {
+	public boolean remove(Droppable d, boolean specific) {
 				
 		if (d instanceof Item) {
 			
@@ -279,7 +296,93 @@ public class Inventory implements Serializable {
 		
 		}
 		
-		fullInventory.remove(d);
+		return fullInventory.remove(d);
+		
+	}
+	
+	public int getIndex(Orb orb) {
+		for (int i = 0; i < orbSlots.length; i++) {
+			if (orb == orbSlots[i]) {
+				return i;
+			}
+		}
+		return Integer.MAX_VALUE;
+	}
+	
+	private int getIndex(Papyrus papyrus) {
+		for (int i = 0; i < papyrusSlots.length; i++) {
+			if (papyrus == papyrusSlots[i]) {
+				return i;
+			}
+		}
+		return Integer.MAX_VALUE;
+	}
+	
+	private int getIndex(Weapon weapon) {
+		return weaponSlot == weapon ? 0 : Integer.MAX_VALUE;
+	}
+	
+	private int getIndex(Armor armor) {
+		return armorSlot == armor ? 0 : Integer.MAX_VALUE;
+	}
+	
+	/**
+	 * @return <code>Integer.MAX_VALUE</code> iff the item does not appear
+	 */
+	public int getIndex(Item item) {
+		if (item instanceof Weapon) {
+			return getIndex((Weapon) item);
+		}
+		if (item instanceof Armor) {
+			return getIndex((Armor) item);
+		}
+		if (item instanceof Orb) {
+			return getIndex((Orb) item);
+		}
+		if (item instanceof Papyrus) {
+			return getIndex((Papyrus) item);
+		}
+		return Integer.MAX_VALUE;
+	}
+	
+	/**
+	 * the character to show in parentheses after
+	 * the item in the inventory HUD
+	 */
+	public Key getKey(Item item) {
+		
+		int index;
+		if (item instanceof Orb) {
+			index = getIndex((Orb) item);
+			if (index == Integer.MAX_VALUE) {
+				return null;
+			}
+			return ORB_KEYS[getIndex((Orb) item)];
+		}
+		if (item instanceof Papyrus) {
+			index = getIndex((Papyrus) item);
+			if (index == Integer.MAX_VALUE) {
+				return null;
+			}
+			return PAPYRUS_KEYS[index];
+		}
+		
+		return null;
+	}
+	
+	public void checkKeys(KeyEvent e) {
+		
+		for (int i = 0; i < ORB_KEYS.length; i++) {
+			if (ORB_KEYS[i].isPressed(e)) {
+				selectOrb(i);
+			}
+		}
+		
+		for (int i = 0; i < PAPYRUS_KEYS.length; i++) {
+			if (PAPYRUS_KEYS[i].isPressed(e)) {
+				usePapyrus(i);
+			}
+		}
 		
 	}
 

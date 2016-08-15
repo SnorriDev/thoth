@@ -54,5 +54,10 @@ public class Weapon extends Item {
 		return spell.getMeaning(e);
 		
 	}
+	
+	@Override
+	public int getInvPos() {
+		return 0;
+	}
 
 }

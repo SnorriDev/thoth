@@ -6,9 +6,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.DefaultListModel;
-
 import snorri.nonterminals.Name;
+import snorri.overlay.SortedListModel;
 import snorri.parser.Lexicon;
 
 public class FullInventory extends ArrayList<Droppable> implements Serializable {
@@ -17,6 +16,12 @@ public class FullInventory extends ArrayList<Droppable> implements Serializable 
 	 * class that represents a player's full inventory
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private final Inventory inv;
+	
+	public FullInventory(Inventory inv) {
+		this.inv = inv;
+	}
 	
 	/**
 	 * will first try to insert items in a new inventory slot
@@ -60,8 +65,8 @@ public class FullInventory extends ArrayList<Droppable> implements Serializable 
 		return true;
 	}
 
-	public DefaultListModel<Item> getItemModel() {
-		DefaultListModel<Item> out = new DefaultListModel<>();
+	public SortedListModel<Item> getItemModel() {
+		SortedListModel<Item> out = new SortedListModel<>();
 		for (Droppable d : this) {
 			if (d instanceof Item) {
 				out.addElement((Item) d);
@@ -88,6 +93,10 @@ public class FullInventory extends ArrayList<Droppable> implements Serializable 
 			}
 		}
 		return list.toArray(arr);
+	}
+	
+	public Inventory getInventory() {
+		return inv;
 	}
 		
 }

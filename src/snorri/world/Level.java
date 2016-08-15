@@ -392,7 +392,7 @@ public class Level implements Editable {
 			}
 		}
 		
-		Main.log("found " + connectedSubGraphs.size() + "sub-graphs in level");
+		Main.log("found " + connectedSubGraphs.size() + " sub-graphs in level");
 		
 		computeGraphHash();
 		
@@ -478,11 +478,6 @@ public class Level implements Editable {
 				
 			}
 		}
-		
-//		Main.log(connectedSubGraphs.size());
-//		for (List<Vector> graph : connectedSubGraphs) {
-//			Main.log(graph.size());
-//		}
 					
 	}
 	

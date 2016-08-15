@@ -121,16 +121,16 @@ public abstract class Item implements Droppable {
 		}
 		
 		public static ItemType fromString(String raw) {
-			Integer i = -1;
 			try {
+				Integer i;
 				if ((i = Util.getInteger(raw)) == null) {
-						return valueOf(raw);
+						return valueOf(Util.unclean(raw));
 				}
 				return values()[i];
 			} catch (IllegalArgumentException e) {
 				return null;
 			} catch (IndexOutOfBoundsException e) {
-				Main.error("invalid item number " + i + " specified");
+				Main.log("invalid item number " + raw + " specified");
 				return null;
 			}
 		}
@@ -323,6 +323,19 @@ public abstract class Item implements Droppable {
 	
 	public static int getSlotWidth() {
 		return DEFAULT_BORDER.getWidth(null);
+	}
+	
+	@Override
+	public int compareIn(Droppable o, Inventory inv) {
+		int cmp = Droppable.super.compareIn(o, inv);
+		if (o instanceof Item && cmp == 0) {
+			int cmp2 = Integer.compare(inv.getIndex(this), inv.getIndex((Item) o));
+			if (cmp2 == 0) { //same-named items can
+				return toUniqueString().compareTo(o.toUniqueString());
+			}
+			return cmp2;
+		}
+		return cmp;
 	}
 
 }

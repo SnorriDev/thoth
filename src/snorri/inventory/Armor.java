@@ -8,9 +8,16 @@ public class Armor extends Item {
 		super(t);
 	}
 
-	//retrieve the block strength from the ItemType
+	/**
+	 * retrieve the block strength from the ItemType
+	 */
 	public int getBlock() {
 		return (int) type.getProperty(0);
+	}
+	
+	@Override
+	public int getInvPos() {
+		return 1;
 	}
 	
 }

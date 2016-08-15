@@ -2,8 +2,10 @@ package snorri.entities;
 
 import snorri.events.CollisionEvent;
 import snorri.inventory.Droppable;
+import snorri.inventory.Item;
 import snorri.main.GameWindow;
 import snorri.main.Main;
+import snorri.parser.Grammar;
 import snorri.world.Vector;
 
 public class Drop extends Detector {
@@ -22,8 +24,12 @@ public class Drop extends Detector {
 		animation = prize.getAnimation();
 	}
 	
-	public Drop(Vector pos, String prize) {
+	public Drop(Vector pos, String prize, String spell) {
 		this(pos, Droppable.fromString(prize));
+		if (this.prize instanceof Item) {
+			((Item) this.prize).setSpell(Grammar.parseString(spell));
+			Main.log("spawned enchanted drop");
+		}
 	}
 	
 	public Droppable getPrize() {

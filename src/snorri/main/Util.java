@@ -41,6 +41,10 @@ public class Util {
 		return constant.toLowerCase().replace('_', ' ');
 	}
 	
+	public static String unclean(String raw) {
+		return raw.toUpperCase().replace(' ', '_');
+	}
+	
 	public static Collection<Object> safe(Collection<Object> c) {
 		return c == null ? Collections.emptyList() : c;
 	}

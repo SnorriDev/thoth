@@ -33,5 +33,10 @@ public class Orb extends Item {
 		g.drawImage(selected ? ORB_BORDER_SELECTED : ORB_BORDER, pos.getX(), pos.getY(), null);
 		return getSlotWidth();
 	}
+	
+	@Override
+	public int getInvPos() {
+		return 2;
+	}
 
 }

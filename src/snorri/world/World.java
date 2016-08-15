@@ -238,7 +238,7 @@ public class World implements Playable, Editable {
 	@SuppressWarnings("deprecation")
 	public boolean deleteHard(Entity e) {
 		
-		if (e.isStaticObject()) {
+		if (e != null && e.isStaticObject()) {
 			level.removeEntity(e);
 		}
 		

@@ -508,8 +508,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			} else if (selectedEntityClass.equals(Drop.class)) {
 				DialogMap inputs = new DialogMap();
 				inputs.put("Prize", "Enter item name/id or vocab word");
+				inputs.put("Spell", "");
 				dialog("Drop Reward", inputs);
-				world.addHard(selectedEntityClass.getConstructor(Vector.class, String.class).newInstance(spawnPos, inputs.getText("Prize")));
+				world.addHard(selectedEntityClass.getConstructor(Vector.class, String.class, String.class).newInstance(spawnPos, inputs.getText("Prize"), inputs.getText("Spell")));
 			} else if (selectedEntityClass.equals(Listener.class)) {
 				DialogMap inputs = new DialogMap();
 				inputs.put("Radius", "40");

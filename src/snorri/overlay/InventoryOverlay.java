@@ -18,7 +18,6 @@ import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
@@ -34,15 +33,20 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import snorri.hieroglyphs.Hieroglyphs;
+import snorri.inventory.Armor;
 import snorri.inventory.Droppable;
 import snorri.inventory.FullInventory;
 import snorri.inventory.Inventory;
 import snorri.inventory.Item;
+import snorri.inventory.Orb;
+import snorri.inventory.Papyrus;
 import snorri.inventory.VocabDrop;
+import snorri.inventory.Weapon;
 import snorri.keyboard.Key;
 import snorri.main.Debug;
 import snorri.main.DialogMap;
 import snorri.main.FocusedWindow;
+import snorri.main.Main;
 import snorri.parser.Grammar;
 
 public class InventoryOverlay extends Overlay implements MouseListener, ListSelectionListener, DocumentListener, FocusListener {
@@ -63,15 +67,18 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private final JButton enchantButton;
 	private final JEditorPane field;
 	
-	private final DefaultListModel<Item> model;
+	private final SortedListModel<Item> model;
 	private final Map<String, JComponent> vocabModel;
 		
-	private static class ItemCellRenderer implements ListCellRenderer<Item> {
+	private class ItemCellRenderer implements ListCellRenderer<Item> {
 		@Override
 		public Component getListCellRendererComponent(JList<? extends Item> list, Item item, int index, boolean isSelected,
 				boolean cellHasFocus) {
-			JLabel label = new JLabel(item.toString(), item.getType().getIcon(), JLabel.LEFT);
+			Key k = inv.getKey(item);
+			String text = item.toString() + (k == null ? "" : (" (" + k.getChar() + ")"));
+			JLabel label = new JLabel(text, item.getType().getIcon(), JLabel.LEFT);
 			label.setPreferredSize(new Dimension(290, 35));
+			label.setFont(label.getFont().deriveFont(inv.getIndex(item) == Integer.MAX_VALUE ? Font.PLAIN : Font.BOLD));
 			label.setBackground(isSelected ? SELECTED_BG : NORMAL_BG);
 			label.setOpaque(true);
 			return label;
@@ -87,6 +94,8 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		super(focusedWindow);
 		inv = inventory;
 		fullInv = inventory.getFullInventory();
+		
+		Droppable.setInventoryForComparison(inv);
 				
 		JPanel panel = new JPanel(new GridBagLayout());
 		panel.setPreferredSize(new Dimension(1000, 618)); //golden ratio
@@ -229,7 +238,15 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	}
 	
 	private void add(Droppable d) {
-		inv.add(d);
+		
+		if (d == null) {
+			Main.error("adding null item to inventory");
+		}
+		
+		if (!inv.add(d)) {
+			return;
+		}
+		
 		if (d instanceof Item) {
 			model.addElement((Item) d);
 		}
@@ -240,7 +257,11 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	}
 	
 	private void delete(Droppable d, boolean specific) {
-		inv.remove(d, specific);
+		
+		if (!inv.remove(d, specific)) {
+			return;
+		}
+		
 		if (d instanceof Item) {
 			model.removeElement((Item) d);
 		}
@@ -286,11 +307,42 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 		super.keyPressed(e);
 		
-		if (Key.DELETE.isPressed(e) && list.getSelectedValue() != null &&
-				e.getSource() != field) {
+		if (e.getSource() == field || list.getSelectedValue() == null) {
+			return;
+		}
+		
+		if (Key.DELETE.isPressed(e)) {
 			delete(list.getSelectedValue(), true);
 		}
 		
+		if (list.getSelectedValue() instanceof Orb) {
+			for (int i = 0; i < Inventory.ORB_KEYS.length; i++) {
+				if (Inventory.ORB_KEYS[i].isPressed(e)) {
+					inv.setOrb(i, (Orb) list.getSelectedValue());
+				}
+			}
+		}
+
+		if (list.getSelectedValue() instanceof Papyrus) {
+			for (int i = 0; i < Inventory.PAPYRUS_KEYS.length; i++) {
+				if (Inventory.PAPYRUS_KEYS[i].isPressed(e)) {
+					inv.setPapyrus(i, (Papyrus) list.getSelectedValue());
+				}
+			}
+		}
+		
+		if (Key.SPACE.isPressed(e)) {
+			
+			if (list.getSelectedValue() instanceof Weapon) {
+				inv.setWeapon((Weapon) list.getSelectedValue());
+			}
+			
+			if (list.getSelectedValue() instanceof Armor) {
+				inv.setArmor((Armor) list.getSelectedValue());
+			}
+			
+		}
+			
 	}
 
 	@Override

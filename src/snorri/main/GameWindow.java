@@ -170,8 +170,6 @@ public class GameWindow extends FocusedWindow {
 		
 		if (Key.SPACE.isPressed(e)) {
 			Entity interactRegion = new Entity(getFocus().getPos(), Unit.RADIUS + Desk.INTERACT_RANGE);
-			//could make this more efficient potentially by making a new method
-			//also move to its own thing for organization?
 			for (Entity entity : universe.getCurrentWorld().getEntityTree().getAllCollisions(interactRegion)) {
 				if (entity instanceof Desk) {
 					openInventory();
@@ -179,22 +177,8 @@ public class GameWindow extends FocusedWindow {
 				}
 			}
 		}
-				
-		if (Key.ONE.isPressed(e)) {
-			focus.getInventory().selectOrb(0);
-		}
-		if (Key.TWO.isPressed(e)) {
-			focus.getInventory().selectOrb(1);
-		}
-		if (Key.THREE.isPressed(e)) {
-			focus.getInventory().usePapyrus(0);
-		}
-		if (Key.FOUR.isPressed(e)) {
-			focus.getInventory().usePapyrus(1);
-		}
-		if (Key.FIVE.isPressed(e)) {
-			focus.getInventory().usePapyrus(2);
-		}
+		
+		focus.getInventory().checkKeys(e);
 		
 	}
 	

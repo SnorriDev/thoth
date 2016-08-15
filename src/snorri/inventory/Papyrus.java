@@ -48,5 +48,10 @@ public class Papyrus extends Item {
 		g.drawImage(selected ? PAPYRUS_BORDER_SELECTED : PAPYRUS_BORDER, pos.getX(), pos.getY(), null);
 		return getSlotWidth();
 	}
+	
+	@Override
+	public int getInvPos() {
+		return 3;
+	}
 
 }
