@@ -30,7 +30,7 @@ public class Orb extends Item {
 	}
 	
 	public static int drawEmptyOrb(Graphics g, Vector pos, boolean selected) {
-		g.drawImage(selected ? ORB_BORDER_SELECTED : ORB_BORDER, pos.getX(), pos.getY(), null);
+		g.drawImage(ORB_BORDER, pos.getX(), pos.getY(), null);
 		return getSlotWidth();
 	}
 	

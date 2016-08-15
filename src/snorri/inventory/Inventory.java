@@ -166,7 +166,7 @@ public class Inventory implements Serializable {
 		}
 		int oldI = getIndex(newProjectile);
 		if (oldI != Integer.MAX_VALUE) {
-			orbSlots[oldI] = null;
+			removeOrb(oldI);
 		}
 		orbSlots[slot] = newProjectile;
 		return;
@@ -197,7 +197,16 @@ public class Inventory implements Serializable {
 	}
 	
 	public void selectOrb(int i) {
-		selectedOrb = i;
+		if (getOrb(i) != null) {
+			selectedOrb = i;
+		}
+	}
+	
+	public void removeOrb(int i) {
+		orbSlots[i] = null;
+		if (selectedOrb == i) {
+			selectedOrb = 0;
+		}
 	}
 
 	

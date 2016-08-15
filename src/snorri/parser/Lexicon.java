@@ -85,7 +85,7 @@ public class Lexicon {
 		lexicon.put("mw", new StaticDef(Noun.class, TileType.WATER));
 		lexicon.put("Say", new StaticDef(Noun.class, TileType.SAND));
 		lexicon.put("xt", new StaticDef(Noun.class, TileType.LAVA)); //technically this is fire
-		lexicon.put("snbt", new StaticDef(Noun.class, Urn.class));
+		lexicon.put("snbt", new StaticDef(Noun.class, Urn.class)); //TODO icon
 		lexicon.put("bit", new StaticDef(Noun.class, null)); //TODO: bee
 		
 		lexicon.put("st", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
