@@ -45,6 +45,7 @@ public class Player extends Unit implements Carrier {
 		Orb o2 = (Orb) Item.newItem(ItemType.PELLET);
 		Papyrus p1 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
 		Papyrus p2 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
+		Papyrus p3 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
 		
 		//equip items in inventory
 		inventory.add(sling);
@@ -52,6 +53,7 @@ public class Player extends Unit implements Carrier {
 		inventory.add(o2);
 		inventory.add(p1);
 		inventory.add(p2);
+		inventory.add(p3);
 		
 	}
 	

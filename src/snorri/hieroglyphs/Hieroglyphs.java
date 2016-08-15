@@ -22,7 +22,6 @@ public class Hieroglyphs {
 	
 	static {
 		
-		Main.log("loading HTML glyphs...");
 		glyphIcons = new HashMap<>();
 		
 		File dir = Main.getFile("/textures/hieroglyphs");
@@ -37,14 +36,6 @@ public class Hieroglyphs {
 				String name = Util.removeExtension(glyph.getName());
 				glyphIcons.put(name, loadImage(name));
 			}
-//			Collections.sort(glyphs, new Comparator<String>() {
-//				@Override
-//				public int compare(String s1, String s2) {
-//					//sort from longest to shortest
-//					return Integer.compare(s2.length(), s1.length());
-//				}
-//				});
-			Main.log(getGlyphs().size() + " HTML glyphs loaded");
 		} else {
 			Main.error("could not find HTML glyph directory");
 		}
@@ -53,6 +44,10 @@ public class Hieroglyphs {
 	
 	public static Set<String> getGlyphs() {
 		return glyphIcons.keySet();
+	}
+	
+	public static void load() {
+		Main.log(glyphIcons.size() + " HTML glyphs loaded");
 	}
 		
 	public static String transliterate(String raw) {

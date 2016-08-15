@@ -20,6 +20,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.UIManager;
 
 import net.sourceforge.yamlbeans.YamlReader;
+import snorri.hieroglyphs.Hieroglyphs;
 import snorri.parser.Lexicon;
 import snorri.terrain.Structure;
 import snorri.terrain.TerrainGen;
@@ -75,8 +76,9 @@ public class Main {
 	
 	public static void main(String[] args) {
 
-		Lexicon.init();
-
+		Lexicon.load();
+		Hieroglyphs.load();
+		
 		setupFont();
 		
 		frame = new JFrame("Spoken Word");
