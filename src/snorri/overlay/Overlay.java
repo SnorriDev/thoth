@@ -1,6 +1,5 @@
 package snorri.overlay;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -9,10 +8,8 @@ import snorri.main.FocusedWindow;
 import snorri.main.GamePanel;
 
 public abstract class Overlay extends GamePanel implements KeyListener {
-
-	protected static final Color NORMAL_BG = new Color(255, 179, 71);
-	protected static final Color SELECTED_BG = new Color(255, 150, 71);
-	protected static final Color BORDER = new Color(255, 130, 71);
+	
+	//private final Color GRAYED_OUT = new Color(50, 50, 50, 50);
 	
 	protected final FocusedWindow window;
 	
@@ -31,6 +28,15 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 	}
+	
+//	@Override
+//	public void paintComponent(Graphics g) {
+//		Dimension size = getSize();
+//		Main.log("drawing shit");
+//		g.setColor(Color.BLACK);
+//		g.drawRect(0, 0, size.width, size.height);
+//		super.paintComponent(g);
+//	}
 	
 	@Override
 	public void keyPressed(KeyEvent e) {

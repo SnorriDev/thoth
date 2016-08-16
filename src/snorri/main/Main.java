@@ -20,6 +20,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.UIManager;
 
 import net.sourceforge.yamlbeans.YamlReader;
+import snorri.dialog.Dialog;
 import snorri.dialog.Objective;
 import snorri.hieroglyphs.Hieroglyphs;
 import snorri.parser.Lexicon;
@@ -29,7 +30,7 @@ import snorri.world.Vector;
 import snorri.world.World;
 
 public class Main {
-
+	
 	private static GamePanel window;
 	private static GamePanel outerOverlay;
 
@@ -169,6 +170,7 @@ public class Main {
 		reader.getConfig().setClassTag("vector", Vector.class);
 		reader.getConfig().setClassTag("struct", Structure.class);
 		reader.getConfig().setClassTag("objective", Objective.class);
+		reader.getConfig().setClassTag("dialog", Dialog.class);
 		return reader;
 	}
 	

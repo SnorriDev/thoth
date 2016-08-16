@@ -6,11 +6,13 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import snorri.dialog.Dialog;
 import snorri.entities.Entity;
 import snorri.inventory.Inventory;
 import snorri.keyboard.Key;
 import snorri.keyboard.KeyStates;
 import snorri.keyboard.MouseButton;
+import snorri.overlay.DialogOverlay;
 import snorri.overlay.InventoryOverlay;
 import snorri.overlay.PauseOverlay;
 import snorri.world.Playable;
@@ -34,26 +36,29 @@ public abstract class FocusedWindow extends GamePanel implements MouseListener, 
 		startAnimation();
 	}
 	
-	public void pause() {
+	public synchronized void pause() {
 		Main.setOverlay(new PauseOverlay(this));
-		states.purge();
 		paused = true;
 	}
 	
-	public void unpause() {
+	public synchronized void unpause() {
 		Main.setOverlay(null);
+		states.purge();
 		paused = false;
 	}
 	
-	public void openInventory(Inventory inv) {
-		Main.setOverlay(new InventoryOverlay(this, inv));
-		states.purge();
+	public synchronized void showDialog(Dialog dialog) {
+		Main.setOverlay(new DialogOverlay(this, dialog));
 		paused = true;
 	}
 	
-	public void editInventory(Inventory inv) {
+	public synchronized void openInventory(Inventory inv) {
+		Main.setOverlay(new InventoryOverlay(this, inv));
+		paused = true;
+	}
+	
+	public synchronized void editInventory(Inventory inv) {
 		Main.setOverlay(new InventoryOverlay(this, inv, true));
-		states.purge();
 		paused = true;
 	}
 	

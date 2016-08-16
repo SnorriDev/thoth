@@ -3,6 +3,11 @@ onStart:
     - TIMELINE:
         object: start
   actions:
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            text: |
+              Welcome to the Book of Thoth!
     - SET_OBJECTIVE:
         objective:
           !objective
@@ -11,7 +16,9 @@ onStart:
 onZone1:
   actions:
     - SET_OBJECTIVE:
-        msg: write a spell to open the door
+        objective:
+          !objective
+          shortDesc: write a spell to open the door
 
 onDoorOpen:
   events:
@@ -47,7 +54,9 @@ onKill:
         object: enemy2
   actions:
     - SET_OBJECTIVE:
-        msg: proceed through the maze
+        objective:
+          !objective
+          shortDesc: proceed through the maze
 
 onZone2:
   actions:

@@ -37,7 +37,7 @@ public class GameWindow extends FocusedWindow {
 	
 	private Playable universe;
 	private Player focus;
-	private Queue<Message> dialogQ;
+	private Queue<Message> messageQ;
 	private boolean hasDied;
 	private long lastTime;
 	
@@ -47,7 +47,7 @@ public class GameWindow extends FocusedWindow {
 		super();
 		this.universe = universe;
 		this.focus = focus;
-		dialogQ = new LinkedList<>();
+		messageQ = new LinkedList<>();
 		lastTime = getTimestamp();
 		hasDied = false;
 	}
@@ -76,8 +76,8 @@ public class GameWindow extends FocusedWindow {
 			Main.log("high delta time detected (" + deltaTime + " sec)");
 		}
 		
-		if (dialogQ != null && dialogQ.peek() != null && dialogQ.peek().update(deltaTime)) {
-			dialogQ.poll();
+		if (messageQ != null && messageQ.peek() != null && messageQ.peek().update(deltaTime)) {
+			messageQ.poll();
 		}
 				
 		if (isPaused()) {
@@ -118,7 +118,7 @@ public class GameWindow extends FocusedWindow {
 		}
 		
 		int xTrans = 0;
-		List<Message> reverse = new ArrayList<>(dialogQ);
+		List<Message> reverse = new ArrayList<>(messageQ);
 		for (ListIterator<Message> iter = reverse.listIterator(reverse.size()); iter.hasPrevious();) {
 			xTrans += iter.previous().render(this, g, xTrans);
 		}
@@ -129,13 +129,13 @@ public class GameWindow extends FocusedWindow {
 		return focus;
 	}
 	
-	public void showDialog(Droppable drop) {
-		showDialog(new DropMessage(drop));
+	public void showMessage(Droppable drop) {
+		showMessage(new DropMessage(drop));
 	}
 	
-	public void showDialog(Message m) {
+	public void showMessage(Message m) {
 		Main.log(m.toString());
-		dialogQ.add(m);
+		messageQ.add(m);
 	}
 	
 	@Override

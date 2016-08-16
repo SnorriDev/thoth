@@ -1,0 +1,13 @@
+@font-face {
+	font-family: thothDefault;
+	src: url(../fonts/thothDefault.ttf);
+}
+
+h1, h2 {
+	font-family: thothDefault;
+}
+
+span.def {
+	font-size: 14;
+	font-style: italic;
+}

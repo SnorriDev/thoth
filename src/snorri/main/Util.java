@@ -10,6 +10,8 @@ import java.util.Collections;
 
 public class Util {
 
+	public static final double GOLDEN_RATIO = 1.61803398875; //TODO use this
+	
 	public static Integer getInteger(String input) {
 		try {
 			return Integer.parseInt(input);

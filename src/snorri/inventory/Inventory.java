@@ -269,7 +269,7 @@ public class Inventory implements Serializable {
 		}
 		
 		if (Main.getWindow() instanceof GameWindow && player instanceof Player) {
-			((GameWindow) Main.getWindow()).showDialog(d);
+			((GameWindow) Main.getWindow()).showMessage(d);
 		}
 		return fullInventory.add(d);
 
