@@ -5,7 +5,10 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Queue;
 
 import javax.swing.UIManager;
@@ -118,8 +121,9 @@ public class GameWindow extends FocusedWindow {
 		}
 		
 		int xTrans = 0;
-		for (Message msg : dialogQ.toArray(new Message[0])) {
-			xTrans += msg.render(this, g, xTrans);
+		List<Message> reverse = new ArrayList<>(dialogQ);
+		for (ListIterator<Message> iter = reverse.listIterator(reverse.size()); iter.hasPrevious();) {
+			xTrans += iter.previous().render(this, g, xTrans);
 		}
 		
 	}

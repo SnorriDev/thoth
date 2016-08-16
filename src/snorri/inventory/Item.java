@@ -26,9 +26,26 @@ public abstract class Item implements Droppable {
 	private static final int ARC_SIZE = 80;
 	private static final int SMALL_ICON_SIZE = 32;
 	private static final int ENTITY_SIZE = 48;
+	private static final int SLOT_SPACE = 15;
 	
-	private static final Image DEFAULT_BORDER = Main.getImage("/textures/hud/itemBorder.png");
+	private static final Image DEFAULT_BORDER = Main.getImage("/textures/hud/items/itemBorder.png"); //TODO grayed out version
 	private static final Color DEFAULT_COOLDOWN_COLOR = new Color(156, 134, 73, 200);
+	
+	protected static final Image[] ACTIVE_BORDERS;
+	
+	protected static final Image[] INACTIVE_BORDERS;
+	
+	static {
+		
+		ACTIVE_BORDERS = new Image[5];
+		INACTIVE_BORDERS = new Image[5];
+		
+		for (int i = 0; i < 5; i++) {
+			ACTIVE_BORDERS[i] = Main.getImage("/textures/hud/items/item" + (i + 1) + ".png");
+			INACTIVE_BORDERS[i] = Main.getImage("/textures/hud/items/item" + (i + 1) + "Alt.png");
+		}
+		
+	}
 	
 	protected Timer timer;
 	
@@ -219,6 +236,7 @@ public abstract class Item implements Droppable {
 		}
 		
 		spell = newSpell;
+		resetTimer();
 		return true;
 	}
 
@@ -267,15 +285,26 @@ public abstract class Item implements Droppable {
 		return nickname;
 	}
 	
-	public Image getBorder(boolean selected) {
-		return DEFAULT_BORDER;
+	public static Image getBorder(int i, boolean top, boolean selected) {
+		if (!top) {
+			return DEFAULT_BORDER;
+		}
+		if (selected) {
+			return ACTIVE_BORDERS[i];
+		}
+		return INACTIVE_BORDERS[i];
 	}
 	
-	public Color getCooldownColor() {
+	public Color getArcColor() {
 		return DEFAULT_COOLDOWN_COLOR;
 	}
 	
 	//TODO: use an ImageViewer to scale things
+	
+	public static Vector getPos(int i, boolean top) {
+		int y = top ? GameWindow.MARGIN : (((GameWindow) Main.getWindow()).getDimensions().getY() - Item.getSlotWidth() - GameWindow.MARGIN);
+		return new Vector(GameWindow.MARGIN + i * (Item.getSlotWidth() + Item.SLOT_SPACE), y);
+	}
 	
 	/**
 	 * draws a thumbnail and returns its width
@@ -285,11 +314,12 @@ public abstract class Item implements Droppable {
 	 * @return
 	 * 	width of thumbnail drawn
 	 */
-	public int drawThumbnail(Graphics g, Vector pos, boolean selected) {
+	public int drawThumbnail(Graphics g, int i, boolean top, boolean selected) {
 		
-		Image border = getBorder(selected);
+		Image border = getBorder(i, top, selected);
 		Image icon = type.getTexture();
 		
+		Vector pos = getPos(i, top);
 		Vector iconPos = pos.copy().add(new Vector(border.getWidth(null) - icon.getWidth(null), border.getHeight(null) - icon.getHeight(null)).divide(2));
 		Vector arcPos = pos.copy().add(new Vector(border.getWidth(null) - ARC_SIZE, border.getHeight(null) - ARC_SIZE).divide(2));
 		
@@ -299,8 +329,8 @@ public abstract class Item implements Droppable {
 		} else {
 			g.drawImage(icon, iconPos.getX(), iconPos.getY(), null);
 			g.drawImage(border, pos.getX(), pos.getY(), null);
-			if (timer != null) { //TODO: instanceof Cooldownable?
-				g.setColor(getCooldownColor());
+			if (timer != null) {
+				g.setColor(getArcColor());
 				g.fillArc(arcPos.getX(), arcPos.getY(), ARC_SIZE, ARC_SIZE, 90, this.getTimer().getRatio(360));
 				g.setColor(Color.BLACK);
 			}
@@ -317,8 +347,9 @@ public abstract class Item implements Droppable {
 	 * @return
 	 * 	width of thumbnail drawn
 	 */
-	public static int drawEmpty(Graphics g, Vector pos) {
-		g.drawImage(DEFAULT_BORDER, pos.getX(), pos.getY(), null);
+	public static int drawEmpty(Graphics g, int i, boolean top) {
+		Vector pos = getPos(i, top);
+		g.drawImage(getBorder(i, top, false), pos.getX(), pos.getY(), null);
 		return getSlotWidth();
 	}
 	
@@ -337,6 +368,12 @@ public abstract class Item implements Droppable {
 			return cmp2;
 		}
 		return cmp;
+	}
+	
+	public void resetTimer() {
+		if (timer != null) {
+			timer.activate();
+		}
 	}
 
 }
