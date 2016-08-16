@@ -1,6 +1,5 @@
 package snorri.main;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -15,6 +14,7 @@ import javax.swing.UIManager;
 
 import snorri.dialog.DropMessage;
 import snorri.dialog.Message;
+import snorri.dialog.Objective;
 import snorri.entities.Desk;
 import snorri.entities.Entity;
 import snorri.entities.Player;
@@ -24,7 +24,6 @@ import snorri.keyboard.Key;
 import snorri.overlay.DeathScreen;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Playable;
-import snorri.world.Vector;
 import snorri.world.World;
 
 public class GameWindow extends FocusedWindow {
@@ -42,7 +41,7 @@ public class GameWindow extends FocusedWindow {
 	private boolean hasDied;
 	private long lastTime;
 	
-	private String objective;
+	private Objective objective;
 		
 	public GameWindow(Playable universe, Player focus) {
 		super();
@@ -115,9 +114,7 @@ public class GameWindow extends FocusedWindow {
 		
 		g.setFont(UIManager.getFont("Label.font"));
 		if (objective != null) {
-			g.setColor(new Color(127, 130, 98));
-			Vector objPos = getFocus().getHealthBarPos().add(0, 43);
-			g.drawString(objective, objPos.getX(), objPos.getY());
+			objective.render(g, this);
 		}
 		
 		int xTrans = 0;
@@ -151,8 +148,8 @@ public class GameWindow extends FocusedWindow {
 		return universe;
 	}
 	
-	public void setObjective(String text) {
-		objective = text;
+	public void setObjective(Objective objective) {
+		this.objective = objective;
 	}
 	
 	@Override

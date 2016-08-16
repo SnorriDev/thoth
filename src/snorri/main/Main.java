@@ -20,6 +20,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.UIManager;
 
 import net.sourceforge.yamlbeans.YamlReader;
+import snorri.dialog.Objective;
 import snorri.hieroglyphs.Hieroglyphs;
 import snorri.parser.Lexicon;
 import snorri.terrain.Structure;
@@ -167,6 +168,7 @@ public class Main {
 		reader.getConfig().setClassTag("spawn", Vector.class);
 		reader.getConfig().setClassTag("vector", Vector.class);
 		reader.getConfig().setClassTag("struct", Structure.class);
+		reader.getConfig().setClassTag("objective", Objective.class);
 		return reader;
 	}
 	

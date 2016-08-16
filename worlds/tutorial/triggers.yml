@@ -4,7 +4,9 @@ onStart:
         object: start
   actions:
     - SET_OBJECTIVE:
-        msg: explore the Temple of Thoth
+        objective:
+          !objective
+            shortDesc: explore the Temple of Thoth
         
 onZone1:
   actions:
@@ -17,7 +19,9 @@ onDoorOpen:
         object: !door {x: 66, y: 43}
   actions:
     - SET_OBJECTIVE:
-        msg: arm yourself with a sling
+        objective:
+          !objective
+          shortDesc: arm yourself with a sling
         
 onPickup:
   events:
@@ -25,7 +29,9 @@ onPickup:
         object: sling
   actions:
     - SET_OBJECTIVE:
-        msg: kill the pharaoh's soldiers
+        objective:
+          !objective
+          shortDesc: kill the pharaoh's soldiers
     - SPAWN_ENTITY:
         type: enemy
         pos: !spawn {x: 1904, y: 400}
@@ -46,7 +52,9 @@ onKill:
 onZone2:
   actions:
     - SET_OBJECTIVE:
-        msg: find the name on the urn and pray to it
+        objective:
+          !objective
+          shortDesc: find the name on the urn and pray to it
 
 prayThoth:
   events:
@@ -54,4 +62,6 @@ prayThoth:
         object: DHwty
   actions:
     - SET_OBJECTIVE:
-        msg: you have beaten the tutorial!
+        objective:
+          !objective
+          shortDesc: you have beaten the tutorial!

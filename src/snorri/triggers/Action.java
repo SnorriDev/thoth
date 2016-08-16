@@ -2,6 +2,7 @@ package snorri.triggers;
 
 import java.util.Map;
 
+import snorri.dialog.Objective;
 import snorri.entities.Entity;
 import snorri.main.GamePanel;
 import snorri.main.GameWindow;
@@ -66,7 +67,7 @@ public abstract class Action {
 					public void run() {
 						GamePanel window = Main.getWindow();
 						if (window instanceof GameWindow) {
-							((GameWindow) window).setObjective((String) args.get("msg"));
+							((GameWindow) window).setObjective((Objective) args.get("objective"));
 						} else {
 							Main.error("Setting objective in non-GameWindow");
 						}
