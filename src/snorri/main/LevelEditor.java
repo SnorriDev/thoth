@@ -305,7 +305,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	@Override
 	protected void onFrame() {
 
-		synchronized (this) {
+		synchronized (env) {
 		
 			if (env != null) {
 				canGoLeft = true;
