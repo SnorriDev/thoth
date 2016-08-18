@@ -1,12 +1,20 @@
 package snorri.overlay;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
+import java.net.URL;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
 import snorri.keyboard.Key;
@@ -24,24 +32,60 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 	
 	protected final FocusedWindow window;
 	
-	protected class TextPane extends JTextPane {
+	protected class TextPane extends JPanel {
 
 		private static final long serialVersionUID = 1L;
+		private final JTextPane pane;
 		
 		public TextPane() {
-			setContentType("text/html");
-			setEditable(false);
+			
+			setOpaque(false);
+			setPreferredSize(new Dimension(BACKGROUND.getWidth(null), BACKGROUND.getHeight(null)));
+			setBorder(BorderFactory.createCompoundBorder(getBorder(), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+			setLayout(new GridBagLayout());
+			GridBagConstraints c = new GridBagConstraints();
+			
+			pane = new JTextPane();
+			pane.setContentType("text/html");
+			pane.setOpaque(false);
+			pane.setEditable(false);
+			pane.setMaximumSize(new Dimension(350, 10000));
+			
+			JScrollPane scroll = new JScrollPane(pane);
+			scroll.setPreferredSize(new Dimension(350, 175));
+			scroll.setOpaque(false);
+			scroll.getViewport().setOpaque(false);
+			scroll.setBorder(null);
+			scroll.setViewportBorder(null);
+			c.gridx = 0;
+			c.gridy = 0;
+			add(scroll, c);
+			
+			JButton b = createButton("Okay");
+			c.gridx = 0;
+			c.gridy = 1;
+			add(b, c);
+			
 			if (Overlay.this instanceof KeyListener) {
 				addKeyListener((KeyListener) Overlay.this);
+				pane.addKeyListener((KeyListener) Overlay.this);
+				b.addKeyListener((KeyListener) Overlay.this);
 			}
-			setBorder(BorderFactory.createLineBorder(BORDER));
-			setBackground(NORMAL_BG);
+			
 		}
 		
 		@Override
 		public void paintComponent(Graphics g) {
 			g.drawImage(BACKGROUND, 0, 0, null);
 			super.paintComponent(g);
+		}
+		
+		public void setPage(URL url) throws IOException {
+			pane.setPage(url);
+		}
+		
+		public void setText(String text) {
+			pane.setText(text);
 		}
 		
 	}

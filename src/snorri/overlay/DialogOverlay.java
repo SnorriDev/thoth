@@ -1,7 +1,5 @@
 package snorri.overlay;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 
@@ -20,22 +18,14 @@ public class DialogOverlay extends Overlay {
 		super(focusedWindow);
 		
 		setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
 		
 		if (dialog.image != null) {
 			add(new JLabel(new ImageIcon(Main.getImage(dialog.image))));
 		}
 		
-		c.gridx = 0;
-		c.gridy = 0;
 		TextPane pane = this.new TextPane();
-		pane.setPreferredSize(new Dimension(323, 200));
 		pane.setText(dialog.text);
-		add(pane, c);
-		
-		c.gridx = 0;
-		c.gridy = 1;
-		add(createButton("Okay"), c);
+		add(pane);
 		
 	}
 

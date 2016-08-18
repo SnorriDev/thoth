@@ -219,7 +219,7 @@ public class Inventory implements Serializable {
 		}
 				
 		drawItemContainer(g, 0, false, weaponSlot, Weapon.class);
-		drawItemContainer(g, 1, false, armorSlot, Armor.class);
+		//drawItemContainer(g, 1, false, armorSlot, Armor.class);
 		
 	}
 	

@@ -28,22 +28,26 @@ public abstract class Item implements Droppable {
 	private static final int ENTITY_SIZE = 48;
 	private static final int SLOT_SPACE = 15;
 	
-	private static final Image DEFAULT_BORDER = Main.getImage("/textures/hud/items/itemBorder.png"); //TODO grayed out version
-	private static final Color DEFAULT_COOLDOWN_COLOR = new Color(156, 134, 73, 200);
+	private static final Color DEFAULT_COOLDOWN_COLOR = new Color(116, 100, 50, 200);
 	
-	protected static final Image[] ACTIVE_BORDERS;
+	protected static final Image[] ACTIVE_BORDERS_TOP;
+	protected static final Image[] INACTIVE_BORDERS_TOP;
 	
-	protected static final Image[] INACTIVE_BORDERS;
+	protected static final Image ACTIVE_BORDER_WEAPON;
+	protected static final Image INACTIVE_BORDER_WEAPON;
 	
 	static {
 		
-		ACTIVE_BORDERS = new Image[5];
-		INACTIVE_BORDERS = new Image[5];
+		ACTIVE_BORDERS_TOP = new Image[5];
+		INACTIVE_BORDERS_TOP = new Image[5];
 		
 		for (int i = 0; i < 5; i++) {
-			ACTIVE_BORDERS[i] = Main.getImage("/textures/hud/items/item" + (i + 1) + ".png");
-			INACTIVE_BORDERS[i] = Main.getImage("/textures/hud/items/item" + (i + 1) + "Alt.png");
+			ACTIVE_BORDERS_TOP[i] = Main.getImage("/textures/hud/items/item" + (i + 1) + ".png");
+			INACTIVE_BORDERS_TOP[i] = Main.getImage("/textures/hud/items/item" + (i + 1) + "Alt.png");
 		}
+		
+		ACTIVE_BORDER_WEAPON = Main.getImage("/textures/hud/items/itemSpace.png");
+		INACTIVE_BORDER_WEAPON = Main.getImage("/textures/hud/items/itemSpaceAlt.png");
 		
 	}
 	
@@ -287,12 +291,12 @@ public abstract class Item implements Droppable {
 	
 	public static Image getBorder(int i, boolean top, boolean selected) {
 		if (!top) {
-			return DEFAULT_BORDER;
+			return selected ? ACTIVE_BORDER_WEAPON : INACTIVE_BORDER_WEAPON;
 		}
 		if (selected) {
-			return ACTIVE_BORDERS[i];
+			return ACTIVE_BORDERS_TOP[i];
 		}
-		return INACTIVE_BORDERS[i];
+		return INACTIVE_BORDERS_TOP[i];
 	}
 	
 	public Color getArcColor() {
@@ -354,7 +358,7 @@ public abstract class Item implements Droppable {
 	}
 	
 	public static int getSlotWidth() {
-		return DEFAULT_BORDER.getWidth(null);
+		return ACTIVE_BORDER_WEAPON.getWidth(null);
 	}
 	
 	@Override
