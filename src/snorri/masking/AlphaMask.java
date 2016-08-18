@@ -9,11 +9,11 @@ import snorri.world.Tile;
 public class AlphaMask {
 	
 	private static final BufferedImage FULL_IMAGE = Main.getImage("/textures/alphaMasks.png");
-	private static final AlphaMask[] MASKS = new AlphaMask[16];
+	private static final AlphaMask[] MASKS = new AlphaMask[32];
 	
 	static {
 		
-		for (int i = 0; i < 16; i++) {
+		for (int i = 0; i < 32; i++) {
 			MASKS[i] = new AlphaMask(i % 16, i / 16);
 		}		
 	}

@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -58,6 +59,18 @@ public class Util {
 		g.drawImage(scaled, 0, 0, null);
 		g.dispose();
 		return img;
+	}
+	
+	public static <T> T[] concatenate(T[] a, T[] b) {
+		int aLen = a.length;
+		int bLen = b.length;
+
+		@SuppressWarnings("unchecked")
+		T[] c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen + bLen);
+		System.arraycopy(a, 0, c, 0, aLen);
+		System.arraycopy(b, 0, c, aLen, bLen);
+
+		return c;
 	}
 	
 }

@@ -30,6 +30,9 @@ public class HelpOverlay extends Overlay {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand().equals("Okay")) {
+			window.unpause();
+		}
 	}
 
 }

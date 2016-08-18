@@ -693,7 +693,7 @@ public class Level implements Editable {
 	
 	private void updateMasksGrid(Vector pos) {
 		getTileGrid(pos).setBitMasks(this, pos);
-		for (Vector trans : Mask.NEIGHBORS) {
+		for (Vector trans : Mask.NEIGHBORS_AND_CORNERS) {
 			Vector p = pos.copy().add(trans);
 			if (getTileGrid(p) != null) {
 				getTileGrid(p).setBitMasks(this, p);
@@ -711,7 +711,7 @@ public class Level implements Editable {
 	 * Excess space in the array is null.
 	 */
 	public Mask[] getBitMasks(int x, int y) {
-		Mask[] masks = new Mask[4];
+		Mask[] masks = new Mask[8];
 		
 		Tile tile = getTileGrid(x, y);
 		if (tile == null || tile.getType().isAtTop()) {
@@ -724,9 +724,25 @@ public class Level implements Editable {
 			if (t != null && !t.getType().isAtTop() && tile.compareTo(t) > 0) {
 				for (int j = 0; j < masks.length; j++) {
 					if (masks[j] == null) {
-						masks[j] = new Mask(t);
+						masks[j] = new Mask(t, false);
 					}
 					if (masks[j].hasTile(t)) {
+						masks[j].add(bitVal);
+					}
+				}
+			}
+			bitVal *= 2;
+		}
+		
+		bitVal = 1;
+		for (Vector v: Mask.CORNERS) {
+			Tile t = getTileGrid(v.copy().add(x, y));
+			if (t != null && !t.getType().isAtTop() && tile.compareTo(t) > 0) {
+				for (int j = 0; j < masks.length; j++) {
+					if (masks[j] == null) {
+						masks[j] = new Mask(t, true);
+					}
+					if (masks[j].hasTile(t) && masks[j].isCorner()) {
 						masks[j].add(bitVal);
 					}
 				}
