@@ -92,18 +92,19 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
-//		menuItem = new JMenuItem("Generate", KeyEvent.VK_G);
-//		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));
-//		menuItem.addActionListener(this);
-//		menu.add(menuItem);
-		
-		//TODO select a generator from the generate list to make a new world
-		
+		// menuItem = new JMenuItem("Generate", KeyEvent.VK_G);
+		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G,
+		// ActionEvent.CTRL_MASK));
+		// menuItem.addActionListener(this);
+		// menu.add(menuItem);
+
+		// TODO select a generator from the generate list to make a new world
+
 		menuItem = new JMenuItem("Open", KeyEvent.VK_O);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
-		
+
 		menuItem = new JMenuItem("Open Level", KeyEvent.VK_L);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
@@ -127,7 +128,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
-		
+
 		menuItem = new JMenuItem("Quit", KeyEvent.VK_Q);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
@@ -176,7 +177,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			rbMenuItem.addActionListener(this);
 			groupEntities.add(rbMenuItem);
 			menu.add(rbMenuItem);
-			
+
 			firstEntity = false;
 			i++;
 		}
@@ -208,8 +209,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		}
 
 		if (e.getActionCommand().startsWith("spawn")) {
-			selectedEntityClass = Entity.EDIT_SPAWNABLE
-					.get(Integer.parseInt(e.getActionCommand().substring(5)));
+			selectedEntityClass = Entity.EDIT_SPAWNABLE.get(Integer.parseInt(e.getActionCommand().substring(5)));
 			return;
 		}
 
@@ -291,12 +291,12 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		if (env == null) {
 			return;
 		}
-		
+
 		env.render(this, gr, false);
 		renderMousePos(gr);
-		
+
 	}
-	
+
 	private void renderMousePos(Graphics gr) {
 		String gridPos = getMousePosAbsolute().toGridPos().toIntString();
 		gr.drawString("grid: " + gridPos, 20, 20);
@@ -305,14 +305,15 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	@Override
 	protected void onFrame() {
 
-		synchronized (env) {
-		
-			if (env != null) {
+		if (env != null) {
+
+			synchronized (env) {
+
 				canGoLeft = true;
 				canGoRight = true;
 				canGoUp = true;
 				canGoDown = true;
-	
+
 				if (focus.getPos().getX() <= -SCALE_FACTOR) {
 					canGoLeft = false;
 				}
@@ -325,7 +326,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				if (focus.getPos().getY() >= env.getLevel().getDimensions().getY() * Tile.WIDTH + SCALE_FACTOR) {
 					canGoDown = false;
 				}
-	
+
 				if (states.getMovementVector().getX() < 0 && !canGoLeft) {
 					focus.getPos().sub(states.getMovementVector().getProjectionX().scale(SCALE_FACTOR));
 				}
@@ -339,16 +340,16 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 					focus.getPos().sub(states.getMovementVector().getProjectionY().scale(SCALE_FACTOR));
 				}
 				focus.getPos().add(states.getMovementVector().scale(SCALE_FACTOR));
-	
+
 				if (isClicking) {
 					Vector location = getMousePosAbsolute().copy();
 					int x = location.getX();
 					int y = location.getY();
-	
+
 					env.getLevel().setTile(x, y, new Tile(selectedTile));
 				}
 			}
-		
+
 		}
 
 		repaint();
@@ -395,9 +396,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
+
 		super.keyPressed(e);
-		
+
 		if (Key.E.isPressed(e)) {
 			spawnEntity();
 		}
@@ -442,59 +443,60 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	}
 
 	private void openEntityInventory() {
-		
+
 		if (!(env instanceof World)) {
 			return;
 		}
 		World world = (World) env;
 		Entity ent = world.getEntityTree().getFirstCollision(new Entity(getMousePosAbsolute()), true);
-		
+
 		if (ent instanceof Carrier) {
 			editInventory(((Carrier) ent).getInventory());
 		}
-		
+
 	}
-	
+
 	private void editEntityTag() {
-		
+
 		if (!(env instanceof World)) {
 			return;
 		}
 		World world = (World) env;
 		Entity ent = world.getEntityTree().getFirstCollision(new Entity(getMousePosAbsolute()), true);
-		
+
 		if (ent == null) {
 			return;
 		}
-		
+
 		DialogMap inputs = new DialogMap();
 		inputs.put("Tag", ent.getTag());
 		dialog("Edit Entity Tag", inputs);
 		String tag = inputs.getText("Tag");
 		ent.setTag(tag.isEmpty() ? null : tag);
-		
+
 	}
-	
+
 	private void spawnEntity() {
-		
+
 		if (!(env instanceof World)) {
 			Main.error("tried to spawn entity in non-world");
 			return;
 		}
 		World world = (World) env;
-		
+
 		autosaveUndo();
 
 		if (selectedEntityClass.equals(Player.class)) {
 			world.deleteHard(world.computeFocus()); // don't need to check null
 		}
-		
-		//TODO auto-detect options for constructor; have method that gives them?
-		
+
+		// TODO auto-detect options for constructor; have method that gives
+		// them?
+
 		Vector spawnPos = getMousePosAbsolute();
-		
+
 		try {
-			
+
 			if (selectedEntityClass.equals(Portal.class)) {
 				DialogMap inputs = new DialogMap();
 				inputs.put("World", WorldId.SPAWN_TOWN.name());
@@ -502,25 +504,28 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				inputs.put("Y", "" + focus.getPos().getY());
 				dialog("Portal Destination", inputs);
 				Vector dest = new Vector(inputs.getDouble("X"), inputs.getDouble("Y"));
-				world.addHard(selectedEntityClass.getConstructor(Vector.class, String.class, Vector.class).newInstance(spawnPos, inputs.getText("World"), dest));
+				world.addHard(selectedEntityClass.getConstructor(Vector.class, String.class, Vector.class)
+						.newInstance(spawnPos, inputs.getText("World"), dest));
 			} else if (selectedEntityClass.equals(Drop.class)) {
 				DialogMap inputs = new DialogMap();
 				inputs.put("Prize", "Enter item name/id or vocab word");
 				inputs.put("Spell", "");
 				dialog("Drop Reward", inputs);
-				world.addHard(selectedEntityClass.getConstructor(Vector.class, String.class, String.class).newInstance(spawnPos, inputs.getText("Prize"), inputs.getText("Spell")));
+				world.addHard(selectedEntityClass.getConstructor(Vector.class, String.class, String.class)
+						.newInstance(spawnPos, inputs.getText("Prize"), inputs.getText("Spell")));
 			} else if (selectedEntityClass.equals(Listener.class)) {
 				DialogMap inputs = new DialogMap();
 				inputs.put("Radius", "40");
 				inputs.put("Tag", "Trigger to activate");
 				dialog("Configure Detector", inputs);
-				world.addHard(selectedEntityClass.getConstructor(Vector.class, int.class, String.class).newInstance(spawnPos, inputs.getInteger("Radius"), inputs.getText("Tag")));
+				world.addHard(selectedEntityClass.getConstructor(Vector.class, int.class, String.class)
+						.newInstance(spawnPos, inputs.getInteger("Radius"), inputs.getText("Tag")));
 			}
-			
+
 			else {
 				world.addHard(selectedEntityClass.getConstructor(Vector.class).newInstance(spawnPos));
 			}
-			
+
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| SecurityException e) {
 			e.printStackTrace();
@@ -530,15 +535,15 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	}
 
 	private void deleteEntity() {
-		
+
 		if (!(env instanceof World)) {
 			Main.error("tried to delete entity in non-world");
 			return;
 		}
 		World world = (World) env;
-		
+
 		Entity deletableEntity = world.getEntityTree().getFirstCollision(new Entity(getMousePosAbsolute()), true);
-		
+
 		autosaveUndo();
 		world.deleteHard(deletableEntity);
 
@@ -630,7 +635,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 }

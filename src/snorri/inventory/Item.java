@@ -46,8 +46,8 @@ public abstract class Item implements Droppable {
 			INACTIVE_BORDERS_TOP[i] = Main.getImage("/textures/hud/items/item" + (i + 1) + "Alt.png");
 		}
 		
-		ACTIVE_BORDER_WEAPON = Main.getImage("/textures/hud/items/itemSpace.png");
-		INACTIVE_BORDER_WEAPON = Main.getImage("/textures/hud/items/itemSpaceAlt.png");
+		ACTIVE_BORDER_WEAPON = Main.getImage("/textures/hud/items/itemMouse.png");
+		INACTIVE_BORDER_WEAPON = Main.getImage("/textures/hud/items/itemMouseAlt.png");
 		
 	}
 	

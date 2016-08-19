@@ -1,6 +1,5 @@
 package snorri.overlay;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -16,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.border.Border;
 
 import snorri.keyboard.Key;
 import snorri.main.FocusedWindow;
@@ -24,10 +24,9 @@ import snorri.main.Main;
 
 public abstract class Overlay extends GamePanel implements KeyListener {
 	
-	//private final Color GRAYED_OUT = new Color(50, 50, 50, 50);
-	protected static final Color NORMAL_BG = new Color(255, 179, 71);
-	protected static final Color SELECTED_BG = new Color(255, 150, 71);
-	protected static final Color BORDER = new Color(255, 130, 71);
+	
+	private static final long serialVersionUID = 1L;
+	
 	private static final Image BACKGROUND = Main.getImage("/textures/hud/textBox.png");
 	
 	protected final FocusedWindow window;
@@ -36,12 +35,12 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 
 		private static final long serialVersionUID = 1L;
 		private final JTextPane pane;
-		
+				
 		public TextPane() {
 			
 			setOpaque(false);
 			setPreferredSize(new Dimension(BACKGROUND.getWidth(null), BACKGROUND.getHeight(null)));
-			setBorder(BorderFactory.createCompoundBorder(getBorder(), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+			setBorder(emptyBorder());
 			setLayout(new GridBagLayout());
 			GridBagConstraints c = new GridBagConstraints();
 			
@@ -96,8 +95,14 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 		addKeyListener(this);
 	}
 	
-	private static final long serialVersionUID = 1L;
-
+	public static Border emptyBorder(int xPad, int yPad) {
+		return BorderFactory.createEmptyBorder(16 + xPad, 16 + yPad, 16, 16);
+	}
+	
+	public static Border emptyBorder() {
+		return emptyBorder(0, 0);
+	}
+	
 	@Override
 	public void keyTyped(KeyEvent e) {
 	}

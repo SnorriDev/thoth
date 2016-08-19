@@ -1,11 +1,14 @@
 package snorri.overlay;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -56,6 +59,9 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	 */
 	
 	private static final long serialVersionUID = 1L;
+	private static final Image BACKGROUND = Main.getImage("/textures/hud/inventory.png");
+	protected static final Color SELECTED_BG = new Color(142, 113, 134, 200);
+	protected static final Color BORDER = new Color(115, 93, 109, 200);
 
 	private final Inventory inv;
 	private final FullInventory fullInv;
@@ -79,10 +85,10 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			Key k = inv.getKey(item);
 			String text = item.toString() + (k == null ? "" : (" (" + k.getChar() + ")"));
 			JLabel label = new JLabel(text, item.getType().getIcon(), JLabel.LEFT);
-			label.setPreferredSize(new Dimension(290, 35));
+			label.setPreferredSize(new Dimension(216, 35));
 			label.setFont(label.getFont().deriveFont(inv.getIndex(item) == Integer.MAX_VALUE ? Font.PLAIN : Font.BOLD));
-			label.setBackground(isSelected ? SELECTED_BG : NORMAL_BG);
-			label.setOpaque(true);
+			label.setBackground(SELECTED_BG);
+			label.setOpaque(isSelected);
 			return label;
 		}
 	}
@@ -100,12 +106,19 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		this.editMode = editMode;
 		Droppable.setInventoryForComparison(inv);
 				
-		JPanel panel = new JPanel(new GridBagLayout());
+		JPanel panel = new JPanel(new GridBagLayout()) {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				g.drawImage(BACKGROUND, 0, 0, null);
+			}			
+		};
+		panel.setOpaque(false);
 		panel.setPreferredSize(new Dimension(1000, 618)); //golden ratio
 		GridBagConstraints c = new GridBagConstraints();
 		
 		setLayout(new GridBagLayout());
-		panel.setBackground(NORMAL_BG);
 		setOpaque(false);
 		
 		//filter item panel
@@ -113,15 +126,18 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		list = new JList<Item>(model);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setLayoutOrientation(JList.VERTICAL);
-		list.setBackground(NORMAL_BG);
 		list.setVisibleRowCount(-1);
 		list.addListSelectionListener(this);
 		list.addKeyListener(this);
+		list.setOpaque(false);
 		list.setCellRenderer(new ItemCellRenderer());
 		
 		JScrollPane scrollPane = new JScrollPane(list);
-		scrollPane.setPreferredSize(new Dimension(300, 618));
-		scrollPane.setBorder(BorderFactory.createLineBorder(BORDER, 5));
+		//TODO make this look nice like other one
+		scrollPane.setPreferredSize(new Dimension(250, 618));
+		scrollPane.setOpaque(false);
+		scrollPane.getViewport().setOpaque(false);
+		scrollPane.setBorder(emptyBorder());
 				
 		c.fill = GridBagConstraints.NORTHWEST;
 		c.weightx = 0.25;
@@ -133,10 +149,10 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		//crafting space
 		craftingSpace = new JPanel();
 		craftingSpace.setLayout(new BoxLayout(craftingSpace, BoxLayout.Y_AXIS));
-		craftingSpace.setPreferredSize(new Dimension(700, 250));
+		craftingSpace.setPreferredSize(new Dimension(750, 204));
+		craftingSpace.setOpaque(false);
 		craftingSpace.addKeyListener(this);
-		craftingSpace.setBackground(NORMAL_BG);
-		craftingSpace.setBorder(BorderFactory.createLineBorder(BORDER, 5));
+		craftingSpace.setBorder(emptyBorder(4, 0));
 		
 		//the panel to show/hide
 		inputPanel = new JPanel();
@@ -147,8 +163,8 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		field = new JEditorPane();
 		field.setContentType("text/html");
 		field.setPreferredSize(new Dimension(650, 100));
-		field.setBorder(BorderFactory.createLineBorder(BORDER));
 		field.setBackground(SELECTED_BG);
+		field.setBorder(BorderFactory.createLineBorder(BORDER));
 		field.getDocument().addDocumentListener(this);
 		field.addKeyListener(this);
 		field.addFocusListener(this);
@@ -168,10 +184,11 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 		//vocab info space
 		JComponent vocabInfo = new JPanel();
-		vocabInfo.setBackground(NORMAL_BG);
+		vocabInfo.setOpaque(false);
 		vocabInfo.setLayout(new GridLayout(0, 1));
 		
 		vocabBox = new JPanel();
+		vocabBox.setOpaque(false);
 		vocabBox.setLayout(new WrapLayout());
 		vocabBox.setOpaque(false);
 		vocabModel = new HashMap<>();
@@ -190,8 +207,10 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		}
 		
 		scrollPane = new JScrollPane(vocabInfo);
-		scrollPane.setPreferredSize(new Dimension(700, 368));
-		scrollPane.setBorder(BorderFactory.createLineBorder(BORDER, 5));
+		scrollPane.setPreferredSize(new Dimension(750, 414));
+		scrollPane.setOpaque(false);
+		scrollPane.getViewport().setOpaque(false);
+		scrollPane.setBorder(emptyBorder(4, 4));
 		
 		c.fill = GridBagConstraints.BASELINE;
 		c.gridheight = 1;

@@ -94,6 +94,7 @@ public class Tile implements Comparable<Tile> {
 		}
 				
 		//TODO g vs. null as ImageObserver
+		//TODO figure out why we are getting 8
 		for (Mask m : bitMasks) {
 			if (m == null) {
 				break;

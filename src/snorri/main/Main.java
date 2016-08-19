@@ -199,7 +199,7 @@ public class Main {
 		}
 
 		// otherwise return that directory
-		if (!f.isDirectory()) {
+		if (!f.isDirectory() && !f.mkdir()) {
 			return new File(fd.getDirectory());
 		}
 

@@ -707,7 +707,7 @@ public class Level implements Editable {
 	}
 	
 	/**
-	 * Returns an array of bitmasks (4 maximum).
+	 * Returns an array of bitmasks (8 maximum).
 	 * Excess space in the array is null.
 	 */
 	public Mask[] getBitMasks(int x, int y) {
@@ -728,6 +728,7 @@ public class Level implements Editable {
 					}
 					if (masks[j].hasTile(t)) {
 						masks[j].add(bitVal);
+						break;
 					}
 				}
 			}
@@ -744,6 +745,7 @@ public class Level implements Editable {
 					}
 					if (masks[j].hasTile(t) && masks[j].isCorner()) {
 						masks[j].add(bitVal);
+						break;
 					}
 				}
 			}
