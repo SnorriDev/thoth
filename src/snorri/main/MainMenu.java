@@ -25,7 +25,7 @@ public class MainMenu extends GamePanel {
 		menu.add(new JLabel("")); //for spacing
 		
 		menu.add(createButton("Tutorial"));
-		menu.add(createButton("Nile Adventure"));
+		menu.add(createButton("Oasis Adventure"));
 		menu.add(createButton("Dungeon Adventure"));
 		menu.add(createButton("Load World"));
 		menu.add(createButton("World Editor"));
@@ -44,7 +44,7 @@ public class MainMenu extends GamePanel {
 				Main.error("could not load tutorial world");
 			}
 			break;
-		case "Nile Adventure":
+		case "Oasis Adventure":
 			Main.launchGame(new TerrainGen(200, 200));
 			break;
 		case "Dungeon Adventure":
