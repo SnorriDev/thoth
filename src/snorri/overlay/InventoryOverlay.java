@@ -15,6 +15,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,7 @@ import snorri.main.DialogMap;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.parser.Grammar;
+import snorri.triggers.Trigger.TriggerType;
 
 public class InventoryOverlay extends Overlay implements MouseListener, ListSelectionListener, DocumentListener, FocusListener {
 
@@ -78,6 +80,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private final Map<String, JComponent> vocabModel;
 	
 	private boolean editMode;
+	private List<String> spellsEnchanted;
 		
 	private class ItemCellRenderer implements ListCellRenderer<Item> {
 		@Override
@@ -124,6 +127,8 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 		setLayout(new GridBagLayout());
 		setOpaque(false);
+		
+		spellsEnchanted = new ArrayList<>();
 		
 		//filter item panel
 		model = fullInv.getItemModel();
@@ -463,6 +468,14 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+	}
+	
+	@Override
+	protected void onClose() {
+		for (String spell : spellsEnchanted) {
+			TriggerType.ENCHANT.activate(spell);
+		}
+		super.onClose();
 	}
 	
 	private Border getThinBorder() {

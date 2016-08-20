@@ -1,14 +1,12 @@
-/*
 @font-face {
 	font-family: thothDefault;
-	src: url(../fonts/thothDefault.ttf);
+	src: url(/../fonts/thothDefault.ttf);
 }
-*/
 
 h1, h2 {
 	padding-bottom: 10px;
     padding-top: 10px;
-    font-family: Arial Bold;
+    font-family: thothDefault, Arial Bold;
     font-weight: bold;
 }
 
@@ -17,12 +15,13 @@ h1 {
 }
 
 h2 {
-    font-size: 15;
+    font-size: 17;
 }
 
 
 body {
     font-family: Arial;
+    font-size: 14;
 }
 
 p {
@@ -31,7 +30,7 @@ p {
 }
 
 p.example {
-    font-size: 13;
+    font-size: 15;
     padding-left: 5px;
 }
 
@@ -42,7 +41,14 @@ span.hiero {
     font-weight: bold;
 }
 
-/*
-span.hiero {
-    font-family: Times New Roman;
-}*/
+span.name {
+    font-style: italic;
+}
+
+p.instruction {
+    font-style: italic;
+}
+
+span.control {
+    font-weight: bold;
+}

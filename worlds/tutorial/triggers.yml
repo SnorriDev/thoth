@@ -7,7 +7,14 @@ onStart:
         dialog:
           !dialog
             text: |
-              <p>Welcome to the Book of Thoth!</p>
+              <p><span class="name">Imhotep:</span> Hey! What are you doing down here?
+              The inner temple archive is not open to the public. Are you one of the royal
+              court? Tell the pharaoh that what we do is none of his business!
+              Wait, never mind, you're just that new apprentice scribe from upstairs.
+              I'm sorry! Here, why don't you have a look around down here.</p>
+              
+              <p class="instruction">Use the <span class="control">WASD</span> keys to
+              move around.</p>
     - SET_OBJECTIVE:
         objective:
           !objective
@@ -15,6 +22,41 @@ onStart:
         
 onZone1:
   actions:
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            text: |
+              <p><span class="name">Imhotep:</span> Excellent job! It's quite beautiful 
+              down here, don't you think? But do remember, there is more to these archives
+              than their looks. In order to get out, you must solve the puzzles and 
+              riddles strewn within. We needed to set up these puzzles to keep this
+              place secret from the pharoah.</p>
+              
+              <p>As you probably know, I'm not a big fan of the pharaoh. Can you believe
+              people think he is actually descended from Horus? His weapons are just
+              ordinary bronze; they weren't forged by the gods! Anyway, what is Horus to 
+              Thoth the All-Knowing? Men may listen when the pharaoh speaks for
+              Horus, but the world itself listens when sorcerers speak on behalf of Thoth.<p>
+              
+              <p>Or at least, when some of us speak. I've only met a handful of people
+              with any ability myself, but I've spent my days reading about the legendary
+              spell casters of days gone by. The gift -- to speak thought into action --
+              is a rare and powerful art. Very few scribes have the ability, and, since 
+              the Book of Thoth went missing, even fewer have had the determination to 
+              master it. I doubt you've got any skill, but, hey, maybe it's no coincidence
+              that you wandered all the way in here. Go take a look at that hieroglyph 
+              and try to open this door.</p>
+              
+              <p class="instruction">Collect the sparkling artifacts and the papyrus on
+              the ground to learn new words. These words will expend your vocabulary and 
+              allow you to enchant your inventory with custom powers. Then, 
+              move over to that desk and press the <span class="control">space</span> bar 
+              to open the enchanting menu.</p>
+              
+              <p class="instruction">Next, select the item you wish to enchant on the left
+              and type in the phrase you wish to enchant the item with. Try typing
+              <span class="hiero">wn s</span> onto your papyrus. When used, this
+              spell will open any door under your mouse.</p>
     - SET_OBJECTIVE:
         objective:
           !objective
@@ -25,6 +67,11 @@ onDoorOpen:
     - DOOR_OPEN:
         object: !door {x: 66, y: 43}
   actions:
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            text: |
+              <p><span class="name">Imhotep:</span> Amazing! Now go grab that sling on the ground. We might run into some company up ahead.</p>              
     - SET_OBJECTIVE:
         objective:
           !objective
@@ -35,6 +82,16 @@ onPickup:
     - ACQUIRE:
         object: sling
   actions:
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            text: |
+              <p><span class="name">Imhotep:</span> What's that at the end of this tunnel?
+              Oh no, it's the pharoah's soldiers! Shoot them before they shoot us.</p>
+              
+              <p class="instruction">Shoot automatically from the sling by clicking in a 
+              target direction. Make sure to dodge the enemy projectiles as well! Careful,
+              if your hearts reach zero, you will die.</p>
     - SET_OBJECTIVE:
         objective:
           !objective
@@ -53,6 +110,13 @@ onKill:
     - KILL:
         object: enemy2
   actions:
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            text: |
+              <p><span class="name">Imhotep:</span> That'll show them! But what are they 
+              doing so deep in the temple? The pharoah must be up to something.
+              Quick, let's get out of here...</p>
     - SET_OBJECTIVE:
         objective:
           !objective
@@ -60,6 +124,18 @@ onKill:
 
 onZone2:
   actions:
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            text: |
+              <p><span class="name">Imhotep:</span> Sigh, this vault is a dead end. Wait, maybe that
+              ancient papyrus and urn can help us out. Go see if you can use those things
+              to get us out of here, apprentice!</p>
+              
+              <p class="instruction">Collect the new vocabulary word and papyrus. If you
+              cast the new scroll on the urn, it will reveal the name of the powerful god
+              to whom the urn belongs. Use the hieroglyph <span class="hiero">dbH</span>
+              to ask the god for help.</p>
     - SET_OBJECTIVE:
         objective:
           !objective
@@ -70,6 +146,25 @@ prayThoth:
     - PRAY:
         object: DHwty
   actions:
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            text: |
+              <p><span class="name">Thoth:</span> Behold, sorcerer, you have called upon me
+              by my true name! I will help you and your friend out of my temple's archives,
+              but we have other matters to discuss first.</p>
+              
+              <p>Your curiosity and ingenuity have led you into this ancient temple vault. Before
+              you, no one had dared to touch this urn for almost 1,000 years. These same
+              qualities might lead you on another great quest: recovering my lost Book. Ages ago, this
+              text taught the first Egyptian spellcasters their craft. By studying it, one can
+              achieve the power of the gods. I am appearing to you now to advise against
+              starting such a quest. That book's power is dangerous, and that is why I destroyed
+              the last mortal who found it.</p>
+              
+              <p>It's a good thing I reached out to you now. I imagine others will ask you
+              to find my book for them. They might even tell you that it's your destiny.
+              Just remember, wise scribe, only fools believe in destiny.</p>
     - SET_OBJECTIVE:
         objective:
           !objective

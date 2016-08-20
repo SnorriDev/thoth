@@ -126,14 +126,19 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (Key.ESC.isPressed(e)) {
-			window.unpause();
+			onClose();
 		}
 	}
 	
+	protected void onClose() {
+		window.unpause();
+	}
+		
 	public HTMLEditorKit getHTMLEditorKit() {
 		HTMLEditorKit kit = new HTMLEditorKit();
 		try {
 			StyleSheet s = new StyleSheet();
+			s.setBase(Main.getDir().toURI().toURL());
 			s.importStyleSheet(Main.getFile("/info/style.css").toURI().toURL());
 			kit.setStyleSheet(s);
 		} catch (MalformedURLException e) {
