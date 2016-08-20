@@ -7,7 +7,7 @@ onStart:
         dialog:
           !dialog
             text: |
-              Welcome to the Book of Thoth!
+              <p>Welcome to the Book of Thoth!</p>
     - SET_OBJECTIVE:
         objective:
           !objective

@@ -165,7 +165,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		craftingSpace.add(inputPanel);
 		
 		field = new JEditorPane();
-		field.setContentType("text/html");
+		field.setEditorKit(getHTMLEditorKit());
 		field.setPreferredSize(new Dimension(650, 100));
 		field.setBackground(SELECTED_BG);
 		field.setBorder(getThinBorder());

@@ -1,13 +1,48 @@
+/*
 @font-face {
 	font-family: thothDefault;
 	src: url(../fonts/thothDefault.ttf);
 }
+*/
 
 h1, h2 {
-	font-family: thothDefault;
+	padding-bottom: 10px;
+    padding-top: 10px;
+    font-family: Arial Bold;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 19;
+}
+
+h2 {
+    font-size: 15;
+}
+
+
+body {
+    font-family: Arial;
+}
+
+p {
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+p.example {
+    font-size: 13;
+    padding-left: 5px;
 }
 
 span.def {
-	font-size: 14;
-	font-style: italic;
 }
+
+span.hiero {
+    font-weight: bold;
+}
+
+/*
+span.hiero {
+    font-family: Times New Roman;
+}*/
