@@ -1,11 +1,12 @@
 package snorri.dialog;
 
-public class Dialog {
+/**
+ * Wrapper class to read dialog from YAML file
+ */
 
-	/**
-	 * Wrapper class to read dialog from YAML file
-	 */
+public class Dialog {
 	
+	/**HTML text to show*/
 	public String text = "";
 	public String image = null;
 	

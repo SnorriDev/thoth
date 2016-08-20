@@ -7,15 +7,15 @@ import java.io.Serializable;
 import snorri.main.GameWindow;
 import snorri.world.Vector;
 
-public class Objective implements Serializable {
+/**
+ * A wrapper class to hold strings that explain what the player has to do.
+ * Triggers should be used to control game logic, not this class.
+ * Although it seems stupid, we need the empty constructor
+ * and public fields for interaction with the YAML parser.
+ * Use YAML's <code>|</code> modifier to store HTML lines.
+ */
 
-	/**
-	 * A wrapper class to hold strings that explain what the player has to do.
-	 * Triggers should be used to control game logic, not this class.
-	 * Although it seems stupid, we need the empty constructor
-	 * and public fields for interaction with the YAML parser.
-	 * Use YAML's <code>|</code> modifier to store HTML lines.
-	 */
+public class Objective implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	

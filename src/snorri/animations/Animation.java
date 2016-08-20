@@ -15,13 +15,13 @@ import javax.imageio.ImageIO;
 
 import snorri.main.Main;
 
-public class Animation implements Serializable {
+/**
+ * stores all the animation frames as Images (PNGS)
+ * to convert SWFs to PNGs, use the swfrender utility
+ * getSprite() should be used to iterate over frames
+ */
 
-	/**
-	 * stores all the animation frames as Images (PNGS)
-	 * to convert SWFs to PNGs, use the swfrender utility
-	 * getSprite() should be used to iterate over frames
-	 */
+public class Animation implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
