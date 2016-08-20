@@ -36,7 +36,7 @@ onZone1:
               people think he is actually descended from Horus? His weapons are just
               ordinary bronze; they weren't forged by the gods! Anyway, what is Horus to 
               Thoth the All-Knowing? Men may listen when the pharaoh speaks for
-              Horus, but the world itself listens when sorcerers speak on behalf of Thoth.<p>
+              Horus, but the world itself listens when sorcerers speak on behalf of Thoth.</p>
               
               <p>Or at least, when some of us speak. I've only met a handful of people
               with any ability myself, but I've spent my days reading about the legendary
@@ -151,7 +151,7 @@ prayThoth:
           !dialog
             text: |
               <p><span class="name">Thoth:</span> Behold, sorcerer, you have called upon me
-              by my true name! I will help you and your friend out of my temple's archives,
+              by my true name! I will bring you out of my temple's archives,
               but we have other matters to discuss first.</p>
               
               <p>Your curiosity and ingenuity have led you into this ancient temple vault. Before
