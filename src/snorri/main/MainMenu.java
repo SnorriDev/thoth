@@ -1,14 +1,12 @@
 package snorri.main;
 
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import snorri.terrain.DungeonGen;
 import snorri.terrain.TerrainGen;
-import snorri.world.World;
 
 public class MainMenu extends GamePanel {
 
@@ -38,11 +36,7 @@ public class MainMenu extends GamePanel {
 
 		switch (e.getActionCommand()) {
 		case "Tutorial":
-			try {
-				Main.launchGame(new World(Main.getFile("/worlds/tutorial")));
-			} catch (IOException e1) {
-				Main.error("could not load tutorial world");
-			}
+			Main.launchGame(new WorldSelection("/worlds/tutorial"));
 			break;
 		case "Oasis Adventure":
 			Main.launchGame(new TerrainGen(200, 200));
@@ -51,10 +45,7 @@ public class MainMenu extends GamePanel {
 			Main.launchGame(new DungeonGen(200, 200));
 			break;
 		case "Load World":
-			World w2 = World.wrapLoad();
-			if (w2 != null) {
-				Main.launchGame(w2);
-			}
+			Main.launchGame((WorldSelection) null);
 			break;
 		case "World Editor":
 			Main.launchEditor();

@@ -1,6 +1,7 @@
 package snorri.main;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 
 import javax.swing.ImageIcon;
@@ -17,8 +18,8 @@ public class LoadingScreen extends GamePanel {
 
 	public LoadingScreen() {
 		label = new JLabel("Loading...");
-		add(new JLabel(new ImageIcon(Main.getImage("/textures/conceptArt/figure.png"))));
-		add(label);
+		Image image = Main.getImage("/textures/conceptArt/thoth.png").getScaledInstance(-1, Main.getWindow().getHeight(), Image.SCALE_SMOOTH);
+		add(new JLabel(new ImageIcon(image)));
 		setVisible(true);
 		setFocusable(true);
 	}

@@ -254,21 +254,33 @@ public class Main {
 	public static JLayeredPane getLayeredPane() {
 		return pane;
 	}
+	
+	private static void launchWorld(World world) {
+		if (world == null) {
+			return;
+		}
+		setWindow(new GameWindow(world));
+	}
 
 	public static void launchMenu() {
 		setOverlay(null);
 		setWindow(new MainMenu());
 	}
 
-	public static void launchGame(World world) {
-		setWindow(new GameWindow(world));
+	public static void launchGame(WorldSelection worldSelect) {
+		loadInto(new Runnable() {
+			@Override
+			public void run() {
+				launchWorld(worldSelect.loadWorld());
+			}
+		});
 	}
 	
 	public static void launchGame(TerrainGen gen) {
 		loadInto(new Runnable() {
 			@Override
 			public void run() {
-				launchGame(gen.genWorld());
+				launchWorld(gen.genWorld());
 			}
 		});
 	}

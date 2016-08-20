@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -60,8 +61,8 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	
 	private static final long serialVersionUID = 1L;
 	private static final Image BACKGROUND = Main.getImage("/textures/hud/inventory.png");
-	protected static final Color SELECTED_BG = new Color(142, 113, 134, 200);
-	protected static final Color BORDER = new Color(115, 93, 109, 200);
+	protected static final Color SELECTED_BG = new Color(120, 96, 115);
+	protected static final Color BORDER = new Color(115, 93, 109);
 
 	private final Inventory inv;
 	private final FullInventory fullInv;
@@ -87,6 +88,9 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			JLabel label = new JLabel(text, item.getType().getIcon(), JLabel.LEFT);
 			label.setPreferredSize(new Dimension(216, 35));
 			label.setFont(label.getFont().deriveFont(inv.getIndex(item) == Integer.MAX_VALUE ? Font.PLAIN : Font.BOLD));
+			if (isSelected) {
+				label.setBorder(getThinBorder());
+			}
 			label.setBackground(SELECTED_BG);
 			label.setOpaque(isSelected);
 			return label;
@@ -164,7 +168,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		field.setContentType("text/html");
 		field.setPreferredSize(new Dimension(650, 100));
 		field.setBackground(SELECTED_BG);
-		field.setBorder(BorderFactory.createLineBorder(BORDER));
+		field.setBorder(getThinBorder());
 		field.getDocument().addDocumentListener(this);
 		field.addKeyListener(this);
 		field.addFocusListener(this);
@@ -243,6 +247,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 		JPanel wordPanel = new JPanel();
 		wordPanel.setBackground(SELECTED_BG);
+		wordPanel.setBorder(getThinBorder());
 		
 		JLabel icon = new JLabel(Hieroglyphs.getIcon(drop.getOrthography()));
 		JLabel orth = new JLabel(drop.getOrthography());
@@ -458,6 +463,10 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+	}
+	
+	private Border getThinBorder() {
+		return BorderFactory.createLineBorder(BORDER);
 	}
 
 }

@@ -9,9 +9,9 @@ public class Dialog {
 	public String text = "";
 	public String image = null;
 	
+	//TODO some sort of action on click?
+	
 	public Dialog() {
 	}
-	
-	//TODO method to contain JComponent holding dialog?
-	
+		
 }
