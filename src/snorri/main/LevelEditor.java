@@ -118,6 +118,11 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Compute Pathing", KeyEvent.VK_P);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
 
 		menuItem = new JMenuItem("Undo", KeyEvent.VK_Z);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
@@ -259,6 +264,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			}
 
 			resize(whNew[0], whNew[1]);
+			break;
+		case "Compute Pathing":
+			env.getLevel().computePathfinding();
 			break;
 		case "Undo":
 			if (env == null || !canUndo) {

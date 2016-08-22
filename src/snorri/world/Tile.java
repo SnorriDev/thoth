@@ -154,7 +154,7 @@ public class Tile implements Comparable<Tile> {
 			Main.getImage("/textures/tiles/column00.png"),
 			Main.getImage("/textures/tiles/column01.png")}, true),
 		DOOR(false, Main.getImage("/textures/tiles/door00.png"), true),
-		SANDSTONE; //TODO make this
+		SANDSTONE(false, Main.getImage("/textures/tiles/sandstone00.png"), false, true);
 		
 		private boolean	pathable, canShootOver, atTop, changable;
 		private BufferedImage[]	textures;

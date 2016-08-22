@@ -18,6 +18,7 @@ import snorri.entities.QuadTree;
 import snorri.entities.Unit;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
+import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.pathfinding.Pathfinding;
 import snorri.triggers.Trigger;
@@ -195,7 +196,7 @@ public class World implements Playable, Editable {
 
 	public void addHard(Entity e) {
 
-		if (e.isStaticObject()) {
+		if (e.isStaticObject() && Main.getWindow() instanceof GameWindow) {
 			level.addEntity(e);
 		}
 		
