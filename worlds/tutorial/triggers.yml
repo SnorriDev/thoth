@@ -7,11 +7,11 @@ onStart:
         dialog:
           !dialog
             text: |
-              <p><span class="name">Imhotep:</span> Hey! What are you doing down here?
-              The inner temple archive is not open to the public. Are you one of the royal
-              court? Tell the pharaoh that what we do is none of his business!
-              Wait, never mind, you're just that new apprentice scribe from upstairs.
-              I'm sorry! Here, why don't you have a look around down here.</p>
+              <p><span class="name">Imhotep:</span> Hey! What are you doing down here, Prince Setna?
+              I don't care if you're royalty. The temple archives are still off limits to you.
+              Tell the pharaoh that what we do is none of his business! Wait, never mind, 
+              I forgot that the high priest accepted you as a temple scribe. Well, I guess I
+              can't stop you from having a look around down here.</p>
               
               <p class="instruction">Use the <span class="control">WASD</span> keys to
               move around.</p>
@@ -30,9 +30,9 @@ onZone1:
               down here, don't you think? But do remember, there is more to these archives
               than their looks. In order to get out, you must solve the puzzles and 
               riddles strewn within. We needed to set up these puzzles to keep this
-              place secret from the pharoah.</p>
+              place secret from your father, the pharoah.</p>
               
-              <p>As you probably know, I'm not a big fan of the pharaoh. Can you believe
+              <p>No offense, but I'm not a big fan of the pharaoh. Can you believe
               people think he is actually descended from Horus? His weapons are just
               ordinary bronze; they weren't forged by the gods! Anyway, what is Horus to 
               Thoth the All-Knowing? Men may listen when the pharaoh speaks for
@@ -71,7 +71,7 @@ onDoorOpen:
         dialog:
           !dialog
             text: |
-              <p><span class="name">Imhotep:</span> Amazing! Now go grab that sling on the ground. We might run into some company up ahead.</p>              
+              <p><span class="name">Imhotep:</span> Amazing! Now go grab that sling on the ground. You might need it up ahead.</p>              
     - SET_OBJECTIVE:
         objective:
           !objective
@@ -87,7 +87,7 @@ onPickup:
           !dialog
             text: |
               <p><span class="name">Imhotep:</span> What's that at the end of this tunnel?
-              Oh no, it's the pharoah's soldiers! Shoot them before they shoot us.</p>
+              Oh no, ancient mummies! Shoot them before they kill us.</p>
               
               <p class="instruction">Shoot automatically from the sling by clicking in a 
               target direction. Make sure to dodge the enemy projectiles as well! Careful,
@@ -114,9 +114,8 @@ onKill:
         dialog:
           !dialog
             text: |
-              <p><span class="name">Imhotep:</span> That'll show them! But what are they 
-              doing so deep in the temple? The pharoah must be up to something.
-              Quick, let's get out of here...</p>
+              <p><span class="name">Imhotep:</span> That'll show them! But still, that was
+              close. Quick, let's get out of here...</p>
     - SET_OBJECTIVE:
         objective:
           !objective

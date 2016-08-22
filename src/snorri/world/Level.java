@@ -522,6 +522,9 @@ public class Level implements Editable {
 	private void updateSurroundingContext(Vector v) {
 		for (int x = (v.getX() * Tile.WIDTH - Unit.RADIUS_X) / Tile.WIDTH - 1; x <= (v.getX() * Tile.WIDTH + Unit.RADIUS_X) / Tile.WIDTH + 1; x++) {
 			for (int y = (v.getY() * Tile.WIDTH - Unit.RADIUS_Y) / Tile.WIDTH - 1; y <= (v.getY() * Tile.WIDTH + Unit.RADIUS_Y) / Tile.WIDTH + 1; y++) {
+				if (getTileGrid(x, y) == null) {
+					continue;
+				}
 				map[x][y].computeSurroundingsPathable(x, y, this);			
 			}
 		}

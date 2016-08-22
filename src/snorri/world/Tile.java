@@ -153,9 +153,10 @@ public class Tile implements Comparable<Tile> {
 		COLUMN(false, new BufferedImage[] {
 			Main.getImage("/textures/tiles/column00.png"),
 			Main.getImage("/textures/tiles/column01.png")}, true),
-		DOOR(false, Main.getImage("/textures/tiles/door00.png"), true);
+		DOOR(false, Main.getImage("/textures/tiles/door00.png"), true),
+		SANDSTONE; //TODO make this
 		
-		private boolean	pathable, canShootOver, atTop;
+		private boolean	pathable, canShootOver, atTop, changable;
 		private BufferedImage[]	textures;
 									
 		TileType() {
@@ -173,12 +174,14 @@ public class Tile implements Comparable<Tile> {
 			this.pathable = pathable;
 			this.textures = textures;
 			canShootOver = pathable;
+			changable = canShootOver;
 			atTop = false;
 		}
 		
 		TileType(boolean pathable, boolean swimmable, BufferedImage[] textures) {
 			this(pathable, textures);
 			canShootOver = swimmable;
+			changable = canShootOver;
 		}
 		
 		TileType(boolean pathable, BufferedImage[] textures, boolean atTop) {
@@ -191,12 +194,17 @@ public class Tile implements Comparable<Tile> {
 			this.atTop = atTop;
 		}
 		
+		TileType(boolean pathable, BufferedImage texture, boolean atTop, boolean changable) {
+			this(pathable , texture, atTop);
+			this.changable = changable;
+		}
+		
 		public boolean isLiquid() {
 			return !pathable && canShootOver;
 		}
 		
 		public boolean isChangable() {
-			return pathable || canShootOver;
+			return changable;
 		}
 		
 		public static TileType byId(int id) {
@@ -212,7 +220,7 @@ public class Tile implements Comparable<Tile> {
 		}
 		
 		public boolean canShootOver() {
-			return canShootOver; //TODO: maybe change this to store more info
+			return canShootOver;
 		}
 		
 		public BufferedImage[] getTextures() {

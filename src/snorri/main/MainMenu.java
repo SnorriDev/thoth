@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 import snorri.terrain.DungeonGen;
 import snorri.terrain.TerrainGen;
+import snorri.world.World;
 
 public class MainMenu extends GamePanel {
 
@@ -45,7 +46,7 @@ public class MainMenu extends GamePanel {
 			Main.launchGame(new DungeonGen(200, 200));
 			break;
 		case "Load World":
-			Main.launchGame((WorldSelection) null);
+			Main.launchGame(World.wrapLoad());
 			break;
 		case "World Editor":
 			Main.launchEditor();

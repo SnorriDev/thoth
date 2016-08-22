@@ -14,10 +14,6 @@ public class WorldSelection {
 	
 	public World loadWorld() {
 		
-		if (name == null) {
-			return World.wrapLoad();
-		}
-		
 		try {
 			return new World(Main.getFile(name));
 		} catch (IOException e1) {

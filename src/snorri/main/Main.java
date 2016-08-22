@@ -271,7 +271,12 @@ public class Main {
 		loadInto(new Runnable() {
 			@Override
 			public void run() {
-				launchWorld(worldSelect.loadWorld());
+				World w = worldSelect.loadWorld();
+				if (w != null) {
+					launchWorld(worldSelect.loadWorld());
+				} else {
+					setWindow(new MainMenu());
+				}
 			}
 		});
 	}
@@ -281,6 +286,15 @@ public class Main {
 			@Override
 			public void run() {
 				launchWorld(gen.genWorld());
+			}
+		});
+	}
+	
+	public static void launchGame(World world) {
+		loadInto(new Runnable() {
+			@Override
+			public void run() {
+				launchWorld(world);
 			}
 		});
 	}
