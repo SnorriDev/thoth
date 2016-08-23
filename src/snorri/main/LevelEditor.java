@@ -27,6 +27,7 @@ import snorri.entities.Player;
 import snorri.entities.Portal;
 import snorri.inventory.Carrier;
 import snorri.keyboard.Key;
+import snorri.terrain.TerrainGen;
 import snorri.world.Campaign.WorldId;
 import snorri.world.Editable;
 import snorri.world.Level;
@@ -92,13 +93,10 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
-		// menuItem = new JMenuItem("Generate", KeyEvent.VK_G);
-		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G,
-		// ActionEvent.CTRL_MASK));
-		// menuItem.addActionListener(this);
-		// menu.add(menuItem);
-
-		// TODO select a generator from the generate list to make a new world
+		menuItem = new JMenuItem("Generate", KeyEvent.VK_G);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
 
 		menuItem = new JMenuItem("Open", KeyEvent.VK_O);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
@@ -111,6 +109,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		menu.add(menuItem);
 
 		menuItem = new JMenuItem("Save", KeyEvent.VK_S);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
@@ -232,6 +231,24 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				env = new World();
 			}
 			break;
+		case "Generate":
+			DialogMap inputs = new DialogMap();
+			inputs.put("Class", "snorri.terrain.TerrainGen");
+			inputs.put("Width", "150");
+			inputs.put("Height", "150");
+			if (dialog("Generator Options", inputs) == null) {
+				return;
+			}
+			Class<?> gen = inputs.getClass("Class");
+			if (gen.isAssignableFrom(TerrainGen.class)) {
+				try {
+					Object g = gen.getConstructor(int.class, int.class).newInstance(inputs.getInteger("Width"), inputs.getInteger("Height"));
+					env = ((TerrainGen) g).genWorld();
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
+					Main.error("generator " + gen + " failed");
+				}
+			}
 		case "Open":
 			World w1 = World.wrapLoad();
 			if (w1 != null) {
@@ -478,7 +495,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 		DialogMap inputs = new DialogMap();
 		inputs.put("Tag", ent.getTag());
-		dialog("Edit Entity Tag", inputs);
+		if (dialog("Edit Entity Tag", inputs) == null) {
+			return;
+		}
 		String tag = inputs.getText("Tag");
 		ent.setTag(tag.isEmpty() ? null : tag);
 
@@ -510,7 +529,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				inputs.put("World", WorldId.SPAWN_TOWN.name());
 				inputs.put("X", "" + focus.getPos().getX());
 				inputs.put("Y", "" + focus.getPos().getY());
-				dialog("Portal Destination", inputs);
+				if (dialog("Portal Destination", inputs) == null) {
+					return;
+				}
 				Vector dest = new Vector(inputs.getDouble("X"), inputs.getDouble("Y"));
 				world.addHard(selectedEntityClass.getConstructor(Vector.class, String.class, Vector.class)
 						.newInstance(spawnPos, inputs.getText("World"), dest));
@@ -518,14 +539,18 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				DialogMap inputs = new DialogMap();
 				inputs.put("Prize", "Enter item name/id or vocab word");
 				inputs.put("Spell", "");
-				dialog("Drop Reward", inputs);
+				if (dialog("Drop Reward", inputs) == null) {
+					return;
+				}
 				world.addHard(selectedEntityClass.getConstructor(Vector.class, String.class, String.class)
 						.newInstance(spawnPos, inputs.getText("Prize"), inputs.getText("Spell")));
 			} else if (selectedEntityClass.equals(Listener.class)) {
 				DialogMap inputs = new DialogMap();
 				inputs.put("Radius", "40");
 				inputs.put("Tag", "Trigger to activate");
-				dialog("Configure Detector", inputs);
+				if (dialog("Configure Listener", inputs) == null) {
+					return;
+				}
 				world.addHard(selectedEntityClass.getConstructor(Vector.class, int.class, String.class)
 						.newInstance(spawnPos, inputs.getInteger("Radius"), inputs.getText("Tag")));
 			}
@@ -615,7 +640,6 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				canUndo = true;
 				canRedo = false;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				Main.error("cannot redo, IOException");
 				e.printStackTrace();
 			}
@@ -642,8 +666,6 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 }
