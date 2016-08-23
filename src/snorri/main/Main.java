@@ -23,6 +23,7 @@ import net.sourceforge.yamlbeans.YamlReader;
 import snorri.dialog.Dialog;
 import snorri.dialog.Objective;
 import snorri.hieroglyphs.Hieroglyphs;
+import snorri.inventory.RandomDrop;
 import snorri.parser.Lexicon;
 import snorri.terrain.Structure;
 import snorri.terrain.TerrainGen;
@@ -80,9 +81,9 @@ public class Main {
 
 		Lexicon.load();
 		Hieroglyphs.load();
-		
+		RandomDrop.load();
 		setupFont();
-		
+				
 		frame = new JFrame("Spoken Word");
 		frame.setSize(1800, 900);
 		frame.addComponentListener(new Main.ResizeListener());

@@ -3,6 +3,7 @@ package snorri.inventory;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.ImageIcon;
 
@@ -377,6 +378,22 @@ public abstract class Item implements Droppable {
 	public void resetTimer() {
 		if (timer != null) {
 			timer.activate();
+		}
+	}
+	
+	@Override
+	public Item copy() {
+		//TODO copy spell/name?
+		try {
+			Item copy = getClass().getConstructor(ItemType.class).newInstance(type);
+			copy.nickname = nickname;
+			copy.spell = spell.copy();
+			return copy;
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			Main.error("could not copy Item");
+			e.printStackTrace();
+			return null;
 		}
 	}
 

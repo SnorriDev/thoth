@@ -249,6 +249,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 					Main.error("generator " + gen + " failed");
 				}
 			}
+			break;
 		case "Open":
 			World w1 = World.wrapLoad();
 			if (w1 != null) {
@@ -262,11 +263,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			}
 			break;
 		case "Save":
-
 			if (env == null) {
 				return;
 			}
-
 			env.wrapSave();
 			break;
 		case "Resize":

@@ -42,5 +42,10 @@ public class Terminal implements Node {
 		
 		return Lexicon.lookup(orthography).altersMovement();
 	}
+
+	@Override
+	public Terminal copy() {
+		return new Terminal(orthography);
+	}
 	
 }
