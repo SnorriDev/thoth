@@ -615,10 +615,10 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		if (canUndo) {
 			try {
 				autosaveRedo();
-				env.load(new File("./worlds/.undo1"));
+				env.load(Main.getFile("/saves/.undo1"));
 				canUndo = false;
 				canRedo = true;
-				Main.log("undo!");
+				Main.log("undone!");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				Main.error("cannot undo, IOException");
@@ -632,7 +632,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	public void redo() {
 		if (canRedo) {
 			try {
-				env.load(new File("./worlds/.redo1"));
+				env.load(Main.getFile("/saves/.redo1"));
 				Main.log("redo!");
 				canUndo = true;
 				canRedo = false;
