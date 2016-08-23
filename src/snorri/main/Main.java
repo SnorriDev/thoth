@@ -311,11 +311,12 @@ public class Main {
 	}
 
 	/**
-	 * show a loading screen while the thread runs
+	 * show a loading screen while a Runnable runs
 	 * 
 	 * @param proc
-	 *            a Runnable whose run() method will be invoked. run() should
-	 *            change the screen to something cooler when it's done
+	 *            a Runnable whose <code>run()</code> method will be invoked.
+	 *            This Runnable should change the screen to the target window
+	 *            when the loading is done
 	 */
 	public static void loadInto(Runnable proc) {
 		setWindow(new LoadingScreen());

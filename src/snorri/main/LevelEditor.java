@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -37,7 +36,7 @@ import snorri.world.Vector;
 import snorri.world.World;
 
 //TODO: add image to world feature
-//TODO: figure out why fill overflows
+//TODO: fix overflow with a 2d boolean array (look at methods in Level which compute pathfinding graphs)
 
 public class LevelEditor extends FocusedWindow implements ActionListener {
 
