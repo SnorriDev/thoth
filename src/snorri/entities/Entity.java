@@ -203,7 +203,8 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	
 	@Override
 	public String toString() {
-		return getTag() == null ? Util.clean(this.getClass().getSimpleName()) : getTag();
+		String name = getTag() == null ? Util.clean(this.getClass().getSimpleName()) : getTag();
+		return name.equals("entity") ? null : name;
 	}
 	
 	public String toStringDebug() {
