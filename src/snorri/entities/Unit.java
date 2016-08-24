@@ -1,7 +1,11 @@
 package snorri.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import snorri.collisions.RectCollider;
 import snorri.events.SpellEvent;
+import snorri.modifiers.Modifier;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -12,27 +16,41 @@ public class Unit extends Entity {
 	private static final int BASE_SPEED = 120;
 	public static final int RADIUS = 46, RADIUS_X = 21, RADIUS_Y = 40;
 	protected static final double MAX_HEALTH = 100;
-	private static final double BURN_DOT = 8d;
 	
+	protected List<Modifier<Unit>> modifiers = new ArrayList<>();
+	
+	protected int speed;
 	private double health;
 		
 	public Unit(Vector pos) {
 		super(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)));
 		health = MAX_HEALTH;
 		z = UNIT_LAYER;
+		speed = getBaseSpeed();
 	}
 	
 	public Unit(Unit unit) {
 		super(unit);
 		health = unit.health;
 		z = UNIT_LAYER;
+		speed = getBaseSpeed();
 	}
 
 	@Override
 	public void update(World world, double deltaTime) {
 		
-		if (isBurning()) {
-			damage(BURN_DOT * deltaTime);
+		speed = getBaseSpeed();
+		
+		if (modifiers == null) {
+			modifiers = new ArrayList<>();
+		}
+		
+		for (Object o : modifiers.toArray()) {
+			@SuppressWarnings("unchecked")
+			Modifier<Unit> m = (Modifier<Unit>) o;
+			if (m.modify(this, deltaTime)) {
+				modifiers.remove(m);
+			}
 		}
 		
 		if (isDead()) {
@@ -80,8 +98,20 @@ public class Unit extends Entity {
 	}
 	
 	//override this for faster entities
-	protected int getSpeed() {
+	protected final int getSpeed() {
+		return speed;
+	}
+	
+	public int getBaseSpeed() {
 		return BASE_SPEED;
+	}
+	
+	public void setSpeed(int spd) {
+		speed = spd;
+	}
+	
+	public void modifySpeed(double factor) {
+		speed = (int) (speed * factor);
 	}
 	
 	@Override
@@ -93,6 +123,27 @@ public class Unit extends Entity {
 		
 		return super.get(world, attr);
 		
+	}
+	
+	public List<Modifier<Unit>> getModifiers() {
+		return modifiers;
+	}
+	
+	public boolean hasModifier(Class <? extends Modifier<Unit>> c) {
+		for (Modifier<Unit> modifier : modifiers) {
+			if (c.isInstance(modifier)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void addModifier(Modifier<Unit> m) {
+		modifiers.add(m);
+	}
+	
+	public void removeModifier(Modifier<Unit> m){
+		modifiers.remove(m);
 	}
 	
 }

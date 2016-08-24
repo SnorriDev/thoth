@@ -38,6 +38,7 @@ import snorri.semantics.RightOf;
 import snorri.semantics.SecondObjectPronoun;
 import snorri.semantics.SecondSuffixPronoun;
 import snorri.semantics.See;
+import snorri.semantics.Slow;
 import snorri.semantics.StaticDef;
 import snorri.semantics.ThirdObjectPronoun;
 import snorri.semantics.ThirdSuffixPronoun;
@@ -105,7 +106,7 @@ public class Lexicon {
 		//Suffix Pronouns
 		lexicon.put("i", new FirstSuffixPronoun());
 		lexicon.put("k", new SecondSuffixPronoun());
-		lexicon.put("t", new SecondSuffixPronoun()); //maybe add gender agreement later
+		lexicon.put("t", new SecondSuffixPronoun()); //maybe add gender agreement later (#cisnormativity)
 		lexicon.put("s", new ThirdSuffixPronoun());
 		lexicon.put("f", new ThirdSuffixPronoun()); //maybe add gender agreement
 		
@@ -134,6 +135,7 @@ public class Lexicon {
 		lexicon.put("wn", new Open());
 		lexicon.put("sS", new Write()); //TODO icon
 		lexicon.put("dbH", new Pray());
+		lexicon.put("slow", new Slow());
 		//lexicon.put("sxpr", new CreateUnit());
 		
 		//Conditionals

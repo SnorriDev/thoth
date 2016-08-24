@@ -1,6 +1,7 @@
 package snorri.semantics;
 
-import snorri.entities.Entity;
+import snorri.entities.Unit;
+import snorri.modifiers.BurnModifier;
 
 public class Burn extends VerbDef {
 
@@ -12,15 +13,15 @@ public class Burn extends VerbDef {
 
 	@Override
 	public boolean exec(Object obj) {
-		if (obj instanceof Entity) {
-			((Entity) obj).burn();
+		if (obj instanceof Unit) {
+			((Unit) obj).addModifier(new BurnModifier());
 		}
 		return true;
 	}
 
 	@Override
 	public boolean eval(Object subj, Object obj) {
-		return obj instanceof Entity && ((Entity) obj).isBurning();
+		return obj instanceof Unit && ((Unit) obj).hasModifier(BurnModifier.class);
 	}
 
 	@Override
