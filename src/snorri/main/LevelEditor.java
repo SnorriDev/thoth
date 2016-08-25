@@ -442,11 +442,11 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		int x = location.getX() / Tile.WIDTH;
 		int y = location.getY() / Tile.WIDTH;
 
-		Tile t = env.getLevel().getNewTileGrid(x, y);
-		if (selectedTile != null && env.getLevel().getNewTileGrid(x, y) != null && t != null
+		Tile t = env.getLevel().getTileGrid(x, y);
+		if (selectedTile != null && env.getLevel().getTileGrid(x, y) != null && t != null
 				&& !t.equals(selectedTile)) {
 			autosaveUndo();
-			env.getLevel().setTileGrid(x, y, selectedTile);
+			env.getLevel().setTileGrid(x, y, new Tile(selectedTile));
 			fill_helper(x + 1, y, t);
 			fill_helper(x - 1, y, t);
 			fill_helper(x, y + 1, t);
