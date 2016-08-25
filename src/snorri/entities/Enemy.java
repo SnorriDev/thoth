@@ -11,7 +11,6 @@ import snorri.inventory.Item.ItemType;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.main.Main;
-import snorri.main.FocusedWindow;
 import snorri.main.GameWindow;
 import snorri.pathfinding.PathNode;
 import snorri.pathfinding.Pathfinder;
