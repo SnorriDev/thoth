@@ -49,7 +49,6 @@ public class Enemy extends Unit implements Pathfinder, Carrier {
 		getInventory().add(Item.newItem(ItemType.SLOW_SLING));
 	}
 	
-	//can only use this when we are in GameWindow with Player
 	public Enemy(Vector pos) {
 		this(pos, ((FocusedWindow) Main.getWindow()).getFocus());
 	}
