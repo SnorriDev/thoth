@@ -13,7 +13,6 @@ import java.util.List;
 import snorri.animations.Animation;
 import snorri.collisions.CircleCollider;
 import snorri.collisions.Collider;
-import snorri.inventory.Timer;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
@@ -37,6 +36,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		SPAWNABLE = new ArrayList<>();
 		
 		SPAWNABLE.add(Urn.class);
+		SPAWNABLE.add(Spike.class);
 		
 		EDIT_SPAWNABLE = new ArrayList<>(SPAWNABLE);
 		
@@ -61,18 +61,17 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		
 	}
 	
-	protected static final int DEFAULT_LAYER = 0;
-	protected static final int UNIT_LAYER = 3;
-	protected static final int PLAYER_LAYER = 4;
+	protected static final int DEFAULT_LAYER = 10;
+	protected static final int UNIT_LAYER = 0;
+	protected static final int PLAYER_LAYER = 1;
 	
 	protected Collider collider;
 	protected Vector pos;
 	protected Animation animation;
 	protected boolean ignoreCollisions = false, staticObject = false;
-	protected int z;
+	protected int z; //render order
 	protected String tag;
 	
-	private Timer burnTimer = new Timer(5);
 	private boolean flying;
 
 	/**
@@ -131,14 +130,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	
 	public Animation getAnimation() {
 		return animation;
-	}
-	
-	public void burn() {
-		burnTimer.hardReset();
-	}
-	
-	public boolean isBurning() {
-		return ! burnTimer.isOffCooldown();
 	}
 	
 	public boolean intersects(Vector pos1) {
@@ -212,7 +203,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 	
 	public void update(World world, double d) {
-		burnTimer.update(d);
 	}
 	
 	public void renderAround(FocusedWindow g, Graphics gr) {

@@ -417,7 +417,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			enchantButton.setEnabled(Grammar.isValidSentence(Grammar.parseString(text)));
 		} else {
 			enchantButton.setEnabled(Grammar.isValidSentence(Grammar.parseString(text)) && fullInv.knowsWords(Grammar.getWords(text)));
-	
 		}
 	}
 

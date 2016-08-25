@@ -11,14 +11,15 @@ import snorri.inventory.Item.ItemType;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.main.Main;
-import snorri.main.FocusedWindow;
+import snorri.main.GameWindow;
 import snorri.pathfinding.PathNode;
 import snorri.pathfinding.Pathfinder;
 import snorri.pathfinding.Pathfinding;
+import snorri.pathfinding.Targetter;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Enemy extends Unit implements Pathfinder, Carrier {
+public class Enemy extends Unit implements Pathfinder, Carrier, Targetter {
 
 	private static final Animation MUMMY_IDLE = new Animation("/textures/animations/mummy/idle");
 	
@@ -50,7 +51,7 @@ public class Enemy extends Unit implements Pathfinder, Carrier {
 	}
 	
 	public Enemy(Vector pos) {
-		this(pos, ((FocusedWindow) Main.getWindow()).getFocus());
+		this(pos, null);
 	}
 		
 	public void setTarget(Entity target) {
@@ -121,7 +122,11 @@ public class Enemy extends Unit implements Pathfinder, Carrier {
 		super.update(world, deltaTime);
 		
 		if (target == null) {
-			return;
+			if (Main.getWindow() instanceof GameWindow) {
+				setTarget(((GameWindow) Main.getWindow()).getFocus());
+			} else {
+				return;
+			}
 		}
 							
 		if (canShootAt(world, target)) {

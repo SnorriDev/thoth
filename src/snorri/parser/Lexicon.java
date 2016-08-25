@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import snorri.entities.Flower;
+import snorri.entities.Spike;
 import snorri.entities.Urn;
 import snorri.nonterminals.AbstractNoun;
 import snorri.nonterminals.Name;
@@ -37,6 +38,7 @@ import snorri.semantics.RightOf;
 import snorri.semantics.SecondObjectPronoun;
 import snorri.semantics.SecondSuffixPronoun;
 import snorri.semantics.See;
+import snorri.semantics.Slow;
 import snorri.semantics.StaticDef;
 import snorri.semantics.ThirdObjectPronoun;
 import snorri.semantics.ThirdSuffixPronoun;
@@ -87,6 +89,7 @@ public class Lexicon {
 		lexicon.put("xt", new StaticDef(Noun.class, TileType.LAVA)); //technically this is fire
 		lexicon.put("snbt", new StaticDef(Noun.class, Urn.class)); //TODO icon
 		lexicon.put("bit", new StaticDef(Noun.class, null)); //TODO: bee
+		lexicon.put("Hnyt", new StaticDef(Noun.class, Spike.class)); //TODO: spike
 		
 		lexicon.put("st", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
 		lexicon.put("iry", new StaticDef(AbstractNoun.class, AbstractSemantics.WEAPON));
@@ -103,7 +106,7 @@ public class Lexicon {
 		//Suffix Pronouns
 		lexicon.put("i", new FirstSuffixPronoun());
 		lexicon.put("k", new SecondSuffixPronoun());
-		lexicon.put("t", new SecondSuffixPronoun()); //maybe add gender agreement later
+		lexicon.put("t", new SecondSuffixPronoun()); //maybe add gender agreement later (#cisnormativity)
 		lexicon.put("s", new ThirdSuffixPronoun());
 		lexicon.put("f", new ThirdSuffixPronoun()); //maybe add gender agreement
 		
@@ -131,6 +134,7 @@ public class Lexicon {
 		lexicon.put("wn", new Open());
 		lexicon.put("sS", new Write()); //TODO icon
 		lexicon.put("dbH", new Pray());
+		lexicon.put("sqbH", new Slow());
 		//lexicon.put("sxpr", new CreateUnit());
 		
 		//Conditionals
