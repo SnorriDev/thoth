@@ -1,20 +1,15 @@
 package snorri.inventory;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
 
 import snorri.entities.Unit;
 import snorri.main.Main;
-import snorri.world.Vector;
 
 public class Papyrus extends Item {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final Image PAPYRUS_BORDER = Main.getImage("/textures/hud/papyrusBorderInactive.png");
-	private static final Image PAPYRUS_BORDER_SELECTED = Main.getImage("/textures/hud/papyrusBorder.png");
-	private static final Color PAPYRUS_COOLDOWN_COLOR = new Color(118, 45, 50, 150);
+	private static final Color PAPYRUS_COOLDOWN_COLOR = new Color(1, 69, 101, 150);
 	
 	public Papyrus(ItemType t) {
 		super(t);
@@ -25,7 +20,6 @@ public class Papyrus extends Item {
 		
 		if (timer.activate()) {
 			Object o = useSpellOn(player);
-			//TODO show errors from messages
 			Main.log("spell output: " + o);
 			return true;
 		}
@@ -35,18 +29,8 @@ public class Papyrus extends Item {
 	}
 	
 	@Override
-	public Color getCooldownColor() {
+	public Color getArcColor() {
 		return PAPYRUS_COOLDOWN_COLOR;
-	}
-	
-	@Override
-	public Image getBorder(boolean selected) {
-		return selected ? PAPYRUS_BORDER_SELECTED : PAPYRUS_BORDER;
-	}
-	
-	public static int drawEmptyPapyrus(Graphics g, Vector pos, boolean selected) {
-		g.drawImage(selected ? PAPYRUS_BORDER_SELECTED : PAPYRUS_BORDER, pos.getX(), pos.getY(), null);
-		return getSlotWidth();
 	}
 	
 	@Override

@@ -3,6 +3,7 @@ package snorri.inventory;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.ImageIcon;
 
@@ -23,12 +24,33 @@ public abstract class Item implements Droppable {
 	protected String nickname; //name which the player gives the item so they know what it does
 	protected ItemType type; // what type of item it is; you can get ID, maxQuantity, enchantable from this
 	
-	private static final int ICON_SIZE = 64;
+	private static final int ARC_SIZE = 80;
 	private static final int SMALL_ICON_SIZE = 32;
 	private static final int ENTITY_SIZE = 48;
+	private static final int SLOT_SPACE = 15;
 	
-	private static final Image DEFAULT_BORDER = Main.getImage("/textures/hud/itemBorder.png");
-	private static final Color DEFAULT_COOLDOWN_COLOR = new Color(156, 134, 73, 200);
+	private static final Color DEFAULT_COOLDOWN_COLOR = new Color(116, 100, 50, 200);
+	
+	protected static final Image[] ACTIVE_BORDERS_TOP;
+	protected static final Image[] INACTIVE_BORDERS_TOP;
+	
+	protected static final Image ACTIVE_BORDER_WEAPON;
+	protected static final Image INACTIVE_BORDER_WEAPON;
+	
+	static {
+		
+		ACTIVE_BORDERS_TOP = new Image[5];
+		INACTIVE_BORDERS_TOP = new Image[5];
+		
+		for (int i = 0; i < 5; i++) {
+			ACTIVE_BORDERS_TOP[i] = Main.getImage("/textures/hud/items/item" + (i + 1) + ".png");
+			INACTIVE_BORDERS_TOP[i] = Main.getImage("/textures/hud/items/item" + (i + 1) + "Alt.png");
+		}
+		
+		ACTIVE_BORDER_WEAPON = Main.getImage("/textures/hud/items/itemMouse.png");
+		INACTIVE_BORDER_WEAPON = Main.getImage("/textures/hud/items/itemMouseAlt.png");
+		
+	}
 	
 	protected Timer timer;
 	
@@ -219,6 +241,7 @@ public abstract class Item implements Droppable {
 		}
 		
 		spell = newSpell;
+		resetTimer();
 		return true;
 	}
 
@@ -267,15 +290,26 @@ public abstract class Item implements Droppable {
 		return nickname;
 	}
 	
-	public Image getBorder(boolean selected) {
-		return DEFAULT_BORDER;
+	public static Image getBorder(int i, boolean top, boolean selected) {
+		if (!top) {
+			return selected ? ACTIVE_BORDER_WEAPON : INACTIVE_BORDER_WEAPON;
+		}
+		if (selected) {
+			return ACTIVE_BORDERS_TOP[i];
+		}
+		return INACTIVE_BORDERS_TOP[i];
 	}
 	
-	public Color getCooldownColor() {
+	public Color getArcColor() {
 		return DEFAULT_COOLDOWN_COLOR;
 	}
 	
 	//TODO: use an ImageViewer to scale things
+	
+	public static Vector getPos(int i, boolean top) {
+		int y = top ? GameWindow.MARGIN : (((GameWindow) Main.getWindow()).getDimensions().getY() - Item.getSlotWidth() - GameWindow.MARGIN);
+		return new Vector(GameWindow.MARGIN + i * (Item.getSlotWidth() + Item.SLOT_SPACE), y);
+	}
 	
 	/**
 	 * draws a thumbnail and returns its width
@@ -285,22 +319,24 @@ public abstract class Item implements Droppable {
 	 * @return
 	 * 	width of thumbnail drawn
 	 */
-	public int drawThumbnail(Graphics g, Vector pos, boolean selected) {
+	public int drawThumbnail(Graphics g, int i, boolean top, boolean selected) {
 		
-		Image border = getBorder(selected);
+		Image border = getBorder(i, top, selected);
 		Image icon = type.getTexture();
 		
-		Vector iconPos = pos.copy().add(new Vector(border.getWidth(null) - icon.getWidth(null), border.getWidth(null) - icon.getWidth(null)).divide(2));
-						
+		Vector pos = getPos(i, top);
+		Vector iconPos = pos.copy().add(new Vector(border.getWidth(null) - icon.getWidth(null), border.getHeight(null) - icon.getHeight(null)).divide(2));
+		Vector arcPos = pos.copy().add(new Vector(border.getWidth(null) - ARC_SIZE, border.getHeight(null) - ARC_SIZE).divide(2));
+		
 		if (selected) {
 			g.drawImage(border, pos.getX(), pos.getY(), null);
 			g.drawImage(icon, iconPos.getX(), iconPos.getY(), null);
 		} else {
 			g.drawImage(icon, iconPos.getX(), iconPos.getY(), null);
 			g.drawImage(border, pos.getX(), pos.getY(), null);
-			if (timer != null) { //TODO: instanceof Cooldownable?
-				g.setColor(getCooldownColor());
-				g.fillArc(iconPos.getX(), iconPos.getY(), ICON_SIZE, ICON_SIZE, 90, this.getTimer().getRatio(360));
+			if (timer != null) {
+				g.setColor(getArcColor());
+				g.fillArc(arcPos.getX(), arcPos.getY(), ARC_SIZE, ARC_SIZE, 90, this.getTimer().getRatio(360));
 				g.setColor(Color.BLACK);
 			}
 		}
@@ -316,13 +352,14 @@ public abstract class Item implements Droppable {
 	 * @return
 	 * 	width of thumbnail drawn
 	 */
-	public static int drawEmpty(Graphics g, Vector pos) {
-		g.drawImage(DEFAULT_BORDER, pos.getX(), pos.getY(), null);
+	public static int drawEmpty(Graphics g, int i, boolean top) {
+		Vector pos = getPos(i, top);
+		g.drawImage(getBorder(i, top, false), pos.getX(), pos.getY(), null);
 		return getSlotWidth();
 	}
 	
 	public static int getSlotWidth() {
-		return DEFAULT_BORDER.getWidth(null);
+		return ACTIVE_BORDER_WEAPON.getWidth(null);
 	}
 	
 	@Override
@@ -336,6 +373,28 @@ public abstract class Item implements Droppable {
 			return cmp2;
 		}
 		return cmp;
+	}
+	
+	public void resetTimer() {
+		if (timer != null) {
+			timer.activate();
+		}
+	}
+	
+	@Override
+	public Item copy() {
+		//TODO copy spell/name?
+		try {
+			Item copy = getClass().getConstructor(ItemType.class).newInstance(type);
+			copy.nickname = nickname;
+			copy.spell = spell.copy();
+			return copy;
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			Main.error("could not copy Item");
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

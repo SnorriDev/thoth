@@ -13,7 +13,7 @@ public class Write extends VerbDef {
 	@Override
 	public boolean exec(Object obj) {
 		if (Main.getWindow() instanceof GameWindow) {
-			((GameWindow) Main.getWindow()).showDialog(new SpellMessage(obj));
+			((GameWindow) Main.getWindow()).showMessage(new SpellMessage(obj));
 			return true;
 		}
 		return false;

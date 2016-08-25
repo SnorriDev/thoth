@@ -10,6 +10,7 @@ public abstract class Detector extends Entity {
 	private static final long serialVersionUID = 1L;
 	protected float age; //set age to -1 to make it not despawn
 	protected boolean treeMember = false;
+	protected static final int DEFAULT_LIFESPAN = 4;
 	
 	public Detector(Vector pos, int r) {
 		super(pos, r);
@@ -49,7 +50,7 @@ public abstract class Detector extends Entity {
 	}
 	
 	protected double getLifeSpan() {
-		return 4;
+		return DEFAULT_LIFESPAN;
 	}
 	
 	protected boolean shouldDespawn() {

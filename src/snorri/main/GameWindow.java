@@ -1,17 +1,20 @@
 package snorri.main;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Queue;
 
 import javax.swing.UIManager;
 
 import snorri.dialog.DropMessage;
 import snorri.dialog.Message;
+import snorri.dialog.Objective;
 import snorri.entities.Desk;
 import snorri.entities.Entity;
 import snorri.entities.Player;
@@ -21,7 +24,6 @@ import snorri.keyboard.Key;
 import snorri.overlay.DeathScreen;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Playable;
-import snorri.world.Vector;
 import snorri.world.World;
 
 public class GameWindow extends FocusedWindow {
@@ -35,17 +37,17 @@ public class GameWindow extends FocusedWindow {
 	
 	private Playable universe;
 	private Player focus;
-	private Queue<Message> dialogQ;
+	private Queue<Message> messageQ;
 	private boolean hasDied;
 	private long lastTime;
 	
-	private String objective;
+	private Objective objective;
 		
 	public GameWindow(Playable universe, Player focus) {
 		super();
 		this.universe = universe;
 		this.focus = focus;
-		dialogQ = new LinkedList<>();
+		messageQ = new LinkedList<>();
 		lastTime = getTimestamp();
 		hasDied = false;
 	}
@@ -74,8 +76,8 @@ public class GameWindow extends FocusedWindow {
 			Main.log("high delta time detected (" + deltaTime + " sec)");
 		}
 		
-		if (dialogQ != null && dialogQ.peek() != null && dialogQ.peek().update(deltaTime)) {
-			dialogQ.poll();
+		if (messageQ != null && messageQ.peek() != null && messageQ.peek().update(deltaTime)) {
+			messageQ.poll();
 		}
 				
 		if (isPaused()) {
@@ -92,9 +94,7 @@ public class GameWindow extends FocusedWindow {
 			return;
 		}
 		
-		synchronized (this) {
-			universe.getCurrentWorld().update(deltaTime);
-		}
+		universe.getCurrentWorld().update(deltaTime);
 		repaint();
 				
 	}
@@ -108,22 +108,19 @@ public class GameWindow extends FocusedWindow {
 		
 		super.paintComponent(g);
 		
-		synchronized (this) {
-			universe.getCurrentWorld().render(this, g, true);
-		}
+		universe.getCurrentWorld().render(this, g, true);
 		focus.getInventory().render(this, g);
 		focus.renderHealthBar(g);
 		
 		g.setFont(UIManager.getFont("Label.font"));
 		if (objective != null) {
-			g.setColor(new Color(127, 130, 98));
-			Vector objPos = getFocus().getHealthBarPos().add(0, 43);
-			g.drawString(objective, objPos.getX(), objPos.getY());
+			objective.render(g, this);
 		}
 		
 		int xTrans = 0;
-		for (Message msg : dialogQ.toArray(new Message[0])) {
-			xTrans += msg.render(this, g, xTrans);
+		List<Message> reverse = new ArrayList<>(messageQ);
+		for (ListIterator<Message> iter = reverse.listIterator(reverse.size()); iter.hasPrevious();) {
+			xTrans += iter.previous().render(this, g, xTrans);
 		}
 		
 	}
@@ -132,13 +129,13 @@ public class GameWindow extends FocusedWindow {
 		return focus;
 	}
 	
-	public void showDialog(Droppable drop) {
-		showDialog(new DropMessage(drop));
+	public void showMessage(Droppable drop) {
+		showMessage(new DropMessage(drop));
 	}
 	
-	public void showDialog(Message m) {
+	public void showMessage(Message m) {
 		Main.log(m.toString());
-		dialogQ.add(m);
+		messageQ.add(m);
 	}
 	
 	@Override
@@ -151,8 +148,8 @@ public class GameWindow extends FocusedWindow {
 		return universe;
 	}
 	
-	public void setObjective(String text) {
-		objective = text;
+	public void setObjective(Objective objective) {
+		this.objective = objective;
 	}
 	
 	@Override

@@ -5,11 +5,13 @@ import java.awt.event.KeyEvent;
 import java.io.Serializable;
 
 import snorri.audio.Audio;
+import snorri.entities.Player;
 import snorri.entities.Projectile;
 import snorri.entities.Unit;
 import snorri.keyboard.Key;
 import snorri.main.GameWindow;
 import snorri.main.Main;
+import snorri.parser.Grammar;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -36,8 +38,6 @@ public class Inventory implements Serializable {
 	private static final int ORB_SLOTS = 2;
 	private static final int PAPYRUS_SLOTS = 3;
 	
-	private static final int SLOT_SPACE = 15;
-
 	public Inventory(Unit player) {
 		this.player = player;
 		fullInventory = new FullInventory(this);
@@ -127,7 +127,7 @@ public class Inventory implements Serializable {
 	
 	public boolean tryToShoot(World world, Unit focus, Vector movement, Vector dir) {
 		
-		if (weaponSlot == null || dir.equals(Vector.ZERO) || dir.notInPlane()) {
+		if (weaponSlot == null ||  dir == null || dir.equals(Vector.ZERO) || dir.notInPlane()) {
 			return false;
 		}
 		
@@ -164,7 +164,7 @@ public class Inventory implements Serializable {
 		}
 		int oldI = getIndex(newProjectile);
 		if (oldI != Integer.MAX_VALUE) {
-			orbSlots[oldI] = null;
+			removeOrb(oldI);
 		}
 		orbSlots[slot] = newProjectile;
 		return;
@@ -188,7 +188,6 @@ public class Inventory implements Serializable {
 			papyrusSlots[oldI] = null;
 		}
 		papyrusSlots[slot] = newPapyrus;
-		return;
 	}
 	
 	public Orb getSelectedOrb() {
@@ -196,53 +195,46 @@ public class Inventory implements Serializable {
 	}
 	
 	public void selectOrb(int i) {
-		selectedOrb = i;
+		if (getOrb(i) != null) {
+			selectedOrb = i;
+		}
+	}
+	
+	public void removeOrb(int i) {
+		orbSlots[i] = null;
+		if (selectedOrb == i) {
+			selectedOrb = 0;
+		}
 	}
 
 	
 	public void render(GameWindow window, Graphics g) {
-		
-		Vector topPos = new Vector(GameWindow.MARGIN, GameWindow.MARGIN);
-		
+				
 		for (int i = 0; i < ORB_SLOTS; i++) {
-			drawItemContainer(g, topPos, orbSlots[i], Orb.class, selectedOrb == i);
+			drawItemContainer(g, i, true, orbSlots[i], Orb.class, selectedOrb == i);
 		}
 		
 		for (int i = 0; i < PAPYRUS_SLOTS; i++) {
-			//will draw as selected/not selected based on cooldown
-			drawItemContainer(g, topPos, papyrusSlots[i], Papyrus.class);
+			drawItemContainer(g, i + 2, true, papyrusSlots[i], Papyrus.class);
 		}
-		
-		Vector bottomPos = new Vector(GameWindow.MARGIN, window.getDimensions().getY() - GameWindow.MARGIN - Item.getSlotWidth());
-		
-		drawItemContainer(g, bottomPos, weaponSlot, Weapon.class);
-		drawItemContainer(g, bottomPos, armorSlot, Armor.class);
+				
+		drawItemContainer(g, 0, false, weaponSlot, Weapon.class);
+		//drawItemContainer(g, 1, false, armorSlot, Armor.class);
 		
 	}
 	
-	//might be nicer if we split this into three different methods
-	//updates the vector
-	private void drawItemContainer(Graphics g, Vector pos, Item item, Class<? extends Item> slotType, boolean flag) {
+	private void drawItemContainer(Graphics g, int i, boolean top, Item item, Class<? extends Item> slotType) {
+		drawItemContainer(g, i, top, item, slotType, item != null && item.canUse());
+	}
+	
+	private void drawItemContainer(Graphics g, int i, boolean top, Item item, Class<? extends Item> slotType, boolean flag) {
 		
-		int width;	
 		if (item == null) {
-			if (slotType.equals(Papyrus.class)) {
-				width = Papyrus.drawEmptyPapyrus(g, pos, flag);
-			} else if (slotType.equals(Orb.class)) {
-				width = Orb.drawEmptyOrb(g, pos, flag);
-			} else {
-				width = Item.drawEmpty(g, pos);
-			}
+			Item.drawEmpty(g, i, top);
 		} else {
-			width = item.drawThumbnail(g, pos, flag);
+			item.drawThumbnail(g, i, top, flag);
 		}
 		
-		pos.add(width + SLOT_SPACE, 0);
-		
-	}
-	
-	private void drawItemContainer(Graphics g, Vector pos, Item item, Class<? extends Item> slotType) {
-		drawItemContainer(g, pos, item, slotType, !(item == null || !item.canUse()));
 	}
 	
 	private boolean compare(Droppable d1, Droppable d2, boolean specific) {
@@ -269,6 +261,16 @@ public class Inventory implements Serializable {
 		}
 		
 		TriggerType.ACQUIRE.activate(d.toString());
+		
+		if (d instanceof Item && ((Item) d).getSpell() != null) {
+			for (String word : Grammar.getWords(((Item) d).getSpell().getOrthography())) {
+				add(new VocabDrop(word));
+			}
+		}
+		
+		if (Main.getWindow() instanceof GameWindow && player instanceof Player) {
+			((GameWindow) Main.getWindow()).showMessage(d);
+		}
 		return fullInventory.add(d);
 
 	}

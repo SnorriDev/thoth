@@ -32,7 +32,8 @@ public class Trigger {
 		PRAY, //like broadcast, but callable by the player
 		DOOR_OPEN,
 		ACQUIRE,
-		KILL;
+		KILL,
+		ENCHANT;
 		
 		/**
 		 * Wrapper for activating triggers
@@ -158,8 +159,8 @@ public class Trigger {
 	 */
 	public void exec() {
 		Main.log("firing trigger " + name + "...");
-		while (!runnableActions.isEmpty()) {
-			runnableActions.poll().run();
+		while (!runnableActions.isEmpty()) { //TODO are there still bugs with runnables?
+			new Thread(runnableActions.poll()).start();
 		}
 	}
 	

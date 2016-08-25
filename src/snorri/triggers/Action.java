@@ -2,7 +2,10 @@ package snorri.triggers;
 
 import java.util.Map;
 
+import snorri.dialog.Dialog;
+import snorri.dialog.Objective;
 import snorri.entities.Entity;
+import snorri.main.FocusedWindow;
 import snorri.main.GamePanel;
 import snorri.main.GameWindow;
 import snorri.main.Main;
@@ -46,13 +49,16 @@ public abstract class Action {
 			}
 		}),
 		
-		DIALOG(new Action() {
+		SHOW_DIALOG(new Action() {
 			@Override
 			public Runnable build(World world, Map<String, Object> args) {
 				return new Runnable() {
 					@Override
 					public void run() {
-						//show msg on screen
+						GamePanel window = Main.getWindow();
+						if (window instanceof FocusedWindow) {
+							((FocusedWindow) window).showDialog((Dialog) args.get("dialog"));
+						}
 					}
 				};
 			}
@@ -66,7 +72,7 @@ public abstract class Action {
 					public void run() {
 						GamePanel window = Main.getWindow();
 						if (window instanceof GameWindow) {
-							((GameWindow) window).setObjective((String) args.get("msg"));
+							((GameWindow) window).setObjective((Objective) args.get("objective"));
 						} else {
 							Main.error("Setting objective in non-GameWindow");
 						}

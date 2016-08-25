@@ -8,16 +8,28 @@ import snorri.world.Vector;
 public class Spike extends Detector {
 
 	private static final long serialVersionUID = 1L;
-	private static final Animation ANIMATION = new Animation("/textures/objects/urn.png");
+	private static final Animation ANIMATION = new Animation("/textures/objects/spike.png");
+	private static final double SPIKE_DMG = 10d;
+	
+	private boolean hasDamaged = false;
 	
 	public Spike(Vector pos) {
 		super(pos, new RectCollider(new Vector(10, 26)));
 		animation = new Animation(ANIMATION);
+		treeMember = true;
 	}
 
 	@Override
 	public void onCollision(CollisionEvent e) {
-		return;
+		if (!hasDamaged && e.getTarget() instanceof Unit) {
+			((Unit) e.getTarget()).damage(SPIKE_DMG);
+			hasDamaged = true;
+		}
+	}
+	
+	@Override
+	public double getLifeSpan() {
+		return 0.75;
 	}
 
 }

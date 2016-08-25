@@ -1,17 +1,21 @@
 package snorri.overlay;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -48,6 +53,7 @@ import snorri.main.DialogMap;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.parser.Grammar;
+import snorri.triggers.Trigger.TriggerType;
 
 public class InventoryOverlay extends Overlay implements MouseListener, ListSelectionListener, DocumentListener, FocusListener {
 
@@ -56,6 +62,9 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	 */
 	
 	private static final long serialVersionUID = 1L;
+	private static final Image BACKGROUND = Main.getImage("/textures/hud/inventory.png");
+	protected static final Color SELECTED_BG = new Color(120, 96, 115);
+	protected static final Color BORDER = new Color(115, 93, 109);
 
 	private final Inventory inv;
 	private final FullInventory fullInv;
@@ -69,6 +78,9 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	
 	private final SortedListModel<Item> model;
 	private final Map<String, JComponent> vocabModel;
+	
+	private boolean editMode;
+	private List<String> spellsEnchanted;
 		
 	private class ItemCellRenderer implements ListCellRenderer<Item> {
 		@Override
@@ -77,10 +89,13 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			Key k = inv.getKey(item);
 			String text = item.toString() + (k == null ? "" : (" (" + k.getChar() + ")"));
 			JLabel label = new JLabel(text, item.getType().getIcon(), JLabel.LEFT);
-			label.setPreferredSize(new Dimension(290, 35));
+			label.setPreferredSize(new Dimension(216, 35));
 			label.setFont(label.getFont().deriveFont(inv.getIndex(item) == Integer.MAX_VALUE ? Font.PLAIN : Font.BOLD));
-			label.setBackground(isSelected ? SELECTED_BG : NORMAL_BG);
-			label.setOpaque(true);
+			if (isSelected) {
+				label.setBorder(getThinBorder());
+			}
+			label.setBackground(SELECTED_BG);
+			label.setOpaque(isSelected);
 			return label;
 		}
 	}
@@ -95,30 +110,43 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		inv = inventory;
 		fullInv = inventory.getFullInventory();
 		
+		this.editMode = editMode;
 		Droppable.setInventoryForComparison(inv);
 				
-		JPanel panel = new JPanel(new GridBagLayout());
+		JPanel panel = new JPanel(new GridBagLayout()) {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				g.drawImage(BACKGROUND, 0, 0, null);
+			}			
+		};
+		panel.setOpaque(false);
 		panel.setPreferredSize(new Dimension(1000, 618)); //golden ratio
 		GridBagConstraints c = new GridBagConstraints();
 		
 		setLayout(new GridBagLayout());
-		panel.setBackground(NORMAL_BG);
 		setOpaque(false);
+		
+		spellsEnchanted = new ArrayList<>();
 		
 		//filter item panel
 		model = fullInv.getItemModel();
 		list = new JList<Item>(model);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setLayoutOrientation(JList.VERTICAL);
-		list.setBackground(NORMAL_BG);
 		list.setVisibleRowCount(-1);
 		list.addListSelectionListener(this);
 		list.addKeyListener(this);
+		list.setOpaque(false);
 		list.setCellRenderer(new ItemCellRenderer());
 		
 		JScrollPane scrollPane = new JScrollPane(list);
-		scrollPane.setPreferredSize(new Dimension(300, 618));
-		scrollPane.setBorder(BorderFactory.createLineBorder(BORDER, 5));
+		//TODO make this look nice like other one
+		scrollPane.setPreferredSize(new Dimension(250, 618));
+		scrollPane.setOpaque(false);
+		scrollPane.getViewport().setOpaque(false);
+		scrollPane.setBorder(emptyBorder());
 				
 		c.fill = GridBagConstraints.NORTHWEST;
 		c.weightx = 0.25;
@@ -130,10 +158,10 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		//crafting space
 		craftingSpace = new JPanel();
 		craftingSpace.setLayout(new BoxLayout(craftingSpace, BoxLayout.Y_AXIS));
-		craftingSpace.setPreferredSize(new Dimension(700, 250));
+		craftingSpace.setPreferredSize(new Dimension(750, 204));
+		craftingSpace.setOpaque(false);
 		craftingSpace.addKeyListener(this);
-		craftingSpace.setBackground(NORMAL_BG);
-		craftingSpace.setBorder(BorderFactory.createLineBorder(BORDER, 5));
+		craftingSpace.setBorder(emptyBorder(4, 0));
 		
 		//the panel to show/hide
 		inputPanel = new JPanel();
@@ -142,10 +170,10 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		craftingSpace.add(inputPanel);
 		
 		field = new JEditorPane();
-		field.setContentType("text/html");
+		field.setEditorKit(getHTMLEditorKit());
 		field.setPreferredSize(new Dimension(650, 100));
-		field.setBorder(BorderFactory.createLineBorder(BORDER));
 		field.setBackground(SELECTED_BG);
+		field.setBorder(getThinBorder());
 		field.getDocument().addDocumentListener(this);
 		field.addKeyListener(this);
 		field.addFocusListener(this);
@@ -165,14 +193,14 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 		//vocab info space
 		JComponent vocabInfo = new JPanel();
-		vocabInfo.setPreferredSize(new Dimension(700, 368));
-		vocabInfo.setBackground(NORMAL_BG);
-		vocabInfo.setBorder(BorderFactory.createLineBorder(BORDER, 5));
+		vocabInfo.setOpaque(false);
 		vocabInfo.setLayout(new GridLayout(0, 1));
 		
 		vocabBox = new JPanel();
-		vocabModel = new HashMap<>();
 		vocabBox.setOpaque(false);
+		vocabBox.setLayout(new WrapLayout());
+		vocabBox.setOpaque(false);
+		vocabModel = new HashMap<>();
 		
 		for (VocabDrop drop : fullInv.getVocab()) {
 			addWordPanel(drop);
@@ -187,11 +215,17 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			vocabInfo.add(buttons);
 		}
 		
+		scrollPane = new JScrollPane(vocabInfo);
+		scrollPane.setPreferredSize(new Dimension(750, 414));
+		scrollPane.setOpaque(false);
+		scrollPane.getViewport().setOpaque(false);
+		scrollPane.setBorder(emptyBorder(4, 4));
+		
 		c.fill = GridBagConstraints.BASELINE;
 		c.gridheight = 1;
 		c.gridx = 1;
 		c.gridy = 1;
-		panel.add(vocabInfo, c);
+		panel.add(scrollPane, c);
 		
 		add(panel);
 				
@@ -218,6 +252,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 		JPanel wordPanel = new JPanel();
 		wordPanel.setBackground(SELECTED_BG);
+		wordPanel.setBorder(getThinBorder());
 		
 		JLabel icon = new JLabel(Hieroglyphs.getIcon(drop.getOrthography()));
 		JLabel orth = new JLabel(drop.getOrthography());
@@ -237,14 +272,14 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 	}
 	
-	private void add(Droppable d) {
+	private boolean add(Droppable d) {
 		
 		if (d == null) {
 			Main.error("adding null item to inventory");
 		}
 		
 		if (!inv.add(d)) {
-			return;
+			return false;
 		}
 		
 		if (d instanceof Item) {
@@ -254,12 +289,15 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			addWordPanel((VocabDrop) d);
 			vocabBox.revalidate();
 		}
+		
+		return true;
+		
 	}
 	
-	private void delete(Droppable d, boolean specific) {
+	private boolean delete(Droppable d, boolean specific) {
 		
 		if (!inv.remove(d, specific)) {
-			return;
+			return false;
 		}
 		
 		if (d instanceof Item) {
@@ -270,6 +308,9 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			vocabModel.remove(((VocabDrop) d).getOrthography());
 			vocabBox.revalidate();
 		}
+		
+		return true;
+		
 	}
 	
 	@Override
@@ -306,19 +347,12 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	public void keyPressed(KeyEvent e) {
 		
 		super.keyPressed(e);
-		
-		if (e.getSource() == field || list.getSelectedValue() == null) {
-			return;
-		}
-		
-		if (Key.DELETE.isPressed(e)) {
-			delete(list.getSelectedValue(), true);
-		}
-		
+				
 		if (list.getSelectedValue() instanceof Orb) {
 			for (int i = 0; i < Inventory.ORB_KEYS.length; i++) {
 				if (Inventory.ORB_KEYS[i].isPressed(e)) {
 					inv.setOrb(i, (Orb) list.getSelectedValue());
+					model.redraw();
 				}
 			}
 		}
@@ -327,6 +361,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			for (int i = 0; i < Inventory.PAPYRUS_KEYS.length; i++) {
 				if (Inventory.PAPYRUS_KEYS[i].isPressed(e)) {
 					inv.setPapyrus(i, (Papyrus) list.getSelectedValue());
+					model.redraw();
 				}
 			}
 		}
@@ -335,12 +370,23 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			
 			if (list.getSelectedValue() instanceof Weapon) {
 				inv.setWeapon((Weapon) list.getSelectedValue());
+				model.redraw();
 			}
 			
 			if (list.getSelectedValue() instanceof Armor) {
 				inv.setArmor((Armor) list.getSelectedValue());
+				model.redraw();
 			}
 			
+		}
+		
+		if (e.getSource() == field || list.getSelectedValue() == null || !editMode) {
+			return;
+		}
+		
+		if (Key.DELETE.isPressed(e)) {
+			delete(list.getSelectedValue(), true);
+			model.redraw();
 		}
 			
 	}
@@ -371,7 +417,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			enchantButton.setEnabled(Grammar.isValidSentence(Grammar.parseString(text)));
 		} else {
 			enchantButton.setEnabled(Grammar.isValidSentence(Grammar.parseString(text)) && fullInv.knowsWords(Grammar.getWords(text)));
-	
 		}
 	}
 
@@ -422,6 +467,18 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+	}
+	
+	@Override
+	protected void onClose() {
+		for (String spell : spellsEnchanted) {
+			TriggerType.ENCHANT.activate(spell);
+		}
+		super.onClose();
+	}
+	
+	private Border getThinBorder() {
+		return BorderFactory.createLineBorder(BORDER);
 	}
 
 }

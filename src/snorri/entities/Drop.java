@@ -3,7 +3,7 @@ package snorri.entities;
 import snorri.events.CollisionEvent;
 import snorri.inventory.Droppable;
 import snorri.inventory.Item;
-import snorri.main.GameWindow;
+import snorri.inventory.RandomDrop;
 import snorri.main.Main;
 import snorri.parser.Grammar;
 import snorri.world.Vector;
@@ -33,15 +33,15 @@ public class Drop extends Detector {
 	}
 	
 	public Droppable getPrize() {
+		if (prize instanceof RandomDrop) {
+			return ((RandomDrop) prize).getDroppable();
+		}
 		return prize;
 	}
 	
 	@Override
 	public void onCollision(CollisionEvent e) {
 		if (e.getTarget() instanceof Player) {
-			if (Main.getWindow() instanceof GameWindow) {
-				((GameWindow) Main.getWindow()).showDialog(getPrize());
-			}
 			((Player) e.getTarget()).getInventory().add(getPrize());
 			e.getWorld().delete(this);
 		}

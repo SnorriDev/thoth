@@ -24,7 +24,7 @@ public class Pray extends VerbDef {
 
 	@Override
 	public String toString() {
-		return "pray";
+		return "pray to (name)";
 	}
 
 }

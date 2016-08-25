@@ -71,11 +71,8 @@ public class Player extends Unit implements Carrier {
 		walk(world, window.getMovementVector(), deltaTime);
 		
 		Vector movement = window.getMovementVector();
-		if (window.isShooting()) {
-			Vector dir = window.getMousePosRelative().copy().normalize();
-			inventory.tryToShoot(world, this, movement.copy(), dir);
-		}
-		inventory.tryToShoot(world, this, movement.copy(), window.getAltFireVector());
+		Vector dir = window.getShotDirection();
+		inventory.tryToShoot(world, this, movement, dir);
 		
 		//TODO figure out what to do about momentum
 		

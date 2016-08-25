@@ -44,10 +44,6 @@ public class KeyStates {
 		return new Vector(getInt(Key.D) - getInt(Key.A), getInt(Key.S) - getInt(Key.W));
 	}
 	
-	public Vector getAltFireVector() {
-		return new Vector(getInt(Key.RIGHT_FIRE) - getInt(Key.LEFT_FIRE), getInt(Key.DOWN_FIRE) - getInt(Key.UP_FIRE));
-	}
-	
 	public void purge() {
 		for (int i = 0; i < states.length; i ++) {
 			states[i] = false;

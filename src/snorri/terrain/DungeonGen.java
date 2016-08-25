@@ -69,6 +69,10 @@ public class DungeonGen extends TerrainGen {
 	public DungeonGen(int x, int y) {
 		super(x, y);
 	}
+	
+	public DungeonGen(Vector v) {
+		super(v);
+	}
 
 	@Override
 	public Level genLevel() {

@@ -524,6 +524,9 @@ public class Level implements Editable {
 	private void updateSurroundingContext(Vector v) {
 		for (int x = (v.getX() * Tile.WIDTH - Unit.RADIUS_X) / Tile.WIDTH - 1; x <= (v.getX() * Tile.WIDTH + Unit.RADIUS_X) / Tile.WIDTH + 1; x++) {
 			for (int y = (v.getY() * Tile.WIDTH - Unit.RADIUS_Y) / Tile.WIDTH - 1; y <= (v.getY() * Tile.WIDTH + Unit.RADIUS_Y) / Tile.WIDTH + 1; y++) {
+				if (getTileGrid(x, y) == null) {
+					continue;
+				}
 				map[x][y].computeSurroundingsPathable(x, y, this);			
 			}
 		}
@@ -695,7 +698,7 @@ public class Level implements Editable {
 	
 	private void updateMasksGrid(Vector pos) {
 		getTileGrid(pos).setBitMasks(this, pos);
-		for (Vector trans : Mask.NEIGHBORS) {
+		for (Vector trans : Mask.NEIGHBORS_AND_CORNERS) {
 			Vector p = pos.copy().add(trans);
 			if (getTileGrid(p) != null) {
 				getTileGrid(p).setBitMasks(this, p);
@@ -709,11 +712,11 @@ public class Level implements Editable {
 	}
 	
 	/**
-	 * Returns an array of bitmasks (4 maximum).
+	 * Returns an array of bitmasks (8 maximum).
 	 * Excess space in the array is null.
 	 */
 	public Mask[] getBitMasks(int x, int y) {
-		Mask[] masks = new Mask[4];
+		Mask[] masks = new Mask[8];
 		
 		Tile tile = getTileGrid(x, y);
 		if (tile == null || tile.getType().isAtTop()) {
@@ -726,10 +729,28 @@ public class Level implements Editable {
 			if (t != null && !t.getType().isAtTop() && tile.compareTo(t) > 0) {
 				for (int j = 0; j < masks.length; j++) {
 					if (masks[j] == null) {
-						masks[j] = new Mask(t);
+						masks[j] = new Mask(t, false);
 					}
 					if (masks[j].hasTile(t)) {
 						masks[j].add(bitVal);
+						break;
+					}
+				}
+			}
+			bitVal *= 2;
+		}
+		
+		bitVal = 1;
+		for (Vector v: Mask.CORNERS) {
+			Tile t = getTileGrid(v.copy().add(x, y));
+			if (t != null && !t.getType().isAtTop() && tile.compareTo(t) > 0) {
+				for (int j = 0; j < masks.length; j++) {
+					if (masks[j] == null) {
+						masks[j] = new Mask(t, true);
+					}
+					if (masks[j].hasTile(t) && masks[j].isCorner()) {
+						masks[j].add(bitVal);
+						break;
 					}
 				}
 			}

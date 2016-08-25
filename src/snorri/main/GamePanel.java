@@ -17,7 +17,7 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 	private static final int FRAME_DELTA = 15; //33 -> 30 FPS (20 -> 50 FPS
 	
 	private boolean stopped = false;
-
+	
 	public static double getBaseDelta() {
 		return FRAME_DELTA / 1000d;
 	}

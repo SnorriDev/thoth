@@ -3,6 +3,7 @@ package snorri.nonterminals;
 import java.util.ArrayList;
 import java.util.List;
 
+import snorri.main.Main;
 import snorri.parser.Node;
 
 public abstract class NonTerminal implements Node {
@@ -20,8 +21,6 @@ public abstract class NonTerminal implements Node {
 	
 	@Override
 	public String toString() {
-		//TODO: traverse full sentence
-		//java 8 makes this nice lol
 		return getClass().getSimpleName();
 	}
 	
@@ -50,6 +49,25 @@ public abstract class NonTerminal implements Node {
 		}
 		
 		return false;
+	}
+	
+	@Override
+	public NonTerminal copy() {
+		List<Node> newChildren = new ArrayList<>();
+		for (Node child : children) {
+			newChildren.add(child.copy());
+		}
+		NonTerminal copy;
+		try {
+			copy = getClass().newInstance();
+			copy.setChildren(newChildren);
+			return copy;
+		} catch (InstantiationException | IllegalAccessException e) {
+			Main.error("could not copy NonTerminal");
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 	
 }

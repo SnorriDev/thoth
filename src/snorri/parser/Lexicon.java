@@ -87,7 +87,7 @@ public class Lexicon {
 		lexicon.put("mw", new StaticDef(Noun.class, TileType.WATER));
 		lexicon.put("Say", new StaticDef(Noun.class, TileType.SAND));
 		lexicon.put("xt", new StaticDef(Noun.class, TileType.LAVA)); //technically this is fire
-		lexicon.put("snbt", new StaticDef(Noun.class, Urn.class));
+		lexicon.put("snbt", new StaticDef(Noun.class, Urn.class)); //TODO icon
 		lexicon.put("bit", new StaticDef(Noun.class, null)); //TODO: bee
 		lexicon.put("Hnyt", new StaticDef(Noun.class, Spike.class)); //TODO: spike
 		
@@ -99,7 +99,7 @@ public class Lexicon {
 		lexicon.put("nbt", new StaticDef(AbstractNoun.class, AbstractSemantics.SOURCE)); //means lord literally
 		lexicon.put("Axt", new StaticDef(AbstractNoun.class, AbstractSemantics.FLOOD));
 		lexicon.put("Da", new StaticDef(AbstractNoun.class, AbstractSemantics.STORM));
-		
+				
 		//Names
 		lexicon.put("DHwty", new StaticDef(Name.class, "DHwty")); //TODO icon; name of Thoth
 				
@@ -112,7 +112,6 @@ public class Lexicon {
 		
 		//Object Pronouns
 		lexicon.put("wi", new FirstObjectPronoun());
-		lexicon.put("w", new FirstObjectPronoun());
 		lexicon.put("tn", new SecondObjectPronoun());
 		lexicon.put("sw", new ThirdObjectPronoun());
 		lexicon.put("sy", new ThirdObjectPronoun());
@@ -135,7 +134,7 @@ public class Lexicon {
 		lexicon.put("wn", new Open());
 		lexicon.put("sS", new Write()); //TODO icon
 		lexicon.put("dbH", new Pray());
-		lexicon.put("slow", new Slow());
+		lexicon.put("sqbH", new Slow());
 		//lexicon.put("sxpr", new CreateUnit());
 		
 		//Conditionals

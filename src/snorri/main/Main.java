@@ -20,7 +20,10 @@ import javax.swing.JLayeredPane;
 import javax.swing.UIManager;
 
 import net.sourceforge.yamlbeans.YamlReader;
+import snorri.dialog.Dialog;
+import snorri.dialog.Objective;
 import snorri.hieroglyphs.Hieroglyphs;
+import snorri.inventory.RandomDrop;
 import snorri.parser.Lexicon;
 import snorri.terrain.Structure;
 import snorri.terrain.TerrainGen;
@@ -28,7 +31,7 @@ import snorri.world.Vector;
 import snorri.world.World;
 
 public class Main {
-
+	
 	private static GamePanel window;
 	private static GamePanel outerOverlay;
 
@@ -78,9 +81,9 @@ public class Main {
 
 		Lexicon.load();
 		Hieroglyphs.load();
-		
+		RandomDrop.load();
 		setupFont();
-		
+				
 		frame = new JFrame("Spoken Word");
 		frame.setSize(1800, 900);
 		frame.addComponentListener(new Main.ResizeListener());
@@ -167,6 +170,8 @@ public class Main {
 		reader.getConfig().setClassTag("spawn", Vector.class);
 		reader.getConfig().setClassTag("vector", Vector.class);
 		reader.getConfig().setClassTag("struct", Structure.class);
+		reader.getConfig().setClassTag("objective", Objective.class);
+		reader.getConfig().setClassTag("dialog", Dialog.class);
 		return reader;
 	}
 	
@@ -195,7 +200,7 @@ public class Main {
 		}
 
 		// otherwise return that directory
-		if (!f.isDirectory()) {
+		if (!f.isDirectory() && !f.mkdir()) {
 			return new File(fd.getDirectory());
 		}
 
@@ -250,21 +255,47 @@ public class Main {
 	public static JLayeredPane getLayeredPane() {
 		return pane;
 	}
+	
+	private static void launchWorld(World world) {
+		if (world == null) {
+			return;
+		}
+		setWindow(new GameWindow(world));
+	}
 
 	public static void launchMenu() {
 		setOverlay(null);
 		setWindow(new MainMenu());
 	}
 
-	public static void launchGame(World world) {
-		setWindow(new GameWindow(world));
+	public static void launchGame(WorldSelection worldSelect) {
+		loadInto(new Runnable() {
+			@Override
+			public void run() {
+				World w = worldSelect.loadWorld();
+				if (w != null) {
+					launchWorld(worldSelect.loadWorld());
+				} else {
+					setWindow(new MainMenu());
+				}
+			}
+		});
 	}
 	
 	public static void launchGame(TerrainGen gen) {
 		loadInto(new Runnable() {
 			@Override
 			public void run() {
-				launchGame(gen.genWorld());
+				launchWorld(gen.genWorld());
+			}
+		});
+	}
+	
+	public static void launchGame(World world) {
+		loadInto(new Runnable() {
+			@Override
+			public void run() {
+				launchWorld(world);
 			}
 		});
 	}
@@ -280,11 +311,12 @@ public class Main {
 	}
 
 	/**
-	 * show a loading screen while the thread runs
+	 * show a loading screen while a Runnable runs
 	 * 
 	 * @param proc
-	 *            a Runnable whose run() method will be invoked. run() should
-	 *            change the screen to something cooler when it's done
+	 *            a Runnable whose <code>run()</code> method will be invoked.
+	 *            This Runnable should change the screen to the target window
+	 *            when the loading is done
 	 */
 	public static void loadInto(Runnable proc) {
 		setWindow(new LoadingScreen());

@@ -9,10 +9,10 @@ public enum Key implements Binding {
 	S(83, 's'),
 	D(68, 'd'),
 	
-	LEFT_FIRE(37, ' '),
-	UP_FIRE(38, ' '),
-	RIGHT_FIRE(39, ' '),
-	DOWN_FIRE(40, ' '),
+	SHOOT_LEFT(37, ' '),
+	SHOOT_UP(38, ' '),
+	SHOOT_RIGHT(39, ' '),
+	SHOOT_DOWN(40, ' '),
 	
 	ONE(49, '1'),
 	TWO(50, '2'),
