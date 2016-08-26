@@ -7,7 +7,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -26,12 +29,14 @@ import snorri.entities.Player;
 import snorri.entities.Portal;
 import snorri.inventory.Carrier;
 import snorri.keyboard.Key;
+import snorri.pathfinding.PathNode;
 import snorri.terrain.TerrainGen;
 import snorri.world.Campaign.WorldId;
 import snorri.world.Editable;
 import snorri.world.Level;
 import snorri.world.Playable;
 import snorri.world.Tile;
+import snorri.world.Tile.TileType;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -116,7 +121,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
-		
+
 		menuItem = new JMenuItem("Compute Pathing", KeyEvent.VK_P);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
@@ -241,7 +246,8 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			Class<?> gen = inputs.getClass("Class");
 			if (gen.isAssignableFrom(TerrainGen.class)) {
 				try {
-					Object g = gen.getConstructor(int.class, int.class).newInstance(inputs.getInteger("Width"), inputs.getInteger("Height"));
+					Object g = gen.getConstructor(int.class, int.class).newInstance(inputs.getInteger("Width"),
+							inputs.getInteger("Height"));
 					env = ((TerrainGen) g).genWorld();
 				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 						| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
@@ -441,28 +447,63 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		Vector location = getMousePosAbsolute().copy();
 		int x = location.getX() / Tile.WIDTH;
 		int y = location.getY() / Tile.WIDTH;
+		int w = env.getLevel().getWidth();
+		int h = env.getLevel().getHeight();
 
 		Tile t = env.getLevel().getTileGrid(x, y);
-		if (selectedTile != null && env.getLevel().getTileGrid(x, y) != null && t != null
-				&& !t.equals(selectedTile)) {
+
+		ArrayList<Vector> willFill = computeConnectedSubGraph(new Vector(x, y), new boolean[w][h]);
+
+		if (selectedTile != null && env.getLevel().getTileGrid(x,y) != null && t != null && !t.equals(selectedTile)) {
 			autosaveUndo();
-			env.getLevel().setTileGrid(x, y, new Tile(selectedTile));
-			fill_helper(x + 1, y, t);
-			fill_helper(x - 1, y, t);
-			fill_helper(x, y + 1, t);
-			fill_helper(x, y - 1, t);
+			for (Vector v : willFill) {
+				env.getLevel().setTileGrid(v, new Tile(selectedTile));
+			}
 		}
+		/*
+		 * if (selectedTile != null && env.getLevel().getTileGrid(x, y) != null
+		 * && t != null && !t.equals(selectedTile)) { autosaveUndo();
+		 * env.getLevel().setTileGrid(x, y, new Tile(selectedTile));
+		 * fill_helper(x + 1, y, t); fill_helper(x - 1, y, t); fill_helper(x, y
+		 * + 1, t); fill_helper(x, y - 1, t); }
+		 */
 	}
 
-	public void fill_helper(int x, int y, Tile t) {
-		if (selectedTile != null && env.getLevel().getNewTileGrid(x, y) != null && t != null
-				&& env.getLevel().getNewTileGrid(x, y).equals(t)) {
-			env.getLevel().setTileGrid(x, y, selectedTile);
-			fill_helper(x + 1, y, t);
-			fill_helper(x - 1, y, t);
-			fill_helper(x, y + 1, t);
-			fill_helper(x, y - 1, t);
+	/*
+	 * public void fill_helper(int x, int y, Tile t) { if (selectedTile != null
+	 * && env.getLevel().getNewTileGrid(x, y) != null && t != null &&
+	 * env.getLevel().getNewTileGrid(x, y).equals(t)) {
+	 * env.getLevel().setTileGrid(x, y, new Tile(selectedTile)); fill_helper(x +
+	 * 1, y, t); fill_helper(x - 1, y, t); fill_helper(x, y + 1, t);
+	 * fill_helper(x, y - 1, t); } }
+	 */
+
+	private ArrayList<Vector> computeConnectedSubGraph(Vector start, boolean[][] visited) { // borrowed
+																							// from
+																							// level.java
+		final Tile START_TILE = env.getLevel().getTileGrid(start);
+
+		ArrayList<Vector> graph = new ArrayList<Vector>();
+		Queue<Vector> searchQ = new LinkedList<Vector>();
+		searchQ.add(start);
+		Vector pos;
+
+		while (!searchQ.isEmpty()) {
+
+			pos = searchQ.poll();
+			if (env.getLevel().getTileGrid(pos) == null || !env.getLevel().getTileGrid(pos).equals(START_TILE) || visited[pos.getX()][pos.getY()]) {
+				continue;
+			}
+
+			visited[pos.getX()][pos.getY()] = true;
+			if (env.getLevel().getTileGrid(pos).equals(START_TILE))
+				graph.add(pos);
+
+			for (Vector v : PathNode.getNeighbors(pos)) {
+				searchQ.add(v);
+			}
 		}
+		return graph;
 	}
 
 	private void openEntityInventory() {
