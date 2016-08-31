@@ -58,5 +58,16 @@ public class VocabDrop implements Droppable {
 	public Image getTexture() {
 		return Hieroglyphs.getImage(orthography);
 	}
+
+	@Override
+	public int compareTo(Droppable o) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Droppable copy() {
+		return new VocabDrop(orthography);
+	}
 	
 }

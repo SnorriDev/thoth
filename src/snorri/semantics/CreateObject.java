@@ -1,6 +1,7 @@
 package snorri.semantics;
 
 import snorri.entities.Entity;
+import snorri.entities.Spike;
 import snorri.world.Tile;
 import snorri.world.Vector;
 
@@ -33,7 +34,7 @@ public class CreateObject extends VerbDef {
 		}
 		
 		if (obj instanceof Class<?> && Entity.canSpawn((Class<?>) obj)) {
-			if (e.getWorld().tileHasEntity(e.getLocative().copy().toGridPos())) {
+			if (e.getWorld().tileHasEntity(e.getLocative().copy().toGridPos()) && obj != Spike.class) {
 				return false;
 			}
 			return Entity.spawnNew(e.getWorld(), e.getLocative(), (Class<? extends Entity>) obj) != null;

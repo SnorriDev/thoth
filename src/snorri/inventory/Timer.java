@@ -28,7 +28,7 @@ public class Timer implements Serializable {
 			return false;
 		}
 		
-		currentTime = 0d;
+		hardReset();
 		return true;
 		
 	}

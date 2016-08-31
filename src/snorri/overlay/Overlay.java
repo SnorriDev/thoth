@@ -1,6 +1,5 @@
 package snorri.overlay;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -9,6 +8,7 @@ import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.swing.BorderFactory;
@@ -16,6 +16,9 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.border.Border;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.StyleSheet;
 
 import snorri.keyboard.Key;
 import snorri.main.FocusedWindow;
@@ -24,10 +27,9 @@ import snorri.main.Main;
 
 public abstract class Overlay extends GamePanel implements KeyListener {
 	
-	//private final Color GRAYED_OUT = new Color(50, 50, 50, 50);
-	protected static final Color NORMAL_BG = new Color(255, 179, 71);
-	protected static final Color SELECTED_BG = new Color(255, 150, 71);
-	protected static final Color BORDER = new Color(255, 130, 71);
+	
+	private static final long serialVersionUID = 1L;
+	
 	private static final Image BACKGROUND = Main.getImage("/textures/hud/textBox.png");
 	
 	protected final FocusedWindow window;
@@ -36,17 +38,17 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 
 		private static final long serialVersionUID = 1L;
 		private final JTextPane pane;
-		
+				
 		public TextPane() {
 			
 			setOpaque(false);
 			setPreferredSize(new Dimension(BACKGROUND.getWidth(null), BACKGROUND.getHeight(null)));
-			setBorder(BorderFactory.createCompoundBorder(getBorder(), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+			setBorder(emptyBorder());
 			setLayout(new GridBagLayout());
 			GridBagConstraints c = new GridBagConstraints();
 			
 			pane = new JTextPane();
-			pane.setContentType("text/html");
+			pane.setEditorKit(getHTMLEditorKit());
 			pane.setOpaque(false);
 			pane.setEditable(false);
 			pane.setMaximumSize(new Dimension(350, 10000));
@@ -96,8 +98,14 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 		addKeyListener(this);
 	}
 	
-	private static final long serialVersionUID = 1L;
-
+	public static Border emptyBorder(int xPad, int yPad) {
+		return BorderFactory.createEmptyBorder(16 + xPad, 16 + yPad, 16, 16);
+	}
+	
+	public static Border emptyBorder() {
+		return emptyBorder(0, 0);
+	}
+	
 	@Override
 	public void keyTyped(KeyEvent e) {
 	}
@@ -120,6 +128,19 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 		if (Key.ESC.isPressed(e)) {
 			window.unpause();
 		}
+	}
+		
+	public HTMLEditorKit getHTMLEditorKit() {
+		HTMLEditorKit kit = new HTMLEditorKit();
+		try {
+			StyleSheet s = new StyleSheet();
+			s.setBase(Main.getDir().toURI().toURL());
+			s.importStyleSheet(Main.getFile("/info/style.css").toURI().toURL());
+			kit.setStyleSheet(s);
+		} catch (MalformedURLException e) {
+			Main.log("could not load stylesheet");
+		}
+		return kit;
 	}
 	
 }

@@ -11,5 +11,7 @@ public interface Node extends Serializable {
 	public boolean altersMovement();
 	
 	public String getOrthography();
+	
+	public Node copy();
 		
 }

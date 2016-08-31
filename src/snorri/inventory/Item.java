@@ -3,6 +3,7 @@ package snorri.inventory;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.ImageIcon;
 
@@ -46,8 +47,8 @@ public abstract class Item implements Droppable {
 			INACTIVE_BORDERS_TOP[i] = Main.getImage("/textures/hud/items/item" + (i + 1) + "Alt.png");
 		}
 		
-		ACTIVE_BORDER_WEAPON = Main.getImage("/textures/hud/items/itemSpace.png");
-		INACTIVE_BORDER_WEAPON = Main.getImage("/textures/hud/items/itemSpaceAlt.png");
+		ACTIVE_BORDER_WEAPON = Main.getImage("/textures/hud/items/itemMouse.png");
+		INACTIVE_BORDER_WEAPON = Main.getImage("/textures/hud/items/itemMouseAlt.png");
 		
 	}
 	
@@ -377,6 +378,22 @@ public abstract class Item implements Droppable {
 	public void resetTimer() {
 		if (timer != null) {
 			timer.activate();
+		}
+	}
+	
+	@Override
+	public Item copy() {
+		//TODO copy spell/name?
+		try {
+			Item copy = getClass().getConstructor(ItemType.class).newInstance(type);
+			copy.nickname = nickname;
+			copy.spell = spell.copy();
+			return copy;
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			Main.error("could not copy Item");
+			e.printStackTrace();
+			return null;
 		}
 	}
 

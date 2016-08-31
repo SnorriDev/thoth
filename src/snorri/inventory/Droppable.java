@@ -23,6 +23,9 @@ public interface Droppable extends Serializable, Comparable<Droppable> {
 	}
 	
 	public static Droppable fromString(String raw) {
+		if (raw.startsWith("!")) {
+			return new RandomDrop(raw.substring(1));
+		}
 		ItemType type = ItemType.fromString(raw);
 		if (type != null) {
 			return type.getNew();
@@ -71,5 +74,7 @@ public interface Droppable extends Serializable, Comparable<Droppable> {
 	default String toUniqueString() {
 		return toString() + hashCode();
 	}
+	
+	public Droppable copy();
 	
 }

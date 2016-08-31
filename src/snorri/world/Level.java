@@ -49,6 +49,8 @@ public class Level implements Editable {
 			}
 		}
 		
+		computePathfinding();
+		
 	}
 	
 	public Level(Vector v, TileType bg) {
@@ -522,6 +524,9 @@ public class Level implements Editable {
 	private void updateSurroundingContext(Vector v) {
 		for (int x = (v.getX() * Tile.WIDTH - Unit.RADIUS_X) / Tile.WIDTH - 1; x <= (v.getX() * Tile.WIDTH + Unit.RADIUS_X) / Tile.WIDTH + 1; x++) {
 			for (int y = (v.getY() * Tile.WIDTH - Unit.RADIUS_Y) / Tile.WIDTH - 1; y <= (v.getY() * Tile.WIDTH + Unit.RADIUS_Y) / Tile.WIDTH + 1; y++) {
+				if (getTileGrid(x, y) == null) {
+					continue;
+				}
 				map[x][y].computeSurroundingsPathable(x, y, this);			
 			}
 		}
@@ -707,7 +712,7 @@ public class Level implements Editable {
 	}
 	
 	/**
-	 * Returns an array of bitmasks (4 maximum).
+	 * Returns an array of bitmasks (8 maximum).
 	 * Excess space in the array is null.
 	 */
 	public Mask[] getBitMasks(int x, int y) {
@@ -728,6 +733,7 @@ public class Level implements Editable {
 					}
 					if (masks[j].hasTile(t)) {
 						masks[j].add(bitVal);
+						break;
 					}
 				}
 			}
@@ -744,6 +750,7 @@ public class Level implements Editable {
 					}
 					if (masks[j].hasTile(t) && masks[j].isCorner()) {
 						masks[j].add(bitVal);
+						break;
 					}
 				}
 			}
@@ -828,6 +835,14 @@ public class Level implements Editable {
 //				}
 //			}
 //		}
+	}
+	
+	public int getWidth() {
+		return dim.getX();
+	}
+	
+	public int getHeight() {
+		return dim.getY();
 	}
 	
 }

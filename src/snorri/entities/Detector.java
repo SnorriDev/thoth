@@ -1,5 +1,6 @@
 package snorri.entities;
 
+import snorri.collisions.Collider;
 import snorri.events.CollisionEvent;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -9,6 +10,7 @@ public abstract class Detector extends Entity {
 	private static final long serialVersionUID = 1L;
 	protected float age; //set age to -1 to make it not despawn
 	protected boolean treeMember = false;
+	protected static final int DEFAULT_LIFESPAN = 4;
 	
 	public Detector(Vector pos, int r) {
 		super(pos, r);
@@ -17,6 +19,11 @@ public abstract class Detector extends Entity {
 	
 	public Detector(Entity e) {
 		super(e);
+		age = 0;
+	}
+
+	public Detector(Vector pos, Collider collider) {
+		super(pos, collider);
 		age = 0;
 	}
 
@@ -43,7 +50,7 @@ public abstract class Detector extends Entity {
 	}
 	
 	protected double getLifeSpan() {
-		return 4;
+		return DEFAULT_LIFESPAN;
 	}
 	
 	protected boolean shouldDespawn() {

@@ -1,17 +1,18 @@
 package snorri.dialog;
 
-public class Dialog {
+/**
+ * Wrapper class to read dialog from YAML file
+ */
 
-	/**
-	 * Wrapper class to read dialog from YAML file
-	 */
+public class Dialog {
 	
+	/**HTML text to show*/
 	public String text = "";
 	public String image = null;
 	
+	//TODO some sort of action on click?
+	
 	public Dialog() {
 	}
-	
-	//TODO method to contain JComponent holding dialog?
-	
+		
 }
