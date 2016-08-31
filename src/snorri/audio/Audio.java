@@ -46,6 +46,10 @@ public class Audio {
 		
 	}
 	
+	public static void loopClip(Clip clip) {
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
+	}
+	
 	public static void playClip(Clip clip) {
 		new Thread(new Runnable() {
 			@Override

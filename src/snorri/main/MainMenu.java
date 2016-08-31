@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import snorri.audio.Music;
 import snorri.terrain.DungeonGen;
 import snorri.terrain.TerrainGen;
 import snorri.world.World;
@@ -31,8 +32,15 @@ public class MainMenu extends GamePanel {
 		menu.add(createButton("World Editor"));
 		add(menu);
 		
+		Music.MAIN_THEME.play();
+		
 	}
 
+	@Override
+	public void onClose() {
+		Music.MAIN_THEME.stop();
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
