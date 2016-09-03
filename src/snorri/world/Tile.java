@@ -15,6 +15,7 @@ import snorri.semantics.Nominal;
 public class Tile implements Comparable<Tile> {
 	
 	public static final int	WIDTH	= 16;
+	public static final BufferedImage DEFAULT_TEXTURE = Main.DEFAULT_TEXTURE;
 									
 	private TileType type;
 	private int style;
@@ -137,8 +138,8 @@ public class Tile implements Comparable<Tile> {
 			Main.getImage("/textures/tiles/wall06.png"),
 			Main.getImage("/textures/tiles/wall07.png")}, true),
 		TREE(false, Main.getImage("/textures/tiles/tree00.png")),
-		FOUNDATION(false, Main.getImage("/textures/tiles/default00.png")),
-		HUT(false, Main.getImage("/textures/tiles/default00.png")),
+		FOUNDATION(false, DEFAULT_TEXTURE),
+		HUT(false, DEFAULT_TEXTURE),
 		WATER(false, true, new BufferedImage[] {
 			Main.getImage("/textures/tiles/water00.png"),
 			Main.getImage("/textures/tiles/water01.png")}),
@@ -163,7 +164,7 @@ public class Tile implements Comparable<Tile> {
 			this(true);
 		}
 		TileType(boolean pathable) {
-			this(pathable, new BufferedImage[] {Main.getImage("/textures/tiles/default00.png")});
+			this(pathable, new BufferedImage[] {DEFAULT_TEXTURE});
 		}
 		
 		TileType(boolean pathable, BufferedImage texture) {
@@ -224,13 +225,17 @@ public class Tile implements Comparable<Tile> {
 		}
 		
 		public BufferedImage[] getTextures() {
-			return textures;
+			if (textures != null)
+					return textures;
+			else
+				Main.error("no textures found, returning default texture");
+				return new BufferedImage[] {DEFAULT_TEXTURE};
 		}
 		
 		public BufferedImage getTexture(int index) {
 			if (index >= textures.length) {
 				Main.error("texture not found, index out of bounds, returning default texture");
-				return Main.getImage("/textures/tiles/default00.png");
+				return DEFAULT_TEXTURE;
 			}
 			return textures[index];
 		}

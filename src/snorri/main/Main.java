@@ -39,6 +39,8 @@ public class Main {
 	private static JLayeredPane pane;
 
 	private static Font customFont;
+	
+	public static final BufferedImage DEFAULT_TEXTURE = getImage("/textures/tiles/default00.png");
 
 	public static class ResizeListener implements ComponentListener {
 

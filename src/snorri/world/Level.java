@@ -837,4 +837,12 @@ public class Level implements Editable {
 //		}
 	}
 	
+	public int getWidth() {
+		return dim.getX();
+	}
+	
+	public int getHeight() {
+		return dim.getY();
+	}
+	
 }
