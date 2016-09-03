@@ -70,7 +70,7 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 		return inputs;
 	}
 	
-	public void stop() {
+	public void onClose() {
 		stopped = true;
 	}
 

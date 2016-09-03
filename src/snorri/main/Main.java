@@ -218,7 +218,7 @@ public class Main {
 	 */
 	public static final void setWindow(GamePanel newWindow) {
 		if (window != null) {
-			window.stop();
+			window.onClose();
 			getLayeredPane().remove(window);
 			getLayeredPane().revalidate();
 		}
@@ -239,7 +239,7 @@ public class Main {
 	 */
 	public static final void setOverlay(GamePanel newOverlay) {
 		if (outerOverlay != null) {
-			outerOverlay.stop();
+			outerOverlay.onClose();
 			getLayeredPane().remove(outerOverlay);
 			getLayeredPane().revalidate();
 		}

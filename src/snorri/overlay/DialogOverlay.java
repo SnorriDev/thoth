@@ -32,7 +32,7 @@ public class DialogOverlay extends Overlay {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Okay")) {
-			onClose();
+			window.unpause();
 		}
 	}
 

@@ -121,41 +121,61 @@ public class Tile implements Comparable<Tile> {
 		return (type.getId() == t.getType().getId() && style == t.getStyle());
 	}
 	
+	public static BufferedImage getImage(String path) {
+		if (Main.getImage(path) != null)
+			return Main.getImage(path);
+		else
+			return DEFAULT_TEXTURE;
+	}
+	
 	public enum TileType implements Nominal {
 												
 		SAND(true, new BufferedImage[] {
-			Main.getImage("/textures/tiles/sand00.png"),
-			Main.getImage("/textures/tiles/sand01.png"),
-			Main.getImage("/textures/tiles/sand02.png"),
-			Main.getImage("/textures/tiles/sand03.png")}),
+			getImage("/textures/tiles/sand00.png"),
+			getImage("/textures/tiles/sand01.png"),
+			getImage("/textures/tiles/sand02.png"),
+			getImage("/textures/tiles/sand03.png")}),
 		WALL(false, new BufferedImage[] {
-			Main.getImage("/textures/tiles/wall00.png"),
-			Main.getImage("/textures/tiles/wall01.png"),
-			Main.getImage("/textures/tiles/wall02.png"),
-			Main.getImage("/textures/tiles/wall03.png"),
-			Main.getImage("/textures/tiles/wall04.png"),
-			Main.getImage("/textures/tiles/wall05.png"),
-			Main.getImage("/textures/tiles/wall06.png"),
-			Main.getImage("/textures/tiles/wall07.png")}, true),
+			getImage("/textures/tiles/wall00.png"),
+			getImage("/textures/tiles/wall01.png"),
+			getImage("/textures/tiles/wall02.png"),
+			getImage("/textures/tiles/wall03.png"),
+			getImage("/textures/tiles/wall04.png"),
+			getImage("/textures/tiles/wall05.png"),
+			getImage("/textures/tiles/wall06.png"),
+			getImage("/textures/tiles/wall07.png")}, true),
 		TREE(false, Main.getImage("/textures/tiles/tree00.png")),
 		FOUNDATION(false, DEFAULT_TEXTURE),
 		HUT(false, DEFAULT_TEXTURE),
-		WATER(false, true, new BufferedImage[] {
-			Main.getImage("/textures/tiles/water00.png"),
-			Main.getImage("/textures/tiles/water01.png")}),
+		WATER(false, true, getImage("/textures/tiles/water00.png")),
 		LAVA(false, true, new BufferedImage[] {
-			Main.getImage("/textures/tiles/lava00.png"),
-			Main.getImage("/textures/tiles/lava01.png"),
-			Main.getImage("/textures/tiles/lava02.png")}),
+			getImage("/textures/tiles/lava00.png"),
+			getImage("/textures/tiles/lava01.png"),
+			getImage("/textures/tiles/lava02.png")}),
 		GRASS(true, new BufferedImage[] {
-			Main.getImage("/textures/tiles/grass00.png"),
-			Main.getImage("/textures/tiles/grass01.png")}),
+			getImage("/textures/tiles/grass00.png"),
+			getImage("/textures/tiles/grass01.png")}),
 		VOID(false, Main.getImage("/textures/tiles/void00.png")),
 		COLUMN(false, new BufferedImage[] {
-			Main.getImage("/textures/tiles/column00.png"),
-			Main.getImage("/textures/tiles/column01.png")}, true),
-		DOOR(false, Main.getImage("/textures/tiles/door00.png"), true),
-		SANDSTONE(false, Main.getImage("/textures/tiles/sandstone00.png"), false, true);
+			getImage("/textures/tiles/column00.png"),
+			getImage("/textures/tiles/column01.png")}, true),
+		DOOR(false, getImage("/textures/tiles/door00.png"), true),
+		SANDSTONE(false, false, getImage("/textures/tiles/sandstone00.png"), false, true),
+		FLOOR(true, new BufferedImage[] {getImage("/textures/tiles/floor00.png"),
+			getImage("/textures/tiles/floor01.png"),
+			getImage("/textures/tiles/floor02.png"),
+			getImage("/textures/tiles/floor03.png"),
+			getImage("/textures/tiles/floor04.png"),
+			getImage("/textures/tiles/floor05.png"),
+			getImage("/textures/tiles/floor06.png"),
+			getImage("/textures/tiles/floor07.png"),
+			getImage("/textures/tiles/floor08.png"),
+			getImage("/textures/tiles/floor09.png"),
+			getImage("/textures/tiles/floor10.png"),
+			getImage("/textures/tiles/floor11.png")}),
+		GRAVEL(true),
+		STONE(true),
+		DEEP_WATER(false, false, getImage("/textures/tiles/water01.png"));
 		
 		private boolean	pathable, canShootOver, atTop, changable;
 		private BufferedImage[]	textures;
@@ -179,10 +199,16 @@ public class Tile implements Comparable<Tile> {
 			atTop = false;
 		}
 		
-		TileType(boolean pathable, boolean swimmable, BufferedImage[] textures) {
+		TileType(boolean pathable, boolean liquidEditable, BufferedImage[] textures) {
 			this(pathable, textures);
-			canShootOver = swimmable;
-			changable = canShootOver;
+			canShootOver = true;
+			changable = liquidEditable;
+		}
+		
+		TileType(boolean pathable, boolean liquidEditable, BufferedImage texture) {
+			this(pathable, texture);
+			canShootOver = true;
+			changable = liquidEditable;
 		}
 		
 		TileType(boolean pathable, BufferedImage[] textures, boolean atTop) {
@@ -195,7 +221,7 @@ public class Tile implements Comparable<Tile> {
 			this.atTop = atTop;
 		}
 		
-		TileType(boolean pathable, BufferedImage texture, boolean atTop, boolean changable) {
+		TileType(boolean pathable, boolean swimmable, BufferedImage texture, boolean atTop, boolean changable) {
 			this(pathable , texture, atTop);
 			this.changable = changable;
 		}

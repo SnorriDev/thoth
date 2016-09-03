@@ -126,12 +126,8 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (Key.ESC.isPressed(e)) {
-			onClose();
+			window.unpause();
 		}
-	}
-	
-	protected void onClose() {
-		window.unpause();
 	}
 		
 	public HTMLEditorKit getHTMLEditorKit() {
