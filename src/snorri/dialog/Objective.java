@@ -15,21 +15,25 @@ import snorri.world.Vector;
  * Use YAML's <code>|</code> modifier to store HTML lines.
  */
 
-public class Objective implements Serializable {
+public class Objective extends Message implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
 	public String shortDesc = "";
 	public String longDesc = "";
-	//TODO trigger for achieving objective?
 	
 	public Objective() {
 	}
 	
 	public void render(Graphics gr, GameWindow window) {
-		gr.setColor(new Color(127, 130, 98));
-		Vector objPos = window.getFocus().getHealthBarPos().add(0, 43);
-		gr.drawString(shortDesc, objPos.getX(), objPos.getY());
+		Vector objPos = window.getFocus().getHealthBarPos().add(0, 33);
+		drawLine(gr, window, objPos, Color.DARK_GRAY);
+//		gr.drawString(shortDesc, objPos.getX(), objPos.getY());
+	}
+
+	@Override
+	public String toString() {
+		return shortDesc;
 	}
 	
 }
