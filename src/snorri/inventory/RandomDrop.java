@@ -8,6 +8,7 @@ import java.util.Map;
 
 import snorri.main.Main;
 import snorri.main.Util;
+import snorri.parser.Lexicon;
 
 public class RandomDrop implements Droppable {
 
@@ -21,6 +22,8 @@ public class RandomDrop implements Droppable {
 		TIERS.put("COMMON", new HashSet<>());
 		TIERS.get("COMMON").add(new VocabDrop("nb"));
 		TIERS.get("COMMON").add(new VocabDrop("nbt"));
+		
+		TIERS.put("ALL", Lexicon.getDropsInLang());
 				
 	}
 	

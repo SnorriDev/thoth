@@ -29,7 +29,7 @@ import snorri.entities.Player;
 import snorri.entities.Portal;
 import snorri.inventory.Carrier;
 import snorri.keyboard.Key;
-import snorri.pathfinding.PathNode;
+import snorri.masking.Mask;
 import snorri.terrain.TerrainGen;
 import snorri.world.Campaign.WorldId;
 import snorri.world.Editable;
@@ -497,8 +497,8 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			visited[pos.getX()][pos.getY()] = true;
 			if (env.getLevel().getTileGrid(pos).equals(START_TILE))
 				graph.add(pos);
-
-			for (Vector v : PathNode.getNeighbors(pos)) {
+			
+			for (Vector v : Mask.getNeighbors(pos)) {
 				searchQ.add(v);
 			}
 		}

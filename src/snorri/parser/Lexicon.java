@@ -1,7 +1,9 @@
 package snorri.parser;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -9,6 +11,8 @@ import java.util.Set;
 import snorri.entities.Flower;
 import snorri.entities.Spike;
 import snorri.entities.Urn;
+import snorri.inventory.Droppable;
+import snorri.inventory.VocabDrop;
 import snorri.nonterminals.AbstractNoun;
 import snorri.nonterminals.Name;
 import snorri.nonterminals.Noun;
@@ -160,6 +164,14 @@ public class Lexicon {
 	
 	public static Collection<Definition> getILang() {
 		return lexicon.values();
+	}
+
+	public static Collection<Droppable> getDropsInLang() {
+		List<Droppable> out = new ArrayList<>();
+		for (String raw : getELang()) {
+			out.add(new VocabDrop(raw));
+		}
+		return out;
 	}
 	
 }

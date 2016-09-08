@@ -27,7 +27,7 @@ public class Player extends Unit implements Carrier {
 	private static final Image GREY_HEART = Main.getImage("/textures/hud/greyHeart.png");
 
 	private static final int HEALTH_RES = 20;
-	protected static final int PLAYER_BASE_SPEED = 160;
+	protected static final int PLAYER_BASE_SPEED = 190;
 	
 	private static final long serialVersionUID = 1L;
 	

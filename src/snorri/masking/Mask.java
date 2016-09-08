@@ -1,6 +1,8 @@
 package snorri.masking;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import snorri.main.Util;
 import snorri.world.Tile;
@@ -72,6 +74,14 @@ public class Mask {
 	
 	public void add(int value) {
 		bitmask += value;
+	}
+
+	public static List<Vector> getNeighbors(Vector pos) {
+		List<Vector> out = new ArrayList<>();
+		for (Vector v : NEIGHBORS) {
+			out.add(pos.copy().add(v));
+		}
+		return out;
 	}
 
 }

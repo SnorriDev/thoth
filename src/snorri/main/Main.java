@@ -108,7 +108,7 @@ public class Main {
 	}
 
 	public static void error(Object o) {
-		System.out.println("[ERROR] " + o);
+		System.err.println("[ERROR] " + o);
 	}
 
 	public static void log(String s) {

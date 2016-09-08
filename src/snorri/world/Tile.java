@@ -172,7 +172,7 @@ public class Tile implements Comparable<Tile> {
 			getImage("/textures/tiles/floor08.png"),
 			getImage("/textures/tiles/floor09.png"),
 			getImage("/textures/tiles/floor10.png"),
-			getImage("/textures/tiles/floor11.png")}),
+			getImage("/textures/tiles/floor11.png")}, true),
 		GRAVEL(true),
 		STONE(true),
 		DEEP_WATER(false, false, getImage("/textures/tiles/water01.png"));
