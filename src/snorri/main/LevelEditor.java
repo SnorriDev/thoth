@@ -243,15 +243,19 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				return;
 			}
 			Class<?> gen = inputs.getClass("Class");
-			if (gen.isAssignableFrom(TerrainGen.class)) {
-				try {
-					Object g = gen.getConstructor(int.class, int.class).newInstance(inputs.getInteger("Width"),
-							inputs.getInteger("Height"));
-					env = ((TerrainGen) g).genWorld();
-				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-						| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
-					Main.error("generator " + gen + " failed");
+			try {
+				Object g = gen.getConstructor(int.class, int.class).newInstance(inputs.getInteger("Width"),
+						inputs.getInteger("Height"));
+				if (!(g instanceof TerrainGen)) {
+					Main.error(gen.getSimpleName() + " is not a terrain generator");
+
 				}
+				Main.log("generating " + gen.getSimpleName() + " world...");
+				env = ((TerrainGen) g).genWorld();
+				Main.log("world successfully generated");
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
+				Main.error("generator " + gen + " has no vector size constructor");
 			}
 			break;
 		case "Open":

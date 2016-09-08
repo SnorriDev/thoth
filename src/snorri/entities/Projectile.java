@@ -77,6 +77,10 @@ public class Projectile extends Detector {
 			((Unit) e.getTarget()).damage(weapon.getSharpness());
 		}
 		
+		if (e.getTarget() instanceof Explosion) {
+			e.getWorld().delete(this);
+		}
+		
 		if (orb != null) {
 			Object output = orb.useSpellOn(e.getTarget());
 			if (Debug.SHOW_ORB_OUTPUT) {

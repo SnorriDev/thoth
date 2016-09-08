@@ -11,7 +11,7 @@ public class SpellEvent {
 	private GameWindow window; //used to retrieve first, third, and world
 	private Entity secondPerson; //the entity being affected by the spell
 	
-	private Vector loc; //the position in which or at which the spell is occuring
+	private Vector loc; //the position in which or at which the spell is occurring
 	private Vector dest; //the "target" position of the spell
 	
 	private Nominal instrument; //assigned by the preposition "with"
@@ -19,9 +19,11 @@ public class SpellEvent {
 	private boolean negated = false; //used to keep track of negatives
 	private int degree = 0; //only used for modifying adverbs; this is NOT a direct scaling factor on size/damage/etc.
 	
+	private double deltaTime = 1; //used to dilute things on continuous spells
+	
 	private double sizeModifier = 1; //modifies the size or magnitude of things within the world
 	private double speedModifier = 1;//modifies velocities
-	private double healthInteractModifier = 1; //used so that healing/damage effects aren't ridiculous on continuous casted spells
+	private double healthInteractModifier = 1; //modifies healing/damage effects
 	
 	public SpellEvent(GameWindow window, Entity secondPerson) {
 		this.secondPerson = secondPerson;
@@ -30,9 +32,9 @@ public class SpellEvent {
 		dest = getThirdPerson().getPos().copy();
 	}
 	
-	public SpellEvent(GameWindow window, Entity secondPerson, double healthInteractModifier) {
+	public SpellEvent(GameWindow window, Entity secondPerson, double deltaTime) {
 		this(window, secondPerson);
-		this.healthInteractModifier = healthInteractModifier;
+		this.deltaTime = deltaTime;
 	}
 	
 	public SpellEvent(SpellEvent e) {
@@ -47,6 +49,8 @@ public class SpellEvent {
 		
 		negated = e.negated;
 		degree = e.degree;
+		
+		deltaTime = e.deltaTime;
 		
 		sizeModifier = e.sizeModifier;
 		speedModifier = e.speedModifier;
@@ -114,7 +118,7 @@ public class SpellEvent {
 	 * 	the modified amount
 	 */
 	public double modifyHealthInteraction(double amount) {
-		return amount * healthInteractModifier;
+		return amount * healthInteractModifier * deltaTime;
 	}
 	
 	/**
@@ -125,7 +129,11 @@ public class SpellEvent {
 	 * 	the modified amount
 	 */
 	public double modifySpeed(double amount) {
-		return amount * speedModifier;
+		return amount * speedModifier * deltaTime;
+	}
+	
+	public double modifySize(double amount) {
+		return amount * sizeModifier * deltaTime;
 	}
 	
 	public SpellEvent scaleHealthInteractionModifier(double scale) {

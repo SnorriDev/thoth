@@ -54,7 +54,10 @@ public class MainMenu extends GamePanel {
 			Main.launchGame(new DungeonGen(200, 200));
 			break;
 		case "Load World":
-			Main.launchGame(World.wrapLoad());
+			World w = World.wrapLoad();
+			if (w != null) {
+				Main.launchGame(w);
+			}
 			break;
 		case "World Editor":
 			Main.launchEditor();
