@@ -173,9 +173,22 @@ public class Tile implements Comparable<Tile> {
 			getImage("/textures/tiles/floor09.png"),
 			getImage("/textures/tiles/floor10.png"),
 			getImage("/textures/tiles/floor11.png")}, true),
-		GRAVEL(true),
-		STONE(true),
-		DEEP_WATER(false, false, getImage("/textures/tiles/water01.png"));
+		GRAVEL(true, getImage("/textures/tiles/floor11.png")),
+		STONE(true, new BufferedImage[] {getImage("/textures/tiles/stone00.png"),
+			getImage("/textures/tiles/stone01.png")}),
+		DEEP_WATER(false, false, getImage("/textures/tiles/water01.png")),
+		CLIFF(false, false, new BufferedImage[] {getImage("/textures/tiles/cliff00.png"),
+			getImage("/textures/tiles/cliff01.png"),
+			getImage("/textures/tiles/cliff02.png"),
+			getImage("/textures/tiles/cliff03.png"),
+			getImage("/textures/tiles/cliff04.png"),
+			getImage("/textures/tiles/cliff05.png"),
+			getImage("/textures/tiles/cliff06.png"),
+			getImage("/textures/tiles/cliff07.png"),
+			getImage("/textures/tiles/cliff08.png"),
+			getImage("/textures/tiles/cliff09.png"),
+			getImage("/textures/tiles/cliff10.png"),
+			getImage("/textures/tiles/cliff11.png")});
 		
 		private boolean	pathable, canShootOver, atTop, changable;
 		private BufferedImage[]	textures;
