@@ -149,18 +149,22 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		ButtonGroup groupTiles = new ButtonGroup();
 
 		boolean firstTile = true;
-		for (Tile t : Tile.getAll()) {
+		for (Tile t : Tile.getAllTypes()) {
 
 			if (t == null || t.getTexture() == null) {
 				continue;
 			}
 
-			rbMenuItem = new JRadioButtonMenuItem(t.toString(), new ImageIcon(t.getTexture()));
-			rbMenuItem.setSelected(firstTile);
-			rbMenuItem.setActionCommand("set" + t.toNumericString());
-			rbMenuItem.addActionListener(this);
-			groupTiles.add(rbMenuItem);
-			menu.add(rbMenuItem);
+			submenu = new JMenu(t.toString());
+			for (Tile s : t.getType().getSubTypes()) {
+				rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(s.getTexture()));
+				rbMenuItem.setSelected(firstTile);
+				rbMenuItem.setActionCommand("set" + s.toNumericString());
+				rbMenuItem.addActionListener(this);
+				submenu.add(rbMenuItem);
+				groupTiles.add(rbMenuItem);
+			}
+			menu.add(submenu);
 
 			firstTile = false;
 

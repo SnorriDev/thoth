@@ -56,6 +56,22 @@ public class Tile implements Comparable<Tile> {
 		style = Integer.parseInt(l[1]);
 	}
 
+	public static ArrayList<Tile> getAllTypes() {
+		ArrayList<Tile> list = new ArrayList<Tile>();
+		for(int i = 0; i < TileType.values().length; i++) {
+			list.add(new Tile(i,0));
+		}
+		return list;
+	}
+	
+	public static ArrayList<Tile> getSubTypes(int i) {
+		ArrayList<Tile> list = new ArrayList<Tile>();
+		for(int j = 0; j < TileType.byId(i).getNumberStyles(); j++) {
+			list.add(new Tile(i,j));
+		}
+		return list;
+	}
+	
 	public static ArrayList<Tile> getAll() {
 		ArrayList<Tile> list = new ArrayList<Tile>();
 		for(int i = 0; i < TileType.values().length; i++) {
@@ -188,7 +204,7 @@ public class Tile implements Comparable<Tile> {
 			getImage("/textures/tiles/cliff08.png"),
 			getImage("/textures/tiles/cliff09.png"),
 			getImage("/textures/tiles/cliff10.png"),
-			getImage("/textures/tiles/cliff11.png")});
+			getImage("/textures/tiles/cliff11.png")}, true);
 		
 		private boolean	pathable, canShootOver, atTop, changable;
 		private BufferedImage[]	textures;
@@ -222,6 +238,20 @@ public class Tile implements Comparable<Tile> {
 			this(pathable, texture);
 			canShootOver = true;
 			changable = liquidEditable;
+		}
+		
+		TileType(boolean pathable, boolean liquidEditable, BufferedImage[] textures, boolean atTop) {
+			this(pathable, textures);
+			canShootOver = true;
+			changable = liquidEditable;
+			this.atTop = atTop;
+		}
+		
+		TileType(boolean pathable, boolean liquidEditable, BufferedImage texture, boolean atTop) {
+			this(pathable, texture);
+			canShootOver = true;
+			changable = liquidEditable;
+			this.atTop = atTop;
 		}
 		
 		TileType(boolean pathable, BufferedImage[] textures, boolean atTop) {
@@ -306,6 +336,15 @@ public class Tile implements Comparable<Tile> {
 		
 		public boolean isAtTop() {
 			return atTop;
+		}
+		
+		public ArrayList<Tile> getSubTypes() {
+			int i = getId();
+			ArrayList<Tile> list = new ArrayList<Tile>();
+			for(int j = 0; j < TileType.byId(i).getNumberStyles(); j++) {
+				list.add(new Tile(i,j));
+			}
+			return list;
 		}
 		
 	}
