@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Queue;
 
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import snorri.dialog.DropMessage;
@@ -94,7 +95,14 @@ public class GameWindow extends FocusedWindow {
 			return;
 		}
 		
-		universe.getCurrentWorld().update(deltaTime);
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				universe.getCurrentWorld().update(deltaTime);
+			}
+			
+		});
 		repaint();
 				
 	}

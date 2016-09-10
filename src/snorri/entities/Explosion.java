@@ -15,6 +15,7 @@ public class Explosion extends Detector {
 	public Explosion(Vector pos, int r) {
 		super(pos, r);
 		animation = new Animation(ANIMATION);
+		z = PARTICLE_LAYER;
 	}
 	
 	public Explosion(Vector pos) {
