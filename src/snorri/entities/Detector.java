@@ -5,26 +5,21 @@ import snorri.events.CollisionEvent;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public abstract class Detector extends Entity {
+public abstract class Detector extends Despawner {
 
 	private static final long serialVersionUID = 1L;
-	protected float age; //set age to -1 to make it not despawn
 	protected boolean treeMember = false;
-	protected static final int DEFAULT_LIFESPAN = 4;
 	
 	public Detector(Vector pos, int r) {
 		super(pos, r);
-		age = 0;
 	}
 	
 	public Detector(Entity e) {
 		super(e);
-		age = 0;
 	}
 
 	public Detector(Vector pos, Collider collider) {
 		super(pos, collider);
-		age = 0;
 	}
 
 	public abstract void onCollision(CollisionEvent e);
@@ -32,29 +27,14 @@ public abstract class Detector extends Entity {
 	@Override
 	public void update(World world, double deltaTime) {
 		
-		if (age != -1) {
-			age += deltaTime;
-		}
-		
-		if (shouldDespawn()) {
-			world.delete(this);
-			return;
-		}
-		
 		for (Entity hit : world.getEntityTree().getAllCollisions(this)) {
 			if (hit != null) {
 				onCollision(new CollisionEvent(this, hit, world));
 			}
 		}
 		
-	}
-	
-	protected double getLifeSpan() {
-		return DEFAULT_LIFESPAN;
-	}
-	
-	protected boolean shouldDespawn() {
-		return age > getLifeSpan();
+		super.update(world, deltaTime);
+		
 	}
 	
 	/**

@@ -12,7 +12,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -35,7 +34,8 @@ public class Level implements Editable {
 	private Vector dim;
 	
 	private List<ArrayList<Vector>> connectedSubGraphs;
-	private HashMap<Vector, ArrayList<Vector>> graphHash;
+	private ArrayList<Vector>[][] graphData;
+	//private HashMap<Vector, ArrayList<Vector>> graphHash;
 
 	// not that indexing conventions are Cartesian, not matrix-based
 
@@ -332,11 +332,19 @@ public class Level implements Editable {
 	}
 	
 	public ArrayList<Vector> getGraph(Vector pos) {
-		return graphHash.get(pos);
+		return getGraph(pos.getX(), pos.getY());
 	}
 	
+	//TODO change this method to have side effect of updating the graph, not just the array
 	public ArrayList<Vector> getGraph(int x, int y) {
-		return graphHash.get(new Vector(x, y));
+		if (x < 0 || graphData.length <= x || y < 0 || graphData[0].length <= y) {
+			return null;
+		}
+		return graphData[x][y];
+	}
+	
+	private void setGraph(Vector pos, ArrayList<Vector> graph) {
+		graphData[pos.getX()][pos.getY()] = graph;
 	}
 	
 	public boolean arePathConnected(Vector p1, Vector p2) {
@@ -400,12 +408,12 @@ public class Level implements Editable {
 		
 	}
 	
-	//TODO update the hash when we do dynamic level changes
+	@SuppressWarnings("unchecked")
 	private void computeGraphHash() {
-		graphHash = new HashMap<Vector, ArrayList<Vector>>();
+		graphData = (ArrayList<Vector>[][]) new ArrayList[dim.getX()][dim.getY()];
 		for (ArrayList<Vector> graph : connectedSubGraphs) {
 			for (Vector v : graph) {
-				graphHash.put(v, graph);
+				setGraph(v, graph);
 			}
 		}
 	}
@@ -469,13 +477,13 @@ public class Level implements Editable {
 				if (isContextPathable(pos) && getGraph(pos) == null) {
 					List<ArrayList<Vector>> graphs = new ArrayList<>();
 					for (Vector p : PathNode.getNeighbors(pos)) {
-						if (getGraph(p) != null && !graphs.contains(getGraph(p))) {
+						if (getGraph(p) != null && !graphs.contains(getGraph(p))) { //merge here if graph exists
 							graphs.add(getGraph(p));
 						}
 					}
 					ArrayList<Vector> newGraph = mergeGraphs(graphs);
 					newGraph.add(pos);
-					graphHash.put(pos, newGraph);
+					setGraph(pos, newGraph);
 				}
 				
 			}
@@ -489,29 +497,30 @@ public class Level implements Editable {
 	 */
 	private void setUnpathableGrid(Vector v) {
 		
-		Queue<Vector> startPoints = new LinkedList<>();
 		List<ArrayList<Vector>> graphs = new ArrayList<>(); //TODO make sure this works as intended
 		
 		//update graphs to reflect the changes
 		for (int x = (v.getX() * Tile.WIDTH - Unit.RADIUS_X) / Tile.WIDTH - 2; x <= (v.getX() * Tile.WIDTH + Unit.RADIUS_X) / Tile.WIDTH + 2; x++) {
 			for (int y = (v.getY() * Tile.WIDTH - Unit.RADIUS_Y) / Tile.WIDTH - 2; y <= (v.getY() * Tile.WIDTH + Unit.RADIUS_Y) / Tile.WIDTH + 2; y++) {
+				
 				Vector pos = new Vector(x, y);
-				if (!isContextPathable(pos) && getGraph(pos) != null) {
+				if (getGraph(pos) == null) {
+					continue;
+				}
+				
+				if (!isContextPathable(pos)) {
 					ArrayList<Vector> graph = getGraph(pos);
 					graph.remove(pos);
-					graphHash.remove(pos);
-				}
-				if (isContextPathable(pos)) {
-					startPoints.add(pos);
-					if (!graphs.contains(getGraph(pos))) {
-						graphs.add(getGraph(pos));
-					}
+					setGraph(pos, null);
+					computeSurroundingsPathable(pos.getX(), pos.getY());
+				} else if (!graphs.contains(getGraph(pos))) {
+					graphs.add(getGraph(pos));
 				}
 			}
 		}
 		
 		for (ArrayList<Vector> graph : graphs) {
-			splitGraph(graph, new LinkedList<>(startPoints));
+			splitGraph(graph);
 		}
 		
 	}
@@ -527,17 +536,26 @@ public class Level implements Editable {
 				if (getTileGrid(x, y) == null) {
 					continue;
 				}
-				map[x][y].computeSurroundingsPathable(x, y, this);			
+				computeSurroundingsPathable(x, y);		
 			}
 		}
 	}
 	
+	private void computeSurroundingsPathable(int x, int y) {
+		if (x < 0 || x >= dim.getX() || y < 0 || y >= dim.getY()) {
+			return;
+		}
+		map[x][y].computeSurroundingsPathable(x, y, this);
+	}
+	
 	/**
-	 * Merge graphs into one big graph.
+	 * Merges disjoint graphs into one big graph.
 	 * Ignores duplicate graphs and graphs which are not in connectedSubGraphs.
+	 * Adds result to connectedSubGraphs, even if it empty
 	 * @return the merged graph
 	 */
 	private ArrayList<Vector> mergeGraphs(List<ArrayList<Vector>> graphs) {
+		
 		ArrayList<Vector> union = new ArrayList<>();
 		for (ArrayList<Vector> graph : graphs) {
 			if (connectedSubGraphs.remove(graph)) {
@@ -546,38 +564,34 @@ public class Level implements Editable {
 		}
 		if (!union.isEmpty()) {
 			for (Vector v : union) {
-				graphHash.put(v, union);
+				setGraph(v, union);
 			}
-			connectedSubGraphs.add(union);
 		}
+		connectedSubGraphs.add(union);
 		return union;
+		
 	}
 	
-	private void splitGraph(ArrayList<Vector> graph, Queue<Vector> q) {
+	private void splitGraph(ArrayList<Vector> graph) {
 		
 		List<ArrayList<Vector>> graphs = new ArrayList<>();
 		boolean[][] visited = new boolean[dim.getX()][dim.getY()];
-		//TODO implement this boolean array check in computeConnectedSubGraphs() as well
 		
-		while (!q.isEmpty()) {
-			Vector pos = q.poll();
-			if (isContextPathable(pos) && !visited[pos.getX()][pos.getY()]
-					&& graph.contains(pos)) { //need this in multiple graph case
+		for (Vector pos : graph) {
+			if (isContextPathable(pos) && !visited[pos.getX()][pos.getY()]) {
 				graphs.add(computeConnectedSubGraph(pos, visited));
 			}
 		}
 		
 		if (graphs.size() <= 1) {
 			return;
-		}
-		
-		Main.log(graphs.size());
-		
+		}		
+				
 		connectedSubGraphs.remove(graph);
 		for (ArrayList<Vector> g : graphs) {
 			connectedSubGraphs.add(g);
 			for (Vector v : g) {
-				graphHash.put(v, g);
+				setGraph(v, g);
 			}
 		}
 		
@@ -658,10 +672,6 @@ public class Level implements Editable {
 		for (int i = -DungeonGen.DOOR_WIDTH / 2; i <= DungeonGen.DOOR_WIDTH / 2; i++) {
 			setTileGrid(dir.copy().multiply(i).add(pos), new Tile(fill));
 		}
-		
-//		for (dir.multiply(-DungeonGen.DOOR_WIDTH / 2); dir.magnitude() <= DungeonGen.DOOR_WIDTH / 2; dir.incr()) {
-//			setTileGrid(pos.copy().add(dir), new Tile(fill));
-//		}
 		
 	}
 

@@ -2,6 +2,7 @@ package snorri.world;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,6 +14,8 @@ import java.util.List;
 
 import snorri.entities.Entity;
 import snorri.main.FocusedWindow;
+import snorri.main.LevelEditor;
+import snorri.main.Main;
 
 public interface EntityGroup {
 
@@ -57,15 +60,17 @@ public interface EntityGroup {
 	 * Add all entities stored in a file to this EntityGroup.
 	 * @param file
 	 * file to read
+	 * @param level 
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	default void loadEntities(File file) throws FileNotFoundException, IOException {
+	default void loadEntities(File file, Level level) throws FileNotFoundException, IOException {
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
 		while (true) {
 			try {
-				insert((Entity) in.readObject());
-			} catch (Exception e) {
+				Entity e = (Entity) in.readObject();
+				insert(e, level);
+			} catch (EOFException | ClassNotFoundException e) {
 				break;
 			}
 		}
@@ -79,5 +84,12 @@ public interface EntityGroup {
 	public Entity getFirstCollisionOtherThan(Entity e, Entity other);
 
 	public Entity getFirstCollision(Rectangle rectangle, boolean hitAll);
+	
+	default void insert(Entity e, Level level) {
+		insert(e);
+		if (e.isStaticObject() && !(Main.getWindow() instanceof LevelEditor)) {
+			level.addEntity(e);
+		}
+	}
 	
 }
