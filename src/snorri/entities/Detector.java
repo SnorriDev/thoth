@@ -12,14 +12,17 @@ public abstract class Detector extends Despawner {
 	
 	public Detector(Vector pos, int r) {
 		super(pos, r);
+		z = PARTICLE_LAYER;
 	}
 	
 	public Detector(Entity e) {
 		super(e);
+		z = PARTICLE_LAYER;
 	}
 
 	public Detector(Vector pos, Collider collider) {
 		super(pos, collider);
+		z = PARTICLE_LAYER;
 	}
 
 	public abstract void onCollision(CollisionEvent e);

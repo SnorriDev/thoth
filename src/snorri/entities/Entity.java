@@ -61,9 +61,10 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		
 	}
 	
-	protected static final int DEFAULT_LAYER = 10;
+	protected static final int PARTICLE_LAYER = 15;
+	protected static final int DEFAULT_LAYER = 4;
 	protected static final int UNIT_LAYER = 0;
-	protected static final int PLAYER_LAYER = 1;
+	protected static final int PLAYER_LAYER = 5;
 	
 	protected Collider collider;
 	protected Vector pos;
