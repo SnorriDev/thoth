@@ -57,6 +57,22 @@ public class Tile implements Comparable<Tile> {
 		style = Integer.parseInt(l[1]);
 	}
 
+	public static ArrayList<Tile> getAllTypes() {
+		ArrayList<Tile> list = new ArrayList<Tile>();
+		for(int i = 0; i < TileType.values().length; i++) {
+			list.add(new Tile(i,0));
+		}
+		return list;
+	}
+	
+	public static ArrayList<Tile> getSubTypes(int i) {
+		ArrayList<Tile> list = new ArrayList<Tile>();
+		for(int j = 0; j < TileType.byId(i).getNumberStyles(); j++) {
+			list.add(new Tile(i,j));
+		}
+		return list;
+	}
+	
 	public static ArrayList<Tile> getAll() {
 		ArrayList<Tile> list = new ArrayList<Tile>();
 		for(int i = 0; i < TileType.values().length; i++) {
@@ -173,9 +189,22 @@ public class Tile implements Comparable<Tile> {
 			getImage("/textures/tiles/floor09.png"),
 			getImage("/textures/tiles/floor10.png"),
 			getImage("/textures/tiles/floor11.png")}, true),
-		GRAVEL(true),
-		STONE(true),
-		DEEP_WATER(false, false, getImage("/textures/tiles/water01.png"));
+		GRAVEL(true, getImage("/textures/tiles/floor11.png")),
+		STONE(true, new BufferedImage[] {getImage("/textures/tiles/stone00.png"),
+			getImage("/textures/tiles/stone01.png")}),
+		DEEP_WATER(false, false, getImage("/textures/tiles/water01.png")),
+		CLIFF(false, false, new BufferedImage[] {getImage("/textures/tiles/cliff00.png"),
+			getImage("/textures/tiles/cliff01.png"),
+			getImage("/textures/tiles/cliff02.png"),
+			getImage("/textures/tiles/cliff03.png"),
+			getImage("/textures/tiles/cliff04.png"),
+			getImage("/textures/tiles/cliff05.png"),
+			getImage("/textures/tiles/cliff06.png"),
+			getImage("/textures/tiles/cliff07.png"),
+			getImage("/textures/tiles/cliff08.png"),
+			getImage("/textures/tiles/cliff09.png"),
+			getImage("/textures/tiles/cliff10.png"),
+			getImage("/textures/tiles/cliff11.png")}, true);
 		
 		private boolean	pathable, canShootOver, atTop, changable;
 		private BufferedImage[]	textures;
@@ -209,6 +238,20 @@ public class Tile implements Comparable<Tile> {
 			this(pathable, texture);
 			canShootOver = true;
 			changable = liquidEditable;
+		}
+		
+		TileType(boolean pathable, boolean liquidEditable, BufferedImage[] textures, boolean atTop) {
+			this(pathable, textures);
+			canShootOver = true;
+			changable = liquidEditable;
+			this.atTop = atTop;
+		}
+		
+		TileType(boolean pathable, boolean liquidEditable, BufferedImage texture, boolean atTop) {
+			this(pathable, texture);
+			canShootOver = true;
+			changable = liquidEditable;
+			this.atTop = atTop;
 		}
 		
 		TileType(boolean pathable, BufferedImage[] textures, boolean atTop) {
@@ -293,6 +336,15 @@ public class Tile implements Comparable<Tile> {
 		
 		public boolean isAtTop() {
 			return atTop;
+		}
+		
+		public ArrayList<Tile> getSubTypes() {
+			int i = getId();
+			ArrayList<Tile> list = new ArrayList<Tile>();
+			for(int j = 0; j < TileType.byId(i).getNumberStyles(); j++) {
+				list.add(new Tile(i,j));
+			}
+			return list;
 		}
 		
 	}
