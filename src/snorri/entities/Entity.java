@@ -119,7 +119,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			if (e instanceof Despawner) {
 				((Despawner) e).setDespawnable(true);
 			}
-			Main.log(e);
 			world.addHard(e);
 			return e;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
@@ -383,6 +382,10 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 
 	public boolean isStaticObject() {
 		return staticObject;
+	}
+	
+	public void setStaticObject(boolean flag) {
+		staticObject = flag;
 	}
 
 }

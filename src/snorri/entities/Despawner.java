@@ -20,22 +20,22 @@ public abstract class Despawner extends Entity {
 	
 	protected Despawner(Vector pos, int r) {
 		super(pos, r);
-		age = 0;
+		setDespawnable(false);
 	}
 			
 	protected Despawner(Entity e) {
 		super(e);
-		age = 0;
+		setDespawnable(false);
 	}
 	
 	protected Despawner(Vector pos, Collider c) {
 		super(pos, c);
-		age = 0;
+		setDespawnable(false);
 	}
 	
 	public void setDespawnable(boolean despawn) {
 		age = despawn ? 0 : -1;
-		staticObject = despawn;
+		staticObject = !despawn;
 	}
 
 	private static final long serialVersionUID = 1L;
