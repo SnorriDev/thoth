@@ -18,6 +18,7 @@ import snorri.entities.QuadTree;
 import snorri.entities.Unit;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
+import snorri.main.LevelEditor;
 import snorri.main.Main;
 import snorri.pathfinding.Pathfinding;
 import snorri.triggers.Trigger;
@@ -231,10 +232,10 @@ public class World implements Playable, Editable {
 	 * @param e
 	 *            the entity to delete
 	 */
-	@SuppressWarnings("deprecation")
 	public boolean deleteHard(Entity e) {
 		
-		if (e != null && e.isStaticObject()) {
+		//TODO possibly move this to EntityGroup
+		if (e != null && e.isStaticObject() && !(Main.getWindow() instanceof LevelEditor)) {
 			level.removeEntity(e);
 		}
 		

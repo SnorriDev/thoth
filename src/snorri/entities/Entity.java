@@ -116,6 +116,10 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public static Entity spawnNew(World world, Vector pos, Class<? extends Entity> c) {
 		try {
 			Entity e = c.getConstructor(Vector.class).newInstance(pos);
+			if (e instanceof Despawner) {
+				((Despawner) e).setDespawnable(true);
+			}
+			Main.log(e);
 			world.addHard(e);
 			return e;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException

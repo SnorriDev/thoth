@@ -16,10 +16,8 @@ public class Grow extends VerbDef {
 	@Override @SuppressWarnings("unchecked")
 	public boolean exec(Object obj) {
 		
-		//can't use generic extension syntax at runtime, so we need to check it this way
-		if (obj instanceof Class<?> && ((Class<?>) obj).isInstance(Plant.class)) {
+		if (obj instanceof Class<?> && Plant.class.isAssignableFrom((Class<?>) obj)) {
 			try {
-				//TODO check in SPAWNABLE?
 				Entity ent = (Entity) ((Class<? extends Entity>) obj).getConstructor(Vector.class).newInstance(e.getLocative());
 				e.getWorld().add(ent);
 				return true;

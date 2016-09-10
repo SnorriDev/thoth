@@ -39,7 +39,7 @@ public class Open extends VerbDef {
 		return false;
 	}
 		
-	private static boolean openDoor(Level l, Vector pos) {
+	public static boolean openDoor(Level l, Vector pos) {
 		if (l.getTileGrid(pos).getType() == TileType.DOOR) {
 			TriggerType.DOOR_OPEN.activate(pos);
 			l.wrapGridUpdate(pos, new Tile(REPLACEMENT_TILE));

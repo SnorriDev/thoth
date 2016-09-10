@@ -779,9 +779,10 @@ public class Level implements Editable {
 		}
 	}
 
-	//TODO this could definitely be made more efficient
+	//TODO maybe we can make these two more efficient?
 	
 	public void addEntity(Entity e) {
+		
 		int x = e.getPos().getX();
 		int y = e.getPos().getY();
 		Collider c = e.getCollider();
@@ -816,35 +817,40 @@ public class Level implements Editable {
 		
 	}
 	
-	/**
-	 * @deprecated This method is not fully implemented. Make sure we implement it before we use it!
-	 */
-	@Deprecated
 	public void removeEntity(Entity e) {
 		
 		int x = e.getPos().getX();
 		int y = e.getPos().getY();
 		Collider c = e.getCollider();
 		
+		//mark all tiles which are occupied
 		for (int x1 = (x - c.getRadiusX()) / Tile.WIDTH; x1 <= (x + c.getRadiusX()) / Tile.WIDTH; x1++) {
 			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH; y1++) {
-				if (getTileGrid(x1, y1) != null)
+				
+				if (getTileGrid(x1, y1) != null && c.intersects(getRectangle(x1, y1))) {
 					getTileGrid(x1, y1).setOccupied(false);
+					getTileGrid(x1, y1).computeSurroundingsPathable(x1, y1, this);
+				}
+				
+			}
+		}
+		
+		//update all tiles in range of occupied tiles
+		for (int x1 = (x - c.getRadiusX() - Unit.RADIUS_X) / Tile.WIDTH; x1 <= (x + c.getRadiusX() + Unit.RADIUS_X) / Tile.WIDTH; x1++) {
+			for (int y1 = (y - c.getRadiusY() - Unit.RADIUS_Y) / Tile.WIDTH; y1 <= (y + c.getRadiusY() + Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
+				
+				if (getTileGrid(x1, y1) == null) {
+					continue;
+				}
+				
+				getTileGrid(x1, y1).computeSurroundingsPathable(x1, y1, this);
+				if (getTileGrid(x1, y1).isContextPathable()) {
 					setPathableGrid(new Vector(x1, y1));
+				}
+				
 			}
 		}
 
-//		// update context pathability around the occupied tiles
-//		for (int x1 = (x - c.getRadiusX() - Unit.RADIUS_X) / Tile.WIDTH; x1 <= (x + c.getRadiusX() + Unit.RADIUS_X)
-//				/ Tile.WIDTH; x1++) {
-//			for (int y1 = (y - c.getRadiusY() - Unit.RADIUS_Y) / Tile.WIDTH; y1 <= (y + c.getRadiusY() + Unit.RADIUS_Y)
-//					/ Tile.WIDTH; y1++) {
-//				getTileGrid(x1, y1).computeSurroundingsPathable(x1, y1, this);
-//				if (isContextPathable(x1, y1)) {
-//					graphHash.put(new Vector(x1, y1), getGraph(x1, y1));
-//				}
-//			}
-//		}
 	}
 	
 	public int getWidth() {

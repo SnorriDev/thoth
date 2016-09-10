@@ -20,6 +20,7 @@ import snorri.semantics.Above;
 import snorri.semantics.At;
 import snorri.semantics.Be;
 import snorri.semantics.Boom;
+import snorri.semantics.Break;
 import snorri.semantics.Burn;
 import snorri.semantics.ConditionalDef;
 import snorri.semantics.CreateObject;
@@ -139,7 +140,8 @@ public class Lexicon {
 		lexicon.put("sS", new Write()); //TODO icon
 		lexicon.put("dbH", new Pray());
 		lexicon.put("sqbH", new Slow());
-		//lexicon.put("sxpr", new CreateUnit());
+		lexicon.put("sDi", new Break());
+		//lexicon.put("sxpr", new CreateUnit()); //conjure
 		
 		//Conditionals
 		lexicon.put("jr", new ConditionalDef());

@@ -4,6 +4,14 @@ import snorri.collisions.Collider;
 import snorri.world.Vector;
 import snorri.world.World;
 
+/**
+ * All subclasses should have the following constructors:
+ * 	<ul>
+ * 		<li><code>Vector pos<code></li>
+ * 		<li><code>Vector pos, boolean despawn</code></li>
+ * 	</ul>
+ */
+
 public abstract class Despawner extends Entity {
 	
 	protected static final int DEFAULT_LIFESPAN = 4;
@@ -11,19 +19,21 @@ public abstract class Despawner extends Entity {
 	protected float age; //set age to -1 to make it not despawn
 	
 	protected Despawner(Vector pos, int r) {
-		this(pos, r, false);
+		super(pos, r);
+		age = 0;
 	}
-		
+			
 	protected Despawner(Entity e) {
 		super(e);
+		age = 0;
 	}
 	
 	protected Despawner(Vector pos, Collider c) {
 		super(pos, c);
+		age = 0;
 	}
 	
-	protected Despawner(Vector pos, int r, boolean despawn) {
-		super(pos, r);
+	public void setDespawnable(boolean despawn) {
 		age = despawn ? 0 : -1;
 		staticObject = despawn;
 	}
