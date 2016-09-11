@@ -13,7 +13,7 @@ import snorri.main.Util;
 import snorri.masking.Mask;
 import snorri.semantics.Nominal;
 
-public class Tile implements Comparable<Tile> {
+public class Tile implements Comparable<Tile>, Nominal {
 	
 	public static final int	WIDTH	= 16;
 	public static final BufferedImage DEFAULT_TEXTURE = Main.DEFAULT_TEXTURE;

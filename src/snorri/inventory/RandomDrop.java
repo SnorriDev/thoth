@@ -34,7 +34,7 @@ public class RandomDrop implements Droppable {
 	}
 	
 	public RandomDrop(String tier) {
-		this.col = TIERS.get(tier.toUpperCase());
+		this(TIERS.get(tier.toUpperCase()));
 	}
 	
 	@Override
