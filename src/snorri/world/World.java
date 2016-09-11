@@ -138,9 +138,6 @@ public class World implements Playable, Editable {
 	}
 
 	public void update(double d) {
-
-		//TODO: recalculate could be causing issues.. duplication?
-		//print pointers of objects that get updated?
 		
 		if (!(Main.getWindow() instanceof FocusedWindow)) {
 			return;
