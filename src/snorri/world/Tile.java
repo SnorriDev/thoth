@@ -130,6 +130,10 @@ public class Tile implements Comparable<Tile>, Nominal {
 		return type.name() + ":" + style;
 	}
 	
+	public String toStringShort() {
+		return type.name();
+	}
+	
 	public boolean equals(Tile t) {
 		if (t == null) {
 			return false;
