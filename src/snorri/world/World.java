@@ -137,10 +137,7 @@ public class World implements Playable, Editable {
 		
 	}
 
-	public void update(double d) {
-
-		//TODO: recalculate could be causing issues.. duplication?
-		//print pointers of objects that get updated?
+	public synchronized void update(double d) {
 		
 		if (!(Main.getWindow() instanceof FocusedWindow)) {
 			return;
@@ -167,7 +164,7 @@ public class World implements Playable, Editable {
 	}
 
 	@Override
-	public void render(FocusedWindow g, Graphics gr, boolean showOutlands) {
+	public synchronized void render(FocusedWindow g, Graphics gr, boolean showOutlands) {
 		
 		level.render(g, gr, showOutlands);
 		
