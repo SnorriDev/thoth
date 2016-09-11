@@ -18,7 +18,7 @@ import snorri.entities.QuadTree;
 import snorri.entities.Unit;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
-import snorri.main.GameWindow;
+import snorri.main.LevelEditor;
 import snorri.main.Main;
 import snorri.pathfinding.Pathfinding;
 import snorri.triggers.Trigger;
@@ -137,10 +137,7 @@ public class World implements Playable, Editable {
 		
 	}
 
-	public synchronized void update(double d) {
-
-		//TODO: recalculate could be causing issues.. duplication?
-		//print pointers of objects that get updated?
+	public void update(double d) {
 		
 		if (!(Main.getWindow() instanceof FocusedWindow)) {
 			return;
@@ -195,17 +192,13 @@ public class World implements Playable, Editable {
 	}
 
 	public void addHard(Entity e) {
-
-		if (e.isStaticObject() && Main.getWindow() instanceof GameWindow) {
-			level.addEntity(e);
-		}
 		
 		if (e instanceof Detector && !((Detector) e).isTreeMember()) {
 			colliders.add((Detector) e);
 			return;
 		}
 
-		col.insert(e);
+		col.insert(e, level);
 		
 	}
 	
@@ -236,10 +229,10 @@ public class World implements Playable, Editable {
 	 * @param e
 	 *            the entity to delete
 	 */
-	@SuppressWarnings("deprecation")
 	public boolean deleteHard(Entity e) {
 		
-		if (e != null && e.isStaticObject()) {
+		//TODO possibly move this to EntityGroup
+		if (e != null && e.isStaticObject() && !(Main.getWindow() instanceof LevelEditor)) {
 			level.removeEntity(e);
 		}
 		
@@ -283,7 +276,7 @@ public class World implements Playable, Editable {
 
 		level = new Level(new File(f, "level.dat"));
 		col = QuadTree.coverLevel(level);
-		col.loadEntities(new File(f, "entities.dat"));
+		col.loadEntities(new File(f, "entities.dat"), level);
 		
 		File triggerFile = new File(f, "triggers.yml");
 		if (triggerFile.exists()) {

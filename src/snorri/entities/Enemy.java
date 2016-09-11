@@ -1,7 +1,7 @@
 package snorri.entities;
 
 import java.util.ArrayDeque;
-import java.util.List;
+import java.util.ArrayList;
 
 import snorri.animations.Animation;
 import snorri.inventory.Carrier;
@@ -28,9 +28,6 @@ public class Enemy extends Unit implements Pathfinder, Carrier, Targetter {
 	private static final double CHANGE_PATH_MARGIN = 350;
 	
 	private Vector lastSeenPos;
-	private List<Vector> graph;
-	private List<Vector> targetGraph;
-	private boolean initialGraphFound = false;
 	private boolean recalculatingPath = false;
 	
 	protected double seekRange = 1000;
@@ -133,25 +130,20 @@ public class Enemy extends Unit implements Pathfinder, Carrier, Targetter {
 			shootAt(world, target);
 			return;
 		}
-		
-		//the pathfinding is mad efficient, but something else is hella laggy
-		
+				
+		ArrayList<Vector> graph = world.getLevel().getGraph(this);
+		ArrayList<Vector> targetGraph = world.getLevel().getGraph(target);
+				
 		if (path != null) {
 			
 			if (target.pos.distanceSquared(lastSeenPos) > CHANGE_PATH_MARGIN * CHANGE_PATH_MARGIN
-					&& (targetGraph = world.getLevel().getGraph(this)) == graph && graph != null) {
+					&& targetGraph == graph && graph != null) {
 				stopPath();
 			} else {
 				follow(world, deltaTime);
 			}
 
 		} else if (!recalculatingPath && (pos.distanceSquared(target.pos) <= seekRange * seekRange)) {
-
-			if (!initialGraphFound) {
-				graph = world.getLevel().getGraph(this);
-				targetGraph = world.getLevel().getGraph(target);
-				initialGraphFound = true;
-			}
 			
 			if (graph != null && graph == targetGraph) {
 				startPath();

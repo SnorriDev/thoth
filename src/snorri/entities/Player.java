@@ -3,6 +3,8 @@ package snorri.entities;
 import java.awt.Graphics;
 import java.awt.Image;
 
+import javax.swing.SwingUtilities;
+
 import snorri.animations.Animation;
 import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
@@ -56,6 +58,8 @@ public class Player extends Unit implements Carrier {
 		inventory.add(p2);
 		inventory.add(p3);
 		
+		tag = "player";
+		
 	}
 	
 	@Override
@@ -68,7 +72,17 @@ public class Player extends Unit implements Carrier {
 		FocusedWindow window = (FocusedWindow) Main.getWindow();
 		super.update(world, deltaTime);
 		inventory.update(deltaTime);
-		walk(world, window.getMovementVector(), deltaTime);
+		
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				walk(world, window.getMovementVector(), deltaTime);
+			}
+			
+		});
+		
+		
 		
 		Vector movement = window.getMovementVector();
 		Vector dir = window.getShotDirection();

@@ -83,4 +83,8 @@ public class Util {
 		throw new AssertionError();
 	}
 	
+	public static int niceMod(int n, int m) {
+		return (((n % m) + m) % m);
+	}
+	
 }

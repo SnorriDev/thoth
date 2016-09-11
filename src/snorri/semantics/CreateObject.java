@@ -32,7 +32,7 @@ public class CreateObject extends VerbDef {
 			e.getWorld().getLevel().wrapUpdate(e.getLocative(), (Tile) obj);
 			return true;
 		}
-		
+				
 		if (obj instanceof Class<?> && Entity.canSpawn((Class<?>) obj)) {
 			if (e.getWorld().tileHasEntity(e.getLocative().copy().toGridPos()) && obj != Spike.class) {
 				return false;

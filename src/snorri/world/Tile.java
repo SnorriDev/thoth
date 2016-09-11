@@ -1,5 +1,6 @@
 package snorri.world;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -96,10 +97,9 @@ public class Tile implements Comparable<Tile> {
 		
 		if (Debug.RENDER_GRAPHS) {
 			if (g.getWorld().getLevel().getGraph(v) != null) {
-				//Color c = new Color(g.getWorld().getLevel().getGraph(v).hashCode());
-				//gr.setColor(c);
+				gr.setColor(Debug.getColor(g.getWorld().getLevel().getGraph(v)));
 				gr.drawRect(relPos.getX(), relPos.getY(), Tile.WIDTH, Tile.WIDTH);
-				//gr.setColor(Color.BLACK);
+				gr.setColor(Color.BLACK);
 				return;
 			}
 		}

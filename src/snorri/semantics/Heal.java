@@ -1,6 +1,7 @@
 package snorri.semantics;
 
 import snorri.entities.Unit;
+import snorri.triggers.Trigger.TriggerType;
 
 public class Heal extends VerbDef {
 
@@ -14,6 +15,7 @@ public class Heal extends VerbDef {
 	public boolean exec(Object obj) {
 		if (obj instanceof Unit) {
 			((Unit) obj).heal(AMOUNT, e);
+			TriggerType.HEAL.activate(((Unit) obj).getTag());
 			return true;
 		}
 		return false;

@@ -18,14 +18,14 @@ public class PathNode implements Comparable<PathNode> {
 	
 	//change this to edit whether or not we can go diagonally
 	public static final Vector[] NEIGHBORS = new Vector[] {
-			new Vector(-1, 0),
-			new Vector(1, 0),
-			new Vector(0, 1),
-			new Vector(0, -1),
-			new Vector(-1, -1),
-			new Vector(1, -1),
-			new Vector(1, 1),
-			new Vector(-1, 1)};
+		new Vector(-1, 0),
+		new Vector(1, 0),
+		new Vector(0, 1),
+		new Vector(0, -1),
+		new Vector(-1, -1),
+		new Vector(1, -1),
+		new Vector(1, 1),
+		new Vector(-1, 1)};
 	
 	private Vector gridPos;
 	

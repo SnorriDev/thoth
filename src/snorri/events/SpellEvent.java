@@ -177,4 +177,8 @@ public class SpellEvent {
 		return degreeTemp;
 	}
 	
+	public double getDeltaTime() {
+		return deltaTime;
+	}
+	
 }

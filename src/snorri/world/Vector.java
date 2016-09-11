@@ -161,6 +161,7 @@ public class Vector implements Serializable, Comparable<Vector> {
 	@Override
 	public boolean equals(Object pos) {
 		if (pos instanceof Vector) {
+			//return getX() == ((Vector) pos).getX() && getY() == ((Vector) pos).getY();
 			return x == ((Vector) pos).x && y == ((Vector) pos).y;
 		}
 		return false;
