@@ -22,6 +22,7 @@ import javax.swing.UIManager;
 import net.sourceforge.yamlbeans.YamlReader;
 import snorri.dialog.Dialog;
 import snorri.dialog.Objective;
+import snorri.dialog.Portraits;
 import snorri.hieroglyphs.Hieroglyphs;
 import snorri.inventory.RandomDrop;
 import snorri.parser.Lexicon;
@@ -84,6 +85,7 @@ public class Main {
 		Lexicon.load();
 		Hieroglyphs.load();
 		RandomDrop.load();
+		Portraits.load();
 		setupFont();
 				
 		frame = new JFrame("Spoken Word");
@@ -154,16 +156,20 @@ public class Main {
 		}
 	}
 
-	public static BufferedImage getImage(String path) {
+	public static BufferedImage getImage(File file) {
 		try {
-			return ImageIO.read(getFile(path));
+			return ImageIO.read(file);
 		} catch (IllegalArgumentException e) {
-			Main.error("unable to find image " + path);
+			Main.error("unable to find image " + file.getName());
 			return null;
 		} catch (IOException e) {
-			Main.error("issue loading image " + path);
+			Main.error("issue loading image " + file.getName());
 			return null;
 		}
+	}
+	
+	public static BufferedImage getImage(String path) {
+		return getImage(getFile(path));
 	}
 	
 	public static YamlReader getYamlReader(File f) throws FileNotFoundException {
