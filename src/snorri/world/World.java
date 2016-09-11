@@ -167,7 +167,7 @@ public class World implements Playable, Editable {
 	}
 
 	@Override
-	public void render(FocusedWindow g, Graphics gr, boolean showOutlands) {
+	public synchronized void render(FocusedWindow g, Graphics gr, boolean showOutlands) {
 		
 		level.render(g, gr, showOutlands);
 		

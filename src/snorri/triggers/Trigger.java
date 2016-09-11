@@ -33,7 +33,8 @@ public class Trigger {
 		DOOR_OPEN,
 		ACQUIRE,
 		KILL,
-		ENCHANT;
+		ENCHANT,
+		HEAL;
 		
 		/**
 		 * Wrapper for activating triggers

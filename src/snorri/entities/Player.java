@@ -56,6 +56,8 @@ public class Player extends Unit implements Carrier {
 		inventory.add(p2);
 		inventory.add(p3);
 		
+		tag = "player";
+		
 	}
 	
 	@Override
