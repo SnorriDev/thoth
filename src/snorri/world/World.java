@@ -5,9 +5,7 @@ import java.awt.Graphics;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import snorri.entities.Detector;
@@ -33,8 +31,6 @@ public class World implements Playable, Editable {
 	private Level level;
 	private EntityGroup col;
 	private CopyOnWriteArrayList<Detector> colliders;
-	private Queue<Entity> deleteQ;
-	private Queue<Entity> addQ;
 	
 	private TriggerMap triggers;
 
@@ -56,14 +52,12 @@ public class World implements Playable, Editable {
 		//level.computePathfinding();
 		col = QuadTree.coverLevel(level);
 		colliders = new CopyOnWriteArrayList<Detector>();
-		deleteQ = new LinkedList<Entity>();
-		addQ = new LinkedList<Entity>();
 		
 		Pathfinding.setWorld(this);
 
 		// temporary
-		addHard(new Player(DEFAULT_SPAWN.copy()));
-		addHard(new Enemy(new Vector(600, 600), computeFocus()));
+		add(new Player(DEFAULT_SPAWN.copy()));
+		add(new Enemy(new Vector(600, 600), computeFocus()));
 
 		Main.log("new world created!");
 		
@@ -78,8 +72,6 @@ public class World implements Playable, Editable {
 		load(file);
 		level.computePathability();
 		colliders = new CopyOnWriteArrayList<Detector>();
-		deleteQ = new LinkedList<Entity>();
-		addQ = new LinkedList<Entity>();
 		
 		Pathfinding.setWorld(this);
 		
@@ -95,8 +87,6 @@ public class World implements Playable, Editable {
 		level = l;
 		col = QuadTree.coverLevel(level);
 		colliders = new CopyOnWriteArrayList<Detector>();
-		deleteQ = new LinkedList<Entity>();
-		addQ = new LinkedList<Entity>();
 		
 		Pathfinding.setWorld(this); //TODO make pathfinding not static
 		l.computePathfinding();
@@ -151,15 +141,6 @@ public class World implements Playable, Editable {
 		for (Detector p : colliders) {
 			p.update(this, d);
 		}
-		
-		//TODO can probably get rid of these queues
-		
-		while (!deleteQ.isEmpty()) {
-			deleteHard(deleteQ.poll());
-		}
-		while (!addQ.isEmpty()) {
-			addHard(addQ.poll());
-		}
 
 	}
 
@@ -182,16 +163,7 @@ public class World implements Playable, Editable {
 		return level;
 	}
 
-	/**
-	 * Add an Entity to the World. Detects whether Entity is a Collider or
-	 * otherwise, and handles it appropriately
-	 * 
-	 */
 	public void add(Entity e) {
-		addQ.add(e);
-	}
-
-	public void addHard(Entity e) {
 		
 		if (e instanceof Detector && !((Detector) e).isTreeMember()) {
 			colliders.add((Detector) e);
@@ -205,9 +177,9 @@ public class World implements Playable, Editable {
 	/**
 	 * Add a bunch of things to the world
 	 */
-	public void addAllHard(List<Entity> ents) {
+	public void addAll(List<Entity> ents) {
 		for (Entity e : ents) {
-			addHard(e);
+			add(e);
 		}
 	}
 
@@ -218,18 +190,7 @@ public class World implements Playable, Editable {
 	 * @param e
 	 *            the entity to delete
 	 */
-	public void delete(Entity e) {
-		deleteQ.add(e);
-	}
-
-	/**
-	 * Use deleteSoft method in update deleteHard is a bit faster, and can be
-	 * used in CollisionEvents and other contexts
-	 * 
-	 * @param e
-	 *            the entity to delete
-	 */
-	public boolean deleteHard(Entity e) {
+	public boolean delete(Entity e) {
 		
 		//TODO possibly move this to EntityGroup
 		if (e != null && e.isStaticObject() && !(Main.getWindow() instanceof LevelEditor)) {
@@ -313,7 +274,7 @@ public class World implements Playable, Editable {
 		for (Entity e : col.getAllEntities()) {
 			Entity e2 = e.copy();
 			e2.getPos().invert();
-			w.addHard(e2);
+			w.add(e2);
 		}
 		return w;
 	}
@@ -324,7 +285,7 @@ public class World implements Playable, Editable {
 		for (Entity e : col.getAllEntities()) {
 			Entity e2 = e.copy();
 			e2.setPos(e2.getPos().getXReflected(level.getDimensions().copy().toGlobalPos()));
-			w.addHard(e2);
+			w.add(e2);
 		}
 		return w;
 	}

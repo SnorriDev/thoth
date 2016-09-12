@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import snorri.main.FocusedWindow;
 
@@ -282,6 +283,33 @@ public class Vector implements Serializable, Comparable<Vector> {
 	 */
 	public Vector getXReflected(Vector dim) {
 		return new Vector(dim.getX() - 1 - x, y);
+	}
+	
+	public ArrayList<Vector> getSquareAround(int r) {
+		
+		ArrayList<Vector> out = new ArrayList<>();
+		
+		if (r == 0) {
+			out.add(copy());
+			return out;
+		}
+		
+		//sides
+		for (int i = -r + 1; i < r; i++) {
+			out.add(copy().add(-r, i));
+			out.add(copy().add(r, i));
+			out.add(copy().add(i, -r));
+			out.add(copy().add(i, r));
+		}
+		
+		//corners
+		out.add(copy().add(r, r));
+		out.add(copy().add(r, -r));
+		out.add(copy().add(-r, -r));
+		out.add(copy().add(-r, r));
+		
+		return out;
+		
 	}
 		
 }

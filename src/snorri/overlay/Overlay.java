@@ -117,7 +117,7 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 		
 		private static final long serialVersionUID = 1L;
 		private static final int MARGIN = 10;
-		private static final int WIDTH = 550;
+		private static final int WIDTH = 650;
 		private static final int HEIGHT = 160;
 		
 		protected final JTextPane pane;

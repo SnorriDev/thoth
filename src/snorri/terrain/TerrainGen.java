@@ -74,21 +74,21 @@ public class TerrainGen {
 		World world = new World(genLevel());
 				
 		Player p = new Player(world.getRandomSpawnPos());
-		world.addHard(p);
+		world.add(p);
 		
 		for (int i = 0; i < 20; i++) {
-			world.addHard(new Enemy(world.getRandomSpawnPos(), p));
+			world.add(new Enemy(world.getRandomSpawnPos(), p));
 		}
 		
 		Set<String> drops = Lexicon.getELang();
 		for (String possibleDrop : drops) {
 			if (Math.random() > 0.2) {
-				world.addHard(new Drop(world.getRandomSpawnPos(), new VocabDrop(possibleDrop)));
+				world.add(new Drop(world.getRandomSpawnPos(), new VocabDrop(possibleDrop)));
 			}
 		}
 		
 		for (int i = 0; i < 10; i++) {
-			world.addHard(new Desk(world.getRandomSpawnPos()));
+			world.add(new Desk(world.getRandomSpawnPos()));
 		}
 				
 		return world;

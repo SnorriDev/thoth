@@ -1,6 +1,8 @@
 package snorri.semantics;
 
+import snorri.entities.Enemy;
 import snorri.entities.Entity;
+import snorri.entities.Sarcophagus;
 import snorri.masking.Mask;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
@@ -21,6 +23,13 @@ public class Open extends VerbDef {
 	 */
 	@Override
 	public boolean exec(Object obj) {
+		
+		if (obj instanceof Sarcophagus) {
+			e.getWorld().delete((Entity) obj);
+			Vector spawnPos = e.getWorld().getLevel().getGoodSpawn(((Sarcophagus) obj).getPos().copy().toGridPos());
+			Entity.spawnNew(e.getWorld(), spawnPos, Enemy.class);
+		}
+		
 		if (obj instanceof Entity) {
 			Vector tilePos = ((Entity) obj).getPos().copy().toGridPos();
 			return openDoor(e.getWorld().getLevel(), tilePos);

@@ -560,7 +560,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		autosaveUndo();
 
 		if (selectedEntityClass.equals(Player.class)) {
-			world.deleteHard(world.computeFocus()); // don't need to check null
+			world.delete(world.computeFocus()); // don't need to check null
 		}
 
 		// TODO auto-detect options for constructor; have method that gives
@@ -579,7 +579,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 					return;
 				}
 				Vector dest = new Vector(inputs.getDouble("X"), inputs.getDouble("Y"));
-				world.addHard(selectedEntityClass.getConstructor(Vector.class, String.class, Vector.class)
+				world.add(selectedEntityClass.getConstructor(Vector.class, String.class, Vector.class)
 						.newInstance(spawnPos, inputs.getText("World"), dest));
 			} else if (selectedEntityClass.equals(Drop.class)) {
 				DialogMap inputs = new DialogMap();
@@ -588,7 +588,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				if (dialog("Drop Reward", inputs) == null) {
 					return;
 				}
-				world.addHard(selectedEntityClass.getConstructor(Vector.class, String.class, String.class)
+				world.add(selectedEntityClass.getConstructor(Vector.class, String.class, String.class)
 						.newInstance(spawnPos, inputs.getText("Prize"), inputs.getText("Spell")));
 			} else if (selectedEntityClass.equals(Listener.class)) {
 				DialogMap inputs = new DialogMap();
@@ -597,12 +597,12 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				if (dialog("Configure Listener", inputs) == null) {
 					return;
 				}
-				world.addHard(selectedEntityClass.getConstructor(Vector.class, int.class, String.class)
+				world.add(selectedEntityClass.getConstructor(Vector.class, int.class, String.class)
 						.newInstance(spawnPos, inputs.getInteger("Radius"), inputs.getText("Tag")));
 			}
 
 			else {
-				world.addHard(selectedEntityClass.getConstructor(Vector.class).newInstance(spawnPos));
+				world.add(selectedEntityClass.getConstructor(Vector.class).newInstance(spawnPos));
 			}
 
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
@@ -624,7 +624,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		Entity deletableEntity = world.getEntityTree().getFirstCollision(new Entity(getMousePosAbsolute()), true);
 
 		autosaveUndo();
-		world.deleteHard(deletableEntity);
+		world.delete(deletableEntity);
 
 	}
 

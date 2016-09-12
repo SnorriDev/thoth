@@ -50,7 +50,7 @@ public class Enemy extends Unit implements Pathfinder, Carrier, Targetter {
 	public Enemy(Vector pos) {
 		this(pos, null);
 	}
-		
+
 	public void setTarget(Entity target) {
 		this.target = target;
 	}

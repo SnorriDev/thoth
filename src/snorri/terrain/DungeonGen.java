@@ -129,15 +129,15 @@ public class DungeonGen extends TerrainGen {
 	public World genWorld() {
 		World world = new World(genLevel());
 		Player p = new Player(start.copy().toGlobalPos());
-		world.addHard(p);
+		world.add(p);
 		for (int i = 0; i < 20; i++) {
 			Vector pos = world.getRandomSpawnPos();
 			if (pos != null) {
-				world.addHard(new Enemy(pos, p));
+				world.add(new Enemy(pos, p));
 			}
 		}
 		while (!spawnQ.isEmpty()) {
-			world.addHard(spawnQ.poll()); //yikes this copy shenanigans
+			world.add(spawnQ.poll()); //yikes this copy shenanigans
 		}
 		return world;
 	}

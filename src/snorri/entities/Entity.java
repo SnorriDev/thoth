@@ -119,7 +119,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			if (e instanceof Despawner) {
 				((Despawner) e).setDespawnable(true);
 			}
-			world.addHard(e);
+			world.add(e);
 			return e;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {

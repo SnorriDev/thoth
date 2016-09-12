@@ -29,6 +29,7 @@ import snorri.world.Tile.TileType;
 public class Level implements Editable {
 
 	public static final int MAX_SIZE = 1024;
+	private static final int SPAWN_SEARCH_RADIUS = 10;
 	
 	private Tile[][] map;
 	private Vector dim;
@@ -596,10 +597,14 @@ public class Level implements Editable {
 		}
 		
 	}
-
-	public Vector getGoodSpawn(int startX, int startY) {
-		for (int x = startX; x < dim.getX(); x++) {
-			changeStart: for (int y = startY; y < dim.getY(); y++) {
+	
+	public Vector getGoodSpawn(Vector start) {
+		
+		for (int r = 0; r < SPAWN_SEARCH_RADIUS; r++) {
+			changeStart: for (Vector v : start.getSquareAround(r)) {
+				
+				int x = v.getX();
+				int y = v.getY();
 				
 				for (int x1 = (x * Tile.WIDTH - 2 * Unit.RADIUS_X) / Tile.WIDTH; x1 <= (x * Tile.WIDTH + 2 * Unit.RADIUS_X) / Tile.WIDTH; x1++) {
 					for (int y1 = (y * Tile.WIDTH - 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1 <= (y * Tile.WIDTH + 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
@@ -609,15 +614,31 @@ public class Level implements Editable {
 					}
 				}
 				
-				return new Vector(x, y).toGlobalPos();
+				return v.copy().toGlobalPos();
 				
 			}
 		}
+		
+//		for (int x = startX; x < dim.getX(); x++) {
+//			changeStart: for (int y = startY; y < dim.getY(); y++) {
+//				
+//				for (int x1 = (x * Tile.WIDTH - 2 * Unit.RADIUS_X) / Tile.WIDTH; x1 <= (x * Tile.WIDTH + 2 * Unit.RADIUS_X) / Tile.WIDTH; x1++) {
+//					for (int y1 = (y * Tile.WIDTH - 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1 <= (y * Tile.WIDTH + 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
+//						if (!isContextPathable(x1, y1)) {
+//							continue changeStart;
+//						}
+//					}
+//				}
+//				
+//				return new Vector(x, y).toGlobalPos();
+//				
+//			}
+//		}
 		return null;
 	}
 	
-	public Vector getGoodSpawn(Vector v) {
-		return getGoodSpawn(v.getX(), v.getY());
+	public Vector getGoodSpawn(int x, int y) {
+		return getGoodSpawn(new Vector(x, y));
 	}
 
 	@Override

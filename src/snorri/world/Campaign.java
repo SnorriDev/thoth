@@ -58,10 +58,10 @@ public class Campaign implements Playable {
 	}
 	
 	public void teleport(Entity e, int i, Vector newPos) {
-		getCurrentWorld().deleteHard(e);
+		getCurrentWorld().delete(e);
 		e.setPos(newPos);
 		currentWorld = i;
-		getCurrentWorld().addHard(e);
+		getCurrentWorld().add(e);
 	}
 	
 	public void teleport(Entity e, World world, Vector newPos) {
