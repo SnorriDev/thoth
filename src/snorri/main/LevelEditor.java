@@ -155,7 +155,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				continue;
 			}
 
-			submenu = new JMenu(t.toString());
+			submenu = new JMenu(t.toStringShort());
 			for (Tile s : t.getType().getSubTypes()) {
 				rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(s.getTexture()));
 				rbMenuItem.setSelected(firstTile);
