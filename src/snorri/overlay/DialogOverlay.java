@@ -1,39 +1,37 @@
 package snorri.overlay;
 
-import java.awt.GridBagLayout;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
+import javax.swing.JComponent;
 
 import snorri.dialog.Dialog;
 import snorri.main.FocusedWindow;
-import snorri.main.Main;
 
 public class DialogOverlay extends Overlay {
 
 	private static final long serialVersionUID = 1L;
 	
-	public DialogOverlay(FocusedWindow focusedWindow, Dialog dialog) {
+	private static final Point POSITION = new Point(30, 40);
+	
+	public DialogOverlay(FocusedWindow focusedWindow) {
+		
 		super(focusedWindow);
+		setLayout(null);
 		
-		setLayout(new GridBagLayout());
+		Dialog test = new Dialog();
+		test.image = "thoth";
 		
-		if (dialog.image != null) {
-			add(new JLabel(new ImageIcon(Main.getImage(dialog.image))));
-		}
-		
-		TextPane pane = this.new TextPane();
-		pane.setText(dialog.text);
+		JComponent pane = new DialogPane(test);
+		Dimension bounds = pane.getPreferredSize();
+		pane.setBounds(POSITION.x, POSITION.y, bounds.width, bounds.height);
 		add(pane);
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Okay")) {
-			window.unpause();
-		}
 	}
 
 }

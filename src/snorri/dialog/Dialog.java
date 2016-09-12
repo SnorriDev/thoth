@@ -1,18 +1,29 @@
 package snorri.dialog;
 
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
+
 /**
- * Wrapper class to read dialog from YAML file
+ * Wrapper class to read dialog and other HTML text from YAML file
  */
 
 public class Dialog {
 	
 	/**HTML text to show*/
 	public String text = "";
+	/**Image for actual dialog*/
 	public String image = null;
-	
-	//TODO some sort of action on click?
-	
+		
 	public Dialog() {
+	}
+	
+	public Image getImage() {
+		return Portraits.get(image);
+	}
+
+	public ImageIcon getIcon() {
+		return new ImageIcon(getImage());
 	}
 		
 }

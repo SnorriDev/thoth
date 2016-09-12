@@ -13,6 +13,7 @@ import java.net.URL;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -20,6 +21,7 @@ import javax.swing.border.Border;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 
+import snorri.dialog.Dialog;
 import snorri.keyboard.Key;
 import snorri.main.FocusedWindow;
 import snorri.main.GamePanel;
@@ -27,24 +29,49 @@ import snorri.main.Main;
 
 public abstract class Overlay extends GamePanel implements KeyListener {
 	
+	private static final Image TEXT_BOX = Main.getImage("/textures/hud/textBox.png");
+	private static final Image DIALOG_BOX = Main.getImage("/textures/hud/dialogBox.png");
 	
 	private static final long serialVersionUID = 1L;
-	
-	private static final Image BACKGROUND = Main.getImage("/textures/hud/textBox.png");
-	
+		
 	protected final FocusedWindow window;
 	
-	protected class TextPane extends JPanel {
-
+	protected abstract class BoxPane extends JPanel {
+		
 		private static final long serialVersionUID = 1L;
-		private final JTextPane pane;
-				
-		public TextPane() {
+		private Image box;
+		
+		protected BoxPane(Image box) {
 			
+			this.box = box;
 			setOpaque(false);
-			setPreferredSize(new Dimension(BACKGROUND.getWidth(null), BACKGROUND.getHeight(null)));
+			setPreferredSize(new Dimension(box.getWidth(null), box.getHeight(null)));
 			setBorder(emptyBorder());
 			setLayout(new GridBagLayout());
+			
+			if (Overlay.this instanceof KeyListener) {
+				addKeyListener((KeyListener) Overlay.this);
+			}
+			
+		}
+		
+		@Override
+		public void paintComponent(Graphics g) {
+			g.drawImage(box, 0, 0, null);
+			super.paintComponent(g);
+		}
+		
+	}
+	
+	protected class TextPane extends BoxPane {
+
+		private static final long serialVersionUID = 1L;
+		
+		protected final JTextPane pane;
+		
+		public TextPane() {
+			
+			super(TEXT_BOX);
 			GridBagConstraints c = new GridBagConstraints();
 			
 			pane = new JTextPane();
@@ -69,17 +96,10 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 			add(b, c);
 			
 			if (Overlay.this instanceof KeyListener) {
-				addKeyListener((KeyListener) Overlay.this);
 				pane.addKeyListener((KeyListener) Overlay.this);
 				b.addKeyListener((KeyListener) Overlay.this);
 			}
 			
-		}
-		
-		@Override
-		public void paintComponent(Graphics g) {
-			g.drawImage(BACKGROUND, 0, 0, null);
-			super.paintComponent(g);
 		}
 		
 		public void setPage(URL url) throws IOException {
@@ -88,6 +108,32 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 		
 		public void setText(String text) {
 			pane.setText(text);
+		}
+		
+	}
+	
+	protected class DialogPane extends BoxPane {
+		
+		private static final long serialVersionUID = 1L;
+		
+		protected final JTextPane pane;
+
+		public DialogPane(Dialog dialog) {
+			
+			super(DIALOG_BOX);
+			GridBagConstraints c = new GridBagConstraints();
+			
+			JLabel portrait = new JLabel(dialog.getIcon());
+			add(portrait, c);
+			
+			pane = new JTextPane();
+			pane.setEditorKit(getHTMLEditorKit());
+			pane.setOpaque(false);
+			pane.setEditable(false);
+			pane.setText("hello world");
+			pane.setMaximumSize(new Dimension(200, 50));
+			add(pane, c);
+			
 		}
 		
 	}

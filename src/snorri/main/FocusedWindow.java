@@ -12,6 +12,7 @@ import snorri.inventory.Inventory;
 import snorri.keyboard.Key;
 import snorri.keyboard.KeyStates;
 import snorri.keyboard.MouseButton;
+import snorri.overlay.TextOverlay;
 import snorri.overlay.DialogOverlay;
 import snorri.overlay.InventoryOverlay;
 import snorri.overlay.PauseOverlay;
@@ -48,7 +49,8 @@ public abstract class FocusedWindow extends GamePanel implements MouseListener, 
 	}
 	
 	public synchronized void showDialog(Dialog dialog) {
-		Main.setOverlay(new DialogOverlay(this, dialog));
+		Main.setOverlay(new DialogOverlay(this));
+		//Main.setOverlay(new TextOverlay(this, dialog));
 		paused = true;
 	}
 	
