@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
@@ -115,6 +116,9 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 	protected class DialogPane extends BoxPane {
 		
 		private static final long serialVersionUID = 1L;
+		private static final int MARGIN = 10;
+		private static final int WIDTH = 550;
+		private static final int HEIGHT = 160;
 		
 		protected final JTextPane pane;
 
@@ -124,15 +128,31 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 			GridBagConstraints c = new GridBagConstraints();
 			
 			JLabel portrait = new JLabel(dialog.getIcon());
+			c.gridx = 0;
+			c.gridy = 0;
 			add(portrait, c);
 			
 			pane = new JTextPane();
 			pane.setEditorKit(getHTMLEditorKit());
 			pane.setOpaque(false);
 			pane.setEditable(false);
-			pane.setText("hello world");
-			pane.setMaximumSize(new Dimension(200, 50));
-			add(pane, c);
+			pane.setText(dialog.text);
+			pane.setMargin(new Insets(0, MARGIN, 0, 0));
+			pane.setMaximumSize(new Dimension(WIDTH, 1000000));
+			
+			JScrollPane scroll = new JScrollPane(pane);
+			scroll.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+			scroll.setOpaque(false);
+			scroll.getViewport().setOpaque(false);
+			scroll.setBorder(null);
+			scroll.setViewportBorder(null);
+			c.gridx = 1;
+			c.gridy = 0;
+			add(scroll, c);
+			
+			if (Overlay.this instanceof KeyListener) {
+				pane.addKeyListener((KeyListener) Overlay.this);
+			}
 			
 		}
 		

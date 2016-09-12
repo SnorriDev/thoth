@@ -13,6 +13,7 @@ public class Portraits {
 	private static Map<String, Image> portraits = new HashMap<>();
 	
 	static {
+		portraits.put(null, Main.getImage("/textures/portraits/box.png"));
 		for (File f : Main.getFile("/textures/portraits").listFiles()) {
 			portraits.put(Util.removeExtension(f.getName()), Main.getImage(f));
 		}
