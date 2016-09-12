@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import snorri.animations.Animation;
 import snorri.entities.Entity;
 import snorri.events.SpellEvent;
+import snorri.main.GamePanel;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.main.Util;
@@ -307,8 +308,8 @@ public abstract class Item implements Droppable {
 	//TODO: use an ImageViewer to scale things
 	
 	public static Vector getPos(int i, boolean top) {
-		int y = top ? GameWindow.MARGIN : (((GameWindow) Main.getWindow()).getDimensions().getY() - Item.getSlotWidth() - GameWindow.MARGIN);
-		return new Vector(GameWindow.MARGIN + i * (Item.getSlotWidth() + Item.SLOT_SPACE), y);
+		int y = top ? GamePanel.MARGIN : (((GameWindow) Main.getWindow()).getDimensions().getY() - Item.getSlotWidth() - GamePanel.MARGIN);
+		return new Vector(GamePanel.MARGIN + i * (Item.getSlotWidth() + Item.SLOT_SPACE), y);
 	}
 	
 	/**

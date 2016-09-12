@@ -15,6 +15,7 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final int FRAME_DELTA = 15; //33 -> 30 FPS (20 -> 50 FPS
+	public static final int MARGIN = 20;
 	
 	private boolean stopped = false;
 	

@@ -15,6 +15,7 @@ import snorri.inventory.Papyrus;
 import snorri.inventory.Weapon;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
+import snorri.main.GamePanel;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.world.Vector;
@@ -113,7 +114,7 @@ public class Player extends Unit implements Carrier {
 	}
 	
 	public Vector getHealthBarPos() {
-		return new Vector(((GameWindow) Main.getWindow()).getDimensions().getX() - GameWindow.MARGIN - HEALTH_RES * HEART.getWidth(null), GameWindow.MARGIN);
+		return new Vector(((GameWindow) Main.getWindow()).getDimensions().getX() - GamePanel.MARGIN - HEALTH_RES * HEART.getWidth(null), GamePanel.MARGIN);
 	}
 	
 	public void renderHealthBar(Graphics g) {

@@ -33,8 +33,6 @@ public class GameWindow extends FocusedWindow {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public static final int MARGIN = 20;
-	
 	private Playable universe;
 	private Player focus;
 	private Queue<Message> messageQ;

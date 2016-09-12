@@ -8,13 +8,13 @@ import javax.swing.JComponent;
 
 import snorri.dialog.Dialog;
 import snorri.main.FocusedWindow;
+import snorri.main.GamePanel;
+import snorri.main.Main;
 
 public class DialogOverlay extends Overlay {
 
 	private static final long serialVersionUID = 1L;
-	
-	private static final Point POSITION = new Point(30, 40);
-	
+		
 	public DialogOverlay(FocusedWindow focusedWindow) {
 		
 		super(focusedWindow);
@@ -25,7 +25,9 @@ public class DialogOverlay extends Overlay {
 		
 		JComponent pane = new DialogPane(test);
 		Dimension bounds = pane.getPreferredSize();
-		pane.setBounds(POSITION.x, POSITION.y, bounds.width, bounds.height);
+		
+		GamePanel window = Main.getWindow();
+		pane.setBounds((window.getWidth() - bounds.width) / 2, window.getHeight() - bounds.height - GamePanel.MARGIN, bounds.width, bounds.height);
 		add(pane);
 		
 	}
