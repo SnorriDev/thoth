@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.List;
 
+import snorri.entities.Entity;
 import snorri.entities.Unit;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
@@ -20,11 +22,17 @@ public class Tile implements Comparable<Tile>, Nominal {
 									
 	private TileType type;
 	private int style;
-	private boolean reachable, surroundingsPathable = true, occupied = false;
+	private boolean reachable, surroundingsPathable = true;
+	private List<Entity> entities;
 	
 	private Mask[] bitMasks;
 
+	private Tile() {
+		entities = new ArrayList<>();
+	}
+	
 	public Tile(TileType type) {
+		this();
 		this.type = type;
 		style = 0;
 	}
@@ -45,13 +53,11 @@ public class Tile implements Comparable<Tile>, Nominal {
 	}
 	
 	public Tile(Tile tile) {
-		if (tile == null)
-			return;
-		type = tile.getType();
-		style = tile.getStyle();
+		this(tile.getType(), tile.getStyle());
 	}
 	
 	public Tile(String substring) {
+		this();
 		String[] l = substring.split(":");
 		type = TileType.byId(Integer.parseInt(l[0]));
 		style = Integer.parseInt(l[1]);
@@ -366,7 +372,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 	}
 	
 	public boolean isOccupied() {
-		return occupied;
+		return !entities.isEmpty();
 	}
 	
 	//figure out if we can stand on this block at the very beginning
@@ -424,9 +430,13 @@ public class Tile implements Comparable<Tile>, Nominal {
 	public void setBitMasks(Level l, Vector pos) {
 		setBitMasks(l, pos.getX(), pos.getY());
 	}
-
-	public void setOccupied(boolean flag) {
-		occupied = flag;
+	
+	public void addEntity(Entity e) {
+		entities.add(e);
+	}
+	
+	public void removeEntity(Entity e) {
+		entities.remove(e);
 	}
 	
 }

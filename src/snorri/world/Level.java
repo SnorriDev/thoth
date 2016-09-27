@@ -584,9 +584,9 @@ public class Level implements Editable {
 			}
 		}
 		
-		if (graphs.size() <= 1) {
-			return;
-		}		
+//		if (graphs.size() <= 1) {
+//			return;
+//		}		
 				
 		connectedSubGraphs.remove(graph);
 		for (ArrayList<Vector> g : graphs) {
@@ -813,7 +813,7 @@ public class Level implements Editable {
 			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH; y1++) {
 				
 				if (getTileGrid(x1, y1) != null && c.intersects(getRectangle(x1, y1))) {
-					getTileGrid(x1, y1).setOccupied(true);
+					getTileGrid(x1, y1).addEntity(e);
 					getTileGrid(x1, y1).computeSurroundingsPathable(x1, y1, this);
 				}
 				
@@ -849,7 +849,7 @@ public class Level implements Editable {
 			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH; y1++) {
 				
 				if (getTileGrid(x1, y1) != null && c.intersects(getRectangle(x1, y1))) {
-					getTileGrid(x1, y1).setOccupied(false);
+					getTileGrid(x1, y1).removeEntity(e);
 					getTileGrid(x1, y1).computeSurroundingsPathable(x1, y1, this);
 				}
 				
