@@ -360,6 +360,7 @@ public class Level implements Editable {
 		
 		if (! f.exists()) {
 			Main.log("graph data not found in world; computing it from scratch");
+			computePathability();
 			computeConnectedSubGraphs();
 			return;
 		}
@@ -496,6 +497,7 @@ public class Level implements Editable {
 	 * Update graphs when we insert an unpathable tile
 	 * @see <code>setPathableGrid</code>
 	 */
+	//TODO the problem with filling is here probably
 	private void setUnpathableGrid(Vector v) {
 		
 		List<ArrayList<Vector>> graphs = new ArrayList<>(); //TODO make sure this works as intended
@@ -584,9 +586,9 @@ public class Level implements Editable {
 			}
 		}
 		
-//		if (graphs.size() <= 1) {
-//			return;
-//		}		
+		if (graphs.size() == 1) {
+			return;
+		}
 				
 		connectedSubGraphs.remove(graph);
 		for (ArrayList<Vector> g : graphs) {
@@ -704,7 +706,8 @@ public class Level implements Editable {
 		
 		Tile oldTile = getTileGrid(pos);
 		
-		if (oldTile == null) {
+		//if there is no tile at this position or a static entity is there, don't let the player mess with it
+		if (oldTile == null || oldTile.isOccupied()) {
 			return;
 		}
 		
@@ -812,28 +815,33 @@ public class Level implements Editable {
 		for (int x1 = (x - c.getRadiusX()) / Tile.WIDTH; x1 <= (x + c.getRadiusX()) / Tile.WIDTH; x1++) {
 			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH; y1++) {
 				
-				if (getTileGrid(x1, y1) != null && c.intersects(getRectangle(x1, y1))) {
+				if (c.intersects(getRectangle(x1, y1))) {
 					getTileGrid(x1, y1).addEntity(e);
-					getTileGrid(x1, y1).computeSurroundingsPathable(x1, y1, this);
 				}
 				
 			}
 		}
 		
-		//update all tiles in range of occupied tiles
-		for (int x1 = (x - c.getRadiusX() - Unit.RADIUS_X) / Tile.WIDTH; x1 <= (x + c.getRadiusX() + Unit.RADIUS_X) / Tile.WIDTH; x1++) {
-			for (int y1 = (y - c.getRadiusY() - Unit.RADIUS_Y) / Tile.WIDTH; y1 <= (y + c.getRadiusY() + Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
-				
-				if (getTileGrid(x1, y1) == null) {
-					continue;
-				}
-				
+		Queue<Vector> unpathableQ = new LinkedList<>();
+		
+		// update all tiles in range of occupied tiles
+		for (int x1 = (x - c.getRadiusX() - 2 * Unit.RADIUS_X)
+				/ Tile.WIDTH; x1 <= (x + c.getRadiusX() + 2 * Unit.RADIUS_X) / Tile.WIDTH; x1++) {
+			for (int y1 = (y - c.getRadiusY() - 2 * Unit.RADIUS_Y)
+					/ Tile.WIDTH; y1 <= (y + c.getRadiusY() + 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
+
+				boolean wasContextPathable = getTileGrid(x1, y1).isContextPathable();
 				getTileGrid(x1, y1).computeSurroundingsPathable(x1, y1, this);
-				if (!getTileGrid(x1, y1).isContextPathable()) {
-					setUnpathableGrid(new Vector(x1, y1));
+				if (wasContextPathable && !getTileGrid(x1, y1).isContextPathable()) {
+					unpathableQ.add(new Vector(x1, y1));
 				}
-				
+
 			}
+		}
+
+		//recalculate graphs around unpathable tiles
+		while (!unpathableQ.isEmpty()) {
+			this.setUnpathableGrid(unpathableQ.poll());
 		}
 		
 	}
@@ -843,33 +851,38 @@ public class Level implements Editable {
 		int x = e.getPos().getX();
 		int y = e.getPos().getY();
 		Collider c = e.getCollider();
-		
-		//mark all tiles which are occupied
-		for (int x1 = (x - c.getRadiusX()) / Tile.WIDTH; x1 <= (x + c.getRadiusX()) / Tile.WIDTH; x1++) {
-			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH; y1++) {
-				
-				if (getTileGrid(x1, y1) != null && c.intersects(getRectangle(x1, y1))) {
+
+		//unmark all tiles which are occupied
+		for (int x1 = (x - c.getRadiusX()) / Tile.WIDTH; x1 <= (x + c.getRadiusX()) / Tile.WIDTH + 1; x1++) {
+			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH + 1; y1++) {
+
+				if (c.intersects(getRectangle(x1, y1))) {
 					getTileGrid(x1, y1).removeEntity(e);
-					getTileGrid(x1, y1).computeSurroundingsPathable(x1, y1, this);
 				}
-				
+
 			}
 		}
-		
-		//update all tiles in range of occupied tiles
-		for (int x1 = (x - c.getRadiusX() - Unit.RADIUS_X) / Tile.WIDTH; x1 <= (x + c.getRadiusX() + Unit.RADIUS_X) / Tile.WIDTH; x1++) {
-			for (int y1 = (y - c.getRadiusY() - Unit.RADIUS_Y) / Tile.WIDTH; y1 <= (y + c.getRadiusY() + Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
-				
-				if (getTileGrid(x1, y1) == null) {
-					continue;
-				}
-				
+
+		Queue<Vector> unpathableQ = new LinkedList<>();
+
+		// update all tiles in range of occupied tiles
+		for (int x1 = (x - c.getRadiusX() - 2 * Unit.RADIUS_X)
+				/ Tile.WIDTH; x1 <= (x + c.getRadiusX() + 2 * Unit.RADIUS_X) / Tile.WIDTH; x1++) {
+			for (int y1 = (y - c.getRadiusY() - 2 * Unit.RADIUS_Y)
+					/ Tile.WIDTH; y1 <= (y + c.getRadiusY() + 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
+
+				boolean wasContextPathable = getTileGrid(x1, y1).isContextPathable();
 				getTileGrid(x1, y1).computeSurroundingsPathable(x1, y1, this);
-				if (getTileGrid(x1, y1).isContextPathable()) {
-					setPathableGrid(new Vector(x1, y1));
+				if (!wasContextPathable && getTileGrid(x1, y1).isContextPathable()) {
+					unpathableQ.add(new Vector(x1, y1));
 				}
-				
+
 			}
+		}
+
+		// recalculate graphs around unpathable tiles
+		while (!unpathableQ.isEmpty()) {
+			this.setPathableGrid(unpathableQ.poll());
 		}
 
 	}
