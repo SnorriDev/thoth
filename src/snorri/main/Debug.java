@@ -10,13 +10,13 @@ import snorri.parser.Node;
 public class Debug {
 
 	public static final boolean ALL_HIEROGLYPHS_UNLOCKED = false;
-	public static final boolean RENDER_GRAPHS = true;
+	public static final boolean RENDER_GRAPHS = false;
 	public static final boolean LOG_FOCUS = false;
 	public static final boolean LOG_WORLD = false;
 	public static final boolean SHOW_WEAPON_OUTPUT = false;
 	public static final boolean SHOW_ORB_OUTPUT = false;
 	public static final boolean DISABLE_PATHFINDING = false;
-	public static final boolean SHOW_COLLIDERS = true;
+	public static final boolean SHOW_COLLIDERS = false;
 	public static final boolean HIDE_MASKS = false;
 	
 	private static final Color[] GRAPH_COLORS;
