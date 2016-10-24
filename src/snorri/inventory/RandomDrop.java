@@ -1,10 +1,8 @@
 package snorri.inventory;
 
 import java.awt.Image;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 
 import snorri.main.Main;
 import snorri.main.Util;
@@ -13,28 +11,38 @@ import snorri.parser.Lexicon;
 public class RandomDrop implements Droppable {
 
 	private static final long serialVersionUID = 1L;
-	
-	private static final Map<String, Collection<Droppable>> TIERS;
-	
-	static {
-		TIERS = new HashMap<String, Collection<Droppable>>();
+			
+	private static enum Tier {
 		
-		TIERS.put("COMMON", new HashSet<>());
-		TIERS.get("COMMON").add(new VocabDrop("nb"));
-		TIERS.get("COMMON").add(new VocabDrop("nbt"));
+		COMMON(new Droppable[] {new VocabDrop("nb"), new VocabDrop("nbt")}),
+		ALL(Lexicon.getDropsInLang());
 		
-		TIERS.put("ALL", Lexicon.getDropsInLang());
-				
+		private Collection<Droppable> col;
+		
+		Tier(Collection<Droppable> col) {
+			this.col = col;
+		}
+		
+		Tier(Droppable[] arr) {
+			this(Arrays.asList(arr));
+		}
+		
+		public Collection<Droppable> getCollection() {
+			return col;
+		}
+		
 	}
 	
 	private final Collection<Droppable> col;
+	private String name;
 
 	public RandomDrop(Collection<Droppable> col) {
 		this.col = col;
 	}
 	
-	public RandomDrop(String tier) {
-		this(TIERS.get(tier.toUpperCase()));
+	public RandomDrop(String name) {
+		this(Tier.valueOf(name.toUpperCase()).getCollection());
+		this.name = name.toUpperCase();
 	}
 	
 	@Override
@@ -68,7 +76,11 @@ public class RandomDrop implements Droppable {
 	}
 
 	public static void load() {
-		Main.log(TIERS.size() + " drop tiers loaded");
+		Main.log(Tier.values().length + " drop tiers loaded");
+	}
+	
+	public String toString() {
+		return "!" + name;
 	}
 
 }

@@ -35,7 +35,7 @@ public class Pathfinding {
 		return world;
 	}
 	
-	//TODO: can still tweak a bit to introduce more optimal routes, random variation, diagonal movement, etc.
+	//TODO: change this to take a list of goals maybe? or just pathfind toward main target, and attack all things on their team
 	public static ArrayDeque<PathNode> findPath(Vector start, Vector goal) {
 		
 		if (Debug.DISABLE_PATHFINDING) {

@@ -47,4 +47,11 @@ public class Drop extends Detector {
 		}
 	}
 
+	public String getPrizeString() {
+		if (prize == null) {
+			return "null fucking prize";
+		}
+		return prize.toString();
+	}
+
 }

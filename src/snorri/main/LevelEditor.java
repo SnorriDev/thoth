@@ -27,9 +27,13 @@ import snorri.entities.Entity;
 import snorri.entities.Listener;
 import snorri.entities.Player;
 import snorri.entities.Portal;
+import snorri.entities.Unit;
 import snorri.inventory.Carrier;
+import snorri.inventory.Droppable;
+import snorri.inventory.Item;
 import snorri.keyboard.Key;
 import snorri.masking.Mask;
+import snorri.pathfinding.Team;
 import snorri.terrain.TerrainGen;
 import snorri.world.Campaign.WorldId;
 import snorri.world.Editable;
@@ -442,11 +446,13 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			deleteEntity();
 		}
 		if (Key.T.isPressed(e)) {
-			editEntityTag();
+			editEntityInfo();
 		}
 		if (Key.SPACE.isPressed(e)) {
 			openEntityInventory();
 		}
+		
+		//TODO add a key to register a team, and function to look up by name?
 
 	}
 
@@ -467,27 +473,11 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				env.getLevel().setTileGrid(v, new Tile(selectedTile));
 			}
 		}
-		/*
-		 * if (selectedTile != null && env.getLevel().getTileGrid(x, y) != null
-		 * && t != null && !t.equals(selectedTile)) { autosaveUndo();
-		 * env.getLevel().setTileGrid(x, y, new Tile(selectedTile));
-		 * fill_helper(x + 1, y, t); fill_helper(x - 1, y, t); fill_helper(x, y
-		 * + 1, t); fill_helper(x, y - 1, t); }
-		 */
+
 	}
 
-	/*
-	 * public void fill_helper(int x, int y, Tile t) { if (selectedTile != null
-	 * && env.getLevel().getNewTileGrid(x, y) != null && t != null &&
-	 * env.getLevel().getNewTileGrid(x, y).equals(t)) {
-	 * env.getLevel().setTileGrid(x, y, new Tile(selectedTile)); fill_helper(x +
-	 * 1, y, t); fill_helper(x - 1, y, t); fill_helper(x, y + 1, t);
-	 * fill_helper(x, y - 1, t); } }
-	 */
-
-	private ArrayList<Vector> computeConnectedSubGraph(Vector start, boolean[][] visited) { // borrowed
-																							// from
-																							// level.java
+	private ArrayList<Vector> computeConnectedSubGraph(Vector start, boolean[][] visited) {
+																							
 		final Tile START_TILE = env.getLevel().getTileGrid(start);
 
 		ArrayList<Vector> graph = new ArrayList<Vector>();
@@ -527,7 +517,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	}
 
-	private void editEntityTag() {
+	private void editEntityInfo() {
 
 		if (!(env instanceof World)) {
 			return;
@@ -541,11 +531,28 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 		DialogMap inputs = new DialogMap();
 		inputs.put("Tag", ent.getTag());
-		if (dialog("Edit Entity Tag", inputs) == null) {
+		if (ent instanceof Unit) {
+			inputs.put("Team", ((Unit) ent).getTeam().toString());
+		}
+		if (ent instanceof Drop) {
+			inputs.put("Prize", ((Drop) ent).getPrizeString());
+			Droppable prize = ((Drop) ent).getPrize();
+			inputs.put("Spell", (prize instanceof Item && ((Item) prize).getSpell() != null) ? ((Item) prize).getSpell().getOrthography() : "");
+		}
+		if (dialog("Edit Entity Info", inputs) == null) {
 			return;
 		}
+		
 		String tag = inputs.getText("Tag");
 		ent.setTag(tag.isEmpty() ? null : tag);
+		if (ent instanceof Unit) {
+			Team team = inputs.getTeam("Team");
+			((Unit) ent).setTeam(team);
+		}
+		if (ent instanceof Drop) {
+			world.delete(ent);
+			world.add(new Drop(ent.getPos().copy(), inputs.getText("Prize"), inputs.getText("Spell")));
+		}
 
 	}
 
@@ -579,8 +586,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 					return;
 				}
 				Vector dest = new Vector(inputs.getDouble("X"), inputs.getDouble("Y"));
-				world.add(selectedEntityClass.getConstructor(Vector.class, String.class, Vector.class)
-						.newInstance(spawnPos, inputs.getText("World"), dest));
+				world.add(new Portal(spawnPos, inputs.getText("World"), dest));
 			} else if (selectedEntityClass.equals(Drop.class)) {
 				DialogMap inputs = new DialogMap();
 				inputs.put("Prize", "Enter item name/id or vocab word");
@@ -588,8 +594,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				if (dialog("Drop Reward", inputs) == null) {
 					return;
 				}
-				world.add(selectedEntityClass.getConstructor(Vector.class, String.class, String.class)
-						.newInstance(spawnPos, inputs.getText("Prize"), inputs.getText("Spell")));
+				world.add(new Drop(spawnPos, inputs.getText("Prize"), inputs.getText("Spell")));
 			} else if (selectedEntityClass.equals(Listener.class)) {
 				DialogMap inputs = new DialogMap();
 				inputs.put("Radius", "40");
@@ -597,8 +602,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				if (dialog("Configure Listener", inputs) == null) {
 					return;
 				}
-				world.add(selectedEntityClass.getConstructor(Vector.class, int.class, String.class)
-						.newInstance(spawnPos, inputs.getInteger("Radius"), inputs.getText("Tag")));
+				world.add(new Listener(spawnPos, inputs.getInteger("Radius"), inputs.getText("Tag")));
 			}
 
 			else {

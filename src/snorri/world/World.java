@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -19,6 +20,7 @@ import snorri.main.FocusedWindow;
 import snorri.main.LevelEditor;
 import snorri.main.Main;
 import snorri.pathfinding.Pathfinding;
+import snorri.pathfinding.Team;
 import snorri.triggers.Trigger;
 import snorri.triggers.TriggerMap;
 
@@ -31,6 +33,7 @@ public class World implements Playable, Editable {
 	private Level level;
 	private EntityGroup col;
 	private CopyOnWriteArrayList<Detector> colliders;
+	private List<Team> teams;
 	
 	private TriggerMap triggers;
 
@@ -219,6 +222,7 @@ public class World implements Playable, Editable {
 		String path = f.getPath();
 		col.saveEntities(new File(path, "entities.dat"));
 		level.save(new File(path, "level.dat"), recomputeGraphs);
+		Team.save(new File(path, "teams.dat"), teams);
 
 	}
 
@@ -242,6 +246,11 @@ public class World implements Playable, Editable {
 		File triggerFile = new File(f, "triggers.yml");
 		if (triggerFile.exists()) {
 			triggers = Trigger.load(triggerFile, this);
+		}
+		
+		File teamsFile = new File(f, "teams.dat");
+		if (teamsFile.exists()) {
+			teams = Team.load(teamsFile);
 		}
 
 	}
@@ -307,6 +316,17 @@ public class World implements Playable, Editable {
 
 	public TriggerMap getTriggerMap() {
 		return triggers;
+	}
+	
+	public List<Team> getTeams() {
+		return teams;
+	}
+	
+	public void addTeam(Team team) {
+		if (teams == null) {
+			teams = new ArrayList<>();
+		}
+		teams.add(team);
 	}
 
 }

@@ -4,6 +4,10 @@ import java.util.HashMap;
 
 import javax.swing.JTextField;
 
+import snorri.inventory.Droppable;
+import snorri.pathfinding.Team;
+import snorri.world.World;
+
 public class DialogMap extends HashMap<String, JTextField> {
 
 	/**
@@ -45,6 +49,15 @@ public class DialogMap extends HashMap<String, JTextField> {
 			Main.error("coud not load class " + key);
 			return null;
 		}
+	}
+
+	public Team getTeam(String key) {
+		World world = ((FocusedWindow) Main.getWindow()).getWorld();
+		return Team.getByName(key, world);
+	}
+
+	public Droppable getDroppable(String key) {
+		return Droppable.fromString(key);
 	}
 
 }

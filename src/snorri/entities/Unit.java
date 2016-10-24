@@ -3,37 +3,50 @@ package snorri.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import snorri.collisions.Collider;
 import snorri.collisions.RectCollider;
 import snorri.events.SpellEvent;
 import snorri.modifiers.Modifier;
+import snorri.pathfinding.Team;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Unit extends Entity {
+public abstract class Unit extends Entity {
 
 	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 120;
+	/**Dimensions for humanoid units*/
 	public static final int RADIUS = 46, RADIUS_X = 21, RADIUS_Y = 40;
 	protected static final double MAX_HEALTH = 100;
 	
 	protected List<Modifier<Unit>> modifiers = new ArrayList<>();
 	
 	protected int speed;
+	private Team team;
 	private double health;
 		
-	public Unit(Vector pos) {
-		super(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)));
-		health = MAX_HEALTH;
-		z = UNIT_LAYER;
-		speed = getBaseSpeed();
+	protected Unit(Vector pos) {
+		this(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)));
 	}
 	
-	public Unit(Unit unit) {
+	/**
+	 * Use this constructor to build non-humanoid units
+	 * @param pos
+	 * 	Position to spawn the unit at
+	 * @param c
+	 * 	Collider for the unit
+	 */
+	protected Unit(Vector pos, Collider c) {
+		super(pos, c);
+		health = MAX_HEALTH;
+		z = UNIT_LAYER;
+	}
+	
+	protected Unit(Unit unit) {
 		super(unit);
 		health = unit.health;
 		z = UNIT_LAYER;
-		speed = getBaseSpeed();
 	}
 
 	@Override
@@ -144,6 +157,19 @@ public class Unit extends Entity {
 	
 	public void removeModifier(Modifier<Unit> m){
 		modifiers.remove(m);
+	}
+	
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+	
+	public Team getTeam() {
+		if (team == null) {
+			Team out = new Team();
+			out.add(this);
+			return out;
+		}
+		return team;
 	}
 	
 }

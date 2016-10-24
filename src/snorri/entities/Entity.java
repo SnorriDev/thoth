@@ -50,6 +50,8 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		EDIT_SPAWNABLE.add(Unit.class);
 		EDIT_SPAWNABLE.add(Sarcophagus.class);
 		EDIT_SPAWNABLE.add(Listener.class);
+		EDIT_SPAWNABLE.add(Crocodile.class);
+		EDIT_SPAWNABLE.add(Cobra.class);
 		
 		
 		Collections.sort(EDIT_SPAWNABLE, new Comparator<Class<? extends Entity>>() {
