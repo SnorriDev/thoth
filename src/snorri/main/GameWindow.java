@@ -159,6 +159,10 @@ public class GameWindow extends FocusedWindow {
 		this.objective = objective;
 	}
 	
+	public String getObjectiveInfo() {
+		return objective.longDesc;
+	}
+	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		

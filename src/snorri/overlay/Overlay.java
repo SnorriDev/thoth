@@ -26,6 +26,7 @@ import snorri.dialog.Dialog;
 import snorri.keyboard.Key;
 import snorri.main.FocusedWindow;
 import snorri.main.GamePanel;
+import snorri.main.GameWindow;
 import snorri.main.Main;
 
 public abstract class Overlay extends GamePanel implements KeyListener {
@@ -136,7 +137,11 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 			pane.setEditorKit(getHTMLEditorKit());
 			pane.setOpaque(false);
 			pane.setEditable(false);
-			pane.setText(dialog.text);
+			if (dialog.showObjective && Main.getWindow() instanceof GameWindow) {
+				pane.setText(dialog.text + "\n\n" + ((GameWindow) Main.getWindow()).getObjectiveInfo());
+			} else {
+				pane.setText(dialog.text);
+			}
 			pane.setMargin(new Insets(0, MARGIN, 0, 0));
 			pane.setMaximumSize(new Dimension(WIDTH, 1000000));
 			

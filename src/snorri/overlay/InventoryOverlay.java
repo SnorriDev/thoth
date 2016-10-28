@@ -317,7 +317,9 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	public void actionPerformed(ActionEvent e) {
 		
 		if (e.getActionCommand().equals("Enchant") && list.getSelectedValue() != null) {
-			list.getSelectedValue().setSpell(Grammar.parseString(getTagless()));
+			String rawSpell = getTagless();
+			list.getSelectedValue().setSpell(Grammar.parseString(rawSpell));
+			spellsEnchanted.add(rawSpell);
 			setGlyphs();
 		}
 		if (e.getActionCommand().equals("Add")) {
@@ -471,10 +473,10 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	
 	@Override
 	public void onClose() {
+		super.onClose();
 		for (String spell : spellsEnchanted) {
 			TriggerType.ENCHANT.activate(spell);
 		}
-		super.onClose();
 	}
 	
 	private Border getThinBorder() {

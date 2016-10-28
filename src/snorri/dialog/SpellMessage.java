@@ -26,7 +26,6 @@ public class SpellMessage extends Message {
 	@Override
 	public int render(GameWindow window, Graphics gr, int xTrans) {
 		if (output == null) {
-			Main.error("null spell message");
 			return 0;
 		}
 		return drawLineWithIcon(output.toString(), gr, window, xTrans);

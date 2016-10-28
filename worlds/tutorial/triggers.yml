@@ -3,81 +3,103 @@ onStart:
     - TIMELINE:
         object: start
   actions:
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+            shortDesc: explore the Temple of Thoth
+            longDesc: |
+              <p class="instruction">Hit <span class="control">escape</span> to close this dialog. Then 
+              use the <span class="control">WASD</span> keys to move around.</p>
     - SHOW_DIALOG:
         dialog:
           !dialog
             image: priest
             text: |
               <p><span class="name">Imhotep:</span> Hey! What are you doing down here, Prince Setna?
-              I don't care if you're royalty. The temple archives are still off limits to you.
-              Tell the pharaoh that what we do is none of his business! Wait, never mind, 
-              I forgot that the high priest accepted you as a temple scribe. Well, I guess I
-              can't stop you from having a look around.</p>
+              I don't care if you're royalty; the temple archives are still off limits to you!</p>
               
-              <p class="instruction">Hit <span class="control">escape</span> to close this dialog. Then 
-              use the <span class="control">WASD</span> keys to move around.</p>
-    - SET_OBJECTIVE:
-        objective:
-          !objective
-            shortDesc: explore the Temple of Thoth
+              <p>Oh wait, I forgot that the high priest accepted you as a temple scribe. 
+              I guess I can't stop you from having a look around.</p>
+            showObjective: true
         
 onZone1:
   actions:
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+          shortDesc: write a spell to open the door
+          longDesc: |
+            <p class="instruction">Collect the sparkling artifacts and papyrus on
+            the ground. Each artifact unlocks a new hieroglyph. To write a spell using
+            your unlocked hieroglyphs, walk to the desk and press <span class="control">
+            spacebar</span>. Next, select <span class="control">papyrus</span> on the left panel
+            and type the spell <span class="hiero">wn s</span> in the textbox. Hit <span class="control">enchant
+            </span> and then <span class="control">escape</span> to close the window.</p>
     - SHOW_DIALOG:
         dialog:
           !dialog
             image: priest
             text: |
-              <p><span class="name">Imhotep:</span> You know, you're not so bad, even if
-              your father is a terrible pharoah. Can you believe people think you guys are
-              actually descended from Horus? Your dad's weapons are just normal bronze; 
-              they weren't forged by the gods! Anyway, what is Horus to Thoth the All-Knowing?
-              Men may listen when your dad speaks for Horus, but the world itself listens 
-              when spellcasters speak on behalf of Thoth.</p>
-              
-              <p>Or at least, when some of us speak. I've only met a handful of people
-              with any ability, but I've spent my days reading about the legendary
-              scribes of days gone by. The gift -- to speak thought into action --
-              is both powerful and rare. Even rarer is the determination to master it. I doubt
-              you've got any skill, but see if you can write a spell to open this door.</p>
-              
-              <p class="instruction">Collect the sparkling artifacts and the papyrus on
-              the ground to learn new words. These words will expend your vocabulary and 
-              allow you to enchant your inventory with custom powers. Then, 
-              move over to that desk and press the <span class="control">space</span> bar 
-              to open the enchanting menu.</p>
-              
-              <p class="instruction">Next, select the item you wish to enchant on the left
-              and type in the phrase you wish to enchant the item with. Try typing
-              <span class="hiero">wn s</span> onto your papyrus. When used, this
-              spell will open any door under your mouse.</p>
+              <p><span class="name">Imhotep:</span> Listen, descendant of Horus! Your god is
+              nothing compared to Thoth, the All-Knowing. Men listen when the Pharoah 
+              speaks for Horus, but the world listens to sorcerers who speak through Thoth.
+              The ability to speak thought into action is a powerful gift that few possess, 
+              and even fewer have mastered. I doubt you have what it takes to open this door
+              with a spell.</p>
+            showObjective: true
+
+onEnchant:
+  events:
+    - ENCHANT:
+        object: wn s
+  actions:
     - SET_OBJECTIVE:
         objective:
           !objective
-          shortDesc: write a spell to open the door
+            shortDesc: cast your spell on the door
+            longDesc: |
+              <p class="instruction">Wait until your spell is off cooldown, and then put
+              your cursor over the door and press <span class="control">3</span>.</p>
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            image: priest
+            text: |
+              <p><span class="name">Imhotep:</span> Cast your spell on the door to see if it works.
+              Wait a second, let me stand back so you don't blow me up.</p>
+            showObjective: true
+              
 
 onDoorOpen:
   events:
     - DOOR_OPEN:
         object: !door {x: 66, y: 43}
   actions:
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+          shortDesc: arm yourself with a sling
     - SHOW_DIALOG:
         dialog:
           !dialog
             image: priest
             text: |
-              <p><span class="name">Imhotep:</span> Wow, amazing! Now go grab that sling on the ground.
-              You never know what you'll run into this deep in the temple archives.</p>              
-    - SET_OBJECTIVE:
-        objective:
-          !objective
-          shortDesc: arm yourself with a sling
+              <p><span class="name">Imhotep:</span> Wow, you're not so worthless after all! Now go grab that sling on the ground.
+              You never know what you'll run into this deep in the temple archives.</p>    
         
 onPickup:
   events:
     - ACQUIRE:
         object: sling
   actions:
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+          shortDesc: kill the pharaoh's soldiers
+          longDesc: |
+            <p class="instruction">Shoot automatically from the sling by clicking in a 
+            target direction. Make sure to dodge the enemy projectiles as well! Careful,
+            if your hearts reach zero, you will die.</p>
     - SHOW_DIALOG:
         dialog:
           !dialog
@@ -85,14 +107,7 @@ onPickup:
             text: |
               <p><span class="name">Imhotep:</span> What's that at the end of this tunnel?
               Oh no, ancient mummies! Shoot them before they kill us.</p>
-              
-              <p class="instruction">Shoot automatically from the sling by clicking in a 
-              target direction. Make sure to dodge the enemy projectiles as well! Careful,
-              if your hearts reach zero, you will die.</p>
-    - SET_OBJECTIVE:
-        objective:
-          !objective
-          shortDesc: kill the pharaoh's soldiers
+            showObjective: true
     - SPAWN_ENTITY:
         type: enemy
         pos: !spawn {x: 1904, y: 400}
@@ -107,6 +122,10 @@ onKill:
     - KILL:
         object: enemy2
   actions:
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+          shortDesc: proceed through the maze
     - SHOW_DIALOG:
         dialog:
           !dialog
@@ -114,52 +133,49 @@ onKill:
             text: |
               <p><span class="name">Imhotep:</span> Well, those mummies are back to being dead. 
               Now let's get out of here!</p>
-    - SET_OBJECTIVE:
-        objective:
-          !objective
-          shortDesc: proceed through the maze
 
 onWall:
   actions:
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+            shortDesc: blast into the blocked room
+            longDesc: |
+              <p class="instruction">After picking up the new vocabulary, enchant a spell 
+              on your sling that will create a sandstorm to blast through the wall.</p>
+              
+              <p class="instruction">In order to specify what kind of storm you want to create,
+              use a descriptive possessive: <span class="hiero">qmA Da Say</span> <span class="def">(create a storm of sand)</span>.</p>
     - SHOW_DIALOG:
         dialog:
           !dialog
             image: priest
             text: |
               <p><span class="name">Imhotep:</span> Ah, it's blocked off. See if you can blast
-              through the wall using your sling.</p>
-              
-              <p class="instruction">After picking up the new vocabulary, enchant a spell 
-              on your sling that will create a sandstorm to blast through the wall.</p>
-              
-              <p class="instruction">In order to specify what kind of storm you want to create,
-              use a descriptive possessive: <span class="hiero">Da Say</span> <span class="def">(storm of sand)</span>.</p>
-    - SET_OBJECTIVE:
-        objective:
-          !objective
-            shortDesc: blast into the blocked room
-            
+              through the wall using your sling.</p> 
+            showObjective: true      
 
 onZone2:
   actions:
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+            shortDesc: find the name on the urn and pray to it
+            longDesc: |
+              <p class="instruction">Collect the new vocabulary word and papyrus. If you
+              cast the new scroll on the urn, it will reveal the name of the powerful god
+              to whom the urn belongs. Use the hieroglyph <span class="hiero">dbH</span>
+              to ask the god for help.</p>
     - SHOW_DIALOG:
         dialog:
           !dialog
             image: priest
             text: |
-              <p><span class="name">Imhotep:</span> Woah, what is this place? That inscription
-              on the wall says Ramesses II, so this vault must be hundreds of years old.
+              <p><span class="name">Imhotep:</span> Woah, what is this place? I see the name of
+              Ramesses II on that wall, so this vault must be hundreds of years old.
               It looks like a dead end, but maybe that ancient papyrus and urn can help us get out of
-              here. See what you can do with those things, apprentice!</p>
-              
-              <p class="instruction">Collect the new vocabulary word and papyrus. If you
-              cast the new scroll on the urn, it will reveal the name of the powerful god
-              to whom the urn belongs. Use the hieroglyph <span class="hiero">dbH</span>
-              to ask the god for help.</p>
-    - SET_OBJECTIVE:
-        objective:
-          !objective
-            shortDesc: find the name on the urn and pray to it
+              here. Maybe you can write some sort of spell using them?</p>
+            showObjective: true
 
 prayThoth:
   events:
@@ -177,15 +193,13 @@ prayThoth:
               to lead you and your friend out of here, but we have other matters to discuss
               first.</p>
               
-              <p>Your curiosity and ingenuity have led you into this ancient temple vault. Before
+              <p>Your curiosity and ingenuity have led you into this ancient vault. Before
               you, no one had dared to touch this urn for almost 1,000 years. These same
-              qualities might lead you on another great quest: recovering the lost Book of Thoth.
-              Before my time, this text taught the first Egyptian spellcasters their craft.
-              By studying it, one can achieve the power of the gods. When I became High Priest,
-              I set out to find it even though its existence was only a legend. I succeeded, but the price
-              I paid was high. As punishment, my master Thoth compelled me to do many terrible
-              things and then destroyed me. I am warning you, do not follow my path. That book is 
-              dangerous, and, besides, the gods will never let any human attain it.</p>
+              qualities might lead you on another great quest: recovering the Book of Thoth,
+              an ancient tome which can teach mortals the secret language of the gods. When I was High Priest,
+              I set out to find this legendary book. After I acquired it, Thoth forced me to do many terrible
+              things and then destroyed me as a punishment. I am warning you: that book is 
+              dangerous. Don't go looking for it, because the gods will never let any human feel its power.</p>
               
               <p>It's a good thing I reached out to you now. I imagine others will ask you
               to find my book for them. They might even tell you that it's your destiny.
