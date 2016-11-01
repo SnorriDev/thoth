@@ -1,5 +1,7 @@
 package snorri.animations;
 
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -26,9 +28,11 @@ public class Animation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	protected BufferedImage[] frames;
+	protected BufferedImage[] flippedFrames;
 	private int currentFrame = 0;
 	private boolean hasCycled = false;
 	private String path;
+	private boolean flipped = false;
 
 	/**
 	 * load an animation from a path (not package name)
@@ -42,11 +46,13 @@ public class Animation implements Serializable {
 		} else {
 			loadFolder(Main.getFile(str));
 		}
+		computeFlipped();
 		path = str;
 	}
 	
 	public Animation(BufferedImage image) {
 		loadImage(image);
+		computeFlipped();
 	}
 
 	public Animation(Animation other) {
@@ -138,6 +144,7 @@ public class Animation implements Serializable {
 	private void set(Animation animation) {
 		path = animation.path;
 		frames = animation.frames;
+		flippedFrames = animation.flippedFrames;
 		hasCycled = animation.hasCycled;
 		currentFrame = animation.currentFrame;
 	}
@@ -158,7 +165,7 @@ public class Animation implements Serializable {
 			hasCycled = true;
 		}
 
-		return frames[currentFrame++];
+		return (flipped ? flippedFrames : frames)[currentFrame++];
 
 	}
 
@@ -172,6 +179,25 @@ public class Animation implements Serializable {
 	@Override
 	public String toString() {
 		return "Animation{len: " + frames.length + ", cur: " + currentFrame + "}";
+	}
+	
+	public void computeFlipped() {
+		flippedFrames = new BufferedImage[frames.length];
+		for (int i = 0; i < frames.length; i++) {
+			BufferedImage image = frames[i];
+			AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+			tx.translate(-image.getWidth(null), 0);
+			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+			flippedFrames[i] = op.filter(image, null);
+		}
+	}
+	
+	public void flip() {
+		flipped = !flipped;
+	}
+	
+	public void flip(boolean facingLeft) {
+		flipped = facingLeft;
 	}
 
 }

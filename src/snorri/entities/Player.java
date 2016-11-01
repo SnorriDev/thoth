@@ -39,8 +39,8 @@ public class Player extends Unit implements Carrier {
 	public Player(Vector pos) {
 		
 		super(pos);
-		inventory = new Inventory(this);
 		animation = new Animation(UNIT_IDLE);
+		inventory = new Inventory(this);
 		z = PLAYER_LAYER;
 		
 		//default weapons
