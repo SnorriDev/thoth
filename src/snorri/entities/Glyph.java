@@ -16,7 +16,7 @@ public class Glyph extends Detector {
 	private boolean activated = false;
 	
 	public Glyph(Vector pos) {
-		super(pos, new RectCollider(20, 16));
+		super(pos, new RectCollider(26, 45));
 		treeMember = true;
 		age = -1;
 		ignoreCollisions = true;

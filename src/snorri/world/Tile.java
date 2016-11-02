@@ -181,7 +181,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 		GRASS(true, new BufferedImage[] {
 			getImage("/textures/tiles/grass00.png"),
 			getImage("/textures/tiles/grass01.png")}),
-		VOID(false, Main.getImage("/textures/tiles/void00.png")),
+		VOID(false, false, Main.getImage("/textures/tiles/void00.png")),
 		COLUMN(false, new BufferedImage[] {
 			getImage("/textures/tiles/column00.png"),
 			getImage("/textures/tiles/column01.png")}, true),
@@ -238,6 +238,15 @@ public class Tile implements Comparable<Tile>, Nominal {
 			atTop = false;
 		}
 		
+		/**
+		 * Create a a liquid tile
+		 * @param pathable
+		 * 	Whether this tile can be walked over
+		 * @param liquidEditable
+		 * 	Whether the player can modify this tile with spells
+		 * @param textures
+		 * 	A list of textures
+		 */
 		TileType(boolean pathable, boolean liquidEditable, BufferedImage[] textures) {
 			this(pathable, textures);
 			canShootOver = true;
@@ -323,7 +332,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 			return textures.length;
 		}
 		
-		//TODO could make this an interface
 		@Override
 		public String toString() {
 			return Util.clean(name());
