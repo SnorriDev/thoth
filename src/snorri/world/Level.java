@@ -856,7 +856,7 @@ public class Level implements Editable {
 		for (int x1 = (x - c.getRadiusX()) / Tile.WIDTH; x1 <= (x + c.getRadiusX()) / Tile.WIDTH + 1; x1++) {
 			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH + 1; y1++) {
 
-				if (c.intersects(getRectangle(x1, y1))) {
+				if (getTileGrid(x1, y1) != null && c.intersects(getRectangle(x1, y1))) {
 					getTileGrid(x1, y1).removeEntity(e);
 				}
 

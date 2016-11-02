@@ -9,7 +9,9 @@ onStart:
             shortDesc: explore the Temple of Thoth
             longDesc: |
               <p class="instruction">Hit <span class="control">escape</span> to close this dialog. Then 
-              use the <span class="control">WASD</span> keys to move around.</p>
+              use the <span class="control">WASD</span> keys to move around. If you want to go back to 
+              your objective instructions at any point while playing,
+              hit <span class="control">escape</span> to open the pause menu.</p>
     - SHOW_DIALOG:
         dialog:
           !dialog
@@ -174,7 +176,7 @@ onZone2:
               <p><span class="name">Imhotep:</span> Woah, what is this place? I see the name of
               Ramesses II on that wall, so this vault must be hundreds of years old.
               It looks like a dead end, but maybe that ancient papyrus and urn can help us get out of
-              here. Maybe you can write some sort of spell using them?</p>
+              here. Can you write some kind of spell using them?</p>
             showObjective: true
 
 prayThoth:

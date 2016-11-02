@@ -21,6 +21,7 @@ public class PauseOverlay extends Overlay {
 		menu.setOpaque(false);
 		menu.add(createButton("Save"));
 		menu.add(createButton("Back"));
+		menu.add(createButton("Objective"));
 		menu.add(createButton("Help"));
 		menu.add(createButton("Quit"));
 		
@@ -34,6 +35,9 @@ public class PauseOverlay extends Overlay {
 		}
 		if (e.getActionCommand().equals("Back")) {
 			window.unpause();
+		}
+		if (e.getActionCommand().equals("Objective")) {
+			Main.setOverlay(new ObjectiveOverlay(window));
 		}
 		if (e.getActionCommand().equals("Help")) {
 			Main.setOverlay(new HelpOverlay(window));

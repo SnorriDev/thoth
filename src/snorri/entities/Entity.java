@@ -52,6 +52,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		EDIT_SPAWNABLE.add(Listener.class);
 		EDIT_SPAWNABLE.add(Crocodile.class);
 		EDIT_SPAWNABLE.add(Cobra.class);
+		EDIT_SPAWNABLE.add(Glyph.class);
 		
 		
 		Collections.sort(EDIT_SPAWNABLE, new Comparator<Class<? extends Entity>>() {
@@ -63,9 +64,13 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		
 	}
 	
+	/** A layer above the player for particle effects */
 	protected static final int PARTICLE_LAYER = 15;
+	/** The default layer for objects (below the player) */
 	protected static final int DEFAULT_LAYER = 4;
+	/** The default layer for units */
 	protected static final int UNIT_LAYER = 0;
+	/** The layer for the player */
 	protected static final int PLAYER_LAYER = 5;
 	
 	protected Collider collider;
