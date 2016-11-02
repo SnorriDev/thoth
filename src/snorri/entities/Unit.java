@@ -29,7 +29,7 @@ public abstract class Unit extends Entity {
 	protected Unit(Vector pos) {
 		this(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)));
 	}
-	
+		
 	/**
 	 * Use this constructor to build non-humanoid units
 	 * @param pos
@@ -76,6 +76,11 @@ public abstract class Unit extends Entity {
 	}
 
 	public void walk(World world, Vector direction, double deltaTime) {
+		
+		if (direction.getX() != 0) {
+			animation.flip(direction.getX() > 0);
+		}
+		
 		moveHard(world, direction.copy().normalize(), getSpeed() * deltaTime);
 	}
 	

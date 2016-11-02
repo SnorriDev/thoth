@@ -41,8 +41,8 @@ public class Enemy extends Unit implements Pathfinder, Carrier, Targetter {
 	public Enemy(Vector pos, Entity target) {
 		super(pos);
 		this.target = target;
-		inventory = new Inventory(this);
 		animation = new Animation(MUMMY_IDLE);
+		inventory = new Inventory(this);
 		getInventory().add(Item.newItem(ItemType.PELLET));
 		getInventory().add(Item.newItem(ItemType.SLOW_SLING));
 	}
