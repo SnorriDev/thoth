@@ -291,7 +291,7 @@ public class QuadTree extends Entity implements EntityGroup {
 	}
 
 	@Override
-	public void renderAround(FocusedWindow window, Graphics gr) {
+	public void renderAround(FocusedWindow window, Graphics gr, double deltaTime) {
 		
 		Vector playerPos = window.getFocus().getPos();
 		Vector dim = window.getDimensions();
@@ -300,7 +300,7 @@ public class QuadTree extends Entity implements EntityGroup {
 		
 		PriorityQueue<Entity> renderQueue = getRenderQueue(view);
 		while (!renderQueue.isEmpty()) {
-			renderQueue.poll().renderAround(window, gr);
+			renderQueue.poll().renderAround(window, gr, deltaTime);
 		}
 		
 	}

@@ -46,9 +46,7 @@ public class Team extends ArrayList<Unit> {
 	public static void save(File teamsFile, List<Team> teams) throws FileNotFoundException, IOException {
 		ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(teamsFile));
 		stream.writeObject(teams);
-		if (teams == null) {
-			Main.log("saved null list of teams");
-		} else {
+		if (teams != null) {
 			Main.log("saved " + teams.size() + " teams");
 		}
 	}

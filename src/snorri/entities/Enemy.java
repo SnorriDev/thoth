@@ -39,9 +39,8 @@ public class Enemy extends Unit implements Pathfinder, Carrier, Targetter {
 	private ArrayDeque<PathNode> path;
 	
 	public Enemy(Vector pos, Entity target) {
-		super(pos);
+		super(pos, new Animation(MUMMY_IDLE), new Animation(MUMMY_IDLE));
 		this.target = target;
-		animation = new Animation(MUMMY_IDLE);
 		inventory = new Inventory(this);
 		getInventory().add(Item.newItem(ItemType.PELLET));
 		getInventory().add(Item.newItem(ItemType.SLOW_SLING));

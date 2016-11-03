@@ -26,10 +26,13 @@ import snorri.main.Main;
 public class Animation implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
+	
+	private static final int FRAMERATE = 30;
+	private static final double SEC_PER_FRAME = 1d / FRAMERATE;
 
 	protected BufferedImage[] frames;
 	protected BufferedImage[] flippedFrames;
-	private int currentFrame = 0;
+	private double currentTime = 0;
 	private boolean hasCycled = false;
 	private String path;
 	private boolean flipped = false;
@@ -87,6 +90,10 @@ public class Animation implements Serializable {
 			}
 		}
 
+		if (tempFrames.size() == 0) {
+			Main.error("animation " + folder.getName() + " has zero frames");
+		}
+		
 		this.frames = new BufferedImage[tempFrames.size()];
 		int i = 0;
 		for (BufferedImage im : tempFrames) {
@@ -138,7 +145,8 @@ public class Animation implements Serializable {
 	 * set the animation back to the initial frame
 	 */
 	public void restart() {
-		currentFrame = 0;
+		currentTime = 0;
+		hasCycled = true;
 	}
 
 	private void set(Animation animation) {
@@ -146,7 +154,7 @@ public class Animation implements Serializable {
 		frames = animation.frames;
 		flippedFrames = animation.flippedFrames;
 		hasCycled = animation.hasCycled;
-		currentFrame = animation.currentFrame;
+		currentTime = animation.currentTime;
 	}
 
 	public String getPath() {
@@ -158,15 +166,21 @@ public class Animation implements Serializable {
 	 * 
 	 * @return the current image
 	 */
-	public BufferedImage getSprite() {
-
-		if (currentFrame == frames.length) {
+	public BufferedImage getSprite(double timeDelta) {
+		
+		int currentFrame = getFrameIndex();
+		if (currentFrame >= frames.length) {
+			restart();
 			currentFrame = 0;
-			hasCycled = true;
 		}
 
-		return (flipped ? flippedFrames : frames)[currentFrame++];
+		currentTime += timeDelta;
+		return (flipped ? flippedFrames : frames)[currentFrame];
 
+	}
+	
+	public int getFrameIndex() {
+		return (int) (currentTime / SEC_PER_FRAME);
 	}
 
 	/**
@@ -178,7 +192,7 @@ public class Animation implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Animation{len: " + frames.length + ", cur: " + currentFrame + "}";
+		return "Animation{n: " + frames.length + ", i: " + getFrameIndex() + "}";
 	}
 	
 	public void computeFlipped() {

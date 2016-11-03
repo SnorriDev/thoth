@@ -40,9 +40,9 @@ public class Listener extends Detector {
 	}
 	
 	@Override
-	public void renderAround(FocusedWindow g, Graphics gr) {
+	public void renderAround(FocusedWindow g, Graphics gr, double deltaTime) {
 		if (g instanceof LevelEditor) {
-			super.renderAround(g, gr);
+			super.renderAround(g, gr, deltaTime);
 		}
 	}
 	

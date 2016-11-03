@@ -88,7 +88,7 @@ public class Main {
 		Portraits.load();
 		setupFont();
 				
-		frame = new JFrame("Spoken Word");
+		frame = new JFrame("the Book of Thoth");
 		frame.setSize(1800, 900);
 		frame.addComponentListener(new Main.ResizeListener());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

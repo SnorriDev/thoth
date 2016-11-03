@@ -8,7 +8,7 @@ import snorri.main.FocusedWindow;
 
 public interface Editable extends Savable {
 
-	public void render(FocusedWindow levelEditor, Graphics gr, boolean b);
+	public void render(FocusedWindow levelEditor, Graphics gr, double deltaTime, boolean b);
 
 	public Level getLevel();
 

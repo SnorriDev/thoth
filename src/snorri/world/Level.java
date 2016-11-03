@@ -189,7 +189,7 @@ public class Level implements Editable {
 	}
 	
 	@Override
-	public void render(FocusedWindow g, Graphics gr, boolean renderOutside) {
+	public void render(FocusedWindow g, Graphics gr, double deltaTime, boolean renderOutside) {
 				
 		int cushion = 4;
 		int scaleFactor = 2;

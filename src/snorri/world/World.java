@@ -148,14 +148,14 @@ public class World implements Playable, Editable {
 	}
 
 	@Override
-	public synchronized void render(FocusedWindow g, Graphics gr, boolean showOutlands) {
+	public synchronized void render(FocusedWindow g, Graphics gr, double deltaTime, boolean showOutlands) {
 		
-		level.render(g, gr, showOutlands);
+		level.render(g, gr, deltaTime, showOutlands);
 		
 		for (Detector p : colliders.toArray(new Detector[0])) {
-			p.renderAround(g, gr);
+			p.renderAround(g, gr, deltaTime);
 		}
-		col.renderAround(g, gr);
+		col.renderAround(g, gr, deltaTime);
 	}
 
 	public EntityGroup getEntityTree() {

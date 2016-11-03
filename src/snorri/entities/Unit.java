@@ -3,6 +3,7 @@ package snorri.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import snorri.animations.Animation;
 import snorri.collisions.Collider;
 import snorri.collisions.RectCollider;
 import snorri.events.SpellEvent;
@@ -25,9 +26,15 @@ public abstract class Unit extends Entity {
 	protected int speed;
 	private Team team;
 	private double health;
+	
+	protected Animation walkingAnimation;
+	protected Animation idleAnimation;
 		
-	protected Unit(Vector pos) {
+	protected Unit(Vector pos, Animation idle, Animation walking) {
 		this(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)));
+		animation = idle;
+		idleAnimation = idle;
+		walkingAnimation = walking;
 	}
 		
 	/**
@@ -40,12 +47,6 @@ public abstract class Unit extends Entity {
 	protected Unit(Vector pos, Collider c) {
 		super(pos, c);
 		health = MAX_HEALTH;
-		z = UNIT_LAYER;
-	}
-	
-	protected Unit(Unit unit) {
-		super(unit);
-		health = unit.health;
 		z = UNIT_LAYER;
 	}
 
@@ -77,8 +78,10 @@ public abstract class Unit extends Entity {
 
 	public void walk(World world, Vector direction, double deltaTime) {
 		
-		if (direction.getX() != 0) {
-			animation.flip(direction.getX() > 0);
+		animation = (direction.magnitude() == 0) ? idleAnimation : walkingAnimation;
+		if (direction.getX() != 0 && animation != null) {
+			walkingAnimation.flip(direction.getX() > 0);
+			idleAnimation.flip(direction.getX() > 0);
 		}
 		
 		moveHard(world, direction.copy().normalize(), getSpeed() * deltaTime);

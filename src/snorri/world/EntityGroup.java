@@ -37,7 +37,7 @@ public interface EntityGroup {
 
 	public void updateAround(World world, double d, Entity focus);
 
-	public void renderAround(FocusedWindow g, Graphics gr);
+	public void renderAround(FocusedWindow g, Graphics gr, double deltaTime);
 
 	/**
 	 * This method does not just search immediate children, but all entities which are transitively children of the root EntityGroup
