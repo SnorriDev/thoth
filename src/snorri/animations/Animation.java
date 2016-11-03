@@ -36,7 +36,7 @@ public class Animation implements Serializable {
 	private boolean hasCycled = false;
 	private String path;
 	private boolean flipped = false;
-
+	
 	/**
 	 * load an animation from a path (not package name)
 	 * @param path
@@ -166,17 +166,9 @@ public class Animation implements Serializable {
 	 * 
 	 * @return the current image
 	 */
-	public BufferedImage getSprite(double timeDelta) {
-		
-		int currentFrame = getFrameIndex();
-		if (currentFrame >= frames.length) {
-			restart();
-			currentFrame = 0;
-		}
-
-		currentTime += timeDelta;
-		return (flipped ? flippedFrames : frames)[currentFrame];
-
+	public BufferedImage getSprite(double timeDelta) {	
+		currentTime = (currentTime + timeDelta) % (frames.length * SEC_PER_FRAME);
+		return (flipped ? flippedFrames : frames)[getFrameIndex()];
 	}
 	
 	public int getFrameIndex() {

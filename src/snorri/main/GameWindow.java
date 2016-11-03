@@ -117,10 +117,6 @@ public class GameWindow extends FocusedWindow {
 		double deltaTime = (time - lastRenderTime) / 1000000000d;
 		lastRenderTime = time;
 		
-		if (deltaTime > 0.2) { //this is shitty
-			Main.log("high delta time detected (" + deltaTime + " sec)");
-		}
-		
 		super.paintComponent(g);
 		
 		universe.getCurrentWorld().render(this, g, deltaTime, true);
