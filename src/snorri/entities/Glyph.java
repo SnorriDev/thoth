@@ -6,6 +6,11 @@ import snorri.events.CollisionEvent;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 
+/**
+ * Action buttons that should be used primarily as teleporters
+ * @author snorri
+ */
+
 public class Glyph extends Detector {
 
 	private static final long serialVersionUID = 1L;
