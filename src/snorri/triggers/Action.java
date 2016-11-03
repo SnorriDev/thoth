@@ -43,7 +43,8 @@ public abstract class Action {
 					@Override
 					public void run() {
 						Entity ent = Trigger.getByTag((String) args.get("unit"));
-						world.getEntityTree().move(ent, (Vector) args.get("pos"));
+						Vector globalPos = ((Vector) args.get("pos")).copy().toGlobalPos();
+						world.getEntityTree().move(ent, globalPos);
 					}
 				};
 			}

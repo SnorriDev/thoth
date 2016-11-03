@@ -1,0 +1,5 @@
+onDoor0:
+  actions:
+    - TELEPORT:
+        unit: player
+        pos: !spawn {x: 56, y: 25}

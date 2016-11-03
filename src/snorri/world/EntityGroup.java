@@ -16,10 +16,16 @@ import snorri.entities.Entity;
 import snorri.main.FocusedWindow;
 import snorri.main.LevelEditor;
 import snorri.main.Main;
+import snorri.triggers.Trigger;
 
 public interface EntityGroup {
 
-	public boolean insert(Entity e);
+	default boolean insert(Entity e) {
+		if (e.getTag() != null) {
+			Trigger.setTag(e.getTag(), e);
+		}
+		return true;
+	}
 	
 	public boolean delete(Entity e);
 

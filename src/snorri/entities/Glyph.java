@@ -44,8 +44,8 @@ public class Glyph extends Detector {
 	
 	public void activate() {
 		animation = new Animation(ACTIVATE);
-		TriggerType.BROADCAST.activate(tag);
 		activated = true;
+		TriggerType.BROADCAST.activate(tag);
 	}
 
 }

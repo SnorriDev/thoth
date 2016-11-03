@@ -80,11 +80,14 @@ public class QuadTree extends Entity implements EntityGroup {
 	 * @return <code>true</code> iff insertion is successful in this node or in
 	 *         a child node
 	 */
+	@Override
 	public boolean insert(Entity e) {
 
 		if (!contains(e)) {
 			return false;
 		}
+		
+		EntityGroup.super.insert(e); //update tags
 
 		boolean inChild = false;
 		if (nodes != null) {
