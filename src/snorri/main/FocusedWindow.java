@@ -27,12 +27,14 @@ public abstract class FocusedWindow extends GamePanel implements MouseListener, 
 	private static final long serialVersionUID = 1L;
 	
 	protected KeyStates states = new KeyStates();
+	protected long lastRenderTime;
 	private boolean paused = false;
 
 	public FocusedWindow() {
 		addMouseListener(this);
 		addKeyListener(this);
 		setFocusable(true);
+		lastRenderTime = getTimestamp();
 		startAnimation();
 	}
 	
@@ -44,6 +46,7 @@ public abstract class FocusedWindow extends GamePanel implements MouseListener, 
 	public synchronized void unpause() {
 		Main.setOverlay(null);
 		states.purge();
+		lastRenderTime = getTimestamp();
 		paused = false;
 	}
 	

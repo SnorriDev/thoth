@@ -23,7 +23,8 @@ import snorri.world.World;
 
 public class Player extends Unit implements Carrier {
 
-	private static final Animation UNIT_IDLE = new Animation("/textures/animations/unit/idle");
+	private static final Animation IDLE = new Animation("/textures/animations/unit/idle");
+	private static final Animation WALKING = new Animation("/textures/animations/unit/walking");
 	
 	private static final Image HEART = Main.getImage("/textures/hud/heart.png");
 	private static final Image HALF_HEART = Main.getImage("/textures/hud/halfHeart.png");
@@ -38,8 +39,7 @@ public class Player extends Unit implements Carrier {
 	
 	public Player(Vector pos) {
 		
-		super(pos);
-		animation = new Animation(UNIT_IDLE);
+		super(pos, new Animation(IDLE), new Animation(WALKING));
 		inventory = new Inventory(this);
 		z = PLAYER_LAYER;
 		

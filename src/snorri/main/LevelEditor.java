@@ -83,6 +83,8 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 		focus = new Entity(new Vector(50, 50));
 
+		lastRenderTime = getTimestamp();
+		
 		canUndo = false;
 		canRedo = false;
 	}
@@ -331,8 +333,12 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		if (env == null) {
 			return;
 		}
+		
+		long time = getTimestamp();
+		double deltaTime = (time - lastRenderTime) / 1000000000d;
+		lastRenderTime = time;
 
-		env.render(this, gr, false);
+		env.render(this, gr, deltaTime, false);
 		renderMousePos(gr);
 
 	}

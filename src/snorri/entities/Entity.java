@@ -216,7 +216,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public void update(World world, double d) {
 	}
 	
-	public void renderAround(FocusedWindow g, Graphics gr) {
+	public void renderAround(FocusedWindow g, Graphics gr, double timeDelta) {
 		
 		if (Debug.SHOW_COLLIDERS || animation == null) {
 			collider.render(g, gr);
@@ -226,13 +226,13 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			return;
 		}
 				
-		BufferedImage sprite = animation.getSprite();
+		BufferedImage sprite = animation.getSprite(timeDelta);
 		if (sprite == null) {
 			return;
 		}
 		
 		Vector rel = pos.copy().sub(g.getFocus().getPos());
-		gr.drawImage(sprite, rel.getX() + (g.getBounds().width - sprite.getWidth()) / 2, rel.getY() + (g.getBounds().height - sprite.getHeight()) / 2, sprite.getWidth(), sprite.getHeight(), null);
+		gr.drawImage(sprite, rel.getX() + (g.getBounds().width - sprite.getWidth()) / 2, rel.getY() + (g.getBounds().height - sprite.getHeight()) / 2, sprite.getWidth(null), sprite.getHeight(null), null);
 		
 	}
 
