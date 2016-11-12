@@ -413,15 +413,15 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		}
 	}
 	
-	private void checkParse(DocumentEvent e) {
+	private void checkParse(DocumentEvent e) {		
 		String text = getTagless();
 		if (Debug.ALL_HIEROGLYPHS_UNLOCKED) {
 			enchantButton.setEnabled(Grammar.isValidSentence(Grammar.parseString(text)));
 		} else {
-			enchantButton.setEnabled(Grammar.isValidSentence(Grammar.parseString(text)) && fullInv.knowsWords(Grammar.getWords(text)));
+			enchantButton.setEnabled(fullInv.knowsWords(Grammar.getWords(text)) && Grammar.isValidSentence(Grammar.parseString(text)));
 		}
 	}
-
+	
 	@Override
 	public void insertUpdate(DocumentEvent e) {
 		checkParse(e);
@@ -449,7 +449,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	@Override
 	public void focusLost(FocusEvent e) {
 	}
-	
 
 	@Override
 	public void mouseClicked(MouseEvent e) {

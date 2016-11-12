@@ -30,7 +30,7 @@ public class Terminal implements Node {
 	}
 	
 	public String toString() {
-		return "[" + orthography + "]";
+		return "`" + orthography + "`";
 	}
 
 	@Override
