@@ -24,8 +24,8 @@ public class Enemy extends Unit implements Pathfinder, Carrier, Targetter {
 	private static final Animation MUMMY_IDLE = new Animation("/textures/animations/mummy/idle");
 	
 	private static final long serialVersionUID = 1L;
-	private static final double APPROACH_MARGIN = 15;
-	private static final double CHANGE_PATH_MARGIN = 350;
+		private static final double APPROACH_MARGIN = 15;
+		private static final double CHANGE_PATH_MARGIN = 350;
 	
 	private Vector lastSeenPos;
 	private boolean recalculatingPath = false;
