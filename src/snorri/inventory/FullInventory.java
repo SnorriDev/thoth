@@ -50,6 +50,9 @@ public class FullInventory extends ArrayList<Droppable> implements Serializable 
 	 * 	the word of interest represented as a string
 	 */
 	public boolean knowsWord(String word) {
+		if (Lexicon.lookup(word) == null) {
+			return false;
+		}
 		return contains(new VocabDrop(word)) || Name.class.equals(Lexicon.lookup(word).getPOS());
 	}
 	

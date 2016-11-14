@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import snorri.entities.Flower;
+import snorri.entities.Glyph;
 import snorri.entities.Spike;
 import snorri.entities.Urn;
 import snorri.inventory.Droppable;
@@ -24,6 +25,7 @@ import snorri.semantics.Break;
 import snorri.semantics.Burn;
 import snorri.semantics.ConditionalDef;
 import snorri.semantics.CreateObject;
+import snorri.semantics.Cross;
 import snorri.semantics.Damage;
 import snorri.semantics.Definition;
 import snorri.semantics.DegreeModifierDef;
@@ -92,9 +94,11 @@ public class Lexicon {
 		lexicon.put("mw", new StaticDef(Noun.class, TileType.WATER));
 		lexicon.put("Say", new StaticDef(Noun.class, TileType.SAND));
 		lexicon.put("xt", new StaticDef(Noun.class, TileType.LAVA)); //technically this is fire
-		lexicon.put("snbt", new StaticDef(Noun.class, Urn.class)); //TODO icon
+		lexicon.put("snbt", new StaticDef(Noun.class, Urn.class));
 		lexicon.put("bit", new StaticDef(Noun.class, null)); //TODO: bee
-		lexicon.put("Hnyt", new StaticDef(Noun.class, Spike.class)); //TODO: spike
+		lexicon.put("Hnyt", new StaticDef(Noun.class, Spike.class));
+		lexicon.put("anx", new StaticDef(Noun.class, Glyph.class));
+		lexicon.put("ankh", new StaticDef(Noun.class, Glyph.class));
 		
 		lexicon.put("st", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
 		lexicon.put("iry", new StaticDef(AbstractNoun.class, AbstractSemantics.WEAPON));
@@ -106,7 +110,7 @@ public class Lexicon {
 		lexicon.put("Da", new StaticDef(AbstractNoun.class, AbstractSemantics.STORM));
 				
 		//Names
-		lexicon.put("DHwty", new StaticDef(Name.class, "DHwty")); //TODO icon; name of Thoth
+		lexicon.put("DHwty", new StaticDef(Name.class, "DHwty"));
 				
 		//Suffix Pronouns
 		lexicon.put("i", new FirstSuffixPronoun());
@@ -141,6 +145,7 @@ public class Lexicon {
 		lexicon.put("dbH", new Pray());
 		lexicon.put("sqbH", new Slow());
 		lexicon.put("sDi", new Break());
+		lexicon.put("DAi", new Cross());
 		//lexicon.put("sxpr", new CreateUnit()); //conjure
 		
 		//Conditionals

@@ -86,7 +86,7 @@ public class Main {
 		RandomDrop.load();
 		Portraits.load();
 		setupFont();
-				
+						
 		frame = new JFrame("the Book of Thoth");
 		frame.setSize(1800, 900);
 		frame.addComponentListener(new Main.ResizeListener());

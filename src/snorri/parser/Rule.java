@@ -30,7 +30,35 @@ public class Rule {
 		}
 		return c;
 	}
+
+	public int getLength() {
+		return specs.length;
+	}
+
+	public Class<? extends NonTerminal> getRoot() {
+		return c;
+	}
 	
+	@SuppressWarnings("unchecked")
+	public Class<? extends Node> getNode(int i) {
+		return (Class<? extends Node>) getRewrite(i);
+	}
 	
+	public Object getRewrite(int i) {
+		return specs[i];
+	}
+	
+	@Override
+	public String toString() {
+		String out = niceName(c) + " -> ";
+		for (Object s : specs) {
+			out += niceName(s) + " ";
+		}
+		return out;
+	}
+	
+	private String niceName(Object o) {
+		return (o instanceof Class<?>) ? ((Class<?>) o).getSimpleName() : o.toString();
+	}
 	
 }
