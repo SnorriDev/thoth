@@ -150,9 +150,7 @@ public class Lexicon {
 		
 		//Conditionals
 		lexicon.put("jr", new ConditionalDef());
-		
-		Grammar.loadLexicon();
-		
+				
 	}
 	
 	public static Definition lookup(String form) {

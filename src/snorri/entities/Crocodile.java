@@ -4,11 +4,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 import snorri.animations.Animation;
-import snorri.collisions.RectCollider;
 import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
-import snorri.inventory.Item;
-import snorri.inventory.Item.ItemType;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.pathfinding.PathNode;
@@ -86,7 +83,6 @@ public class Crocodile extends Unit implements Pathfinder, Carrier, Targetter {
 
 	public void attack(World world, Entity e) {
 		animation = ATTACK;
-		//e.getAnimation() = damagetaken
 		((Unit)e).damage(attackPower);
 	}
 

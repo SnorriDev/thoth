@@ -77,14 +77,6 @@ public class Grammar extends HashMap<Class<? extends NonTerminal>, List<Rule>> {
 		
 	}
 	
-	public static void loadLexicon() {
-//		for (Entry<String, Definition> e : Lexicon.getAllTerminals()) {
-//			grammar.add(new Rule(new Object[] {e.getKey()}, e.getValue().getPOS()));
-//		}
-//		
-//		Main.log("lexicon with " + Lexicon.getAllTerminals().size() + " definitions loaded");
-	}
-	
 	public void add(Rule rule) {
 		List<Rule> rules = get(rule.getRoot());
 		if (rules == null) {
@@ -142,7 +134,6 @@ public class Grammar extends HashMap<Class<? extends NonTerminal>, List<Rule>> {
 		
 		if (words.size() == 1) {
 			if (nodeType.isInstance(words.get(0))) {
-				Main.log("VALID base: " + nodeType.getSimpleName() + words);
 				return words;
 			}
 		}
