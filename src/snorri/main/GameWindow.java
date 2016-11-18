@@ -92,15 +92,6 @@ public class GameWindow extends FocusedWindow {
 			return;
 		}
 		
-//		SwingUtilities.invokeLater(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				universe.getCurrentWorld().update(deltaTime);
-//			}
-//			
-//		});
-		
 		universe.getCurrentWorld().update(deltaTime);
 		repaint();
 				
