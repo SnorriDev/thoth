@@ -1,13 +1,8 @@
 package snorri.keyboard;
 
-import snorri.main.Main;
 import snorri.world.Vector;
 
 public class KeyStates {
-
-	//TODO switch implementation to KeyBinding from just the event stuff
-	//should bind WASD, arrows, and maybe more this way
-	//might not be possible with arbitrary keys? not really sure
 	
 	private boolean[] states;
 	private boolean[] mouseStates;
@@ -18,7 +13,6 @@ public class KeyStates {
 	}
 	
 	public void set(int id, boolean state) {
-		Main.log("set " + id + " " + state);
 		states[id] = state;
 	}
 	

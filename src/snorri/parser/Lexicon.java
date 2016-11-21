@@ -124,7 +124,6 @@ public class Lexicon {
 		lexicon.put("tn", new SecondObjectPronoun());
 		lexicon.put("sw", new ThirdObjectPronoun());
 		lexicon.put("sy", new ThirdObjectPronoun());
-		lexicon.put("s", new ThirdObjectPronoun());
 		
 		//Verbs
 		lexicon.put("in", new Move());

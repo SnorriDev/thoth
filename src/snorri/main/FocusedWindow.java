@@ -142,7 +142,6 @@ public abstract class FocusedWindow extends GamePanel implements MouseListener, 
 	public abstract Playable getUniverse();
 	
 	//TODO we can port all input to use KeyBindings instead of KeyListeners
-	//TODO in line with these changes, all game logic based on input should be moved to player
 	@Override
 	public void setKeyBindings() {
 //		Main.log("key bindings set");

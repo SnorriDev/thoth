@@ -5,6 +5,7 @@ import snorri.collisions.RectCollider;
 import snorri.events.CollisionEvent;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
+import snorri.world.World;
 
 /**
  * Action buttons that should be used primarily as teleporters
@@ -32,14 +33,18 @@ public class Glyph extends Detector {
 	@Override
 	public void onCollision(CollisionEvent e) {
 		
-		if (activated && animation.hasCycled()) {
-			e.getWorld().delete(this);
-		}
-		
 		if (!activated && (e.getTarget() instanceof Player || e.getTarget() instanceof Explosion)) {
 			activate();
 		}
 		
+	}
+	
+	@Override
+	public void update(World world, double deltaTime) {
+		if (activated && animation.hasCycled()) {
+			world.delete(this);
+		}
+		super.update(world, deltaTime);
 	}
 	
 	public void activate() {
