@@ -2,6 +2,9 @@ package snorri.keyboard;
 
 import java.awt.event.KeyEvent;
 
+import snorri.main.FocusedWindow;
+import snorri.main.Main;
+
 public enum Key implements Binding {
 	
 	W(87, 'w'),
@@ -48,14 +51,30 @@ public enum Key implements Binding {
 	}
 	
 	/**
-	 * do NOT use this from keyTyped because e.getKeyCode will be empty
+	 * Returns whether a key is pressed in a given <code>KeyEvent</code>
+	 * Do <b>not</b> use this from <code>keyTyped</code> because <code>e.getKeyCode</code> will be empty.
 	 * @param e
 	 * 	key event
 	 * @return
-	 * 	whether this key is pressed in the event
+	 * 	Whether this key is pressed with respect to the <code>KeyEvent</code>
 	 */
 	public boolean isPressed(KeyEvent e) {
 		return id == e.getKeyCode();
+	}
+	
+	public boolean isPressed(KeyStates states) {
+		return states.get(this);
+	}
+	
+	/**
+	 * @return
+	 * 	Whether this key is pressed with respect to the current window
+	 */
+	public boolean isPressed() {
+		if (!(Main.getWindow() instanceof FocusedWindow)) {
+			return false;
+		}
+		return isPressed(((FocusedWindow) Main.getWindow()).getKeyStates());
 	}
 	
 	//for changing controls?

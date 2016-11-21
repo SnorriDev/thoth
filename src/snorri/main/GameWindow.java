@@ -15,10 +15,7 @@ import javax.swing.UIManager;
 import snorri.dialog.DropMessage;
 import snorri.dialog.Message;
 import snorri.dialog.Objective;
-import snorri.entities.Desk;
-import snorri.entities.Entity;
 import snorri.entities.Player;
-import snorri.entities.Unit;
 import snorri.inventory.Droppable;
 import snorri.keyboard.Key;
 import snorri.overlay.DeathScreen;
@@ -170,18 +167,6 @@ public class GameWindow extends FocusedWindow {
 		if (focus == null || focus.isDead() || isPaused()) {
 			return;
 		}
-		
-		if (Key.SPACE.isPressed(e)) {
-			Entity interactRegion = new Entity(getFocus().getPos(), Unit.RADIUS + Desk.INTERACT_RANGE);
-			for (Entity entity : universe.getCurrentWorld().getEntityTree().getAllCollisions(interactRegion)) {
-				if (entity instanceof Desk) {
-					openInventory();
-					return;
-				}
-			}
-		}
-		
-		focus.getInventory().checkKeys(e);
 		
 	}
 	

@@ -67,8 +67,8 @@ public class Main {
 		}
 		
 		private void resize() {
-			resize(window);
 			resize(outerOverlay);
+			resize(window);
 		}
 		
 		private static void resize(JComponent component) {
@@ -234,6 +234,7 @@ public class Main {
 		getLayeredPane().revalidate();
 		getLayeredPane().repaint();
 		window.requestFocusInWindow();
+		//window.setKeyBindings();
 	}
 
 	/**

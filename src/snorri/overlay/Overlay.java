@@ -214,4 +214,8 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 		return kit;
 	}
 	
+	@Override
+	public void setKeyBindings() {
+	}
+	
 }

@@ -66,5 +66,9 @@ public class MainMenu extends GamePanel {
 		//TODO: for continue story, look to saved campaign
 		
 	}
+
+	@Override
+	public void setKeyBindings() {
+	}
 		
 }

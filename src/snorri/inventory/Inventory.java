@@ -1,7 +1,6 @@
 package snorri.inventory;
 
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 import java.io.Serializable;
 
 import snorri.audio.Audio;
@@ -372,16 +371,19 @@ public class Inventory implements Serializable {
 		return null;
 	}
 	
-	public void checkKeys(KeyEvent e) {
+	/**
+	 * Check if inventory buttons are pressed in the <code>keyStates</code> map of the current focused window
+	 */
+	public void checkKeys() {
 		
 		for (int i = 0; i < ORB_KEYS.length; i++) {
-			if (ORB_KEYS[i].isPressed(e)) {
+			if (ORB_KEYS[i].isPressed()) {
 				selectOrb(i);
 			}
 		}
 		
 		for (int i = 0; i < PAPYRUS_KEYS.length; i++) {
-			if (PAPYRUS_KEYS[i].isPressed(e)) {
+			if (PAPYRUS_KEYS[i].isPressed()) {
 				usePapyrus(i);
 			}
 		}
