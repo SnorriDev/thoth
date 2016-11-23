@@ -133,7 +133,7 @@ onWall:
     - SET_OBJECTIVE:
         objective:
           !objective
-            shortDesc: write a spell to blast through the barrier
+            shortDesc: enchant your sling with `qmA Da Say` to blast through the wall
             longDesc: |
               <p class="instruction">After picking up the new vocabulary, enchant a spell 
               on your sling that will create a sandstorm to blast through the wall.</p>
@@ -165,9 +165,8 @@ onZone2:
           !dialog
             image: priest
             text: |
-              <p><span class="name">Imhotep:</span> Woah, this crypt must be hundreds of years old.
-              It looks like a dead end, but maybe that ancient papyrus and urn can help us get out of
-              here. Can you write some kind of spell using them?</p>
+              <p><span class="name">Imhotep:</span> This crypt must be hundreds of years old.
+              Go investigate that urn.</p>
             showObjective: true
 
 prayThoth:
@@ -182,20 +181,15 @@ prayThoth:
             text: |
               <p><span class="name">Ghost:</span> Behold, sorcerer, you have invoked
               the ancient name of Thoth the All-Knowing! I was Neferkaptah, High Priest of
-              Thoth to Ramesses II, Pharaoh of Upper and Lower Egypt. I will open the door
-              to lead you and your friend out of here, but we have other matters to discuss
-              first.</p>
+              Thoth to Ramesses II, Pharaoh of Upper and Lower Egypt. We have much to discuss.</p>
               
-              <p>Your curiosity and ingenuity have led you into this ancient vault. Before
-              you, no one had dared to touch this urn for almost 1,000 years. These same
-              qualities might lead you on another great quest: recovering the Book of Thoth,
-              an ancient tome which can teach mortals the secret language of the gods. When I was High Priest,
-              I set out to find this legendary book. After I acquired it, Thoth forced me to do many terrible
-              things and then destroyed me as a punishment. I am warning you: that book is 
-              dangerous. Don't go looking for it, because the gods will never let any human feel its power.</p>
+              <p>Your curiosity has led you to my old study, which has been untouched for 1,000 years. It may also 
+              lead you on another great quest: recovering the Book of Thoth, an ancient tome which teaches the language of the gods. When I was High Priest,
+              I once set out to find this legendary book. After I acquired it, Thoth did unspeakable things to me and then cursed me
+              to be a ghost forevermore. I am warning you: that book is dangerous.</p>
               
-              <p>It's a good thing I reached out to you now. I imagine others will ask you
-              to find my book for them. They might even tell you that it's your destiny.
+              <p>Don't go looking for the Book of Thoth. The gods will never let any human feel its power.
+              Others might tell you it is your destiny to find that book.
               Just remember, wise scribe, only fools believe in destiny.</p>
     - SET_OBJECTIVE:
         objective:
