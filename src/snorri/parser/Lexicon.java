@@ -64,10 +64,7 @@ public class Lexicon {
 	 * although this may change
 	 */
 	private static Map<String, Definition> lexicon;
-	
-	//TODO: allow duplicate definitions? hash by String, POS
-	//TODO: definitionSet
-	
+		
 	public static void load() {
 		
 		lexicon = new HashMap<String, Definition>();

@@ -116,8 +116,8 @@ public class Main {
 		System.out.println("[LOG] " + s);
 	}
 
-	public static void log(Object o) {
-		System.out.println("[RAW] " + o);
+	public static void debug(Object o) {
+		System.out.println("[DEBUG] " + o);
 	}
 
 	public static GamePanel getWindow() {
@@ -135,7 +135,7 @@ public class Main {
 	public static void setupFont() {
 		customFont = loadFont("/fonts/thothDefault.ttf");
 		UIManager.put("Button.font", getCustomFont(20));
-		Main.log("default font loaded");
+		log("default font loaded");
 	}
 
 	public static Font getCustomFont(float size) {

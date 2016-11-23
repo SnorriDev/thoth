@@ -28,12 +28,11 @@ onZone1:
           !objective
           shortDesc: 'acquire the vocab, walk to the desk, and press spacebar'
           longDesc: |
-            <p class="instruction">Collect the sparkling artifacts and papyrus on
-            the ground. Each artifact unlocks a new hieroglyph. To write a spell using
-            your unlocked hieroglyphs, walk to the desk and press <span class="control">
-            spacebar</span>. Next, select <span class="control">papyrus</span> on the left panel
-            and type the spell <span class="hiero">wn sy</span> in the textbox. Hit <span class="control">enchant
-            </span> and then <span class="control">escape</span> to close the window.</p>
+            <p class="instruction">First collect the sparkling artifacts and papyrus on
+            the ground. Each artifact unlocks a hieroglyph. Next, walk down to the desk and press <span class="control">
+            spacebar</span>. Select <span class="control">papyrus</span> on the left panel
+            and type the spell <span class="hiero">wn sy</span> in the textbox. Click <span class="control">enchant
+            </span> and then press <span class="control">escape</span> to close the window.</p>
     - SHOW_DIALOG:
         dialog:
           !dialog
@@ -93,7 +92,7 @@ onPickup:
           !objective
           shortDesc: shoot at the mummies by clicking
           longDesc: |
-            <p class="instruction">Shoot from the sling by clicking on a target location. If you hearts
+            <p class="instruction">Shoot by clicking at a target location. If you hearts
             reach zero, you will die!</p>
     - SHOW_DIALOG:
         dialog:
@@ -135,11 +134,10 @@ onWall:
           !objective
             shortDesc: enchant your sling with `qmA Da Say` to blast through the wall
             longDesc: |
-              <p class="instruction">After picking up the new vocabulary, enchant a spell 
-              on your sling that will create a sandstorm to blast through the wall.</p>
+              <p class="instruction"> Using the new vocabulary, enchant a spell on your sling
+              that will create a sandstorm to blast through the wall.</p>
               
-              <p class="instruction">In order to specify what kind of storm you want to create,
-              use a descriptive possessive: <span class="hiero">qmA Da Say</span> <span class="def">(create a storm of sand)</span>.</p>
+              <p class="instruction">This can be done as follows: <span class="hiero">qmA Da Say</span> <span class="def">(create a storm of sand)</span>.</p>
     - SHOW_DIALOG:
         dialog:
           !dialog
@@ -156,10 +154,9 @@ onZone2:
           !objective
             shortDesc: find the name on the urn and pray to it
             longDesc: |
-              <p class="instruction">Collect the new vocabulary word and papyrus. If you
-              cast the new scroll on the urn, it will reveal the name of the powerful god
-              to whom the urn belongs. Use the hieroglyph <span class="hiero">dbH</span>
-              to ask the god for help.</p>
+              <p class="instruction">Pick up the already enchanted scroll and cast it on the urn
+              to learn its owner. Next, use the hieroglyph <span class="hiero">dbH</span>
+              to pray to the name which appeared.</p>
     - SHOW_DIALOG:
         dialog:
           !dialog
