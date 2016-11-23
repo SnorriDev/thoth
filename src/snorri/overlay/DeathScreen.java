@@ -28,9 +28,5 @@ public class DeathScreen extends GamePanel {
 			Main.launchMenu();
 		}
 	}
-	
-	@Override
-	public void setKeyBindings() {
-	}
 
 }

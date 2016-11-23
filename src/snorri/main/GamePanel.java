@@ -110,6 +110,4 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 		return System.nanoTime();
 	}
 
-	public abstract void setKeyBindings();
-
 }

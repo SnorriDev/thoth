@@ -104,7 +104,7 @@ public class GameWindow extends FocusedWindow {
 		long time = getTimestamp();
 		double deltaTime = (time - lastRenderTime) / 1000000000d;
 		lastRenderTime = time;
-		
+				
 		super.paintComponent(g);
 		
 		universe.getCurrentWorld().render(this, g, deltaTime, true);

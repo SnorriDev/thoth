@@ -39,8 +39,4 @@ public class LoadingScreen extends GamePanel {
 	public void actionPerformed(ActionEvent e) {
 	}
 
-	@Override
-	public void setKeyBindings() {
-	}
-
 }
