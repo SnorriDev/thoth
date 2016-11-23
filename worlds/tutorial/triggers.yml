@@ -6,7 +6,7 @@ onStart:
     - SET_OBJECTIVE:
         objective:
           !objective
-            shortDesc: explore the Temple of Thoth
+            shortDesc: explore the Temple of Thoth with WASD
             longDesc: |
               <p class="instruction">Hit <span class="control">escape</span> to close this dialog. Then 
               use the <span class="control">WASD</span> keys to move around. If you want to go back to 
@@ -17,48 +17,43 @@ onStart:
           !dialog
             image: priest
             text: |
-              <p><span class="name">Imhotep:</span> Hey! What are you doing down here, Prince Setna?
-              I don't care if you're royalty; the temple archives are still off limits to you!</p>
-              
-              <p>Oh wait, I forgot that the high priest accepted you as a temple scribe. 
-              I guess I can't stop you from having a look around.</p>
+              <p><span class="name">Imhotep:</span> Welcome to the temple archives, Prince Setna!
+              Now that you are an apprentice scribe, feel free to take a look around.</p>
             showObjective: true
-        
+
 onZone1:
   actions:
     - SET_OBJECTIVE:
         objective:
           !objective
-          shortDesc: write a spell to open the door
+          shortDesc: 'acquire the vocab, walk to the desk, and press spacebar'
           longDesc: |
             <p class="instruction">Collect the sparkling artifacts and papyrus on
             the ground. Each artifact unlocks a new hieroglyph. To write a spell using
             your unlocked hieroglyphs, walk to the desk and press <span class="control">
             spacebar</span>. Next, select <span class="control">papyrus</span> on the left panel
-            and type the spell <span class="hiero">wn s</span> in the textbox. Hit <span class="control">enchant
+            and type the spell <span class="hiero">wn sy</span> in the textbox. Hit <span class="control">enchant
             </span> and then <span class="control">escape</span> to close the window.</p>
     - SHOW_DIALOG:
         dialog:
           !dialog
             image: priest
             text: |
-              <p><span class="name">Imhotep:</span> Listen, descendant of Horus! Your god is
-              nothing compared to Thoth, the All-Knowing. Men listen when the Pharoah 
-              speaks for Horus, but the world listens to sorcerers who speak through Thoth.
-              The ability to speak thought into action is a powerful gift that few possess, 
-              and even fewer have mastered. I doubt you have what it takes to open this door
-              with a spell.</p>
+              <p><span class="name">Imhotep:</span> Men listen when your father the Pharoah 
+              speaks for Horus, but the world itself listens to sorcerers who speak through Thoth.
+              The ability to shape reality with hieroglyphs is a powerful gift that few possess, 
+              and even fewer have mastered. See if you can write a spell to unlock this door.</p>
             showObjective: true
 
 onEnchant:
   events:
     - ENCHANT:
-        object: wn s
+        object: wn sy
   actions:
     - SET_OBJECTIVE:
         objective:
           !objective
-            shortDesc: cast your spell on the door
+            shortDesc: put your mouse over the door and press 3
             longDesc: |
               <p class="instruction">Wait until your spell is off cooldown, and then put
               your cursor over the door and press <span class="control">3</span>.</p>
@@ -68,9 +63,8 @@ onEnchant:
             image: priest
             text: |
               <p><span class="name">Imhotep:</span> Cast your spell on the door to see if it works.
-              Wait a second, let me stand back so you don't blow me up.</p>
+              Wait a second! Let me stand back so you don't blow me up.</p>
             showObjective: true
-              
 
 onDoorOpen:
   events:
@@ -80,15 +74,15 @@ onDoorOpen:
     - SET_OBJECTIVE:
         objective:
           !objective
-          shortDesc: arm yourself with a sling
+          shortDesc: walk over the sling to pick it up
     - SHOW_DIALOG:
         dialog:
           !dialog
             image: priest
             text: |
-              <p><span class="name">Imhotep:</span> Wow, you're not so worthless after all! Now go grab that sling on the ground.
-              You never know what you'll run into this deep in the temple archives.</p>    
-        
+              <p><span class="name">Imhotep:</span> By Thoth, you're a natural! Now go grab that sling on the ground.
+              You never know what you'll run into this deep in the archives.</p>    
+
 onPickup:
   events:
     - ACQUIRE:
@@ -97,18 +91,16 @@ onPickup:
     - SET_OBJECTIVE:
         objective:
           !objective
-          shortDesc: kill the pharaoh's soldiers
+          shortDesc: shoot at the mummies by clicking
           longDesc: |
-            <p class="instruction">Shoot automatically from the sling by clicking in a 
-            target direction. Make sure to dodge the enemy projectiles as well! Careful,
-            if your hearts reach zero, you will die.</p>
+            <p class="instruction">Shoot from the sling by clicking on a target location. If you hearts
+            reach zero, you will die!</p>
     - SHOW_DIALOG:
         dialog:
           !dialog
             image: priest
             text: |
-              <p><span class="name">Imhotep:</span> What's that at the end of this tunnel?
-              Oh no, ancient mummies! Shoot them before they kill us.</p>
+              <p><span class="name">Imhotep:</span> Mummies, up ahead!</p>
             showObjective: true
     - SPAWN_ENTITY:
         type: enemy
@@ -133,7 +125,7 @@ onKill:
           !dialog
             image: priest
             text: |
-              <p><span class="name">Imhotep:</span> Well, those mummies are back to being dead. 
+              <p><span class="name">Imhotep:</span> Those mummies fought pretty well considering they have no brains. 
               Now let's get out of here!</p>
 
 onWall:
@@ -141,7 +133,7 @@ onWall:
     - SET_OBJECTIVE:
         objective:
           !objective
-            shortDesc: blast into the blocked room
+            shortDesc: write a spell to blast through the barrier
             longDesc: |
               <p class="instruction">After picking up the new vocabulary, enchant a spell 
               on your sling that will create a sandstorm to blast through the wall.</p>
@@ -173,8 +165,7 @@ onZone2:
           !dialog
             image: priest
             text: |
-              <p><span class="name">Imhotep:</span> Woah, what is this place? I see the name of
-              Ramesses II on that wall, so this vault must be hundreds of years old.
+              <p><span class="name">Imhotep:</span> Woah, this crypt must be hundreds of years old.
               It looks like a dead end, but maybe that ancient papyrus and urn can help us get out of
               here. Can you write some kind of spell using them?</p>
             showObjective: true
