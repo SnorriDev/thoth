@@ -124,8 +124,8 @@ onKill:
           !dialog
             image: priest
             text: |
-              <p><span class="name">Imhotep:</span> Those mummies fought pretty well considering they have no brains. 
-              Now let's get out of here!</p>
+              <p><span class="name">Imhotep:</span> Those mummies fought pretty well considering they have no brains.
+              Now let's keep going!</p>
 
 onWall:
   actions:
@@ -155,7 +155,7 @@ onZone2:
             shortDesc: find the name on the urn and pray to it
             longDesc: |
               <p class="instruction">Pick up the already enchanted scroll and cast it on the urn
-              to learn its owner. Next, use the hieroglyph <span class="hiero">dbH</span>
+              to learn the secret name written on it. Next, use the hieroglyph <span class="hiero">dbH</span>
               to pray to the name which appeared.</p>
     - SHOW_DIALOG:
         dialog:

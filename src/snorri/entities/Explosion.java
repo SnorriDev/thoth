@@ -2,6 +2,7 @@ package snorri.entities;
 
 import snorri.animations.Animation;
 import snorri.events.CollisionEvent;
+import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -39,6 +40,7 @@ public class Explosion extends Detector {
 
 	@Override
 	public void onCollision(CollisionEvent e) {
+		Main.debug(e.getTarget());
 		if (e.getTarget() instanceof Unit) {
 			((Unit) e.getTarget()).damage(damage);
 		}
