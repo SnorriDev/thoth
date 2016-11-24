@@ -41,6 +41,10 @@ span.hiero {
     font-weight: bold;
 }
 
+img.hiero {
+    display: inline-block;
+}
+
 span.name {
     font-style: italic;
 }

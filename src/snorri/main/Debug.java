@@ -14,6 +14,7 @@ public class Debug {
 	public static final boolean LOG_FOCUS = false;
 	public static final boolean LOG_WORLD = false;
 	public static final boolean LOG_PARSES = false;
+	public static final boolean LOG_RENDER_QUEUE = false;
 	public static final boolean SHOW_WEAPON_OUTPUT = false;
 	public static final boolean SHOW_ORB_OUTPUT = false;
 	public static final boolean DISABLE_PATHFINDING = false;

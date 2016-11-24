@@ -180,4 +180,10 @@ public abstract class Unit extends Entity {
 		return team;
 	}
 	
+	@Override
+	public void kill(World world) {
+		damage(100);
+		super.kill(world);
+	}
+	
 }

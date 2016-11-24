@@ -8,7 +8,15 @@ import snorri.world.World;
 public abstract class Detector extends Despawner {
 
 	private static final long serialVersionUID = 1L;
+	/**
+	 * set <code>true</code> iff detector should be added to the hit detection data structure
+	 */
 	protected boolean treeMember = false;
+	/**
+	 * set <code>true</code> iff collisions should be registered against
+	 * entities <code>e</code> s.t. <code>e.hitAll = false</code>
+	 */
+	protected boolean hitAll = false;
 	
 	public Detector(Vector pos, int r) {
 		super(pos, r);
@@ -30,7 +38,7 @@ public abstract class Detector extends Despawner {
 	@Override
 	public void update(World world, double deltaTime) {
 		
-		for (Entity hit : world.getEntityTree().getAllCollisions(this)) {
+		for (Entity hit : world.getEntityTree().getAllCollisions(this, hitAll)) {
 			if (hit != null) {
 				onCollision(new CollisionEvent(this, hit, world));
 			}

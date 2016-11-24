@@ -40,7 +40,7 @@ onZone1:
             text: |
               <p><span class="name">Imhotep:</span> Men listen when your father the Pharoah 
               speaks for Horus, but the world itself listens to sorcerers who speak through Thoth.
-              The ability to shape reality with hieroglyphs is a powerful gift that few possess, 
+              The ability to alter reality with hieroglyphs is a powerful gift that few possess, 
               and even fewer have mastered. See if you can write a spell to unlock this door.</p>
             showObjective: true
 
@@ -152,18 +152,37 @@ onZone2:
     - SET_OBJECTIVE:
         objective:
           !objective
-            shortDesc: find the name on the urn and pray to it
+            shortDesc: pick up the papyrus and use it to find the name on the urn
             longDesc: |
-              <p class="instruction">Pick up the already enchanted scroll and cast it on the urn
-              to learn the secret name written on it. Next, use the hieroglyph <span class="hiero">dbH</span>
-              to pray to the name which appeared.</p>
+              <p class="instruction">Pick up the already enchanted papyrus and cast it on the urn by pressing <class="control">4</class>. 
+              The spell on this papyrus will reveal the name of objects.</p>
     - SHOW_DIALOG:
         dialog:
           !dialog
             image: priest
             text: |
               <p><span class="name">Imhotep:</span> This crypt must be hundreds of years old.
-              Go investigate that urn.</p>
+              I wonder who left that urn here!</p>
+            showObjective: true
+
+onWrite:
+  events:
+    - WRITE:
+        object: DHwty
+  actions:
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+            shortDesc: pray using `dbH DHwty`
+            longDesc: |
+              <p class="instruction">Cast the spell <span class="hiero">dbH DHwty</span> <span class="def">(pray to DHwty)</span>.</p>
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            image: priest
+            text: |
+              <p><span class="name">Imhotep:</span> DHwty - the ancient, venerated name of Thoth! Speaking such a word unleashes
+              mystical energy. See what happens if you pray to that name.</p>
             showObjective: true
 
 prayThoth:
@@ -176,17 +195,16 @@ prayThoth:
           !dialog
             image: ghost
             text: |
-              <p><span class="name">Ghost:</span> Behold, sorcerer, you have invoked
-              the ancient name of Thoth the All-Knowing! I was Neferkaptah, High Priest of
-              Thoth to Ramesses II, Pharaoh of Upper and Lower Egypt. We have much to discuss.</p>
+              <p><span class="name">Ghost:</span> Behold, sorcerer, you have invoked Thoth the All-Knowing!
+              I was Neferkaptah, High Priest of Thoth to Ramesses II, Pharaoh of Upper and Lower Egypt. We have much to discuss.</p>
               
-              <p>Your curiosity has led you to my old study, which has been untouched for 1,000 years. It may also 
-              lead you on another great quest: recovering the Book of Thoth, an ancient tome which teaches the language of the gods. When I was High Priest,
-              I once set out to find this legendary book. After I acquired it, Thoth did unspeakable things to me and then cursed me
-              to be a ghost forevermore. I am warning you: that book is dangerous.</p>
+              <p>Your curiosity has led you to my old study, which had been untouched for 1,000 years. It may also 
+              lead you on another great quest: recovering the Book of Thoth, an ancient tome which teaches the language of the gods.
+              Long ago I set out to find this book. After I had read it, Thoth lashed out at me with unspeakable vengeance,
+              and doomed me to be a ghost for eternity.</p>
               
-              <p>Don't go looking for the Book of Thoth. The gods will never let any human feel its power.
-              Others might tell you it is your destiny to find that book.
+              <p>Don't go looking for that dangerous book, because the gods will never let you suceed!
+              Others might tell you that finding my book is your destiny.
               Just remember, wise scribe, only fools believe in destiny.</p>
     - SET_OBJECTIVE:
         objective:

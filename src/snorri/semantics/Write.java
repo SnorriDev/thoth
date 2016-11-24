@@ -3,6 +3,7 @@ package snorri.semantics;
 import snorri.dialog.SpellMessage;
 import snorri.main.GameWindow;
 import snorri.main.Main;
+import snorri.triggers.Trigger.TriggerType;
 
 public class Write extends VerbDef {
 
@@ -13,6 +14,7 @@ public class Write extends VerbDef {
 	@Override
 	public boolean exec(Object obj) {
 		if (Main.getWindow() instanceof GameWindow) {
+			TriggerType.WRITE.activate((String) obj);
 			((GameWindow) Main.getWindow()).showMessage(new SpellMessage(obj));
 			return true;
 		}

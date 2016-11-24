@@ -9,6 +9,7 @@ import java.util.PriorityQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import snorri.collisions.RectCollider;
+import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.world.EntityGroup;
@@ -27,13 +28,11 @@ public class QuadTree extends Entity implements EntityGroup {
 		nodeMap = new HashMap<>();
 	}
 	
+	/** the entities in this level of the tree */
 	private CopyOnWriteArrayList<Entity> entities; // the entities in this level
 	private QuadTree parent;
 	private QuadTree[] nodes; // if this is a leaf, then nodes == null
 	private boolean isEmpty;
-
-	//TODO
-	//hashmap mapping entity to quadtree
 	
 	public QuadTree(Vector pos, RectCollider collider, QuadTree parent) {
 		super(pos, collider);
@@ -52,7 +51,7 @@ public class QuadTree extends Entity implements EntityGroup {
 	/**
 	 * Create a quad tree with dimensions <code>dim</code>.
 	 * @param dim
-	 * the dimensions to cover, in grid coordinates
+	 * 	the dimensions to cover, in grid coordinates
 	 */
 	public static QuadTree coverLevel(Level l) {
 		Vector pos = l.getDimensions().copy().toGlobalPos().divide(2);
@@ -76,7 +75,7 @@ public class QuadTree extends Entity implements EntityGroup {
 	}
 	
 	/**
-	 * Attempt to insert an entity into the QuadTree.
+	 * Attempt to insert an entity into the <code>QuadTree</code>
 	 * @return <code>true</code> iff insertion is successful in this node or in
 	 *         a child node
 	 */
@@ -293,8 +292,11 @@ public class QuadTree extends Entity implements EntityGroup {
 
 	}
 
+	/**
+	 * Render all entities in the tree, and add in the passed list
+	 */
 	@Override
-	public void renderAround(FocusedWindow window, Graphics gr, double deltaTime) {
+	public void renderAround(FocusedWindow window, Graphics gr, double deltaTime, CopyOnWriteArrayList<? extends Entity> colliders) {
 		
 		Vector playerPos = window.getFocus().getPos();
 		Vector dim = window.getDimensions();
@@ -302,6 +304,12 @@ public class QuadTree extends Entity implements EntityGroup {
 				dim.getY());
 		
 		PriorityQueue<Entity> renderQueue = getRenderQueue(view);
+		renderQueue.addAll(colliders);
+		
+		if (Debug.LOG_RENDER_QUEUE) {
+			Main.debug(renderQueue);
+		}
+		
 		while (!renderQueue.isEmpty()) {
 			renderQueue.poll().renderAround(window, gr, deltaTime);
 		}

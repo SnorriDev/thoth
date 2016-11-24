@@ -28,8 +28,10 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 
 	private static final long serialVersionUID = 1L;
 	
-	public static final List<Class<? extends Entity>> SPAWNABLE; //a list of ents spawnable using CreateObject
-	public static final List<Class<? extends Entity>> EDIT_SPAWNABLE; //a list of ents spawnable in level editor
+	/** a list of entities which can be spawned using the word <code>CreateObject</code> */
+	public static final List<Class<? extends Entity>> SPAWNABLE;
+	/** a list of entities which can be spawned in the level editor */
+	public static final List<Class<? extends Entity>> EDIT_SPAWNABLE;
 	
 	static {
 		
@@ -54,7 +56,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		EDIT_SPAWNABLE.add(Cobra.class);
 		EDIT_SPAWNABLE.add(Glyph.class);
 		
-		
+		//alphabetize the list for nice view in the editor
 		Collections.sort(EDIT_SPAWNABLE, new Comparator<Class<? extends Entity>>() {
 			@Override
 			public int compare(Class<? extends Entity> o1, Class<? extends Entity> o2) {
@@ -77,7 +79,8 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	protected Vector pos;
 	protected Animation animation;
 	protected boolean ignoreCollisions = false, staticObject = false;
-	protected int z; //render order
+	/** used to determine which entities should be rendered over others **/
+	protected int z;
 	protected String tag;
 	
 	private boolean flying;
@@ -393,6 +396,10 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	
 	public void setStaticObject(boolean flag) {
 		staticObject = flag;
+	}
+	
+	public void kill(World world) {
+		world.delete(this);
 	}
 
 }
