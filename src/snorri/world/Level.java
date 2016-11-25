@@ -31,14 +31,12 @@ public class Level implements Editable {
 	public static final int MAX_SIZE = 1024;
 	private static final int SPAWN_SEARCH_RADIUS = 10;
 	
+	/**An array of tiles. Note that coordinates are Cartesian, not matrix-based**/
 	private Tile[][] map;
 	private Vector dim;
 	
 	private List<ArrayList<Vector>> connectedSubGraphs;
 	private ArrayList<Vector>[][] graphData;
-	//private HashMap<Vector, ArrayList<Vector>> graphHash;
-
-	// not that indexing conventions are Cartesian, not matrix-based
 
 	public Level(int width, int height, TileType bg) {
 		map = new Tile[width][height];
@@ -621,22 +619,8 @@ public class Level implements Editable {
 			}
 		}
 		
-//		for (int x = startX; x < dim.getX(); x++) {
-//			changeStart: for (int y = startY; y < dim.getY(); y++) {
-//				
-//				for (int x1 = (x * Tile.WIDTH - 2 * Unit.RADIUS_X) / Tile.WIDTH; x1 <= (x * Tile.WIDTH + 2 * Unit.RADIUS_X) / Tile.WIDTH; x1++) {
-//					for (int y1 = (y * Tile.WIDTH - 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1 <= (y * Tile.WIDTH + 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
-//						if (!isContextPathable(x1, y1)) {
-//							continue changeStart;
-//						}
-//					}
-//				}
-//				
-//				return new Vector(x, y).toGlobalPos();
-//				
-//			}
-//		}
 		return null;
+		
 	}
 	
 	public Vector getGoodSpawn(int x, int y) {
@@ -768,11 +752,14 @@ public class Level implements Editable {
 					if (masks[j].hasTile(t)) {
 						masks[j].add(bitVal);
 						break;
+				
 					}
 				}
 			}
 			bitVal *= 2;
 		}
+		
+		//TODO check to make sure there isn't an overriding mask
 		
 		bitVal = 1;
 		for (Vector v: Mask.CORNERS) {
