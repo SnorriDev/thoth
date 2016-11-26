@@ -1,49 +1,45 @@
 package snorri.entities;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-
 import snorri.animations.Animation;
-import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
-import snorri.main.GameWindow;
-import snorri.main.Main;
-import snorri.pathfinding.PathNode;
-import snorri.pathfinding.Pathfinder;
-import snorri.pathfinding.Pathfinding;
-import snorri.pathfinding.Targetter;
+
 import snorri.world.Vector;
-import snorri.world.World;
 
-
-public class Scorpion extends Unit implements Pathfinder, Carrier, Targetter {
+public class Scorpion extends LandMeleeUnit {
 
 	private static final long serialVersionUID = 1L;
 	private static final double APPROACH_MARGIN = 15;
 	private static final double CHANGE_PATH_MARGIN = 350;
 
-	public static final Animation IDLE = new Animation("/textures/animations/scorpion/idle");
-	public static final Animation ATTACK = new Animation("/textures/animations/scorpion/attack");
+	public static final Animation IDLE = new Animation("/textures/animations/crocodile/idle");
+	public static final Animation ATTACK = new Animation("/textures/animations/crocodile/attack");
 
-	private Vector lastSeenPos;
-	private boolean recalculatingPath = false;
-
-	protected double seekRange = 128;
-	protected double attackRange = 16;
-	protected double attackPower = 2; //TODO: change to something more logical and balanced
+	protected static double seekRange = 128;
+	protected static double attackRange = 16;
+	protected static double attackPower = 2; //TODO: change to something more logical and balanced
 
 	protected Inventory inventory;
 	protected Entity target;
 
-	private ArrayDeque<PathNode> path;
-
 	public Scorpion(Vector pos, Entity target) {
+		super(pos, target, new Animation(IDLE), new Animation(IDLE), new Animation(ATTACK), seekRange, attackRange, attackPower, APPROACH_MARGIN, CHANGE_PATH_MARGIN);
+		this.target = target;
+		animation = new Animation(IDLE);
+		inventory = new Inventory(this);
+	}
+
+	public Scorpion(Vector pos) {
+		this(pos, null);
+		animation = new Animation(IDLE);
+	}
+
+	/*public Crocodile(Vector pos, Entity target) {
 		super(pos, new Animation(IDLE), new Animation(IDLE));
 		this.target = target;
 		inventory = new Inventory(this);
 	}
 
-	public Scorpion(Vector pos) {
+	public Crocodile(Vector pos) {
 		this(pos, null);
 		animation = new Animation(IDLE);
 	}
@@ -177,5 +173,5 @@ public class Scorpion extends Unit implements Pathfinder, Carrier, Targetter {
 	public Inventory getInventory() {
 		return inventory;
 	}
-
+*/
 }

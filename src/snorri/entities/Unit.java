@@ -29,12 +29,22 @@ public abstract class Unit extends Entity {
 	
 	protected Animation walkingAnimation;
 	protected Animation idleAnimation;
+	protected Animation attackAnimation;
 		
 	protected Unit(Vector pos, Animation idle, Animation walking) {
 		this(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)));
 		animation = idle;
 		idleAnimation = idle;
 		walkingAnimation = walking;
+		attackAnimation = idle;
+	}
+	
+	protected Unit(Vector pos, Animation idle, Animation walking, Animation attack) {
+		this(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)));
+		animation = idle;
+		idleAnimation = idle;
+		walkingAnimation = walking;
+		attackAnimation = attack;
 	}
 		
 	/**
