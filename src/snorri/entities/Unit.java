@@ -85,15 +85,29 @@ public abstract class Unit extends Entity {
 		super.update(world, deltaTime);
 		
 	}
-
-	public void walk(World world, Vector direction, double deltaTime) {
-		
+	
+	/**
+	 * Update the animations on a unit which isn't walking
+	 */
+	public void dontWalk() {
+		setAnimation(Vector.ZERO);
+	}
+	
+	/**
+	 * Set the walking or idle animation based on the current movement vector
+	 * @param direction
+	 * 	the direction of movement
+	 */
+	protected void setAnimation(Vector direction) {
 		animation = (direction.magnitude() == 0) ? idleAnimation : walkingAnimation;
 		if (direction.getX() != 0 && animation != null) {
 			walkingAnimation.flip(direction.getX() > 0);
 			idleAnimation.flip(direction.getX() > 0);
 		}
-		
+	}
+
+	public void walk(World world, Vector direction, double deltaTime) {
+		setAnimation(direction);
 		moveHard(world, direction.copy().normalize(), getSpeed() * deltaTime);
 	}
 	
@@ -188,6 +202,12 @@ public abstract class Unit extends Entity {
 			return out;
 		}
 		return team;
+	}
+	
+	@Override
+	public void kill(World world) {
+		damage(100);
+		super.kill(world);
 	}
 	
 }
