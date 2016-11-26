@@ -1,6 +1,7 @@
 package snorri.entities;
 
 import snorri.animations.Animation;
+import snorri.collisions.RectCollider;
 import snorri.world.Vector;
 
 public class Desk extends Entity {
@@ -10,11 +11,11 @@ public class Desk extends Entity {
 	 * Press space to interact with them
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final Animation ANIMATION = new Animation("/textures/objects/desk.png");
+	private static final Animation ANIMATION = new Animation("/textures/objects/inkwell.png");
 	public static final int INTERACT_RANGE = 5;
 	
 	public Desk(Vector pos) {
-		super(pos, 22);
+		super(pos, new RectCollider(12, 27));
 		staticObject = true;
 		animation = new Animation(ANIMATION);
 	}

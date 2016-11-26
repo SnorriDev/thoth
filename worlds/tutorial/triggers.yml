@@ -29,7 +29,7 @@ onZone1:
           shortDesc: 'acquire the vocab, walk to the desk, and press spacebar'
           longDesc: |
             <p class="instruction">First collect the sparkling artifacts and papyrus on
-            the ground. Each artifact unlocks a hieroglyph. Next, walk down to the desk and press <span class="control">
+            the ground. Each artifact unlocks a hieroglyph. Next, walk down to the inkwell and press <span class="control">
             spacebar</span>. Select <span class="control">papyrus</span> on the left panel
             and type the spell <span class="hiero">wn sy</span> in the textbox. Click <span class="control">enchant
             </span> and then press <span class="control">escape</span> to close the window.</p>
