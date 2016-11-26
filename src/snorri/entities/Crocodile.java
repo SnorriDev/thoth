@@ -1,21 +1,11 @@
 package snorri.entities;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-
 import snorri.animations.Animation;
-import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
-import snorri.main.GameWindow;
-import snorri.main.Main;
-import snorri.pathfinding.PathNode;
-import snorri.pathfinding.Pathfinder;
-import snorri.pathfinding.Pathfinding;
-import snorri.pathfinding.Targetter;
-import snorri.world.Vector;
-import snorri.world.World;
 
-public class Crocodile extends Unit implements Pathfinder, Carrier, Targetter {
+import snorri.world.Vector;
+
+public class Crocodile extends LandMeleeUnit{
 
 	private static final long serialVersionUID = 1L;
 	private static final double APPROACH_MARGIN = 15;
@@ -24,19 +14,26 @@ public class Crocodile extends Unit implements Pathfinder, Carrier, Targetter {
 	public static final Animation IDLE = new Animation("/textures/animations/crocodile/idle");
 	public static final Animation ATTACK = new Animation("/textures/animations/crocodile/attack");
 
-	private Vector lastSeenPos;
-	private boolean recalculatingPath = false;
-
-	protected double seekRange = 256;
-	protected double attackRange = 32;
-	protected double attackPower = 5; //TODO: change to something more logical and balanced
+	protected static double seekRange = 256;
+	protected static double attackRange = 32;
+	protected static double attackPower = 5; //TODO: change to something more logical and balanced
 
 	protected Inventory inventory;
 	protected Entity target;
 
-	private ArrayDeque<PathNode> path;
-
 	public Crocodile(Vector pos, Entity target) {
+		super(pos, target, new Animation(IDLE), new Animation(IDLE), new Animation(ATTACK), seekRange, attackRange, attackPower, APPROACH_MARGIN, CHANGE_PATH_MARGIN);
+		this.target = target;
+		animation = new Animation(IDLE);
+		inventory = new Inventory(this);
+	}
+
+	public Crocodile(Vector pos) {
+		this(pos, null);
+		animation = new Animation(IDLE);
+	}
+
+	/*public Crocodile(Vector pos, Entity target) {
 		super(pos, new Animation(IDLE), new Animation(IDLE));
 		this.target = target;
 		inventory = new Inventory(this);
@@ -176,5 +173,5 @@ public class Crocodile extends Unit implements Pathfinder, Carrier, Targetter {
 	public Inventory getInventory() {
 		return inventory;
 	}
-
+*/
 }
