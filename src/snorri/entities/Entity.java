@@ -298,10 +298,8 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	 * @return
 	 * 	whether or not we were able to move
 	 */
-	public boolean moveHard(World world, Vector direction, double speed) {
-		
-		Vector dir = direction.copy().scale(speed);
-		
+	public boolean moveNicely(World world, Vector dir) {
+				
 		if (dir.equals(Vector.ZERO)) {
 			return false;
 		}
@@ -335,7 +333,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		return true;
 		
 	}
-	
+		
 	public boolean shouldIgnoreCollisions() {
 		return ignoreCollisions;
 	}

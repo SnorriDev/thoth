@@ -17,11 +17,19 @@ public class Cross extends VerbDef {
 	@Override
 	public boolean eval(Object subj, Object obj) {
 		
-		if (!(subj instanceof Entity) || !(obj instanceof Class<?>)) {
+		//if the subject isn't an entity, then return false
+		if (!(subj instanceof Entity)) {
 			return false;
 		}
-		
 		Entity ent = (Entity) subj;
+		
+		if (obj instanceof Entity) {
+			return ent.intersects((Entity) obj);
+		}
+		
+		if (!(obj instanceof Class<?>)) {
+			return false;
+		}
 		Class<?> c = (Class<?>) obj;
 		
 		//if the argument is a tile type, check what type the entity is standing on
@@ -45,7 +53,7 @@ public class Cross extends VerbDef {
 
 	@Override
 	public String toString() {
-		return "collide";
+		return "touch";
 	}
 
 }

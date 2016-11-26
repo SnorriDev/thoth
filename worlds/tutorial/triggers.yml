@@ -154,7 +154,7 @@ onZone2:
           !objective
             shortDesc: pick up the papyrus and use it to find the name on the urn
             longDesc: |
-              <p class="instruction">Pick up the already enchanted papyrus and cast it on the urn by pressing <class="control">4</class>. 
+              <p class="instruction">Pick up the already enchanted papyrus and cast it on the urn by pressing <span class="control">4</span>. 
               The spell on this papyrus will reveal the name of objects.</p>
     - SHOW_DIALOG:
         dialog:

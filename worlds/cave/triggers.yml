@@ -10,12 +10,6 @@ onDoor1:
         unit: player
         pos: !spawn {x: 143, y: 54}
 
-onDoor1.5:
-  actions:
-    - TELEPORT:
-        unit: player
-        pos: !spawn {x: 52, y: 47}
-
 onDoor2a:
   actions:
     - TELEPORT:
@@ -35,6 +29,12 @@ onDoor3a:
         pos: !spawn {x: 52, y: 119}
 
 onDoor3b:
+  actions:
+    - TELEPORT:
+        unit: player
+        pos: !spawn {x: 52, y: 119}
+
+onDoor4:
   actions:
     - TELEPORT:
         unit: player

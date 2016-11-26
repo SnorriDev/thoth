@@ -116,9 +116,9 @@ public class Lexicon {
 		//Suffix Pronouns
 		lexicon.put("i", new FirstSuffixPronoun());
 		lexicon.put("k", new SecondSuffixPronoun());
-		lexicon.put("t", new SecondSuffixPronoun()); //maybe add gender agreement later (#cisnormativity)
+		lexicon.put("t", new SecondSuffixPronoun());
 		lexicon.put("s", new ThirdSuffixPronoun());
-		lexicon.put("f", new ThirdSuffixPronoun()); //maybe add gender agreement
+		lexicon.put("f", new ThirdSuffixPronoun());
 		
 		//Object Pronouns
 		lexicon.put("wi", new FirstObjectPronoun());
@@ -141,7 +141,7 @@ public class Lexicon {
 		lexicon.put("qmA", new CreateObject());
 		lexicon.put("rd", new Grow());
 		lexicon.put("wn", new Open());
-		lexicon.put("sS", new Write()); //TODO icon
+		lexicon.put("sS", new Write());
 		lexicon.put("dbH", new Pray());
 		lexicon.put("sqbH", new Slow());
 		lexicon.put("sDi", new Break());

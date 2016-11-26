@@ -74,7 +74,7 @@ public class Player extends Unit implements Carrier {
 		FocusedWindow window = (FocusedWindow) Main.getWindow();
 		super.update(world, deltaTime);
 		inventory.update(deltaTime);
-		
+				
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override

@@ -9,11 +9,12 @@ import snorri.collisions.RectCollider;
 import snorri.events.SpellEvent;
 import snorri.modifiers.Modifier;
 import snorri.pathfinding.Team;
+import snorri.semantics.Walk.Walker;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public abstract class Unit extends Entity {
+public abstract class Unit extends Entity implements Walker {
 
 	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 120;
@@ -96,9 +97,15 @@ public abstract class Unit extends Entity {
 		}
 	}
 
-	public void walk(World world, Vector direction, double deltaTime) {
-		setAnimation(direction);
-		moveHard(world, direction.copy().normalize(), getSpeed() * deltaTime);
+	@Override
+	public void walk(World world, Vector delta) {
+		moveNicely(world, delta.copy().multiply(getSpeed()));
+	}
+	
+	@Override
+	public void walk(World world, Vector dir, double deltaTime) {
+		setAnimation(dir);
+		Walker.super.walk(world, dir, deltaTime);
 	}
 	
 	public void walkTo(World world, Vector target, double deltaTime) {
