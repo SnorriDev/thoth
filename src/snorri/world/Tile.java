@@ -191,7 +191,8 @@ public class Tile implements Comparable<Tile>, Nominal {
 		DOOR(false, getImage("/textures/tiles/door00.png"), true),
 		SANDSTONE(false, false, new BufferedImage[] {
 				getImage("/textures/tiles/sandstone00.png"),
-				getImage("/textures/tiles/sandstone01.png")}, false, true),
+				getImage("/textures/tiles/sandstone01.png"),
+				getImage("/textures/tiles/sandstone02.png")}, false, true),
 		FLOOR(true, new BufferedImage[] {getImage("/textures/tiles/floor00.png"),
 			getImage("/textures/tiles/floor01.png"),
 			getImage("/textures/tiles/floor02.png"),
@@ -205,7 +206,8 @@ public class Tile implements Comparable<Tile>, Nominal {
 			getImage("/textures/tiles/floor10.png"),
 			getImage("/textures/tiles/floor11.png")}, true),
 		GRAVEL(true, getImage("/textures/tiles/floor11.png")),
-		STONE(false, new BufferedImage[] {getImage("/textures/tiles/stone00.png"),
+		STONE(false, new BufferedImage[] {
+			getImage("/textures/tiles/stone00.png"),
 			getImage("/textures/tiles/stone01.png")}),
 		DEEP_WATER(false, false, getImage("/textures/tiles/water01.png")),
 		CLIFF(false, false, new BufferedImage[] {getImage("/textures/tiles/cliff00.png"),
