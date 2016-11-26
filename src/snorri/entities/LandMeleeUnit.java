@@ -98,7 +98,7 @@ public abstract class LandMeleeUnit extends Unit implements Pathfinder, Carrier,
 	}
 	
 	public LandMeleeUnit(Vector pos, Entity Target) {
-		super(pos, new Animation(IDLE_DEFAULT), new Animation(WALKING_DEFAULT));
+		super(pos, new Animation(IDLE_DEFAULT), new Animation(WALKING_DEFAULT), new Animation(ATTACK_DEFAULT));
 		animation = new Animation(idleAnimation);
 	}
 

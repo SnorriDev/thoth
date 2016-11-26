@@ -169,7 +169,11 @@ public class Tile implements Comparable<Tile>, Nominal {
 			getImage("/textures/tiles/wall04.png"),
 			getImage("/textures/tiles/wall05.png"),
 			getImage("/textures/tiles/wall06.png"),
-			getImage("/textures/tiles/wall07.png")}, true),
+			getImage("/textures/tiles/wall07.png"),
+			getImage("/textures/tiles/wall08.png"),
+			getImage("/textures/tiles/wall09.png"),
+			getImage("/textures/tiles/wall10.png"),
+			getImage("/textures/tiles/wall11.png")}, true),
 		TREE(false, Main.getImage("/textures/tiles/tree00.png")),
 		FOUNDATION(false, DEFAULT_TEXTURE),
 		HUT(false, DEFAULT_TEXTURE),
@@ -186,7 +190,9 @@ public class Tile implements Comparable<Tile>, Nominal {
 			getImage("/textures/tiles/column00.png"),
 			getImage("/textures/tiles/column01.png")}, true),
 		DOOR(false, getImage("/textures/tiles/door00.png"), true),
-		SANDSTONE(false, false, getImage("/textures/tiles/sandstone00.png"), false, true),
+		SANDSTONE(false, false, new BufferedImage[] {
+				getImage("/textures/tiles/sandstone00.png"),
+				getImage("/textures/tiles/sandstone01.png")}, false, true),
 		FLOOR(true, new BufferedImage[] {getImage("/textures/tiles/floor00.png"),
 			getImage("/textures/tiles/floor01.png"),
 			getImage("/textures/tiles/floor02.png"),
@@ -287,6 +293,12 @@ public class Tile implements Comparable<Tile>, Nominal {
 			this(pathable , texture, atTop);
 			this.changable = changable;
 		}
+		
+		TileType(boolean pathable, boolean swimmable, BufferedImage[] textures, boolean atTop, boolean changable) {
+			this(pathable , textures, atTop);
+			this.changable = changable;
+		}
+		
 		
 		public boolean isLiquid() {
 			return !pathable && canShootOver;
