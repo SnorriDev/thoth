@@ -21,11 +21,12 @@ import snorri.world.World;
 
 public class Enemy extends Unit implements Pathfinder, Carrier, Targetter {
 
-	private static final Animation MUMMY_IDLE = new Animation("/textures/animations/mummy/idle");
+	private static final Animation IDLE = new Animation("/textures/animations/mummy/idle");
+	private static final Animation WALKING = new Animation("textures/animations/mummy/walking");
 	
 	private static final long serialVersionUID = 1L;
-		private static final double APPROACH_MARGIN = 15;
-		private static final double CHANGE_PATH_MARGIN = 350;
+	private static final double APPROACH_MARGIN = 15;
+	private static final double CHANGE_PATH_MARGIN = 350;
 	
 	private Vector lastSeenPos;
 	private boolean recalculatingPath = false;
@@ -39,7 +40,7 @@ public class Enemy extends Unit implements Pathfinder, Carrier, Targetter {
 	private ArrayDeque<PathNode> path;
 	
 	public Enemy(Vector pos, Entity target) {
-		super(pos, new Animation(MUMMY_IDLE), new Animation(MUMMY_IDLE));
+		super(pos, new Animation(IDLE), new Animation(WALKING));
 		this.target = target;
 		inventory = new Inventory(this);
 		getInventory().add(Item.newItem(ItemType.PELLET));
@@ -112,10 +113,10 @@ public class Enemy extends Unit implements Pathfinder, Carrier, Targetter {
 	//TODO don't walk into each other
 	
 	@Override
-	public void update(World world, double deltaTime) {
+	public synchronized void update(World world, double deltaTime) {
 		
+		dontWalk();
 		inventory.update(deltaTime);
-		super.update(world, deltaTime);
 		
 		if (target == null) {
 			if (Main.getWindow() instanceof GameWindow) {
@@ -149,7 +150,9 @@ public class Enemy extends Unit implements Pathfinder, Carrier, Targetter {
 			}
 
 		}
-				
+		
+		super.update(world, deltaTime);
+						
 	}
 
 	private void follow(World world, double deltaTime) {

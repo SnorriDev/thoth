@@ -108,14 +108,29 @@ public class Main {
 		return frame.getBounds();
 	}
 
-	public static void error(Object o) {
-		System.err.println("[ERROR] " + o);
+	/**
+	 * Use this to print error messages to the game log
+	 * @param s
+	 * 	the error string to print
+	 */
+	public static void error(String s) {
+		System.err.println("[ERROR] " + s);
 	}
 
+	/**
+	 * Use this to print nice messages to the game log
+	 * @param s
+	 * 	the string to print
+	 */
 	public static void log(String s) {
 		System.out.println("[LOG] " + s);
 	}
 
+	/**
+	 * Use this to print things for debugging purposes
+	 * @param o
+	 * 	the object to print
+	 */
 	public static void debug(Object o) {
 		System.out.println("[DEBUG] " + o);
 	}

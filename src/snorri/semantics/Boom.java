@@ -10,9 +10,12 @@ public class Boom extends VerbDef {
 		super(false);
 	}
 
+	//TODO make explosions bigger
+	
 	@Override
 	public boolean exec(Object obj) {
-		e.getWorld().add(new Explosion(e.getLocative(), e.modifyHealthInteraction(DAMAGE)));
+		e.getSecondPerson().kill(e.getWorld());; //delete the thing that is exploding
+		e.getWorld().add(new Explosion(e.getSecondPerson().getPos(), DAMAGE));
 		return true;
 	}
 
@@ -23,7 +26,7 @@ public class Boom extends VerbDef {
 
 	@Override
 	public String toString() {
-		return "boom!";
+		return "explode";
 	}
 	
 	//TODO: boom whenever we return false?

@@ -74,7 +74,7 @@ public class Hieroglyphs {
 			return null;
 		}
 		try {
-			return "<img src=\'" + f.toURI().toURL() + "'/>";
+			return "<span><img class='hiero' src=\'" + f.toURI().toURL() + "'/>&nbsp;</span>";
 		} catch (MalformedURLException e) {
 			Main.error("bad URL for file " + raw);
 			return null;

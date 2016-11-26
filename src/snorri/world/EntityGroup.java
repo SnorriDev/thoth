@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import snorri.entities.Entity;
 import snorri.main.FocusedWindow;
@@ -43,7 +44,7 @@ public interface EntityGroup {
 
 	public void updateAround(World world, double d, Entity focus);
 
-	public void renderAround(FocusedWindow g, Graphics gr, double deltaTime);
+	public void renderAround(FocusedWindow g, Graphics gr, double deltaTime, CopyOnWriteArrayList<? extends Entity> colliders);
 
 	/**
 	 * This method does not just search immediate children, but all entities which are transitively children of the root EntityGroup

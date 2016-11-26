@@ -102,6 +102,11 @@ public class Grammar extends HashMap<Class<? extends NonTerminal>, List<Rule>> {
 	public static List<Node> getNodes(String input) throws InstantiationException, IllegalAccessException {
 		List<Node> semiTerminals = new ArrayList<>();
 		for (String word : getWords(input)) {
+			
+			if (Lexicon.lookup(word) == null) {
+				return null;
+			}
+			
 			NonTerminal semi = Lexicon.lookup(word).getPOS().newInstance();
 			List<Node> singleton = new ArrayList<>();
 			singleton.add(new Terminal(word));
@@ -113,6 +118,10 @@ public class Grammar extends HashMap<Class<? extends NonTerminal>, List<Rule>> {
 	
 	public static List<Node> parseAmbigString(String input) {
 		try {
+			List<Node> nodes = getNodes(input);
+			if (nodes == null) {
+				return new ArrayList<>();
+			}
 			List<Node> parses = topDown(getNodes(input), Sentence.class);
 			if (Debug.LOG_PARSES) {
 				Main.log("parses for " + input + ": " + parses);

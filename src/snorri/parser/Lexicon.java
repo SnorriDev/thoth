@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import snorri.entities.Enemy;
+import snorri.entities.Entity;
 import snorri.entities.Flower;
 import snorri.entities.Glyph;
 import snorri.entities.Spike;
@@ -90,12 +92,14 @@ public class Lexicon {
 		lexicon.put("ssn", new StaticDef(Noun.class, Flower.class)); //flower, gotta make this an entity
 		lexicon.put("mw", new StaticDef(Noun.class, TileType.WATER));
 		lexicon.put("Say", new StaticDef(Noun.class, TileType.SAND));
-		lexicon.put("xt", new StaticDef(Noun.class, TileType.LAVA)); //technically this is fire
+		lexicon.put("xt1", new StaticDef(Noun.class, TileType.LAVA)); //technically this is fire
 		lexicon.put("snbt", new StaticDef(Noun.class, Urn.class));
 		lexicon.put("bit", new StaticDef(Noun.class, null)); //TODO: bee
 		lexicon.put("Hnyt", new StaticDef(Noun.class, Spike.class));
 		lexicon.put("anx", new StaticDef(Noun.class, Glyph.class));
 		lexicon.put("ankh", new StaticDef(Noun.class, Glyph.class));
+		lexicon.put("xt", new StaticDef(Noun.class, Entity.class));
+		lexicon.put("wi1", new StaticDef(Noun.class, Enemy.class)); //TODO kAr.t is better
 		
 		lexicon.put("st", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
 		lexicon.put("iry", new StaticDef(AbstractNoun.class, AbstractSemantics.WEAPON));
