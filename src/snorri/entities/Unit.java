@@ -7,6 +7,8 @@ import snorri.animations.Animation;
 import snorri.collisions.Collider;
 import snorri.collisions.RectCollider;
 import snorri.events.SpellEvent;
+import snorri.main.Debug;
+import snorri.main.Main;
 import snorri.modifiers.Modifier;
 import snorri.pathfinding.Team;
 import snorri.semantics.Walk.Walker;
@@ -30,12 +32,22 @@ public abstract class Unit extends Entity implements Walker {
 	
 	protected Animation walkingAnimation;
 	protected Animation idleAnimation;
+	protected Animation attackAnimation;
 		
 	protected Unit(Vector pos, Animation idle, Animation walking) {
 		this(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)));
 		animation = idle;
 		idleAnimation = idle;
 		walkingAnimation = walking;
+		attackAnimation = idle;
+	}
+	
+	protected Unit(Vector pos, Animation idle, Animation walking, Animation attack) {
+		this(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)));
+		animation = idle;
+		idleAnimation = idle;
+		walkingAnimation = walking;
+		attackAnimation = attack;
 	}
 		
 	/**
@@ -70,6 +82,9 @@ public abstract class Unit extends Entity implements Walker {
 		
 		if (isDead()) {
 			world.delete(this);
+			if (Debug.LOG_DEATHS) {
+				Main.debug(tag + " died");
+			}
 			TriggerType.KILL.activate(tag);
 		}
 		
@@ -103,13 +118,13 @@ public abstract class Unit extends Entity implements Walker {
 	}
 	
 	@Override
-	public void walk(World world, Vector dir, double deltaTime) {
+	public void walkNormalized(World world, Vector dir, double deltaTime) {
 		setAnimation(dir);
-		Walker.super.walk(world, dir, deltaTime);
+		Walker.super.walkNormalized(world, dir, deltaTime);
 	}
 	
 	public void walkTo(World world, Vector target, double deltaTime) {
-		walk(world, target.copy().sub(pos), deltaTime);
+		walkNormalized(world, target.copy().sub(pos), deltaTime);
 	}
 	
 	public double getHealth() {
@@ -117,11 +132,14 @@ public abstract class Unit extends Entity implements Walker {
 	}
 	
 	public void damage(double d) {
+		if (Debug.LOG_DAMAGE_EVENTS) {
+			Main.log(this + "(" + (int) health + "/" + MAX_HEALTH + ") took " + d + " damage");
+		}
 		health -= d;
 	}
 	
 	public void damage(double d, SpellEvent e) {
-		heal(e.modifyHealthInteraction(d));
+		damage(e.modifyHealthInteraction(d));
 	}
 	
 	public void heal(double d) {

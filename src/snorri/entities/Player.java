@@ -79,7 +79,7 @@ public class Player extends Unit implements Carrier {
 
 			@Override
 			public void run() {
-				walk(world, window.getMovementVector(), deltaTime);
+				walkNormalized(world, window.getMovementVector(), deltaTime);
 			}
 			
 		});

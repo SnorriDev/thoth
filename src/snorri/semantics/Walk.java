@@ -6,21 +6,19 @@ import snorri.world.World;
 
 public class Walk extends VerbDef {
 	
-	private static final double SPEED = 175;
+	private static final double SPEED = 350;
+	private static final double DELETE_MARGIN = 5;
 	
 	public interface Walker {
 		
-		/**
-		 * This method is public, but don't call it
-		 * @param world
-		 * 	The world we are walking in
-		 * @param delta
-		 * 	The change vector
-		 */
 		public void walk(World world, Vector delta);
-		
+			
 		default void walk(World world, Vector dir, double deltaTime) {
-			walk(world, dir.copy().scale(deltaTime));
+			walk(world, dir.copy().multiply(deltaTime));
+		}
+		
+		default void walkNormalized(World world, Vector dir, double deltaTime) {
+			walk(world, dir.copy().normalize(), deltaTime);
 		}
 		
 	}
@@ -32,8 +30,12 @@ public class Walk extends VerbDef {
 	@Override
 	public boolean exec(Object obj) {
 		if (e.getSecondPerson() instanceof Walker) {
-			Vector trans = e.getDestination().copy().sub(e.getSecondPerson().getPos()).normalize();	
-			((Walker) e.getSecondPerson()).walk(e.getWorld(), trans, SPEED * e.getDeltaTime());
+			Vector trans = e.getDestination().copy().sub(e.getSecondPerson().getPos());
+			if (trans.magnitude() < DELETE_MARGIN) {
+				e.getWorld().delete(e.getSecondPerson());
+				return false;
+			}
+			((Walker) e.getSecondPerson()).walkNormalized(e.getWorld(), trans, SPEED * e.getDeltaTime());
 			return true;
 		}
 		return false;

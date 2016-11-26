@@ -117,6 +117,7 @@ public class Enemy extends Unit implements Pathfinder, Carrier, Targetter {
 		
 		dontWalk();
 		inventory.update(deltaTime);
+		super.update(world, deltaTime);
 		
 		if (target == null) {
 			if (Main.getWindow() instanceof GameWindow) {
@@ -150,8 +151,6 @@ public class Enemy extends Unit implements Pathfinder, Carrier, Targetter {
 			}
 
 		}
-		
-		super.update(world, deltaTime);
 						
 	}
 

@@ -169,7 +169,10 @@ public class Tile implements Comparable<Tile>, Nominal {
 			getImage("/textures/tiles/wall04.png"),
 			getImage("/textures/tiles/wall05.png"),
 			getImage("/textures/tiles/wall06.png"),
-			getImage("/textures/tiles/wall07.png")}, true),
+			getImage("/textures/tiles/wall07.png"),
+			getImage("/textures/tiles/wall08.png"),
+			getImage("/textures/tiles/wall09.png"),
+			getImage("/textures/tiles/wall10.png")}, true),
 		TREE(false, Main.getImage("/textures/tiles/tree00.png")),
 		FOUNDATION(false, DEFAULT_TEXTURE),
 		HUT(false, DEFAULT_TEXTURE),
@@ -186,7 +189,10 @@ public class Tile implements Comparable<Tile>, Nominal {
 			getImage("/textures/tiles/column00.png"),
 			getImage("/textures/tiles/column01.png")}, true),
 		DOOR(false, getImage("/textures/tiles/door00.png"), true),
-		SANDSTONE(false, false, getImage("/textures/tiles/sandstone00.png"), false, true),
+		SANDSTONE(false, false, new BufferedImage[] {
+				getImage("/textures/tiles/sandstone00.png"),
+				getImage("/textures/tiles/sandstone01.png"),
+				getImage("/textures/tiles/sandstone02.png")}, false, true),
 		FLOOR(true, new BufferedImage[] {getImage("/textures/tiles/floor00.png"),
 			getImage("/textures/tiles/floor01.png"),
 			getImage("/textures/tiles/floor02.png"),
@@ -200,7 +206,8 @@ public class Tile implements Comparable<Tile>, Nominal {
 			getImage("/textures/tiles/floor10.png"),
 			getImage("/textures/tiles/floor11.png")}, true),
 		GRAVEL(true, getImage("/textures/tiles/floor11.png")),
-		STONE(false, new BufferedImage[] {getImage("/textures/tiles/stone00.png"),
+		STONE(false, new BufferedImage[] {
+			getImage("/textures/tiles/stone00.png"),
 			getImage("/textures/tiles/stone01.png")}),
 		DEEP_WATER(false, false, getImage("/textures/tiles/water01.png")),
 		CLIFF(false, false, new BufferedImage[] {getImage("/textures/tiles/cliff00.png"),
@@ -301,6 +308,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 			this.changable = changable;
 		}
 		
+
 		/**
 		 * Use to make tile types which can be changed with sandstorms, etc.
 		 * @param pathable
@@ -314,11 +322,14 @@ public class Tile implements Comparable<Tile>, Nominal {
 		 * @param changable
 		 * 	Whether it can be changed
 		 */
+
 		TileType(boolean pathable, boolean swimmable, BufferedImage[] textures, boolean atTop, boolean changable) {
 			this(pathable , textures, atTop);
 			this.changable = changable;
 		}
 		
+
+
 		public boolean isLiquid() {
 			return !pathable && canShootOver;
 		}

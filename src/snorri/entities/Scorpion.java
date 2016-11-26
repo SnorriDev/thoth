@@ -5,7 +5,7 @@ import snorri.inventory.Inventory;
 
 import snorri.world.Vector;
 
-public class Crocodile extends LandMeleeUnit{
+public class Scorpion extends LandMeleeUnit {
 
 	private static final long serialVersionUID = 1L;
 	private static final double APPROACH_MARGIN = 15;
@@ -14,21 +14,21 @@ public class Crocodile extends LandMeleeUnit{
 	public static final Animation IDLE = new Animation("/textures/animations/crocodile/idle");
 	public static final Animation ATTACK = new Animation("/textures/animations/crocodile/attack");
 
-	protected static double seekRange = 256;
-	protected static double attackRange = 32;
-	protected static double attackPower = 5; //TODO: change to something more logical and balanced
+	protected static double seekRange = 128;
+	protected static double attackRange = 16;
+	protected static double attackPower = 2; //TODO: change to something more logical and balanced
 
 	protected Inventory inventory;
 	protected Entity target;
 
-	public Crocodile(Vector pos, Entity target) {
+	public Scorpion(Vector pos, Entity target) {
 		super(pos, target, new Animation(IDLE), new Animation(IDLE), new Animation(ATTACK), seekRange, attackRange, attackPower, APPROACH_MARGIN, CHANGE_PATH_MARGIN);
 		this.target = target;
 		animation = new Animation(IDLE);
 		inventory = new Inventory(this);
 	}
 
-	public Crocodile(Vector pos) {
+	public Scorpion(Vector pos) {
 		this(pos, null);
 		animation = new Animation(IDLE);
 	}
