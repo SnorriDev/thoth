@@ -256,8 +256,11 @@ public abstract class Item implements Droppable {
 		if (spell == null) {
 			return null;
 		}
+		
+		Main.debug("here");
 				
 		SpellEvent e = new SpellEvent((GameWindow) Main.getWindow(), subject);
+		Main.debug(Main.getWindow());
 		return spell.getMeaning(e);
 	}
 

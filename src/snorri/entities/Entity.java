@@ -84,6 +84,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	protected String tag;
 	
 	private boolean flying;
+	protected boolean killed = false;
 
 	/**
 	 * This method will automatically set the collider focus to the entity
@@ -398,6 +399,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	
 	public void kill(World world) {
 		world.delete(this);
+		killed = true;
 	}
 
 }

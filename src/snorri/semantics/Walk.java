@@ -32,7 +32,7 @@ public class Walk extends VerbDef {
 		if (e.getSecondPerson() instanceof Walker) {
 			Vector trans = e.getDestination().copy().sub(e.getSecondPerson().getPos());
 			if (trans.magnitude() < DELETE_MARGIN) {
-				e.getWorld().delete(e.getSecondPerson());
+				e.getSecondPerson().kill(e.getWorld());
 				return false;
 			}
 			((Walker) e.getSecondPerson()).walkNormalized(e.getWorld(), trans, SPEED * e.getDeltaTime());

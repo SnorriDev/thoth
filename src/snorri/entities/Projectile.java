@@ -78,18 +78,25 @@ public class Projectile extends Detector implements Walker {
 			((Unit) e.getTarget()).damage(weapon.getSharpness());
 		}
 		
-		if (e.getTarget() instanceof Explosion) {
-			e.getWorld().delete(this);
+		kill(e.getWorld());
+		
+	}
+	
+	@Override
+	public void kill(World world) {
+		
+		if (killed) { //prevent infinite loops when the spell kills this object
+			return;
 		}
 		
+		super.kill(world);
+		
 		if (orb != null) {
-			Object output = orb.useSpellOn(e.getTarget());
+			Object output = orb.useSpellOn(this);
 			if (Debug.SHOW_ORB_OUTPUT) {
 				Main.log("orb output: " + output);
 			}
 		}
-				
-		e.getWorld().delete(this); //could use removeFrom, but this is a little better
 		
 	}
 	
