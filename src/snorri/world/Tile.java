@@ -192,7 +192,8 @@ public class Tile implements Comparable<Tile>, Nominal {
 		SANDSTONE(false, false, new BufferedImage[] {
 				getImage("/textures/tiles/sandstone00.png"),
 				getImage("/textures/tiles/sandstone01.png"),
-				getImage("/textures/tiles/sandstone02.png")}, false, true),
+				getImage("/textures/tiles/sandstone02.png"),
+				getImage("/textures/tiles/default00.png")}, false, true), //will change to look like bricks
 		FLOOR(true, new BufferedImage[] {getImage("/textures/tiles/floor00.png"),
 			getImage("/textures/tiles/floor01.png"),
 			getImage("/textures/tiles/floor02.png"),
