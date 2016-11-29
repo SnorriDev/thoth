@@ -6,6 +6,7 @@ import java.awt.Image;
 import javax.swing.SwingUtilities;
 
 import snorri.animations.Animation;
+import snorri.audio.ClipWrapper;
 import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
 import snorri.inventory.Item;
@@ -36,6 +37,8 @@ public class Player extends Unit implements Carrier {
 	
 	private static final long serialVersionUID = 1L;
 	
+	private static final ClipWrapper[] SOUNDLIST = {new ClipWrapper("/sound/arrow.wav")};
+	
 	private Inventory inventory;
 	
 	public Player(Vector pos) {
@@ -43,6 +46,7 @@ public class Player extends Unit implements Carrier {
 		super(pos, new Animation(IDLE), new Animation(WALKING));
 		inventory = new Inventory(this);
 		z = PLAYER_LAYER;
+		sounds = SOUNDLIST;
 		
 		//default weapons
 		Weapon sling = (Weapon) Item.newItem(ItemType.SLING);
