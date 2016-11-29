@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import snorri.animations.Animation;
+import snorri.audio.ClipWrapper;
 import snorri.collisions.CircleCollider;
 import snorri.collisions.Collider;
 import snorri.main.Debug;
@@ -84,6 +85,8 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	protected String tag;
 	
 	private boolean flying;
+	
+	protected ClipWrapper[] sounds;
 
 	/**
 	 * This method will automatically set the collider focus to the entity
