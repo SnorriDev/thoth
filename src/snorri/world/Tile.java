@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import snorri.audio.ClipWrapper;
 import snorri.entities.Entity;
 import snorri.entities.Unit;
 import snorri.main.Debug;
@@ -26,6 +27,9 @@ public class Tile implements Comparable<Tile>, Nominal {
 	private List<Entity> entities;
 	
 	private Mask[] bitMasks;
+	
+	protected static ClipWrapper[] sounds;
+	
 
 	private Tile() {
 		entities = new ArrayList<>();
@@ -406,6 +410,28 @@ public class Tile implements Comparable<Tile>, Nominal {
 				list.add(new Tile(i,j));
 			}
 			return list;
+		}
+		
+		public boolean hasSounds() {
+			//return (sounds != null && sounds.length >= 1);
+			return sounds.length >= 1;
+		}
+		
+		public int getNumSounds() {
+			return sounds.length;
+		}
+		
+		public ClipWrapper[] getSounds() {
+			return sounds;
+		}
+		
+		public ClipWrapper getSound(int x) { //FIXME: what happens when a null sound gets played?  Should there be a default sound?
+			if (x < sounds.length)
+				return sounds[x];
+			else {
+				Main.error("index out of bounds");
+				return null;
+			}
 		}
 		
 	}
