@@ -19,5 +19,12 @@ public class Sentence extends NonTerminal {
 		return children.get(0).getMeaning((SpellEvent) children.get(1).getMeaning(e));
 		
 	}
+	
+	/**
+	 * @return <code>true</code> if the sentence has side effect
+	 */
+	public boolean isStatement() {
+		return children.get(0) instanceof Statement;
+	}
 
 }

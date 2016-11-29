@@ -6,10 +6,11 @@ import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.main.Debug;
 import snorri.main.Main;
+import snorri.semantics.Walk.Walker;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Projectile extends Detector {
+public class Projectile extends Detector implements Walker {
 
 	private static final long serialVersionUID = 1L;
 
@@ -47,7 +48,7 @@ public class Projectile extends Detector {
 	public void update(World world, double deltaTime) {
 		
 		if (weapon == null || !weapon.altersMovement()) {
-			pos.add(velocity.copy().multiply(deltaTime));
+			walk(world, velocity.copy().multiply(deltaTime));
 		} 
 		
 		if (weapon != null) {
@@ -101,6 +102,11 @@ public class Projectile extends Detector {
 		
 		return super.get(world, attr);
 		
+	}
+
+	@Override
+	public void walk(World world, Vector delta) {
+		pos.add(delta);
 	}
 
 }

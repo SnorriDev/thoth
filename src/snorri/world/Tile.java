@@ -156,11 +156,11 @@ public class Tile implements Comparable<Tile>, Nominal {
 	
 	public enum TileType implements Nominal {
 												
-		SAND(true, new BufferedImage[] {
+		SAND(true, false, new BufferedImage[] {
 			getImage("/textures/tiles/sand00.png"),
 			getImage("/textures/tiles/sand01.png"),
 			getImage("/textures/tiles/sand02.png"),
-			getImage("/textures/tiles/sand03.png")}),
+			getImage("/textures/tiles/sand03.png")}, false, true),
 		WALL(false, new BufferedImage[] {
 			getImage("/textures/tiles/wall00.png"),
 			getImage("/textures/tiles/wall01.png"),
@@ -169,7 +169,10 @@ public class Tile implements Comparable<Tile>, Nominal {
 			getImage("/textures/tiles/wall04.png"),
 			getImage("/textures/tiles/wall05.png"),
 			getImage("/textures/tiles/wall06.png"),
-			getImage("/textures/tiles/wall07.png")}, true),
+			getImage("/textures/tiles/wall07.png"),
+			getImage("/textures/tiles/wall08.png"),
+			getImage("/textures/tiles/wall09.png"),
+			getImage("/textures/tiles/wall10.png")}, true),
 		TREE(false, Main.getImage("/textures/tiles/tree00.png")),
 		FOUNDATION(false, DEFAULT_TEXTURE),
 		HUT(false, DEFAULT_TEXTURE),
@@ -178,15 +181,19 @@ public class Tile implements Comparable<Tile>, Nominal {
 			getImage("/textures/tiles/lava00.png"),
 			getImage("/textures/tiles/lava01.png"),
 			getImage("/textures/tiles/lava02.png")}),
-		GRASS(true, new BufferedImage[] {
+		GRASS(true, false, new BufferedImage[] {
 			getImage("/textures/tiles/grass00.png"),
-			getImage("/textures/tiles/grass01.png")}),
+			getImage("/textures/tiles/grass01.png")}, false, true),
 		VOID(false, false, Main.getImage("/textures/tiles/void00.png")),
 		COLUMN(false, new BufferedImage[] {
 			getImage("/textures/tiles/column00.png"),
 			getImage("/textures/tiles/column01.png")}, true),
 		DOOR(false, getImage("/textures/tiles/door00.png"), true),
-		SANDSTONE(false, false, getImage("/textures/tiles/sandstone00.png"), false, true),
+		SANDSTONE(false, false, new BufferedImage[] {
+				getImage("/textures/tiles/sandstone00.png"),
+				getImage("/textures/tiles/sandstone01.png"),
+				getImage("/textures/tiles/sandstone02.png"),
+				getImage("/textures/tiles/default00.png")}, false, true), //will change to look like bricks
 		FLOOR(true, new BufferedImage[] {getImage("/textures/tiles/floor00.png"),
 			getImage("/textures/tiles/floor01.png"),
 			getImage("/textures/tiles/floor02.png"),
@@ -200,7 +207,8 @@ public class Tile implements Comparable<Tile>, Nominal {
 			getImage("/textures/tiles/floor10.png"),
 			getImage("/textures/tiles/floor11.png")}, true),
 		GRAVEL(true, getImage("/textures/tiles/floor11.png")),
-		STONE(false, new BufferedImage[] {getImage("/textures/tiles/stone00.png"),
+		STONE(false, new BufferedImage[] {
+			getImage("/textures/tiles/stone00.png"),
 			getImage("/textures/tiles/stone01.png")}),
 		DEEP_WATER(false, false, getImage("/textures/tiles/water01.png")),
 		CLIFF(false, false, new BufferedImage[] {getImage("/textures/tiles/cliff00.png"),
@@ -234,7 +242,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 			this.pathable = pathable;
 			this.textures = textures;
 			canShootOver = pathable;
-			changable = canShootOver;
+			changable = false;
 			atTop = false;
 		}
 		
@@ -283,11 +291,46 @@ public class Tile implements Comparable<Tile>, Nominal {
 			this.atTop = atTop;
 		}
 		
+		/**
+		 * Use to make tile types which can be changed with sandstorms, etc.
+		 * @param pathable
+		 * 	Whether it can be walked on
+		 * @param swimmable
+		 * 	Whether it is a liquid
+		 * @param texture
+		 * 	The texture to display
+		 * @param atTop
+		 * 	Whether it should be bitmapped over
+		 * @param changable
+		 * 	Whether it can be changed
+		 */
 		TileType(boolean pathable, boolean swimmable, BufferedImage texture, boolean atTop, boolean changable) {
 			this(pathable , texture, atTop);
 			this.changable = changable;
 		}
 		
+
+		/**
+		 * Use to make tile types which can be changed with sandstorms, etc.
+		 * @param pathable
+		 * 	Whether it can be walked on
+		 * @param swimmable
+		 * 	Whether it is a liquid
+		 * @param texture
+		 * 	The texture to display
+		 * @param atTop
+		 * 	Whether it should be bitmapped over
+		 * @param changable
+		 * 	Whether it can be changed
+		 */
+
+		TileType(boolean pathable, boolean swimmable, BufferedImage[] textures, boolean atTop, boolean changable) {
+			this(pathable , textures, atTop);
+			this.changable = changable;
+		}
+		
+
+
 		public boolean isLiquid() {
 			return !pathable && canShootOver;
 		}

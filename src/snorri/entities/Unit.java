@@ -7,13 +7,16 @@ import snorri.animations.Animation;
 import snorri.collisions.Collider;
 import snorri.collisions.RectCollider;
 import snorri.events.SpellEvent;
+import snorri.main.Debug;
+import snorri.main.Main;
 import snorri.modifiers.Modifier;
 import snorri.pathfinding.Team;
+import snorri.semantics.Walk.Walker;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public abstract class Unit extends Entity {
+public abstract class Unit extends Entity implements Walker {
 
 	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 120;
@@ -29,12 +32,22 @@ public abstract class Unit extends Entity {
 	
 	protected Animation walkingAnimation;
 	protected Animation idleAnimation;
+	protected Animation attackAnimation;
 		
 	protected Unit(Vector pos, Animation idle, Animation walking) {
 		this(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)));
 		animation = idle;
 		idleAnimation = idle;
 		walkingAnimation = walking;
+		attackAnimation = idle;
+	}
+	
+	protected Unit(Vector pos, Animation idle, Animation walking, Animation attack) {
+		this(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)));
+		animation = idle;
+		idleAnimation = idle;
+		walkingAnimation = walking;
+		attackAnimation = attack;
 	}
 		
 	/**
@@ -69,26 +82,49 @@ public abstract class Unit extends Entity {
 		
 		if (isDead()) {
 			world.delete(this);
+			if (Debug.LOG_DEATHS) {
+				Main.debug(tag + " died");
+			}
 			TriggerType.KILL.activate(tag);
 		}
 		
 		super.update(world, deltaTime);
 		
 	}
-
-	public void walk(World world, Vector direction, double deltaTime) {
-		
+	
+	/**
+	 * Update the animations on a unit which isn't walking
+	 */
+	public void dontWalk() {
+		setAnimation(Vector.ZERO);
+	}
+	
+	/**
+	 * Set the walking or idle animation based on the current movement vector
+	 * @param direction
+	 * 	the direction of movement
+	 */
+	protected void setAnimation(Vector direction) {
 		animation = (direction.magnitude() == 0) ? idleAnimation : walkingAnimation;
 		if (direction.getX() != 0 && animation != null) {
 			walkingAnimation.flip(direction.getX() > 0);
 			idleAnimation.flip(direction.getX() > 0);
 		}
-		
-		moveHard(world, direction.copy().normalize(), getSpeed() * deltaTime);
+	}
+
+	@Override
+	public void walk(World world, Vector delta) {
+		moveNicely(world, delta.copy().multiply(getSpeed()));
+	}
+	
+	@Override
+	public void walkNormalized(World world, Vector dir, double deltaTime) {
+		setAnimation(dir);
+		Walker.super.walkNormalized(world, dir, deltaTime);
 	}
 	
 	public void walkTo(World world, Vector target, double deltaTime) {
-		walk(world, target.copy().sub(pos), deltaTime);
+		walkNormalized(world, target.copy().sub(pos), deltaTime);
 	}
 	
 	public double getHealth() {
@@ -96,11 +132,14 @@ public abstract class Unit extends Entity {
 	}
 	
 	public void damage(double d) {
+		if (Debug.LOG_DAMAGE_EVENTS) {
+			Main.log(this + "(" + (int) health + "/" + MAX_HEALTH + ") took " + d + " damage");
+		}
 		health -= d;
 	}
 	
 	public void damage(double d, SpellEvent e) {
-		heal(e.modifyHealthInteraction(d));
+		damage(e.modifyHealthInteraction(d));
 	}
 	
 	public void heal(double d) {
@@ -178,6 +217,12 @@ public abstract class Unit extends Entity {
 			return out;
 		}
 		return team;
+	}
+	
+	@Override
+	public void kill(World world) {
+		damage(100);
+		super.kill(world);
 	}
 	
 }

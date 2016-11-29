@@ -3,7 +3,7 @@ package snorri.keyboard;
 import snorri.world.Vector;
 
 public class KeyStates {
-
+	
 	private boolean[] states;
 	private boolean[] mouseStates;
 	

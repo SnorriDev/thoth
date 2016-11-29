@@ -11,16 +11,22 @@ public class SpellMessage extends Message {
 	private static final BufferedImage ICON = Main.getImage("/textures/hud/horus.png");
 	
 	private final Object output;
+	private final String header;
 	
-	public SpellMessage(Object output) {
+	public SpellMessage(String header, Object output) {
 		super(ICON);
 		this.output = output;
+		this.header = header;
 		success = output != null;
+	}
+	
+	public SpellMessage(Object output) {
+		this("spell", output);
 	}
 	
 	@Override
 	public String toString() {
-		return success ? ("spell: " + output) : "nothing";
+		return success ? format(header, output) : "nothing";
 	}
 	
 	@Override
@@ -29,6 +35,18 @@ public class SpellMessage extends Message {
 			return 0;
 		}
 		return drawLineWithIcon(output.toString(), gr, window, xTrans);
+	}
+	
+	/**
+	 * Format information to be printed in the game log
+	 * @param header
+	 * 	The header to go in front of the spell
+	 * @param output
+	 * 	The result of the evaluated spell
+	 * @return formatted text
+	 */
+	public static final String format(String header, Object output) {
+		return header + ": " + output;
 	}
 
 }

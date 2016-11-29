@@ -1,17 +1,24 @@
 package snorri.entities;
 
 import snorri.animations.Animation;
-import snorri.collisions.RectCollider;
+import snorri.inventory.Inventory;
 import snorri.world.Vector;
 
-public class Cobra extends Unit {
+public class Cobra extends LandMeleeUnit {
 
 	private static final long serialVersionUID = 1L;
 	
 	public static final Animation IDLE = new Animation("/textures/animations/cobra");
 	
+	public Cobra(Vector pos, Entity target) {
+		super(pos, target, new Animation(IDLE));
+		this.target = target;
+		animation = new Animation(IDLE);
+		inventory = new Inventory(this);
+	}
+	
 	public Cobra(Vector pos) {
-		super(pos, new RectCollider(57, 51));
+		super(pos, null);
 		animation = new Animation(IDLE);
 	}
 	

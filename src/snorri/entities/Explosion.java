@@ -15,7 +15,8 @@ public class Explosion extends Detector {
 	public Explosion(Vector pos, int r) {
 		super(pos, r);
 		animation = new Animation(ANIMATION);
-		z = PARTICLE_LAYER;
+		hitAll = true;
+		z = 0;
 	}
 	
 	public Explosion(Vector pos) {
@@ -39,9 +40,15 @@ public class Explosion extends Detector {
 
 	@Override
 	public void onCollision(CollisionEvent e) {
+
 		if (e.getTarget() instanceof Unit) {
 			((Unit) e.getTarget()).damage(damage);
 		}
+		
+		if (e.getTarget() instanceof Glyph) {
+			((Glyph) e.getTarget()).activate();
+		}
+		
 	}
 	
 	@Override

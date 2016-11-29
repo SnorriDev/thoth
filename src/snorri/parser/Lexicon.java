@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import snorri.entities.Enemy;
+import snorri.entities.Entity;
 import snorri.entities.Flower;
 import snorri.entities.Glyph;
 import snorri.entities.Spike;
@@ -64,10 +66,7 @@ public class Lexicon {
 	 * although this may change
 	 */
 	private static Map<String, Definition> lexicon;
-	
-	//TODO: allow duplicate definitions? hash by String, POS
-	//TODO: definitionSet
-	
+		
 	public static void load() {
 		
 		lexicon = new HashMap<String, Definition>();
@@ -93,12 +92,14 @@ public class Lexicon {
 		lexicon.put("ssn", new StaticDef(Noun.class, Flower.class)); //flower, gotta make this an entity
 		lexicon.put("mw", new StaticDef(Noun.class, TileType.WATER));
 		lexicon.put("Say", new StaticDef(Noun.class, TileType.SAND));
-		lexicon.put("xt", new StaticDef(Noun.class, TileType.LAVA)); //technically this is fire
+		lexicon.put("xt1", new StaticDef(Noun.class, TileType.LAVA)); //technically this is fire
 		lexicon.put("snbt", new StaticDef(Noun.class, Urn.class));
 		lexicon.put("bit", new StaticDef(Noun.class, null)); //TODO: bee
 		lexicon.put("Hnyt", new StaticDef(Noun.class, Spike.class));
 		lexicon.put("anx", new StaticDef(Noun.class, Glyph.class));
 		lexicon.put("ankh", new StaticDef(Noun.class, Glyph.class));
+		lexicon.put("xt", new StaticDef(Noun.class, Entity.class));
+		lexicon.put("wi1", new StaticDef(Noun.class, Enemy.class)); //TODO kAr.t is better
 		
 		lexicon.put("st", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
 		lexicon.put("iry", new StaticDef(AbstractNoun.class, AbstractSemantics.WEAPON));
@@ -115,16 +116,15 @@ public class Lexicon {
 		//Suffix Pronouns
 		lexicon.put("i", new FirstSuffixPronoun());
 		lexicon.put("k", new SecondSuffixPronoun());
-		lexicon.put("t", new SecondSuffixPronoun()); //maybe add gender agreement later (#cisnormativity)
+		lexicon.put("t", new SecondSuffixPronoun());
 		lexicon.put("s", new ThirdSuffixPronoun());
-		lexicon.put("f", new ThirdSuffixPronoun()); //maybe add gender agreement
+		lexicon.put("f", new ThirdSuffixPronoun());
 		
 		//Object Pronouns
 		lexicon.put("wi", new FirstObjectPronoun());
 		lexicon.put("tn", new SecondObjectPronoun());
 		lexicon.put("sw", new ThirdObjectPronoun());
 		lexicon.put("sy", new ThirdObjectPronoun());
-		lexicon.put("s", new ThirdObjectPronoun());
 		
 		//Verbs
 		lexicon.put("in", new Move());
@@ -141,7 +141,7 @@ public class Lexicon {
 		lexicon.put("qmA", new CreateObject());
 		lexicon.put("rd", new Grow());
 		lexicon.put("wn", new Open());
-		lexicon.put("sS", new Write()); //TODO icon
+		lexicon.put("sS", new Write());
 		lexicon.put("dbH", new Pray());
 		lexicon.put("sqbH", new Slow());
 		lexicon.put("sDi", new Break());

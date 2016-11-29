@@ -10,6 +10,7 @@ import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
+import snorri.keyboard.Key;
 import snorri.inventory.Orb;
 import snorri.inventory.Papyrus;
 import snorri.inventory.Weapon;
@@ -73,24 +74,33 @@ public class Player extends Unit implements Carrier {
 		FocusedWindow window = (FocusedWindow) Main.getWindow();
 		super.update(world, deltaTime);
 		inventory.update(deltaTime);
-		
+				
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
 			public void run() {
-				walk(world, window.getMovementVector(), deltaTime);
+				walkNormalized(world, window.getMovementVector(), deltaTime);
 			}
 			
 		});
 		
+		//check if we're hitting a desk
+		if (Key.SPACE.isPressed()) {
+			Entity interactRegion = new Entity(pos, Unit.RADIUS + Desk.INTERACT_RANGE);
+			for (Entity entity : world.getEntityTree().getAllCollisions(interactRegion)) {
+				if (entity instanceof Desk && Main.getWindow() instanceof GameWindow) {
+					((GameWindow) Main.getWindow()).openInventory();
+					return;
+				}
+			}
+		}
 		
+		inventory.checkKeys();
 		
 		Vector movement = window.getMovementVector();
 		Vector dir = window.getShotDirection();
 		inventory.tryToShoot(world, this, movement, dir);
-		
-		//TODO figure out what to do about momentum
-		
+				
 	}
 	
 	@Override

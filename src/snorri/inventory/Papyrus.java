@@ -2,8 +2,11 @@ package snorri.inventory;
 
 import java.awt.Color;
 
+import snorri.dialog.SpellMessage;
 import snorri.entities.Unit;
+import snorri.main.GameWindow;
 import snorri.main.Main;
+import snorri.nonterminals.Sentence;
 
 public class Papyrus extends Item {
 
@@ -20,12 +23,20 @@ public class Papyrus extends Item {
 		
 		if (timer.activate()) {
 			Object o = useSpellOn(player);
-			Main.log("spell output: " + o);
+			if (Main.getWindow() instanceof GameWindow && spellIsStatement()) {
+				((GameWindow) Main.getWindow()).showMessage(new SpellMessage(spell.getOrthography(), o));
+			} else {
+				Main.log(SpellMessage.format(spell.getOrthography(), o));
+			}
 			return true;
 		}
 		
 		return false;
 		
+	}
+	
+	private boolean spellIsStatement() {
+		return spell instanceof Sentence && ((Sentence) spell).isStatement();
 	}
 	
 	@Override

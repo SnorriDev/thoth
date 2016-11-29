@@ -67,8 +67,8 @@ public class Main {
 		}
 		
 		private void resize() {
-			resize(window);
 			resize(outerOverlay);
+			resize(window);
 		}
 		
 		private static void resize(JComponent component) {
@@ -108,16 +108,31 @@ public class Main {
 		return frame.getBounds();
 	}
 
-	public static void error(Object o) {
-		System.err.println("[ERROR] " + o);
+	/**
+	 * Use this to print error messages to the game log
+	 * @param s
+	 * 	the error string to print
+	 */
+	public static void error(String s) {
+		System.err.println("[ERROR] " + s);
 	}
 
+	/**
+	 * Use this to print nice messages to the game log
+	 * @param s
+	 * 	the string to print
+	 */
 	public static void log(String s) {
 		System.out.println("[LOG] " + s);
 	}
 
-	public static void log(Object o) {
-		System.out.println("[RAW] " + o);
+	/**
+	 * Use this to print things for debugging purposes
+	 * @param o
+	 * 	the object to print
+	 */
+	public static void debug(Object o) {
+		System.out.println("[DEBUG] " + o);
 	}
 
 	public static GamePanel getWindow() {
@@ -135,7 +150,7 @@ public class Main {
 	public static void setupFont() {
 		customFont = loadFont("/fonts/thothDefault.ttf");
 		UIManager.put("Button.font", getCustomFont(20));
-		Main.log("default font loaded");
+		log("default font loaded");
 	}
 
 	public static Font getCustomFont(float size) {
@@ -234,6 +249,7 @@ public class Main {
 		getLayeredPane().revalidate();
 		getLayeredPane().repaint();
 		window.requestFocusInWindow();
+		//window.setKeyBindings();
 	}
 
 	/**

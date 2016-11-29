@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import snorri.main.Debug;
 import snorri.main.Main;
 import snorri.main.Util;
 import snorri.nonterminals.AbstractNoun;
@@ -93,9 +94,7 @@ public class Grammar extends HashMap<Class<? extends NonTerminal>, List<Rule>> {
 		}
 		return out;
 	}
-	
-	//TODO get by POS
-	
+		
 	public static List<String> getWords(String input) {
 		return Arrays.asList(input.replaceAll("\\.",  "").split("\\s+|="));
 	}
@@ -103,6 +102,11 @@ public class Grammar extends HashMap<Class<? extends NonTerminal>, List<Rule>> {
 	public static List<Node> getNodes(String input) throws InstantiationException, IllegalAccessException {
 		List<Node> semiTerminals = new ArrayList<>();
 		for (String word : getWords(input)) {
+			
+			if (Lexicon.lookup(word) == null) {
+				return null;
+			}
+			
 			NonTerminal semi = Lexicon.lookup(word).getPOS().newInstance();
 			List<Node> singleton = new ArrayList<>();
 			singleton.add(new Terminal(word));
@@ -114,7 +118,15 @@ public class Grammar extends HashMap<Class<? extends NonTerminal>, List<Rule>> {
 	
 	public static List<Node> parseAmbigString(String input) {
 		try {
-			return topDown(getNodes(input), Sentence.class);
+			List<Node> nodes = getNodes(input);
+			if (nodes == null) {
+				return new ArrayList<>();
+			}
+			List<Node> parses = topDown(getNodes(input), Sentence.class);
+			if (Debug.LOG_PARSES) {
+				Main.log("parses for " + input + ": " + parses);
+			}
+			return parses;
 		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 			return null;
@@ -131,7 +143,7 @@ public class Grammar extends HashMap<Class<? extends NonTerminal>, List<Rule>> {
 	}
 	
 	private static List<Node> topDown(List<Node> words, Class<? extends Node> nodeType) throws InstantiationException, IllegalAccessException {
-		
+				
 		if (words.size() == 1) {
 			if (nodeType.isInstance(words.get(0))) {
 				return words;
@@ -152,7 +164,6 @@ public class Grammar extends HashMap<Class<? extends NonTerminal>, List<Rule>> {
 				Iterator<Integer> iter = part.iterator();
 				for (int start = 0, next = iter.next(), i = 0; start < words.size(); start += next, next = iter.next(), i++) {
 					allPoss.add(topDown(new ArrayList<>(words.subList(start, start + next)), rewrite.getNode(i)));
-				
 					if (! iter.hasNext()) {
 						break;
 					}
@@ -162,10 +173,10 @@ public class Grammar extends HashMap<Class<? extends NonTerminal>, List<Rule>> {
 				//loops through the possible valid combinations
 				for (List<Node> nodes : Util.computeCombinations(allPoss)) {
 					Class<? extends NonTerminal> c = rewrite.fits(nodes);
-//					if (c == null) {
-//						Main.error("doesn't fit; reevaluate parsing");
-//						break;
-//					}
+					if (c == null) {
+						Main.error("very weird parsing issue");
+						return null;
+					}
 					NonTerminal node = c.newInstance();
 					node.setChildren(nodes);
 					out.add(node);
