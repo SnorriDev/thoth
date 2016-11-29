@@ -50,11 +50,16 @@ public class Audio {
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 	
+	public static void loopClip(ClipWrapper clip) {
+		loopClip(clip.getClip());
+	}
+	
 	public static void playClip(Clip clip) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
+					
 					AudioListener listener = new AudioListener();
 					clip.setFramePosition(0);
 					clip.start();

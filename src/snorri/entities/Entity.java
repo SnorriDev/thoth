@@ -86,7 +86,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	
 	private boolean flying;
 	
-	protected ClipWrapper[] sounds;
+	//protected ClipWrapper[] sounds;
 
 	/**
 	 * This method will automatically set the collider focus to the entity

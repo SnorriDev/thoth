@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import snorri.animations.Animation;
+import snorri.audio.ClipWrapper;
 import snorri.collisions.Collider;
 import snorri.collisions.RectCollider;
 import snorri.events.SpellEvent;
@@ -33,6 +34,11 @@ public abstract class Unit extends Entity implements Walker {
 	protected Animation walkingAnimation;
 	protected Animation idleAnimation;
 	protected Animation attackAnimation;
+	
+	protected String[] speechSounds;
+	protected String[] damageSounds;
+	protected String[] deathSounds;
+
 		
 	protected Unit(Vector pos, Animation idle, Animation walking) {
 		this(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)));
@@ -223,6 +229,102 @@ public abstract class Unit extends Entity implements Walker {
 	public void kill(World world) {
 		damage(100);
 		super.kill(world);
+	}
+	
+	public String[] getSpeechSounds() {
+		return speechSounds;
+	}
+	
+	public String[] getdamageSounds() {
+		return damageSounds;
+	}
+	
+	public String[] getDeathSounds() {
+		return deathSounds;
+	}
+	
+	public String getSpeechSound() {
+		if (speechSounds.length >= 1)
+			return speechSounds[0];
+		else
+			return null;
+	}
+	
+	public String getDamageSound() {
+		if (damageSounds.length >= 1)
+			return damageSounds[0];
+		else
+			return null;
+	}
+	
+	public String getDeathSound() {
+		if (deathSounds.length >= 1)
+			return deathSounds[0];
+		else
+			return null;
+	}
+	
+	public String getSpeechSound(int x) {
+		if (x > speechSounds.length)
+			return speechSounds[x];
+		else
+			return null;
+	}
+	
+	public String getDamageSound(int x) {
+		if (x > damageSounds.length)
+			return damageSounds[x];
+		else
+			return null;
+	}
+	
+	public String getDeathSound(int x) {
+		if (x > deathSounds.length)
+			return deathSounds[x];
+		else
+			return null;
+	}
+	
+	public ClipWrapper getSpeechSoundClip() {
+		if (speechSounds.length >= 1)
+			return new ClipWrapper(speechSounds[0]);
+		else
+			return null;
+	}
+	
+	public ClipWrapper getDamageSoundClip() {
+		if (damageSounds.length >= 1)
+			return new ClipWrapper(damageSounds[0]);
+		else
+			return null;
+	}
+	
+	public ClipWrapper getDeathSoundClip() {
+		if (deathSounds.length >= 1)
+			return new ClipWrapper(deathSounds[0]);
+		else
+			return null;
+	}
+	
+	public ClipWrapper getSpeechSoundClip(int x) {
+		if (x > speechSounds.length)
+			return new ClipWrapper(speechSounds[x]);
+		else
+			return null;
+	}
+	
+	public ClipWrapper getDamageSoundClip(int x) {
+		if (x > damageSounds.length)
+			return new ClipWrapper(damageSounds[x]);
+		else
+			return null;
+	}
+	
+	public ClipWrapper getDeathSoundClip(int x) {
+		if (x > deathSounds.length)
+			return new ClipWrapper(deathSounds[x]);
+		else
+			return null;
 	}
 	
 }
