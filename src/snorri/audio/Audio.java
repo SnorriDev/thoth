@@ -50,8 +50,8 @@ public class Audio {
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 	
-	public static void loopClip(ClipWrapper clip) {
-		loopClip(clip.getClip());
+	public static void loopClip(ClipWrapper wrapper) {
+		loopClip(wrapper.getClip());
 	}
 	
 	public static void playClip(Clip clip) {

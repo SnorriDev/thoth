@@ -11,7 +11,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import snorri.animations.Animation;
-import snorri.audio.ClipWrapper;
 import snorri.collisions.CircleCollider;
 import snorri.collisions.Collider;
 import snorri.main.Debug;

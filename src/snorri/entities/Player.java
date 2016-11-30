@@ -6,7 +6,6 @@ import java.awt.Image;
 import javax.swing.SwingUtilities;
 
 import snorri.animations.Animation;
-import snorri.audio.ClipWrapper;
 import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
 import snorri.inventory.Item;
