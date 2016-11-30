@@ -209,13 +209,15 @@ public class Tile implements Comparable<Tile>, Nominal {
 			getImage("/textures/tiles/floor08.png"),
 			getImage("/textures/tiles/floor09.png"),
 			getImage("/textures/tiles/floor10.png"),
-			getImage("/textures/tiles/floor11.png")}, true),
+			getImage("/textures/tiles/floor11.png"),
+			getImage("/textures/tiles/floor12.png")}, true),
 		GRAVEL(true, getImage("/textures/tiles/floor11.png")),
 		STONE(false, new BufferedImage[] {
 			getImage("/textures/tiles/stone00.png"),
 			getImage("/textures/tiles/stone01.png")}),
 		DEEP_WATER(false, false, getImage("/textures/tiles/water01.png")),
-		CLIFF(false, false, new BufferedImage[] {getImage("/textures/tiles/cliff00.png"),
+		CLIFF(false, false, new BufferedImage[] {
+			getImage("/textures/tiles/cliff00.png"),
 			getImage("/textures/tiles/cliff01.png"),
 			getImage("/textures/tiles/cliff02.png"),
 			getImage("/textures/tiles/cliff03.png"),
@@ -226,7 +228,19 @@ public class Tile implements Comparable<Tile>, Nominal {
 			getImage("/textures/tiles/cliff08.png"),
 			getImage("/textures/tiles/cliff09.png"),
 			getImage("/textures/tiles/cliff10.png"),
-			getImage("/textures/tiles/cliff11.png")}, true);
+			getImage("/textures/tiles/cliff11.png")}, true),
+		WOOD(true, new BufferedImage[] {
+			getImage("/textures/tiles/wood00.png"),
+			getImage("/textures/tiles/wood01.png"),
+			getImage("/textures/tiles/wood02.png")}, true),
+		BRICK(true, new BufferedImage[] {
+			getImage("/textures/tiles/brick00.png"),
+			getImage("/textures/tiles/brick01.png"),
+			getImage("/textures/tiles/brick02.png"),
+			getImage("/textures/tiles/brick03.png"),
+			getImage("/textures/tiles/brick04.png"),
+			getImage("/textures/tiles/brick05.png"),
+			getImage("/textures/tiles/brick06.png")}, true);
 		
 		private boolean	pathable, canShootOver, atTop, changable;
 		private BufferedImage[]	textures;
