@@ -26,14 +26,6 @@ public abstract class LandMeleeUnit extends Unit implements Pathfinder, Carrier,
 	
 	private Vector lastSeenPos;
 	private boolean recalculatingPath = false;
-
-	private static final Animation IDLE_DEFAULT = new Animation("/textures/animations/crocodile/idle");
-	private static final Animation WALKING_DEFAULT = new Animation("/textures/animations/crocodile/idle");
-	private static final Animation ATTACK_DEFAULT = new Animation("/textures/animations/crocodile/idle");
-	
-	//protected Animation idle = IDLE_DEFAULT;
-	//protected Animation walking = WALKING_DEFAULT;
-	//protected Animation attack = ATTACK_DEFAULT;
 	
 	protected final double SEEKRANGE_DEFAULT = 256;
 	protected final double ATTACKRANGE_DEFAULT = 32;
@@ -65,7 +57,8 @@ public abstract class LandMeleeUnit extends Unit implements Pathfinder, Carrier,
 	}
 	
 	public LandMeleeUnit(Vector pos, Entity target, Animation idle, Animation walking, Animation attack, double seekRange, double attackRange, double attackPower) {
-		super(pos, new Animation(idle), new Animation(walking), new Animation(attack));
+		
+		super(pos, idle, walking, attack);
 		
 		this.target = target;
 		inventory = new Inventory(this);
@@ -95,16 +88,6 @@ public abstract class LandMeleeUnit extends Unit implements Pathfinder, Carrier,
 	
 	public LandMeleeUnit(Vector pos, Entity target, Animation idle) {
 		this(pos, target, idle, idle);
-	}
-	
-	public LandMeleeUnit(Vector pos, Entity Target) {
-		super(pos, new Animation(IDLE_DEFAULT), new Animation(WALKING_DEFAULT), new Animation(ATTACK_DEFAULT));
-		animation = new Animation(idleAnimation);
-	}
-
-	public LandMeleeUnit(Vector pos) {
-		this(pos, null);
-		animation = new Animation(idleAnimation);
 	}
 
 	@Override

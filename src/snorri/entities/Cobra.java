@@ -1,7 +1,6 @@
 package snorri.entities;
 
 import snorri.animations.Animation;
-import snorri.inventory.Inventory;
 import snorri.world.Vector;
 
 public class Cobra extends LandMeleeUnit {
@@ -11,15 +10,11 @@ public class Cobra extends LandMeleeUnit {
 	public static final Animation IDLE = new Animation("/textures/animations/cobra");
 	
 	public Cobra(Vector pos, Entity target) {
-		super(pos, target, new Animation(IDLE));
-		this.target = target;
-		animation = new Animation(IDLE);
-		inventory = new Inventory(this);
+		super(pos, target, IDLE);
 	}
 	
 	public Cobra(Vector pos) {
-		super(pos, null);
-		animation = new Animation(IDLE);
+		this(pos, null);
 	}
 	
 }

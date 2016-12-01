@@ -36,18 +36,12 @@ public abstract class Unit extends Entity implements Walker {
 		
 	protected Unit(Vector pos, Animation idle, Animation walking) {
 		this(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)));
-		animation = idle;
-		idleAnimation = idle;
-		walkingAnimation = walking;
-		attackAnimation = idle;
+		initializeAnimations(idle, walking, idle);
 	}
 	
 	protected Unit(Vector pos, Animation idle, Animation walking, Animation attack) {
 		this(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)));
-		animation = idle;
-		idleAnimation = idle;
-		walkingAnimation = walking;
-		attackAnimation = attack;
+		initializeAnimations(idle, walking, attack);
 	}
 		
 	/**
@@ -90,6 +84,22 @@ public abstract class Unit extends Entity implements Walker {
 		
 		super.update(world, deltaTime);
 		
+	}
+	
+	/**
+	 * Set the animations for this unit to copies of the supplied ones
+	 * @param idle
+	 * 	the idle animation
+	 * @param walking
+	 * 	the walking animation
+	 * @param attack
+	 * 	the attack animation
+	 */
+	protected void initializeAnimations(Animation idle, Animation walking, Animation attack) {
+		idleAnimation = new Animation(idle);
+		walkingAnimation = new Animation(walking);
+		attackAnimation = new Animation(attack);
+		animation = idleAnimation;
 	}
 	
 	/**

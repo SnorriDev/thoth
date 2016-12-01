@@ -40,7 +40,7 @@ public class Player extends Unit implements Carrier {
 	
 	public Player(Vector pos) {
 		
-		super(pos, new Animation(IDLE), new Animation(WALKING));
+		super(pos, IDLE, WALKING);
 		inventory = new Inventory(this);
 		z = PLAYER_LAYER;
 		
