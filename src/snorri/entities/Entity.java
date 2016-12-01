@@ -86,6 +86,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	private boolean flying;
 	protected boolean killed = false;
 
+
 	/**
 	 * This method will automatically set the collider focus to the entity
 	 */

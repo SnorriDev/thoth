@@ -36,6 +36,10 @@ public class Player extends Unit implements Carrier {
 	
 	private static final long serialVersionUID = 1L;
 	
+	private static final String[] SPEECH_SOUNDS = {"/sound/arrow.wav"};
+	private static final String[] DAMAGE_SOUNDS = {"/sound/arrow.wav"};
+	private static final String[] DEATH_SOUNDS = {"/sound/arrow.wav"};
+	
 	private Inventory inventory;
 	
 	public Player(Vector pos) {
@@ -43,6 +47,10 @@ public class Player extends Unit implements Carrier {
 		super(pos, IDLE, WALKING);
 		inventory = new Inventory(this);
 		z = PLAYER_LAYER;
+		
+		speechSounds = SPEECH_SOUNDS;
+		damageSounds = DAMAGE_SOUNDS;
+		deathSounds = DEATH_SOUNDS;
 		
 		//default weapons
 		Weapon sling = (Weapon) Item.newItem(ItemType.SLING);

@@ -55,7 +55,25 @@ public class Util {
 		return c == null ? Collections.emptyList() : c;
 	}
 	
+	/**
+	 * Resize a buffered image. Can leave one dimension equal to 0 to autoscale
+	 * @param image
+	 * 	the original image
+	 * @param newWidth
+	 * 	the desired height
+	 * @param newHeight
+	 * 	the desired width
+	 * @return the resized image
+	 */
 	public static BufferedImage resize(Image image, int newWidth, int newHeight) {
+		
+		if (newWidth <= 0 && newHeight != 0) {
+			newWidth = image.getWidth(null) * newHeight / image.getHeight(null);
+		}
+		if (newHeight <= 0 && newWidth != 0) {
+			newHeight = image.getHeight(null) * newWidth / image.getWidth(null);
+		}
+		
 		Image scaled = image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
 		BufferedImage img = new BufferedImage(scaled.getWidth(null), scaled.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = img.getGraphics();
