@@ -388,7 +388,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 			}
 			
 			if (attr == AbstractSemantics.STORM && this == SAND) {
-				return new Tile(this, 3);
+				return new Tile(this, 0);
 			}
 			
 			return Nominal.super.get(world, attr);

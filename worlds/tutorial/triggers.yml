@@ -26,13 +26,11 @@ onZone1:
     - SET_OBJECTIVE:
         objective:
           !objective
-          shortDesc: 'acquire the vocab, walk to the desk, and press spacebar'
+          shortDesc: 'pick up the hieroglyphs and papyrus'
           longDesc: |
-            <p class="instruction">First collect the sparkling artifacts and papyrus on
-            the ground. Each artifact unlocks a hieroglyph. Next, walk down to the inkwell and press <span class="control">
-            spacebar</span>. Select <span class="control">papyrus</span> on the left panel
-            and type the spell <span class="hiero">wn sy</span> in the textbox. Click <span class="control">enchant
-            </span> and then press <span class="control">escape</span> to close the window.</p>
+            <p class="instruction">Collect the sparkling artifacts and papyrus on
+            the ground. Each artifact unlocks a hieroglyph, and the papyrus allows you
+            to write spells.</p>
     - SHOW_DIALOG:
         dialog:
           !dialog
@@ -41,7 +39,30 @@ onZone1:
               <p><span class="name">Imhotep:</span> Men listen when your father the Pharoah 
               speaks for Horus, but the world itself listens to sorcerers who speak through Thoth.
               The ability to alter reality with hieroglyphs is a powerful gift that few possess, 
-              and even fewer have mastered. See if you can write a spell to unlock this door.</p>
+              and even fewer have mastered. Pick up those hieroglyphs, and use them to write a spell 
+              which will open the door.</p>
+            showObjective: true
+
+onPickupPapyrus:
+  events:
+    - ACQUIRE:
+        object: papyrus
+  actions:
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+          shortDesc: 'pick up the hieroglyphs and papyrus'
+          longDesc: |
+            <p class="instruction">Walk south to the inkwell and press <span class="control">
+            spacebar</span>. Select <span class="control">papyrus</span> on the left panel
+            and type the spell <span class="hiero">wn sy</span> in the textbox. Click <span class="control">enchant
+            </span> and then press <span class="control">escape</span> to close the enchanting window.</p>
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            image: priest
+            text: |
+              <p><span class="name">Imhotep:</span> Now it is time to write a spell!</p>
             showObjective: true
 
 onEnchant:
@@ -80,7 +101,7 @@ onDoorOpen:
             image: priest
             text: |
               <p><span class="name">Imhotep:</span> By Thoth, you're a natural! Now go grab that sling on the ground.
-              You never know what you'll run into this deep in the archives.</p>    
+              You never know what you'll run into down here.</p>    
 
 onPickup:
   events:
