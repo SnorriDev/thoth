@@ -83,7 +83,7 @@ public abstract class Unit extends Entity implements Walker {
 		if (isDead()) {
 			world.delete(this);
 			if (Debug.LOG_DEATHS) {
-				Main.debug(tag + " died");
+				Main.log(tag + " died");
 			}
 			TriggerType.KILL.activate(tag);
 		}

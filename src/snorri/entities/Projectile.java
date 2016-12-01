@@ -91,6 +91,7 @@ public class Projectile extends Detector implements Walker {
 		
 		super.kill(world);
 		
+		//TODO might want to change this back to applying to the target
 		if (orb != null) {
 			Object output = orb.useSpellOn(this);
 			if (Debug.SHOW_ORB_OUTPUT) {

@@ -307,7 +307,7 @@ public class QuadTree extends Entity implements EntityGroup {
 		renderQueue.addAll(colliders);
 		
 		if (Debug.LOG_RENDER_QUEUE) {
-			Main.debug(renderQueue);
+			Main.log("render queue: " + renderQueue);
 		}
 		
 		while (!renderQueue.isEmpty()) {
