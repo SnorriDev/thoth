@@ -52,7 +52,6 @@ public class Grammar extends HashMap<Class<? extends NonTerminal>, List<Rule>> {
 		grammar.add(new Rule(new Object[] {TransVerb.class, NounPhrase.class}, Command.class));
 		grammar.add(new Rule(new Object[] {IntransVerb.class}, Command.class));
 		
-		grammar.add(new Rule(new Object[] {AbstractNoun.class}, NounPhrase.class));
 		grammar.add(new Rule(new Object[] {Noun.class}, NounPhrase.class));
 		grammar.add(new Rule(new Object[] {Name.class}, Noun.class));
 		grammar.add(new Rule(new Object[] {AbstractNoun.class, NounPhrase.class}, NounPhrase.class));
