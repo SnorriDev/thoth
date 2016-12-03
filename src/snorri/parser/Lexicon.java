@@ -100,6 +100,7 @@ public class Lexicon {
 		lexicon.put("ankh", new StaticDef(Noun.class, Glyph.class));
 		lexicon.put("xt", new StaticDef(Noun.class, Entity.class));
 		lexicon.put("wi1", new StaticDef(Noun.class, Enemy.class)); //TODO kAr.t is better
+		lexicon.put("rwdt", new StaticDef(Noun.class, TileType.SANDSTONE));
 		
 		lexicon.put("st", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
 		lexicon.put("iry", new StaticDef(AbstractNoun.class, AbstractSemantics.WEAPON));
