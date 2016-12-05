@@ -53,7 +53,7 @@ import snorri.semantics.ThirdObjectPronoun;
 import snorri.semantics.ThirdSuffixPronoun;
 import snorri.semantics.To;
 import snorri.semantics.Under;
-import snorri.semantics.Walk;
+import snorri.semantics.Go;
 import snorri.semantics.With;
 import snorri.semantics.Write;
 import snorri.world.Tile.TileType;
@@ -131,7 +131,7 @@ public class Lexicon {
 		lexicon.put("in", new Move());
 		lexicon.put("ini", new Move());
 		lexicon.put("ms", new Move());
-		lexicon.put("xpi", new Walk());
+		lexicon.put("xpi", new Go());
 		lexicon.put("iw", new Be());
 		lexicon.put("bm", new Boom());
 		lexicon.put("mAX", new Burn());

@@ -12,7 +12,7 @@ import snorri.main.Debug;
 import snorri.main.Main;
 import snorri.modifiers.Modifier;
 import snorri.pathfinding.Team;
-import snorri.semantics.Walk.Walker;
+import snorri.semantics.Go.Walker;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;

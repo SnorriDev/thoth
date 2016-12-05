@@ -6,7 +6,7 @@ import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.main.Debug;
 import snorri.main.Main;
-import snorri.semantics.Walk.Walker;
+import snorri.semantics.Go.Walker;
 import snorri.world.Vector;
 import snorri.world.World;
 
