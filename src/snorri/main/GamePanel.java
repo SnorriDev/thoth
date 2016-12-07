@@ -1,5 +1,6 @@
 package snorri.main;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
@@ -17,7 +18,13 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 	private static final int FRAME_DELTA = 15; //33 -> 30 FPS (20 -> 50 FPS
 	public static final int MARGIN = 20;
 	
+	private static final Color BACKGROUND_COLOR = new Color(255, 242, 197);
+	
 	private boolean stopped = false;
+	
+	protected GamePanel() {
+		setBackground(BACKGROUND_COLOR);
+	}
 	
 	public static double getBaseDelta() {
 		return FRAME_DELTA / 1000d;

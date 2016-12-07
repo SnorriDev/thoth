@@ -12,6 +12,7 @@ public class MenuPanel extends JPanel {
 		GridLayout layout = new GridLayout(0, 1);
 		layout.setVgap(10);
 		setLayout(layout);
+		setOpaque(false);
 	}
 	
 }

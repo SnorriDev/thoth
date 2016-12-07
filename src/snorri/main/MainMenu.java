@@ -19,10 +19,11 @@ public class MainMenu extends GamePanel {
 	public MainMenu() {
 		
 		JPanel outerFrame = new JPanel();
+		outerFrame.setOpaque(false);
 		outerFrame.setLayout(new GridLayout(0, 1));
 		add(outerFrame);
 		
-		outerFrame.add(new JLabel(new ImageIcon(Util.resize(Main.getImage("/textures/hud/title.png"), 0, 310))));
+		outerFrame.add(new JLabel(new ImageIcon(Util.resize(Main.getImage("/textures/titleScreen/title.png"), 0, 310))));
 		
 		JPanel menu = new MenuPanel();
 		menu.add(createButton("Tutorial"));

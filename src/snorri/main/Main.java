@@ -244,12 +244,11 @@ public class Main {
 		}
 		window = newWindow;
 		window.setVisible(true);
-		ResizeListener.resize(window);
 		getLayeredPane().add(window, JLayeredPane.DEFAULT_LAYER);
 		getLayeredPane().revalidate();
 		getLayeredPane().repaint();
 		window.requestFocusInWindow();
-		//window.setKeyBindings();
+		ResizeListener.resize(window);
 	}
 
 	/**

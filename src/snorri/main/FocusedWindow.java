@@ -31,6 +31,7 @@ public abstract class FocusedWindow extends GamePanel implements MouseListener, 
 	private boolean paused = false;
 	
 	public FocusedWindow() {
+		super();
 		setFocusable(true);
 		addMouseListener(this);
 		addKeyListener(this);

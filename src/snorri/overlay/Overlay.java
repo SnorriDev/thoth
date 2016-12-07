@@ -164,6 +164,7 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 	}
 	
 	protected Overlay(FocusedWindow focusedWindow) {
+		super();
 		this.window = focusedWindow;
 		setOpaque(false);
 		addKeyListener(this);
