@@ -1,4 +1,4 @@
-<p align="center"><img src="https://github.com/viking-sudo-rm/SpokenWord/blob/master/textures/conceptArt/title.png" width=50% height=50%/></p>
+<p align="center"><img src="https://github.com/viking-sudo-rm/SpokenWord/blob/master/textures/conceptArt/title.png" width=30% height=30%/></p>
 
 *The Book of Thoth* is a 2D puzzle game set in Ancient Egypt. Unlock new hieroglyphs as you progress, and write spells with the words you know to defeat enemies and solve challenging puzzles. Enter a world where your power is limited only by your linguistic ingenuity. 
 
