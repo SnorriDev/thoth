@@ -2,7 +2,7 @@ package snorri.inventory;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.ImageIcon;
@@ -27,21 +27,21 @@ public abstract class Item implements Droppable {
 	
 	private static final int ARC_SIZE = 80;
 	private static final int SMALL_ICON_SIZE = 32;
-	private static final int ENTITY_SIZE = 48;
+	private static final int ENTITY_SIZE = 44;
 	private static final int SLOT_SPACE = 15;
 	
 	private static final Color DEFAULT_COOLDOWN_COLOR = new Color(116, 100, 50, 200);
 	
-	protected static final Image[] ACTIVE_BORDERS_TOP;
-	protected static final Image[] INACTIVE_BORDERS_TOP;
+	protected static final BufferedImage[] ACTIVE_BORDERS_TOP;
+	protected static final BufferedImage[] INACTIVE_BORDERS_TOP;
 	
-	protected static final Image ACTIVE_BORDER_WEAPON;
-	protected static final Image INACTIVE_BORDER_WEAPON;
+	protected static final BufferedImage ACTIVE_BORDER_WEAPON;
+	protected static final BufferedImage INACTIVE_BORDER_WEAPON;
 	
 	static {
 		
-		ACTIVE_BORDERS_TOP = new Image[5];
-		INACTIVE_BORDERS_TOP = new Image[5];
+		ACTIVE_BORDERS_TOP = new BufferedImage[5];
+		INACTIVE_BORDERS_TOP = new BufferedImage[5];
 		
 		for (int i = 0; i < 5; i++) {
 			ACTIVE_BORDERS_TOP[i] = Main.getImage("/textures/hud/items/item" + (i + 1) + ".png");
@@ -70,30 +70,31 @@ public abstract class Item implements Droppable {
 		private int maxQuantity = 1; //number of inventory slots; use Consumable class with data field for charges
 		private boolean enchantable = true;
 		private Object[] args;
-		private Image texture;
+		private BufferedImage texture;
+		//private Image inventoryImage;
 		
 		ItemType() { //only use this for empty item
 		}
 		
-		ItemType(Class<? extends Item> c, Image texture, Object...args) {
+		ItemType(Class<? extends Item> c, BufferedImage texture, Object...args) {
 			this.c = c;
 			this.args = args;
-			this.texture = texture;
+			this.texture = Util.resize(texture, ENTITY_SIZE, 0);
 		}
 
 		// we need to put maxQuantity as the first argument to avoid ambiguity
 		// (lol)
-		ItemType(int maxQuantity, Class<? extends Item> c, Image texture, Object... args) {
+		ItemType(int maxQuantity, Class<? extends Item> c, BufferedImage texture, Object... args) {
 			this(c, texture, args);
 			this.maxQuantity = maxQuantity;
 		}
 		
-		ItemType(boolean enchantable, Class<? extends Item> c, Image texture, Object... args) {
+		ItemType(boolean enchantable, Class<? extends Item> c, BufferedImage texture, Object... args) {
 			this(c, texture, args);
 			this.enchantable = enchantable;
 		}
 		
-		ItemType(int maxQuantity, boolean enchantable, Class<? extends Item> c, Image texture, Object... args) {
+		ItemType(int maxQuantity, boolean enchantable, Class<? extends Item> c, BufferedImage texture, Object... args) {
 			this(c, texture, args);
 			this.maxQuantity = maxQuantity;
 			this.enchantable = enchantable;
@@ -108,13 +109,13 @@ public abstract class Item implements Droppable {
 			return ordinal();
 		}
 		
-		public Image getTexture() {
+		public BufferedImage getTexture() {
 			return texture;
 		}
 		
 		public ImageIcon getIcon() {
-			Image texture = getTexture();
-			return new ImageIcon(texture.getScaledInstance(SMALL_ICON_SIZE, (int) (((double) texture.getHeight(null)) / texture.getWidth(null) * SMALL_ICON_SIZE), Image.SCALE_SMOOTH));
+			BufferedImage texture = getTexture();
+			return new ImageIcon(texture.getScaledInstance(SMALL_ICON_SIZE, (int) (((double) texture.getHeight(null)) / texture.getWidth(null) * SMALL_ICON_SIZE), BufferedImage.SCALE_SMOOTH));
 		}
 		
 		public boolean isEnchantable() {
@@ -175,13 +176,13 @@ public abstract class Item implements Droppable {
 	}
 	
 	@Override
-	public Image getTexture() {
-		return type.getTexture();
+	public BufferedImage getTexture() {
+		return Util.getBufferedImage(type.getTexture());
 	}
 	
 	@Override
 	public Animation getAnimation() {
-		return new Animation(Util.resize(getTexture(), ENTITY_SIZE, -1));
+		return new Animation(getTexture());
 	}
 	
 	public void updateCooldown(double deltaTime) {
@@ -292,7 +293,7 @@ public abstract class Item implements Droppable {
 		return nickname;
 	}
 	
-	public static Image getBorder(int i, boolean top, boolean selected) {
+	public static BufferedImage getBorder(int i, boolean top, boolean selected) {
 		if (!top) {
 			return selected ? ACTIVE_BORDER_WEAPON : INACTIVE_BORDER_WEAPON;
 		}
@@ -323,8 +324,8 @@ public abstract class Item implements Droppable {
 	 */
 	public int drawThumbnail(Graphics g, int i, boolean top, boolean selected) {
 		
-		Image border = getBorder(i, top, selected);
-		Image icon = type.getTexture();
+		BufferedImage border = getBorder(i, top, selected);
+		BufferedImage icon = type.getTexture();
 		
 		Vector pos = getPos(i, top);
 		Vector iconPos = pos.copy().add(new Vector(border.getWidth(null) - icon.getWidth(null), border.getHeight(null) - icon.getHeight(null)).divide(2));
