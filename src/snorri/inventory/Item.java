@@ -25,10 +25,12 @@ public abstract class Item implements Droppable {
 	protected String nickname; //name which the player gives the item so they know what it does
 	protected ItemType type; // what type of item it is; you can get ID, maxQuantity, enchantable from this
 	
-	private static final int ARC_SIZE = 80;
+	private static final int ARC_SIZE = 40;
 	private static final int SMALL_ICON_SIZE = 32;
 	private static final int ENTITY_SIZE = 44;
-	private static final int SLOT_SPACE = 15;
+	private static final int SLOT_SPACE = 16;
+	//private static final int BIG_SLOT_SIZE = 2;
+	private static final double SEPARATION_FACTOR = 1.0/1.8;
 	
 	private static final Color DEFAULT_COOLDOWN_COLOR = new Color(116, 100, 50, 200);
 	
@@ -310,7 +312,7 @@ public abstract class Item implements Droppable {
 	//TODO: use an ImageViewer to scale things
 	
 	public static Vector getPos(int i, boolean top) {
-		int y = top ? GamePanel.MARGIN : (((GameWindow) Main.getWindow()).getDimensions().getY() - Item.getSlotWidth() - GamePanel.MARGIN);
+		int y = top ? GamePanel.MARGIN : (((GameWindow) Main.getWindow()).getDimensions().getY() - Item.getBigSlotWidth() - GamePanel.MARGIN);
 		return new Vector(GamePanel.MARGIN + i * (Item.getSlotWidth() + Item.SLOT_SPACE), y);
 	}
 	
@@ -362,7 +364,12 @@ public abstract class Item implements Droppable {
 	}
 	
 	public static int getSlotWidth() {
-		return ACTIVE_BORDER_WEAPON.getWidth(null);
+		return (int) (ACTIVE_BORDER_WEAPON.getWidth(null) * SEPARATION_FACTOR);
+	}
+	
+	public static int getBigSlotWidth() {
+		return (int) (getSlotWidth() / SEPARATION_FACTOR);
+		//return BIG_SLOT_SIZE * getSlotWidth();
 	}
 	
 	@Override

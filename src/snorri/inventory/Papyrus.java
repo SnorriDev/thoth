@@ -12,7 +12,7 @@ public class Papyrus extends Item {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final Color PAPYRUS_COOLDOWN_COLOR = new Color(1, 69, 101, 150);
+	private static final Color PAPYRUS_COOLDOWN_COLOR = new Color(118, 45, 50, 150);
 	
 	public Papyrus(ItemType t) {
 		super(t);

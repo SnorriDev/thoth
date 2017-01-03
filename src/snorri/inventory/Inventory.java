@@ -31,8 +31,8 @@ public class Inventory implements Serializable {
 	private Papyrus[] papyrusSlots;
 	private int selectedOrb = 0;
 	
-	public static final Key[] ORB_KEYS = new Key[] {Key.ONE, Key.TWO};
-	public static final Key[] PAPYRUS_KEYS = new Key[] {Key.THREE, Key.FOUR, Key.FIVE};
+	public static final Key[] ORB_KEYS = new Key[] {Key.FOUR, Key.FIVE};
+	public static final Key[] PAPYRUS_KEYS = new Key[] {Key.ONE, Key.TWO, Key.THREE};
 
 	private static final int ORB_SLOTS = 2;
 	private static final int PAPYRUS_SLOTS = 3;
@@ -208,15 +208,18 @@ public class Inventory implements Serializable {
 
 	
 	public void render(GameWindow window, Graphics g) {
-				
+		
+		//4,5
 		for (int i = 0; i < ORB_SLOTS; i++) {
-			drawItemContainer(g, i, true, orbSlots[i], Orb.class, selectedOrb == i);
+			drawItemContainer(g, i + PAPYRUS_SLOTS, true, orbSlots[i], Orb.class, selectedOrb == i);
 		}
 		
+		//1,2,3
 		for (int i = 0; i < PAPYRUS_SLOTS; i++) {
-			drawItemContainer(g, i + 2, true, papyrusSlots[i], Papyrus.class);
+			drawItemContainer(g, i, true, papyrusSlots[i], Papyrus.class);
 		}
-				
+		
+		//Sling
 		drawItemContainer(g, 0, false, weaponSlot, Weapon.class);
 		//drawItemContainer(g, 1, false, armorSlot, Armor.class);
 		
