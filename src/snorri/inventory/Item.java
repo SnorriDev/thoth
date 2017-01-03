@@ -25,7 +25,7 @@ public abstract class Item implements Droppable {
 	protected String nickname; //name which the player gives the item so they know what it does
 	protected ItemType type; // what type of item it is; you can get ID, maxQuantity, enchantable from this
 	
-	private static final int ARC_SIZE = 40;
+	private static final int ARC_SIZE = 32;
 	private static final int SMALL_ICON_SIZE = 32;
 	private static final int ENTITY_SIZE = 44;
 	private static final int SLOT_SPACE = 16;

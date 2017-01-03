@@ -21,7 +21,7 @@ public class Papyrus extends Item {
 	
 	public boolean tryToActivate(Unit player) {
 		
-		if (timer.activate()) {
+		if (timer.activate() && spell != null) {
 			Object o = useSpellOn(player);
 			if (Main.getWindow() instanceof GameWindow && spellIsStatement()) {
 				((GameWindow) Main.getWindow()).showMessage(new SpellMessage(spell.getOrthography(), o));
