@@ -26,7 +26,7 @@ onZone1:
     - SET_OBJECTIVE:
         objective:
           !objective
-          shortDesc: 'pick up the hieroglyphs and papyrus'
+          shortDesc: 'pick up the sparkling artifacts and papyrus'
           longDesc: |
             <p class="instruction">Collect the sparkling artifacts and papyrus on
             the ground. Each artifact unlocks a hieroglyph, and the papyrus allows you
@@ -36,11 +36,9 @@ onZone1:
           !dialog
             image: priest
             text: |
-              <p><span class="name">Imhotep:</span> Men listen when your father the Pharoah 
-              speaks for Horus, but the world itself listens to sorcerers who speak through Thoth.
-              The ability to alter reality with hieroglyphs is a powerful gift that few possess, 
-              and even fewer have mastered. Pick up those hieroglyphs, and use them to write a spell 
-              which will open the door.</p>
+              <p><span class="name">Imhotep:</span> The world listens to sorcerers who speak the language of Thoth.
+              It is time for you to try your hand at spellcasting - a powerful gift that few possess, 
+              and even fewer have mastered.</p>
             showObjective: true
 
 onPickupPapyrus:
@@ -51,10 +49,10 @@ onPickupPapyrus:
     - SET_OBJECTIVE:
         objective:
           !objective
-          shortDesc: 'pick up the hieroglyphs and papyrus'
+          shortDesc: 'write the spell `wn sy` on your papyrus'
           longDesc: |
-            <p class="instruction">Walk south to the inkwell and press <span class="control">
-            spacebar</span>. Select <span class="control">papyrus</span> on the left panel
+            <p class="instruction">Walk <span class="control">south to the inkwell</span> and press <span class="control">
+            spacebar</span> while touching it. Select <span class="control">papyrus</span> on the left panel
             and type the spell <span class="hiero">wn sy</span> in the textbox. Click <span class="control">enchant
             </span> and then press <span class="control">escape</span> to close the enchanting window.</p>
     - SHOW_DIALOG:
@@ -62,7 +60,7 @@ onPickupPapyrus:
           !dialog
             image: priest
             text: |
-              <p><span class="name">Imhotep:</span> Now it is time to write a spell!</p>
+              <p><span class="name">Imhotep:</span> Now use the vocabulary to write a spell.</p>
             showObjective: true
 
 onEnchant:
@@ -76,7 +74,7 @@ onEnchant:
             shortDesc: put your mouse over the door and press 3
             longDesc: |
               <p class="instruction">Wait until your spell is off cooldown, and then put
-              your cursor over the door and press <span class="control">3</span>.</p>
+              your mouse over the door and press <span class="control">1</span>.</p>
     - SHOW_DIALOG:
         dialog:
           !dialog
@@ -120,21 +118,17 @@ onPickup:
           !dialog
             image: priest
             text: |
-              <p><span class="name">Imhotep:</span> Mummies, up ahead!</p>
+              <p><span class="name">Imhotep:</span> A mummy, up ahead!</p>
             showObjective: true
     - SPAWN_ENTITY:
         type: enemy
         pos: !spawn {x: 1904, y: 400}
         tag: enemy1
-    - SPAWN_ENTITY:
-        type: enemy
-        pos: !spawn {x: 2032, y: 400}
-        tag: enemy2
 
 onKill:
   events:
     - KILL:
-        object: enemy2
+        object: enemy1
   actions:
     - SET_OBJECTIVE:
         objective:
@@ -145,8 +139,7 @@ onKill:
           !dialog
             image: priest
             text: |
-              <p><span class="name">Imhotep:</span> Those mummies fought pretty well considering they have no brains.
-              Now let's keep going!</p>
+              <p><span class="name">Imhotep:</span> That thing fought pretty well considering it has no brain! Let's keep going.</p>
 
 onWall:
   actions:
@@ -164,8 +157,8 @@ onWall:
           !dialog
             image: priest
             text: |
-              <p><span class="name">Imhotep:</span> Ah, it's blocked off. See if you can blast
-              through the wall using your sling.</p> 
+              <p><span class="name">Imhotep:</span> Hmm, it's blocked off. See if you can shoot
+              through this wall using your sling.</p> 
             showObjective: true      
 
 onZone2:
@@ -194,7 +187,7 @@ onWrite:
     - SET_OBJECTIVE:
         objective:
           !objective
-            shortDesc: pray using `dbH DHwty`
+            shortDesc: pray to DHwty by activating `dbH DHwty` on your papyrus
             longDesc: |
               <p class="instruction">Cast the spell <span class="hiero">dbH DHwty</span> <span class="def">(pray to DHwty)</span>.</p>
     - SHOW_DIALOG:
@@ -216,17 +209,15 @@ prayThoth:
           !dialog
             image: ghost
             text: |
-              <p><span class="name">Ghost:</span> Behold, sorcerer, you have invoked Thoth the All-Knowing!
-              I was Neferkaptah, High Priest of Thoth to Ramesses II, Pharaoh of Upper and Lower Egypt. We have much to discuss.</p>
+              <p><span class="name">Ghost:</span> Hail, sorcerer! I was Neferkaptah, High Priest of Thoth to Ramesses II, 
+              Pharaoh of Upper and Lower Egypt. We have much to discuss.</p>
               
               <p>Your curiosity has led you to my old study, which had been untouched for 1,000 years. It may also 
-              lead you on another great quest: recovering the Book of Thoth, an ancient tome which teaches the language of the gods.
-              Long ago I set out to find this book. After I had read it, Thoth lashed out at me with unspeakable vengeance,
-              and doomed me to be a ghost for eternity.</p>
+              lead you on another great quest: recovering the Book of Thoth, which contains powerful secrets about the language of the gods.
+              Trust me, don't go looking for this dangerous tome!</p>
               
-              <p>Don't go looking for that dangerous book, because the gods will never let you suceed!
-              Others might tell you that finding my book is your destiny.
-              Just remember, wise scribe, only fools believe in destiny.</p>
+              <p>Others might tell you that finding it is your destiny, but the gods will never let you succeed.
+              Wisdom is the only truth in this world - those who believe in destiny are fools.</p>
     - SET_OBJECTIVE:
         objective:
           !objective
