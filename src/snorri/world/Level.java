@@ -817,7 +817,7 @@ public class Level implements Editable {
 			for (int y1 = (y - c.getRadiusY() - 2 * Unit.RADIUS_Y)
 					/ Tile.WIDTH; y1 <= (y + c.getRadiusY() + 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
 
-				boolean wasContextPathable = getTileGrid(x1, y1).isContextPathable();
+				boolean wasContextPathable = isContextPathable(x1, y1);
 				getTileGrid(x1, y1).computeSurroundingsPathable(x1, y1, this);
 				if (wasContextPathable && !getTileGrid(x1, y1).isContextPathable()) {
 					unpathableQ.add(new Vector(x1, y1));

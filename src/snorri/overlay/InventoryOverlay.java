@@ -65,6 +65,23 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private static final Image BACKGROUND = Main.getImage("/textures/hud/inventory.png");
 	protected static final Color SELECTED_BG = new Color(120, 96, 115);
 	protected static final Color BORDER = new Color(115, 93, 109);
+	
+	private static final int INVENTORY_WIDTH = 757;
+	private static final int INVENTORY_HEIGHT = 468;
+	private static final double LEFT_PANEL_WIDTH_MULTIPLIER = 0.2352;
+	private static final int PADDING = 16;
+	private static final int LEFT_PANEL_WIDTH = (int) (INVENTORY_WIDTH * LEFT_PANEL_WIDTH_MULTIPLIER); //178
+	private static final int LEFT_PANEL_HEIGHT = INVENTORY_HEIGHT;
+	private static final int LEFT_PANEL_LABEL_WIDTH = PADDING - 2*LEFT_PANEL_WIDTH;
+	private static final int LEFT_PANEL_ITEM_HEIGHT = 30;
+	private static final double CRAFTING_SPACE_HEIGHT_MULTIPLIER = 0.3676;
+	private static final int CRAFTING_SPACE_WIDTH = INVENTORY_WIDTH - LEFT_PANEL_WIDTH; //579
+	private static final int CRAFTING_SPACE_HEIGHT = (int) (INVENTORY_HEIGHT * CRAFTING_SPACE_HEIGHT_MULTIPLIER); //172
+	private static final double TEXT_BOX_HEIGHT_MULTIPLIER = 0.55;
+	private static final int TEXT_BOX_WIDTH = CRAFTING_SPACE_WIDTH - 2*PADDING; //547
+	private static final int TEXT_BOX_HEIGHT = (int) (CRAFTING_SPACE_HEIGHT * TEXT_BOX_HEIGHT_MULTIPLIER);//94
+	private static final int VOCAB_BOX_WIDTH = CRAFTING_SPACE_WIDTH-4*PADDING;
+	private static final int VOCAB_BOX_HEIGHT = INVENTORY_HEIGHT-CRAFTING_SPACE_HEIGHT-6*PADDING;
 
 	private final Inventory inv;
 	private final FullInventory fullInv;
@@ -89,7 +106,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			Key k = inv.getKey(item);
 			String text = item.toString() + (k == null ? "" : (" (" + k.getChar() + ")"));
 			JLabel label = new JLabel(text, item.getType().getIcon(), JLabel.LEFT);
-			label.setPreferredSize(new Dimension(216, 35));
+			label.setPreferredSize(new Dimension(LEFT_PANEL_LABEL_WIDTH, LEFT_PANEL_ITEM_HEIGHT));
 			label.setFont(label.getFont().deriveFont(inv.getIndex(item) == Integer.MAX_VALUE ? Font.PLAIN : Font.BOLD));
 			if (isSelected) {
 				label.setBorder(getThinBorder());
@@ -122,7 +139,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			}			
 		};
 		panel.setOpaque(false);
-		panel.setPreferredSize(new Dimension(1000, 618)); //golden ratio
+		panel.setPreferredSize(new Dimension(INVENTORY_WIDTH, INVENTORY_HEIGHT)); //inventory panel, everything must fit within this box
 		GridBagConstraints c = new GridBagConstraints();
 		
 		setLayout(new GridBagLayout());
@@ -143,7 +160,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 		JScrollPane scrollPane = new JScrollPane(list);
 		//TODO make this look nice like other one
-		scrollPane.setPreferredSize(new Dimension(250, 618));
+		scrollPane.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, LEFT_PANEL_HEIGHT)); //Left Panel Seize
 		scrollPane.setOpaque(false);
 		scrollPane.getViewport().setOpaque(false);
 		scrollPane.setBorder(emptyBorder());
@@ -158,7 +175,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		//crafting space
 		craftingSpace = new JPanel();
 		craftingSpace.setLayout(new BoxLayout(craftingSpace, BoxLayout.Y_AXIS));
-		craftingSpace.setPreferredSize(new Dimension(750, 204));
+		craftingSpace.setPreferredSize(new Dimension(CRAFTING_SPACE_WIDTH, CRAFTING_SPACE_HEIGHT));
 		craftingSpace.setOpaque(false);
 		craftingSpace.addKeyListener(this);
 		craftingSpace.setBorder(emptyBorder(4, 0));
@@ -171,7 +188,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 		field = new JEditorPane();
 		field.setEditorKit(getHTMLEditorKit());
-		field.setPreferredSize(new Dimension(650, 100));
+		field.setPreferredSize(new Dimension(TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT));
 		field.setBackground(SELECTED_BG);
 		field.setBorder(getThinBorder());
 		field.getDocument().addDocumentListener(this);
@@ -199,6 +216,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		vocabBox = new JPanel();
 		vocabBox.setOpaque(false);
 		vocabBox.setLayout(new WrapLayout());
+		vocabBox.setPreferredSize(new Dimension(VOCAB_BOX_WIDTH, VOCAB_BOX_HEIGHT));
 		vocabBox.setOpaque(false);
 		vocabModel = new HashMap<>();
 		
@@ -216,7 +234,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		}
 		
 		scrollPane = new JScrollPane(vocabInfo);
-		scrollPane.setPreferredSize(new Dimension(750, 414));
+		scrollPane.setPreferredSize(new Dimension(CRAFTING_SPACE_WIDTH, 250)); //originally 750,414
 		scrollPane.setOpaque(false);
 		scrollPane.getViewport().setOpaque(false);
 		scrollPane.setBorder(emptyBorder(4, 4));
