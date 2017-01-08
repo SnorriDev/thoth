@@ -187,7 +187,7 @@ onWrite:
     - SET_OBJECTIVE:
         objective:
           !objective
-            shortDesc: pray to DHwty by activating `dbH DHwty` on your papyrus
+            shortDesc: pray to DHwty by activating `dbH DHwty` on a papyrus
             longDesc: |
               <p class="instruction">Cast the spell <span class="hiero">dbH DHwty</span> <span class="def">(pray to DHwty)</span>.</p>
     - SHOW_DIALOG:
