@@ -89,6 +89,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private final JList<Item> list;
 	private final JPanel craftingSpace;
 	private final JPanel inputPanel;
+	private final JLabel nullInputText;
 	private final JPanel vocabBox;
 	private final JButton enchantButton;
 	private final JEditorPane field;
@@ -185,6 +186,11 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		inputPanel.setOpaque(false);
 		inputPanel.setVisible(false);
 		craftingSpace.add(inputPanel);
+		
+		//the text which appears when nothing is selected
+		nullInputText = new JLabel("Select an item to edit its spell...");
+		nullInputText.setOpaque(false);
+		craftingSpace.add(nullInputText);
 		
 		field = new JEditorPane();
 		field.setEditorKit(getHTMLEditorKit());
@@ -411,8 +417,12 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			
 	}
 
+	/**
+	 * This method is called when someone selects an item
+	 */
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
+		nullInputText.setVisible(false);
 		inputPanel.setVisible(true);
 		setGlyphs();
 		craftingSpace.revalidate();
