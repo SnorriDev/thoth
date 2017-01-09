@@ -13,10 +13,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.ImageIcon;
+
 public class Util {
 
-	public static final double GOLDEN_RATIO = 1.61803398875; //TODO use this
-	
+	public static final double GOLDEN_RATIO = 1.61803398875; // TODO use this
+
 	public static Integer getInteger(String input) {
 		try {
 			return Integer.parseInt(input);
@@ -24,7 +26,7 @@ public class Util {
 			return null;
 		}
 	}
-	
+
 	public static Double getDouble(String input) {
 		try {
 			return Double.parseDouble(input);
@@ -32,57 +34,78 @@ public class Util {
 			return null;
 		}
 	}
-	
+
 	public static String removeExtension(String fileName) {
 		return fileName.replaceFirst("[.][^.]+$", "");
 	}
-	
+
 	public static BufferedImage deepCopy(BufferedImage bi) {
 		ColorModel cm = bi.getColorModel();
 		boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
 		WritableRaster raster = bi.copyData(null);
 		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
 	}
-	
+
 	public static String clean(String constant) {
 		return constant.toLowerCase().replace('_', ' ');
 	}
-	
+
 	public static String unclean(String raw) {
 		return raw.toUpperCase().replace(' ', '_');
 	}
-	
+
 	public static Collection<Object> safe(Collection<Object> c) {
 		return c == null ? Collections.emptyList() : c;
 	}
-	
+
 	/**
 	 * Resize a buffered image. Can leave one dimension equal to 0 to autoscale
+	 * 
 	 * @param image
-	 * 	the original image
+	 *            the original image
 	 * @param newWidth
-	 * 	the desired height
+	 *            the desired height
 	 * @param newHeight
-	 * 	the desired width
+	 *            the desired width
 	 * @return the resized image
 	 */
 	public static BufferedImage resize(Image image, int newWidth, int newHeight) {
-		
+
 		if (newWidth <= 0 && newHeight != 0) {
 			newWidth = image.getWidth(null) * newHeight / image.getHeight(null);
 		}
 		if (newHeight <= 0 && newWidth != 0) {
 			newHeight = image.getHeight(null) * newWidth / image.getWidth(null);
 		}
-		
+
 		Image scaled = image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
-		BufferedImage img = new BufferedImage(scaled.getWidth(null), scaled.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage img = new BufferedImage(scaled.getWidth(null), scaled.getHeight(null),
+				BufferedImage.TYPE_INT_ARGB);
 		Graphics g = img.getGraphics();
 		g.drawImage(scaled, 0, 0, null);
 		g.dispose();
 		return img;
 	}
 	
+	/**
+	 * Resize an ImageIcon. Can leave one dimension equal to 0 to autoscale
+	 * 
+	 * @paramicon
+	 *            the original imageIcon
+	 * @param newWidth
+	 *            the desired height
+	 * @param newHeight
+	 *            the desired width
+	 * @return the resized imageIcon
+	 */
+	public static ImageIcon resize(ImageIcon icon, int newWidth, int newHeight) {
+		return new ImageIcon(resize(toBufferedImage(icon), newWidth, newHeight));
+	}
+	
+	public static BufferedImage toBufferedImage(ImageIcon icon) {
+		return (BufferedImage) (icon.getImage());
+	}
+
 	public static <T> T[] concatenate(T[] a, T[] b) {
 		int aLen = a.length;
 		int bLen = b.length;
@@ -104,7 +127,7 @@ public class Util {
 		}
 		throw new AssertionError();
 	}
-	
+
 	public static int niceMod(int n, int m) {
 		return (((n % m) + m) % m);
 	}
@@ -124,21 +147,19 @@ public class Util {
 		}
 		return combinations;
 	}
-	
-	public static BufferedImage getBufferedImage(Image img)
-	{
-	    if (img instanceof BufferedImage)
-	    {
-	        return (BufferedImage) img;
-	    }
-	    
-	    BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 
-	    Graphics2D bGr = bimage.createGraphics();
-	    bGr.drawImage(img, 0, 0, null);
-	    bGr.dispose();
+	public static BufferedImage getBufferedImage(Image img) {
+		if (img instanceof BufferedImage) {
+			return (BufferedImage) img;
+		}
 
-	    return bimage;
+		BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+		Graphics2D bGr = bimage.createGraphics();
+		bGr.drawImage(img, 0, 0, null);
+		bGr.dispose();
+
+		return bimage;
 	}
 
 }

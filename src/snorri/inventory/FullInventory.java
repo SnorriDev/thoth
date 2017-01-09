@@ -11,10 +11,8 @@ import snorri.overlay.SortedListModel;
 import snorri.parser.Lexicon;
 
 public class FullInventory extends ArrayList<Droppable> implements Serializable {
-
-	/**
-	 * class that represents a player's full inventory
-	 */
+	
+	/** class that represents a player's full inventory */
 	private static final long serialVersionUID = 1L;
 	
 	private final Inventory inv;
@@ -23,11 +21,9 @@ public class FullInventory extends ArrayList<Droppable> implements Serializable 
 		this.inv = inv;
 	}
 	
-	/**
-	 * will first try to insert items in a new inventory slot
-	 * if this cannot be done, will attempt to stack them in an existing slot
-	 * under this system, all stackable items (consumables mostly) should have maxStack == 1
-	 */
+	/** will first try to insert items in a new inventory slot if this cannot be
+	 * done, will attempt to stack them in an existing slot under this system,
+	 * all stackable items (consumables mostly) should have maxStack == 1 */
 	@Override
 	public boolean add(Droppable drop) {
 		int freq = Collections.frequency(this, drop);
@@ -43,12 +39,11 @@ public class FullInventory extends ArrayList<Droppable> implements Serializable 
 		return false;
 	}
 	
-	/**
-	 * whether a player has unlocked a word
-	 * used to stop players from enchanting with vocabulary they haven't learned yet
+	/** whether a player has unlocked a word used to stop players from
+	 * enchanting with vocabulary they haven't learned yet
+	 * 
 	 * @param word
-	 * 	the word of interest represented as a string
-	 */
+	 * the word of interest represented as a string */
 	public boolean knowsWord(String word) {
 		if (Lexicon.lookup(word) == null) {
 			return false;
@@ -56,9 +51,7 @@ public class FullInventory extends ArrayList<Droppable> implements Serializable 
 		return contains(new VocabDrop(word)) || Name.class.equals(Lexicon.lookup(word).getPOS());
 	}
 	
-	/**
-	 * @see knowsWord
-	 */
+	/** @see knowsWord */
 	public boolean knowsWords(List<String> words) {
 		for (String word : words) {
 			if (!knowsWord(word)) {
@@ -67,7 +60,7 @@ public class FullInventory extends ArrayList<Droppable> implements Serializable 
 		}
 		return true;
 	}
-
+	
 	public SortedListModel<Item> getItemModel() {
 		SortedListModel<Item> out = new SortedListModel<>();
 		for (Droppable d : this) {
@@ -89,7 +82,7 @@ public class FullInventory extends ArrayList<Droppable> implements Serializable 
 	}
 	
 	public Droppable[] getArray(Droppable[] arr) {
-		List<Droppable> list = new ArrayList<>(); 
+		List<Droppable> list = new ArrayList<>();
 		for (Droppable d : this) {
 			if (arr.getClass().getComponentType().isInstance(d)) {
 				list.add((Droppable) d);
@@ -101,5 +94,5 @@ public class FullInventory extends ArrayList<Droppable> implements Serializable 
 	public Inventory getInventory() {
 		return inv;
 	}
-		
+	
 }

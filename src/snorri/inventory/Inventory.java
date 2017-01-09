@@ -17,11 +17,9 @@ import snorri.world.World;
 
 public class Inventory implements Serializable {
 	
-	/**
-	 * Holds the inventory of a player
-	 */
+	/** Holds the inventory of a player */
 	private static final long serialVersionUID = 1L;
-
+	
 	private Unit player;
 	private FullInventory fullInventory;
 	
@@ -31,9 +29,9 @@ public class Inventory implements Serializable {
 	private Papyrus[] papyrusSlots;
 	private int selectedOrb = 0;
 	
-	public static final Key[] ORB_KEYS = new Key[] {Key.FOUR, Key.FIVE};
-	public static final Key[] PAPYRUS_KEYS = new Key[] {Key.ONE, Key.TWO, Key.THREE};
-
+	public static final Key[] PAPYRUS_KEYS = new Key[] { Key.ONE, Key.TWO, Key.THREE };
+	public static final Key[] ORB_KEYS = new Key[] { Key.FOUR, Key.FIVE };
+	
 	private static final int ORB_SLOTS = 2;
 	private static final int PAPYRUS_SLOTS = 3;
 	
@@ -45,7 +43,7 @@ public class Inventory implements Serializable {
 	}
 	
 	public void update(double deltaTime) {
-
+		
 		if (weaponSlot != null) {
 			weaponSlot.updateCooldown(deltaTime);
 		}
@@ -67,11 +65,11 @@ public class Inventory implements Serializable {
 		}
 		
 	}
-
+	
 	public FullInventory getFullInventory() {
 		return fullInventory;
 	}
-
+	
 	public boolean addOrb(Orb newProjectile) {
 		for (int i = 0; i < ORB_SLOTS; i++) {
 			if (orbSlots[i] == null) {
@@ -81,7 +79,7 @@ public class Inventory implements Serializable {
 		}
 		return false;
 	}
-
+	
 	public boolean addPapyrus(Papyrus newPapyrus) {
 		for (int i = 0; i < PAPYRUS_SLOTS; i++) {
 			if (papyrusSlots[i] == null) {
@@ -113,11 +111,11 @@ public class Inventory implements Serializable {
 			papyrusSlots[i].tryToActivate(player);
 		}
 	}
-
+	
 	public Weapon getWeapon() {
 		return weaponSlot;
 	}
-
+	
 	// if you want to set the slot to empty, pass null
 	public void setWeapon(Weapon newWeapon) {
 		weaponSlot = newWeapon;
@@ -126,7 +124,7 @@ public class Inventory implements Serializable {
 	
 	public boolean tryToShoot(World world, Unit focus, Vector movement, Vector dir) {
 		
-		if (weaponSlot == null ||  dir == null || dir.equals(Vector.ZERO) || dir.notInPlane()) {
+		if (weaponSlot == null || dir == null || dir.equals(Vector.ZERO) || dir.notInPlane()) {
 			return false;
 		}
 		
@@ -139,15 +137,15 @@ public class Inventory implements Serializable {
 		return false;
 		
 	}
-
+	
 	public Armor getArmor() {
 		return armorSlot;
 	}
-
+	
 	public void setArmor(Armor newArmor) {
 		armorSlot = newArmor;
 	}
-
+	
 	public Orb getOrb(int index) {
 		if (index < 0 || index >= ORB_SLOTS) {
 			Main.error("index out of range, returning empty");
@@ -155,7 +153,7 @@ public class Inventory implements Serializable {
 		}
 		return orbSlots[index];
 	}
-
+	
 	public void setOrb(int slot, Orb newProjectile) {
 		if (slot < 0 || slot >= ORB_SLOTS) {
 			Main.error("slot out of range");
@@ -168,7 +166,7 @@ public class Inventory implements Serializable {
 		orbSlots[slot] = newProjectile;
 		return;
 	}
-
+	
 	public Papyrus getPapyrus(int index) {
 		if (index < 0 || index >= PAPYRUS_SLOTS) {
 			Main.error("index out of range, returning empty");
@@ -205,23 +203,22 @@ public class Inventory implements Serializable {
 			selectedOrb = 0;
 		}
 	}
-
 	
 	public void render(GameWindow window, Graphics g) {
 		
-		//4,5
-		for (int i = 0; i < ORB_SLOTS; i++) {
-			drawItemContainer(g, i + PAPYRUS_SLOTS, true, orbSlots[i], Orb.class, selectedOrb == i);
-		}
-		
-		//1,2,3
+		// 1,2,3
 		for (int i = 0; i < PAPYRUS_SLOTS; i++) {
 			drawItemContainer(g, i, true, papyrusSlots[i], Papyrus.class);
 		}
 		
-		//Sling
+		// 4,5
+		for (int i = 0; i < ORB_SLOTS; i++) {
+			drawItemContainer(g, i + PAPYRUS_SLOTS, true, orbSlots[i], Orb.class, selectedOrb == i);
+		}
+		
+		// Sling
 		drawItemContainer(g, 0, false, weaponSlot, Weapon.class);
-		//drawItemContainer(g, 1, false, armorSlot, Armor.class);
+		// drawItemContainer(g, 1, false, armorSlot, Armor.class);
 		
 	}
 	
@@ -233,7 +230,8 @@ public class Inventory implements Serializable {
 		
 		if (item == null) {
 			Item.drawEmpty(g, i, top);
-		} else {
+		}
+		else {
 			item.drawThumbnail(g, i, top, flag);
 		}
 		
@@ -274,11 +272,11 @@ public class Inventory implements Serializable {
 			((GameWindow) Main.getWindow()).showMessage(d);
 		}
 		return fullInventory.add(d);
-
+		
 	}
 	
 	public boolean remove(Droppable d, boolean specific) {
-				
+		
 		if (d instanceof Item) {
 			
 			if (compare(d, weaponSlot, specific)) {
@@ -297,7 +295,7 @@ public class Inventory implements Serializable {
 					papyrusSlots[i] = null;
 				}
 			}
-		
+			
 		}
 		
 		return fullInventory.remove(d);
@@ -330,9 +328,7 @@ public class Inventory implements Serializable {
 		return armorSlot == armor ? 0 : Integer.MAX_VALUE;
 	}
 	
-	/**
-	 * @return <code>Integer.MAX_VALUE</code> iff the item does not appear
-	 */
+	/** @return <code>Integer.MAX_VALUE</code> iff the item does not appear */
 	public int getIndex(Item item) {
 		if (item instanceof Weapon) {
 			return getIndex((Weapon) item);
@@ -349,20 +345,11 @@ public class Inventory implements Serializable {
 		return Integer.MAX_VALUE;
 	}
 	
-	/**
-	 * the character to show in parentheses after
-	 * the item in the inventory HUD
-	 */
+	/** the character to show in parentheses after the item in the inventory
+	 * HUD */
 	public Key getKey(Item item) {
 		
 		int index;
-		if (item instanceof Orb) {
-			index = getIndex((Orb) item);
-			if (index == Integer.MAX_VALUE) {
-				return null;
-			}
-			return ORB_KEYS[getIndex((Orb) item)];
-		}
 		if (item instanceof Papyrus) {
 			index = getIndex((Papyrus) item);
 			if (index == Integer.MAX_VALUE) {
@@ -370,13 +357,19 @@ public class Inventory implements Serializable {
 			}
 			return PAPYRUS_KEYS[index];
 		}
+		if (item instanceof Orb) {
+			index = getIndex((Orb) item);
+			if (index == Integer.MAX_VALUE) {
+				return null;
+			}
+			return ORB_KEYS[getIndex((Orb) item)];
+		}
 		
 		return null;
 	}
 	
-	/**
-	 * Check if inventory buttons are pressed in the <code>keyStates</code> map of the current focused window
-	 */
+	/** Check if inventory buttons are pressed in the <code>keyStates</code> map
+	 * of the current focused window */
 	public void checkKeys() {
 		
 		for (int i = 0; i < ORB_KEYS.length; i++) {
@@ -392,5 +385,5 @@ public class Inventory implements Serializable {
 		}
 		
 	}
-
+	
 }
