@@ -52,14 +52,13 @@ import snorri.main.Debug;
 import snorri.main.DialogMap;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
+import snorri.main.Util;
 import snorri.parser.Grammar;
 import snorri.triggers.Trigger.TriggerType;
 
 public class InventoryOverlay extends Overlay implements MouseListener, ListSelectionListener, DocumentListener, FocusListener {
-
-	/**
-	 * the GUI interface for editing inventory and spells
-	 */
+	
+	/** the GUI interface for editing inventory and spells */
 	
 	private static final long serialVersionUID = 1L;
 	private static final Image BACKGROUND = Main.getImage("/textures/hud/inventory.png");
@@ -70,22 +69,24 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private static final int INVENTORY_HEIGHT = 468;
 	private static final double LEFT_PANEL_WIDTH_MULTIPLIER = 0.2352;
 	private static final int PADDING = 16;
-	private static final int LEFT_PANEL_WIDTH = (int) (INVENTORY_WIDTH * LEFT_PANEL_WIDTH_MULTIPLIER); //178
+	private static final int LEFT_PANEL_WIDTH = (int) (INVENTORY_WIDTH * LEFT_PANEL_WIDTH_MULTIPLIER); // 178
 	private static final int LEFT_PANEL_HEIGHT = INVENTORY_HEIGHT;
-	private static final int LEFT_PANEL_LABEL_WIDTH = PADDING - 2*LEFT_PANEL_WIDTH;
+	private static final int LEFT_PANEL_LABEL_WIDTH = PADDING - 2 * LEFT_PANEL_WIDTH;
 	private static final int LEFT_PANEL_ITEM_HEIGHT = 30;
 	private static final double CRAFTING_SPACE_HEIGHT_MULTIPLIER = 0.3676;
-	private static final int CRAFTING_SPACE_WIDTH = INVENTORY_WIDTH - LEFT_PANEL_WIDTH; //579
-	private static final int CRAFTING_SPACE_HEIGHT = (int) (INVENTORY_HEIGHT * CRAFTING_SPACE_HEIGHT_MULTIPLIER); //172
+	private static final int CRAFTING_SPACE_WIDTH = INVENTORY_WIDTH - LEFT_PANEL_WIDTH; // 579
+	private static final int CRAFTING_SPACE_HEIGHT = (int) (INVENTORY_HEIGHT * CRAFTING_SPACE_HEIGHT_MULTIPLIER); // 172
 	private static final double TEXT_BOX_HEIGHT_MULTIPLIER = 0.55;
-	private static final int TEXT_BOX_WIDTH = CRAFTING_SPACE_WIDTH - 2*PADDING; //547
-	private static final int TEXT_BOX_HEIGHT = (int) (CRAFTING_SPACE_HEIGHT * TEXT_BOX_HEIGHT_MULTIPLIER);//94
-	private static final int VOCAB_BOX_WIDTH = CRAFTING_SPACE_WIDTH-4*PADDING;
-	private static final int VOCAB_BOX_HEIGHT = INVENTORY_HEIGHT-CRAFTING_SPACE_HEIGHT-6*PADDING;
-
+	private static final int TEXT_BOX_WIDTH = CRAFTING_SPACE_WIDTH - 2 * PADDING; // 547
+	private static final int TEXT_BOX_HEIGHT = (int) (CRAFTING_SPACE_HEIGHT * TEXT_BOX_HEIGHT_MULTIPLIER);// 94
+	//private static final int VOCAB_BOX_WIDTH = CRAFTING_SPACE_WIDTH - 4*PADDING;
+	//private static final int VOCAB_BOX_HEIGHT = INVENTORY_HEIGHT-CRAFTING_SPACE_HEIGHT - 6*PADDING;
+	private static final int HIEROGLYPH_SIZE = 18;
+	private static final int HIEROGLYPH_TRANSLATION_FONT_SIZE = 12;
+	
 	private final Inventory inv;
 	private final FullInventory fullInv;
-		
+	
 	private final JList<Item> list;
 	private final JPanel craftingSpace;
 	private final JPanel inputPanel;
@@ -99,11 +100,10 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	
 	private boolean editMode;
 	private List<String> spellsEnchanted;
-		
+	
 	private class ItemCellRenderer implements ListCellRenderer<Item> {
 		@Override
-		public Component getListCellRendererComponent(JList<? extends Item> list, Item item, int index, boolean isSelected,
-				boolean cellHasFocus) {
+		public Component getListCellRendererComponent(JList<? extends Item> list, Item item, int index, boolean isSelected, boolean cellHasFocus) {
 			Key k = inv.getKey(item);
 			String text = item.toString() + (k == null ? "" : (" (" + k.getChar() + ")"));
 			JLabel label = new JLabel(text, item.getType().getIcon(), JLabel.LEFT);
@@ -130,17 +130,18 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 		this.editMode = editMode;
 		Droppable.setInventoryForComparison(inv);
-				
+		
 		JPanel panel = new JPanel(new GridBagLayout()) {
 			private static final long serialVersionUID = 1L;
+			
 			@Override
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				g.drawImage(BACKGROUND, 0, 0, null);
-			}			
+			}
 		};
 		panel.setOpaque(false);
-		panel.setPreferredSize(new Dimension(INVENTORY_WIDTH, INVENTORY_HEIGHT)); //inventory panel, everything must fit within this box
+		panel.setPreferredSize(new Dimension(INVENTORY_WIDTH, INVENTORY_HEIGHT)); // inventory panel, everything must fit within this box
 		GridBagConstraints c = new GridBagConstraints();
 		
 		setLayout(new GridBagLayout());
@@ -148,7 +149,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 		spellsEnchanted = new ArrayList<>();
 		
-		//filter item panel
+		// filter item panel
 		model = fullInv.getItemModel();
 		list = new JList<Item>(model);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -160,12 +161,12 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		list.setCellRenderer(new ItemCellRenderer());
 		
 		JScrollPane scrollPane = new JScrollPane(list);
-		//TODO make this look nice like other one
-		scrollPane.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, LEFT_PANEL_HEIGHT)); //Left Panel Seize
+		// TODO make this look nice like other one
+		scrollPane.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, LEFT_PANEL_HEIGHT)); //Left Panel Size
 		scrollPane.setOpaque(false);
 		scrollPane.getViewport().setOpaque(false);
 		scrollPane.setBorder(emptyBorder());
-				
+		
 		c.fill = GridBagConstraints.NORTHWEST;
 		c.weightx = 0.25;
 		c.gridheight = 2;
@@ -173,7 +174,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		c.gridy = 0;
 		panel.add(scrollPane, c);
 		
-		//crafting space
+		// crafting space
 		craftingSpace = new JPanel();
 		craftingSpace.setLayout(new BoxLayout(craftingSpace, BoxLayout.Y_AXIS));
 		craftingSpace.setPreferredSize(new Dimension(CRAFTING_SPACE_WIDTH, CRAFTING_SPACE_HEIGHT));
@@ -181,13 +182,13 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		craftingSpace.addKeyListener(this);
 		craftingSpace.setBorder(emptyBorder(4, 0));
 		
-		//the panel to show/hide
+		// the panel to show/hide
 		inputPanel = new JPanel();
 		inputPanel.setOpaque(false);
 		inputPanel.setVisible(false);
 		craftingSpace.add(inputPanel);
 		
-		//the text which appears when nothing is selected
+		// the text which appears when nothing is selected
 		nullInputText = new JLabel("Select an item to edit its spell...");
 		nullInputText.setOpaque(false);
 		craftingSpace.add(nullInputText);
@@ -201,7 +202,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		field.addKeyListener(this);
 		field.addFocusListener(this);
 		inputPanel.add(field);
-				
+		
 		enchantButton = createButton("Enchant");
 		enchantButton.setEnabled(false);
 		enchantButton.addKeyListener(this);
@@ -214,7 +215,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		c.gridy = 0;
 		panel.add(craftingSpace, c);
 		
-		//vocab info space
+		// vocab info space
 		JComponent vocabInfo = new JPanel();
 		vocabInfo.setOpaque(false);
 		vocabInfo.setLayout(new GridLayout(0, 1));
@@ -222,7 +223,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		vocabBox = new JPanel();
 		vocabBox.setOpaque(false);
 		vocabBox.setLayout(new WrapLayout());
-		vocabBox.setPreferredSize(new Dimension(VOCAB_BOX_WIDTH, VOCAB_BOX_HEIGHT));
 		vocabBox.setOpaque(false);
 		vocabModel = new HashMap<>();
 		
@@ -240,7 +240,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		}
 		
 		scrollPane = new JScrollPane(vocabInfo);
-		scrollPane.setPreferredSize(new Dimension(CRAFTING_SPACE_WIDTH, 250)); //originally 750,414
+		scrollPane.setPreferredSize(new Dimension(CRAFTING_SPACE_WIDTH, 250)); // originally 750,414
 		scrollPane.setOpaque(false);
 		scrollPane.getViewport().setOpaque(false);
 		scrollPane.setBorder(emptyBorder(4, 4));
@@ -252,12 +252,11 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		panel.add(scrollPane, c);
 		
 		add(panel);
-				
-	}
 		
+	}
+	
 	public String getTagless() {
-		return field.getText()
-				.replaceAll("<[^>]+>", "").replaceAll("\\s\\s", " ").trim(); //crude html strip
+		return field.getText().replaceAll("<[^>]+>", "").replaceAll("\\s\\s", " ").trim(); // crude html strip
 	}
 	
 	public List<String> getWords() {
@@ -269,7 +268,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	}
 	
 	private void redrawVocab() {
-		//TODO update vocab
+		// TODO update vocab
 	}
 	
 	private void addWordPanel(VocabDrop drop) {
@@ -278,14 +277,14 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		wordPanel.setBackground(SELECTED_BG);
 		wordPanel.setBorder(getThinBorder());
 		
-		JLabel icon = new JLabel(Hieroglyphs.getIcon(drop.getOrthography()));
+		JLabel icon = new JLabel(Util.resize(Hieroglyphs.getIcon(drop.getOrthography()), 0, HIEROGLYPH_SIZE));
 		JLabel orth = new JLabel(drop.getOrthography());
-		orth.setFont(new Font(orth.getFont().getName(), Font.BOLD, 16));
+		orth.setFont(new Font(orth.getFont().getName(), Font.BOLD, HIEROGLYPH_TRANSLATION_FONT_SIZE));
 		JLabel pos = new JLabel(drop.getMeaning().getPOS().getSimpleName());
-		pos.setFont(new Font(pos.getFont().getName(), Font.ITALIC, 12));
+		pos.setFont(new Font(pos.getFont().getName(), Font.ITALIC, HIEROGLYPH_TRANSLATION_FONT_SIZE));
 		String d = drop.getMeaning().toString();
 		JLabel desc = new JLabel(d == null ? "unknown" : d);
-		desc.setFont(new Font(pos.getFont().getName(), Font.PLAIN, 14));
+		desc.setFont(new Font(pos.getFont().getName(), Font.PLAIN, HIEROGLYPH_TRANSLATION_FONT_SIZE));
 		wordPanel.add(icon);
 		wordPanel.add(orth);
 		wordPanel.add(pos);
@@ -373,7 +372,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	public void keyPressed(KeyEvent e) {
 		
 		super.keyPressed(e);
-				
+		
 		if (list.getSelectedValue() instanceof Orb) {
 			for (int i = 0; i < Inventory.ORB_KEYS.length; i++) {
 				if (Inventory.ORB_KEYS[i].isPressed(e)) {
@@ -382,7 +381,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 				}
 			}
 		}
-
+		
 		if (list.getSelectedValue() instanceof Papyrus) {
 			for (int i = 0; i < Inventory.PAPYRUS_KEYS.length; i++) {
 				if (Inventory.PAPYRUS_KEYS[i].isPressed(e)) {
@@ -414,12 +413,10 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			delete(list.getSelectedValue(), true);
 			model.redraw();
 		}
-			
+		
 	}
-
-	/**
-	 * This method is called when someone selects an item
-	 */
+	
+	/** This method is called when someone selects an item */
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		nullInputText.setVisible(false);
@@ -436,16 +433,18 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 		if (list.getSelectedValue().getSpell() == null) {
 			field.setText("<p>enter spell here...</p>");
-		} else {
+		}
+		else {
 			field.setText(Hieroglyphs.transliterate(list.getSelectedValue().getSpell().getOrthography()));
 		}
 	}
 	
-	private void checkParse(DocumentEvent e) {		
+	private void checkParse(DocumentEvent e) {
 		String text = getTagless();
 		if (Debug.ALL_HIEROGLYPHS_UNLOCKED) {
 			enchantButton.setEnabled(Grammar.isValidSentence(Grammar.parseString(text)));
-		} else {
+		}
+		else {
 			enchantButton.setEnabled(fullInv.knowsWords(Grammar.getWords(text)) && Grammar.isValidSentence(Grammar.parseString(text)));
 		}
 	}
@@ -454,7 +453,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	public void insertUpdate(DocumentEvent e) {
 		checkParse(e);
 	}
-
+	
 	@Override
 	public void focusGained(FocusEvent e) {
 		if (list.getSelectedValue().getSpell() == null) {
@@ -468,7 +467,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	public void removeUpdate(DocumentEvent e) {
 		checkParse(e);
 	}
-
+	
 	@Override
 	public void changedUpdate(DocumentEvent e) {
 		checkParse(e);
@@ -477,23 +476,23 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	@Override
 	public void focusLost(FocusEvent e) {
 	}
-
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 	}
-
+	
 	@Override
 	public void mouseEntered(MouseEvent e) {
 	}
-
+	
 	@Override
 	public void mouseExited(MouseEvent e) {
 	}
-
+	
 	@Override
 	public void mousePressed(MouseEvent e) {
 	}
-
+	
 	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
@@ -509,5 +508,5 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private Border getThinBorder() {
 		return BorderFactory.createLineBorder(BORDER);
 	}
-
+	
 }
