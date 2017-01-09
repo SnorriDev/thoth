@@ -71,7 +71,7 @@ onEnchant:
     - SET_OBJECTIVE:
         objective:
           !objective
-            shortDesc: put your mouse over the door and press 3
+            shortDesc: put your mouse over the door and press 1
             longDesc: |
               <p class="instruction">Wait until your spell is off cooldown, and then put
               your mouse over the door and press <span class="control">1</span>.</p>

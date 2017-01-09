@@ -12,8 +12,15 @@ public class PrepPhrase extends NonTerminal {
 	 * @return a modified copy of SpellEvent which carries the necessary semantics
 	 */
 	public Object getMeaning(SpellEvent e) {
+		
+		//the supplied object is a class, not an object
+		if (!(children.get(1).getMeaning(e) instanceof Nominal)) {
+			return null;
+		}
+		
 		PrepDef prep = (PrepDef) children.get(0).getMeaning(e);
 		return ((PrepDef) prep.getMeaning(e)).getModified((Nominal) children.get(1).getMeaning(e));
+		
 	}
 
 }

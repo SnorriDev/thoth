@@ -10,7 +10,6 @@ import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.pathfinding.PathNode;
 import snorri.pathfinding.Pathfinder;
-import snorri.pathfinding.Pathfinding;
 import snorri.pathfinding.Targetter;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -24,8 +23,8 @@ public abstract class WaterMeleeUnit extends Unit implements Pathfinder, Carrier
 	protected double approachMargin = APPROACH_MARGIN_DEFAULT;
 	protected double changePathMargin = CHANGE_PATH_MARGIN_DEFAULT;
 	
-	private Vector lastSeenPos;
-	private boolean recalculatingPath = false;
+//	private Vector lastSeenPos;
+//	private boolean recalculatingPath = false;
 
 	private static final Animation IDLE_DEFAULT = new Animation("/textures/animations/crocodile/idle");
 	private static final Animation SWIMMING_DEFAULT = new Animation("/textures/animations/crocodile/idle");
@@ -46,7 +45,7 @@ public abstract class WaterMeleeUnit extends Unit implements Pathfinder, Carrier
 	protected Inventory inventory;
 	protected Entity target;
 
-	private ArrayDeque<PathNode> path;
+//	private ArrayDeque<PathNode> path;
 	
 	
 	public WaterMeleeUnit(Vector pos, Entity target, Animation idle, Animation walking, Animation attack, double seekRange, double attackRange, double attackPower, double approachMargin, double changePathMargin) {

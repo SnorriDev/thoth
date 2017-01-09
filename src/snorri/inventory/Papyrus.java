@@ -46,7 +46,7 @@ public class Papyrus extends Item {
 	
 	@Override
 	public int getInvPos() {
-		return 3;
+		return 2;
 	}
 
 }
