@@ -16,7 +16,7 @@ public class ThirdSuffixPronoun extends Definition {
 
 	@Override
 	public String toString() {
-		return "it";
+		return "it (mouse)";
 	}
 	
 }
