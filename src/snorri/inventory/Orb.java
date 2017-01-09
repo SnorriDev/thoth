@@ -19,7 +19,7 @@ public class Orb extends Item {
 	
 	@Override
 	public int getInvPos() {
-		return 2;
+		return 3;
 	}
 
 }
