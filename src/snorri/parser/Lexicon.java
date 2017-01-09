@@ -1,4 +1,4 @@
-package snorri.parser;
+	package snorri.parser;
 
 import java.util.ArrayList;
 import java.util.Collection;

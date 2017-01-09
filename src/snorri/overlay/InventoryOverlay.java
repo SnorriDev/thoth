@@ -277,7 +277,13 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		wordPanel.setBackground(SELECTED_BG);
 		wordPanel.setBorder(getThinBorder());
 		
-		JLabel icon = new JLabel(Util.resize(Hieroglyphs.getIcon(drop.getOrthography()), 0, HIEROGLYPH_SIZE));
+		JLabel icon;
+		if (Hieroglyphs.getIcon(drop.getOrthography()) == null) {
+			icon = new JLabel();
+		}
+		else {
+			icon = new JLabel(Util.resize(Hieroglyphs.getIcon(drop.getOrthography()), 0, HIEROGLYPH_SIZE));
+		}
 		JLabel orth = new JLabel(drop.getOrthography());
 		orth.setFont(new Font(orth.getFont().getName(), Font.BOLD, HIEROGLYPH_TRANSLATION_FONT_SIZE));
 		JLabel pos = new JLabel(drop.getMeaning().getPOS().getSimpleName());
