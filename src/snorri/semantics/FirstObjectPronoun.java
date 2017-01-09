@@ -16,7 +16,7 @@ public class FirstObjectPronoun extends Definition {
 
 	@Override
 	public String toString() {
-		return "me";
+		return "me (player)";
 	}
 
 }

@@ -16,7 +16,7 @@ public class FirstSuffixPronoun extends Definition {
 
 	@Override
 	public String toString() {
-		return "I";
+		return "I (player)";
 	}
 
 	

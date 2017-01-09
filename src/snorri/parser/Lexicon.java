@@ -150,7 +150,7 @@ public class Lexicon {
 		//lexicon.put("sxpr", new CreateUnit()); //conjure
 		
 		//Conditionals
-		lexicon.put("jr", new ConditionalDef());
+		lexicon.put("Dr", new ConditionalDef());
 				
 	}
 	

@@ -51,7 +51,7 @@ public class CreateObject extends VerbDef {
 
 	@Override
 	public String toString() {
-		return "create object";
+		return "create (object)";
 	}
 
 }
