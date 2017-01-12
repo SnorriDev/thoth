@@ -1,6 +1,7 @@
 package snorri.main;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
@@ -19,6 +20,7 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 	public static final int MARGIN = 20;
 	
 	private static final Color BACKGROUND_COLOR = new Color(255, 242, 197);
+	private static final Color BUTTON_COLOR = new Color(55, 135, 206);
 	
 	private boolean stopped = false;
 	
@@ -84,15 +86,11 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 
 	protected JButton createButton(String text) {
 		JButton button = new JButton(text);
+		button.setOpaque(true);
+		button.setFont(button.getFont().deriveFont(Font.BOLD));
+		button.setBackground(BUTTON_COLOR);
 		button.setSelected(false);
 		button.addActionListener(this);
-		return button;
-	}
-	
-	protected JButton createButton(String text, Vector size) {
-		JButton button = createButton(text);
-		button.setFont(Main.getCustomFont(20f));
-		button.setSize(size.getX(), size.getY());
 		return button;
 	}
 

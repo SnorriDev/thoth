@@ -81,6 +81,12 @@ public class Main {
 	
 	public static void main(String[] args) {
 
+		try {
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		Lexicon.load();
 		Hieroglyphs.load();
 		RandomDrop.load();
@@ -148,8 +154,9 @@ public class Main {
 	}
 
 	public static void setupFont() {
-		customFont = loadFont("/fonts/thothDefault.ttf");
+		customFont = loadFont("/fonts/avenir.otf");		
 		UIManager.put("Button.font", getCustomFont(20));
+		UIManager.put("Label.font", getCustomFont(13));
 		log("default font loaded");
 	}
 

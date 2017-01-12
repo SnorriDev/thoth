@@ -26,11 +26,11 @@ public class MainMenu extends GamePanel {
 		outerFrame.add(new JLabel(new ImageIcon(Util.resize(Main.getImage("/textures/titleScreen/title.png"), 0, 310))));
 		
 		JPanel menu = new MenuPanel();
-		menu.add(createButton("Tutorial"));
-		menu.add(createButton("Oasis Adventure"));
-		menu.add(createButton("Dungeon Adventure"));
-		menu.add(createButton("Load World"));
-		menu.add(createButton("World Editor"));
+		menu.add(createButton("TUTORIAL"));
+		menu.add(createButton("OASIS ADVENTURE"));
+		menu.add(createButton("DUNGEON ADVENTURE"));
+		menu.add(createButton("LOAD WORLD"));
+		menu.add(createButton("WORLD EDITOR"));
 		outerFrame.add(menu);
 		
 		Music.MAIN_THEME.play();
@@ -46,22 +46,22 @@ public class MainMenu extends GamePanel {
 	public void actionPerformed(ActionEvent e) {
 
 		switch (e.getActionCommand()) {
-		case "Tutorial":
+		case "TUTORIAL":
 			Main.launchGame(new WorldSelection("/worlds/tutorial"));
 			break;
-		case "Oasis Adventure":
+		case "OASIS ADVENTURE":
 			Main.launchGame(new TerrainGen(200, 200));
 			break;
-		case "Dungeon Adventure":
+		case "DUNGEON ADVENTURE":
 			Main.launchGame(new DungeonGen(200, 200));
 			break;
-		case "Load World":
+		case "LOAD WORLD":
 			World w = World.wrapLoad();
 			if (w != null) {
 				Main.launchGame(w);
 			}
 			break;
-		case "World Editor":
+		case "WORLD EDITOR":
 			Main.launchEditor();
 		}
 		

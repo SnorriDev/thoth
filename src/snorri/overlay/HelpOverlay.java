@@ -1,7 +1,6 @@
 package snorri.overlay;
 
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 import snorri.main.FocusedWindow;
@@ -26,13 +25,6 @@ public class HelpOverlay extends Overlay {
 		}
 		add(display);
 		
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Okay")) {
-			window.unpause();
-		}
 	}
 
 }

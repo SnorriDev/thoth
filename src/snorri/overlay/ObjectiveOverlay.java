@@ -23,7 +23,7 @@ public class ObjectiveOverlay extends Overlay {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Okay")) {
+		if (e.getActionCommand().equals("OKAY")) {
 			window.unpause();
 		}
 	}

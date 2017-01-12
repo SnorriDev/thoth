@@ -203,7 +203,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		field.addFocusListener(this);
 		inputPanel.add(field);
 		
-		enchantButton = createButton("Enchant");
+		enchantButton = createButton("ENCHANT");
 		enchantButton.setEnabled(false);
 		enchantButton.addKeyListener(this);
 		inputPanel.add(enchantButton);
@@ -234,8 +234,8 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		if (editMode) {
 			JComponent buttons = new JPanel();
 			buttons.setOpaque(false);
-			buttons.add(createButton("Add"));
-			buttons.add(createButton("Delete"));
+			buttons.add(createButton("ADD"));
+			buttons.add(createButton("DELETE"));
 			vocabInfo.add(buttons);
 		}
 		
@@ -339,13 +339,13 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		if (e.getActionCommand().equals("Enchant") && list.getSelectedValue() != null) {
+		if (e.getActionCommand().equals("ENCHANT") && list.getSelectedValue() != null) {
 			String rawSpell = getTagless();
 			list.getSelectedValue().setSpell(Grammar.parseString(rawSpell));
 			spellsEnchanted.add(rawSpell);
 			setGlyphs();
 		}
-		if (e.getActionCommand().equals("Add")) {
+		if (e.getActionCommand().equals("ADD")) {
 			
 			DialogMap inputs = new DialogMap();
 			inputs.put("Droppable", "Enter word or item here");
@@ -354,7 +354,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			add(Droppable.fromString(inputs.getText("Droppable")));
 			redrawVocab();
 		}
-		if (e.getActionCommand().equals("Delete")) {
+		if (e.getActionCommand().equals("DELETE")) {
 			
 			DialogMap inputs = new DialogMap();
 			inputs.put("Word", "Enter here...");

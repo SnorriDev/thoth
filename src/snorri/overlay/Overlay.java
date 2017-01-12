@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
@@ -92,7 +93,7 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 			c.gridy = 0;
 			add(scroll, c);
 			
-			JButton b = createButton("Okay");
+			JButton b = createButton("OKAY");
 			c.gridx = 0;
 			c.gridy = 1;
 			add(b, c);
@@ -198,6 +199,13 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (Key.ESC.isPressed(e)) {
+			window.unpause();
+		}
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand().equals("OKAY")) {
 			window.unpause();
 		}
 	}

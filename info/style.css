@@ -1,12 +1,13 @@
+
 @font-face {
 	font-family: thothDefault;
-	src: url(/../fonts/thothDefault.ttf);
+	src: url(/../fonts/avenir.ttf);
 }
 
 h1, h2 {
 	padding-bottom: 10px;
     padding-top: 10px;
-    font-family: thothDefault, Arial Bold;
+    font-family: Avenir Bold;
     font-weight: bold;
 }
 
@@ -20,7 +21,7 @@ h2 {
 
 
 body {
-    font-family: Arial;
+    font-family: Avenir, Arial;
     font-size: 14;
 }
 

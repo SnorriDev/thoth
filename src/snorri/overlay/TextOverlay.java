@@ -1,7 +1,6 @@
 package snorri.overlay;
 
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -27,13 +26,6 @@ public class TextOverlay extends Overlay {
 		pane.setText(dialog.text);
 		add(pane);
 		
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Okay")) {
-			window.unpause();
-		}
 	}
 
 }
