@@ -18,13 +18,13 @@ public class DeathScreen extends GamePanel {
 		setOpaque(false);
 		JPanel panel = new JPanel(new GridLayout(0, 1));
 		panel.setOpaque(false);
-		panel.add(createButton("Main Menu"));
+		panel.add(createButton("MAIN MENU"));
 		add(panel);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Main Menu")) {
+		if (e.getActionCommand().equals("MAIN MENU")) {
 			Main.launchMenu();
 		}
 	}
