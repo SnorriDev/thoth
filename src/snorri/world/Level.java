@@ -35,7 +35,7 @@ public class Level implements Editable {
 	private Tile[][] map;
 	private Vector dim;
 	
-	private List<ArrayList<Vector>> connectedSubGraphs;
+	private List<ArrayList<Vector>> components;
 	private ArrayList<Vector>[][] graphData;
 
 	public Level(int width, int height, TileType bg) {
@@ -365,7 +365,7 @@ public class Level implements Editable {
 		
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream(f));
 		try {
-			connectedSubGraphs = (ArrayList<ArrayList<Vector>>) in.readObject();
+			components = (ArrayList<ArrayList<Vector>>) in.readObject();
 			computeGraphHash();
 		} catch (ClassNotFoundException e) {
 			Main.error("recalculating corrupted pathfinding data");
@@ -381,13 +381,13 @@ public class Level implements Editable {
 		computePathfinding();
 		
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f));
-		out.writeObject(connectedSubGraphs);
+		out.writeObject(components);
 		out.close();
 	}
 
 	private void computeConnectedSubGraphs() {
 		
-		connectedSubGraphs = new ArrayList<ArrayList<Vector>>();
+		components = new ArrayList<ArrayList<Vector>>();
 		boolean[][] visited = new boolean[dim.getX()][dim.getY()];
 				
 		for (int x = 0; x < dim.getX(); x++) {
@@ -397,12 +397,12 @@ public class Level implements Editable {
 					continue;
 				}
 								
-				connectedSubGraphs.add(computeConnectedSubGraph(new Vector(x, y), visited));
+				components.add(computeConnectedSubGraph(new Vector(x, y), visited));
 				
 			}
 		}
 		
-		Main.log("found " + connectedSubGraphs.size() + " sub-graphs in level");
+		Main.log("found " + components.size() + " sub-graphs in level");
 		
 		computeGraphHash();
 		
@@ -411,7 +411,7 @@ public class Level implements Editable {
 	@SuppressWarnings("unchecked")
 	private void computeGraphHash() {
 		graphData = (ArrayList<Vector>[][]) new ArrayList[dim.getX()][dim.getY()];
-		for (ArrayList<Vector> graph : connectedSubGraphs) {
+		for (ArrayList<Vector> graph : components) {
 			for (Vector v : graph) {
 				setGraph(v, graph);
 			}
@@ -557,9 +557,11 @@ public class Level implements Editable {
 	 */
 	private ArrayList<Vector> mergeGraphs(List<ArrayList<Vector>> graphs) {
 		
+		//TODO: can make this more efficient by merging all other components into the largest one
+		
 		ArrayList<Vector> union = new ArrayList<>();
 		for (ArrayList<Vector> graph : graphs) {
-			if (connectedSubGraphs.remove(graph)) {
+			if (components.remove(graph)) {
 				union.addAll(graph);
 			}
 		}
@@ -568,7 +570,7 @@ public class Level implements Editable {
 				setGraph(v, union);
 			}
 		}
-		connectedSubGraphs.add(union);
+		components.add(union);
 		return union;
 		
 	}
@@ -588,9 +590,9 @@ public class Level implements Editable {
 			return;
 		}
 				
-		connectedSubGraphs.remove(graph);
+		components.remove(graph);
 		for (ArrayList<Vector> g : graphs) {
-			connectedSubGraphs.add(g);
+			components.add(g);
 			for (Vector v : g) {
 				setGraph(v, g);
 			}
