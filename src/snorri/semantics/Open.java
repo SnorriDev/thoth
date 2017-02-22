@@ -1,6 +1,6 @@
 package snorri.semantics;
 
-import snorri.entities.Enemy;
+import snorri.entities.Mummy;
 import snorri.entities.Entity;
 import snorri.entities.Sarcophagus;
 import snorri.masking.Mask;
@@ -27,7 +27,7 @@ public class Open extends VerbDef {
 		if (obj instanceof Sarcophagus) {
 			e.getWorld().delete((Entity) obj);
 			Vector spawnPos = e.getWorld().getLevel().getGoodSpawn(((Sarcophagus) obj).getPos().copy().toGridPos());
-			Entity.spawnNew(e.getWorld(), spawnPos, Enemy.class);
+			Entity.spawnNew(e.getWorld(), spawnPos, Mummy.class);
 		}
 		
 		if (obj instanceof Entity) {

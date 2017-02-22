@@ -44,7 +44,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		
 		EDIT_SPAWNABLE.add(Desk.class);
 		EDIT_SPAWNABLE.add(Drop.class);
-		EDIT_SPAWNABLE.add(Enemy.class);
+		EDIT_SPAWNABLE.add(Mummy.class);
 		EDIT_SPAWNABLE.add(Explosion.class);
 		EDIT_SPAWNABLE.add(Flower.class);
 		EDIT_SPAWNABLE.add(Player.class);

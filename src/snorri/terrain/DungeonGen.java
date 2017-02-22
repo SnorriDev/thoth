@@ -12,7 +12,7 @@ import java.util.Queue;
 
 import net.sourceforge.yamlbeans.YamlException;
 import net.sourceforge.yamlbeans.YamlReader;
-import snorri.entities.Enemy;
+import snorri.entities.Mummy;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.main.Main;
@@ -133,7 +133,7 @@ public class DungeonGen extends TerrainGen {
 		for (int i = 0; i < 20; i++) {
 			Vector pos = world.getRandomSpawnPos();
 			if (pos != null) {
-				world.add(new Enemy(pos, p));
+				world.add(new Mummy(pos, p));
 			}
 		}
 		while (!spawnQ.isEmpty()) {

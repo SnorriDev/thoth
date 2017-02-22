@@ -4,7 +4,7 @@ import java.util.Set;
 
 import snorri.entities.Desk;
 import snorri.entities.Drop;
-import snorri.entities.Enemy;
+import snorri.entities.Mummy;
 import snorri.entities.Player;
 import snorri.inventory.VocabDrop;
 import snorri.parser.Lexicon;
@@ -77,7 +77,7 @@ public class TerrainGen {
 		world.add(p);
 		
 		for (int i = 0; i < 20; i++) {
-			world.add(new Enemy(world.getRandomSpawnPos(), p));
+			world.add(new Mummy(world.getRandomSpawnPos(), p));
 		}
 		
 		Set<String> drops = Lexicon.getELang();

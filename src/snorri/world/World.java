@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import snorri.entities.Detector;
-import snorri.entities.Enemy;
+import snorri.entities.Mummy;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.entities.QuadTree;
@@ -60,7 +60,7 @@ public class World implements Playable, Editable {
 
 		// temporary
 		add(new Player(DEFAULT_SPAWN.copy()));
-		add(new Enemy(new Vector(600, 600), computeFocus()));
+		add(new Mummy(new Vector(600, 600), computeFocus()));
 
 		Main.log("new world created!");
 		

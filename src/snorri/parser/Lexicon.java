@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import snorri.entities.Enemy;
+import snorri.entities.Mummy;
 import snorri.entities.Entity;
 import snorri.entities.Flower;
 import snorri.entities.Glyph;
@@ -99,7 +99,7 @@ public class Lexicon {
 		lexicon.put("anx", new StaticDef(Noun.class, Glyph.class));
 		lexicon.put("ankh", new StaticDef(Noun.class, Glyph.class));
 		lexicon.put("xt", new StaticDef(Noun.class, Entity.class));
-		lexicon.put("wi1", new StaticDef(Noun.class, Enemy.class)); //TODO kAr.t is better
+		lexicon.put("wi1", new StaticDef(Noun.class, Mummy.class)); //TODO kAr.t is better
 		lexicon.put("rwdt", new StaticDef(Noun.class, TileType.SANDSTONE));
 		
 		lexicon.put("st", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));

@@ -19,7 +19,7 @@ import snorri.pathfinding.Targetter;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Enemy extends Unit implements Pathfinder, Carrier, Targetter {
+public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targetter {
 
 	private static final Animation IDLE = new Animation("/textures/animations/mummy/idle");
 	private static final Animation WALKING = new Animation("textures/animations/mummy/walking");
