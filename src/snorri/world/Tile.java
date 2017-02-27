@@ -18,7 +18,7 @@ import snorri.semantics.Nominal;
 
 public class Tile implements Comparable<Tile>, Nominal {
 	
-	public static final int	WIDTH	= 16;
+	public static final int	WIDTH	= 64;
 	public static final BufferedImage DEFAULT_TEXTURE = Main.DEFAULT_TEXTURE;
 									
 	private TileType type;
@@ -377,13 +377,13 @@ public class Tile implements Comparable<Tile>, Nominal {
 			if (textures != null)
 					return textures;
 			else
-				Main.error("no textures found, returning default texture");
+				//Main.error("no textures found, returning default texture");
 				return new BufferedImage[] {DEFAULT_TEXTURE};
 		}
 		
 		public BufferedImage getTexture(int index) {
 			if (index >= textures.length) {
-				Main.error("texture not found, index out of bounds, returning default texture");
+				//Main.error("texture not found, index out of bounds, returning default texture");
 				return DEFAULT_TEXTURE;
 			}
 			return textures[index];

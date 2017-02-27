@@ -26,6 +26,7 @@ import snorri.triggers.TriggerMap;
 
 public class World implements Playable, Editable {
 
+	public static final int DEFAULT_LEVEL_SIZE = 72;
 	public static final Vector DEFAULT_SPAWN = new Vector(100, 100);
 	private static final int RANDOM_SPAWN_ATTEMPTS = 100;
 	public static final int UPDATE_RADIUS = 4000;
@@ -38,7 +39,7 @@ public class World implements Playable, Editable {
 	private TriggerMap triggers;
 
 	public World() {
-		this(300, 300);
+		this(DEFAULT_LEVEL_SIZE, DEFAULT_LEVEL_SIZE);
 	}
 
 	/**
