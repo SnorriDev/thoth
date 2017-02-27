@@ -310,7 +310,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 		}
 		
 		/**
-		 * Use to make tile types which can be changed with sandstorms, etc.
+		 * Use to make tile types which can be changed with sand	s, etc.
 		 * @param pathable
 		 * 	Whether it can be walked on
 		 * @param swimmable
@@ -405,9 +405,13 @@ public class Tile implements Comparable<Tile>, Nominal {
 				return new Tile(this);
 			}
 			
-			if (attr == AbstractSemantics.STORM && this == SAND) {
+			if (attr == AbstractSemantics.STORM && this == SAND) { //TODO: Do we need to check for this == sand?
 				return new Tile(this, 0);
 			}
+			
+			/*if (attr == AbstractSemantics.WALLOF) { //FIXME: Need wrapper class
+				return new Tile(this, 0);
+			}*/
 			
 			return Nominal.super.get(world, attr);
 			

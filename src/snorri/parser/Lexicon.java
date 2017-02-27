@@ -110,6 +110,7 @@ public class Lexicon {
 		lexicon.put("nbt", new StaticDef(AbstractNoun.class, AbstractSemantics.SOURCE)); //means lord literally
 		lexicon.put("Axt", new StaticDef(AbstractNoun.class, AbstractSemantics.FLOOD));
 		lexicon.put("Da", new StaticDef(AbstractNoun.class, AbstractSemantics.STORM));
+		lexicon.put("WallOf", new StaticDef(AbstractNoun.class, AbstractSemantics.WALLOF)); //TODO: Need real word for wall
 				
 		//Names
 		lexicon.put("DHwty", new StaticDef(Name.class, "DHwty"));

@@ -7,7 +7,7 @@ public interface Nominal {
 	
 	public enum AbstractSemantics implements Nominal {
 		
-		POSITION, WEAPON, TILE, NAME, SOURCE, HEALTH, FLOOD, STORM;
+		POSITION, WEAPON, TILE, NAME, SOURCE, HEALTH, FLOOD, STORM, WALLOF;
 
 		@Override
 		public String toString() {
