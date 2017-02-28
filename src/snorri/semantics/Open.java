@@ -6,9 +6,10 @@ import snorri.entities.Sarcophagus;
 import snorri.masking.Mask;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
+import snorri.world.BackgroundElement;
 import snorri.world.Level;
 import snorri.world.Tile;
-import snorri.world.Tile.TileType;
+import snorri.world.TileType;
 
 public class Open extends VerbDef {
 
@@ -54,7 +55,7 @@ public class Open extends VerbDef {
 			return false;
 		}
 		
-		if (l.getTileGrid(pos).getType() == TileType.DOOR) {
+		if (l.getTileGrid(pos).getType() == BackgroundElement.DOOR) {
 			TriggerType.DOOR_OPEN.activate(pos);
 			l.wrapGridUpdate(pos, new Tile(REPLACEMENT_TILE));
 			for (Vector trans : Mask.NEIGHBORS) {
