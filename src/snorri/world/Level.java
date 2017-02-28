@@ -24,7 +24,7 @@ import snorri.main.Main;
 import snorri.masking.Mask;
 import snorri.pathfinding.PathNode;
 import snorri.terrain.DungeonGen;
-import snorri.world.Tile.TileType;
+import snorri.world.TileType;
 
 public class Level implements Editable {
 
@@ -32,19 +32,19 @@ public class Level implements Editable {
 	private static final int SPAWN_SEARCH_RADIUS = 12;
 	
 	/**An array of tiles. Note that coordinates are Cartesian, not matrix-based**/
-	private Tile[][] background;
+	private Tile[][] map;
 	private Vector dim;
 	
 	private List<ArrayList<Vector>> components;
 	private ArrayList<Vector>[][] graphData;
 
 	public Level(int width, int height, TileType bg) {
-		background = new Tile[width][height];
+		map = new Tile[width][height];
 		dim = new Vector(width, height);
 
 		for (int i = 0; i < dim.getX(); i++) {
 			for (int j = 0; j < dim.getY(); j++) {
-				background[i][j] = new Tile(bg);
+				map[i][j] = new Tile(bg);
 			}
 		}
 		
@@ -57,11 +57,15 @@ public class Level implements Editable {
 	}
 	
 	public Level(int width, int height) {
-		this(width, height, TileType.SAND);
+		this(width, height, 0);
+	}
+	
+	public Level(int width, int height, int layer) {
+		this(width, height, ((layer == 0) ? BackgroundElement.SAND : ((layer == 1) ? MidgroundElement.NONE : ForegroundElement.NONE)));
 	}
 	
 	public Level(Vector v) {
-		this(v, TileType.SAND);
+		this(v, BackgroundElement.SAND);
 	}
 
 	public Level(File file) throws FileNotFoundException, IOException {
@@ -74,17 +78,17 @@ public class Level implements Editable {
 	 */
 	private Level(Level l, int newWidth, int newHeight) {
 		
-		background = new Tile[newWidth][newHeight];
+		map = new Tile[newWidth][newHeight];
 		dim = new Vector(newWidth, newHeight);
 		
 		for (int i = 0; i < dim.getX(); i++) {
 			for (int j = 0; j < dim.getY(); j++) {
-				background[i][j] = new Tile(TileType.SAND);
+				map[i][j] = new Tile(BackgroundElement.SAND);
 			}
 		}
 		for (int i = 0; i < dim.getX() && i < l.dim.getX(); i++) {
 			for (int j = 0; j < dim.getY() && j < l.dim.getY(); j++) {
-				background[i][j] = l.background[i][j];
+				map[i][j] = l.map[i][j];
 			}
 		}
 		
@@ -123,16 +127,16 @@ public class Level implements Editable {
 		
 		for (int i = 0; i < newDim.getX(); i++) {
 			for (int j = 0; j < newDim.getY(); j++) {
-				newMap[i][j] = new Tile(TileType.SAND);
+				newMap[i][j] = new Tile(BackgroundElement.SAND);
 			}
 		}
 		for (int i = 0; i < newDim.getX() && i < dim.getX(); i++) {
 			for (int j = 0; j < newDim.getY() && j < dim.getY(); j++) {
-				newMap[i][j] = background[i][j];
+				newMap[i][j] = map[i][j];
 			}
 		}
 		
-		background = newMap;
+		map = newMap;
 		dim = newDim;
 		
 	}
@@ -146,10 +150,10 @@ public class Level implements Editable {
 	}
 
 	public void setTileGrid(int x, int y, Tile t) {
-		if (x < 0 || x >= background.length || y < 0 || y >= background[x].length) {
+		if (x < 0 || x >= map.length || y < 0 || y >= map[x].length) {
 			return;
 		}
-		background[x][y] = t;
+		map[x][y] = t;
 		updateMasksGrid(new Vector(x, y));
 	}
 
@@ -162,7 +166,7 @@ public class Level implements Editable {
 	}
 	
 	public Tile getNewTileGrid(int x, int y) {
-		if (x < 0 || x >= background.length || y < 0 || y >= background[x].length) {
+		if (x < 0 || x >= map.length || y < 0 || y >= map[x].length) {
 			return null;
 		}
 		if (getTileGrid(x,y) == null) {
@@ -172,10 +176,10 @@ public class Level implements Editable {
 	}
 
 	public Tile getTileGrid(int x, int y) {
-		if (x < 0 || x >= background.length || y < 0 || y >= background[x].length) {
+		if (x < 0 || x >= map.length || y < 0 || y >= map[x].length) {
 			return null;
 		}
-		return background[x][y];
+		return map[x][y];
 	}
 	
 	public Tile getTileGrid(Vector v) {
@@ -198,16 +202,16 @@ public class Level implements Editable {
 		
 		for (int i = minX; i < maxX; i++) {
 			for (int j = minY; j < maxY; j++) {
-				if (i >= 0 && i < background.length) {
-					if (j >= 0 && j < background[i].length) {
-						background[i][j].drawTile(g, gr, new Vector(i,j));
+				if (i >= 0 && i < map.length) {
+					if (j >= 0 && j < map[i].length) {
+						map[i][j].drawTile(g, gr, new Vector(i,j));
 					}
 					else if (renderOutside) {
-						background[0][0].drawTile(g, gr, new Vector(i,j));
+						map[0][0].drawTile(g, gr, new Vector(i,j));
 					}
 				}
 				else if (renderOutside) {
-					background[0][0].drawTile(g, gr, new Vector(i,j));
+					map[0][0].drawTile(g, gr, new Vector(i,j));
 				}
 			}
 		}
@@ -232,13 +236,13 @@ public class Level implements Editable {
 		int height = ByteBuffer.wrap(b).getInt();
 
 		dim = new Vector(width, height);
-		background = new Tile[width][height];
+		map = new Tile[width][height];
 
 		byte[] b2 = new byte[2];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				is.read(b2);
-				background[i][j] = new Tile(((Byte) b2[0]).intValue(), ((Byte) b2[1]).intValue());
+				map[i][j] = new Tile(((Byte) b2[0]).intValue(), ((Byte) b2[1]).intValue());
 			}
 		}
 
@@ -269,8 +273,8 @@ public class Level implements Editable {
 
 		for (int i = 0; i < dim.getX(); i++) {
 			for (int j = 0; j < dim.getY(); j++) {
-				os.write(((byte) background[i][j].getType().getId()) & 0xFF);
-				os.write(((byte) background[i][j].getStyle()) & 0xFF);
+				os.write(((byte) map[i][j].getType().getId()) & 0xFF);
+				os.write(((byte) map[i][j].getStyle()) & 0xFF);
 			}
 		}
 
@@ -295,7 +299,7 @@ public class Level implements Editable {
 	public void computePathability() {
 		for (int i = 0; i < dim.getX(); i++) {
 			for (int j = 0; j < dim.getY(); j++) {
-				background[i][j].computeSurroundingsPathable(i, j, this);
+				map[i][j].computeSurroundingsPathable(i, j, this);
 			}
 		}
 	}
@@ -546,7 +550,7 @@ public class Level implements Editable {
 		if (x < 0 || x >= dim.getX() || y < 0 || y >= dim.getY()) {
 			return;
 		}
-		background[x][y].computeSurroundingsPathable(x, y, this);
+		map[x][y].computeSurroundingsPathable(x, y, this);
 	}
 	
 	/**
