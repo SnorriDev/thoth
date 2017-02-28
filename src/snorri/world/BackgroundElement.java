@@ -100,11 +100,11 @@ public enum BackgroundElement implements Nominal, TileType {
 	}
 	
 	private static BufferedImage getImage(String string) {
-		return Tile.getImage("/textures/tiles/BackgroundElements/" + string);
+		return Tile.getImage("/textures/tiles/BackgroundElements/" + string, 0);
 	}
 	
 	BackgroundElement(boolean pathable) {
-		this(pathable, new BufferedImage[] {Tile.DEFAULT_TEXTURE});
+		this(pathable, new BufferedImage[] {Tile.DEFAULT_BACKGROUND_TEXTURE});
 	}
 	
 	BackgroundElement(boolean pathable, BufferedImage texture) {
@@ -240,14 +240,14 @@ public enum BackgroundElement implements Nominal, TileType {
 				return textures;
 		else
 			//Main.error("no textures found, returning default texture");
-			return new BufferedImage[] {Tile.DEFAULT_TEXTURE};
+			return new BufferedImage[] {Tile.DEFAULT_BACKGROUND_TEXTURE};
 	}
 	
 	@Override
 	public BufferedImage getTexture(int index) {
 		if (index >= textures.length) {
 			//Main.error("texture not found, index out of bounds, returning default texture");
-			return Tile.DEFAULT_TEXTURE;
+			return Tile.DEFAULT_BACKGROUND_TEXTURE;
 		}
 		return textures[index];
 	}

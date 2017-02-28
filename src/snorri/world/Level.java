@@ -65,7 +65,11 @@ public class Level implements Editable {
 	}
 	
 	public Level(Vector v) {
-		this(v, BackgroundElement.SAND);
+		this(v, 0);
+	}
+	
+	public Level(Vector v, int layer) {
+		this(v, ((layer == 0) ? BackgroundElement.SAND : ((layer == 1) ? MidgroundElement.NONE : ForegroundElement.NONE)));
 	}
 
 	public Level(File file) throws FileNotFoundException, IOException {
@@ -77,21 +81,41 @@ public class Level implements Editable {
 	 * Constructor used for resizing
 	 */
 	private Level(Level l, int newWidth, int newHeight) {
+		this(l, newWidth, newHeight, 0);
+	}
+	
+	private Level(Level l, int newWidth, int newHeight, int layer) {
 		
 		map = new Tile[newWidth][newHeight];
 		dim = new Vector(newWidth, newHeight);
 		
-		for (int i = 0; i < dim.getX(); i++) {
-			for (int j = 0; j < dim.getY(); j++) {
-				map[i][j] = new Tile(BackgroundElement.SAND);
+		if (layer == 0) {
+			for (int i = 0; i < dim.getX(); i++) {
+				for (int j = 0; j < dim.getY(); j++) {
+					map[i][j] = new Tile(BackgroundElement.SAND);
+				}
 			}
 		}
+		else if (layer == 1) {
+			for (int i = 0; i < dim.getX(); i++) {
+				for (int j = 0; j < dim.getY(); j++) {
+					map[i][j] = new Tile(MidgroundElement.NONE);
+				}
+			}
+		}
+		else {
+			for (int i = 0; i < dim.getX(); i++) {
+				for (int j = 0; j < dim.getY(); j++) {
+					map[i][j] = new Tile(ForegroundElement.NONE);
+				}
+			}
+		}
+		
 		for (int i = 0; i < dim.getX() && i < l.dim.getX(); i++) {
 			for (int j = 0; j < dim.getY() && j < l.dim.getY(); j++) {
 				map[i][j] = l.map[i][j];
 			}
 		}
-		
 	}
 	
 	public Level getTransposed() {

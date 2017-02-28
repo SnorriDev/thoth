@@ -7,7 +7,6 @@ import snorri.audio.ClipWrapper;
 import snorri.main.Main;
 import snorri.main.Util;
 import snorri.semantics.Nominal;
-import snorri.semantics.Nominal.AbstractSemantics;
 
 public enum MidgroundElement implements Nominal, TileType {
 	NONE;
@@ -15,11 +14,11 @@ public enum MidgroundElement implements Nominal, TileType {
 	private BufferedImage[]	textures;
 	
 	MidgroundElement() {
-		textures = new BufferedImage[] {Tile.DEFAULT_FOREGROUND_TEXTURE};
+		textures = new BufferedImage[] {Tile.DEFAULT_MIDGROUND_TEXTURE};
 	}
 	
 	private static BufferedImage getImage(String string) {
-		return Tile.getImage("/textures/tiles/ForegroundElements/" + string);
+		return Tile.getImage("/textures/tiles/ForegroundElements/" + string, 1);
 	}
 
 	@Override

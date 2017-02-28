@@ -18,7 +18,7 @@ public enum ForegroundElement implements Nominal, TileType {
 	}
 	
 	private static BufferedImage getImage(String string) {
-		return Tile.getImage("/textures/tiles/ForegroundElements/" + string);
+		return Tile.getImage("/textures/tiles/ForegroundElements/" + string, 2);
 	}
 
 	@Override

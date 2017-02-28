@@ -26,12 +26,14 @@ import snorri.triggers.TriggerMap;
 
 public class World implements Playable, Editable {
 
-	public static final int DEFAULT_LEVEL_SIZE = 72;
+	public static final int DEFAULT_LEVEL_SIZE = 144;
 	public static final Vector DEFAULT_SPAWN = new Vector(100, 100);
 	private static final int RANDOM_SPAWN_ATTEMPTS = 100;
 	public static final int UPDATE_RADIUS = 4000;
 	
-	private Level level;
+	private Level background;
+	private Level midground;
+	private Level foreground;
 	private EntityGroup col;
 	private CopyOnWriteArrayList<Detector> colliders;
 	private List<Team> teams;
@@ -52,9 +54,11 @@ public class World implements Playable, Editable {
 	public World(int width, int height) {
 
 		Main.log("creating new world of size " + width + " x " + height + "...");
-		level = new Level(width, height); // TODO: pass a level file to read
+		background = new Level(width, height, 0); // TODO: pass a level file to read
+		midground = new Level(width, height, 1);
+		foreground = new Level(width, height, 2);
 		//level.computePathfinding();
-		col = QuadTree.coverLevel(level);
+		col = QuadTree.coverLevel(background);
 		colliders = new CopyOnWriteArrayList<Detector>();
 		
 		Pathfinding.setWorld(this);
@@ -74,7 +78,7 @@ public class World implements Playable, Editable {
 	public World(File file) throws FileNotFoundException, IOException {
 		
 		load(file);
-		level.computePathability();
+		background.computePathability(); //FIXME: is that function still capplicable?
 		colliders = new CopyOnWriteArrayList<Detector>();
 		
 		Pathfinding.setWorld(this);
@@ -85,15 +89,20 @@ public class World implements Playable, Editable {
 		
 	}
 	
-	public World(Level l) {
+	public World(Level l0, Level l1, Level l2) {
 
-		Main.log("creating new world of size " + l.getDimensions().getX() + " x " + l.getDimensions().getY() + "...");
-		level = l;
-		col = QuadTree.coverLevel(level);
+		Main.log("creating new world background of size " + l0.getDimensions().getX() + " x " + l0.getDimensions().getY() + "...");
+		background = l0;
+		Main.log("creating new world midground of size " + l1.getDimensions().getX() + " x " + l1.getDimensions().getY() + "...");
+		midground = l1;
+		Main.log("creating new world foreground of size " + l2.getDimensions().getX() + " x " + l2.getDimensions().getY() + "...");
+		foreground = l2;
+		
+		col = QuadTree.coverLevel(background);
 		colliders = new CopyOnWriteArrayList<Detector>();
 		
 		Pathfinding.setWorld(this); //TODO make pathfinding not static
-		l.computePathfinding();
+		l0.computePathfinding(); //FIXME: do we need to change how this function works?
 		
 		Main.log("new world created!");
 	}
@@ -101,7 +110,7 @@ public class World implements Playable, Editable {
 	//TODO input the unit as an arg?
 	public Vector getRandomSpawnPos(int radius) {
 		for (int i = 0; i < RANDOM_SPAWN_ATTEMPTS; i++) {
-			Vector pos = level.getGoodSpawn(level.getDimensions().random());
+			Vector pos = background.getGoodSpawn(background.getDimensions().random()); //FIXME: good spawn?
 			if (pos != null && col.getFirstCollision(new Entity(pos, radius)) == null) {
 				return pos;
 			}
@@ -150,16 +159,22 @@ public class World implements Playable, Editable {
 
 	@Override
 	public synchronized void render(FocusedWindow g, Graphics gr, double deltaTime, boolean showOutlands) {	
-		level.render(g, gr, deltaTime, showOutlands);
+		background.render(g, gr, deltaTime, showOutlands);
+		midground.render(g, gr, deltaTime, showOutlands);
 		col.renderAround(g, gr, deltaTime, colliders);
+		foreground.render(g, gr, deltaTime, showOutlands);
 	}
 
 	public EntityGroup getEntityTree() {
 		return col;
 	}
 
-	public Level getLevel() {
-		return level;
+	public Level getLevel() { //what is this for?
+		return background;
+	}
+	
+	public Level[] getLevels() {
+		return new Level[] {background, midground, foreground};
 	}
 
 	public void add(Entity e) {
@@ -169,7 +184,7 @@ public class World implements Playable, Editable {
 			return;
 		}
 
-		col.insert(e, level);
+		col.insert(e, background);
 		
 	}
 	
@@ -193,7 +208,7 @@ public class World implements Playable, Editable {
 		
 		//TODO possibly move this to EntityGroup
 		if (e != null && e.isStaticObject() && !(Main.getWindow() instanceof LevelEditor)) {
-			level.removeEntity(e);
+			background.removeEntity(e);
 		}
 		
 		if (e instanceof Detector && !((Detector) e).isTreeMember()) {
@@ -217,7 +232,9 @@ public class World implements Playable, Editable {
 
 		String path = f.getPath();
 		col.saveEntities(new File(path, "entities.dat"));
-		level.save(new File(path, "level.dat"), recomputeGraphs);
+		background.save(new File(path, "background.lvl"), recomputeGraphs);
+		midground.save(new File(path, "midground.lvl"), recomputeGraphs);
+		foreground.save(new File(path, "foreground.lvl"), recomputeGraphs);
 		Team.save(new File(path, "teams.dat"), teams);
 
 	}
@@ -235,9 +252,11 @@ public class World implements Playable, Editable {
 			throw new IOException();
 		}
 
-		level = new Level(new File(f, "level.dat"));
-		col = QuadTree.coverLevel(level);
-		col.loadEntities(new File(f, "entities.dat"), level);
+		background = new Level(new File(f, "background.lvl"));
+		midground = new Level(new File(f, "midground.lvl"));
+		foreground = new Level(new File(f, "foreground.lvl"));
+		col = QuadTree.coverLevel(background);
+		col.loadEntities(new File(f, "entities.dat"), background);
 		
 		File triggerFile = new File(f, "triggers.yml");
 		if (triggerFile.exists()) {
@@ -270,12 +289,12 @@ public class World implements Playable, Editable {
 	}
 	
 	public void resize(int newWidth, int newHeight) {
-		level = level.getResized(newWidth, newHeight);
+		background = background.getResized(newWidth, newHeight);
 	}
 	
 	@Override
 	public World getTransposed() {
-		World w = new World(level.getTransposed());
+		World w = new World(background.getTransposed(), midground.getTransposed(), foreground.getTransposed());
 		for (Entity e : col.getAllEntities()) {
 			Entity e2 = e.copy();
 			e2.getPos().invert();
@@ -286,10 +305,10 @@ public class World implements Playable, Editable {
 	
 	@Override
 	public World getXReflected() {
-		World w = new World(level.getXReflected());
+		World w = new World(background.getXReflected(), midground.getXReflected(), foreground.getXReflected());
 		for (Entity e : col.getAllEntities()) {
 			Entity e2 = e.copy();
-			e2.setPos(e2.getPos().getXReflected(level.getDimensions().copy().toGlobalPos()));
+			e2.setPos(e2.getPos().getXReflected(background.getDimensions().copy().toGlobalPos()));
 			w.add(e2);
 		}
 		return w;
