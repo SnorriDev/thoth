@@ -13,7 +13,7 @@ import snorri.world.TileType;
 
 public class Open extends VerbDef {
 
-	private static final Tile REPLACEMENT_TILE = new Tile(0);
+	private static final Tile REPLACEMENT_TILE = new Tile(BackgroundElement.SAND);
 	
 	public Open() {
 		super(true);

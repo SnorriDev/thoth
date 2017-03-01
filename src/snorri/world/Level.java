@@ -42,6 +42,8 @@ public class Level implements Editable {
 		map = new Tile[width][height];
 		dim = new Vector(width, height);
 
+		Main.debug(bg);
+		
 		for (int i = 0; i < dim.getX(); i++) {
 			for (int j = 0; j < dim.getY(); j++) {
 				map[i][j] = new Tile(bg);
@@ -72,6 +74,11 @@ public class Level implements Editable {
 		this(v, ((layer == 0) ? BackgroundElement.SAND : ((layer == 1) ? MidgroundElement.NONE : ForegroundElement.NONE)));
 	}
 
+	public Level(File file, Class<? extends TileType> c) throws FileNotFoundException, IOException {
+		load(file, c);
+		setBitMasks();
+	}
+	
 	public Level(File file) throws FileNotFoundException, IOException {
 		load(file);
 		setBitMasks();
@@ -223,7 +230,7 @@ public class Level implements Editable {
 		int maxX = g.getFocus().getPos().getX() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / scaleFactor + cushion;
 		int minY = g.getFocus().getPos().getY() / Tile.WIDTH - g.getDimensions().getY() / Tile.WIDTH / scaleFactor - cushion;
 		int maxY = g.getFocus().getPos().getY() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / scaleFactor + cushion;
-		
+				
 		for (int i = minX; i < maxX; i++) {
 			for (int j = minY; j < maxY; j++) {
 				if (i >= 0 && i < map.length) {
@@ -246,7 +253,7 @@ public class Level implements Editable {
 		return f.getName().substring(0, f.getName().lastIndexOf('.'));
 	}
 
-	public void load(File file) throws FileNotFoundException, IOException {
+	public void load(File file, Class<? extends TileType> c) throws FileNotFoundException, IOException {
 
 		Main.log("loading " + file + "...");
 
@@ -266,7 +273,7 @@ public class Level implements Editable {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				is.read(b2);
-				map[i][j] = new Tile(((Byte) b2[0]).intValue(), ((Byte) b2[1]).intValue());
+				map[i][j] = new Tile(c, ((Byte) b2[0]).intValue(), ((Byte) b2[1]).intValue());
 			}
 		}
 
@@ -914,6 +921,11 @@ public class Level implements Editable {
 	
 	public int getHeight() {
 		return dim.getY();
+	}
+
+	@Override
+	public void load(File folder) throws FileNotFoundException, IOException {
+		load(folder, BackgroundElement.class);
 	}
 	
 }

@@ -160,9 +160,9 @@ public class World implements Playable, Editable {
 	@Override
 	public synchronized void render(FocusedWindow g, Graphics gr, double deltaTime, boolean showOutlands) {	
 		background.render(g, gr, deltaTime, showOutlands);
-		midground.render(g, gr, deltaTime, showOutlands);
+		midground.render(g, gr, deltaTime, false);
 		col.renderAround(g, gr, deltaTime, colliders);
-		foreground.render(g, gr, deltaTime, showOutlands);
+		foreground.render(g, gr, deltaTime, false);
 	}
 
 	public EntityGroup getEntityTree() {
@@ -252,9 +252,9 @@ public class World implements Playable, Editable {
 			throw new IOException();
 		}
 
-		background = new Level(new File(f, "background.lvl"));
-		midground = new Level(new File(f, "midground.lvl"));
-		foreground = new Level(new File(f, "foreground.lvl"));
+		background = new Level(new File(f, "background.lvl"), BackgroundElement.class);
+		midground = new Level(new File(f, "midground.lvl"), MidgroundElement.class);
+		foreground = new Level(new File(f, "foreground.lvl"), ForegroundElement.class);
 		col = QuadTree.coverLevel(background);
 		col.loadEntities(new File(f, "entities.dat"), background);
 		

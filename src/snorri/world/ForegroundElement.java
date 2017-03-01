@@ -17,6 +17,10 @@ public enum ForegroundElement implements Nominal, TileType {
 		textures = new BufferedImage[] {Tile.DEFAULT_FOREGROUND_TEXTURE};
 	}
 	
+	public static ForegroundElement byIdStatic(int id) {
+		return values()[id];
+	}
+	
 	private static BufferedImage getImage(String string) {
 		return Tile.getImage("/textures/tiles/ForegroundElements/" + string, 2);
 	}
@@ -60,12 +64,13 @@ public enum ForegroundElement implements Nominal, TileType {
 		return Nominal.super.get(world, attr);
 	}
 
+	//TODO: can implement all these in terms of a supermethod that takes a class parameter
 	@Override
 	public ArrayList<Tile> getSubTypes() {
 		int i = getId();
 		ArrayList<Tile> list = new ArrayList<Tile>();
 		for(int j = 0; j < byId(i).getNumberStyles(); j++) {
-			list.add(new Tile(i,j));
+			list.add(new Tile(ForegroundElement.class, i,j));
 		}
 		return list;
 	}

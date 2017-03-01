@@ -42,4 +42,40 @@ public interface TileType {
 	boolean canShootOver();
 
 	boolean isAtTop();
+
+	public static TileType lookup(Class<? extends TileType> c, int id) {
+		
+		if (c.equals(BackgroundElement.class)) {
+			return BackgroundElement.byIdStatic(id);
+		}
+		
+		if (c.equals(MidgroundElement.class)) {
+			return MidgroundElement.byIdStatic(id);
+		}
+		
+		if (c.equals(ForegroundElement.class)) {
+			return ForegroundElement.byIdStatic(id);
+		}
+		
+		return null;
+		
+	}
+	
+	public static TileType[] getValues(Class<? extends TileType> c) {
+		
+		if (c.equals(BackgroundElement.class)) {
+			return BackgroundElement.values();
+		}
+		
+		if (c.equals(MidgroundElement.class)) {
+			return MidgroundElement.values();
+		}
+		
+		if (c.equals(ForegroundElement.class)) {
+			return ForegroundElement.values();
+		}
+		
+		return null;
+		
+	}
 }

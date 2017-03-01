@@ -284,7 +284,7 @@ public enum BackgroundElement implements Nominal, TileType {
 		int i = getId();
 		ArrayList<Tile> list = new ArrayList<Tile>();
 		for(int j = 0; j < byId(i).getNumberStyles(); j++) {
-			list.add(new Tile(i,j));
+			list.add(new Tile(BackgroundElement.class, i,j));
 		}
 		return list;
 	}

@@ -17,6 +17,10 @@ public enum MidgroundElement implements Nominal, TileType {
 		textures = new BufferedImage[] {Tile.DEFAULT_MIDGROUND_TEXTURE};
 	}
 	
+	public static MidgroundElement byIdStatic(int id) {
+		return values()[id];
+	}
+	
 	private static BufferedImage getImage(String string) {
 		return Tile.getImage("/textures/tiles/ForegroundElements/" + string, 1);
 	}
@@ -65,7 +69,7 @@ public enum MidgroundElement implements Nominal, TileType {
 		int i = getId();
 		ArrayList<Tile> list = new ArrayList<Tile>();
 		for(int j = 0; j < byId(i).getNumberStyles(); j++) {
-			list.add(new Tile(i,j));
+			list.add(new Tile(MidgroundElement.class, i,j));
 		}
 		return list;
 	}

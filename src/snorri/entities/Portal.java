@@ -21,7 +21,6 @@ public class Portal extends Detector {
 		super(pos, 30);
 		this.world = world;
 		this.dest = dest;
-		treeMember = true;
 		animation = new Animation(ANIMATION);
 		age = -1;
 		ignoreCollisions = true;

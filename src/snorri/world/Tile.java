@@ -12,7 +12,6 @@ import snorri.entities.Unit;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
-import snorri.main.Util;
 import snorri.masking.Mask;
 import snorri.semantics.Nominal;
 import snorri.world.TileType;
@@ -50,13 +49,13 @@ public class Tile implements Comparable<Tile>, Nominal {
 		this.style = style;
 	}
 	
-	public Tile(int id) {
-		this(BackgroundElement.byIdStatic(id));
+	public Tile(Class<? extends TileType> c, int id) {
+		this(TileType.lookup(c, id));
 		style = 0;
 	}
 	
-	public Tile(int id, int style) {
-		this(id);
+	public Tile(Class<? extends TileType> c, int id, int style) {
+		this(c, id);
 		this.style = style;
 	}
 	
@@ -71,31 +70,31 @@ public class Tile implements Comparable<Tile>, Nominal {
 		style = Integer.parseInt(l[1]);
 	}
 
-	public static ArrayList<Tile> getAllTypes() {
-		ArrayList<Tile> list = new ArrayList<Tile>();
-		for(int i = 0; i < BackgroundElement.values().length; i++) {
-			list.add(new Tile(i,0));
-		}
-		return list;
-	}
+//	public static ArrayList<Tile> getAllTypes(Class<? extends TileType> c) {
+//		ArrayList<Tile> list = new ArrayList<Tile>();
+//		for(int i = 0; i < BackgroundElement.values().length; i++) {
+//			list.add(new Tile(c, i, 0));
+//		}
+//		return list;
+//	}
 	
-	public static ArrayList<Tile> getSubTypes(int i) {
-		ArrayList<Tile> list = new ArrayList<Tile>();
-		for(int j = 0; j < BackgroundElement.byIdStatic(i).getNumberStyles(); j++) {
-			list.add(new Tile(i,j));
-		}
-		return list;
-	}
+//	public static ArrayList<Tile> getSubTypes(int i) {
+//		ArrayList<Tile> list = new ArrayList<Tile>();
+//		for(int j = 0; j < BackgroundElement.byIdStatic(i).getNumberStyles(); j++) {
+//			list.add(new Tile(i,j));
+//		}
+//		return list;
+//	}
 	
-	public static ArrayList<Tile> getAll() {
-		ArrayList<Tile> list = new ArrayList<Tile>();
-		for(int i = 0; i < BackgroundElement.values().length; i++) {
-			for(int j = 0; j < BackgroundElement.byIdStatic(i).getNumberStyles(); j++) {
-				list.add(new Tile(i,j));
-			}
-		}
-		return list;
-	}
+//	public static ArrayList<Tile> getAll() {
+//		ArrayList<Tile> list = new ArrayList<Tile>();
+//		for(int i = 0; i < BackgroundElement.values().length; i++) {
+//			for(int j = 0; j < BackgroundElement.byIdStatic(i).getNumberStyles(); j++) {
+//				list.add(new Tile(i,j));
+//			}
+//		}
+//		return list;
+//	}
 	
 	public TileType getType() {
 		return type;

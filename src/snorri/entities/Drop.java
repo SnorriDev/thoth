@@ -18,7 +18,6 @@ public class Drop extends Detector {
 	public Drop(Vector pos, Droppable prize) {
 		super(pos, 15);
 		this.prize = prize;
-		treeMember = true;
 		age = -1;
 		ignoreCollisions = true;
 		animation = prize.getAnimation();
