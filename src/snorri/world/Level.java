@@ -797,6 +797,7 @@ public class Level implements Editable {
 		}
 		
 		//TODO check to make sure there isn't an overriding mask
+		//TODO this is where corners are fucked up
 		
 		bitVal = 1;
 		for (Vector v: Mask.CORNERS) {

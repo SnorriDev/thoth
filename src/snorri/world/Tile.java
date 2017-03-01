@@ -234,11 +234,22 @@ public class Tile implements Comparable<Tile>, Nominal {
 	 */
 	@Override
 	public int compareTo(Tile t) {
-		if (type.equals(t.type)) {
-			return Integer.compare(style, t.style);
-		}
-		else
+		
+		if (!type.getClass().equals(t.type.getClass())) {
+			Main.debug(type.getClass());
+			Main.debug(t.type.getClass());
+			Main.error("comparing TileTypes from different layers");
 			return 0;
+		}
+		
+		int n = TileType.getValues(type.getClass()).length;
+		return Integer.compare(style * n + type.getId(),  t.style * n + t.type.getId());
+		
+//		if (type.equals(t.type)) {
+//			return Integer.compare(style, t.style);
+//		}
+//		else
+//			return 0;
 	}
 	
 	public void setBitMasks(Mask[] b) {

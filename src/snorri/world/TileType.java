@@ -63,6 +63,7 @@ public interface TileType {
 		
 	}
 	
+	
 	public static TileType[] getValues(Class<? extends TileType> c) {
 		
 		if (c.equals(BackgroundElement.class)) {
@@ -80,4 +81,5 @@ public interface TileType {
 		return null;
 		
 	}
+	
 }
