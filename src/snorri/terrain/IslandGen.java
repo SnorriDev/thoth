@@ -42,7 +42,7 @@ public class IslandGen extends TerrainGen {
 	
 	@Override
 	public World genWorld() {
-		World world = new World(genLevel());	
+		World world = new World(genBackground(), genMidground(), genForeground());	
 		Player p = new Player(world.getRandomSpawnPos());
 		world.add(p);		
 		return world;

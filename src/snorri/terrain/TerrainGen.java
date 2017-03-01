@@ -8,9 +8,12 @@ import snorri.entities.Mummy;
 import snorri.entities.Player;
 import snorri.inventory.VocabDrop;
 import snorri.parser.Lexicon;
+import snorri.world.BackgroundElement;
+import snorri.world.MidgroundElement;
+import snorri.world.ForegroundElement;
 import snorri.world.Level;
 import snorri.world.Tile;
-import snorri.world.Tile.TileType;
+import snorri.world.TileType;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -27,14 +30,14 @@ public class TerrainGen {
 	
 	public enum Biome {
 		
-		DEEP(-0.1, new Tile(TileType.DEEP_WATER, 0)),
-		WATER(0, new Tile(TileType.WATER, 0)),
-		MARSH(0.1, new Tile(TileType.GRASS, 1)),
-		SWAMP(0.2, new Tile(TileType.GRASS, 0)),
-		SAND(0.3, new Tile(TileType.SAND, 0)),
-		LAND(0.5, new Tile(TileType.SAND, 1)),
-		DESERT(1, new Tile(TileType.SAND, 2)),
-		MOUNTAIN(Double.MAX_VALUE, new Tile(TileType.SAND, 0));
+		DEEP(-0.1, new Tile(BackgroundElement.DEEP_WATER, 0)),
+		WATER(0, new Tile(BackgroundElement.WATER, 0)),
+		MARSH(0.1, new Tile(BackgroundElement.GRASS, 1)),
+		SWAMP(0.2, new Tile(BackgroundElement.GRASS, 0)),
+		SAND(0.3, new Tile(BackgroundElement.SAND, 0)),
+		LAND(0.5, new Tile(BackgroundElement.SAND, 1)),
+		DESERT(1, new Tile(BackgroundElement.SAND, 2)),
+		MOUNTAIN(Double.MAX_VALUE, new Tile(BackgroundElement.SAND, 0));
 		
 		public static final Biome[] DEFAULT = Biome.values();
 //		public static final Biome[] NETHER = new Biome[] {
@@ -71,7 +74,7 @@ public class TerrainGen {
 	
 	public World genWorld() {
 		
-		World world = new World(genLevel());
+		World world = new World(genBackground(), genMidground(), genForeground());
 				
 		Player p = new Player(world.getRandomSpawnPos());
 		world.add(p);
@@ -122,7 +125,7 @@ public class TerrainGen {
 		return genHeightMap(DEFAULT_FREQUENCIES, DEFAULT_SMOOTHNESS, DEFAULT_ELEVATION);
 	}
 
-	public Level genLevel(double[][] heightMap, Biome[] biomes) {
+	public Level genBackground(double[][] heightMap, Biome[] biomes) {
 		Level level = new Level(dim);
 		for (int x = 0; x < dim.getX(); x++) {
 			for (int y = 0; y < dim.getY(); y++) {
@@ -137,8 +140,28 @@ public class TerrainGen {
 		return level;
 	}
 	
-	public Level genLevel() {
-		return genLevel(genHeightMap(), Biome.DEFAULT);
+	public Level genBackground() {
+		return genBackground(genHeightMap(), Biome.DEFAULT);
+	}
+	
+	public Level genMidground() { //TODO: modify for later
+		Level level = new Level(dim, 1);
+		for (int x = 0; x < dim.getX(); x++) {
+			for (int y = 0; y < dim.getY(); y++) {
+				level.setTileGrid(x, y, new Tile(MidgroundElement.NONE));
+			}
+		}
+		return level;
+	}
+	
+	public Level genForeground() { //TODO: modify for later
+		Level level = new Level(dim, 1);
+		for (int x = 0; x < dim.getX(); x++) {
+			for (int y = 0; y < dim.getY(); y++) {
+				level.setTileGrid(x, y, new Tile(ForegroundElement.NONE));
+			}
+		}
+		return level;
 	}
 		
 	protected Vector getScaledPos(int x, int y) {
