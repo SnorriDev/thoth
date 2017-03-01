@@ -145,7 +145,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 		if (t == null) {
 			return false;
 		}
-		return (type.getId() == t.getType().getId() && style == t.getStyle());
+		return (getType().equals(t.getType()) && getStyle() == t.getStyle());
 	}
 	
 	public static BufferedImage getImage(String path) {
