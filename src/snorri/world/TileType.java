@@ -42,6 +42,8 @@ public interface TileType {
 	boolean canShootOver();
 
 	boolean isAtTop();
+	
+	boolean isChangable();
 
 	public static TileType lookup(Class<? extends TileType> c, int id) {
 		

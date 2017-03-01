@@ -42,6 +42,7 @@ import snorri.world.Playable;
 import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
+import snorri.world.BackgroundElement;
 
 //TODO: add image to world feature
 //TODO: fix overflow with a 2d boolean array (look at methods in Level which compute pathfinding graphs)
@@ -75,7 +76,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	public LevelEditor() {
 		super();
 
-		selectedTile = new Tile(0, 0);
+		selectedTile = new Tile(BackgroundElement.class, 0, 0);
 		selectedEntityClass = Entity.EDIT_SPAWNABLE.get(0);
 		createMenu();
 
@@ -155,7 +156,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		ButtonGroup groupTiles = new ButtonGroup();
 
 		boolean firstTile = true;
-		for (Tile t : Tile.getAllTypes()) {
+		for (Tile t : Tile.getAllTypes(BackgroundElement.class)) {
 
 			if (t == null || t.getTexture() == null) {
 				continue;
