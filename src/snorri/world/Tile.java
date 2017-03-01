@@ -78,23 +78,24 @@ public class Tile implements Comparable<Tile>, Nominal {
 		return list;
 	}
 
-	public static ArrayList<Tile> getSubTypes(int i) {
-		ArrayList<Tile> list = new ArrayList<Tile>();
-		for(int j = 0; j < BackgroundElement.byIdStatic(i).getNumberStyles(); j++) {
-			list.add(new Tile(i,j));
-		}
-		return list;
-	}
+//	public static ArrayList<Tile> getSubTypes(int i) {
+//		ArrayList<Tile> list = new ArrayList<Tile>();
+//		for(int j = 0; j < BackgroundElement.byIdStatic(i).getNumberStyles(); j++) {
+//			list.add(new Tile(i,j));
+//		}
+//		return list;
+//	}
+//	
+//	public static ArrayList<Tile> getAll() {
+//		ArrayList<Tile> list = new ArrayList<Tile>();
+//		for(int i = 0; i < BackgroundElement.values().length; i++) {
+//			for(int j = 0; j < BackgroundElement.byIdStatic(i).getNumberStyles(); j++) {
+//				list.add(new Tile(i,j));
+//			}
+//		}
+//		return list;
+//	}
 	
-	public static ArrayList<Tile> getAll() {
-		ArrayList<Tile> list = new ArrayList<Tile>();
-		for(int i = 0; i < BackgroundElement.values().length; i++) {
-			for(int j = 0; j < BackgroundElement.byIdStatic(i).getNumberStyles(); j++) {
-				list.add(new Tile(i,j));
-			}
-		}
-		return list;
-	}
 	public TileType getType() {
 		return type;
 	}
