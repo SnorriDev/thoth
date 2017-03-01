@@ -296,7 +296,7 @@ public class QuadTree extends Entity implements EntityGroup {
 	 * Render all entities in the tree, and add in the passed list
 	 */
 	@Override
-	public void renderAround(FocusedWindow window, Graphics gr, double deltaTime, CopyOnWriteArrayList<? extends Entity> colliders) {
+	public void renderAround(FocusedWindow window, Graphics gr, double deltaTime) {
 		
 		Vector playerPos = window.getFocus().getPos();
 		Vector dim = window.getDimensions();
@@ -304,7 +304,6 @@ public class QuadTree extends Entity implements EntityGroup {
 				dim.getY());
 		
 		PriorityQueue<Entity> renderQueue = getRenderQueue(view);
-		renderQueue.addAll(colliders);
 		
 		if (Debug.LOG_RENDER_QUEUE) {
 			Main.log("render queue: " + renderQueue);

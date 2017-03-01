@@ -7,9 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import snorri.entities.Detector;
 import snorri.entities.Mummy;
 import snorri.entities.Entity;
 import snorri.entities.Player;
@@ -35,7 +33,6 @@ public class World implements Playable, Editable {
 	private Level midground;
 	private Level foreground;
 	private EntityGroup col;
-	private CopyOnWriteArrayList<Detector> colliders;
 	private List<Team> teams;
 	
 	private TriggerMap triggers;
@@ -59,7 +56,6 @@ public class World implements Playable, Editable {
 		foreground = new Level(width, height, 2);
 		//level.computePathfinding();
 		col = QuadTree.coverLevel(background);
-		colliders = new CopyOnWriteArrayList<Detector>();
 		
 		Pathfinding.setWorld(this);
 
@@ -79,7 +75,6 @@ public class World implements Playable, Editable {
 		
 		load(file);
 		background.computePathability(); //FIXME: is that function still capplicable?
-		colliders = new CopyOnWriteArrayList<Detector>();
 		
 		Pathfinding.setWorld(this);
 		
@@ -99,7 +94,6 @@ public class World implements Playable, Editable {
 		foreground = l2;
 		
 		col = QuadTree.coverLevel(background);
-		colliders = new CopyOnWriteArrayList<Detector>();
 		
 		Pathfinding.setWorld(this); //TODO make pathfinding not static
 		l0.computePathfinding(); //FIXME: do we need to change how this function works?
@@ -150,10 +144,7 @@ public class World implements Playable, Editable {
 			Main.log("world update");
 		}
 		
-		col.updateAround(this, d, ((FocusedWindow) Main.getWindow()).getFocus());		
-		for (Detector p : colliders) {
-			p.update(this, d);
-		}
+		col.updateAround(this, d, ((FocusedWindow) Main.getWindow()).getFocus());
 
 	}
 
@@ -161,7 +152,7 @@ public class World implements Playable, Editable {
 	public synchronized void render(FocusedWindow g, Graphics gr, double deltaTime, boolean showOutlands) {	
 		background.render(g, gr, deltaTime, showOutlands);
 		midground.render(g, gr, deltaTime, false);
-		col.renderAround(g, gr, deltaTime, colliders);
+		col.renderAround(g, gr, deltaTime);
 		foreground.render(g, gr, deltaTime, false);
 	}
 
@@ -178,14 +169,7 @@ public class World implements Playable, Editable {
 	}
 
 	public void add(Entity e) {
-		
-		if (e instanceof Detector && !((Detector) e).isTreeMember()) {
-			colliders.add((Detector) e);
-			return;
-		}
-
 		col.insert(e, background);
-		
 	}
 	
 	/**
@@ -205,14 +189,9 @@ public class World implements Playable, Editable {
 	 *            the entity to delete
 	 */
 	public boolean delete(Entity e) {
-		
 		//TODO possibly move this to EntityGroup
 		if (e != null && e.isStaticObject() && !(Main.getWindow() instanceof LevelEditor)) {
 			background.removeEntity(e);
-		}
-		
-		if (e instanceof Detector && !((Detector) e).isTreeMember()) {
-			return colliders.remove(e);
 		}
 		return col.delete(e);
 	}
