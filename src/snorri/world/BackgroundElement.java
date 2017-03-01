@@ -208,6 +208,7 @@ public enum BackgroundElement implements Nominal, TileType {
 		return !pathable && canShootOver;
 	}
 	
+	@Override
 	public boolean isChangable() {
 		return changable;
 	}

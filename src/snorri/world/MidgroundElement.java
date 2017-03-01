@@ -118,4 +118,9 @@ public enum MidgroundElement implements Nominal, TileType {
 	public boolean isAtTop() {
 		return false;
 	}
+
+	@Override
+	public boolean isChangable() { //FIXME:
+		return true;
+	}
 }
