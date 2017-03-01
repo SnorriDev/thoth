@@ -37,6 +37,8 @@ import snorri.pathfinding.Team;
 import snorri.terrain.TerrainGen;
 import snorri.world.Campaign.WorldId;
 import snorri.world.Editable;
+import snorri.world.ForegroundElement;
+import snorri.world.MidgroundElement;
 import snorri.world.Level;
 import snorri.world.Playable;
 import snorri.world.Tile;
@@ -68,7 +70,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	private boolean canRedo;
 
 	JMenuBar menuBar;
-	JMenu menu, submenu;
+	JMenu menu, submenu0, submenu1, submenu2, subsubmenu;
 	JMenuItem menuItem;
 	JRadioButtonMenuItem rbMenuItem;
 	JCheckBoxMenuItem cbMenuItem;
@@ -154,6 +156,10 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		menuBar.add(menu);
 
 		ButtonGroup groupTiles = new ButtonGroup();
+		
+		submenu0 = new JMenu("Backgrounds");
+		submenu1 = new JMenu("Midgrounds");
+		submenu2 = new JMenu("Foregrounds");
 
 		boolean firstTile = true;
 		for (Tile t : Tile.getAllTypes(BackgroundElement.class)) {
@@ -162,20 +168,58 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				continue;
 			}
 
-			submenu = new JMenu(t.toStringShort());
+			subsubmenu = new JMenu(t.toStringShort());
 			for (Tile s : t.getType().getSubTypes()) {
 				rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(s.getTexture()));
 				rbMenuItem.setSelected(firstTile);
 				rbMenuItem.setActionCommand("set" + s.toNumericString());
 				rbMenuItem.addActionListener(this);
-				submenu.add(rbMenuItem);
+				subsubmenu.add(rbMenuItem);
 				groupTiles.add(rbMenuItem);
 			}
-			menu.add(submenu);
+			submenu0.add(subsubmenu);
 
 			firstTile = false;
 
 		}
+		for (Tile t : Tile.getAllTypes(MidgroundElement.class)) {
+
+			if (t == null || t.getTexture() == null) {
+				continue;
+			}
+
+			subsubmenu = new JMenu(t.toStringShort());
+			for (Tile s : t.getType().getSubTypes()) {
+				rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(s.getTexture()));
+				rbMenuItem.setSelected(firstTile);
+				rbMenuItem.setActionCommand("set" + s.toNumericString());
+				rbMenuItem.addActionListener(this);
+				subsubmenu.add(rbMenuItem);
+				groupTiles.add(rbMenuItem);
+			}
+			submenu1.add(subsubmenu);
+		}
+		for (Tile t : Tile.getAllTypes(ForegroundElement.class)) {
+
+			if (t == null || t.getTexture() == null) {
+				continue;
+			}
+
+			subsubmenu = new JMenu(t.toStringShort());
+			for (Tile s : t.getType().getSubTypes()) {
+				rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(s.getTexture()));
+				rbMenuItem.setSelected(firstTile);
+				rbMenuItem.setActionCommand("set" + s.toNumericString());
+				rbMenuItem.addActionListener(this);
+				subsubmenu.add(rbMenuItem);
+				groupTiles.add(rbMenuItem);
+			}
+			submenu2.add(subsubmenu);
+		}
+		
+		menu.add(submenu0);
+		menu.add(submenu1);
+		menu.add(submenu2);
 
 		menu = new JMenu("Select Entity");
 		menu.setMnemonic(KeyEvent.VK_E);
@@ -206,8 +250,8 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	private int[] whDialog() {
 		int[] wh = { -1, -1 };
 		DialogMap inputs = new DialogMap();
-		inputs.put("Width", "150");
-		inputs.put("Height", "150");
+		inputs.put("Width", "" + World.DEFAULT_LEVEL_SIZE);
+		inputs.put("Height", "" + World.DEFAULT_LEVEL_SIZE);
 		if (dialog("World Dimensions", inputs) == null) {
 			return null;
 		}
