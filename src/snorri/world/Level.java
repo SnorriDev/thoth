@@ -771,12 +771,13 @@ public class Level implements Editable {
 	 * Excess space in the array is null.
 	 */
 	public Mask[] getBitMasks(int x, int y) {
-		Mask[] masks = new Mask[8];
 		
 		Tile tile = getTileGrid(x, y);
 		if (tile == null || tile.getType().isAtTop()) {
-			return masks;
+			return null;
 		}
+		
+		Mask[] masks = new Mask[8];
 		
 		short bitVal = 1;
 		for (Vector v : Mask.NEIGHBORS) {
