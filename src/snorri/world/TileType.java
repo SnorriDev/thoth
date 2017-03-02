@@ -44,6 +44,8 @@ public interface TileType {
 	boolean isAtTop();
 	
 	boolean isChangable();
+	
+	int getLayer();
 
 	public static TileType lookup(Class<? extends TileType> c, int id) {
 		

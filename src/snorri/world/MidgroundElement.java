@@ -123,4 +123,9 @@ public enum MidgroundElement implements Nominal, TileType {
 	public boolean isChangable() { //FIXME:
 		return true;
 	}
+	
+	@Override 
+	public int getLayer() {
+		return 1;
+	}
 }

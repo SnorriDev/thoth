@@ -668,6 +668,16 @@ public class Level implements Editable {
 	public Level getLevel() {
 		return this;
 	}
+	
+	@Override
+	public Level getLevel(int layer) {
+		return this;
+	}
+	
+	@Override
+	public Level getLevel(Class<? extends TileType> c) {
+		return this;
+	}
 
 	public static Level wrapLoad() {
 		

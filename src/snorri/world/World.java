@@ -21,6 +21,10 @@ import snorri.pathfinding.Pathfinding;
 import snorri.pathfinding.Team;
 import snorri.triggers.Trigger;
 import snorri.triggers.TriggerMap;
+import snorri.world.TileType;
+import snorri.world.BackgroundElement;
+import snorri.world.MidgroundElement;
+import snorri.world.ForegroundElement;
 
 public class World implements Playable, Editable {
 
@@ -160,8 +164,38 @@ public class World implements Playable, Editable {
 		return col;
 	}
 
-	public Level getLevel() { //what is this for?
+	public Level getLevel() {
 		return background;
+	}
+	
+	public Level getLevel(int layer) {
+		if (layer == 0) {
+			//Main.debug("returning background layer");
+			return background;
+		}
+		else if (layer == 1) {
+			Main.debug("returning midground layer");
+			return midground;
+		}
+		else {
+			Main.debug("returning foreground layer");
+			return foreground;
+		}
+	}
+	
+	public Level getLevel(Class<? extends TileType> c) {
+		if (c == BackgroundElement.class) {
+			//Main.debug("should return background layer");
+			return getLevel(0);
+		}
+		else if (c == MidgroundElement.class) {
+			Main.debug("should return midground layer");
+			return getLevel(1);
+		}
+		else {
+			Main.debug("should return foreground layer");
+			return getLevel(2);
+		}
 	}
 	
 	public Level[] getLevels() {

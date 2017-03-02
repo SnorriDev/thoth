@@ -11,6 +11,10 @@ public interface Editable extends Savable {
 	public void render(FocusedWindow levelEditor, Graphics gr, double deltaTime, boolean b);
 
 	public Level getLevel();
+	
+	public Level getLevel(int layer);
+	
+	public Level getLevel(Class<? extends TileType> c);
 
 	public void resize(int newWidth, int newHeight);
 	

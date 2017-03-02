@@ -124,4 +124,9 @@ public enum ForegroundElement implements Nominal, TileType {
 	public boolean isChangable() { //FIXME
 		return true;
 	}
+	
+	@Override 
+	public int getLayer() {
+		return 2;
+	}
 }

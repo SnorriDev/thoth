@@ -315,4 +315,9 @@ public enum BackgroundElement implements Nominal, TileType {
 			return null;
 		}
 	}
+	
+	@Override 
+	public int getLayer() {
+		return 0;
+	}
 }

@@ -408,13 +408,13 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				if (focus.getPos().getX() <= -SCALE_FACTOR) {
 					canGoLeft = false;
 				}
-				if (focus.getPos().getX() >= env.getLevel().getDimensions().getX() * Tile.WIDTH + SCALE_FACTOR) {
+				if (focus.getPos().getX() >= env.getLevel(selectedTile.getType().getLayer()).getDimensions().getX() * Tile.WIDTH + SCALE_FACTOR) {
 					canGoRight = false;
 				}
 				if (focus.getPos().getY() <= -SCALE_FACTOR) {
 					canGoUp = false;
 				}
-				if (focus.getPos().getY() >= env.getLevel().getDimensions().getY() * Tile.WIDTH + SCALE_FACTOR) {
+				if (focus.getPos().getY() >= env.getLevel(selectedTile.getType().getLayer()).getDimensions().getY() * Tile.WIDTH + SCALE_FACTOR) {
 					canGoDown = false;
 				}
 
@@ -437,7 +437,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 					int x = location.getX();
 					int y = location.getY();
 
-					env.getLevel().setTile(x, y, new Tile(selectedTile));
+					env.getLevel(selectedTile.getType().getLayer()).setTile(x, y, new Tile(selectedTile));
 				}
 			}
 
@@ -511,17 +511,19 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		Vector location = getMousePosAbsolute().copy();
 		int x = location.getX() / Tile.WIDTH;
 		int y = location.getY() / Tile.WIDTH;
-		int w = env.getLevel().getWidth();
-		int h = env.getLevel().getHeight();
+		Main.debug(selectedTile.toString());
+		Main.debug(selectedTile.getType().getLayer());
+		int w = env.getLevel(selectedTile.getType().getLayer()).getWidth();
+		int h = env.getLevel(selectedTile.getType().getLayer()).getHeight();
 
-		Tile t = env.getLevel().getTileGrid(x, y);
+		Tile t = env.getLevel(selectedTile.getType().getLayer()).getTileGrid(x, y);
 
 		ArrayList<Vector> willFill = computeConnectedSubGraph(new Vector(x, y), new boolean[w][h]);
 
-		if (selectedTile != null && env.getLevel().getTileGrid(x,y) != null && t != null && !t.equals(selectedTile)) {
+		if (selectedTile != null && env.getLevel(selectedTile.getType().getLayer()).getTileGrid(x,y) != null && t != null && !t.equals(selectedTile)) {
 			autosaveUndo();
 			for (Vector v : willFill) {
-				env.getLevel().setTileGrid(v, new Tile(selectedTile));
+				env.getLevel(selectedTile.getType().getLayer()).setTileGrid(v, new Tile(selectedTile));
 			}
 		}
 
@@ -529,7 +531,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	private ArrayList<Vector> computeConnectedSubGraph(Vector start, boolean[][] visited) {
 																							
-		final Tile START_TILE = env.getLevel().getTileGrid(start);
+		final Tile START_TILE = env.getLevel(selectedTile.getType().getLayer()).getTileGrid(start);
 
 		ArrayList<Vector> graph = new ArrayList<Vector>();
 		Queue<Vector> searchQ = new LinkedList<Vector>();
@@ -539,12 +541,12 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		while (!searchQ.isEmpty()) {
 
 			pos = searchQ.poll();
-			if (env.getLevel().getTileGrid(pos) == null || !env.getLevel().getTileGrid(pos).equals(START_TILE) || visited[pos.getX()][pos.getY()]) {
+			if (env.getLevel(selectedTile.getType().getLayer()).getTileGrid(pos) == null || !env.getLevel(selectedTile.getType().getLayer()).getTileGrid(pos).equals(START_TILE) || visited[pos.getX()][pos.getY()]) {
 				continue;
 			}
 
 			visited[pos.getX()][pos.getY()] = true;
-			if (env.getLevel().getTileGrid(pos).equals(START_TILE))
+			if (env.getLevel(selectedTile.getType().getLayer()).getTileGrid(pos).equals(START_TILE))
 				graph.add(pos);
 			
 			for (Vector v : Mask.getNeighbors(pos)) {
