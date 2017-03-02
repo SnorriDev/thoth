@@ -1,6 +1,7 @@
 package snorri.pathfinding;
 
 import java.awt.Graphics;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,8 +12,9 @@ import snorri.world.Level;
 import snorri.world.Tile;
 import snorri.world.Vector;
 
-public class PathNode implements Comparable<PathNode> {
+public class PathNode implements Comparable<PathNode>, Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private static final double D = 1;
 	private static final double D2 = 1;//Math.sqrt(2); we get better performance with 1
 	

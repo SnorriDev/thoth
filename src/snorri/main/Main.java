@@ -28,6 +28,7 @@ import snorri.inventory.RandomDrop;
 import snorri.parser.Lexicon;
 import snorri.terrain.Structure;
 import snorri.terrain.TerrainGen;
+import snorri.world.BackgroundElement;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -86,6 +87,8 @@ public class Main {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		Main.debug(BackgroundElement.SAND.compareTo(BackgroundElement.GRASS));
 
 		Lexicon.load();
 		Hieroglyphs.load();

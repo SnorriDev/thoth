@@ -21,6 +21,7 @@ public class AlphaMask {
 	private final BufferedImage mask;
 
 	public AlphaMask(int x, int y) {
+		//TODO: maybe this is off by a pixel?
 		mask = FULL_IMAGE.getSubimage(x * Tile.WIDTH, y * Tile.WIDTH, Tile.WIDTH, Tile.WIDTH);
 	}
 

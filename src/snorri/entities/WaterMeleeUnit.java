@@ -1,6 +1,5 @@
 package snorri.entities;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 import snorri.animations.Animation;
@@ -8,7 +7,6 @@ import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
 import snorri.main.GameWindow;
 import snorri.main.Main;
-import snorri.pathfinding.PathNode;
 import snorri.pathfinding.Pathfinder;
 import snorri.pathfinding.Targetter;
 import snorri.world.Vector;

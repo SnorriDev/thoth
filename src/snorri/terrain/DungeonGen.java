@@ -22,7 +22,6 @@ import snorri.world.Level;
 import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
-import snorri.world.TileType;
 
 @SuppressWarnings("unchecked")
 public class DungeonGen extends TerrainGen {

@@ -90,23 +90,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 		return list;
 	}
 
-	public static ArrayList<Tile> getSubTypes(Class<? extends TileType> c, int i) {
-		ArrayList<Tile> list = new ArrayList<Tile>();
-		for(int j = 0; j < BackgroundElement.byIdStatic(i).getNumberStyles(); j++) {
-			list.add(new Tile(c, i, j));
-		}
-		return list;
-	}
-	
-	public static ArrayList<Tile> getAll(Class<? extends TileType> c) {
-		ArrayList<Tile> list = new ArrayList<Tile>();
-		for(int i = 0; i < BackgroundElement.values().length; i++) {
-			for(int j = 0; j < BackgroundElement.byIdStatic(i).getNumberStyles(); j++) {
-				list.add(new Tile(c, i, j));
-			}
-		}
-		return list;
-	}
 	public TileType getType() {
 		//Main.debug(type.name());
 		return type;
@@ -163,7 +146,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 		if (t == null) {
 			return false;
 		}
-		return (type.getId() == t.getType().getId() && style == t.getStyle());
+		return (getType().equals(t.getType()) && getStyle() == t.getStyle());
 	}
 	
 	public static BufferedImage getImage(String path) {
@@ -252,11 +235,22 @@ public class Tile implements Comparable<Tile>, Nominal {
 	 */
 	@Override
 	public int compareTo(Tile t) {
-		if (type.equals(t.type)) {
-			return Integer.compare(style, t.style);
-		}
-		else
+		
+		if (!type.getClass().equals(t.type.getClass())) {
+			Main.debug(type.getClass());
+			Main.debug(t.type.getClass());
+			Main.error("comparing TileTypes from different layers");
 			return 0;
+		}
+		
+		int n = TileType.getValues(type.getClass()).length;
+		return Integer.compare(style * n + type.getId(),  t.style * n + t.type.getId());
+		
+//		if (type.equals(t.type)) {
+//			return Integer.compare(style, t.style);
+//		}
+//		else
+//			return 0;
 	}
 	
 	public void setBitMasks(Mask[] b) {
