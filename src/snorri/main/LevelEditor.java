@@ -266,6 +266,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getActionCommand().startsWith("set")) {
+			//Main.debug(e.getActionCommand());
 			selectedTile = new Tile(e.getActionCommand().substring(3));
 			return;
 		}
@@ -511,8 +512,8 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		Vector location = getMousePosAbsolute().copy();
 		int x = location.getX() / Tile.WIDTH;
 		int y = location.getY() / Tile.WIDTH;
-		Main.debug(selectedTile.toString());
-		Main.debug(selectedTile.getType().getLayer());
+		//Main.debug(selectedTile.toString());
+		//Main.debug(selectedTile.getType().getLayer());
 		int w = env.getLevel(selectedTile.getType().getLayer()).getWidth();
 		int h = env.getLevel(selectedTile.getType().getLayer()).getHeight();
 

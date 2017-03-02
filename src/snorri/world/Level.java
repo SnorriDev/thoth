@@ -42,7 +42,7 @@ public class Level implements Editable {
 		map = new Tile[width][height];
 		dim = new Vector(width, height);
 
-		Main.debug(bg);
+		//Main.debug(bg);
 		
 		for (int i = 0; i < dim.getX(); i++) {
 			for (int j = 0; j < dim.getY(); j++) {

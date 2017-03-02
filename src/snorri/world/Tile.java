@@ -66,8 +66,9 @@ public class Tile implements Comparable<Tile>, Nominal {
 	public Tile(String substring) {
 		this();
 		String[] l = substring.split(":");
-		type = BackgroundElement.byIdStatic(Integer.parseInt(l[0]));
-		style = Integer.parseInt(l[1]);
+		int layer = Integer.parseInt(l[0]);
+		type = (layer == 0 ? BackgroundElement.byIdStatic(Integer.parseInt(l[1])) : (layer == 1 ? MidgroundElement.byIdStatic(Integer.parseInt(l[1])) : ForegroundElement.byIdStatic(Integer.parseInt(l[1]))));
+		style = Integer.parseInt(l[2]);
 	}
 
 	public static ArrayList<Tile> getAllTypes(Class<? extends TileType> c) {
@@ -182,7 +183,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 	}
 
 	public String toNumericString() {
-		return getType().getId() + ":" + getStyle();
+		return getType().getLayer() + ":" + getType().getId() + ":" + getStyle();
 	}
 
 	public boolean isPathable() {

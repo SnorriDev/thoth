@@ -174,11 +174,11 @@ public class World implements Playable, Editable {
 			return background;
 		}
 		else if (layer == 1) {
-			Main.debug("returning midground layer");
+			//Main.debug("returning midground layer");
 			return midground;
 		}
 		else {
-			Main.debug("returning foreground layer");
+			//Main.debug("returning foreground layer");
 			return foreground;
 		}
 	}
@@ -189,11 +189,11 @@ public class World implements Playable, Editable {
 			return getLevel(0);
 		}
 		else if (c == MidgroundElement.class) {
-			Main.debug("should return midground layer");
+			//Main.debug("should return midground layer");
 			return getLevel(1);
 		}
 		else {
-			Main.debug("should return foreground layer");
+			//Main.debug("should return foreground layer");
 			return getLevel(2);
 		}
 	}
