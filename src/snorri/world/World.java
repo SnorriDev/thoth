@@ -6,9 +6,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import snorri.collisions.Collider;
 import snorri.entities.Detector;
 import snorri.entities.Mummy;
 import snorri.entities.Entity;
@@ -29,6 +32,8 @@ public class World implements Playable, Editable {
 	public static final Vector DEFAULT_SPAWN = new Vector(100, 100);
 	private static final int RANDOM_SPAWN_ATTEMPTS = 100;
 	public static final int UPDATE_RADIUS = 4000;
+	
+	private static final int SPAWN_SEARCH_RADIUS = 10;
 	
 	private Level level;
 	private EntityGroup col;
@@ -322,6 +327,149 @@ public class World implements Playable, Editable {
 			teams = new ArrayList<>();
 		}
 		teams.add(team);
+	}
+	
+	public Vector getGoodSpawn(Vector start) {
+		
+		for (int r = 0; r < SPAWN_SEARCH_RADIUS; r++) {
+			changeStart: for (Vector v : start.getSquareAround(r)) {
+				
+				int x = v.getX();
+				int y = v.getY();
+				
+				for (int x1 = (x * Tile.WIDTH - 2 * Unit.RADIUS_X) / Tile.WIDTH; x1 <= (x * Tile.WIDTH + 2 * Unit.RADIUS_X) / Tile.WIDTH; x1++) {
+					for (int y1 = (y * Tile.WIDTH - 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1 <= (y * Tile.WIDTH + 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
+						if (!isContextPathable(x1, y1)) {
+							continue changeStart;
+						}
+					}
+				}
+				
+				return v.copy().toGlobalPos();
+				
+			}
+		}
+		
+		return null;
+		
+	}
+	
+	public Vector getGoodSpawn(int x, int y) {
+		return getGoodSpawn(new Vector(x, y));
+	}
+	
+	public void wrapGridUpdate(Vector pos, Tile newTile) {
+		
+		Tile oldTile = getTileGrid(pos);
+		
+		//if there is no tile at this position or a static entity is there, don't let the player mess with it
+		if (oldTile == null || oldTile.isOccupied()) {
+			return;
+		}
+		
+		setTileGrid(pos, newTile);
+		updateSurroundingContext(pos); //update context pathability on nearby tiles
+		
+		if (oldTile.isPathable() == newTile.isPathable()) {
+			return;
+		}
+		
+		if (newTile.isPathable()) {
+			setPathableGrid(pos);
+		} else {
+			setUnpathableGrid(pos);
+		}
+				
+	}
+	
+	public void wrapUpdate(Vector pos, Tile tile) {
+		wrapGridUpdate(pos.copy().toGridPos(), tile);
+	}
+	
+	public void addEntity(Entity e) {
+		
+		int x = e.getPos().getX();
+		int y = e.getPos().getY();
+		Collider c = e.getCollider();
+				
+		//mark all tiles which are occupied
+		for (int x1 = (x - c.getRadiusX()) / Tile.WIDTH; x1 <= (x + c.getRadiusX()) / Tile.WIDTH; x1++) {
+			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH; y1++) {
+				
+				if (c.intersects(getRectangle(x1, y1))) {
+					getTileGrid(x1, y1).addEntity(e);
+				}
+				
+			}
+		}
+		
+		Queue<Vector> unpathableQ = new LinkedList<>();
+		
+		// update all tiles in range of occupied tiles
+		for (int x1 = (x - c.getRadiusX() - 2 * Unit.RADIUS_X)
+				/ Tile.WIDTH; x1 <= (x + c.getRadiusX() + 2 * Unit.RADIUS_X) / Tile.WIDTH; x1++) {
+			for (int y1 = (y - c.getRadiusY() - 2 * Unit.RADIUS_Y)
+					/ Tile.WIDTH; y1 <= (y + c.getRadiusY() + 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
+
+				boolean wasContextPathable = isContextPathable(x1, y1);
+				getTileGrid(x1, y1).computeSurroundingsPathable(x1, y1, this);
+				if (wasContextPathable && !getTileGrid(x1, y1).isContextPathable()) {
+					unpathableQ.add(new Vector(x1, y1));
+				}
+
+			}
+		}
+
+		//recalculate graphs around unpathable tiles
+		while (!unpathableQ.isEmpty()) {
+			this.setUnpathableGrid(unpathableQ.poll());
+		}
+		
+	}
+	
+	public void removeEntity(Entity e) {
+		
+		int x = e.getPos().getX();
+		int y = e.getPos().getY();
+		Collider c = e.getCollider();
+
+		//unmark all tiles which are occupied
+		for (int x1 = (x - c.getRadiusX()) / Tile.WIDTH; x1 <= (x + c.getRadiusX()) / Tile.WIDTH + 1; x1++) {
+			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH + 1; y1++) {
+
+				if (getTileGrid(x1, y1) != null && c.intersects(getRectangle(x1, y1))) {
+					getTileGrid(x1, y1).removeEntity(e);
+				}
+
+			}
+		}
+
+		Queue<Vector> unpathableQ = new LinkedList<>();
+
+		// update all tiles in range of occupied tiles
+		for (int x1 = (x - c.getRadiusX() - 2 * Unit.RADIUS_X)
+				/ Tile.WIDTH; x1 <= (x + c.getRadiusX() + 2 * Unit.RADIUS_X) / Tile.WIDTH; x1++) {
+			for (int y1 = (y - c.getRadiusY() - 2 * Unit.RADIUS_Y)
+					/ Tile.WIDTH; y1 <= (y + c.getRadiusY() + 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
+				
+				if (getTileGrid(x1, y1) == null) {
+					continue;
+				}
+				
+				boolean wasContextPathable = isContextPathable(x1, y1);
+				getTileGrid(x1, y1).computeSurroundingsPathable(x1, y1, this);
+				if (!wasContextPathable && getTileGrid(x1, y1).isContextPathable()) {
+					unpathableQ.add(new Vector(x1, y1));
+				}
+
+			}
+		}
+
+		// recalculate graphs around unpathable tiles
+		while (!unpathableQ.isEmpty()) {
+			this.setPathableGrid(unpathableQ.poll());
+		}
+
 	}
 
 }

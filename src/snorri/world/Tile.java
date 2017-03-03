@@ -465,25 +465,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 	public boolean isOccupied() {
 		return !entities.isEmpty();
 	}
-	
-	//figure out if we can stand on this block at the very beginning
-	public void computeSurroundingsPathable(int x, int y, Level level) {
-		
-		surroundingsPathable = true;
-			
-		for (int i = (x * Tile.WIDTH - Unit.RADIUS_X) / Tile.WIDTH; i <= (x * Tile.WIDTH + Unit.RADIUS_X) / Tile.WIDTH; i++) {
-			for (int j = (y * Tile.WIDTH - Unit.RADIUS_Y) / Tile.WIDTH; j <= (y * Tile.WIDTH + Unit.RADIUS_Y) / Tile.WIDTH; j++) {
-				
-				Tile t = level.getTileGrid(i, j);
-				if (t == null || !t.isPathable() || t.isOccupied()) {
-					surroundingsPathable = false;
-					return;
-				}
-								
-			}
-		}
-		
-	}
 
 	public void setReachable(boolean b) {
 		reachable = b;
