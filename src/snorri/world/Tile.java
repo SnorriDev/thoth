@@ -92,7 +92,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 	}
 
 	public TileType getType() {
-		//Main.debug(type.name());
 		return type;
 	}
 	

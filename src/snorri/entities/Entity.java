@@ -19,7 +19,6 @@ import snorri.main.Main;
 import snorri.main.Util;
 import snorri.semantics.Nominal;
 import snorri.triggers.Trigger;
-import snorri.world.Level;
 import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -165,10 +164,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 	
 	public boolean intersectsWall(World world) {
-		return intersectsWall(world.getLevel());
-	}
-	
-	public boolean intersectsWall(Level level) {
 
 		for (int i = (pos.getX() - collider.getMaxRadius()) / Tile.WIDTH - 1; i <= (pos.getX() + collider.getMaxRadius()) / Tile.WIDTH; i++) {
 			for (int j = (pos.getY() - collider.getMaxRadius()) / Tile.WIDTH - 1; j <= (pos.getY() + collider.getMaxRadius()) / Tile.WIDTH; j++) {
@@ -177,8 +172,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 					continue;
 				}
 				
-				Tile t = level.getTileGrid(i, j);
-				if (t == null || !t.isPathable()) {
+				if (!world.isPathable(i, j)) {
 					return true;
 				}
 
@@ -248,7 +242,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			return pos;
 		}
 		if (attr == AbstractSemantics.TILE) {
-			return world.getLevel().getTile(pos);
+			return world.getLevel().getTile(pos); //FIXME
 		}
 		if (attr == AbstractSemantics.NAME) {
 			return toString();

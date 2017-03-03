@@ -346,7 +346,6 @@ public class PathGraph {
 			}
 		}
 
-		Main.debug("found pathable thing");
 		return true;
 
 	}

@@ -59,8 +59,7 @@ public class Projectile extends Detector implements Walker {
 		}
 				
 		//if we hit the edge of the map or a wall, end
-		if (world.getLevel().getTile(pos) == null || ! world.getLevel().getTile(pos).canShootOver()) {
-			//TODO: activate spell?
+		if (!world.canShootOver(pos)) {
 			world.delete(this);
 		}
 				

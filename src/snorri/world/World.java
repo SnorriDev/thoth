@@ -422,10 +422,22 @@ public class World implements Playable, Editable {
 		return graph.isPathable(v.getX(), v.getY());
 	}
 	
+	/**
+	 * @param pos global coordinates
+	 * @return whether or not bullets can pass over pos
+	 */
 	public boolean canShootOver(Vector pos) {
 		Vector g = pos.copy().toGridPos();
-		return background.canShootOver(g) && midground.canShootOver(g) && foreground.canShootOver(g)
-				&& graph.isOccupied(g);
+		return background.canShootOver(g) && midground.canShootOver(g) && foreground.canShootOver(g);
+	}
+
+	/**
+	 * @param x grid coordinate
+	 * @param y grid coordinate
+	 * @return whether the tile at x, y is pathable
+	 */
+	public boolean isPathable(int x, int y) {
+		return graph.isPathable(x, y);
 	}
 
 }
