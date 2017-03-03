@@ -11,12 +11,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import snorri.entities.Entity;
 import snorri.main.FocusedWindow;
 import snorri.main.LevelEditor;
 import snorri.main.Main;
+import snorri.pathfinding.PathGraph;
 import snorri.triggers.Trigger;
 
 public interface EntityGroup {
@@ -44,7 +44,7 @@ public interface EntityGroup {
 
 	public void updateAround(World world, double d, Entity focus);
 
-	public void renderAround(FocusedWindow g, Graphics gr, double deltaTime, CopyOnWriteArrayList<? extends Entity> colliders);
+	public void renderAround(FocusedWindow g, Graphics gr, double deltaTime);
 
 	/**
 	 * This method does not just search immediate children, but all entities which are transitively children of the root EntityGroup
@@ -71,12 +71,12 @@ public interface EntityGroup {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	default void loadEntities(File file, Level level) throws FileNotFoundException, IOException {
+	default void loadEntities(File file, PathGraph graph) throws FileNotFoundException, IOException {
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
 		while (true) {
 			try {
 				Entity e = (Entity) in.readObject();
-				insert(e, level);
+				insert(e, graph);
 			} catch (EOFException | ClassNotFoundException e) {
 				break;
 			}
@@ -92,10 +92,17 @@ public interface EntityGroup {
 
 	public Entity getFirstCollision(Rectangle rectangle, boolean hitAll);
 	
-	default void insert(Entity e, Level level) {
+	default void insert(Entity e, PathGraph graph) {
 		insert(e);
 		if (e.isStaticObject() && !(Main.getWindow() instanceof LevelEditor)) {
-			level.addEntity(e);
+			graph.addEntity(e);
+		}
+	}
+	
+	default void delete(Entity e, PathGraph graph) {
+		delete(e);
+		if (e.isStaticObject() && !(Main.getWindow() instanceof LevelEditor)) {
+			graph.removeEntity(e);
 		}
 	}
 	

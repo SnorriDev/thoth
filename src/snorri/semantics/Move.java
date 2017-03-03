@@ -11,7 +11,7 @@ public class Move extends VerbDef {
 	@Override
 	public boolean exec(Object obj) {
 		
-		if (!e.getWorld().getLevel().isContextPathable(e.getDestination())) {
+		if (!e.getWorld().isContextPathable(e.getDestination())) {
 			return false;
 		}
 		

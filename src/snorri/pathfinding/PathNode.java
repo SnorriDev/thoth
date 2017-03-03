@@ -1,18 +1,19 @@
 package snorri.pathfinding;
 
 import java.awt.Graphics;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
 import snorri.main.FocusedWindow;
-import snorri.world.Level;
 import snorri.world.Tile;
 import snorri.world.Vector;
 
-public class PathNode implements Comparable<PathNode> {
+public class PathNode implements Comparable<PathNode>, Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private static final double D = 1;
 	private static final double D2 = 1;//Math.sqrt(2); we get better performance with 1
 	
@@ -83,14 +84,14 @@ public class PathNode implements Comparable<PathNode> {
 	}
 
 	//TODO: randomize the order of neighbors so we get random paths
-	public Queue<PathNode> getNeighbors(PathNode[][] map, Level level) {
+	public Queue<PathNode> getNeighbors(PathNode[][] map, PathGraph graph) {
 		
 		Queue<PathNode> neighbors = new LinkedList<PathNode>();
 		Vector newPos;
 		
 		for (int i = 0; i < NEIGHBORS.length; i++) {
 			newPos = gridPos.copy().add(NEIGHBORS[i]);
-			if (level.isContextPathable(newPos)) {
+			if (graph.isContextPathable(newPos)) {
 				if (map[newPos.getX()][newPos.getY()] == null) {
 					map[newPos.getX()][newPos.getY()] = new PathNode(newPos);
 				}

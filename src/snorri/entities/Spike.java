@@ -16,7 +16,6 @@ public class Spike extends Detector {
 	public Spike(Vector pos) {
 		super(pos, new RectCollider(new Vector(10, 26)));
 		animation = new Animation(ANIMATION);
-		treeMember = true;
 	}
 
 	@Override

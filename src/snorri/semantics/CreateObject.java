@@ -29,7 +29,7 @@ public class CreateObject extends VerbDef {
 				}
 			}
 			
-			e.getWorld().getLevel().wrapUpdate(e.getLocative(), (Tile) obj);
+			e.getWorld().wrapUpdate(e.getLocative(), (Tile) obj);
 			return true;
 		}
 				

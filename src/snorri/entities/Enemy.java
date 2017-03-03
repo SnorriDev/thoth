@@ -1,7 +1,7 @@
 package snorri.entities;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
+import java.util.List;
 
 import snorri.animations.Animation;
 import snorri.inventory.Carrier;
@@ -82,7 +82,7 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 		//I'm checking if pos and target.pos are both okay just in case we're in a wall
 		while (tempPos.distanceSquared(pos) <= target.pos.distanceSquared(pos)) {	
 		
-			if (! world.getLevel().canShootOver(tempPos.copy().toGridPos())) {
+			if (! world.canShootOver(tempPos)) {
 				return false;
 			}
 			
@@ -132,8 +132,8 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 			return;
 		}
 				
-		ArrayList<Vector> graph = world.getLevel().getGraph(this);
-		ArrayList<Vector> targetGraph = world.getLevel().getGraph(target);
+		List<Vector> graph = world.getComponent(this);
+		List<Vector> targetGraph = world.getComponent(target);
 				
 		if (path != null) {
 			

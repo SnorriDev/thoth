@@ -37,11 +37,14 @@ import snorri.pathfinding.Team;
 import snorri.terrain.TerrainGen;
 import snorri.world.Campaign.WorldId;
 import snorri.world.Editable;
+import snorri.world.ForegroundElement;
+import snorri.world.MidgroundElement;
 import snorri.world.Level;
 import snorri.world.Playable;
 import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
+import snorri.world.BackgroundElement;
 
 //TODO: add image to world feature
 //TODO: fix overflow with a 2d boolean array (look at methods in Level which compute pathfinding graphs)
@@ -67,7 +70,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	private boolean canRedo;
 
 	JMenuBar menuBar;
-	JMenu menu, submenu;
+	JMenu menu, submenu0, submenu1, submenu2, subsubmenu;
 	JMenuItem menuItem;
 	JRadioButtonMenuItem rbMenuItem;
 	JCheckBoxMenuItem cbMenuItem;
@@ -75,7 +78,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	public LevelEditor() {
 		super();
 
-		selectedTile = new Tile(0, 0);
+		selectedTile = new Tile(BackgroundElement.class, 0, 0);
 		selectedEntityClass = Entity.EDIT_SPAWNABLE.get(0);
 		createMenu();
 
@@ -153,28 +156,70 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		menuBar.add(menu);
 
 		ButtonGroup groupTiles = new ButtonGroup();
+		
+		submenu0 = new JMenu("Backgrounds");
+		submenu1 = new JMenu("Midgrounds");
+		submenu2 = new JMenu("Foregrounds");
 
 		boolean firstTile = true;
-		for (Tile t : Tile.getAllTypes()) {
+		for (Tile t : Tile.getAllTypes(BackgroundElement.class)) {
 
 			if (t == null || t.getTexture() == null) {
 				continue;
 			}
 
-			submenu = new JMenu(t.toStringShort());
+			subsubmenu = new JMenu(t.toStringShort());
 			for (Tile s : t.getType().getSubTypes()) {
 				rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(s.getTexture()));
 				rbMenuItem.setSelected(firstTile);
 				rbMenuItem.setActionCommand("set" + s.toNumericString());
 				rbMenuItem.addActionListener(this);
-				submenu.add(rbMenuItem);
+				subsubmenu.add(rbMenuItem);
 				groupTiles.add(rbMenuItem);
 			}
-			menu.add(submenu);
+			submenu0.add(subsubmenu);
 
 			firstTile = false;
 
 		}
+		for (Tile t : Tile.getAllTypes(MidgroundElement.class)) {
+
+			if (t == null || t.getTexture() == null) {
+				continue;
+			}
+
+			subsubmenu = new JMenu(t.toStringShort());
+			for (Tile s : t.getType().getSubTypes()) {
+				rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(s.getTexture()));
+				rbMenuItem.setSelected(firstTile);
+				rbMenuItem.setActionCommand("set" + s.toNumericString());
+				rbMenuItem.addActionListener(this);
+				subsubmenu.add(rbMenuItem);
+				groupTiles.add(rbMenuItem);
+			}
+			submenu1.add(subsubmenu);
+		}
+		for (Tile t : Tile.getAllTypes(ForegroundElement.class)) {
+
+			if (t == null || t.getTexture() == null) {
+				continue;
+			}
+
+			subsubmenu = new JMenu(t.toStringShort());
+			for (Tile s : t.getType().getSubTypes()) {
+				rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(s.getTexture()));
+				rbMenuItem.setSelected(firstTile);
+				rbMenuItem.setActionCommand("set" + s.toNumericString());
+				rbMenuItem.addActionListener(this);
+				subsubmenu.add(rbMenuItem);
+				groupTiles.add(rbMenuItem);
+			}
+			submenu2.add(subsubmenu);
+		}
+		
+		menu.add(submenu0);
+		menu.add(submenu1);
+		menu.add(submenu2);
 
 		menu = new JMenu("Select Entity");
 		menu.setMnemonic(KeyEvent.VK_E);
@@ -205,8 +250,8 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	private int[] whDialog() {
 		int[] wh = { -1, -1 };
 		DialogMap inputs = new DialogMap();
-		inputs.put("Width", "150");
-		inputs.put("Height", "150");
+		inputs.put("Width", "" + World.DEFAULT_LEVEL_SIZE);
+		inputs.put("Height", "" + World.DEFAULT_LEVEL_SIZE);
 		if (dialog("World Dimensions", inputs) == null) {
 			return null;
 		}
@@ -221,6 +266,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getActionCommand().startsWith("set")) {
+			//Main.debug(e.getActionCommand());
 			selectedTile = new Tile(e.getActionCommand().substring(3));
 			return;
 		}
@@ -300,7 +346,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			resize(whNew[0], whNew[1]);
 			break;
 		case "Compute Pathing":
-			env.getLevel().computePathfinding();
+			if (env instanceof World) {
+				((World) env).getGraph().computePathfinding();
+			}
 			break;
 		case "Undo":
 			if (env == null || !canUndo) {
@@ -363,13 +411,13 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				if (focus.getPos().getX() <= -SCALE_FACTOR) {
 					canGoLeft = false;
 				}
-				if (focus.getPos().getX() >= env.getLevel().getDimensions().getX() * Tile.WIDTH + SCALE_FACTOR) {
+				if (focus.getPos().getX() >= env.getLevel(selectedTile.getType().getLayer()).getDimensions().getX() * Tile.WIDTH + SCALE_FACTOR) {
 					canGoRight = false;
 				}
 				if (focus.getPos().getY() <= -SCALE_FACTOR) {
 					canGoUp = false;
 				}
-				if (focus.getPos().getY() >= env.getLevel().getDimensions().getY() * Tile.WIDTH + SCALE_FACTOR) {
+				if (focus.getPos().getY() >= env.getLevel(selectedTile.getType().getLayer()).getDimensions().getY() * Tile.WIDTH + SCALE_FACTOR) {
 					canGoDown = false;
 				}
 
@@ -392,7 +440,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 					int x = location.getX();
 					int y = location.getY();
 
-					env.getLevel().setTile(x, y, new Tile(selectedTile));
+					env.getLevel(selectedTile.getType().getLayer()).setTile(x, y, new Tile(selectedTile));
 				}
 			}
 
@@ -466,17 +514,19 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		Vector location = getMousePosAbsolute().copy();
 		int x = location.getX() / Tile.WIDTH;
 		int y = location.getY() / Tile.WIDTH;
-		int w = env.getLevel().getWidth();
-		int h = env.getLevel().getHeight();
+		//Main.debug(selectedTile.toString());
+		//Main.debug(selectedTile.getType().getLayer());
+		int w = env.getLevel(selectedTile.getType().getLayer()).getWidth();
+		int h = env.getLevel(selectedTile.getType().getLayer()).getHeight();
 
-		Tile t = env.getLevel().getTileGrid(x, y);
+		Tile t = env.getLevel(selectedTile.getType().getLayer()).getTileGrid(x, y);
 
 		ArrayList<Vector> willFill = computeConnectedSubGraph(new Vector(x, y), new boolean[w][h]);
 
-		if (selectedTile != null && env.getLevel().getTileGrid(x,y) != null && t != null && !t.equals(selectedTile)) {
+		if (selectedTile != null && env.getLevel(selectedTile.getType().getLayer()).getTileGrid(x,y) != null && t != null && !t.equals(selectedTile)) {
 			autosaveUndo();
 			for (Vector v : willFill) {
-				env.getLevel().setTileGrid(v, new Tile(selectedTile));
+				env.getLevel(selectedTile.getType().getLayer()).setTileGrid(v, new Tile(selectedTile));
 			}
 		}
 
@@ -484,7 +534,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	private ArrayList<Vector> computeConnectedSubGraph(Vector start, boolean[][] visited) {
 																							
-		final Tile START_TILE = env.getLevel().getTileGrid(start);
+		final Tile START_TILE = env.getLevel(selectedTile.getType().getLayer()).getTileGrid(start);
 
 		ArrayList<Vector> graph = new ArrayList<Vector>();
 		Queue<Vector> searchQ = new LinkedList<Vector>();
@@ -494,12 +544,12 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		while (!searchQ.isEmpty()) {
 
 			pos = searchQ.poll();
-			if (env.getLevel().getTileGrid(pos) == null || !env.getLevel().getTileGrid(pos).equals(START_TILE) || visited[pos.getX()][pos.getY()]) {
+			if (env.getLevel(selectedTile.getType().getLayer()).getTileGrid(pos) == null || !env.getLevel(selectedTile.getType().getLayer()).getTileGrid(pos).equals(START_TILE) || visited[pos.getX()][pos.getY()]) {
 				continue;
 			}
 
 			visited[pos.getX()][pos.getY()] = true;
-			if (env.getLevel().getTileGrid(pos).equals(START_TILE))
+			if (env.getLevel(selectedTile.getType().getLayer()).getTileGrid(pos).equals(START_TILE))
 				graph.add(pos);
 			
 			for (Vector v : Mask.getNeighbors(pos)) {

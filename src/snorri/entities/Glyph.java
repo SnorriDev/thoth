@@ -23,7 +23,6 @@ public class Glyph extends Detector {
 	
 	public Glyph(Vector pos) {
 		super(pos, new RectCollider(26, 45));
-		treeMember = true;
 		age = -1;
 		ignoreCollisions = true;
 		animation = new Animation(IDLE);

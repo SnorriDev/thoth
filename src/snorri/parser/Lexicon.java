@@ -1,4 +1,4 @@
-	package snorri.parser;
+package snorri.parser;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -56,7 +56,7 @@ import snorri.semantics.Under;
 import snorri.semantics.Go;
 import snorri.semantics.With;
 import snorri.semantics.Write;
-import snorri.world.Tile.TileType;
+import snorri.world.BackgroundElement;
 
 public class Lexicon {
 	
@@ -88,11 +88,11 @@ public class Lexicon {
 		lexicon.put("er", new DegreeModifierDef(2)); //TODO is this correct enough usage?
 		
 		//Nouns
-		lexicon.put("jAm", new StaticDef(Noun.class, TileType.TREE)); //tree
+		lexicon.put("jAm", new StaticDef(Noun.class, BackgroundElement.TREE)); //tree
 		lexicon.put("ssn", new StaticDef(Noun.class, Flower.class)); //flower, gotta make this an entity
-		lexicon.put("mw", new StaticDef(Noun.class, TileType.WATER));
-		lexicon.put("Say", new StaticDef(Noun.class, TileType.SAND));
-		lexicon.put("xt1", new StaticDef(Noun.class, TileType.LAVA)); //technically this is fire
+		lexicon.put("mw", new StaticDef(Noun.class, BackgroundElement.WATER));
+		lexicon.put("Say", new StaticDef(Noun.class, BackgroundElement.SAND));
+		lexicon.put("xt1", new StaticDef(Noun.class, BackgroundElement.LAVA)); //technically this is fire
 		lexicon.put("snbt", new StaticDef(Noun.class, Urn.class));
 		lexicon.put("bit", new StaticDef(Noun.class, null)); //TODO: bee
 		lexicon.put("Hnyt", new StaticDef(Noun.class, Spike.class));
@@ -100,7 +100,7 @@ public class Lexicon {
 		lexicon.put("ankh", new StaticDef(Noun.class, Glyph.class));
 		lexicon.put("xt", new StaticDef(Noun.class, Entity.class));
 		lexicon.put("wi1", new StaticDef(Noun.class, Mummy.class)); //TODO kAr.t is better
-		lexicon.put("rwdt", new StaticDef(Noun.class, TileType.SANDSTONE));
+		lexicon.put("rwdt", new StaticDef(Noun.class, BackgroundElement.SANDSTONE));
 		
 		lexicon.put("st", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
 		lexicon.put("iry", new StaticDef(AbstractNoun.class, AbstractSemantics.WEAPON));

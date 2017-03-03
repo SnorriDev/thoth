@@ -86,7 +86,7 @@ public class Main {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
 		Lexicon.load();
 		Hieroglyphs.load();
 		RandomDrop.load();

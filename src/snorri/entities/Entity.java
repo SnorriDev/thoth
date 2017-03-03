@@ -173,7 +173,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		for (int i = (pos.getX() - collider.getMaxRadius()) / Tile.WIDTH - 1; i <= (pos.getX() + collider.getMaxRadius()) / Tile.WIDTH; i++) {
 			for (int j = (pos.getY() - collider.getMaxRadius()) / Tile.WIDTH - 1; j <= (pos.getY() + collider.getMaxRadius()) / Tile.WIDTH; j++) {
 				
-				if (! intersects(Level.getRectangle(i, j))) {
+				if (! intersects(Tile.getRectangle(i, j))) {
 					continue;
 				}
 				

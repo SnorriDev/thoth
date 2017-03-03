@@ -16,12 +16,12 @@ import snorri.entities.Mummy;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.main.Main;
+import snorri.world.BackgroundElement;
 import snorri.world.Editable;
 import snorri.world.Level;
 import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
-import snorri.world.Tile.TileType;
 
 @SuppressWarnings("unchecked")
 public class DungeonGen extends TerrainGen {
@@ -75,9 +75,9 @@ public class DungeonGen extends TerrainGen {
 	}
 
 	@Override
-	public Level genLevel() {
+	public Level genBackground() {
 		
-		Level l = new Level(dim, TileType.VOID);
+		Level l = new Level(dim, BackgroundElement.VOID);
 		
 		List<Rectangle> filledRegions = new ArrayList<Rectangle>();
 		Queue<Vector> doorQ = new LinkedList<Vector>();
@@ -118,7 +118,7 @@ public class DungeonGen extends TerrainGen {
 					}
 				}
 			}
-			l.fillDoor(pos, new Tile(TileType.WALL, 4), TileType.SAND);
+			l.fillDoor(pos, new Tile(BackgroundElement.WALL,4), BackgroundElement.SAND);
 		}
 		
 		return l;
@@ -127,7 +127,7 @@ public class DungeonGen extends TerrainGen {
 	
 	@Override
 	public World genWorld() {
-		World world = new World(genLevel());
+		World world = new World(genBackground(), genMidground(), genForeground());
 		Player p = new Player(start.copy().toGlobalPos());
 		world.add(p);
 		for (int i = 0; i < 20; i++) {

@@ -20,7 +20,6 @@ public class Listener extends Detector {
 	public Listener(Vector pos, int r, String msg) {
 		super(pos, r);
 		tag = msg;
-		treeMember = true;
 		age = -1;
 		ignoreCollisions = true;
 	}

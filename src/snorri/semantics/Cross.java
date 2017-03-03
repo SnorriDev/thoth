@@ -1,7 +1,7 @@
 package snorri.semantics;
 
 import snorri.entities.Entity;
-import snorri.world.Tile.TileType;
+import snorri.world.TileType;
 
 public class Cross extends VerbDef {
 

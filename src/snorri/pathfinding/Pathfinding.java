@@ -6,19 +6,16 @@ import java.util.PriorityQueue;
 
 import snorri.main.Debug;
 import snorri.world.Vector;
-import snorri.world.World;
 
 public class Pathfinding {
 	
 	//save array of costs from start
 	//everything is null, or etc.
 		
-	private static World world;
-	private static Vector dim;
+	private static PathGraph graph;
 	
-	public static void setWorld(World world) {
-		Pathfinding.world = world;
-		dim = world.getLevel().getDimensions();
+	public static void setGraph(PathGraph graph) {
+		Pathfinding.graph = graph;
 	}
 	
 	public static void setPathAsync(Vector start, Vector goal, Pathfinder p) {	
@@ -31,8 +28,8 @@ public class Pathfinding {
 		}).start();
 	}
 	
-	public static World getWorld() {
-		return world;
+	public static PathGraph getGraph() {
+		return graph;
 	}
 	
 	//TODO: change this to take a list of goals maybe? or just pathfind toward main target, and attack all things on their team
@@ -43,11 +40,11 @@ public class Pathfinding {
 		}
 		
 		//do this to avoid lots of unnecessary computation
-		if (!world.getLevel().arePathConnected(start, goal)) {
+		if (!graph.arePathConnected(start, goal)) {
 			return null;
 		}
 		
-		PathNode[][] map = new PathNode[dim.getX()][dim.getY()];
+		PathNode[][] map = new PathNode[graph.getWidth()][graph.getHeight()];
 		PriorityQueue<PathNode> openSet = new PriorityQueue<PathNode>();
 		ArrayList<PathNode> closedSet = new ArrayList<PathNode>();
 				
@@ -66,7 +63,7 @@ public class Pathfinding {
 			closedSet.add(current);
 			
 			//getNeighbors has the side effect of creating PathNodes which are null
-			for (PathNode neighbor : current.getNeighbors(map, world.getLevel())) {
+			for (PathNode neighbor : current.getNeighbors(map, graph)) {
 				
 				if (closedSet.contains(neighbor)) {
 					continue;

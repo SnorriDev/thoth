@@ -15,6 +15,7 @@ import java.util.Queue;
 import snorri.entities.Entity;
 import snorri.entities.Unit;
 import snorri.main.Main;
+import snorri.collisions.Collider;
 import snorri.world.Level;
 import snorri.world.Tile;
 import snorri.world.Vector;
@@ -22,6 +23,7 @@ import snorri.world.Vector;
 public class PathGraph {
 
 	private boolean[][] contextPathable;
+	private List<Entity>[][] entities;
 	private List<Level> levels;
 
 	/** A list of the graph's components */
@@ -33,9 +35,10 @@ public class PathGraph {
 	public PathGraph(int width, int height, List<Level> levels) {
 
 		contextPathable = new boolean[width][height];
+		entities = new ArrayList[width][height];
 		this.levels = levels;
-
-		componentLookup = new List[width][height];
+				
+		computePathfinding();
 
 	}
 
@@ -43,26 +46,23 @@ public class PathGraph {
 		this(v.getX(), v.getY(), levels);
 	}
 
-	private int getWidth() {
+	public int getWidth() {
 		return contextPathable.length;
 	}
 
-	private int getHeight() {
-		if (getWidth() == 0) {
-			return 0;
-		}
+	public int getHeight() {
 		return contextPathable[0].length;
 	}
 
-	public List<Vector> getGraph(Entity e) {
-		return getGraph(e.getPos().copy().toGridPos());
+	public List<Vector> getComponent(Entity e) {
+		return getComponent(e.getPos().copy().toGridPos());
 	}
 
-	public List<Vector> getGraph(Vector pos) {
-		return getGraph(pos.getX(), pos.getY());
+	public List<Vector> getComponent(Vector pos) {
+		return getComponent(pos.getX(), pos.getY());
 	}
 
-	public List<Vector> getGraph(int x, int y) {
+	public List<Vector> getComponent(int x, int y) {
 		if (x < 0 || componentLookup.length <= x || y < 0 || componentLookup[0].length <= y) {
 			return null;
 		}
@@ -77,16 +77,40 @@ public class PathGraph {
 		setGraph(pos.getX(), pos.getY(), graph);
 	}
 
-	private boolean isPathable(int x, int y) {
+	private boolean isInMap(int x, int y) {
+		return x < 0 || getWidth() <= x || y < 0 || getHeight() <= y;
+	}
+	
+	public boolean isPathable(int x, int y) {
+		
+		if (isOccupied(x, y)) {
+			return false;
+		}
+		
 		for (Level l : levels) {
 			if (!l.isPathable(x, y)) {
 				return false;
 			}
-		}
+		}		
 		return true;
+		
 	}
 
+	public boolean isOccupied(Vector v) {
+		return isOccupied(v.getX(), v.getY());
+	}
+	
+	public boolean isOccupied(int x, int y) {
+		if (!isInMap(x, y)) {
+			return false;
+		}
+		return !entities[x][y].isEmpty();
+	}
+	
 	public boolean isContextPathable(int x, int y) {
+		if (!isInMap(x, y)) {
+			return false;
+		}
 		return contextPathable[x][y];
 	}
 
@@ -98,7 +122,7 @@ public class PathGraph {
 		if (!isContextPathable(p1) || !isContextPathable(p2)) {
 			return false;
 		}
-		return getGraph(p1) == getGraph(p2);
+		return getComponent(p1) == getComponent(p2);
 	}
 	
 	/**
@@ -114,7 +138,7 @@ public class PathGraph {
 	}
 
 	@SuppressWarnings("unchecked")
-	void loadComponents(File f) throws FileNotFoundException, IOException {
+	public void loadComponents(File f) throws FileNotFoundException, IOException {
 
 		if (!f.exists()) {
 			Main.log("graph data not found in world; computing it from scratch");
@@ -134,7 +158,7 @@ public class PathGraph {
 		in.close();
 	}
 
-	void saveComponents(File f) throws FileNotFoundException, IOException {
+	public void saveComponents(File f) throws FileNotFoundException, IOException {
 
 		computePathfinding();
 
@@ -160,7 +184,7 @@ public class PathGraph {
 			}
 		}
 
-		Main.log("found " + components.size() + " sub-graphs in level");
+		Main.log("found " + components.size() + " pathfinding components");
 
 		computeGraphHash();
 
@@ -222,7 +246,7 @@ public class PathGraph {
 	 * @param v
 	 *            position, in grid coordinates
 	 */
-	void setPathableGrid(Vector v) {
+	public void setPathableGrid(Vector v) {
 
 		// update graphs to reflect the changes
 		for (int x = (v.getX() * Tile.WIDTH - Unit.RADIUS_X) / Tile.WIDTH
@@ -231,15 +255,15 @@ public class PathGraph {
 					- 2; y <= (v.getY() * Tile.WIDTH + Unit.RADIUS_Y) / Tile.WIDTH + 2; y++) {
 
 				Vector pos = new Vector(x, y);
-				if (isContextPathable(pos) && getGraph(pos) == null) {
+				if (isContextPathable(pos) && getComponent(pos) == null) {
 					List<List<Vector>> graphs = new ArrayList<>();
 					for (Vector p : PathNode.getNeighbors(pos)) {
-						if (getGraph(p) != null && !graphs.contains(getGraph(p))) { // merge
+						if (getComponent(p) != null && !graphs.contains(getComponent(p))) { // merge
 																					// here
 																					// if
 																					// graph
 																					// exists
-							graphs.add(getGraph(p));
+							graphs.add(getComponent(p));
 						}
 					}
 					List<Vector> newGraph = mergeGraphs(graphs);
@@ -257,7 +281,7 @@ public class PathGraph {
 	 * 
 	 * @see <code>setPathableGrid</code>
 	 */
-	void setUnpathableGrid(Vector v) {
+	public void setUnpathableGrid(Vector v) {
 
 		List<List<Vector>> graphs = new ArrayList<>();
 
@@ -268,17 +292,17 @@ public class PathGraph {
 					- 2; y <= (v.getY() * Tile.WIDTH + Unit.RADIUS_Y) / Tile.WIDTH + 2; y++) {
 
 				Vector pos = new Vector(x, y);
-				if (getGraph(pos) == null) {
+				if (getComponent(pos) == null) {
 					continue;
 				}
 
 				if (!isContextPathable(pos)) {
-					List<Vector> graph = getGraph(pos);
+					List<Vector> graph = getComponent(pos);
 					graph.remove(pos);
 					setGraph(pos, null);
 					computeContextPathable(pos.getX(), pos.getY());
-				} else if (!graphs.contains(getGraph(pos))) {
-					graphs.add(getGraph(pos));
+				} else if (!graphs.contains(getComponent(pos))) {
+					graphs.add(getComponent(pos));
 				}
 			}
 		}
@@ -322,6 +346,7 @@ public class PathGraph {
 			}
 		}
 
+		Main.debug("found pathable thing");
 		return true;
 
 	}
@@ -374,6 +399,109 @@ public class PathGraph {
 			for (Vector v : g) {
 				setGraph(v, g);
 			}
+		}
+
+	}
+	
+	public void wrapPathingUpdate(Vector pos, Tile oldTile, Tile newTile) {
+
+		updateSurroundingContext(pos); // update context pathability on nearby
+										// tiles
+
+		if (oldTile.isPathable() == newTile.isPathable()) {
+			return;
+		}
+
+		if (newTile.isPathable()) {
+			setPathableGrid(pos);
+		} else {
+			setUnpathableGrid(pos);
+		}
+
+	}
+	
+	public void addEntity(Entity e) {
+
+		int x = e.getPos().getX();
+		int y = e.getPos().getY();
+		Collider c = e.getCollider();
+
+		// mark all tiles which are occupied
+		for (int x1 = (x - c.getRadiusX()) / Tile.WIDTH; x1 <= (x + c.getRadiusX()) / Tile.WIDTH; x1++) {
+			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH; y1++) {
+
+				if (c.intersects(Tile.getRectangle(x1, y1))) {
+					entities[x1][y1].add(e);
+				}
+
+			}
+		}
+
+		Queue<Vector> unpathableQ = new LinkedList<>();
+
+		// update all tiles in range of occupied tiles
+		for (int x1 = (x - c.getRadiusX() - 2 * Unit.RADIUS_X)
+				/ Tile.WIDTH; x1 <= (x + c.getRadiusX() + 2 * Unit.RADIUS_X) / Tile.WIDTH; x1++) {
+			for (int y1 = (y - c.getRadiusY() - 2 * Unit.RADIUS_Y)
+					/ Tile.WIDTH; y1 <= (y + c.getRadiusY() + 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
+
+				boolean wasContextPathable = isContextPathable(x1, y1);
+				computeContextPathable(x1, y1);
+				if (wasContextPathable && !isContextPathable(x1, y1)) {
+					unpathableQ.add(new Vector(x1, y1));
+				}
+
+			}
+		}
+
+		// recalculate graphs around unpathable tiles
+		while (!unpathableQ.isEmpty()) {
+			this.setUnpathableGrid(unpathableQ.poll());
+		}
+
+	}
+
+	public void removeEntity(Entity e) {
+
+		int x = e.getPos().getX();
+		int y = e.getPos().getY();
+		Collider c = e.getCollider();
+
+		// unmark all tiles which are occupied
+		for (int x1 = (x - c.getRadiusX()) / Tile.WIDTH; x1 <= (x + c.getRadiusX()) / Tile.WIDTH + 1; x1++) {
+			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH + 1; y1++) {
+
+				if (isInMap(x1, y1) && c.intersects(Tile.getRectangle(x1, y1))) {
+					entities[x1][y1].remove(e);
+				}
+
+			}
+		}
+
+		Queue<Vector> unpathableQ = new LinkedList<>();
+
+		// update all tiles in range of occupied tiles
+		for (int x1 = (x - c.getRadiusX() - 2 * Unit.RADIUS_X)
+				/ Tile.WIDTH; x1 <= (x + c.getRadiusX() + 2 * Unit.RADIUS_X) / Tile.WIDTH; x1++) {
+			for (int y1 = (y - c.getRadiusY() - 2 * Unit.RADIUS_Y)
+					/ Tile.WIDTH; y1 <= (y + c.getRadiusY() + 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
+
+				if (!isInMap(x1, y1)) {
+					continue;
+				}
+
+				boolean wasContextPathable = isContextPathable(x1, y1);
+				computeContextPathable(x1, y1);
+				if (!wasContextPathable && isContextPathable(x1, y1)) {
+					unpathableQ.add(new Vector(x1, y1));
+				}
+
+			}
+		}
+
+		// recalculate graphs around unpathable tiles
+		while (!unpathableQ.isEmpty()) {
+			this.setPathableGrid(unpathableQ.poll());
 		}
 
 	}

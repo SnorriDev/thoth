@@ -38,7 +38,7 @@ public class Break extends VerbDef {
 		
 		//TODO make this open doors that are locked
 		Vector tilePos = ((Entity) obj).getPos().copy().toGridPos();
-		return Open.openDoor(e.getWorld().getLevel(), tilePos);
+		return Open.openDoor(e.getWorld(), tilePos);
 		
 	}
 

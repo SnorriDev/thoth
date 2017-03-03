@@ -8,10 +8,7 @@ import snorri.world.World;
 public abstract class Detector extends Despawner {
 
 	private static final long serialVersionUID = 1L;
-	/**
-	 * set <code>true</code> iff detector should be added to the hit detection data structure
-	 */
-	protected boolean treeMember = false;
+
 	/**
 	 * set <code>true</code> iff collisions should be registered against
 	 * entities <code>e</code> s.t. <code>e.hitAll = false</code>
@@ -52,7 +49,7 @@ public abstract class Detector extends Despawner {
 	 * @return whether this entity should be stored in the entity tree or in the projectiles list
 	 */
 	public boolean isTreeMember() {
-		return treeMember;
+		return true;
 	}
 		
 }

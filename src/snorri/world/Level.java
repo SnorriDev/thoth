@@ -2,33 +2,29 @@ package snorri.world;
 
 import java.awt.FileDialog;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
-import snorri.collisions.Collider;
 import snorri.entities.Entity;
-import snorri.entities.Unit;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.masking.Mask;
-import snorri.pathfinding.PathNode;
 import snorri.terrain.DungeonGen;
-import snorri.world.Tile.TileType;
+import snorri.world.TileType;
 
 public class Level implements Editable {
 
 	public static final int MAX_SIZE = 1024;
+	
+	public static final int BACKGROUND = 0;
+	public static final int MIDGROUND = 1;
+	public static final int FOREGROUND = 2;
 	
 	/**An array of tiles. Note that coordinates are Cartesian, not matrix-based**/
 	private Tile[][] map;
@@ -37,7 +33,7 @@ public class Level implements Editable {
 	public Level(int width, int height, TileType bg) {
 		map = new Tile[width][height];
 		dim = new Vector(width, height);
-
+		
 		for (int i = 0; i < dim.getX(); i++) {
 			for (int j = 0; j < dim.getY(); j++) {
 				map[i][j] = new Tile(bg);
@@ -51,13 +47,26 @@ public class Level implements Editable {
 	}
 	
 	public Level(int width, int height) {
-		this(width, height, TileType.SAND);
+		this(width, height, 0);
+	}
+	
+	public Level(int width, int height, int layer) {
+		this(width, height, ((layer == 0) ? BackgroundElement.SAND : ((layer == 1) ? MidgroundElement.NONE : ForegroundElement.NONE)));
 	}
 	
 	public Level(Vector v) {
-		this(v, TileType.SAND);
+		this(v, 0);
+	}
+	
+	public Level(Vector v, int layer) {
+		this(v, ((layer == 0) ? BackgroundElement.SAND : ((layer == 1) ? MidgroundElement.NONE : ForegroundElement.NONE)));
 	}
 
+	public Level(File file, Class<? extends TileType> c) throws FileNotFoundException, IOException {
+		load(file, c);
+		setBitMasks();
+	}
+	
 	public Level(File file) throws FileNotFoundException, IOException {
 		load(file);
 		setBitMasks();
@@ -67,21 +76,41 @@ public class Level implements Editable {
 	 * Constructor used for resizing
 	 */
 	private Level(Level l, int newWidth, int newHeight) {
+		this(l, newWidth, newHeight, 0);
+	}
+	
+	private Level(Level l, int newWidth, int newHeight, int layer) {
 		
 		map = new Tile[newWidth][newHeight];
 		dim = new Vector(newWidth, newHeight);
 		
-		for (int i = 0; i < dim.getX(); i++) {
-			for (int j = 0; j < dim.getY(); j++) {
-				map[i][j] = new Tile(TileType.SAND);
+		if (layer == 0) {
+			for (int i = 0; i < dim.getX(); i++) {
+				for (int j = 0; j < dim.getY(); j++) {
+					map[i][j] = new Tile(BackgroundElement.SAND);
+				}
 			}
 		}
+		else if (layer == 1) {
+			for (int i = 0; i < dim.getX(); i++) {
+				for (int j = 0; j < dim.getY(); j++) {
+					map[i][j] = new Tile(MidgroundElement.NONE);
+				}
+			}
+		}
+		else {
+			for (int i = 0; i < dim.getX(); i++) {
+				for (int j = 0; j < dim.getY(); j++) {
+					map[i][j] = new Tile(ForegroundElement.NONE);
+				}
+			}
+		}
+		
 		for (int i = 0; i < dim.getX() && i < l.dim.getX(); i++) {
 			for (int j = 0; j < dim.getY() && j < l.dim.getY(); j++) {
 				map[i][j] = l.map[i][j];
 			}
 		}
-		
 	}
 	
 	public Level getTransposed() {
@@ -117,7 +146,7 @@ public class Level implements Editable {
 		
 		for (int i = 0; i < newDim.getX(); i++) {
 			for (int j = 0; j < newDim.getY(); j++) {
-				newMap[i][j] = new Tile(TileType.SAND);
+				newMap[i][j] = new Tile(BackgroundElement.SAND);
 			}
 		}
 		for (int i = 0; i < newDim.getX() && i < dim.getX(); i++) {
@@ -189,7 +218,7 @@ public class Level implements Editable {
 		int maxX = g.getFocus().getPos().getX() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / scaleFactor + cushion;
 		int minY = g.getFocus().getPos().getY() / Tile.WIDTH - g.getDimensions().getY() / Tile.WIDTH / scaleFactor - cushion;
 		int maxY = g.getFocus().getPos().getY() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / scaleFactor + cushion;
-		
+				
 		for (int i = minX; i < maxX; i++) {
 			for (int j = minY; j < maxY; j++) {
 				if (i >= 0 && i < map.length) {
@@ -207,12 +236,8 @@ public class Level implements Editable {
 		}
 		
 	}
-	
-	private static String getNameWithoutExtension(File f) {
-		return f.getName().substring(0, f.getName().lastIndexOf('.'));
-	}
 
-	public void load(File file) throws FileNotFoundException, IOException {
+	public void load(File file, Class<? extends TileType> c) throws FileNotFoundException, IOException {
 
 		Main.log("loading " + file + "...");
 
@@ -232,7 +257,7 @@ public class Level implements Editable {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				is.read(b2);
-				map[i][j] = new Tile(((Byte) b2[0]).intValue(), ((Byte) b2[1]).intValue());
+				map[i][j] = new Tile(c, ((Byte) b2[0]).intValue(), ((Byte) b2[1]).intValue());
 			}
 		}
 
@@ -267,10 +292,6 @@ public class Level implements Editable {
 		os.close();
 	}
 	
-	public static Rectangle getRectangle(int i, int j) {
-		return new Rectangle(i * Tile.WIDTH, j * Tile.WIDTH, Tile.WIDTH, Tile.WIDTH);
-	}
-	
 	/**
 	 * @param x coordinate
 	 * @param y coordinate
@@ -278,17 +299,11 @@ public class Level implements Editable {
 	 */
 	public boolean isPathable(int x, int y) {
 		Tile t = getTileGrid(x, y);
-		return t != null && t.isPathable() && t.isOccupied();
+		return t != null && t.isPathable();
 	}
 	
 	public boolean isPathable(Vector pos) {
 		return isPathable(pos.getX(), pos.getY());
-	}
-	
-	public boolean canShootOver(Vector pos) {
-		Tile t = getTileGrid(pos);
-		return t != null && t.canShootOver() && !t.isOccupied();
-		//TODO should be be able to shoot over occupied tiles?
 	}
 	
 	public void setTileGrid(Vector v, Tile newTile) {
@@ -297,6 +312,16 @@ public class Level implements Editable {
 
 	@Override
 	public Level getLevel() {
+		return this;
+	}
+	
+	@Override
+	public Level getLevel(int layer) {
+		return this;
+	}
+	
+	@Override
+	public Level getLevel(Class<? extends TileType> c) {
 		return this;
 	}
 
@@ -374,12 +399,13 @@ public class Level implements Editable {
 	 * Excess space in the array is null.
 	 */
 	public Mask[] getBitMasks(int x, int y) {
-		Mask[] masks = new Mask[8];
 		
 		Tile tile = getTileGrid(x, y);
 		if (tile == null || tile.getType().isAtTop()) {
-			return masks;
+			return null;
 		}
+		
+		Mask[] masks = new Mask[8];
 		
 		short bitVal = 1;
 		for (Vector v : Mask.NEIGHBORS) {
@@ -400,6 +426,7 @@ public class Level implements Editable {
 		}
 		
 		//TODO check to make sure there isn't an overriding mask
+		//TODO this is where corners are fucked up
 		
 		bitVal = 1;
 		for (Vector v: Mask.CORNERS) {
@@ -436,6 +463,16 @@ public class Level implements Editable {
 	
 	public int getHeight() {
 		return dim.getY();
+	}
+
+	@Override
+	public void load(File folder) throws FileNotFoundException, IOException {
+		load(folder, BackgroundElement.class);
+	}
+	
+	public boolean canShootOver(Vector pos) {
+		Tile t = getTileGrid(pos);
+		return t != null && t.canShootOver();
 	}
 	
 }
