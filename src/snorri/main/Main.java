@@ -88,8 +88,6 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		Main.debug(BackgroundElement.SAND.compareTo(BackgroundElement.GRASS));
-
 		Lexicon.load();
 		Hieroglyphs.load();
 		RandomDrop.load();

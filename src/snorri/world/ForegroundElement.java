@@ -9,12 +9,22 @@ import snorri.main.Util;
 import snorri.semantics.Nominal;
 
 public enum ForegroundElement implements Nominal, TileType {
-	NONE;
+	NONE,
+	COL_MID(getImage("colmid00.png")),
+	COL_TOP(getImage("coltop00.png"));;
 	
 	private BufferedImage[]	textures;
 	
 	ForegroundElement() {
-		textures = new BufferedImage[] {Tile.DEFAULT_FOREGROUND_TEXTURE};
+		this(Tile.DEFAULT_FOREGROUND_TEXTURE);
+	}
+	
+	ForegroundElement(BufferedImage[] textures) {
+		this.textures = textures;
+	}
+	
+	ForegroundElement(BufferedImage texture) {
+		this(new BufferedImage[] {texture});
 	}
 	
 	public static ForegroundElement byIdStatic(int id) {
@@ -22,7 +32,7 @@ public enum ForegroundElement implements Nominal, TileType {
 	}
 	
 	private static BufferedImage getImage(String string) {
-		return Tile.getImage("/textures/tiles/ForegroundElements/" + string, 2);
+		return Tile.getImage("/textures/tiles/foreground/" + string, 2);
 	}
 
 	@Override
@@ -102,12 +112,12 @@ public enum ForegroundElement implements Nominal, TileType {
 
 	@Override
 	public boolean isPathable() {
-		return (ordinal() != 0); //TODO: any other pathable foreground?
+		return true; //everything in this layer is pathable
 	}
 
 	@Override
 	public boolean canShootOver() {
-		return (ordinal() != 0); //TODO: any other shootableOver foreground?
+		return true; //everythign in this layer should let things shoot through it
 	}
 	
 	@Override
@@ -117,7 +127,7 @@ public enum ForegroundElement implements Nominal, TileType {
 	
 	@Override
 	public boolean isAtTop() {
-		return false;
+		return true; //nothign should be blended in this layer
 	}
 
 	@Override

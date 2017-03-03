@@ -9,12 +9,32 @@ import snorri.main.Util;
 import snorri.semantics.Nominal;
 
 public enum MidgroundElement implements Nominal, TileType {
-	NONE;
+	NONE,
+	COL_BOT(getImage("colbot00.png"));
 	
 	private BufferedImage[]	textures;
+	private boolean pathable = false; //some things (like paths and tiles) will be unpathable
 	
 	MidgroundElement() {
-		textures = new BufferedImage[] {Tile.DEFAULT_MIDGROUND_TEXTURE};
+		this(true, Tile.DEFAULT_MIDGROUND_TEXTURE);
+	}
+	
+	MidgroundElement(BufferedImage[] textures) {
+		this.textures = textures;
+	}
+	
+	MidgroundElement(BufferedImage texture) {
+		this(new BufferedImage[] {texture});
+	}
+	
+	MidgroundElement(boolean pathable, BufferedImage[] textures) {
+		this(textures);
+		pathable = true;
+	}
+	
+	MidgroundElement(boolean pathable, BufferedImage texture) {
+		this(texture);
+		pathable = true;
 	}
 	
 	public static MidgroundElement byIdStatic(int id) {
@@ -22,7 +42,7 @@ public enum MidgroundElement implements Nominal, TileType {
 	}
 	
 	private static BufferedImage getImage(String string) {
-		return Tile.getImage("/textures/tiles/ForegroundElements/" + string, 1);
+		return Tile.getImage("/textures/tiles/midground/" + string, 1);
 	}
 
 	@Override
@@ -101,12 +121,12 @@ public enum MidgroundElement implements Nominal, TileType {
 
 	@Override
 	public boolean isPathable() {
-		return (ordinal() != 0); //TODO: any other pathable foreground?
+		return pathable;
 	}
 
 	@Override
 	public boolean canShootOver() {
-		return (ordinal() != 0); //TODO: any other shootableOver foreground?
+		return pathable; //I this always equivalent to pathability in this layer
 	}
 	
 	@Override
@@ -116,7 +136,7 @@ public enum MidgroundElement implements Nominal, TileType {
 
 	@Override
 	public boolean isAtTop() {
-		return false;
+		return true; //we want all tiles in this layer to be unblended
 	}
 
 	@Override

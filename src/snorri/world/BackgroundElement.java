@@ -100,7 +100,7 @@ public enum BackgroundElement implements Nominal, TileType {
 	}
 	
 	private static BufferedImage getImage(String string) {
-		return Tile.getImage("/textures/tiles/BackgroundElements/" + string, 0);
+		return Tile.getImage("/textures/tiles/background/" + string, 0);
 	}
 	
 	BackgroundElement(boolean pathable) {
