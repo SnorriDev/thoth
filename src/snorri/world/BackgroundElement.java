@@ -82,7 +82,8 @@ public enum BackgroundElement implements Nominal, TileType {
 	WOOD(true, new BufferedImage[] {
 		getImage("wood00.png"),
 		getImage("wood01.png"),
-		getImage("wood02.png")}, true),
+		getImage("wood02.png"),
+		getImage("wood03.png")}, true),
 	BRICK(true, new BufferedImage[] {
 		getImage("brick00.png"),
 		getImage("brick01.png"),
