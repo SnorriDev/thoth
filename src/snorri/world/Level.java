@@ -298,8 +298,7 @@ public class Level implements Editable {
 	 * @return whether the tile at <code>(x, y)</code> is pathable and unoccupied
 	 */
 	public boolean isPathable(int x, int y) {
-		Tile t = getTileGrid(x, y);
-		return t != null && t.isPathable();
+		return getTileGrid(x, y) != null && getTileGrid(x, y).isPathable();
 	}
 	
 	public boolean isPathable(Vector pos) {

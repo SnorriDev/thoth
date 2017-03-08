@@ -28,7 +28,7 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 	private static final Animation WALKING = new Animation("textures/animations/mummy/walking");
 	
 	private static final long serialVersionUID = 1L;
-	private static final double APPROACH_MARGIN = 15;
+	private static final double APPROACH_MARGIN = Tile.WIDTH; //was 15, was causing pathfinding bug?
 	private static final double CHANGE_PATH_MARGIN = 350;
 	
 	private Vector lastSeenPos;
