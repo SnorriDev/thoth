@@ -24,7 +24,7 @@ public class PathGraph {
 
 	private boolean[][] contextPathable;
 	private List<Entity>[][] entities;
-	private List<Level> levels;
+	private final List<Level> levels;
 
 	/** A list of the graph's components */
 	private List<List<Vector>> components;
@@ -35,9 +35,16 @@ public class PathGraph {
 	public PathGraph(int width, int height, List<Level> levels) {
 
 		contextPathable = new boolean[width][height];
-		entities = new ArrayList[width][height];
 		this.levels = levels;
-				
+		entities = new ArrayList[width][height];
+
+		//initialize the entities arrays at each index
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				entities[x][y] = new ArrayList<>();
+			}
+		}
+		
 		computePathfinding();
 
 	}
@@ -78,7 +85,7 @@ public class PathGraph {
 	}
 
 	private boolean isInMap(int x, int y) {
-		return x < 0 || getWidth() <= x || y < 0 || getHeight() <= y;
+		return x >= 0 && getWidth() > x && y >= 0 && getHeight() > y;
 	}
 	
 	public boolean isPathable(int x, int y) {
@@ -136,14 +143,48 @@ public class PathGraph {
 			}
 		}
 	}
+	
+	private void computeComponents() {
+
+		components = new ArrayList<List<Vector>>();
+		boolean[][] visited = new boolean[getWidth()][getHeight()];
+		
+		for (int x = 0; x < getWidth(); x++) {
+			for (int y = 0; y < getHeight(); y++) {
+
+				//TODO problem is here; nothing is context pathable for some reason???
+				
+				if (!isContextPathable(x, y) || visited[x][y]) {
+					continue;
+				}
+
+				components.add(computeComponent(new Vector(x, y), visited));
+
+			}
+		}
+
+		Main.log("found " + components.size() + " pathfinding components");
+
+		computeGraphHash();
+
+	}
+
+	@SuppressWarnings("unchecked")
+	private void computeGraphHash() {
+		componentLookup = (List<Vector>[][]) new ArrayList[getWidth()][getHeight()];
+		for (List<Vector> graph : components) {
+			for (Vector v : graph) {
+				setGraph(v, graph);
+			}
+		}
+	}
 
 	@SuppressWarnings("unchecked")
 	public void loadComponents(File f) throws FileNotFoundException, IOException {
 
 		if (!f.exists()) {
 			Main.log("graph data not found in world; computing it from scratch");
-			computePathability();
-			computeComponents();
+			computePathfinding();
 			return;
 		}
 
@@ -167,39 +208,6 @@ public class PathGraph {
 		out.close();
 	}
 
-	private void computeComponents() {
-
-		components = new ArrayList<List<Vector>>();
-		boolean[][] visited = new boolean[getWidth()][getHeight()];
-
-		for (int x = 0; x < getWidth(); x++) {
-			for (int y = 0; y < getHeight(); y++) {
-
-				if (!isContextPathable(x, y) || visited[x][y]) {
-					continue;
-				}
-
-				components.add(computeComponents(new Vector(x, y), visited));
-
-			}
-		}
-
-		Main.log("found " + components.size() + " pathfinding components");
-
-		computeGraphHash();
-
-	}
-
-	@SuppressWarnings("unchecked")
-	private void computeGraphHash() {
-		componentLookup = (List<Vector>[][]) new ArrayList[getWidth()][getHeight()];
-		for (List<Vector> graph : components) {
-			for (Vector v : graph) {
-				setGraph(v, graph);
-			}
-		}
-	}
-
 	/**
 	 * @param start
 	 *            the tile around which to compute a sub-graph
@@ -208,7 +216,7 @@ public class PathGraph {
 	 *            which have been visited
 	 * @return the sub-graph as an ArrayList
 	 */
-	private ArrayList<Vector> computeComponents(Vector start, boolean[][] visited) {
+	private ArrayList<Vector> computeComponent(Vector start, boolean[][] visited) {
 
 		ArrayList<Vector> graph = new ArrayList<Vector>();
 		Queue<Vector> searchQ = new LinkedList<Vector>();
@@ -218,6 +226,7 @@ public class PathGraph {
 		while (!searchQ.isEmpty()) {
 
 			pos = searchQ.poll();
+			
 			if (!isContextPathable(pos) || visited[pos.getX()][pos.getY()]) {
 				continue;
 			}
@@ -384,7 +393,7 @@ public class PathGraph {
 
 		for (Vector pos : graph) {
 			if (isContextPathable(pos) && !visited[pos.getX()][pos.getY()]) {
-				graphs.add(computeComponents(pos, visited));
+				graphs.add(computeComponent(pos, visited));
 			}
 		}
 
@@ -429,7 +438,7 @@ public class PathGraph {
 		for (int x1 = (x - c.getRadiusX()) / Tile.WIDTH; x1 <= (x + c.getRadiusX()) / Tile.WIDTH; x1++) {
 			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH; y1++) {
 
-				if (c.intersects(Tile.getRectangle(x1, y1))) {
+				if (isInMap(x1, y1) && c.intersects(Tile.getRectangle(x1, y1))) {
 					entities[x1][y1].add(e);
 				}
 

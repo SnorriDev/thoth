@@ -385,11 +385,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 
 	public boolean isStaticObject() {
-		return staticObject;
-	}
-	
-	public void setStaticObject(boolean flag) {
-		staticObject = flag;
+		return false;
 	}
 	
 	public void kill(World world) {

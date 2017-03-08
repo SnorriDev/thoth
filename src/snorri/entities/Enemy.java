@@ -1,5 +1,6 @@
 package snorri.entities;
 
+import java.awt.Graphics;
 import java.util.ArrayDeque;
 import java.util.List;
 
@@ -11,11 +12,13 @@ import snorri.inventory.Item.ItemType;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.main.Main;
+import snorri.main.FocusedWindow;
 import snorri.main.GameWindow;
 import snorri.pathfinding.PathNode;
 import snorri.pathfinding.Pathfinder;
 import snorri.pathfinding.Pathfinding;
 import snorri.pathfinding.Targetter;
+import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -134,7 +137,9 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 				
 		List<Vector> graph = world.getComponent(this);
 		List<Vector> targetGraph = world.getComponent(target);
-				
+		
+		//Main.debug("comp size: " + graph.size());
+		
 		if (path != null) {
 			
 			if (target.pos.distanceSquared(lastSeenPos) > CHANGE_PATH_MARGIN * CHANGE_PATH_MARGIN
@@ -200,6 +205,29 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 	@Override
 	public Inventory getInventory() {
 		return inventory;
+	}
+	
+	@Override
+	public void renderAround(FocusedWindow g, Graphics gr, double timeDelta) {
+		
+		//TODO debug this so that we follow paths correctly
+		
+		Vector p1 = pos.copy();
+		
+		if (path == null) {
+			super.renderAround(g, gr, timeDelta);
+			return;
+		}
+		
+		for (PathNode n : path) {
+			Vector p2 = n.getGlobalPos();
+			Vector player = g.getFocus().getPos().copy().sub(g.getCenter().copy().add(Tile.WIDTH / 2, Tile.WIDTH / 2));
+			Main.debug(p1.getX() - player.getX());
+			gr.drawLine(p1.getX() - player.getX(), p1.getY() - player.getY(), p2.getX() - player.getX(), p2.getY() - player.getY());
+			p1 = p2;
+		}
+		
+		super.renderAround(g, gr, timeDelta);
 	}
 
 }

@@ -8,10 +8,7 @@ import snorri.main.Debug;
 import snorri.world.Vector;
 
 public class Pathfinding {
-	
-	//save array of costs from start
-	//everything is null, or etc.
-		
+			
 	private static PathGraph graph;
 	
 	public static void setGraph(PathGraph graph) {
@@ -22,8 +19,7 @@ public class Pathfinding {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				ArrayDeque<PathNode> stack = findPath(start, goal);
-				p.setPath(stack);
+				p.setPath(findPath(start, goal));
 			}
 		}).start();
 	}
