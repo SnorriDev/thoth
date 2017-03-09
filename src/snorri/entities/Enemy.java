@@ -209,22 +209,10 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 	
 	@Override
 	public void renderAround(FocusedWindow g, Graphics gr, double timeDelta) {
-		
-		//TODO debug this so that we follow paths correctly
-		
-		Vector p1 = pos.copy();
-		
+						
 		if (path == null) {
 			super.renderAround(g, gr, timeDelta);
 			return;
-		}
-		
-		for (PathNode n : path) {
-			Vector p2 = n.getGlobalPos();
-			Vector player = g.getFocus().getPos().copy().sub(g.getCenter().copy().add(Tile.WIDTH / 2, Tile.WIDTH / 2));
-			Main.debug(p1.getX() - player.getX());
-			gr.drawLine(p1.getX() - player.getX(), p1.getY() - player.getY(), p2.getX() - player.getX(), p2.getY() - player.getY());
-			p1 = p2;
 		}
 		
 		super.renderAround(g, gr, timeDelta);

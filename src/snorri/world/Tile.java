@@ -214,8 +214,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 	public int compareTo(Tile t) {
 		
 		if (!type.getClass().equals(t.type.getClass())) {
-			Main.debug(type.getClass());
-			Main.debug(t.type.getClass());
 			Main.error("comparing TileTypes from different layers");
 			return 0;
 		}
