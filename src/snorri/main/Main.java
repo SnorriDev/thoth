@@ -28,7 +28,6 @@ import snorri.inventory.RandomDrop;
 import snorri.parser.Lexicon;
 import snorri.terrain.Structure;
 import snorri.terrain.TerrainGen;
-import snorri.world.BackgroundElement;
 import snorri.world.Vector;
 import snorri.world.World;
 

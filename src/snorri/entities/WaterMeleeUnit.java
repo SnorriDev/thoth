@@ -1,6 +1,6 @@
 package snorri.entities;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import snorri.animations.Animation;
 import snorri.inventory.Carrier;
@@ -36,6 +36,7 @@ public abstract class WaterMeleeUnit extends Unit implements Pathfinder, Carrier
 	protected final double ATTACKRANGE_DEFAULT = 16;
 	protected final double ATTACKPOWER_DEFAULT = 4;
 	
+	@SuppressWarnings("unused")
 	private double seekRange = SEEKRANGE_DEFAULT;
 	private double attackRange = ATTACKRANGE_DEFAULT;
 	private double attackPower = ATTACKPOWER_DEFAULT; //TODO: change to something more logical and balanced
@@ -123,7 +124,7 @@ public abstract class WaterMeleeUnit extends Unit implements Pathfinder, Carrier
 		// in a wall
 		while (tempPos.distanceSquared(pos) <= target.pos.distanceSquared(pos)) {
 
-			if (!world.getLevel().canShootOver(tempPos.copy().toGridPos())) {
+			if (!world.canShootOver(tempPos)) {
 				return false;
 			}
 
@@ -164,8 +165,8 @@ public abstract class WaterMeleeUnit extends Unit implements Pathfinder, Carrier
 			return;
 		}
 
-		ArrayList<Vector> graph = world.getLevel().getGraph(this);
-		ArrayList<Vector> targetGraph = world.getLevel().getGraph(target);
+		List<Vector> graph = world.getComponent(this);
+		List<Vector> targetGraph = world.getComponent(target);
 
 		//TODO: Implement Water Pathfinding
 		/*if (path != null) {

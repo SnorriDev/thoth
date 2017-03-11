@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Queue;
 
 import snorri.main.FocusedWindow;
-import snorri.world.Level;
 import snorri.world.Tile;
 import snorri.world.Vector;
 
@@ -85,14 +84,14 @@ public class PathNode implements Comparable<PathNode>, Serializable {
 	}
 
 	//TODO: randomize the order of neighbors so we get random paths
-	public Queue<PathNode> getNeighbors(PathNode[][] map, Level level) {
+	public Queue<PathNode> getNeighbors(PathNode[][] map, PathGraph graph) {
 		
 		Queue<PathNode> neighbors = new LinkedList<PathNode>();
 		Vector newPos;
 		
 		for (int i = 0; i < NEIGHBORS.length; i++) {
 			newPos = gridPos.copy().add(NEIGHBORS[i]);
-			if (level.isContextPathable(newPos)) {
+			if (graph.isContextPathable(newPos)) {
 				if (map[newPos.getX()][newPos.getY()] == null) {
 					map[newPos.getX()][newPos.getY()] = new PathNode(newPos);
 				}

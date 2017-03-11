@@ -1,7 +1,8 @@
 package snorri.entities;
 
+import java.awt.Graphics;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
+import java.util.List;
 
 import snorri.animations.Animation;
 import snorri.inventory.Carrier;
@@ -11,11 +12,13 @@ import snorri.inventory.Item.ItemType;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.main.Main;
+import snorri.main.FocusedWindow;
 import snorri.main.GameWindow;
 import snorri.pathfinding.PathNode;
 import snorri.pathfinding.Pathfinder;
 import snorri.pathfinding.Pathfinding;
 import snorri.pathfinding.Targetter;
+import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -25,7 +28,7 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 	private static final Animation WALKING = new Animation("textures/animations/mummy/walking");
 	
 	private static final long serialVersionUID = 1L;
-	private static final double APPROACH_MARGIN = 15;
+	private static final double APPROACH_MARGIN = Tile.WIDTH; //was 15, was causing pathfinding bug?
 	private static final double CHANGE_PATH_MARGIN = 350;
 	
 	private Vector lastSeenPos;
@@ -82,7 +85,7 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 		//I'm checking if pos and target.pos are both okay just in case we're in a wall
 		while (tempPos.distanceSquared(pos) <= target.pos.distanceSquared(pos)) {	
 		
-			if (! world.getLevel().canShootOver(tempPos.copy().toGridPos())) {
+			if (! world.canShootOver(tempPos)) {
 				return false;
 			}
 			
@@ -132,9 +135,11 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 			return;
 		}
 				
-		ArrayList<Vector> graph = world.getLevel().getGraph(this);
-		ArrayList<Vector> targetGraph = world.getLevel().getGraph(target);
-				
+		List<Vector> graph = world.getComponent(this);
+		List<Vector> targetGraph = world.getComponent(target);
+		
+		//Main.debug("comp size: " + graph.size());
+		
 		if (path != null) {
 			
 			if (target.pos.distanceSquared(lastSeenPos) > CHANGE_PATH_MARGIN * CHANGE_PATH_MARGIN
@@ -200,6 +205,17 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 	@Override
 	public Inventory getInventory() {
 		return inventory;
+	}
+	
+	@Override
+	public void renderAround(FocusedWindow g, Graphics gr, double timeDelta) {
+						
+		if (path == null) {
+			super.renderAround(g, gr, timeDelta);
+			return;
+		}
+		
+		super.renderAround(g, gr, timeDelta);
 	}
 
 }

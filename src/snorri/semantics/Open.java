@@ -6,10 +6,9 @@ import snorri.entities.Sarcophagus;
 import snorri.masking.Mask;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
+import snorri.world.World;
 import snorri.world.BackgroundElement;
-import snorri.world.Level;
 import snorri.world.Tile;
-import snorri.world.TileType;
 
 public class Open extends VerbDef {
 
@@ -27,13 +26,13 @@ public class Open extends VerbDef {
 		
 		if (obj instanceof Sarcophagus) {
 			e.getWorld().delete((Entity) obj);
-			Vector spawnPos = e.getWorld().getLevel().getGoodSpawn(((Sarcophagus) obj).getPos().copy().toGridPos());
+			Vector spawnPos = e.getWorld().getGoodSpawn(((Sarcophagus) obj).getPos().copy().toGridPos());
 			Entity.spawnNew(e.getWorld(), spawnPos, Mummy.class);
 		}
 		
 		if (obj instanceof Entity) {
 			Vector tilePos = ((Entity) obj).getPos().copy().toGridPos();
-			return openDoor(e.getWorld().getLevel(), tilePos);
+			return openDoor(e.getWorld(), tilePos);
 		}
 		return false;
 	}
@@ -49,17 +48,17 @@ public class Open extends VerbDef {
 		return false;
 	}
 		
-	public static boolean openDoor(Level l, Vector pos) {
+	public static boolean openDoor(World w, Vector pos) {
 		
-		if (l.getTileGrid(pos) == null) {
+		if (w.getLevel().getTileGrid(pos) == null) {
 			return false;
 		}
 		
-		if (l.getTileGrid(pos).getType() == BackgroundElement.DOOR) {
+		if (w.getLevel().getTileGrid(pos).getType() == BackgroundElement.DOOR) {
 			TriggerType.DOOR_OPEN.activate(pos);
-			l.wrapGridUpdate(pos, new Tile(REPLACEMENT_TILE));
+			w.wrapGridUpdate(pos, new Tile(REPLACEMENT_TILE));
 			for (Vector trans : Mask.NEIGHBORS) {
-				openDoor(l, pos.copy().add(trans));
+				openDoor(w, pos.copy().add(trans));
 			}
 			return true;
 		}

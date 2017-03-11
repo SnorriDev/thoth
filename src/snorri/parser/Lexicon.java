@@ -1,4 +1,4 @@
-	package snorri.parser;
+package snorri.parser;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,7 +57,6 @@ import snorri.semantics.Go;
 import snorri.semantics.With;
 import snorri.semantics.Write;
 import snorri.world.BackgroundElement;
-import snorri.world.TileType;
 
 public class Lexicon {
 	

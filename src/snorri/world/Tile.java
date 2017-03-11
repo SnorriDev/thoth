@@ -2,13 +2,13 @@ package snorri.world;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
 import snorri.audio.ClipWrapper;
 import snorri.entities.Entity;
-import snorri.entities.Unit;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
@@ -92,7 +92,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 	}
 
 	public TileType getType() {
-		//Main.debug(type.name());
 		return type;
 	}
 	
@@ -105,8 +104,8 @@ public class Tile implements Comparable<Tile>, Nominal {
 		Vector relPos = v.getRelPosGrid(g);
 		
 		if (Debug.RENDER_GRAPHS) {
-			if (g.getWorld().getLevel().getGraph(v) != null) {
-				gr.setColor(Debug.getColor(g.getWorld().getLevel().getGraph(v)));
+			if (g.getWorld().getGraph().getComponent(v) != null) {
+				gr.setColor(Debug.getColor(g.getWorld().getGraph().getComponent(v)));
 				gr.drawRect(relPos.getX(), relPos.getY(), Tile.WIDTH, Tile.WIDTH);
 				gr.setColor(Color.BLACK);
 				return;
@@ -193,29 +192,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 	public boolean isContextPathable() {
 		return isPathable() && surroundingsPathable;
 	}
-	
-	public boolean isOccupied() {
-		return !entities.isEmpty();
-	}
-	
-	//figure out if we can stand on this block at the very beginning
-	public void computeSurroundingsPathable(int x, int y, Level level) {
-		
-		surroundingsPathable = true;
-			
-		for (int i = (x * Tile.WIDTH - Unit.RADIUS_X) / Tile.WIDTH; i <= (x * Tile.WIDTH + Unit.RADIUS_X) / Tile.WIDTH; i++) {
-			for (int j = (y * Tile.WIDTH - Unit.RADIUS_Y) / Tile.WIDTH; j <= (y * Tile.WIDTH + Unit.RADIUS_Y) / Tile.WIDTH; j++) {
-				
-				Tile t = level.getTileGrid(i, j);
-				if (t == null || !t.isPathable() || t.isOccupied()) {
-					surroundingsPathable = false;
-					return;
-				}
-								
-			}
-		}
-		
-	}
 
 	public void setReachable(boolean b) {
 		reachable = b;
@@ -238,8 +214,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 	public int compareTo(Tile t) {
 		
 		if (!type.getClass().equals(t.type.getClass())) {
-			Main.debug(type.getClass());
-			Main.debug(t.type.getClass());
 			Main.error("comparing TileTypes from different layers");
 			return 0;
 		}
@@ -273,5 +247,10 @@ public class Tile implements Comparable<Tile>, Nominal {
 	public void removeEntity(Entity e) {
 		entities.remove(e);
 	}
+	
+	public static Rectangle getRectangle(int i, int j) {
+		return new Rectangle(i * Tile.WIDTH, j * Tile.WIDTH, Tile.WIDTH, Tile.WIDTH);
+	}
+
 	
 }

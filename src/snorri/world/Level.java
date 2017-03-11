@@ -2,56 +2,44 @@ package snorri.world;
 
 import java.awt.FileDialog;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
-import snorri.collisions.Collider;
 import snorri.entities.Entity;
-import snorri.entities.Unit;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.masking.Mask;
-import snorri.pathfinding.PathNode;
 import snorri.terrain.DungeonGen;
 import snorri.world.TileType;
 
 public class Level implements Editable {
 
 	public static final int MAX_SIZE = 1024;
-	private static final int SPAWN_SEARCH_RADIUS = 12;
+	
+	public static final int BACKGROUND = 0;
+	public static final int MIDGROUND = 1;
+	public static final int FOREGROUND = 2;
 	
 	/**An array of tiles. Note that coordinates are Cartesian, not matrix-based**/
 	private Tile[][] map;
-	private Vector dim;
-	
-	private List<ArrayList<Vector>> components;
-	private ArrayList<Vector>[][] graphData;
+	private Vector dim; //TODO: remove this
 
 	public Level(int width, int height, TileType bg) {
 		map = new Tile[width][height];
 		dim = new Vector(width, height);
-
-		//Main.debug(bg);
 		
 		for (int i = 0; i < dim.getX(); i++) {
 			for (int j = 0; j < dim.getY(); j++) {
 				map[i][j] = new Tile(bg);
 			}
 		}
-		
-		computePathfinding();
-		
+				
 	}
 	
 	public Level(Vector v, TileType bg) {
@@ -248,10 +236,6 @@ public class Level implements Editable {
 		}
 		
 	}
-	
-	private static String getNameWithoutExtension(File f) {
-		return f.getName().substring(0, f.getName().lastIndexOf('.'));
-	}
 
 	public void load(File file, Class<? extends TileType> c) throws FileNotFoundException, IOException {
 
@@ -279,10 +263,6 @@ public class Level implements Editable {
 
 		is.close();
 		
-		loadSubGraphs(new File(file.getParentFile(), getNameWithoutExtension(file) + "-graphs.dat"));
-
-		Main.log("load complete!");
-		return;
 	}
 
 	public void save(File file) throws IOException {
@@ -310,358 +290,23 @@ public class Level implements Editable {
 		}
 
 		os.close();
-		
-		if (saveGraphs) {
-			saveSubGraphs(new File(file.getParentFile(), getNameWithoutExtension(file) + "-graphs.dat"));
-		}
-
-		Main.log("save complete!");
-		return;
-	}
-	
-	public static Rectangle getRectangle(int i, int j) {
-		return new Rectangle(i * Tile.WIDTH, j * Tile.WIDTH, Tile.WIDTH, Tile.WIDTH);
 	}
 	
 	/**
-	 * computes whether tiles in the map are context-pathable
-	 * this is FAR less computationally intensive than computing all sub-graphs
+	 * @param x coordinate
+	 * @param y coordinate
+	 * @return whether the tile at <code>(x, y)</code> is pathable and unoccupied
 	 */
-	public void computePathability() {
-		for (int i = 0; i < dim.getX(); i++) {
-			for (int j = 0; j < dim.getY(); j++) {
-				map[i][j].computeSurroundingsPathable(i, j, this);
-			}
-		}
+	public boolean isPathable(int x, int y) {
+		return getTileGrid(x, y) != null && getTileGrid(x, y).isPathable();
 	}
 	
 	public boolean isPathable(Vector pos) {
-		Tile t = getTileGrid(pos);
-		return t != null && t.isPathable();
-	}
-	
-	/**
-	 * @param pos
-	 * the tile position in grid coordinates
-	 * @return whether this tile is context pathable
-	 */
-	public boolean isContextPathable(Vector pos) {
-		Tile t = getTileGrid(pos);
-		return t != null && t.isContextPathable();
-	}
-	
-	public boolean isContextPathable(int x, int y) {
-		Tile t = getTileGrid(x, y);
-		return t != null && t.isContextPathable();
-	}
-	
-	public boolean canShootOver(Vector pos) {
-		Tile t = getTileGrid(pos);
-		return t != null && t.canShootOver() && !t.isOccupied();
-		//TODO should be be able to shoot over occupied tiles?
-	}
-	
-	public ArrayList<Vector> getGraph(Entity e) {
-		return getGraph(e.getPos().copy().toGridPos());
-	}
-	
-	public ArrayList<Vector> getGraph(Vector pos) {
-		return getGraph(pos.getX(), pos.getY());
-	}
-	
-	//TODO change this method to have side effect of updating the graph, not just the array
-	public ArrayList<Vector> getGraph(int x, int y) {
-		if (x < 0 || graphData.length <= x || y < 0 || graphData[0].length <= y) {
-			return null;
-		}
-		return graphData[x][y];
-	}
-	
-	private void setGraph(Vector pos, ArrayList<Vector> graph) {
-		graphData[pos.getX()][pos.getY()] = graph;
-	}
-	
-	public boolean arePathConnected(Vector p1, Vector p2) {
-		if (!isContextPathable(p1) || !isContextPathable(p2)) {
-			return false;
-		}
-		return getGraph(p1) == getGraph(p2);
-	}
-	
-	@SuppressWarnings("unchecked")
-	private void loadSubGraphs(File f) throws FileNotFoundException, IOException {
-		
-		if (! f.exists()) {
-			Main.log("graph data not found in world; computing it from scratch");
-			computePathability();
-			computeConnectedSubGraphs();
-			return;
-		}
-		
-		ObjectInputStream in = new ObjectInputStream(new FileInputStream(f));
-		try {
-			components = (ArrayList<ArrayList<Vector>>) in.readObject();
-			computeGraphHash();
-		} catch (ClassNotFoundException e) {
-			Main.error("recalculating corrupted pathfinding data");
-			computeConnectedSubGraphs();
-		}
-		in.close();
-	}
-	
-	private void saveSubGraphs(File f) throws FileNotFoundException, IOException {
-		
-		//TODO: track when we do and don't need to do this
-		Main.log("recomputing sub-graphs before save...");
-		computePathfinding();
-		
-		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f));
-		out.writeObject(components);
-		out.close();
-	}
-
-	private void computeConnectedSubGraphs() {
-		
-		components = new ArrayList<ArrayList<Vector>>();
-		boolean[][] visited = new boolean[dim.getX()][dim.getY()];
-				
-		for (int x = 0; x < dim.getX(); x++) {
-			for (int y = 0; y < dim.getY(); y++) {
-				
-				if (!isContextPathable(x, y) || visited[x][y]) {
-					continue;
-				}
-								
-				components.add(computeConnectedSubGraph(new Vector(x, y), visited));
-				
-			}
-		}
-		
-		Main.log("found " + components.size() + " sub-graphs in level");
-		
-		computeGraphHash();
-		
-	}
-	
-	@SuppressWarnings("unchecked")
-	private void computeGraphHash() {
-		graphData = (ArrayList<Vector>[][]) new ArrayList[dim.getX()][dim.getY()];
-		for (ArrayList<Vector> graph : components) {
-			for (Vector v : graph) {
-				setGraph(v, graph);
-			}
-		}
-	}
-	
-	/**
-	 * @param start
-	 * the tile around which to compute a sub-graph
-	 * @param visited
-	 * a 2D boolean array which will be modified to reflect
-	 * the tiles which have been visited
-	 * @return the sub-graph as an ArrayList
-	 */
-	private ArrayList<Vector> computeConnectedSubGraph(Vector start, boolean[][] visited) {
-		
-		ArrayList<Vector> graph = new ArrayList<Vector>();
-		Queue<Vector> searchQ = new LinkedList<Vector>();
-		searchQ.add(start);	
-		Vector pos;
-		
-		while (!searchQ.isEmpty()) {
-			
-			pos = searchQ.poll();
-			if (!isContextPathable(pos) || visited[pos.getX()][pos.getY()]) {
-				continue;
-			}
-						
-			visited[pos.getX()][pos.getY()] = true;
-			graph.add(pos);
-			
-			for (Vector v : PathNode.getNeighbors(pos)) {
-				searchQ.add(v);
-			}
-			
-		}
-		
-		return graph;
-				
-	}
-
-	public void computePathfinding() {
-		computePathability();
-		computeConnectedSubGraphs();
+		return isPathable(pos.getX(), pos.getY());
 	}
 	
 	public void setTileGrid(Vector v, Tile newTile) {
 		setTileGrid(v.getX(), v.getY(), newTile);
-	}
-	
-	/**
-	 * update graphs when we insert a pathable tile
-	 * @param v
-	 * 	position, in grid coordinates
-	 */
-	public void setPathableGrid(Vector v) {		
-		
-		//update graphs to reflect the changes
-		for (int x = (v.getX() * Tile.WIDTH - Unit.RADIUS_X) / Tile.WIDTH - 2; x <= (v.getX() * Tile.WIDTH + Unit.RADIUS_X) / Tile.WIDTH + 2; x++) {
-			for (int y = (v.getY() * Tile.WIDTH - Unit.RADIUS_Y) / Tile.WIDTH - 2; y <= (v.getY() * Tile.WIDTH + Unit.RADIUS_Y) / Tile.WIDTH + 2; y++) {
-				
-				Vector pos = new Vector(x, y);
-				if (isContextPathable(pos) && getGraph(pos) == null) {
-					List<ArrayList<Vector>> graphs = new ArrayList<>();
-					for (Vector p : PathNode.getNeighbors(pos)) {
-						if (getGraph(p) != null && !graphs.contains(getGraph(p))) { //merge here if graph exists
-							graphs.add(getGraph(p));
-						}
-					}
-					ArrayList<Vector> newGraph = mergeGraphs(graphs);
-					newGraph.add(pos);
-					setGraph(pos, newGraph);
-				}
-				
-			}
-		}
-					
-	}
-	
-	/**
-	 * Update graphs when we insert an unpathable tile
-	 * @see <code>setPathableGrid</code>
-	 */
-	//TODO the problem with filling is here probably
-	private void setUnpathableGrid(Vector v) {
-		
-		List<ArrayList<Vector>> graphs = new ArrayList<>(); //TODO make sure this works as intended
-		
-		//update graphs to reflect the changes
-		for (int x = (v.getX() * Tile.WIDTH - Unit.RADIUS_X) / Tile.WIDTH - 2; x <= (v.getX() * Tile.WIDTH + Unit.RADIUS_X) / Tile.WIDTH + 2; x++) {
-			for (int y = (v.getY() * Tile.WIDTH - Unit.RADIUS_Y) / Tile.WIDTH - 2; y <= (v.getY() * Tile.WIDTH + Unit.RADIUS_Y) / Tile.WIDTH + 2; y++) {
-				
-				Vector pos = new Vector(x, y);
-				if (getGraph(pos) == null) {
-					continue;
-				}
-				
-				if (!isContextPathable(pos)) {
-					ArrayList<Vector> graph = getGraph(pos);
-					graph.remove(pos);
-					setGraph(pos, null);
-					computeSurroundingsPathable(pos.getX(), pos.getY());
-				} else if (!graphs.contains(getGraph(pos))) {
-					graphs.add(getGraph(pos));
-				}
-			}
-		}
-		
-		for (ArrayList<Vector> graph : graphs) {
-			splitGraph(graph);
-		}
-		
-	}
-	
-	/**
-	 * Update the context pathability of surrounding tiles.
-	 * @param v
-	 * The position around which to update, in grid coordinates
-	 */
-	private void updateSurroundingContext(Vector v) {
-		for (int x = (v.getX() * Tile.WIDTH - Unit.RADIUS_X) / Tile.WIDTH - 1; x <= (v.getX() * Tile.WIDTH + Unit.RADIUS_X) / Tile.WIDTH + 1; x++) {
-			for (int y = (v.getY() * Tile.WIDTH - Unit.RADIUS_Y) / Tile.WIDTH - 1; y <= (v.getY() * Tile.WIDTH + Unit.RADIUS_Y) / Tile.WIDTH + 1; y++) {
-				if (getTileGrid(x, y) == null) {
-					continue;
-				}
-				computeSurroundingsPathable(x, y);		
-			}
-		}
-	}
-	
-	private void computeSurroundingsPathable(int x, int y) {
-		if (x < 0 || x >= dim.getX() || y < 0 || y >= dim.getY()) {
-			return;
-		}
-		map[x][y].computeSurroundingsPathable(x, y, this);
-	}
-	
-	/**
-	 * Merges disjoint graphs into one big graph.
-	 * Ignores duplicate graphs and graphs which are not in connectedSubGraphs.
-	 * Adds result to connectedSubGraphs, even if it empty
-	 * @return the merged graph
-	 */
-	private ArrayList<Vector> mergeGraphs(List<ArrayList<Vector>> graphs) {
-		
-		//TODO: can make this more efficient by merging all other components into the largest one
-		
-		ArrayList<Vector> union = new ArrayList<>();
-		for (ArrayList<Vector> graph : graphs) {
-			if (components.remove(graph)) {
-				union.addAll(graph);
-			}
-		}
-		if (!union.isEmpty()) {
-			for (Vector v : union) {
-				setGraph(v, union);
-			}
-		}
-		components.add(union);
-		return union;
-		
-	}
-	
-	private void splitGraph(ArrayList<Vector> graph) {
-		
-		List<ArrayList<Vector>> graphs = new ArrayList<>();
-		boolean[][] visited = new boolean[dim.getX()][dim.getY()];
-		
-		for (Vector pos : graph) {
-			if (isContextPathable(pos) && !visited[pos.getX()][pos.getY()]) {
-				graphs.add(computeConnectedSubGraph(pos, visited));
-			}
-		}
-		
-		if (graphs.size() == 1) {
-			return;
-		}
-				
-		components.remove(graph);
-		for (ArrayList<Vector> g : graphs) {
-			components.add(g);
-			for (Vector v : g) {
-				setGraph(v, g);
-			}
-		}
-		
-	}
-	
-	public Vector getGoodSpawn(Vector start) {
-		
-		for (int r = 0; r < SPAWN_SEARCH_RADIUS; r++) {
-			changeStart: for (Vector v : start.getSquareAround(r)) {
-				
-				int x = v.getX();
-				int y = v.getY();
-				
-				for (int x1 = (x * Tile.WIDTH - 2 * Unit.RADIUS_X) / Tile.WIDTH; x1 <= (x * Tile.WIDTH + 2 * Unit.RADIUS_X) / Tile.WIDTH; x1++) {
-					for (int y1 = (y * Tile.WIDTH - 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1 <= (y * Tile.WIDTH + 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
-						if (!isContextPathable(x1, y1)) {
-							continue changeStart;
-						}
-					}
-				}
-				
-				return v.copy().toGlobalPos();
-				
-			}
-		}
-		
-		return null;
-		
-	}
-	
-	public Vector getGoodSpawn(int x, int y) {
-		return getGoodSpawn(new Vector(x, y));
 	}
 
 	@Override
@@ -731,34 +376,6 @@ public class Level implements Editable {
 
 	public void setTile(Vector pos, Tile tile) {
 		setTile(pos.getX(), pos.getY(), tile);
-	}
-	
-	public void wrapGridUpdate(Vector pos, Tile newTile) {
-		
-		Tile oldTile = getTileGrid(pos);
-		
-		//if there is no tile at this position or a static entity is there, don't let the player mess with it
-		if (oldTile == null || oldTile.isOccupied()) {
-			return;
-		}
-		
-		setTileGrid(pos, newTile);
-		updateSurroundingContext(pos); //update context pathability on nearby tiles
-		
-		if (oldTile.isPathable() == newTile.isPathable()) {
-			return;
-		}
-		
-		if (newTile.isPathable()) {
-			setPathableGrid(pos);
-		} else {
-			setUnpathableGrid(pos);
-		}
-				
-	}
-	
-	public void wrapUpdate(Vector pos, Tile tile) {
-		wrapGridUpdate(pos.copy().toGridPos(), tile);
 	}
 	
 	private void updateMasksGrid(Vector pos) {
@@ -838,94 +455,6 @@ public class Level implements Editable {
 			}
 		}
 	}
-
-	//TODO maybe we can make these two more efficient?
-	
-	public void addEntity(Entity e) {
-		
-		int x = e.getPos().getX();
-		int y = e.getPos().getY();
-		Collider c = e.getCollider();
-				
-		//mark all tiles which are occupied
-		for (int x1 = (x - c.getRadiusX()) / Tile.WIDTH; x1 <= (x + c.getRadiusX()) / Tile.WIDTH; x1++) {
-			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH; y1++) {
-				
-				if (c.intersects(getRectangle(x1, y1))) {
-					getTileGrid(x1, y1).addEntity(e);
-				}
-				
-			}
-		}
-		
-		Queue<Vector> unpathableQ = new LinkedList<>();
-		
-		// update all tiles in range of occupied tiles
-		for (int x1 = (x - c.getRadiusX() - 2 * Unit.RADIUS_X)
-				/ Tile.WIDTH; x1 <= (x + c.getRadiusX() + 2 * Unit.RADIUS_X) / Tile.WIDTH; x1++) {
-			for (int y1 = (y - c.getRadiusY() - 2 * Unit.RADIUS_Y)
-					/ Tile.WIDTH; y1 <= (y + c.getRadiusY() + 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
-
-				boolean wasContextPathable = isContextPathable(x1, y1);
-				getTileGrid(x1, y1).computeSurroundingsPathable(x1, y1, this);
-				if (wasContextPathable && !getTileGrid(x1, y1).isContextPathable()) {
-					unpathableQ.add(new Vector(x1, y1));
-				}
-
-			}
-		}
-
-		//recalculate graphs around unpathable tiles
-		while (!unpathableQ.isEmpty()) {
-			this.setUnpathableGrid(unpathableQ.poll());
-		}
-		
-	}
-	
-	public void removeEntity(Entity e) {
-		
-		int x = e.getPos().getX();
-		int y = e.getPos().getY();
-		Collider c = e.getCollider();
-
-		//unmark all tiles which are occupied
-		for (int x1 = (x - c.getRadiusX()) / Tile.WIDTH; x1 <= (x + c.getRadiusX()) / Tile.WIDTH + 1; x1++) {
-			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH; y1 <= (y + c.getRadiusY()) / Tile.WIDTH + 1; y1++) {
-
-				if (getTileGrid(x1, y1) != null && c.intersects(getRectangle(x1, y1))) {
-					getTileGrid(x1, y1).removeEntity(e);
-				}
-
-			}
-		}
-
-		Queue<Vector> unpathableQ = new LinkedList<>();
-
-		// update all tiles in range of occupied tiles
-		for (int x1 = (x - c.getRadiusX() - 2 * Unit.RADIUS_X)
-				/ Tile.WIDTH; x1 <= (x + c.getRadiusX() + 2 * Unit.RADIUS_X) / Tile.WIDTH; x1++) {
-			for (int y1 = (y - c.getRadiusY() - 2 * Unit.RADIUS_Y)
-					/ Tile.WIDTH; y1 <= (y + c.getRadiusY() + 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
-				
-				if (getTileGrid(x1, y1) == null) {
-					continue;
-				}
-				
-				boolean wasContextPathable = isContextPathable(x1, y1);
-				getTileGrid(x1, y1).computeSurroundingsPathable(x1, y1, this);
-				if (!wasContextPathable && getTileGrid(x1, y1).isContextPathable()) {
-					unpathableQ.add(new Vector(x1, y1));
-				}
-
-			}
-		}
-
-		// recalculate graphs around unpathable tiles
-		while (!unpathableQ.isEmpty()) {
-			this.setPathableGrid(unpathableQ.poll());
-		}
-
-	}
 	
 	public int getWidth() {
 		return dim.getX();
@@ -938,6 +467,11 @@ public class Level implements Editable {
 	@Override
 	public void load(File folder) throws FileNotFoundException, IOException {
 		load(folder, BackgroundElement.class);
+	}
+	
+	public boolean canShootOver(Vector pos) {
+		Tile t = getTileGrid(pos);
+		return t != null && t.canShootOver();
 	}
 	
 }

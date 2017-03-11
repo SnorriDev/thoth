@@ -37,7 +37,11 @@ public class Debug {
 		if (o == null) {
 			return Color.WHITE;
 		}
-		return GRAPH_COLORS[Util.niceMod(o.hashCode(), GRAPH_COLORS.length)];
+		try {
+			return GRAPH_COLORS[Util.niceMod(o.hashCode(), GRAPH_COLORS.length)];
+		} catch (java.util.ConcurrentModificationException e) {
+			return Color.WHITE;
+		}
 	}
 
 	public static void castWTFMode(String s, SpellEvent e) {
