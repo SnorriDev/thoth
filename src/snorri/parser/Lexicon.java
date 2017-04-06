@@ -72,44 +72,42 @@ public class Lexicon {
 		lexicon = new HashMap<String, Definition>();
 		
 		//Prepositions
-		lexicon.put("n", new To()); //to
-		lexicon.put("m", new At()); //in
+		lexicon.put("r", new To()); //to
+		lexicon.put("n", new At()); //in
 		lexicon.put("Xr", new Under()); //under
 		lexicon.put("tp", new Above()); //above
-		lexicon.put("HA", new LeftOf()); //behind
-		lexicon.put("xft", new RightOf()); //in front of
+		lexicon.put("iAb", new LeftOf()); //behind
+		lexicon.put("imnt", new RightOf()); //in front of
 		lexicon.put("Hna", new With()); //with
 		//lexicon.put("mhAw", null); //around
 		
 		//Adverbs
 		lexicon.put("nn", new Not());
 		lexicon.put("aAw", new Greatly());
-		lexicon.put("wrt", new DegreeModifierDef(1));
-		lexicon.put("er", new DegreeModifierDef(2)); //TODO is this correct enough usage?
+		lexicon.put("wrt", new DegreeModifierDef(1)); //"very"
 		
 		//Nouns
-		lexicon.put("jAm", new StaticDef(Noun.class, BackgroundElement.TREE)); //tree
-		lexicon.put("ssn", new StaticDef(Noun.class, Flower.class)); //flower, gotta make this an entity
+		lexicon.put("nht", new StaticDef(Noun.class, BackgroundElement.TREE)); //tree
+		lexicon.put("Hrrt", new StaticDef(Noun.class, Flower.class)); //flower, gotta make this an entity
 		lexicon.put("mw", new StaticDef(Noun.class, BackgroundElement.WATER));
 		lexicon.put("Say", new StaticDef(Noun.class, BackgroundElement.SAND));
-		lexicon.put("xt1", new StaticDef(Noun.class, BackgroundElement.LAVA)); //technically this is fire
+		lexicon.put("nsr", new StaticDef(Noun.class, BackgroundElement.LAVA)); //technically this is fire
 		lexicon.put("snbt", new StaticDef(Noun.class, Urn.class));
 		lexicon.put("bit", new StaticDef(Noun.class, null)); //TODO: bee
-		lexicon.put("Hnyt", new StaticDef(Noun.class, Spike.class));
+		lexicon.put("txn", new StaticDef(Noun.class, Spike.class));
 		lexicon.put("anx", new StaticDef(Noun.class, Glyph.class));
-		lexicon.put("ankh", new StaticDef(Noun.class, Glyph.class));
-		lexicon.put("xt", new StaticDef(Noun.class, Entity.class));
-		lexicon.put("wi1", new StaticDef(Noun.class, Mummy.class)); //TODO kAr.t is better
-		lexicon.put("rwdt", new StaticDef(Noun.class, BackgroundElement.SANDSTONE));
+		lexicon.put("z", new StaticDef(Noun.class, Entity.class));
+		lexicon.put("saH", new StaticDef(Noun.class, Mummy.class)); //TODO kAr.t is better
+		lexicon.put("rwDt", new StaticDef(Noun.class, BackgroundElement.SANDSTONE));
 		
-		lexicon.put("st", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
-		lexicon.put("iry", new StaticDef(AbstractNoun.class, AbstractSemantics.WEAPON));
-		lexicon.put("pr", new StaticDef(AbstractNoun.class, AbstractSemantics.TILE));
+		lexicon.put("bw", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
+		lexicon.put("aHAw", new StaticDef(AbstractNoun.class, AbstractSemantics.WEAPON));
+		lexicon.put("sAt", new StaticDef(AbstractNoun.class, AbstractSemantics.TILE));
 		lexicon.put("rn", new StaticDef(AbstractNoun.class, AbstractSemantics.NAME));
 		lexicon.put("nb", new StaticDef(AbstractNoun.class, AbstractSemantics.SOURCE)); //means lord literally
 		lexicon.put("nbt", new StaticDef(AbstractNoun.class, AbstractSemantics.SOURCE)); //means lord literally
-		lexicon.put("Axt", new StaticDef(AbstractNoun.class, AbstractSemantics.FLOOD));
-		lexicon.put("Da", new StaticDef(AbstractNoun.class, AbstractSemantics.STORM));
+		lexicon.put("Hap", new StaticDef(AbstractNoun.class, AbstractSemantics.FLOOD));
+		lexicon.put("nSni", new StaticDef(AbstractNoun.class, AbstractSemantics.STORM));
 				
 		//Names
 		lexicon.put("DHwty", new StaticDef(Name.class, "DHwty"));
@@ -124,29 +122,29 @@ public class Lexicon {
 		//Object Pronouns
 		lexicon.put("wi", new FirstObjectPronoun());
 		lexicon.put("tn", new SecondObjectPronoun());
+		lexicon.put("st", new ThirdObjectPronoun()); //this one should be default/preferred
 		lexicon.put("sw", new ThirdObjectPronoun());
 		lexicon.put("sy", new ThirdObjectPronoun());
 		
 		//Verbs
-		lexicon.put("in", new Move());
-		lexicon.put("ini", new Move());
 		lexicon.put("ms", new Move());
-		lexicon.put("xpi", new Go());
-		lexicon.put("iw", new Be());
+		lexicon.put("Sm", new Go());
+		lexicon.put("wn", new Be());
 		lexicon.put("bm", new Boom());
+		lexicon.put("Htm", new Boom());
 		lexicon.put("mAX", new Burn());
-		lexicon.put("nD", new Heal()); //literally means "protect"
+		lexicon.put("ssnb", new Heal()); //literally means "protect"
 		lexicon.put("pA", new Fly());	
 		lexicon.put("mAA", new See());
-		lexicon.put("pH", new Damage());
+		lexicon.put("Hwi", new Damage());
 		lexicon.put("qmA", new CreateObject());
 		lexicon.put("rd", new Grow());
-		lexicon.put("wn", new Open());
+		lexicon.put("wpi", new Open());
 		lexicon.put("sS", new Write());
-		lexicon.put("dbH", new Pray());
-		lexicon.put("sqbH", new Slow());
-		lexicon.put("sDi", new Break());
-		lexicon.put("DAi", new Cross());
+		lexicon.put("smAa", new Pray());
+		lexicon.put("sdfA", new Slow());
+		lexicon.put("sD", new Break());
+		lexicon.put("dmi", new Cross());
 		//lexicon.put("sxpr", new CreateUnit()); //conjure
 		
 		//Conditionals

@@ -61,7 +61,7 @@ public class Hieroglyphs {
 			}
 			out.add(word);
 		}
-		return "<p>" + String.join(" ", out) + "</p>";
+		return "<p>" + String.join("", out) + "</p>";
 	}
 	
 	static String getPath(String raw) {
