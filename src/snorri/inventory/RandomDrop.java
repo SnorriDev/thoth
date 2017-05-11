@@ -1,6 +1,7 @@
 package snorri.inventory;
 
 import java.awt.Image;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -12,9 +13,12 @@ public class RandomDrop implements Droppable {
 
 	private static final long serialVersionUID = 1L;
 			
-	private static enum Tier {
+	public static enum Tier {
 		
-		COMMON(new Droppable[] {new VocabDrop("nb"), new VocabDrop("nbt")}),
+		COMMON,
+		RARE,
+		EPIC,
+		LEGENDARY,
 		ALL(Lexicon.getDropsInLang());
 		
 		private Collection<Droppable> col;
@@ -27,8 +31,26 @@ public class RandomDrop implements Droppable {
 			this(Arrays.asList(arr));
 		}
 		
+		Tier() {
+			this.col = new ArrayList<>();
+		}
+		
 		public Collection<Droppable> getCollection() {
 			return col;
+		}
+
+		/**
+		 * Add a new item to this drop tier.
+		 * This is not guaranteed to work if the drop tier was constructed from an arbitrary collection.
+		 * @param d
+		 * 	The <code>Droppable</code> item to add
+		 */
+		public void add(Droppable d) {
+			col.add(d);
+		}
+		
+		public void add(String key) {
+			add(new VocabDrop(key));
 		}
 		
 	}

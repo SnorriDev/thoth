@@ -73,9 +73,6 @@ public enum MidgroundElement implements Nominal, TileType {
 			//Main.error("texture not found, index out of bounds, returning default texture");
 			return Tile.DEFAULT_MIDGROUND_TEXTURE;
 		}
-		if (index == 0) {
-			return Tile.BLANK_TEXTURE;
-		}
 		return textures[index];
 	}
 
@@ -152,10 +149,5 @@ public enum MidgroundElement implements Nominal, TileType {
 	@Override
 	public boolean isLiquid() {
 		return false;
-	}
-	
-	@Override
-	public int getOrdinal() {
-		return this.ordinal();
 	}
 }

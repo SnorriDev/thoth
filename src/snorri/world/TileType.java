@@ -44,8 +44,6 @@ public interface TileType extends Nominal {
 	boolean isChangable();
 	
 	int getLayer();
-	
-	int getOrdinal();
 
 	public static TileType lookup(Class<? extends TileType> c, int id) {
 		
@@ -66,6 +64,13 @@ public interface TileType extends Nominal {
 	}
 	
 	public boolean isLiquid();
+	
+	public int ordinal();
+	
+	@Deprecated
+	default int getOrdinal() {
+		return ordinal();
+	}
 	
 	@Override
 	public default Object get(World world, AbstractSemantics attr) {

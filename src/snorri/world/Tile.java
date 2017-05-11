@@ -23,7 +23,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 	public static final BufferedImage DEFAULT_BACKGROUND_TEXTURE = getImage("/textures/tiles/default_background00.png");
 	public static final BufferedImage DEFAULT_MIDGROUND_TEXTURE = getImage("/textures/tiles/default_midground00.png");
 	public static final BufferedImage DEFAULT_FOREGROUND_TEXTURE = getImage("/textures/tiles/default_foreground00.png");
-	public static final BufferedImage BLANK_TEXTURE = getImage("/textures/tiles/blank00.png");
 									
 	private TileType type;
 	private int style;
