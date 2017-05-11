@@ -485,6 +485,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			if (SwingUtilities.isRightMouseButton(e)) {
 				fill();
 			}
+			else if(SwingUtilities.isMiddleMouseButton(e)) {
+				pick();
+			}
 		}
 	}
 
@@ -554,6 +557,10 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			}
 		}
 
+	}
+	
+	public void pick() {
+		selectedTile = env.getLevel(selectedTile.getType().getLayer()).getTileGrid(getMousePosAbsolute().getX() / Tile.WIDTH, getMousePosAbsolute().getY() / Tile.WIDTH);
 	}
 
 	private ArrayList<Vector> computeConnectedSubGraph(Vector start, boolean[][] visited) {
