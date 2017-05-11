@@ -42,7 +42,7 @@ public class Hieroglyphs {
 			
 	}
 	
-	public static Set<String> getGlyphs() {
+	public static                                                                              Set<String> getGlyphs() {
 		return glyphIcons.keySet();
 	}
 	

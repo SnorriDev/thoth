@@ -16,7 +16,7 @@ public enum MidgroundElement implements Nominal, TileType {
 	private boolean pathable; //some things (like paths and tiles) will be unpathable
 	
 	MidgroundElement() {
-		this(true, Tile.DEFAULT_MIDGROUND_TEXTURE);
+		this(true, (BufferedImage) null);
 	}
 	
 	MidgroundElement(BufferedImage[] textures) {
@@ -140,7 +140,7 @@ public enum MidgroundElement implements Nominal, TileType {
 	}
 
 	@Override
-	public boolean isChangable() { //FIXME:
+	public boolean isChangable() {
 		return true;
 	}
 	
