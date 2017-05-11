@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import snorri.entities.Mummy;
@@ -15,6 +13,7 @@ import snorri.entities.Glyph;
 import snorri.entities.Spike;
 import snorri.entities.Urn;
 import snorri.inventory.Droppable;
+import snorri.inventory.RandomDrop.Tier;
 import snorri.inventory.VocabDrop;
 import snorri.nonterminals.AbstractNoun;
 import snorri.nonterminals.Name;
@@ -58,16 +57,17 @@ import snorri.semantics.With;
 import snorri.semantics.Write;
 import snorri.world.BackgroundElement;
 
-public class Lexicon {
+public class Lexicon extends HashMap<String, Definition> {
 	
 	/**
 	 * Maps strings -> meaning. By design, each word can only have one meaning.
 	 */
-	private static Map<String, Definition> lexicon;
-		
+	private static Lexicon lexicon;
+	private static final long serialVersionUID = 1L;
+	
 	public static void load() {
 		
-		lexicon = new HashMap<String, Definition>();
+		lexicon = new Lexicon();
 		
 		//Prepositions
 		lexicon.put("r", new To()); //to
@@ -137,7 +137,7 @@ public class Lexicon {
 		lexicon.put("Hwi", new Damage());
 		lexicon.put("qmA", new CreateObject());
 		lexicon.put("rd", new Grow());
-		lexicon.put("wpi", new Open());
+		lexicon.put("wpi", new Open(), Tier.COMMON);
 		lexicon.put("sS", new Write());
 		lexicon.put("smAa", new Pray());
 		lexicon.put("sdfA", new Slow());
@@ -148,6 +148,40 @@ public class Lexicon {
 		//Conditionals
 		lexicon.put("Dr", new ConditionalDef());
 				
+	}
+	
+	/**
+	 * Add a word to the lexicon with a tier rarity for random drops.
+	 * @param key
+	 * 	The vocab item to add.
+	 * @param value
+	 * 	The semantics of the vocab item.
+	 * @param dropTier
+	 * 	The <code>Tier</code> in which the item should drop.
+	 * @return
+	 * 	The added item.
+	 */
+	public Definition put(String key, Definition value, Tier dropTier) {
+		dropTier.add(key);
+		return super.put(key, value);
+	}
+	
+	/**
+	 * Add a word to the lexicon with a list of several drop tiers.
+	 * @param key
+	 * 	The vocab item to add.
+	 * @param value
+	 * 	The semantics of the vocab item.
+	 * @param dropTier
+	 * 	An array of <code>Tier</code>s in which this element should drop.
+	 * @return
+	 * 	The added item.
+	 */
+	public Definition put(String key, Definition value, Tier[] dropTiers) {
+		for (Tier dropTier : dropTiers) {
+			dropTier.add(key);
+		}
+		return super.put(key, value);
 	}
 	
 	public static Definition lookup(String form) {
