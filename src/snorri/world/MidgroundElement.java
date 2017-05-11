@@ -10,7 +10,8 @@ import snorri.semantics.Nominal;
 
 public enum MidgroundElement implements Nominal, TileType {
 	NONE,
-	COL_BOT(false, getImage("colbot00.png"));
+	COL_BOT(false, getImage("colbot00.png")),
+	DOOR(false, getImage("door00.png"));
 	
 	private BufferedImage[]	textures;
 	private boolean pathable; //some things (like paths and tiles) will be unpathable
@@ -80,11 +81,6 @@ public enum MidgroundElement implements Nominal, TileType {
 	}
 
 	@Override
-	public Object get(World world, AbstractSemantics attr) {
-		return Nominal.super.get(world, attr);
-	}
-
-	@Override
 	public ArrayList<Tile> getSubTypes() {
 		int i = getId();
 		ArrayList<Tile> list = new ArrayList<Tile>();
@@ -147,5 +143,10 @@ public enum MidgroundElement implements Nominal, TileType {
 	@Override 
 	public int getLayer() {
 		return 1;
+	}
+
+	@Override
+	public boolean isLiquid() {
+		return false;
 	}
 }

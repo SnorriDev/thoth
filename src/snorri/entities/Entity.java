@@ -318,7 +318,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 				dir = dir.getProjection(Vector.DOWN_RIGHT);
 			}
 			
-			//give up; TODO more stuff?
 			else {
 				return false;
 			}

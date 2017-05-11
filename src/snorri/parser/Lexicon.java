@@ -61,9 +61,7 @@ import snorri.world.BackgroundElement;
 public class Lexicon {
 	
 	/**
-	 * maps strings -> meaning
-	 * currently, each word can only have one meaning,
-	 * although this may change
+	 * Maps strings -> meaning. By design, each word can only have one meaning.
 	 */
 	private static Map<String, Definition> lexicon;
 		

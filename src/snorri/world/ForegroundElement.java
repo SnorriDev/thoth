@@ -11,7 +11,7 @@ import snorri.semantics.Nominal;
 public enum ForegroundElement implements Nominal, TileType {
 	NONE,
 	COL_MID(getImage("colmid00.png")),
-	COL_TOP(getImage("coltop00.png"));;
+	COL_TOP(getImage("coltop00.png"));
 	
 	private BufferedImage[]	textures;
 	
@@ -67,11 +67,6 @@ public enum ForegroundElement implements Nominal, TileType {
 	@Override
 	public int getNumberStyles() {
 		return textures.length;
-	}
-
-	@Override
-	public Object get(World world, AbstractSemantics attr) {
-		return Nominal.super.get(world, attr);
 	}
 
 	//TODO: can implement all these in terms of a supermethod that takes a class parameter
@@ -138,5 +133,10 @@ public enum ForegroundElement implements Nominal, TileType {
 	@Override 
 	public int getLayer() {
 		return 2;
+	}
+
+	@Override
+	public boolean isLiquid() {
+		return false;
 	}
 }

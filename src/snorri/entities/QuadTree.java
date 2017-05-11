@@ -112,8 +112,6 @@ public class QuadTree extends Entity implements EntityGroup {
 	 *         child node
 	 */
 	public boolean delete(Entity e) {
-
-		// TODO can still make insert better
 		
 		QuadTree local = nodeMap.get(e);
 		if (local == null) {
@@ -122,23 +120,6 @@ public class QuadTree extends Entity implements EntityGroup {
 		boolean out = local.entities.remove(e);
 		local.calculateEmptyRec();
 		return out;
-
-//		if (isEmpty() || !contains(e)) {
-//			return false;
-//		}
-//
-//		if (nodes != null) {
-//			for (QuadTree node : nodes) {
-//				if (!node.isEmpty() && node.contains(e)) {
-//					boolean out = node.delete(e);
-//					calculateEmpty();
-//					return out;
-//				}
-//			}
-//		}
-//		boolean out = entities.remove(e);
-//		calculateEmpty();
-//		return out;
 
 	}
 	

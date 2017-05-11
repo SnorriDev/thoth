@@ -118,7 +118,8 @@ public class DungeonGen extends TerrainGen {
 					}
 				}
 			}
-			l.fillDoor(pos, new Tile(BackgroundElement.WALL,4), BackgroundElement.SAND);
+			//FIXME need to draw things in different layers
+			l.fillDoor(pos, new Tile(BackgroundElement.SAND,4), BackgroundElement.SAND);
 		}
 		
 		return l;

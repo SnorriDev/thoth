@@ -15,18 +15,6 @@ public enum BackgroundElement implements Nominal, TileType {
 		getImage("sand01.png"),
 		getImage("sand02.png"),
 		getImage("sand03.png")}, false, true),
-	WALL(false, new BufferedImage[] {
-		getImage("wall00.png"),
-		getImage("wall01.png"),
-		getImage("wall02.png"),
-		getImage("wall03.png"),
-		getImage("wall04.png"),
-		getImage("wall05.png"),
-		getImage("wall06.png"),
-		getImage("wall07.png"),
-		getImage("wall08.png"),
-		getImage("wall09.png"),
-		getImage("wall10.png")}, true),
 	TREE(false, Main.getImage("tree00.png")),
 	FOUNDATION(false, Tile.DEFAULT_TEXTURE),
 	HUT(false, Tile.DEFAULT_TEXTURE),
@@ -261,19 +249,6 @@ public enum BackgroundElement implements Nominal, TileType {
 	@Override
 	public String toString() {
 		return Util.clean(name());
-	}
-	
-	@Override
-	public Object get(World world, AbstractSemantics attr) {
-		if (attr == AbstractSemantics.FLOOD && isLiquid()) {
-			return new Tile(this);
-		}
-		
-		if (attr == AbstractSemantics.STORM && this == SAND) {
-			return new Tile(this, 0);
-		}
-		
-		return Nominal.super.get(world, attr);
 	}
 	
 	public boolean isAtTop() {

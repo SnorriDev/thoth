@@ -4,9 +4,9 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import snorri.audio.ClipWrapper;
-import snorri.semantics.Nominal.AbstractSemantics;
+import snorri.semantics.Nominal;
 
-public interface TileType {
+public interface TileType extends Nominal {
 	
 	//BufferedImage getImage(String string);
 	
@@ -22,9 +22,7 @@ public interface TileType {
 	
 	@Override
 	String toString();
-	
-	Object get(World world, AbstractSemantics attr);
-	
+		
 	ArrayList<Tile> getSubTypes();
 	
 	boolean hasSounds();
@@ -65,6 +63,20 @@ public interface TileType {
 		
 	}
 	
+	public boolean isLiquid();
+	
+	@Override
+	public default Object get(World world, AbstractSemantics attr) {
+		if (attr == AbstractSemantics.FLOOD && isLiquid()) {
+			return new Tile(this);
+		}
+		
+		if (attr == AbstractSemantics.STORM && this == BackgroundElement.SAND) {
+			return new Tile(this, 0);
+		}
+		
+		return Nominal.super.get(world, attr);
+	}
 	
 	public static TileType[] getValues(Class<? extends TileType> c) {
 		
