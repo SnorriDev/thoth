@@ -185,6 +185,18 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		for (Tile t : Tile.getAllTypes(MidgroundElement.class)) {
 
 			if (t == null || t.getTexture() == null) {
+				if (t.getType().getOrdinal() == 0) {
+					subsubmenu = new JMenu(t.toStringShort());
+					for (Tile s : t.getType().getSubTypes()) {
+						rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(s.getTexture()));
+						rbMenuItem.setSelected(firstTile);
+						rbMenuItem.setActionCommand("set" + s.toNumericString());
+						rbMenuItem.addActionListener(this);
+						subsubmenu.add(rbMenuItem);
+						groupTiles.add(rbMenuItem);
+					}
+					submenu1.add(subsubmenu);
+				}
 				continue;
 			}
 
@@ -201,7 +213,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		}
 		for (Tile t : Tile.getAllTypes(ForegroundElement.class)) {
 
-			if (t == null || t.getTexture() == null) {
+			if (t == null || t.getTexture() == null && t.getType().getOrdinal() != 0) {
 				continue;
 			}
 

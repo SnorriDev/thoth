@@ -44,6 +44,8 @@ public interface TileType extends Nominal {
 	boolean isChangable();
 	
 	int getLayer();
+	
+	int getOrdinal();
 
 	public static TileType lookup(Class<? extends TileType> c, int id) {
 		
