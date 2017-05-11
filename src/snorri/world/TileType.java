@@ -65,6 +65,13 @@ public interface TileType extends Nominal {
 	
 	public boolean isLiquid();
 	
+	public int ordinal();
+	
+	@Deprecated
+	default int getOrdinal() {
+		return ordinal();
+	}
+	
 	@Override
 	public default Object get(World world, AbstractSemantics attr) {
 		if (attr == AbstractSemantics.FLOOD && isLiquid()) {

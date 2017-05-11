@@ -6,10 +6,9 @@ import java.util.ArrayList;
 import snorri.audio.ClipWrapper;
 import snorri.main.Main;
 import snorri.main.Util;
-import snorri.semantics.Nominal;
 import snorri.world.TileType;
 
-public enum BackgroundElement implements Nominal, TileType {
+public enum BackgroundElement implements TileType {
 	SAND(true, false, new BufferedImage[] {
 		getImage("sand00.png"),
 		getImage("sand01.png"),
