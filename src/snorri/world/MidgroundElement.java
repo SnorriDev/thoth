@@ -10,7 +10,8 @@ import snorri.semantics.Nominal;
 
 public enum MidgroundElement implements Nominal, TileType {
 	NONE,
-	COL_BOT(false, getImage("colbot00.png"));
+	COL_BOT(false, getImage("colbot00.png")),
+	DEBRIS(false, getImage("debris00.png"));
 	
 	private BufferedImage[]	textures;
 	private boolean pathable; //some things (like paths and tiles) will be unpathable
