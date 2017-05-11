@@ -61,6 +61,9 @@ public enum ForegroundElement implements Nominal, TileType {
 			//Main.error("texture not found, index out of bounds, returning default texture");
 			return Tile.DEFAULT_FOREGROUND_TEXTURE;
 		}
+		if (index == 0) {
+			return Tile.BLANK_TEXTURE;
+		}
 		return textures[index];
 	}
 
@@ -138,5 +141,10 @@ public enum ForegroundElement implements Nominal, TileType {
 	@Override
 	public boolean isLiquid() {
 		return false;
+	}
+	
+	@Override
+	public int getOrdinal() {
+		return this.ordinal();
 	}
 }
