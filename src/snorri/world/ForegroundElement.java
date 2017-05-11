@@ -16,7 +16,7 @@ public enum ForegroundElement implements Nominal, TileType {
 	private BufferedImage[]	textures;
 	
 	ForegroundElement() {
-		this(Tile.DEFAULT_FOREGROUND_TEXTURE);
+		this((BufferedImage) null);
 	}
 	
 	ForegroundElement(BufferedImage[] textures) {
