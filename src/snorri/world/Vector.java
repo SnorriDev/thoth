@@ -238,13 +238,18 @@ public class Vector implements Serializable, Comparable<Vector> {
 	}
 	
 	/**
-	 * used in the pos -> graph hash
-	 * note that this is only meaningful for
-	 * integral vectors defined in grid coordinates
+	 * Hash function taken from {@link http://stackoverflow.com/questions/5928725/hashing-2d-3d-and-nd-vectors}.
+	 * 100030001 and 100050001 are arbitrary primes. For more palindromic primes, see {@link https://www.rsok.com/~jrm/9_digit_palindromic_primes.html}.
+	 * @return Hash code
 	 */
 	@Override
 	public int hashCode() {
-		return Level.MAX_SIZE * getY() + getX();
+		return getX() * 100030001 ^ getY() * 100050001;
+//		return Level.MAX_SIZE * getY() + getX();
+	}
+	
+	public static int hashVectorPair(Vector v1, Vector v2) {
+		return v1.getX() * 100030001 ^ v1.getY() * 100050001 ^ v2.getX() * 100060001 ^ v2.getY() * 100111001;
 	}
 	
 	//TODO maybe should have just used these instead of vectors lol

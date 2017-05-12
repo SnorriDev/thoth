@@ -61,7 +61,10 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 	 * 		whether terrain obstructs the shot
 	 */
 	public boolean canAttack(Entity target, World world) {
-		return target.pos.distanceSquared(pos) < attackRange * attackRange;
+		if (getInventory().getWeapon() == null) {
+			return false;
+		}
+		return target.pos.distanceSquared(pos) < attackRange * attackRange && getInventory().getWeapon().canUse();
 	}
 	
 	public void attack(World world, Entity e) {

@@ -211,7 +211,9 @@ public class Level implements Editable {
 	
 	@Override
 	public void render(FocusedWindow g, Graphics gr, double deltaTime, boolean renderOutside) {
-				
+		
+		//TODO add some shit that checks if layer is empty etc.
+		
 		int cushion = 4;
 		int scaleFactor = 2;
 		int minX = g.getFocus().getPos().getX() / Tile.WIDTH - g.getDimensions().getX() / Tile.WIDTH / scaleFactor - cushion;
