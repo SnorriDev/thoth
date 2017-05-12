@@ -20,12 +20,10 @@ public abstract class Despawner extends Entity {
 	
 	protected Despawner(Vector pos, int r) {
 		super(pos, r);
-		setDespawnable(false);
 	}
 			
 	protected Despawner(Entity e) {
 		super(e);
-		setDespawnable(false);
 	}
 	
 	protected Despawner(Vector pos, Collider c) {
@@ -60,6 +58,11 @@ public abstract class Despawner extends Entity {
 	
 	protected double getLifeSpan() {
 		return DEFAULT_LIFESPAN;
+	}
+	
+	@Override
+	public void updateEntityStats() {
+		setDespawnable(false);
 	}
 	
 }

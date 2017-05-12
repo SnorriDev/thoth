@@ -28,6 +28,7 @@ public abstract class CloseRangeAIUnit extends AIUnit {
 	public void updateEntityStats() {
 		super.updateEntityStats();
 		attackRange = 100;
+		stopRange = 80;
 	}
 
 }

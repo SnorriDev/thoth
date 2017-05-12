@@ -37,7 +37,7 @@ public abstract class Detector extends Despawner {
 		
 		for (Entity hit : world.getEntityTree().getAllCollisions(this, hitAll)) {
 			if (hit != null) {
-				onCollision(new CollisionEvent(this, hit, world));
+				onCollision(new CollisionEvent(this, hit, world, deltaTime));
 			}
 		}
 		

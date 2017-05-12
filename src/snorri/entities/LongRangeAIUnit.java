@@ -98,9 +98,16 @@ public abstract class LongRangeAIUnit extends AIUnit {
 			tempPos.add(step);	
 		}
 
-		ShootAttempt.save(attempt,  true); //this line might not be necessary
+		ShootAttempt.save(attempt, true); //this line might not be necessary
 		return true;
 		
+	}
+	
+	@Override
+	public void updateEntityStats() {
+		super.updateEntityStats();
+		attackRange = 450;
+		stopRange = 300;
 	}
 	
 }

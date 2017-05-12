@@ -29,7 +29,7 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 	private Vector lastSeenPos;
 	private boolean recalculatingPath = false;
 	
-	protected int seekRange, attackRange;
+	protected int seekRange, attackRange, stopRange;
 	
 	protected Inventory inventory;
 	protected Entity target;
@@ -93,6 +93,11 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 							
 		if (canAttack(target, world)) {
 			attack(world, target);
+			return;
+		}
+		
+		//if we are very close to the target, don't even try to move
+		if (target.pos.distanceSquared(pos) <= stopRange * stopRange) {
 			return;
 		}
 				
@@ -184,7 +189,6 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 		super.updateEntityStats();
 		inventory = new Inventory(this);
 		seekRange = 1000;
-		attackRange = 450;
 	}
 
 }
