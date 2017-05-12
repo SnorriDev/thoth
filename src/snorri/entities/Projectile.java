@@ -42,6 +42,10 @@ public class Projectile extends Detector implements Walker {
 		return orb;
 	}
 	
+	public void applyForce(Vector force, double deltaTime) {
+		velocity.add(force.copy().multiply(deltaTime));
+	}
+	
 	@Override
 	public void update(World world, double deltaTime) {
 		
