@@ -76,6 +76,10 @@ public class Util {
 	 */
 	public static BufferedImage resize(Image image, int newWidth, int newHeight) {
 		
+		if (image == null) {
+			return null;
+		}
+		
 		if (newWidth <= 0 && newHeight != 0) {
 			newWidth = image.getWidth(null) * newHeight / image.getHeight(null);
 		}

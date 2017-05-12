@@ -59,14 +59,18 @@ public abstract class Item implements Droppable {
 	
 	public enum ItemType {
 
+		//TODO convert these to Animations instead of BufferedImages?
+		
 		EMPTY,
 		PAPYRUS(5, Papyrus.class, Main.getImage("/textures/items/papyrus.png")),
 		HELMET(Armor.class, Main.getImage("/textures/items/helmet.png"), 2d),
 		SLING(Weapon.class, Main.getImage("/textures/items/sling.png"), 34d, 0.45, "/sound/arrow.wav"),
-		PELLET(5, Orb.class, Main.getImage("/textures/items/pellet.png")),
+		PELLET(5, Orb.class, Main.getImage("/textures/items/pellet.png"), new Animation("/textures/objects/pellet.png")),
 		SLOW_SLING(Weapon.class, Main.getImage("/textures/items/sling.png"), 34d, 2d, "/sound/arrow.wav"),
 		BOW(Weapon.class, Main.getImage("/textures/items/bow.png"), 75d, 0.6, "/sound/arrow.wav"),
-		ARROW(5, Orb.class, Main.getImage("/textures/items/arrow.png"));
+		ARROW(5, Orb.class, Main.getImage("/textures/items/arrow.png"), new Animation("/textures/objects/pellet.png")),
+		SNAKE_BITE(Weapon.class, null, 75d, 1d, "/sound/arrow.wav"),
+		VENOM(5, Orb.class, null, new Animation("/textures/objects/venom.png"));
 
 		private Class<? extends Item> c;
 		private int maxQuantity = 1; //number of inventory slots; use Consumable class with data field for charges

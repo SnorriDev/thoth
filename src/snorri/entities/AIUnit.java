@@ -7,8 +7,6 @@ import java.util.List;
 import snorri.animations.Animation;
 import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
-import snorri.inventory.Item;
-import snorri.inventory.Item.ItemType;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.main.Main;
@@ -22,7 +20,7 @@ import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targetter {
+public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Targetter {
 	
 	private static final long serialVersionUID = 1L;
 	private static final double APPROACH_MARGIN = Tile.WIDTH; //was 15, was causing pathfinding bug?
@@ -31,20 +29,16 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 	private Vector lastSeenPos;
 	private boolean recalculatingPath = false;
 	
-	protected double seekRange = 1000;
-	protected double attackRange = 450;
+	protected int seekRange, attackRange;
 	
 	protected Inventory inventory;
 	protected Entity target;
 	
 	private ArrayDeque<PathNode> path;
 	
-	protected Enemy(Vector pos, Entity target, Animation idle, Animation walking) {
+	protected AIUnit(Vector pos, Entity target, Animation idle, Animation walking) {
 		super(pos, idle, walking);
 		this.target = target;
-		inventory = new Inventory(this);
-		getInventory().add(Item.newItem(ItemType.PELLET));
-		getInventory().add(Item.newItem(ItemType.SLOW_SLING));
 	}
 
 	public void setTarget(Entity target) {
@@ -180,6 +174,14 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 		}
 		
 		super.renderAround(g, gr, timeDelta);
+	}
+	
+	@Override
+	public void updateEntityStats() {
+		super.updateEntityStats();
+		inventory = new Inventory(this);
+		seekRange = 1000;
+		attackRange = 450;
 	}
 
 }

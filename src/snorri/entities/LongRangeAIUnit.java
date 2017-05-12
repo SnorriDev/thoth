@@ -4,11 +4,11 @@ import snorri.animations.Animation;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public abstract class RangedEnemy extends Enemy {
+public abstract class LongRangeAIUnit extends AIUnit {
 
 	private static final long serialVersionUID = 1L;
 	
-	protected RangedEnemy(Vector pos, Entity target, Animation idle, Animation walking) {
+	protected LongRangeAIUnit(Vector pos, Entity target, Animation idle, Animation walking) {
 		super(pos, target, idle, walking);
 	}
 

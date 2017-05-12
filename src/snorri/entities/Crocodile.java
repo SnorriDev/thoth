@@ -5,7 +5,7 @@ import snorri.inventory.Inventory;
 
 import snorri.world.Vector;
 
-public class Crocodile extends LandMeleeUnit{
+public class Crocodile extends CloseRangeAIUnit{
 
 	private static final long serialVersionUID = 1L;
 

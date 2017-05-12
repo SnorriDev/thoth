@@ -2,6 +2,8 @@ package snorri.inventory;
 
 import java.awt.Color;
 
+import snorri.animations.Animation;
+
 public class Orb extends Item {	
 	
 	private static final long serialVersionUID = 1L;
@@ -20,6 +22,10 @@ public class Orb extends Item {
 	@Override
 	public int getInvPos() {
 		return 3;
+	}
+
+	public Animation getProjectileAnimation() {
+		return (Animation) type.getProperty(0);
 	}
 
 }

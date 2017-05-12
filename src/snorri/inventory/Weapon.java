@@ -22,7 +22,6 @@ public class Weapon extends Item {
 		clip = new ClipWrapper((String) type.getProperty(2));
 	}
 	
-	//retrieve the sharpness for this weapon from the ItemType
 	public double getSharpness() {
 		return (double) type.getProperty(0);
 	}
@@ -30,7 +29,7 @@ public class Weapon extends Item {
 	public double getBaseCooldown() {
 		return (double) type.getProperty(1);
 	}
-	
+		
 	public void setCustomTimer(Timer timer) {
 		this.timer = timer;
 	}

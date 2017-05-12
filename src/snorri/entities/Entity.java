@@ -97,6 +97,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			this.collider = collider.cloneOnto(this);
 		}
 		z = DEFAULT_LAYER;
+		updateEntityStats();
 	}
 	
 	public Entity(Entity e) {
@@ -394,12 +395,9 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	
 	/**
 	 * This method can be called manually to update the stats and other parameters of old entitites in a world.
-	 * @return
-	 * 	Whether the update was successful
 	 */
 	//TODO implement this on all entities to avoid a lot of compatibility issues
-	public boolean updateEntityToLatest() {
-		return true;
+	public void updateEntityStats() {
 	}
 
 }
