@@ -8,24 +8,18 @@ import snorri.world.Vector;
 public class Crocodile extends LandMeleeUnit{
 
 	private static final long serialVersionUID = 1L;
-	private static final double APPROACH_MARGIN = 15;
-	private static final double CHANGE_PATH_MARGIN = 350;
 
 	public static final Animation IDLE = new Animation("/textures/animations/crocodile/idle");
 	public static final Animation ATTACK = new Animation("/textures/animations/crocodile/attack");
 
-	protected static double seekRange = 256;
-	protected static double attackRange = 32;
-	protected static double attackPower = 5; //TODO: change to something more logical and balanced
+	protected double seekRange = 256;
+	protected double attackPower = 5; //TODO: change to something more logical and balanced
 
 	protected Inventory inventory;
 	protected Entity target;
 
 	public Crocodile(Vector pos, Entity target) {
-		super(pos, target, new Animation(IDLE), new Animation(IDLE), new Animation(ATTACK), seekRange, attackRange, attackPower, APPROACH_MARGIN, CHANGE_PATH_MARGIN);
-		this.target = target;
-		animation = new Animation(IDLE);
-		inventory = new Inventory(this);
+		super(pos, target, new Animation(IDLE), new Animation(ATTACK));
 	}
 
 	public Crocodile(Vector pos) {

@@ -10,7 +10,7 @@ public class Cobra extends LandMeleeUnit {
 	public static final Animation IDLE = new Animation("/textures/animations/cobra");
 	
 	public Cobra(Vector pos, Entity target) {
-		super(pos, target, IDLE);
+		super(pos, target, new Animation(IDLE));
 	}
 	
 	public Cobra(Vector pos) {

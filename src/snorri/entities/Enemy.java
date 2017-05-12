@@ -23,9 +23,6 @@ import snorri.world.Vector;
 import snorri.world.World;
 
 public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targetter {
-
-	private static final Animation IDLE = new Animation("/textures/animations/mummy/idle");
-	private static final Animation WALKING = new Animation("textures/animations/mummy/walking");
 	
 	private static final long serialVersionUID = 1L;
 	private static final double APPROACH_MARGIN = Tile.WIDTH; //was 15, was causing pathfinding bug?
@@ -42,16 +39,12 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 	
 	private ArrayDeque<PathNode> path;
 	
-	public Enemy(Vector pos, Entity target) {
-		super(pos, IDLE, WALKING);
+	protected Enemy(Vector pos, Entity target, Animation idle, Animation walking) {
+		super(pos, idle, walking);
 		this.target = target;
 		inventory = new Inventory(this);
 		getInventory().add(Item.newItem(ItemType.PELLET));
 		getInventory().add(Item.newItem(ItemType.SLOW_SLING));
-	}
-	
-	public Enemy(Vector pos) {
-		this(pos, null);
 	}
 
 	public void setTarget(Entity target) {
@@ -73,40 +66,11 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 	 * @return
 	 * 		whether terrain obstructs the shot
 	 */
-	public boolean canShootAt(World world, Entity target) {
-		
-		if (target.pos.distanceSquared(pos) > attackRange * attackRange) {
-			return false;
-		}
-		
-		Vector step = target.pos.copy().sub(pos).normalize();
-		Vector tempPos = pos.copy();
-		
-		//I'm checking if pos and target.pos are both okay just in case we're in a wall
-		while (tempPos.distanceSquared(pos) <= target.pos.distanceSquared(pos)) {	
-		
-			if (! world.canShootOver(tempPos)) {
-				return false;
-			}
-			
-			if (tempPos.distanceSquared(pos) > attackRange * attackRange) {
-				return false;
-			}
-			
-//			Entity col;
-//			if ((col = world.getEntityTree().getFirstCollision(new Entity(tempPos))) != null
-//					&& col != this && col != target) {
-//				return false;
-//			}
-			
-			tempPos.add(step);	
-		}
-
-		return true;
-		
+	public boolean canAttack(Entity target, World world) {
+		return target.pos.distanceSquared(pos) < attackRange * attackRange;
 	}
 	
-	public void shootAt(World world, Entity e) {
+	public void attack(World world, Entity e) {
 		if (inventory == null) {
 			return;
 		}
@@ -130,8 +94,8 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 			}
 		}
 							
-		if (canShootAt(world, target)) {
-			shootAt(world, target);
+		if (canAttack(target, world)) {
+			attack(world, target);
 			return;
 		}
 				
