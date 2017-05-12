@@ -53,10 +53,10 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int SCALE_FACTOR = 16;
-	private static final int SPEED_MULTIPLIER = 4;
+	private static final double SCALE_FACTOR = 15.9;
+	private static final double SPEED_MULTIPLIER = 3.9;
 	
-	private int speed = SCALE_FACTOR;
+	private double speed = SCALE_FACTOR;
 
 	private Editable env;
 	private Entity focus;
@@ -89,7 +89,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 		repaint();
 
-		focus = new Entity(new Vector(50, 50));
+		focus = new Entity(new Vector(8, 8));
 
 		lastRenderTime = getTimestamp();
 		
