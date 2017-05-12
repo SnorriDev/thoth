@@ -3,9 +3,7 @@ package snorri.inventory;
 import java.awt.Graphics;
 import java.io.Serializable;
 
-import snorri.audio.Audio;
 import snorri.entities.Player;
-import snorri.entities.Projectile;
 import snorri.entities.Unit;
 import snorri.keyboard.Key;
 import snorri.main.GameWindow;
@@ -122,22 +120,29 @@ public class Inventory implements Serializable {
 		return;
 	}
 	
-	public boolean tryToShoot(World world, Unit focus, Vector movement, Vector dir) {
+	/**
+	 * Try to attack with the weapon in the inventory.
+	 * @param world
+	 * 	The world in which to attack
+	 * @param focus
+	 * 	The entity using the inventory
+	 * @param movement
+	 * 	The movement vector of the unit
+	 * @param dir
+	 * 	The direction (normalized) of the shot
+	 * @return
+	 * 	Whether the attack was successful (i.e. whether it was off cooldown)
+	 */
+	public boolean attack(World world, Unit focus, Vector movement, Vector dir) {
 		
 		if (weaponSlot == null || dir == null || dir.equals(Vector.ZERO) || dir.notInPlane()) {
 			return false;
 		}
 		
-		if (weaponSlot.getTimer().activate()) {
-			Audio.playClip(weaponSlot.getClip());
-			world.add(new Projectile(focus, movement, dir, weaponSlot, getSelectedOrb()));
-			return true;
-		}
-		
-		return false;
+		return weaponSlot.attack(world, focus, movement, dir, getSelectedOrb());
 		
 	}
-	
+		
 	public Armor getArmor() {
 		return armorSlot;
 	}

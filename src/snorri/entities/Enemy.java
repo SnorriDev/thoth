@@ -74,7 +74,7 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 		if (inventory == null) {
 			return;
 		}
-		inventory.tryToShoot(world, this, Vector.ZERO.copy(), e.getPos().copy().sub(pos));
+		inventory.attack(world, this, Vector.ZERO.copy(), e.getPos().copy().sub(pos));
 	}
 	
 	//TODO don't walk into each other

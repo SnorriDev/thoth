@@ -1,10 +1,14 @@
 package snorri.inventory;
 
+import snorri.audio.Audio;
 import snorri.audio.ClipWrapper;
 import snorri.entities.Entity;
+import snorri.entities.Projectile;
 import snorri.events.SpellEvent;
 import snorri.main.GameWindow;
 import snorri.main.Main;
+import snorri.world.Vector;
+import snorri.world.World;
 
 public class Weapon extends Item {
 
@@ -25,10 +29,6 @@ public class Weapon extends Item {
 	
 	public double getBaseCooldown() {
 		return (double) type.getProperty(1);
-	}
-	
-	public ClipWrapper getClip() {
-		return clip;
 	}
 	
 	public void setCustomTimer(Timer timer) {
@@ -58,6 +58,15 @@ public class Weapon extends Item {
 	@Override
 	public int getInvPos() {
 		return 0;
+	}
+	
+	boolean attack(World world, Entity focus, Vector movement, Vector dir, Orb orb) {
+		if (timer.activate()) {
+			Audio.playClip(clip);
+			world.add(new Projectile(focus, movement, dir, this, orb));
+			return true;
+		}
+		return false;
 	}
 
 }
