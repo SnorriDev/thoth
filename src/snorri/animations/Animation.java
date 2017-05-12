@@ -16,6 +16,7 @@ import java.util.Comparator;
 import javax.imageio.ImageIO;
 
 import snorri.main.Main;
+import snorri.world.Vector;
 
 /**
  * stores all the animation frames as Images (PNGS)
@@ -197,6 +198,27 @@ public class Animation implements Serializable {
 			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
 			flippedFrames[i] = op.filter(image, null);
 		}
+	}
+	
+	/**
+	 * Returns an animation rotated with respect to <code>dir</code>.
+	 * The original animation is unchanged.
+	 * @param dir
+	 * 	The direction to rotate, as a vector.
+	 * @return
+	 * 	The new rotated animation.
+	 */
+	public Animation getRotated(Vector dir) {
+		Animation other = new Animation(this);
+//		double radians = Math.toRadians(degrees);
+		for (int i = 0; i < frames.length; i++) {
+			double midX = frames[i].getWidth() / 2, midY = frames[i].getHeight() / 2;
+			AffineTransform tx = AffineTransform.getRotateInstance(dir.getX(), dir.getY(), midX, midY);
+			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+			other.frames[i] = op.filter(frames[i], null);
+		}
+		other.computeFlipped();
+		return other;
 	}
 	
 	public void flip() {

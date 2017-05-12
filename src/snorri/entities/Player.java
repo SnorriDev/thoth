@@ -107,7 +107,7 @@ public class Player extends Unit implements Carrier {
 		
 		Vector movement = window.getMovementVector();
 		Vector dir = window.getShotDirection();
-		inventory.tryToShoot(world, this, movement, dir);
+		inventory.attack(world, this, movement, dir);
 				
 	}
 	

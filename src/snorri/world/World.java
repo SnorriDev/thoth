@@ -12,6 +12,7 @@ import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.entities.QuadTree;
 import snorri.entities.Unit;
+import snorri.entities.LongRangeAIUnit.ShootAttempt;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
@@ -395,6 +396,7 @@ public class World implements Playable, Editable {
 
 		l.setTileGrid(posGrid, tile);
 		graph.wrapPathingUpdate(posGrid, oldTile, tile);
+		ShootAttempt.reset();
 	
 	}
 

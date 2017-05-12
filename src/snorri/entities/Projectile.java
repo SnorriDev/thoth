@@ -1,6 +1,5 @@
 package snorri.entities;
 
-import snorri.animations.Animation;
 import snorri.events.CollisionEvent;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
@@ -14,7 +13,6 @@ public class Projectile extends Detector implements Walker {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Animation ANIMATION = new Animation("/textures/objects/pellet.png");
 	private static final int PROJECTILE_SPEED = 450;
 		
 	private Vector velocity;
@@ -26,7 +24,7 @@ public class Projectile extends Detector implements Walker {
 	public Projectile(Entity root, Vector rootVelocity, Vector path, Weapon weapon, Orb orb) {
 		super(root.getPos().copy(), 3); //radius of a projectile is 1
 		velocity = rootVelocity.copy().add(path.copy().scale(PROJECTILE_SPEED));
-		animation = new Animation(ANIMATION);
+		this.animation = orb.getProjectileAnimation().getRotated(path.copy().normalize()); //new Animation(ANIMATION);
 		this.root = root;
 		this.weapon = weapon;
 		this.orb = orb;

@@ -7,8 +7,6 @@ import java.util.List;
 import snorri.animations.Animation;
 import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
-import snorri.inventory.Item;
-import snorri.inventory.Item.ItemType;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.main.Main;
@@ -22,10 +20,7 @@ import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targetter {
-
-	private static final Animation IDLE = new Animation("/textures/animations/mummy/idle");
-	private static final Animation WALKING = new Animation("textures/animations/mummy/walking");
+public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Targetter {
 	
 	private static final long serialVersionUID = 1L;
 	private static final double APPROACH_MARGIN = Tile.WIDTH; //was 15, was causing pathfinding bug?
@@ -34,24 +29,16 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 	private Vector lastSeenPos;
 	private boolean recalculatingPath = false;
 	
-	protected double seekRange = 1000;
-	protected double attackRange = 450;
+	protected int seekRange, attackRange;
 	
 	protected Inventory inventory;
 	protected Entity target;
 	
 	private ArrayDeque<PathNode> path;
 	
-	public Enemy(Vector pos, Entity target) {
-		super(pos, IDLE, WALKING);
+	protected AIUnit(Vector pos, Entity target, Animation idle, Animation walking) {
+		super(pos, idle, walking);
 		this.target = target;
-		inventory = new Inventory(this);
-		getInventory().add(Item.newItem(ItemType.PELLET));
-		getInventory().add(Item.newItem(ItemType.SLOW_SLING));
-	}
-	
-	public Enemy(Vector pos) {
-		this(pos, null);
 	}
 
 	public void setTarget(Entity target) {
@@ -73,44 +60,18 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 	 * @return
 	 * 		whether terrain obstructs the shot
 	 */
-	public boolean canShootAt(World world, Entity target) {
-		
-		if (target.pos.distanceSquared(pos) > attackRange * attackRange) {
+	public boolean canAttack(Entity target, World world) {
+		if (getInventory().getWeapon() == null) {
 			return false;
 		}
-		
-		Vector step = target.pos.copy().sub(pos).normalize();
-		Vector tempPos = pos.copy();
-		
-		//I'm checking if pos and target.pos are both okay just in case we're in a wall
-		while (tempPos.distanceSquared(pos) <= target.pos.distanceSquared(pos)) {	
-		
-			if (! world.canShootOver(tempPos)) {
-				return false;
-			}
-			
-			if (tempPos.distanceSquared(pos) > attackRange * attackRange) {
-				return false;
-			}
-			
-//			Entity col;
-//			if ((col = world.getEntityTree().getFirstCollision(new Entity(tempPos))) != null
-//					&& col != this && col != target) {
-//				return false;
-//			}
-			
-			tempPos.add(step);	
-		}
-
-		return true;
-		
+		return target.pos.distanceSquared(pos) < attackRange * attackRange && getInventory().getWeapon().canUse();
 	}
 	
-	public void shootAt(World world, Entity e) {
+	public void attack(World world, Entity e) {
 		if (inventory == null) {
 			return;
 		}
-		inventory.tryToShoot(world, this, Vector.ZERO.copy(), e.getPos().copy().sub(pos));
+		inventory.attack(world, this, Vector.ZERO.copy(), e.getPos().copy().sub(pos));
 	}
 	
 	//TODO don't walk into each other
@@ -130,8 +91,8 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 			}
 		}
 							
-		if (canShootAt(world, target)) {
-			shootAt(world, target);
+		if (canAttack(target, world)) {
+			attack(world, target);
 			return;
 		}
 				
@@ -216,6 +177,14 @@ public abstract class Enemy extends Unit implements Pathfinder, Carrier, Targett
 		}
 		
 		super.renderAround(g, gr, timeDelta);
+	}
+	
+	@Override
+	public void updateEntityStats() {
+		super.updateEntityStats();
+		inventory = new Inventory(this);
+		seekRange = 1000;
+		attackRange = 450;
 	}
 
 }
