@@ -9,8 +9,8 @@ public class Vortex extends Detector {
 	private static final long serialVersionUID = 1L;
 	private static final Animation VORTEX_ANIMATION = new Animation("/textures/animations/vortex");
 	
-	protected static final double FIELD_STRENGTH = 10000000d;
-	protected static final double ENTITY_SCALE = 1 / 500d;
+	protected static final double FIELD_STRENGTH = 50000000d;
+	protected static final double ENTITY_SCALE = 1 / 5000d;
 	protected static final double EVENT_HORIZON = 30;
 	
 	public Vortex(Vector pos) {

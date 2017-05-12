@@ -117,5 +117,11 @@ public class Projectile extends Detector implements Walker {
 	public void walk(World world, Vector delta) {
 		pos.add(delta);
 	}
+	
+	@Override
+	public void updateEntityStats() {
+		super.updateEntityStats();
+		setDespawnable(true);
+	}
 
 }
