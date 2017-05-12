@@ -48,7 +48,7 @@ public enum BackgroundElement implements TileType {
 		getImage("floor10.png"),
 		getImage("floor11.png"),
 		getImage("floor12.png")}, true),
-	GRAVEL(true, getImage("floor11.png")),
+	GRAVEL(true, getImage("gravel00.png")),
 	STONE(false, new BufferedImage[] {
 		getImage("stone00.png"),
 		getImage("stone01.png")}),
