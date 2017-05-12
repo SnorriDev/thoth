@@ -30,8 +30,9 @@ public enum Key implements Binding {
 	DELETE(8, ' '), //delete entity
 	T(84, 't'), //edit entity tag
 	
-	Q(81, 'q'), //UNUSED
-	I(73, 'i'); //UNUSED
+	Q(81, 'q'), //speed key
+	I(73, 'i'), //UNUSED
+	P(80, 'p'); //pick key
 	
 	private int id;
 	private char ch;

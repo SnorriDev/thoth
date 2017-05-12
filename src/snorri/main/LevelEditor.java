@@ -53,7 +53,10 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int SCALE_FACTOR = 10;
+	private static final double SCALE_FACTOR = 15.9;
+	private static final double SPEED_MULTIPLIER = 3.9;
+	
+	private double speed = SCALE_FACTOR;
 
 	private Editable env;
 	private Entity focus;
@@ -68,6 +71,8 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	private boolean canUndo;
 	private boolean canRedo;
+	
+	private boolean extraSpeed = false;
 
 	JMenuBar menuBar;
 	JMenu menu, submenu0, submenu1, submenu2, subsubmenu;
@@ -84,7 +89,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 		repaint();
 
-		focus = new Entity(new Vector(50, 50));
+		focus = new Entity(new Vector(8, 8));
 
 		lastRenderTime = getTimestamp();
 		
@@ -444,20 +449,22 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				if (focus.getPos().getY() >= env.getLevel(selectedTile.getType().getLayer()).getDimensions().getY() * Tile.WIDTH + SCALE_FACTOR) {
 					canGoDown = false;
 				}
-
+				
+				
 				if (states.getMovementVector().getX() < 0 && !canGoLeft) {
-					focus.getPos().sub(states.getMovementVector().getProjectionX().scale(SCALE_FACTOR));
+					focus.getPos().sub(states.getMovementVector().getProjectionX().scale(speed));
 				}
 				if (states.getMovementVector().getX() > 0 && !canGoRight) {
-					focus.getPos().sub(states.getMovementVector().getProjectionX().scale(SCALE_FACTOR));
+					focus.getPos().sub(states.getMovementVector().getProjectionX().scale(speed));
 				}
 				if (states.getMovementVector().getY() < 0 && !canGoUp) {
-					focus.getPos().sub(states.getMovementVector().getProjectionY().scale(SCALE_FACTOR));
+					focus.getPos().sub(states.getMovementVector().getProjectionY().scale(speed));
 				}
 				if (states.getMovementVector().getY() > 0 && !canGoDown) {
-					focus.getPos().sub(states.getMovementVector().getProjectionY().scale(SCALE_FACTOR));
+					focus.getPos().sub(states.getMovementVector().getProjectionY().scale(speed));
 				}
-				focus.getPos().add(states.getMovementVector().scale(SCALE_FACTOR));
+				focus.getPos().add(states.getMovementVector().scale(speed));
+				
 
 				if (isClicking) {
 					Vector location = getMousePosAbsolute().copy();
@@ -532,9 +539,35 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		if (Key.SPACE.isPressed(e)) {
 			openEntityInventory();
 		}
+		if (Key.P.isPressed(e)) {
+			pick();
+		}
+		if (Key.Q.isPressed(e)) {
+			changeSpeed();
+		}
+		if (Key.ONE.isPressed(e)) {
+			selectedTile = new Tile(BackgroundElement.class, 0, 0);
+		}
+		if (Key.TWO.isPressed(e)) {
+			selectedTile = new Tile(MidgroundElement.class, 0, 0);
+		}
+		if (Key.THREE.isPressed(e)) {
+			selectedTile = new Tile(ForegroundElement.class, 0, 0);
+		}
 		
 		//TODO add a key to register a team, and function to look up by name?
 
+	}
+
+	private void changeSpeed() {
+		if (extraSpeed) {
+			speed = SCALE_FACTOR;
+			extraSpeed = false;
+		}
+		else {
+			speed = SCALE_FACTOR * SPEED_MULTIPLIER;
+			extraSpeed = true;
+		}
 	}
 
 	public void fill() {
