@@ -224,6 +224,7 @@ public class Animation implements Serializable {
 //		double radians = Math.toRadians(degrees);
 		for (int i = 0; i < frames.length; i++) {
 			double midX = frames[i].getWidth() / 2, midY = frames[i].getHeight() / 2;
+			//FIXME this is cutting off corners of projectiles
 			AffineTransform tx = AffineTransform.getRotateInstance(dir.getX(), dir.getY(), midX, midY);
 			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
 			other.frames[i] = op.filter(frames[i], null);
