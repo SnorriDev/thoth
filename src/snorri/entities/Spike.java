@@ -8,7 +8,7 @@ import snorri.world.Vector;
 public class Spike extends Detector {
 
 	private static final long serialVersionUID = 1L;
-	private static final Animation ANIMATION = new Animation("/textures/objects/spike.png");
+	private static final Animation ANIMATION = new Animation("/textures/animations/spike", true);
 	private static final double SPIKE_DMG = 10d;
 	
 	private boolean hasDamaged = false;

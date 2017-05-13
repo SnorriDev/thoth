@@ -1,0 +1,27 @@
+<!DOCTYPE PencilPalette>
+<palette>
+  <Colour red="0" blue="0" name="Black" green="0"/>
+  <Colour red="255" blue="0" name="Red" green="0"/>
+  <Colour red="128" blue="0" name="Dark Red" green="0"/>
+  <Colour red="255" blue="0" name="Orange" green="128"/>
+  <Colour red="128" blue="0" name="Dark Orange" green="64"/>
+  <Colour red="255" blue="0" name="Yellow" green="255"/>
+  <Colour red="128" blue="0" name="Dark Yellow" green="128"/>
+  <Colour red="0" blue="0" name="Green" green="255"/>
+  <Colour red="0" blue="0" name="Dark Green" green="128"/>
+  <Colour red="0" blue="255" name="Cyan" green="255"/>
+  <Colour red="0" blue="128" name="Dark Cyan" green="128"/>
+  <Colour red="0" blue="255" name="Blue" green="0"/>
+  <Colour red="0" blue="128" name="Dark Blue" green="0"/>
+  <Colour red="255" blue="255" name="White" green="255"/>
+  <Colour red="220" blue="229" name="Very Light Grey" green="220"/>
+  <Colour red="192" blue="192" name="Light Grey" green="192"/>
+  <Colour red="160" blue="164" name="Grey" green="160"/>
+  <Colour red="128" blue="128" name="Dark Grey" green="128"/>
+  <Colour red="255" blue="187" name="Light Skin" green="227"/>
+  <Colour red="221" blue="161" name="Light Skin - shade" green="196"/>
+  <Colour red="255" blue="156" name="Skin" green="214"/>
+  <Colour red="207" blue="127" name="Skin - shade" green="174"/>
+  <Colour red="255" blue="116" name="Dark Skin" green="198"/>
+  <Colour red="227" blue="105" name="Dark Skin - shade" green="177"/>
+</palette>
