@@ -34,10 +34,12 @@ public class CreateObject extends VerbDef {
 		}
 				
 		if (obj instanceof Class<?> && Entity.canSpawn((Class<?>) obj)) {
-			if (e.getWorld().tileHasEntity(e.getLocative().copy().toGridPos()) && obj != Spike.class) {
-				return false;
-			}
-			return Entity.spawnNew(e.getWorld(), e.getLocative(), (Class<? extends Entity>) obj) != null;
+			//TODO check if the entity can fit at the position (probably do this in spawnNew)
+//			if (e.getWorld().tileHasEntity(e.getLocative().copy().toGridPos()) && obj != Spike.class) {
+//				return false;
+//			}
+			boolean checkCollisions = obj != Spike.class;
+			return Entity.spawnNew(e.getWorld(), e.getLocative(), (Class<? extends Entity>) obj, checkCollisions) != null;
 		}
 		
 		return false;

@@ -41,6 +41,7 @@ import snorri.semantics.Move;
 import snorri.semantics.Nominal.AbstractSemantics;
 import snorri.semantics.Not;
 import snorri.semantics.Open;
+import snorri.semantics.Order;
 import snorri.semantics.Pray;
 import snorri.semantics.RightOf;
 import snorri.semantics.SecondObjectPronoun;
@@ -97,6 +98,7 @@ public class Lexicon extends HashMap<String, Definition> {
 		lexicon.put("z", new StaticDef(Noun.class, Entity.class));
 		lexicon.put("saH", new StaticDef(Noun.class, Mummy.class)); //TODO kAr.t is better
 		lexicon.put("rwDt", new StaticDef(Noun.class, BackgroundElement.SANDSTONE));
+		lexicon.put("mAAt", new StaticDef(Noun.class, new Order()));
 		
 		lexicon.put("bw", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
 		lexicon.put("aHAw", new StaticDef(AbstractNoun.class, AbstractSemantics.WEAPON));

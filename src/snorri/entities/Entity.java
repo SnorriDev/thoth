@@ -38,6 +38,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		
 		SPAWNABLE.add(Urn.class);
 		SPAWNABLE.add(Spike.class);
+		SPAWNABLE.add(Vortex.class);
 		
 		EDIT_SPAWNABLE = new ArrayList<>(SPAWNABLE);
 		
@@ -54,7 +55,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		EDIT_SPAWNABLE.add(Crocodile.class);
 		EDIT_SPAWNABLE.add(Cobra.class);
 		EDIT_SPAWNABLE.add(Glyph.class);
-		EDIT_SPAWNABLE.add(Vortex.class);
 		
 		//alphabetize the list for nice view in the editor
 		Collections.sort(EDIT_SPAWNABLE, new Comparator<Class<? extends Entity>>() {
@@ -127,10 +127,17 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 	
 	public static Entity spawnNew(World world, Vector pos, Class<? extends Entity> c) {
+		return spawnNew(world, pos, c, true);
+	}
+	
+	public static Entity spawnNew(World world, Vector pos, Class<? extends Entity> c, boolean checkCollisions) {
 		try {
 			Entity e = c.getConstructor(Vector.class).newInstance(pos);
 			if (e instanceof Despawner) {
 				((Despawner) e).setDespawnable(true);
+			}
+			if (checkCollisions && world.getEntityTree().getFirstCollision(e) != null) {
+				return null;
 			}
 			world.add(e);
 			return e;

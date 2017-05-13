@@ -79,7 +79,7 @@ public interface TileType extends Nominal {
 		}
 		
 		if (attr == AbstractSemantics.STORM && this == BackgroundElement.SAND) {
-			return new Tile(this, 0);
+			return new Tile(this, 1);
 		}
 		
 		return Nominal.super.get(world, attr);

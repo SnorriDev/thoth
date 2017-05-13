@@ -10,7 +10,7 @@ public class Vortex extends Detector {
 	private static final Animation VORTEX_ANIMATION = new Animation("/textures/animations/vortex");
 	
 	protected static final double FIELD_STRENGTH = 50000000d;
-	protected static final double ENTITY_SCALE = 1 / 5000d;
+	protected static final double ENTITY_SCALE = 1 / 1000d;
 	protected static final double EVENT_HORIZON = 30;
 	
 	public Vortex(Vector pos) {
@@ -27,8 +27,9 @@ public class Vortex extends Detector {
 
 	@Override
 	public void onCollision(CollisionEvent e) {
-		//TODO want the behavior to bend the trajectory of bullets
-		// and pull Walkers
+		
+		//issue when trying to place this too close to the edge of the map
+		
 		if (e.getTarget().isStaticObject()) {
 			return;
 		}

@@ -14,7 +14,7 @@ import snorri.world.World;
 
 public abstract class Despawner extends Entity {
 	
-	protected static final int DEFAULT_LIFESPAN = 4;
+	protected static final int DEFAULT_LIFESPAN = 5;
 
 	protected float age; //set age to -1 to make it not despawn
 	

@@ -12,7 +12,8 @@ public enum MidgroundElement implements Nominal, TileType {
 	NONE,
 	COL_BOT(false, getImage("colbot00.png")),
 	DOOR(false, getImage("door00.png")),
-	DEBRIS(false, getImage("debris00.png"));
+	DEBRIS(false, getImage("debris00.png")),
+	BROKEN_DEBRIS(false, getImage("brokendebris00.png")); //clearable by some spells
 	
 	private BufferedImage[]	textures;
 	private boolean pathable; //some things (like paths and tiles) will be unpathable

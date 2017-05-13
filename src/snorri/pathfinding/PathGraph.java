@@ -332,12 +332,16 @@ public class PathGraph {
 				- 1; x <= (v.getX() * Tile.WIDTH + Unit.RADIUS_X) / Tile.WIDTH + 1; x++) {
 			for (int y = (v.getY() * Tile.WIDTH - Unit.RADIUS_Y) / Tile.WIDTH
 					- 1; y <= (v.getY() * Tile.WIDTH + Unit.RADIUS_Y) / Tile.WIDTH + 1; y++) {
+				
 				computeContextPathable(x, y);
 			}
 		}
 	}
 
 	private void computeContextPathable(int x, int y) {
+		if (!isInMap(x, y)) {
+			return;
+		}
 		contextPathable[x][y] = searchContextPathable(x, y);
 	}
 	
