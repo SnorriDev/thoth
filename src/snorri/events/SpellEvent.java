@@ -9,6 +9,7 @@ import snorri.world.World;
 public class SpellEvent {
 	
 	private GameWindow window; //used to retrieve first, third, and world
+	private Entity firstPerson; //the spell's caster
 	private Entity secondPerson; //the entity being affected by the spell
 	
 	private Vector loc; //the position in which or at which the spell is occurring
@@ -25,15 +26,16 @@ public class SpellEvent {
 	private double speedModifier = 1;//modifies velocities
 	private double healthInteractModifier = 1; //modifies healing/damage effects
 	
-	public SpellEvent(GameWindow window, Entity secondPerson) {
+	public SpellEvent(GameWindow window, Entity firstPerson, Entity secondPerson) {
+		this.firstPerson = firstPerson;
 		this.secondPerson = secondPerson;
 		this.window = window;
 		loc = getSecondPerson().getPos().copy();
 		dest = getThirdPerson().getPos().copy();
 	}
 	
-	public SpellEvent(GameWindow window, Entity secondPerson, double deltaTime) {
-		this(window, secondPerson);
+	public SpellEvent(GameWindow window, Entity firstPerson, Entity secondPerson, double deltaTime) {
+		this(window, firstPerson, secondPerson);
 		this.deltaTime = deltaTime;
 	}
 	
@@ -71,7 +73,7 @@ public class SpellEvent {
 	}
 	
 	public Entity getFirstPerson() {
-		return window.getFocus();
+		return firstPerson;
 	}
 	
 	public Entity getSecondPerson() {

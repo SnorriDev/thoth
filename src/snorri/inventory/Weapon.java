@@ -4,9 +4,6 @@ import snorri.audio.Audio;
 import snorri.audio.ClipWrapper;
 import snorri.entities.Entity;
 import snorri.entities.Projectile;
-import snorri.events.SpellEvent;
-import snorri.main.GameWindow;
-import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -41,17 +38,6 @@ public class Weapon extends Item {
 		}
 		
 		return spell.altersMovement();
-	}
-	
-	public Object useSpellOn(Entity subject, double modifier) {
-		
-		if (spell == null) {
-			return null;
-		}
-				
-		SpellEvent e = new SpellEvent((GameWindow) Main.getWindow(), subject, modifier);
-		return spell.getMeaning(e);
-		
 	}
 	
 	@Override

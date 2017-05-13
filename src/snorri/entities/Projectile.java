@@ -54,7 +54,7 @@ public class Projectile extends Detector implements Walker {
 		} 
 		
 		if (weapon != null) {
-			Object output = weapon.useSpellOn(this, deltaTime / getLifeSpan());
+			Object output = weapon.useSpellOn(root, this, deltaTime / getLifeSpan());
 			if (Debug.SHOW_WEAPON_OUTPUT) {
 				Main.log("weapon output: " + output);
 			}
@@ -92,9 +92,8 @@ public class Projectile extends Detector implements Walker {
 		
 		super.kill(world);
 		
-		//TODO might want to change this back to applying to the target
 		if (orb != null) {
-			Object output = orb.useSpellOn(this);
+			Object output = orb.useSpellOn(root, this); //
 			if (Debug.SHOW_ORB_OUTPUT) {
 				Main.log("orb output: " + output);
 			}

@@ -19,10 +19,14 @@ public class Papyrus extends Item {
 		timer = new Timer(5);
 	}
 	
-	public boolean tryToActivate(Entity e) {
+	public boolean tryToActivate(Entity subject) {
+		return tryToActivate(((GameWindow) Main.getWindow()).getFocus(), subject);
+	}
+	
+	public boolean tryToActivate(Entity caster, Entity subject) {
 		
 		if (timer.activate() && spell != null) {
-			Object o = useSpellOn(e);
+			Object o = useSpellOn(caster, subject);
 			if (Main.getWindow() instanceof GameWindow && spellIsStatement()) {
 				((GameWindow) Main.getWindow()).showMessage(new SpellMessage(spell.getOrthography(), o));
 			} else {
