@@ -19,22 +19,20 @@ public enum BackgroundElement implements TileType {
 	HUT(false, Tile.DEFAULT_TEXTURE),
 	WATER(false, true, getImage("water00.png")),
 	LAVA(false, true, new BufferedImage[] {
-		getImage("lava00.png"),
-		getImage("lava01.png"),
-		getImage("lava02.png")}),
+		getImage("lava00.png")}),
 	GRASS(true, false, new BufferedImage[] {
 		getImage("grass00.png"),
 		getImage("grass01.png")}, false, true),
 	VOID(false, false, Main.getImage("void00.png")),
 	COLUMN(false, new BufferedImage[] {
-		getImage("column00.png"),
-		getImage("column01.png")}, true),
+		getImage("column00.png")}, true),
 	DOOR(false, getImage("door00.png"), true),
 	SANDSTONE(false, false, new BufferedImage[] {
 			getImage("sandstone00.png"),
 			getImage("sandstone01.png"),
 			getImage("sandstone02.png"),
-			getImage("default00.png")}, false, true), //will change to look like bricks
+			getImage("sandstone03.png"),
+			getImage("sandstone04.png")}, false, true), //will change to look like bricks
 	FLOOR(true, new BufferedImage[] {getImage("floor00-floor00.png"),
 		getImage("floor01-floor01.png"),
 		getImage("floor02-floor02.png"),
@@ -52,33 +50,33 @@ public enum BackgroundElement implements TileType {
 	GRAVEL(true, getImage("gravel00.png")),
 	STONE(false, new BufferedImage[] {
 		getImage("stone00.png"),
-		getImage("stone01.png")}),
+		getImage("stone01.png"),
+		getImage("stone02.png"),
+		getImage("stone03.png"),
+		getImage("stone04.png")}),
 	DEEP_WATER(false, false, getImage("water01.png")),
-	CLIFF(false, false, new BufferedImage[] {
-		getImage("cliff00.png"),
-		getImage("cliff01.png"),
-		getImage("cliff02.png"),
-		getImage("cliff03.png"),
-		getImage("cliff04.png"),
-		getImage("cliff05.png"),
-		getImage("cliff06.png"),
-		getImage("cliff07.png"),
-		getImage("cliff08.png"),
-		getImage("cliff09.png"),
-		getImage("cliff10.png"),
-		getImage("cliff11.png")}, true),
+	EARTH(false, false, new BufferedImage[] {
+		getImage("earth00.png"),
+		getImage("earth01.png"),
+		getImage("earth02.png"),
+		getImage("earth03.png")}, true),
 	WOOD(true, new BufferedImage[] {
 		getImage("wood00.png"),
 		getImage("wood01.png"),
-		getImage("wood02.png")}, true),
+		getImage("wood02.png"),
+		getImage("wood03.png"),
+		getImage("wood04.png")}, true),
 	BRICK(true, new BufferedImage[] {
-		getImage("brick00.png"),
-		getImage("brick01.png"),
-		getImage("brick02.png"),
-		getImage("brick03.png"),
-		getImage("brick04.png"),
-		getImage("brick05.png"),
-		getImage("brick06.png")}, true);
+		getImage("wall00.png"),
+		getImage("wall01.png"),
+		getImage("wall02.png"),
+		getImage("wall03.png"),
+		getImage("wall04.png"),
+		getImage("wall05.png"),
+		getImage("wall06.png"),
+		getImage("wall07.png"),
+		getImage("wall08.png"),
+		getImage("wall09.png"),}, true);
 	
 	private boolean	pathable, canShootOver, atTop, changable;
 	private BufferedImage[]	textures;
