@@ -1,0 +1,162 @@
+<!DOCTYPE PencilVectorImage>
+<image type="vector">
+  <curve width="1" variableWidth="0" originPressure="0.5" invisible="0" originX="0.1573955714702606" originY="19.0854549407959" colourNumber="0">
+    <segment c1x="0.1994974195957184" c2y="18.98111801147461" c1y="18.94633903503418" vx="0.2100228816270828" vy="18.91156005859375" pressure="0.5" c2x="0.1889719575643539"/>
+    <segment c1x="0.585757276415825" c2y="19.79493423468643" c1y="19.47366027832031" vx="1.149358868598938" vy="20.31681060791016" pressure="0.5" c2x="0.7334006273073643"/>
+    <segment c1x="1.623659911088416" c2y="21.15927475836214" c1y="20.91188598639541" vx="2.435671091079712" vy="21.70393943786621" pressure="0.5" c2x="1.910959349609053"/>
+    <segment c1x="2.911147461867964" c2y="22.45920539041651" c1y="22.1974964990848" vx="3.649829149246216" vy="22.9123649597168" pressure="0.5" c2x="3.133955286539671"/>
+    <segment c1x="4.234486197031615" c2y="23.68287888686759" c1y="23.42594580789697" vx="5.18699836730957" vy="24.12079048156738" pressure="0.5" c2x="4.52667206604379"/>
+    <segment c1x="5.749528492282803" c2y="24.7058866994117" c1y="24.49384614150626" vx="6.70697021484375" vy="24.93978309631348" pressure="0.5" c2x="6.005280826833418"/>
+    <segment c1x="7.36192793681877" c2y="25.18262154870813" c1y="25.15810227558357" vx="8.578616142272949" vy="25.25132942199707" pressure="0.5" c2x="7.774047114316772"/>
+    <segment c1x="9.233329798642945" c2y="25.25132942199707" c1y="25.30724007898157" vx="10.35517692565918" vy="25.25132942199707" pressure="0.5" c2x="9.644552612304688"/>
+    <segment c1x="11.3888126373291" c2y="25.28086172142806" c1y="25.25132942199707" vx="12.93926620483398" vy="25.25132942199707" pressure="0.5" c2x="11.93516279259505"/>
+    <segment c1x="14.13163877526106" c2y="25.19738368462297" c1y="25.2162598232347" vx="15.84636688232422" vy="25.08982467651367" pressure="0.5" c2x="14.72648372124406"/>
+    <segment c1x="16.63224956169405" c2y="24.94626499696451" c1y="25.01434469393963" vx="17.70368080595897" vy="24.79373194528873" pressure="0.5" c2x="16.99485119569087"/>
+    <segment c1x="18.69604311178514" c2y="24.45149294261227" c1y="24.58018548971893" vx="20.09934667255989" vy="24.17462590839973" pressure="0.5" c2x="19.17030494537645"/>
+    <segment c1x="20.79612764537516" c2y="23.90151633165379" c1y="23.96697572887125" vx="21.76823755595572" vy="23.5824389109362" pressure="0.5" c2x="21.18288382432956"/>
+    <segment c1x="22.67157842944442" c2y="22.76362228383148" c1y="23.0900261007525" vx="23.82108318534702" vy="22.1459003311465" pressure="0.5" c2x="23.04305145435961"/>
+    <segment c1x="24.69893645316352" c2y="21.10315087996193" c1y="21.44892459973475" vx="25.90795005296552" vy="20.29569470069437" pressure="0.5" c2x="25.14057723300483"/>
+    <segment c1x="26.71413948320316" c2y="19.06196763275218" c1y="19.44739434371936" vx="27.75498881084285" vy="18.00650899054007" pressure="0.5" c2x="27.3824653430494"/>
+    <segment c1x="27.94903382961517" c2y="16.97216027928508" c1y="17.45672754118713" vx="27.32437126937997" vy="16.28259447178176" pressure="0.5" c2x="27.49661828596512"/>
+    <segment c1x="26.51923780340236" c2y="16.44679188512614" c1y="16.50125278884589" vx="25.31153760443596" vy="16.82924026444209" pressure="0.5" c2x="25.95288100816175"/>
+    <segment c1x="24.42236643519481" c2y="17.92190423518532" c1y="17.35947425552269" vx="23.49808483696263" vy="18.56430039777312" pressure="0.5" c2x="24.27509383469657"/>
+    <segment c1x="22.76590547526412" c2y="19.42381115899943" c1y="19.16963342950485" vx="21.53856670585482" vy="19.94856325024089" pressure="0.5" c2x="22.35132700804359"/>
+    <segment c1x="20.81955960442988" c2y="20.63795215336628" c1y="20.41278434848367" vx="19.66866632792838" vy="21.03673337148373" pressure="0.5" c2x="20.45311330947864"/>
+    <segment c1x="18.8222554137578" c2y="21.7612826792518" c1y="21.46701455468594" vx="17.46142196655273" vy="22.02121925354004" pressure="0.5" c2x="18.47817748963728"/>
+    <segment c1x="16.43243985556066" c2y="22.28270467381899" c1y="22.2842815914005" vx="14.55432224273682" vy="22.34423065185547" pressure="0.5" c2x="15.78484071355288"/>
+    <segment c1x="13.2007518158478" c2y="22.38163218564269" c1y="22.41190923314516" vx="11.00119972229004" vy="22.34423065185547" pressure="0.5" c2x="12.38504719668152"/>
+    <segment c1x="9.994764756495977" c2y="22.34035234317987" c1y="22.31702952450988" vx="8.578616142272949" vy="22.18272399902344" pressure="0.5" c2x="9.454623891256162"/>
+    <segment c1x="7.993048001668759" c2y="21.90424938026928" c1y="22.0773571954748" vx="7.347259998321533" vy="21.68674278259277" pressure="0.5" c2x="7.820688344797854"/>
+    <segment c1x="6.753604795298342" c2y="21.27697348992249" c1y="21.41400050941968" vx="5.91090726852417" vy="20.95710182189941" pressure="0.5" c2x="6.457433076697385"/>
+    <segment c1x="5.361488099890744" c2y="20.46971304860077" c1y="20.63553672234436" vx="4.607397556304932" vy="20.08315086364746" pressure="0.5" c2x="5.091819639540105"/>
+    <segment c1x="4.087045545912175" c2y="19.41006295531959" c1y="19.66791708912811" vx="3.398972034454346" vy="18.95261192321777" pressure="0.5" c2x="3.877106787264635"/>
+    <segment c1x="2.83888514190941" c2y="18.18094487467372" c1y="18.4167539343235" vx="2.01184344291687" vy="17.59987831115723" pressure="0.5" c2x="2.52672176083959"/>
+    <segment c1x="1.610825631231436" c2y="16.83937192256728" c1y="17.14730916300379" vx="1.10923171043396" vy="16.36852264404297" pressure="0.5" c2x="1.491969391748519"/>
+    <segment c1x="0.74560427968225" c2y="15.69410710041037" c1y="15.92118306453505" vx="0.1459306627511978" vy="15.30440616607666" pressure="0.5" c2x="0.5671967386771148"/>
+    <segment c1x="-0.2588744044732148" c2y="14.79661464691162" c1y="14.92993282978049" vx="-0.955946147441864" vy="14.45808696746826" pressure="0.5" c2x="-0.5151954233646393"/>
+    <segment c1x="-1.049410021305084" c2y="15.39791798044653" c1y="15.06878147125244" vx="-1.189605832099915" vy="15.98482322692871" pressure="0.5" c2x="-1.218919112087128"/>
+    <segment c1x="-1.156609870792267" c2y="17.04067872923719" c1y="16.64546245981664" vx="-0.8001730442047119" vy="17.57694816589355" pressure="0.5" c2x="-1.056526698292365"/>
+    <segment c1x="-0.49714142841207" c2y="18.36011394153258" c1y="18.21086381834852" vx="0.2088573426008224" vy="18.91028594970703" pressure="0.5" c2x="-0.1403803651879524"/>
+    <segment c1x="0.2426470810820366" c2y="19.02448579614471" c1y="18.96351665149351" vx="0.1573955714702606" vy="19.0854549407959" pressure="0.5" c2x="0.2000213262761486"/>
+  </curve>
+  <area colourNumber="1">
+    <vertex vertex="-1" curve="0"/>
+    <vertex vertex="0" curve="0"/>
+    <vertex vertex="1" curve="0"/>
+    <vertex vertex="2" curve="0"/>
+    <vertex vertex="3" curve="0"/>
+    <vertex vertex="4" curve="0"/>
+    <vertex vertex="5" curve="0"/>
+    <vertex vertex="6" curve="0"/>
+    <vertex vertex="7" curve="0"/>
+    <vertex vertex="8" curve="0"/>
+    <vertex vertex="9" curve="0"/>
+    <vertex vertex="10" curve="0"/>
+    <vertex vertex="11" curve="0"/>
+    <vertex vertex="12" curve="0"/>
+    <vertex vertex="13" curve="0"/>
+    <vertex vertex="14" curve="0"/>
+    <vertex vertex="15" curve="0"/>
+    <vertex vertex="16" curve="0"/>
+    <vertex vertex="17" curve="0"/>
+    <vertex vertex="18" curve="0"/>
+    <vertex vertex="19" curve="0"/>
+    <vertex vertex="20" curve="0"/>
+    <vertex vertex="21" curve="0"/>
+    <vertex vertex="22" curve="0"/>
+    <vertex vertex="23" curve="0"/>
+    <vertex vertex="24" curve="0"/>
+    <vertex vertex="25" curve="0"/>
+    <vertex vertex="26" curve="0"/>
+    <vertex vertex="27" curve="0"/>
+    <vertex vertex="28" curve="0"/>
+    <vertex vertex="29" curve="0"/>
+    <vertex vertex="30" curve="0"/>
+    <vertex vertex="31" curve="0"/>
+    <vertex vertex="32" curve="0"/>
+    <vertex vertex="33" curve="0"/>
+    <vertex vertex="34" curve="0"/>
+    <vertex vertex="35" curve="0"/>
+    <vertex vertex="36" curve="0"/>
+  </area>
+  <area colourNumber="1">
+    <vertex vertex="-1" curve="0"/>
+    <vertex vertex="0" curve="0"/>
+    <vertex vertex="1" curve="0"/>
+    <vertex vertex="2" curve="0"/>
+    <vertex vertex="3" curve="0"/>
+    <vertex vertex="4" curve="0"/>
+    <vertex vertex="5" curve="0"/>
+    <vertex vertex="6" curve="0"/>
+    <vertex vertex="7" curve="0"/>
+    <vertex vertex="8" curve="0"/>
+    <vertex vertex="9" curve="0"/>
+    <vertex vertex="10" curve="0"/>
+    <vertex vertex="11" curve="0"/>
+    <vertex vertex="12" curve="0"/>
+    <vertex vertex="13" curve="0"/>
+    <vertex vertex="14" curve="0"/>
+    <vertex vertex="15" curve="0"/>
+    <vertex vertex="16" curve="0"/>
+    <vertex vertex="17" curve="0"/>
+    <vertex vertex="18" curve="0"/>
+    <vertex vertex="19" curve="0"/>
+    <vertex vertex="20" curve="0"/>
+    <vertex vertex="21" curve="0"/>
+    <vertex vertex="22" curve="0"/>
+    <vertex vertex="23" curve="0"/>
+    <vertex vertex="24" curve="0"/>
+    <vertex vertex="25" curve="0"/>
+    <vertex vertex="26" curve="0"/>
+    <vertex vertex="27" curve="0"/>
+    <vertex vertex="28" curve="0"/>
+    <vertex vertex="29" curve="0"/>
+    <vertex vertex="30" curve="0"/>
+    <vertex vertex="31" curve="0"/>
+    <vertex vertex="32" curve="0"/>
+    <vertex vertex="33" curve="0"/>
+    <vertex vertex="34" curve="0"/>
+    <vertex vertex="35" curve="0"/>
+    <vertex vertex="36" curve="0"/>
+  </area>
+  <area colourNumber="1">
+    <vertex vertex="-1" curve="0"/>
+    <vertex vertex="0" curve="0"/>
+    <vertex vertex="1" curve="0"/>
+    <vertex vertex="2" curve="0"/>
+    <vertex vertex="3" curve="0"/>
+    <vertex vertex="4" curve="0"/>
+    <vertex vertex="5" curve="0"/>
+    <vertex vertex="6" curve="0"/>
+    <vertex vertex="7" curve="0"/>
+    <vertex vertex="8" curve="0"/>
+    <vertex vertex="9" curve="0"/>
+    <vertex vertex="10" curve="0"/>
+    <vertex vertex="11" curve="0"/>
+    <vertex vertex="12" curve="0"/>
+    <vertex vertex="13" curve="0"/>
+    <vertex vertex="14" curve="0"/>
+    <vertex vertex="15" curve="0"/>
+    <vertex vertex="16" curve="0"/>
+    <vertex vertex="17" curve="0"/>
+    <vertex vertex="18" curve="0"/>
+    <vertex vertex="19" curve="0"/>
+    <vertex vertex="20" curve="0"/>
+    <vertex vertex="21" curve="0"/>
+    <vertex vertex="22" curve="0"/>
+    <vertex vertex="23" curve="0"/>
+    <vertex vertex="24" curve="0"/>
+    <vertex vertex="25" curve="0"/>
+    <vertex vertex="26" curve="0"/>
+    <vertex vertex="27" curve="0"/>
+    <vertex vertex="28" curve="0"/>
+    <vertex vertex="29" curve="0"/>
+    <vertex vertex="30" curve="0"/>
+    <vertex vertex="31" curve="0"/>
+    <vertex vertex="32" curve="0"/>
+    <vertex vertex="33" curve="0"/>
+    <vertex vertex="34" curve="0"/>
+    <vertex vertex="35" curve="0"/>
+    <vertex vertex="36" curve="0"/>
+  </area>
+</image>
