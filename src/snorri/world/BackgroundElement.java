@@ -14,7 +14,7 @@ public enum BackgroundElement implements TileType {
 		getImage("sand01.png"),
 		getImage("sand02.png"),
 		getImage("sand03.png")}, false, true),
-	TREE(false, Main.getImage("tree00.png")),
+	TREE(false, Tile.DEFAULT_TEXTURE),
 	FOUNDATION(false, Tile.DEFAULT_TEXTURE),
 	HUT(false, Tile.DEFAULT_TEXTURE),
 	WATER(false, true, getImage("water00.png")),
@@ -23,17 +23,19 @@ public enum BackgroundElement implements TileType {
 	GRASS(true, false, new BufferedImage[] {
 		getImage("grass00.png"),
 		getImage("grass01.png")}, false, true),
-	VOID(false, false, Main.getImage("void00.png")),
+	VOID(false, false, getImage("void00.png")),
 	COLUMN(false, new BufferedImage[] {
-		getImage("column00.png")}, true),
-	DOOR(false, getImage("door00.png"), true),
+			Tile.DEFAULT_TEXTURE}, true),
+	DOOR(false, Tile.DEFAULT_TEXTURE, true),
 	SANDSTONE(false, false, new BufferedImage[] {
 			getImage("sandstone00.png"),
 			getImage("sandstone01.png"),
 			getImage("sandstone02.png"),
 			getImage("sandstone03.png"),
-			getImage("sandstone04.png")}, false, true), //will change to look like bricks
-	FLOOR(true, new BufferedImage[] {getImage("floor00-floor00.png"),
+			getImage("sandstone04.png"),
+			getImage("drymud00.png")}, false, true), //will change to look like bricks
+	FLOOR(true, new BufferedImage[] {
+		getImage("floor00-floor00.png"),
 		getImage("floor01-floor01.png"),
 		getImage("floor02-floor02.png"),
 		getImage("floor03-floor03.png"),
@@ -47,7 +49,7 @@ public enum BackgroundElement implements TileType {
 		getImage("floor11-floor11.png"),
 		getImage("floor12-floor12.png")}, true),
 		//TODO add some of the nice-looking mixed ones
-	GRAVEL(true, getImage("gravel00.png")),
+	GRAVEL(true, false, getImage("gravel00.png"), false, true),
 	STONE(false, new BufferedImage[] {
 		getImage("stone00.png"),
 		getImage("stone01.png"),
@@ -55,7 +57,7 @@ public enum BackgroundElement implements TileType {
 		getImage("stone03.png"),
 		getImage("stone04.png")}),
 	DEEP_WATER(false, false, getImage("water01.png")),
-	EARTH(false, false, new BufferedImage[] {
+	EARTH(true, new BufferedImage[] {
 		getImage("earth00.png"),
 		getImage("earth01.png"),
 		getImage("earth02.png"),
