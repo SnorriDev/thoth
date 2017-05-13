@@ -11,6 +11,7 @@ import snorri.animations.Animation;
 import snorri.collisions.CircleCollider;
 import snorri.entities.Entity;
 import snorri.events.SpellEvent;
+import snorri.events.SpellEvent.Caster;
 import snorri.main.GamePanel;
 import snorri.main.GameWindow;
 import snorri.main.Main;
@@ -260,15 +261,27 @@ public abstract class Item implements Droppable {
 		return spell;
 	}
 	
-	public Object useSpellOn(Entity subject) {
+	/**
+	 * Use this item's spell on <code>subject</code> from <code>caster</code>'s perspective
+	 * @param caster
+	 * 	The caster of the spell
+	 * @param subject
+	 * 	The target of the spell
+	 * @return
+	 */
+	public Object useSpellOn(Caster caster, Entity subject, double modifier) {
 				
 		if (spell == null) {
 			return null;
 		}
 						
-		SpellEvent e = new SpellEvent((GameWindow) Main.getWindow(), subject);
+		SpellEvent e = new SpellEvent((GameWindow) Main.getWindow(), caster, subject, modifier);
 		return spell.getMeaning(e);
 		
+	}
+	
+	public Object useSpellOn(Caster caster, Entity subject) {
+		return useSpellOn(caster, subject, 1);	
 	}
 
 	public static Item newItem() {

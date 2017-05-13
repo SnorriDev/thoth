@@ -6,6 +6,7 @@ import java.awt.Image;
 import javax.swing.SwingUtilities;
 
 import snorri.animations.Animation;
+import snorri.events.SpellEvent.Caster;
 import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
 import snorri.inventory.Item;
@@ -22,7 +23,7 @@ import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Player extends Unit implements Carrier {
+public class Player extends Unit implements Carrier, Caster {
 
 	private static final Animation IDLE = new Animation("/textures/animations/unit/idle");
 	private static final Animation WALKING = new Animation("/textures/animations/unit/walking");
@@ -159,6 +160,11 @@ public class Player extends Unit implements Carrier {
 	@Override
 	public int getBaseSpeed() {
 		return PLAYER_BASE_SPEED;
+	}
+
+	@Override
+	public Vector getAimPosition() {
+		return ((FocusedWindow) Main.getWindow()).getMousePosAbsolute();
 	}
 
 }

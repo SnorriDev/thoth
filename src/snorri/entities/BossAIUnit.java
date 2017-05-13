@@ -1,10 +1,11 @@
 package snorri.entities;
 
 import snorri.animations.Animation;
+import snorri.events.SpellEvent.Caster;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public abstract class BossAIUnit extends AIUnit {
+public abstract class BossAIUnit extends AIUnit implements Caster {
 
 	private static final long serialVersionUID = 1L;
 
@@ -12,14 +13,33 @@ public abstract class BossAIUnit extends AIUnit {
 		super(pos, target, idle, walking);
 	}
 	
+	// should override these methods for more complex behavior
+	
+	@Override
+	public boolean canAttack(Entity target, World world) {
+		if (inventory == null || inventory.getPapyrus(0) == null) {
+			return false;
+		}
+		return target.pos.distanceSquared(pos) < attackRange * attackRange && inventory.getPapyrus(0).canUse();
+	}
+	
 	@Override
 	public void attack(World world, Entity e) {
-		if (inventory == null) {
-			return;
+		inventory.getPapyrus(0).tryToActivate(this, e);
+	}
+	
+	@Override
+	public void updateEntityStats() {
+		super.updateEntityStats();
+		attackRange = 900;
+	}
+	
+	@Override
+	public Vector getAimPosition() {
+		if (target == null) {
+			return pos.copy();
 		}
-		//TODO add some complex logic here
-		//Probably want to just override this function for every boss type
-		inventory.getPapyrus(0).tryToActivate(e);
+		return target.pos.copy();
 	}
 	
 }
