@@ -1,0 +1,224 @@
+onStart:
+  events:
+    - TIMELINE:
+        object: start
+  actions:
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+            shortDesc: explore the Temple of Thoth with WASD
+            longDesc: |
+              <p class="instruction">Hit <span class="control">escape</span> to close this dialog. Then 
+              use the <span class="control">WASD</span> keys to move around. If you want to go back to 
+              your objective instructions at any point while playing,
+              hit <span class="control">escape</span> to open the pause menu.</p>
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            image: priest
+            text: |
+              <p><span class="name">Imhotep:</span> Welcome to the temple archives, Prince Setna!
+              Now that you are an apprentice scribe, feel free to take a look around.</p>
+            showObjective: true
+
+onZone1:
+  actions:
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+          shortDesc: 'pick up the sparkling artifacts and papyrus'
+          longDesc: |
+            <p class="instruction">Collect the sparkling artifacts and papyrus on
+            the ground. Each artifact unlocks a hieroglyph, and the papyrus allows you
+            to write spells.</p>
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            image: priest
+            text: |
+              <p><span class="name">Imhotep:</span> The world listens to sorcerers who speak the language of Thoth.
+              It is time for you to try your hand at spellcasting - a powerful gift that few possess, 
+              and even fewer have mastered.</p>
+            showObjective: true
+
+onPickupPapyrus:
+  events:
+    - ACQUIRE:
+        object: papyrus
+  actions:
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+          shortDesc: 'write the spell `wpi sy` on your papyrus'
+          longDesc: |
+            <p class="instruction">Walk <span class="control">south to the inkwell</span> and press <span class="control">
+            spacebar</span> while touching it. Select <span class="control">papyrus</span> on the left panel
+            and type the spell <span class="hiero">wpi sy</span> in the textbox. Click <span class="control">enchant
+            </span> and then press <span class="control">escape</span> to close the enchanting window.</p>
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            image: priest
+            text: |
+              <p><span class="name">Imhotep:</span> Now use the vocabulary to write a spell.</p>
+            showObjective: true
+
+onEnchant:
+  events:
+    - ENCHANT:
+        object: wpi sy
+  actions:
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+            shortDesc: put your mouse over the door and press 1
+            longDesc: |
+              <p class="instruction">Wait until your spell is off cooldown, and then put
+              your mouse over the door and press <span class="control">1</span>.</p>
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            image: priest
+            text: |
+              <p><span class="name">Imhotep:</span> Cast your spell on the door to see if it works.
+              Wait a second! Let me stand back so you don't blow me up.</p>
+            showObjective: true
+
+onDoorOpen:
+  events:
+    - DOOR_OPEN:
+        object: !door {x: 68, y: 55}
+  actions:
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+          shortDesc: walk over the sling to pick it up
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            image: priest
+            text: |
+              <p><span class="name">Imhotep:</span> By Thoth, you're a natural! Now go grab that sling on the ground.
+              You never know what you'll run into down here.</p>    
+
+onPickup:
+  events:
+    - ACQUIRE:
+        object: sling
+  actions:
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+          shortDesc: shoot at the mummies by clicking
+          longDesc: |
+            <p class="instruction">Shoot by clicking at a target location. If you hearts
+            reach zero, you will die!</p>
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            image: priest
+            text: |
+              <p><span class="name">Imhotep:</span> A snake, up ahead!</p>
+            showObjective: true
+    - SPAWN_ENTITY:
+        type: cobra
+        pos: !spawn {x: 5570, y: 2936}
+        tag: enemy1
+
+onKill:
+  events:
+    - KILL:
+        object: enemy1
+  actions:
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+          shortDesc: proceed through the maze
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            image: priest
+            text: |
+              <p><span class="name">Imhotep:</span> That thing fought pretty well considering it has no legs! Let's keep going.</p>
+
+onWall:
+  actions:
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+            shortDesc: enchant your sling with `qmA nSni Say` to blast through the wall
+            longDesc: |
+              <p class="instruction"> Using the new vocabulary, enchant a spell on your sling
+              that will create a sandstorm to blast through the wall.</p>
+              
+              <p class="instruction">This can be done as follows: <span class="hiero">qmA nSni Say</span> <span class="def">(create a storm of sand)</span>.</p>
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            image: priest
+            text: |
+              <p><span class="name">Imhotep:</span> Hmm, it's blocked off. See if you can shoot
+              through this wall using your sling.</p> 
+            showObjective: true      
+
+onZone2:
+  actions:
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+            shortDesc: pick up the papyrus and use it to find the name on the urn
+            longDesc: |
+              <p class="instruction">Pick up the already enchanted papyrus and cast it on the urn by pressing <span class="control">2</span>. 
+              The spell on this papyrus will reveal the name of objects.</p>
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            image: priest
+            text: |
+              <p><span class="name">Imhotep:</span> This crypt must be hundreds of years old.
+              I wonder who left that urn here!</p>
+            showObjective: true
+
+onWrite:
+  events:
+    - WRITE:
+        object: DHwty
+  actions:
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+            shortDesc: pray to DHwty by activating `smAa DHwty` on a papyrus
+            longDesc: |
+              <p class="instruction">Cast the spell <span class="hiero">smAa DHwty</span> <span class="def">(pray to DHwty)</span>.</p>
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            image: priest
+            text: |
+              <p><span class="name">Imhotep:</span> DHwty - the ancient, venerated name of Thoth! Speaking such a word unleashes
+              mystical energy. See what happens if you pray to that name.</p>
+            showObjective: true
+
+prayThoth:
+  events:
+    - PRAY:
+        object: DHwty
+  actions:
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            image: ghost
+            text: |
+              <p><span class="name">Ghost:</span> Hail, sorcerer! I was Neferkaptah, High Priest of Thoth to Ramesses II, 
+              Pharaoh of Upper and Lower Egypt. We have much to discuss.</p>
+              
+              <p>Your curiosity has led you to my old study, which had been untouched for 1,000 years. It may also 
+              lead you on another great quest: recovering the Book of Thoth, which contains powerful secrets about the language of the gods.
+              Trust me, don't go looking for this dangerous tome!</p>
+              
+              <p>Others might tell you that finding it is your destiny, but the gods will never let you succeed.
+              Wisdom is the only truth in this world - those who believe in destiny are fools.</p>
+    - SET_OBJECTIVE:
+        objective:
+          !objective
+            shortDesc: you have beaten the tutorial!
