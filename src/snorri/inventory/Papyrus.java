@@ -3,7 +3,7 @@ package snorri.inventory;
 import java.awt.Color;
 
 import snorri.dialog.SpellMessage;
-import snorri.entities.Unit;
+import snorri.entities.Entity;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.nonterminals.Sentence;
@@ -19,10 +19,10 @@ public class Papyrus extends Item {
 		timer = new Timer(5);
 	}
 	
-	public boolean tryToActivate(Unit player) {
+	public boolean tryToActivate(Entity e) {
 		
 		if (timer.activate() && spell != null) {
-			Object o = useSpellOn(player);
+			Object o = useSpellOn(e);
 			if (Main.getWindow() instanceof GameWindow && spellIsStatement()) {
 				((GameWindow) Main.getWindow()).showMessage(new SpellMessage(spell.getOrthography(), o));
 			} else {
