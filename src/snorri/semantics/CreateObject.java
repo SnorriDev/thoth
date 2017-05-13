@@ -2,6 +2,8 @@ package snorri.semantics;
 
 import snorri.entities.Entity;
 import snorri.entities.Spike;
+import snorri.world.Level;
+import snorri.world.MidgroundElement;
 import snorri.world.Tile;
 import snorri.world.Vector;
 
@@ -20,6 +22,12 @@ public class CreateObject extends VerbDef {
 			Tile tile = e.getWorld().getLevel(layer).getTile(e.getLocative());
 			if (tile == null || !tile.getType().isChangable()) {
 				return false;
+			}
+			
+			Level midground = e.getWorld().getLevel(MidgroundElement.class);
+			if (midground.getTile(e.getLocative()).getType() == MidgroundElement.BROKEN_DEBRIS) {
+				e.getWorld().wrapUpdate(e.getLocative(), new Tile(MidgroundElement.NONE));
+				//TODO add method to change a bunch of things then recalculate grid
 			}
 			
 			//check if there is an entity in the way
