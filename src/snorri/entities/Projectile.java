@@ -1,6 +1,7 @@
 package snorri.entities;
 
 import snorri.events.CollisionEvent;
+import snorri.events.SpellEvent.Caster;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.main.Debug;
@@ -53,8 +54,8 @@ public class Projectile extends Detector implements Walker {
 			walk(world, velocity.copy().multiply(deltaTime));
 		} 
 		
-		if (weapon != null) {
-			Object output = weapon.useSpellOn(root, this, deltaTime / getLifeSpan());
+		if (root instanceof Caster && weapon != null) {
+			Object output = weapon.useSpellOn(((Caster) root), this, deltaTime / getLifeSpan());
 			if (Debug.SHOW_WEAPON_OUTPUT) {
 				Main.log("weapon output: " + output);
 			}
@@ -92,8 +93,8 @@ public class Projectile extends Detector implements Walker {
 		
 		super.kill(world);
 		
-		if (orb != null) {
-			Object output = orb.useSpellOn(root, this); //
+		if (root instanceof Caster && orb != null) {
+			Object output = orb.useSpellOn((Caster) root, this); //
 			if (Debug.SHOW_ORB_OUTPUT) {
 				Main.log("orb output: " + output);
 			}

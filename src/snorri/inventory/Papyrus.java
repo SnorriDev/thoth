@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import snorri.dialog.SpellMessage;
 import snorri.entities.Entity;
+import snorri.events.SpellEvent.Caster;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.nonterminals.Sentence;
@@ -20,10 +21,10 @@ public class Papyrus extends Item {
 	}
 	
 	public boolean tryToActivate(Entity subject) {
-		return tryToActivate(((GameWindow) Main.getWindow()).getFocus(), subject);
+		return tryToActivate(((GameWindow) Main.getWindow()).getFocusAsCaster(), subject);
 	}
 	
-	public boolean tryToActivate(Entity caster, Entity subject) {
+	public boolean tryToActivate(Caster caster, Entity subject) {
 		
 		if (timer.activate() && spell != null) {
 			Object o = useSpellOn(caster, subject);

@@ -11,7 +11,7 @@ public class Thoth extends BossAIUnit {
 
 	private static final long serialVersionUID = 1L;
 	private static final Animation THOTH = new Animation("/textures/animations/thoth");
-	private static final Node SPELL = Grammar.parseString("bm");
+	private static final Node SPELL = Grammar.parseString("qmA txn n sy");
 	
 	public Thoth(Vector pos, Entity target) {
 		super(pos, target, new Animation(THOTH), new Animation(THOTH));
@@ -23,13 +23,10 @@ public class Thoth extends BossAIUnit {
 	
 	@Override
 	public void updateEntityStats() {
-		super.updateEntityStats();	
+		super.updateEntityStats();
 		Item papyrus = Item.newItem(ItemType.PAPYRUS);
 		papyrus.setSpell(SPELL);
 		inventory.add(papyrus);
 	}
-	
-	
-	
 	
 }

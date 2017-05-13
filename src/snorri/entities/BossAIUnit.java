@@ -1,10 +1,11 @@
 package snorri.entities;
 
 import snorri.animations.Animation;
+import snorri.events.SpellEvent.Caster;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public abstract class BossAIUnit extends AIUnit {
+public abstract class BossAIUnit extends AIUnit implements Caster {
 
 	private static final long serialVersionUID = 1L;
 
@@ -30,7 +31,15 @@ public abstract class BossAIUnit extends AIUnit {
 	@Override
 	public void updateEntityStats() {
 		super.updateEntityStats();
-		attackRange = 600;
+		attackRange = 900;
+	}
+	
+	@Override
+	public Vector getAimPosition() {
+		if (target == null) {
+			return pos.copy();
+		}
+		return target.pos.copy();
 	}
 	
 }

@@ -11,6 +11,7 @@ import snorri.animations.Animation;
 import snorri.collisions.CircleCollider;
 import snorri.entities.Entity;
 import snorri.events.SpellEvent;
+import snorri.events.SpellEvent.Caster;
 import snorri.main.GamePanel;
 import snorri.main.GameWindow;
 import snorri.main.Main;
@@ -268,7 +269,7 @@ public abstract class Item implements Droppable {
 	 * 	The target of the spell
 	 * @return
 	 */
-	public Object useSpellOn(Entity caster, Entity subject, double modifier) {
+	public Object useSpellOn(Caster caster, Entity subject, double modifier) {
 				
 		if (spell == null) {
 			return null;
@@ -279,7 +280,7 @@ public abstract class Item implements Droppable {
 		
 	}
 	
-	public Object useSpellOn(Entity caster, Entity subject) {
+	public Object useSpellOn(Caster caster, Entity subject) {
 		return useSpellOn(caster, subject, 1);	
 	}
 

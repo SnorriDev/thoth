@@ -16,6 +16,7 @@ import snorri.dialog.DropMessage;
 import snorri.dialog.Message;
 import snorri.dialog.Objective;
 import snorri.entities.Player;
+import snorri.events.SpellEvent.Caster;
 import snorri.inventory.Droppable;
 import snorri.keyboard.Key;
 import snorri.overlay.DeathScreen;
@@ -198,6 +199,10 @@ public class GameWindow extends FocusedWindow {
 	public void unpause() {
 		super.unpause();
 		lastTime = getTimestamp();
+	}
+
+	public Caster getFocusAsCaster() {
+		return (Caster) getFocus();
 	}
 	
 }
