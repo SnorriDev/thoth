@@ -27,7 +27,6 @@ public class CreateObject extends VerbDef {
 			Level midground = e.getWorld().getLevel(MidgroundElement.class);
 			if (midground.getTile(e.getLocative()).getType() == MidgroundElement.BROKEN_DEBRIS) {
 				e.getWorld().wrapUpdate(e.getLocative(), new Tile(MidgroundElement.NONE));
-				//TODO add method to change a bunch of things then recalculate grid
 			}
 			
 			//check if there is an entity in the way

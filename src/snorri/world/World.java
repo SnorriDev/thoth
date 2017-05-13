@@ -385,6 +385,7 @@ public class World implements Playable, Editable {
 		wrapGridUpdate(pos.copy().toGridPos(), tile);
 	}
 	
+	//TODO add wrapGridUpdates
 	public void wrapGridUpdate(Vector posGrid, Tile tile) {
 				
 		Level l = getLevel(tile.getType().getClass());
