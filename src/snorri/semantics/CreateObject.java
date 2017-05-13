@@ -16,7 +16,8 @@ public class CreateObject extends VerbDef {
 				
 		if (obj instanceof Tile) {
 			
-			Tile tile = e.getWorld().getLevel().getTile(e.getLocative());
+			int layer = ((Tile) obj).getType().getLayer();
+			Tile tile = e.getWorld().getLevel(layer).getTile(e.getLocative());
 			if (tile == null || !tile.getType().isChangable()) {
 				return false;
 			}

@@ -167,7 +167,7 @@ public class Animation implements Serializable {
 	 * 
 	 * @return the current image
 	 */
-	public BufferedImage getSprite(double timeDelta) {
+	public synchronized BufferedImage getSprite(double timeDelta) {
 		hasCycled |= (currentTime + timeDelta) >= (frames.length * SEC_PER_FRAME);
 		currentTime = (currentTime + timeDelta) % (frames.length * SEC_PER_FRAME);	
 		return (flipped ? flippedFrames : frames)[getFrameIndex()];

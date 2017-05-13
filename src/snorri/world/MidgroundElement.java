@@ -13,10 +13,10 @@ public enum MidgroundElement implements Nominal, TileType {
 	COL_BOT(false, getImage("colbot00.png")),
 	DOOR(false, getImage("door00.png")),
 	DEBRIS(false, getImage("debris00.png")),
-	BROKEN_DEBRIS(false, getImage("brokendebris00.png")); //clearable by some spells
+	BROKEN_DEBRIS(false, getImage("brokendebris00.png"), true); //clearable by some spells
 	
 	private BufferedImage[]	textures;
-	private boolean pathable; //some things (like paths and tiles) will be unpathable
+	private boolean pathable, changable = true; //some things (like paths and tiles) will be unpathable
 	
 	MidgroundElement() {
 		this(true, (BufferedImage) null);
@@ -38,6 +38,11 @@ public enum MidgroundElement implements Nominal, TileType {
 	MidgroundElement(boolean pathable, BufferedImage texture) {
 		this(texture);
 		this.pathable = pathable;
+	}
+	
+	MidgroundElement(boolean pathable, BufferedImage texture, boolean changable) {
+		this(pathable, texture);
+		this.changable = changable;
 	}
 	
 	public static MidgroundElement byIdStatic(int id) {
@@ -139,7 +144,7 @@ public enum MidgroundElement implements Nominal, TileType {
 
 	@Override
 	public boolean isChangable() {
-		return true;
+		return changable;
 	}
 	
 	@Override 
