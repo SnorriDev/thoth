@@ -6,14 +6,20 @@ import java.util.ArrayList;
 import snorri.audio.ClipWrapper;
 import snorri.main.Main;
 import snorri.main.Util;
-import snorri.semantics.Nominal;
 
-public enum MidgroundElement implements Nominal, TileType {
+public enum MidgroundElement implements TileType {
+	
 	NONE,
 	COL_BOT(false, getImage("colbot00.png")),
 	DOOR(false, getImage("door00.png")),
 	DEBRIS(false, getImage("debris00.png")),
-	BROKEN_DEBRIS(false, getImage("brokendebris00.png"), true); //clearable by some spells
+	BROKEN_DEBRIS(false, getImage("brokendebris00.png"), true),
+	WALL_CORNER(false, TileType.getAllReflections(new BufferedImage[] {
+			getImage("wallcorner00.png"),
+			getImage("wallcorner01.png"),
+			getImage("wallcorner02.png"),
+			getImage("wallcorner03.png")
+	}));
 	
 	private BufferedImage[]	textures;
 	private boolean pathable, changable = true; //some things (like paths and tiles) will be unpathable

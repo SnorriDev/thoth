@@ -16,6 +16,7 @@ import java.util.Comparator;
 import javax.imageio.ImageIO;
 
 import snorri.main.Main;
+import snorri.main.Util;
 import snorri.world.Vector;
 
 /**
@@ -203,11 +204,7 @@ public class Animation implements Serializable {
 	public void computeFlipped() {
 		flippedFrames = new BufferedImage[frames.length];
 		for (int i = 0; i < frames.length; i++) {
-			BufferedImage image = frames[i];
-			AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-			tx.translate(-image.getWidth(null), 0);
-			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-			flippedFrames[i] = op.filter(image, null);
+			flippedFrames[i] = Util.getFlipped(frames[i], true, false);
 		}
 	}
 	

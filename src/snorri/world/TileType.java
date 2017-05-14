@@ -2,8 +2,10 @@ package snorri.world;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.List;
 
 import snorri.audio.ClipWrapper;
+import snorri.main.Util;
 import snorri.semantics.Nominal;
 
 public interface TileType extends Nominal {
@@ -100,6 +102,23 @@ public interface TileType extends Nominal {
 		}
 		
 		return null;
+		
+	}
+	
+	static BufferedImage[] getAllReflections(BufferedImage[] images) {
+		
+		List<BufferedImage> out = new ArrayList<>();
+		
+		final boolean[] FLIP_OPTIONS = new boolean[] {false, true};
+		for (boolean flipY : FLIP_OPTIONS) {
+			for (boolean flipX : FLIP_OPTIONS) {
+				for (BufferedImage image : images) {
+					out.add(Util.getFlipped(image, flipX, flipY));
+				}
+			}
+		}
+		
+		return out.toArray(new BufferedImage[0]);
 		
 	}
 	

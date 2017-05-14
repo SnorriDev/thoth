@@ -3,6 +3,8 @@ package snorri.main;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
@@ -155,6 +157,29 @@ public class Util {
 			combinations = extraColumnCombinations;
 		}
 		return combinations;
+	}
+	
+	/**
+	 * Get a copy of the input <code>BufferedImage</code> flipped about either (or both) axes
+	 * @param image
+	 * 	The image to flip
+	 * @param xFlip
+	 * 	Whether the image should be flipped about the x axis
+	 * @param yFlip
+	 * 	Whether the image should be flipped about the y axis
+	 * @return
+	 * 	The flipped image
+	 */
+	public static BufferedImage getFlipped(BufferedImage image, boolean flipX, boolean flipY) {
+		AffineTransform tx = AffineTransform.getScaleInstance(flipX ? -1 : 1, flipY ? -1 : 1);
+		if (flipX) {
+			tx.translate(-image.getWidth(null), 0);
+		}
+		if (flipY) {
+			tx.translate(0, -image.getHeight(null));
+		}
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+		return op.filter(image, null);
 	}
 
 	public static BufferedImage getBufferedImage(Image img) {
