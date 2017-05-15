@@ -181,6 +181,38 @@ public class Util {
 		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
 		return op.filter(image, null);
 	}
+	
+	/**
+	 * Rotate an image to point in <code>dir</code>
+	 * @param image
+	 * 	The image to rotate
+	 * @param dir
+	 * 	The direction to point in
+	 * @return
+	 * 	The rotated image
+	 */
+	public static BufferedImage getRotated(BufferedImage image, Vector dir) {
+		double midX = image.getWidth() / 2, midY = image.getHeight() / 2;
+		AffineTransform tx = AffineTransform.getRotateInstance(dir.getX(), dir.getY(), midX, midY);
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+		return op.filter(image, null);
+	}
+	
+	/**
+	 * Rotate an image by an angle
+	 * @param image
+	 * 	The image to rotate
+	 * @param angle
+	 * 	The angle by which to rotate
+	 * @return
+	 * 	The rotated image
+	 */
+	public static BufferedImage getRotated(BufferedImage image, double theta) {
+		double midX = image.getWidth() / 2, midY = image.getHeight() / 2;
+		AffineTransform tx = AffineTransform.getRotateInstance(theta, midX, midY);
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+		return op.filter(image, null);
+	}
 
 	public static BufferedImage getBufferedImage(Image img) {
 		if (img instanceof BufferedImage) {

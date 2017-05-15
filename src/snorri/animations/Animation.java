@@ -1,7 +1,5 @@
 package snorri.animations;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -218,13 +216,8 @@ public class Animation implements Serializable {
 	 */
 	public Animation getRotated(Vector dir) {
 		Animation other = new Animation(this);
-//		double radians = Math.toRadians(degrees);
 		for (int i = 0; i < frames.length; i++) {
-			double midX = frames[i].getWidth() / 2, midY = frames[i].getHeight() / 2;
-			//FIXME this is cutting off corners of projectiles
-			AffineTransform tx = AffineTransform.getRotateInstance(dir.getX(), dir.getY(), midX, midY);
-			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
-			other.frames[i] = op.filter(frames[i], null);
+			other.frames[i] = Util.getRotated(frames[i], dir);
 		}
 		other.computeFlipped();
 		return other;

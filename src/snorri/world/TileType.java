@@ -105,17 +105,27 @@ public interface TileType extends Nominal {
 		
 	}
 	
-	static BufferedImage[] getAllReflections(BufferedImage[] images) {
+	static BufferedImage[] getReflections(BufferedImage image) {
 		
 		List<BufferedImage> out = new ArrayList<>();
 		
 		final boolean[] FLIP_OPTIONS = new boolean[] {false, true};
 		for (boolean flipY : FLIP_OPTIONS) {
 			for (boolean flipX : FLIP_OPTIONS) {
-				for (BufferedImage image : images) {
-					out.add(Util.getFlipped(image, flipX, flipY));
-				}
+				out.add(Util.getFlipped(image, flipX, flipY));
 			}
+		}
+		
+		return out.toArray(new BufferedImage[0]);
+		
+	}
+	
+	static BufferedImage[] getRotations(BufferedImage image) {
+		
+		List<BufferedImage> out = new ArrayList<>();
+		
+		for (double theta = 0; theta < Math.PI * 2; theta += Math.PI / 2) {
+			out.add(Util.getRotated(image, theta));
 		}
 		
 		return out.toArray(new BufferedImage[0]);

@@ -14,12 +14,12 @@ public enum MidgroundElement implements TileType {
 	DOOR(false, getImage("door00.png")),
 	DEBRIS(false, getImage("debris00.png")),
 	BROKEN_DEBRIS(false, getImage("brokendebris00.png"), true),
-	WALL_CORNER(false, TileType.getAllReflections(new BufferedImage[] {
-			getImage("wallcorner00.png"),
-			getImage("wallcorner01.png"),
-			getImage("wallcorner02.png"),
-			getImage("wallcorner03.png")
-	}));
+	WALL_CORNER_TOP(false, TileType.getReflections(getImage("wallcorner00.png"))),
+	WALL_CORNER_RIGHT(false, TileType.getReflections(getImage("wallcorner01.png"))),
+	WALL_CORNER_LEFT(false, TileType.getReflections(getImage("wallcorner02.png"))),
+	WALL_CORNER_BOTTOM(false, TileType.getReflections(getImage("wallcorner03.png"))),
+	WALL_TOP(false, TileType.getRotations(getImage("wall00.png"))),
+	WALL_BOTTOM(false, TileType.getRotations(getImage("wall01.png"))),;
 	
 	private BufferedImage[]	textures;
 	private boolean pathable, changable = true; //some things (like paths and tiles) will be unpathable
