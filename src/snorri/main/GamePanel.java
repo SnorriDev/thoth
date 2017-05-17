@@ -53,6 +53,7 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 		thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
 			@Override
 			public void uncaughtException(Thread t, Throwable e) {
+				Main.error("unhandled exception");
 				e.printStackTrace();
 			}
 		});

@@ -79,8 +79,8 @@ public class GameWindow extends FocusedWindow {
 		if (isPaused()) {
 			return;
 		}
-		
-		if (!hasDied && focus != null && focus.isDead()) {
+				
+		if (!hasDied && focus != null && focus.isDead()) {			
 			TriggerType.TIMELINE.activate("death");
 			hasDied = true;
 			Main.setOverlay(new DeathScreen());
@@ -105,9 +105,9 @@ public class GameWindow extends FocusedWindow {
 		long time = getTimestamp();
 		double deltaTime = (time - lastRenderTime) / 1000000000d;
 		lastRenderTime = time;
-				
-		super.paintComponent(g);
 		
+		super.paintComponent(g);
+						
 		universe.getCurrentWorld().render(this, g, deltaTime, true);
 		focus.getInventory().render(this, g);
 		focus.renderHealthBar(g);

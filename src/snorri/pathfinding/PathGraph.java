@@ -27,7 +27,7 @@ import snorri.world.Vector;
 public class PathGraph {
 
 	private boolean[][] contextPathable;
-	private List<Entity>[][] entities;
+	private Set<Entity>[][] entities;
 	private final List<Level> levels;
 
 	/** A list of the graph's components */
@@ -48,12 +48,12 @@ public class PathGraph {
 		
 		contextPathable = new boolean[mapWidth][mapHeight];
 		this.levels = levels;
-		entities = new ArrayList[mapWidth][mapHeight];
+		entities = (Set<Entity>[][]) new HashSet[mapWidth][mapHeight];
 
 		//initialize the entities arrays at each index
 		for (int x = 0; x < mapWidth; x++) {
 			for (int y = 0; y < mapHeight; y++) {
-				entities[x][y] = new ArrayList<>();
+				entities[x][y] = new HashSet<>();
 			}
 		}
 		
@@ -349,7 +349,7 @@ public class PathGraph {
 	public void setPathableGrid(Vector v) {
 
 		updateSurroundingContext(v);
-				
+		
 		for (int x = v.getX() - width; x <= v.getX() + width; x++) {
 			for (int y = v.getY() - height; y <= v.getY() + height; y++) {
 								
@@ -361,7 +361,7 @@ public class PathGraph {
 							graphs.add(getComponent(p));
 						}
 					}
-					Component newGraph = mergeGraphs(graphs);
+					Component newGraph = mergeComponents(graphs);
 					newGraph.add(pos);
 					setComponent(pos, newGraph);
 				}
@@ -369,7 +369,7 @@ public class PathGraph {
 			}
 						
 		}
-
+	
 	}
 
 	/**
@@ -393,10 +393,10 @@ public class PathGraph {
 	 * 	Whether (x, y) is context pathable
 	 */
 	private boolean searchContextPathable(int x, int y) {
-
-		for (int x1 = x - width; x1 <= x + width; x++) {
-			for (int y1 = y - height; y1 <= y + height; y++) {	
-				if (isPathable(x1, y1)) {
+		
+		for (int x1 = x - width; x1 <= x + width; x1++) {
+			for (int y1 = y - height; y1 <= y + height; y1++) {					
+				if (!isPathable(x1, y1)) {
 					return false;
 				}		
 			}
@@ -419,7 +419,7 @@ public class PathGraph {
 		for (int x = xc - width; x <= xc + width; x++) {
 			for (int y = yc - height; y <= yc + height; y++) {
 				if (isInMap(x, y)) {
-					
+										
 					if (!isPathable(xc, yc)) { //in this case we know everything around will be inpathable
 						contextPathable[x][y] = false;
 						if (getComponent(x, y) != null) {
@@ -445,25 +445,29 @@ public class PathGraph {
 
 	/**
 	 * Merges disjoint graphs into one big graph. Ignores duplicate graphs and
-	 * graphs which are not in components. Adds result to components, even if it empty
-	 * 
+	 * graphs which are not in components.
+	 * For performance reasons, merges smaller graphs into the largest one.
 	 * @return the merged graph
 	 */
-	private Component mergeGraphs(Set<Component> graphs) {
+	private Component mergeComponents(Set<Component> graphs) {
 
-		Component union = new Component();
+		Component largest = new Component();
 		for (Component graph : graphs) {
-			if (components.remove(graph)) {
-				union.addAll(graph);
+			if (graph.size() > largest.size()) {
+				largest = graph;
 			}
 		}
-		if (!union.isEmpty()) {
-			for (Vector v : union) {
-				setComponent(v, union);
+				
+		for (Component graph : graphs) {
+			if (graph != largest && components.remove(graph)) {
+				largest.addAll(graph);
+				for (Vector v : graph) {
+					setComponent(v, largest);
+				}
 			}
 		}
-		components.add(union);
-		return union;
+
+		return largest;
 
 	}
 
@@ -506,6 +510,7 @@ public class PathGraph {
 
 	}
 	
+	//untested
 	public void addEntity(Entity e) {
 
 		int x = e.getPos().getX();
@@ -523,41 +528,10 @@ public class PathGraph {
 
 			}
 		}
-		
-//		for (int x1 = (x - c.getRadiusX()) / Tile.WIDTH - width; x1 <= (x + c.getRadiusX()) / Tile.WIDTH + width; x1++) {
-//			for (int y1 = (y - c.getRadiusY()) / Tile.WIDTH - height; y1 <= (y + c.getRadiusY()) / Tile.WIDTH + height; y1++) {
-//				
-//				if (isInMap(x1, y1)) {
-//					contextPathable[x1][y1] = false;
-//				}
-//				
-//			}
-//		}
-
-//		Queue<Vector> unpathableQ = new LinkedList<>();
-//
-//		// update all tiles in range of occupied tiles
-//		for (int x1 = (x - c.getRadiusX() - 2 * Unit.RADIUS_X)
-//				/ Tile.WIDTH; x1 <= (x + c.getRadiusX() + 2 * Unit.RADIUS_X) / Tile.WIDTH; x1++) {
-//			for (int y1 = (y - c.getRadiusY() - 2 * Unit.RADIUS_Y)
-//					/ Tile.WIDTH; y1 <= (y + c.getRadiusY() + 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
-//
-//				boolean wasContextPathable = isContextPathable(x1, y1);
-//				computeContextPathable(x1, y1);
-//				if (wasContextPathable && !isContextPathable(x1, y1)) {
-//					unpathableQ.add(new Vector(x1, y1));
-//				}
-//
-//			}
-//		}
-//
-//		// recalculate graphs around unpathable tiles
-//		while (!unpathableQ.isEmpty()) {
-//			this.setUnpathableGrid(unpathableQ.poll());
-//		}
 
 	}
 
+	//untested
 	public void removeEntity(Entity e) {
 
 		int x = e.getPos().getX();
@@ -575,32 +549,6 @@ public class PathGraph {
 
 			}
 		}
-
-//		Queue<Vector> unpathableQ = new LinkedList<>();
-//
-//		// update all tiles in range of occupied tiles
-//		for (int x1 = (x - c.getRadiusX() - 2 * Unit.RADIUS_X)
-//				/ Tile.WIDTH; x1 <= (x + c.getRadiusX() + 2 * Unit.RADIUS_X) / Tile.WIDTH; x1++) {
-//			for (int y1 = (y - c.getRadiusY() - 2 * Unit.RADIUS_Y)
-//					/ Tile.WIDTH; y1 <= (y + c.getRadiusY() + 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
-//
-//				if (!isInMap(x1, y1)) {
-//					continue;
-//				}
-//
-//				boolean wasContextPathable = isContextPathable(x1, y1);
-//				computeContextPathable(x1, y1);
-//				if (!wasContextPathable && isContextPathable(x1, y1)) {
-//					unpathableQ.add(new Vector(x1, y1));
-//				}
-//
-//			}
-//		}
-//
-//		// recalculate graphs around unpathable tiles
-//		while (!unpathableQ.isEmpty()) {
-//			this.setPathableGrid(unpathableQ.poll());
-//		}
 
 	}
 

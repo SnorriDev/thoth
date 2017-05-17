@@ -111,7 +111,8 @@ public class Tile implements Comparable<Tile>, Nominal {
 		
 		if (Debug.RENDER_GRAPHS) {
 			if (g.getWorld().getGraph().getComponent(v) != null) {
-				gr.setColor(Debug.getColor(g.getWorld().getGraph().getComponent(v)));
+				World w = g.getWorld();
+				gr.setColor(w.getGraph().getComponent(v).getColor());
 				gr.drawRect(relPos.getX(), relPos.getY(), Tile.WIDTH, Tile.WIDTH);
 				gr.setColor(Color.BLACK);
 				return;
