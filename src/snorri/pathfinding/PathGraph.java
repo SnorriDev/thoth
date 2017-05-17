@@ -165,7 +165,7 @@ public class PathGraph {
 	
 	public boolean isPathable(int x, int y) {
 		
-		if (isOccupied(x, y)) {
+		if (!isInMap(x, y) || isOccupied(x, y)) {
 			return false;
 		}
 		
@@ -219,15 +219,15 @@ public class PathGraph {
 		
 		//TODO store components as hash-sets, not lists (makes everything better)
 		
-		for (int i = 0; i < getWidth(); i++) {
-			for (int j = 0; j < getHeight(); j++) {
+		for (int i = width; i < getWidth() - width; i++) {
+			for (int j = height; j < getHeight() - height; j++) {
 				contextPathable[i][j] = true;
 			}
 		}
 		
 		for (int i = 0; i < getWidth(); i++) {
 			for (int j = 0; j < getHeight(); j++) {
-				if (contextPathable[i][j] && !isPathable(i, j)) {
+				if (!isPathable(i, j)) {
 					updateSurroundingContext(i, j);
 				}
 			}
