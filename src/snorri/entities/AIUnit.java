@@ -2,7 +2,6 @@ package snorri.entities;
 
 import java.awt.Graphics;
 import java.util.ArrayDeque;
-import java.util.List;
 
 import snorri.animations.Animation;
 import snorri.inventory.Carrier;
@@ -12,6 +11,7 @@ import snorri.inventory.Weapon;
 import snorri.main.Main;
 import snorri.main.FocusedWindow;
 import snorri.main.GameWindow;
+import snorri.pathfinding.Component;
 import snorri.pathfinding.PathNode;
 import snorri.pathfinding.Pathfinder;
 import snorri.pathfinding.Pathfinding;
@@ -98,8 +98,8 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 			return;
 		}
 				
-		List<Vector> graph = world.getComponent(this);
-		List<Vector> targetGraph = world.getComponent(target);
+		Component graph = world.getComponent(this);
+		Component targetGraph = world.getComponent(target);
 		
 		//Main.debug("comp size: " + graph.size());
 		

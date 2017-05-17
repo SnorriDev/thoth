@@ -16,6 +16,7 @@ import snorri.entities.LongRangeAIUnit.ShootAttempt;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
+import snorri.pathfinding.Component;
 import snorri.pathfinding.PathGraph;
 import snorri.pathfinding.Pathfinding;
 import snorri.pathfinding.Team;
@@ -75,7 +76,7 @@ public class World implements Playable, Editable {
 
 		load(file);
 
-		graph = new PathGraph(getPathfindingLevels());
+		graph = new PathGraph(getPathfindingLevels(), 1, 2);
 		Pathfinding.setGraph(graph);
 		
 		if (computeFocus() == null) {
@@ -92,7 +93,7 @@ public class World implements Playable, Editable {
 
 		col = QuadTree.coverLevel(background);
 
-		graph = new PathGraph(getPathfindingLevels());
+		graph = new PathGraph(getPathfindingLevels(), 1, 2);
 		Pathfinding.setGraph(graph);
 
 	}
@@ -401,7 +402,7 @@ public class World implements Playable, Editable {
 	
 	}
 
-	public List<Vector> getComponent(Entity e) {
+	public Component getComponent(Entity e) {
 		return graph.getComponent(e);
 	}
 

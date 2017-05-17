@@ -157,12 +157,12 @@ public class Vector implements Serializable, Comparable<Vector> {
 	}
 	
 	/**
-	 * we need to define this to take an Object so it works with built-in Java stuff like Collection.contains
+	 * @param pos The position to compare against
+	 * @return Whether or not two positions are equal
 	 */
 	@Override
 	public boolean equals(Object pos) {
 		if (pos instanceof Vector) {
-			//return getX() == ((Vector) pos).getX() && getY() == ((Vector) pos).getY();
 			return x == ((Vector) pos).x && y == ((Vector) pos).y;
 		}
 		return false;

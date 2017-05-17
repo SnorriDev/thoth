@@ -4,67 +4,71 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.lang.Thread.UncaughtExceptionHandler;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingWorker;
 
 import snorri.world.Vector;
 
 public abstract class GamePanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private static final int FRAME_DELTA = 15; //33 -> 30 FPS (20 -> 50 FPS
+	private static final int FRAME_DELTA = 15; // 33 -> 30 FPS (20 -> 50 FPS
 	public static final int MARGIN = 20;
-	
+
 	private static final Color BACKGROUND_COLOR = new Color(255, 242, 197);
 	private static final Color BUTTON_COLOR = new Color(55, 135, 206);
-	
+
 	private boolean stopped = false;
-	
+
 	protected GamePanel() {
 		setBackground(BACKGROUND_COLOR);
 	}
-	
+
 	public static double getBaseDelta() {
 		return FRAME_DELTA / 1000d;
 	}
-	
+
 	protected void startAnimation() {
 
-		SwingWorker<Object, Object> sw = new SwingWorker<Object, Object>() {
-			@Override
-			protected Object doInBackground() throws Exception {
-				try {
-					onStart();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				while (!stopped) {
-					try {
-						onFrame();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					Thread.sleep(FRAME_DELTA);
-				}
-				return null;
-			}
-		};
+		Thread thread = new Thread(new Runnable() {
 
-		sw.execute();
+			@Override
+			public void run() {
+				onStart();
+				try {
+					while (!stopped) {
+						onFrame();
+						Thread.sleep(FRAME_DELTA);
+					}
+				} catch (InterruptedException e) {
+					Main.error("thread interrupted");
+				}
+			}
+		});
+		
+		thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+			@Override
+			public void uncaughtException(Thread t, Throwable e) {
+				e.printStackTrace();
+			}
+		});
+		thread.start();
+
 	}
-	
+
 	/**
 	 * a general method for making GUI dialogs
+	 * 
 	 * @param title
-	 * 	the title of the window
+	 *            the title of the window
 	 * @param inputs
-	 * 	a dialog map of inputs and textfields;
-	 * as a side effect, this map will be updated,
-	 * and a pointer to it is return by the method
+	 *            a dialog map of inputs and textfields; as a side effect, this
+	 *            map will be updated, and a pointer to it is return by the
+	 *            method
 	 * @return a pointer to the modified DialogMap
 	 */
 	protected DialogMap dialog(String title, DialogMap inputs) {
@@ -79,7 +83,7 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 		}
 		return inputs;
 	}
-	
+
 	public void onClose() {
 		stopped = true;
 	}
@@ -104,7 +108,7 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 
 	protected void onStart() {
 	}
-	
+
 	protected void onFrame() {
 	}
 
