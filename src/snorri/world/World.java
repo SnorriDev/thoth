@@ -75,7 +75,7 @@ public class World implements Playable, Editable {
 
 		load(file);
 
-		graph = new PathGraph(background.getDimensions(), getPathfindingLevels());
+		graph = new PathGraph(getPathfindingLevels());
 		Pathfinding.setGraph(graph);
 		
 		if (computeFocus() == null) {
@@ -92,7 +92,7 @@ public class World implements Playable, Editable {
 
 		col = QuadTree.coverLevel(background);
 
-		graph = new PathGraph(background.getDimensions(), getPathfindingLevels());
+		graph = new PathGraph(getPathfindingLevels());
 		Pathfinding.setGraph(graph);
 
 	}

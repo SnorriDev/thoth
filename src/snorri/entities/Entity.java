@@ -408,5 +408,9 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	//TODO implement this on all entities to avoid a lot of compatibility issues
 	public void updateEntityStats() {
 	}
+	
+	public Vector getGridBounds() {
+		return pos.copy().toGridPos();
+	}
 
 }

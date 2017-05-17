@@ -7,13 +7,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 import snorri.entities.Entity;
 import snorri.entities.Unit;
+import snorri.main.Debug;
 import snorri.main.Main;
 import snorri.collisions.Collider;
 import snorri.world.Level;
@@ -32,8 +35,11 @@ public class PathGraph {
 	private List<Vector>[][] componentLookup;
 
 	@SuppressWarnings("unchecked")
-	public PathGraph(int width, int height, List<Level> levels) {
+	public PathGraph(List<Level> levels) {
 
+		int width = levels.get(0).getWidth();
+		int height = levels.get(0).getHeight();
+		
 		contextPathable = new boolean[width][height];
 		this.levels = levels;
 		entities = new ArrayList[width][height];
@@ -48,9 +54,62 @@ public class PathGraph {
 		computePathfinding();
 
 	}
-
-	public PathGraph(Vector v, List<Level> levels) {
-		this(v.getX(), v.getY(), levels);
+	
+	//TODO: rework this method to be inside PathGraph, and store a list of PathGraphs in
+	// the Pathfinding class
+	public ArrayDeque<PathNode> findPath(Vector start, Vector goal) {
+		
+		if (Debug.DISABLE_PATHFINDING) {
+			return null;
+		}
+		
+		//do this to avoid lots of unnecessary computation
+		if (!arePathConnected(start, goal)) {
+			return null;
+		}
+		
+		PathNode[][] map = new PathNode[getWidth()][getHeight()];
+		PriorityQueue<PathNode> openSet = new PriorityQueue<PathNode>();
+		ArrayList<PathNode> closedSet = new ArrayList<PathNode>();
+				
+		map[start.getX()][start.getY()] = new PathNode(start, 0, goal);
+		openSet.offer(map[start.getX()][start.getY()]);
+		
+		PathNode current;
+		while (! openSet.isEmpty()) {
+			
+			current = openSet.poll();
+						
+			if (current.getGridPos().equals(goal)) {
+				return Pathfinding.reconstructPath(current);
+			}
+			
+			closedSet.add(current);
+			
+			//getNeighbors has the side effect of creating PathNodes which are null
+			for (PathNode neighbor : current.getNeighbors(map, this)) {
+				
+				if (closedSet.contains(neighbor)) {
+					continue;
+				}
+				
+				double tentativeG = current.getG() + current.distance(neighbor);
+				if (! openSet.contains(neighbor)) {
+					openSet.offer(neighbor);
+				}
+				else if (tentativeG >= neighbor.getG()) {
+					continue;
+				}
+				
+				neighbor.setOrigin(current);
+				neighbor.updateHeuristics(tentativeG, goal);
+				
+			}
+			
+		}
+		
+		return null;
+		
 	}
 
 	public int getWidth() {
