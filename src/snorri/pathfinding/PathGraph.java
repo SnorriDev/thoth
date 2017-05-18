@@ -61,6 +61,10 @@ public class PathGraph {
 
 	}
 	
+	public PathGraph(List<Level> levels, Vector v) {
+		this(levels, v.getX(), v.getY());
+	}
+	
 	//TODO: rework this method to be inside PathGraph, and store a list of PathGraphs in
 	// the Pathfinding class
 	public ArrayDeque<PathNode> findPath(Vector start, Vector goal) {

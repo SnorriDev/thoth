@@ -16,8 +16,6 @@ import snorri.entities.LongRangeAIUnit.ShootAttempt;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
-import snorri.pathfinding.Component;
-import snorri.pathfinding.PathGraph;
 import snorri.pathfinding.Pathfinding;
 import snorri.pathfinding.Team;
 import snorri.triggers.Trigger;
@@ -39,7 +37,7 @@ public class World implements Playable, Editable {
 	private Level midground;
 	private Level foreground;
 
-	private final PathGraph graph;
+	private final Pathfinding pathfinding;
 	private EntityGroup col;
 
 	private List<Team> teams;
@@ -76,8 +74,7 @@ public class World implements Playable, Editable {
 
 		load(file);
 
-		graph = new PathGraph(getPathfindingLevels(), 1, 2);
-		Pathfinding.setGraph(graph);
+		pathfinding = new Pathfinding(getPathfindingLevels());
 		
 		if (computeFocus() == null) {
 			Main.log("world without player detected");
@@ -93,8 +90,7 @@ public class World implements Playable, Editable {
 
 		col = QuadTree.coverLevel(background);
 
-		graph = new PathGraph(getPathfindingLevels(), 1, 2);
-		Pathfinding.setGraph(graph);
+		pathfinding = new Pathfinding(getPathfindingLevels());
 
 	}
 
@@ -203,7 +199,7 @@ public class World implements Playable, Editable {
 	}
 
 	public void add(Entity e) {
-		col.insert(e, graph);
+		col.insert(e, pathfinding);
 	}
 
 	/**
@@ -262,7 +258,7 @@ public class World implements Playable, Editable {
 		midground = new Level(new File(f, "midground.lvl"), MidgroundElement.class);
 		foreground = new Level(new File(f, "foreground.lvl"), ForegroundElement.class);
 		col = QuadTree.coverLevel(background);
-		col.loadEntities(new File(f, "entities.dat"), graph);
+		col.loadEntities(new File(f, "entities.dat"), pathfinding);
 
 		File triggerFile = new File(f, "triggers.yml");
 		if (triggerFile.exists()) {
@@ -350,8 +346,12 @@ public class World implements Playable, Editable {
 		}
 		teams.add(team);
 	}
-
+	
 	public Vector getGoodSpawn(Vector start) {
+		return getGoodSpawn(start, new Vector(1, 2));
+	}
+
+	public Vector getGoodSpawn(Vector start, Vector gridSize) {
 
 		for (int r = 0; r < SPAWN_SEARCH_RADIUS; r++) {
 			changeStart: for (Vector v : start.getSquareAround(r)) {
@@ -363,7 +363,7 @@ public class World implements Playable, Editable {
 						/ Tile.WIDTH; x1 <= (x * Tile.WIDTH + 2 * Unit.RADIUS_X) / Tile.WIDTH; x1++) {
 					for (int y1 = (y * Tile.WIDTH - 2 * Unit.RADIUS_Y)
 							/ Tile.WIDTH; y1 <= (y * Tile.WIDTH + 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
-						if (!graph.isContextPathable(x1, y1)) {
+						if (!pathfinding.getGraph(gridSize).isContextPathable(x1, y1)) {
 							continue changeStart;
 						}
 					}
@@ -392,30 +392,18 @@ public class World implements Playable, Editable {
 		Level l = getLevel(tile.getType().getClass());
 		Tile oldTile = l.getTileGrid(posGrid);
 
-		if (oldTile == null || graph.isOccupied(posGrid)) {
+		if (oldTile == null || pathfinding.isOccupied(posGrid)) {
 			return;
 		}
 
 		l.setTileGrid(posGrid, tile);
-		graph.wrapPathingUpdate(posGrid, oldTile, tile);
+		pathfinding.wrapPathingUpdate(posGrid, oldTile, tile);
 		ShootAttempt.reset();
 	
 	}
 
-	public Component getComponent(Entity e) {
-		return graph.getComponent(e);
-	}
-
-	public PathGraph getGraph() {
-		return graph;
-	}
-
-	/**
-	 * @param v grid coordinates
-	 * @return whether or not <code>v</code> is pathable in its context
-	 */
-	public boolean isContextPathable(Vector v) {
-		return graph.isContextPathable(v);
+	public Pathfinding getPathfinding() {
+		return pathfinding;
 	}
 	
 	/**
@@ -423,7 +411,7 @@ public class World implements Playable, Editable {
 	 * @return whether or not the tile at <code>v</code> is pathable
 	 */
 	public boolean isPathable(Vector v) {
-		return graph.isPathable(v.getX(), v.getY());
+		return isPathable(v.getX(), v.getY());
 	}
 	
 	/**
@@ -441,7 +429,7 @@ public class World implements Playable, Editable {
 	 * @return whether the tile at x, y is pathable
 	 */
 	public boolean isPathable(int x, int y) {
-		return graph.isPathable(x, y);
+		return pathfinding.isPathable(x, y);
 	}
 
 }

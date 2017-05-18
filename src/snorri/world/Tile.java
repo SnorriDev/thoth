@@ -110,9 +110,9 @@ public class Tile implements Comparable<Tile>, Nominal {
 		Vector relPos = v.getRelPosGrid(g);
 		
 		if (Debug.RENDER_GRAPHS) {
-			if (g.getWorld().getGraph().getComponent(v) != null) {
-				World w = g.getWorld();
-				gr.setColor(w.getGraph().getComponent(v).getColor());
+			World w = g.getWorld();
+			if (w.getPathfinding().getDefaultGraph().getComponent(v) != null) {
+				gr.setColor(w.getPathfinding().getDefaultGraph().getComponent(v).getColor());
 				gr.drawRect(relPos.getX(), relPos.getY(), Tile.WIDTH, Tile.WIDTH);
 				gr.setColor(Color.BLACK);
 				return;

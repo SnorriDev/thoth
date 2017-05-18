@@ -14,7 +14,6 @@ import snorri.main.GameWindow;
 import snorri.pathfinding.Component;
 import snorri.pathfinding.PathNode;
 import snorri.pathfinding.Pathfinder;
-import snorri.pathfinding.Pathfinding;
 import snorri.pathfinding.Targetter;
 import snorri.world.Tile;
 import snorri.world.Vector;
@@ -97,9 +96,9 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 		if (target.pos.distanceSquared(pos) <= stopRange * stopRange) {
 			return;
 		}
-				
-		Component graph = world.getComponent(this);
-		Component targetGraph = world.getComponent(target);
+		
+		Component graph = world.getPathfinding().getGraph(this).getComponent(this);
+		Component targetGraph = world.getPathfinding().getGraph(this).getComponent(target);
 		
 		//Main.debug("comp size: " + graph.size());
 		
@@ -115,7 +114,7 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 		} else if (!recalculatingPath && (pos.distanceSquared(target.pos) <= seekRange * seekRange)) {
 			
 			if (graph != null && graph == targetGraph) {
-				startPath();
+				startPath(world);
 			}
 
 		}
@@ -149,13 +148,13 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 		recalculatingPath = true;
 	}
 	
-	public void startPath() {
+	public void startPath(World world) {
 		
 		if (pos == null) {
 			return;
 		}
-				
-		Pathfinding.setPathAsync(pos.copy().toGridPos(), target.pos.copy().toGridPos(), this);
+		
+		world.getPathfinding().setPathAsync(pos.copy().toGridPos(), target.pos.copy().toGridPos(), this);
 		lastSeenPos = target.pos.copy(); //don't put this in other thing
 		recalculatingPath = true;
 	}

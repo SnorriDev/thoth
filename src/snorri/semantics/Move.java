@@ -11,7 +11,8 @@ public class Move extends VerbDef {
 	@Override
 	public boolean exec(Object obj) {
 		
-		if (!e.getWorld().isContextPathable(e.getDestination())) {
+		//TODO perhaps this shouldn't use the default grpah?
+		if (!e.getWorld().getPathfinding().getDefaultGraph().isContextPathable(e.getDestination())) {
 			return false;
 		}
 		

@@ -209,6 +209,12 @@ public class Vector implements Serializable, Comparable<Vector> {
 		return this;
 	}
 	
+	public Vector toGridPosCeiling() {
+		x = Math.ceil(x / Tile.WIDTH);
+		y = Math.ceil(y / Tile.WIDTH);
+		return this;
+	}
+	
 	public Vector toGlobalPos() {
 		x = getX() * Tile.WIDTH;
 		y = getY() * Tile.WIDTH;

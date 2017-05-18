@@ -17,6 +17,7 @@ import snorri.main.FocusedWindow;
 import snorri.main.LevelEditor;
 import snorri.main.Main;
 import snorri.pathfinding.PathGraph;
+import snorri.pathfinding.Pathfinding;
 import snorri.triggers.Trigger;
 
 public interface EntityGroup {
@@ -71,12 +72,12 @@ public interface EntityGroup {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	default void loadEntities(File file, PathGraph graph) throws FileNotFoundException, IOException {
+	default void loadEntities(File file, Pathfinding pathfinding) throws FileNotFoundException, IOException {
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
 		while (true) {
 			try {
 				Entity e = (Entity) in.readObject();
-				insert(e, graph);
+				insert(e, pathfinding);
 			} catch (EOFException | ClassNotFoundException e) {
 				break;
 			}
@@ -92,10 +93,10 @@ public interface EntityGroup {
 
 	public Entity getFirstCollision(Rectangle rectangle, boolean hitAll);
 	
-	default void insert(Entity e, PathGraph graph) {
+	default void insert(Entity e, Pathfinding pathfinding) {
 		insert(e);
 		if (e.isStaticObject() && !(Main.getWindow() instanceof LevelEditor)) {
-			graph.addEntity(e);
+			pathfinding.addEntity(e);
 		}
 	}
 	

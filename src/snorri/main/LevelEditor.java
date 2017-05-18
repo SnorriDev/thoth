@@ -376,7 +376,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			break;
 		case "Compute Pathing":
 			if (env instanceof World) {
-				((World) env).getGraph().computePathfinding();
+				((World) env).getPathfinding().compute();
 			}
 			break;
 		case "Undo":
