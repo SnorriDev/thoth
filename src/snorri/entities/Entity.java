@@ -410,7 +410,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 	
 	public Vector getGridBounds() {
-		return new Vector(collider.getRadiusX(), collider.getRadiusY()).multiply(2).toGridPosCeiling();
+		return new Vector(collider.getRadiusX(), collider.getRadiusY()).multiply(2).toGridPosRounded();
 	}
 
 }

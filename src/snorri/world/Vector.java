@@ -209,9 +209,9 @@ public class Vector implements Serializable, Comparable<Vector> {
 		return this;
 	}
 	
-	public Vector toGridPosCeiling() {
-		x = Math.ceil(x / Tile.WIDTH);
-		y = Math.ceil(y / Tile.WIDTH);
+	public Vector toGridPosRounded() {
+		x = Math.round(x / Tile.WIDTH);
+		y = Math.round(y / Tile.WIDTH);
 		return this;
 	}
 	

@@ -32,7 +32,7 @@ public class PathGraph {
 
 	/** A list of the graph's components */
 	private Set<Component> components;
-	/** Indexes component graphs by coordinate */
+	/** Indices component graphs by coordinate */
 	private Component[][] componentLookup;
 	
 	private final int width, height;
@@ -64,6 +64,7 @@ public class PathGraph {
 	public PathGraph(List<Level> levels, Vector v) {
 		this(levels, v.getX(), v.getY());
 	}
+	
 	
 	//TODO: rework this method to be inside PathGraph, and store a list of PathGraphs in
 	// the Pathfinding class

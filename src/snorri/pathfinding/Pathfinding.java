@@ -15,7 +15,6 @@ public class Pathfinding {
 	/** An array of bounding-box sizes for which pathfinding grids should be calculated */
 	private static final Vector[] SIZES = new Vector[] {
 		new Vector(1, 1), //cobra
-		new Vector(1, 2) //human units
 	};
 	
 	private PathGraph[][] graphs = new PathGraph[MAX_WIDTH][MAX_HEIGHT];
@@ -43,7 +42,7 @@ public class Pathfinding {
 	}
 	
 	public PathGraph getDefaultGraph() {
-		return getGraph(1, 2);
+		return getGraph(1, 1);
 	}
 	
 	public void setPathAsync(Vector start, Vector goal, Pathfinder p) {	
