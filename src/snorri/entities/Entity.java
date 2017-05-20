@@ -137,7 +137,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			if (e instanceof Despawner) {
 				((Despawner) e).setDespawnable(true);
 			}
-			if (checkCollisions && world.getEntityTree().getFirstCollision(e) != null) {
+			if (checkCollisions && !e.shouldIgnoreCollisions() && world.getEntityTree().getFirstCollision(e) != null) {
 				return null;
 			}
 			world.add(e);
