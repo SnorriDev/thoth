@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+//import java.util.Vector as javaVector;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -61,6 +62,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	private Editable env;
 	private Entity focus;
 	private Tile selectedTile;
+	private Tile previousTile;
 	private Class<? extends Entity> selectedEntityClass;
 	private boolean isClicking = false;
 
@@ -73,6 +75,10 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	private boolean canRedo;
 	
 	private boolean extraSpeed = false;
+	private boolean wallMode = false;
+	
+	private java.util.Vector<Vector> wallPoints = new java.util.Vector<Vector>();
+	private boolean alternateWallOrientation = false;
 
 	JMenuBar menuBar;
 	JMenu menu, submenu0, submenu1, submenu2, subsubmenu;
@@ -83,6 +89,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	public LevelEditor() {
 		super();
 
+		previousTile = new Tile(BackgroundElement.class, 0, 0);
 		selectedTile = new Tile(BackgroundElement.class, 0, 0);
 		selectedEntityClass = Entity.EDIT_SPAWNABLE.get(0);
 		createMenu();
@@ -296,8 +303,11 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 		if (e.getActionCommand().startsWith("set")) {
 			//Main.debug(e.getActionCommand());
-			selectedTile = new Tile(e.getActionCommand().substring(3));
-			return;
+			if (!selectedTile.equals(new Tile(e.getActionCommand().substring(3)))) {
+				previousTile = selectedTile;
+				selectedTile = new Tile(e.getActionCommand().substring(3));
+				return;
+			}
 		}
 
 		if (e.getActionCommand().startsWith("spawn")) {
@@ -470,8 +480,58 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 					Vector location = getMousePosAbsolute().copy();
 					int x = location.getX();
 					int y = location.getY();
-
-					env.getLevel(selectedTile.getType().getLayer()).setTile(x, y, new Tile(selectedTile));
+					int xGrid = x / Tile.WIDTH;
+					int yGrid = y / Tile.WIDTH;
+					if (!wallMode) {	
+						env.getLevel(selectedTile.getType().getLayer()).setTile(x, y, new Tile(selectedTile));
+					}
+					else { //WALL MODE
+						if (!wallPoints.isEmpty()) {
+							if (!wallPoints.lastElement().equals(new Vector(xGrid,yGrid)) && wallPoints.lastElement().isNormalTo(xGrid,yGrid) && !wallPoints.lastElement().isToCloseTo(xGrid,yGrid)) {
+								env.getLevel(selectedTile.getType().getLayer()).setTile(x, y, new Tile(selectedTile));
+								if (xGrid == wallPoints.lastElement().getX()) {
+									if (yGrid > wallPoints.lastElement().getY()) {
+										for (int i = yGrid - 1; i > wallPoints.lastElement().getY(); --i) {
+											env.getLevel(selectedTile.getType().getLayer()).setTileGrid(xGrid, i, new Tile(selectedTile));
+										}
+									}
+									else {
+										for (int i = yGrid + 1; i < wallPoints.lastElement().getY(); ++i) {
+											Main.debug(i);
+											env.getLevel(selectedTile.getType().getLayer()).setTileGrid(xGrid, i, new Tile(selectedTile));
+										}
+									}
+								}
+								else {
+									if (xGrid > wallPoints.lastElement().getX()) {
+										for (int i = xGrid - 1; i > wallPoints.lastElement().getX(); --i) {
+											env.getLevel(selectedTile.getType().getLayer()).setTileGrid(i, yGrid, new Tile(selectedTile));
+										}
+									}
+									else {
+										for (int i = xGrid + 1; i < wallPoints.lastElement().getX(); ++i) {
+											env.getLevel(selectedTile.getType().getLayer()).setTileGrid(i, yGrid, new Tile(selectedTile));
+										}
+									}
+								}
+							
+								Main.log("Added Tile (" + xGrid + ", " + yGrid + ") to wall");
+								wallPoints.add(new Vector(xGrid,yGrid));
+								
+								if (wallPoints.firstElement().equals(wallPoints.lastElement())) {
+									makeWall();
+								}
+							}
+							else {
+								Main.error("Cannot add Tile (" + xGrid + ", " + yGrid + ") to wall, in wall mode, tiles must be properly spaced and normal to each other");
+							}
+						}
+						else {
+							env.getLevel(selectedTile.getType().getLayer()).setTileGrid(xGrid, yGrid, new Tile(selectedTile));
+							Main.log("Added Tile (" + xGrid + ", " + yGrid + ") to wall");
+							wallPoints.add(new Vector(xGrid,yGrid));
+						}
+					}
 				}
 			}
 
@@ -479,6 +539,11 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 		repaint();
 
+	}
+
+	private void makeWall() {
+		//TODO: make wall function, reverse orientation
+		wallPoints.clear();
 	}
 
 	@Override
@@ -545,18 +610,55 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		if (Key.Q.isPressed(e)) {
 			changeSpeed();
 		}
+		if (Key.M.isPressed(e)) {
+			if (!wallMode) {
+				activateWallMode();
+			}
+			else {
+				deactivateWallMode();
+			}
+		}
+		if (Key.N.isPressed(e)) {
+			if (wallMode) {
+				makeWall();
+			}
+		}
 		if (Key.ONE.isPressed(e)) {
-			selectedTile = new Tile(BackgroundElement.class, 0, 0);
+			if (!selectedTile.equals(new Tile(BackgroundElement.class, 0, 0))) {
+				previousTile = selectedTile;
+				selectedTile = new Tile(BackgroundElement.class, 0, 0);
+			}
 		}
 		if (Key.TWO.isPressed(e)) {
-			selectedTile = new Tile(MidgroundElement.class, 0, 0);
+			if (!selectedTile.equals(new Tile(MidgroundElement.class, 0, 0))) {
+				previousTile = selectedTile;
+				selectedTile = new Tile(MidgroundElement.class, 0, 0);
+			}
 		}
 		if (Key.THREE.isPressed(e)) {
-			selectedTile = new Tile(ForegroundElement.class, 0, 0);
+			if (!selectedTile.equals(new Tile(ForegroundElement.class, 0, 0))) {
+				previousTile = selectedTile;
+				selectedTile = new Tile(ForegroundElement.class, 0, 0);
+			}
 		}
 		
 		//TODO add a key to register a team, and function to look up by name?
 
+	}
+	
+	private void activateWallMode() {
+		wallMode = true;
+		if (!selectedTile.equals(new Tile(MidgroundElement.class, 11, 0))) {
+			previousTile = selectedTile;
+			selectedTile = new Tile(MidgroundElement.class, 11, 0);
+		}
+	}
+
+	private void deactivateWallMode() {
+		makeWall();
+		wallMode = false;
+		selectedTile = previousTile;
+		previousTile = new Tile(MidgroundElement.class, 11, 0);
 	}
 
 	private void changeSpeed() {
@@ -593,7 +695,10 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	}
 	
 	public void pick() {
-		selectedTile = env.getLevel(selectedTile.getType().getLayer()).getTileGrid(getMousePosAbsolute().getX() / Tile.WIDTH, getMousePosAbsolute().getY() / Tile.WIDTH);
+		if (!selectedTile.equals(env.getLevel(selectedTile.getType().getLayer()).getTileGrid(getMousePosAbsolute().getX() / Tile.WIDTH, getMousePosAbsolute().getY() / Tile.WIDTH))) {
+			previousTile = selectedTile;
+			selectedTile = env.getLevel(selectedTile.getType().getLayer()).getTileGrid(getMousePosAbsolute().getX() / Tile.WIDTH, getMousePosAbsolute().getY() / Tile.WIDTH);
+		}
 	}
 
 	private ArrayList<Vector> computeConnectedSubGraph(Vector start, boolean[][] visited) {

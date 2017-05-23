@@ -8,6 +8,7 @@ import snorri.main.Main;
 import snorri.main.Util;
 import snorri.world.TileType;
 
+
 public enum BackgroundElement implements TileType {
 	SAND(true, false, new BufferedImage[] {
 		getImage("sand00.png"),
@@ -25,15 +26,15 @@ public enum BackgroundElement implements TileType {
 		getImage("grass01.png")}, false, true),
 	VOID(false, false, getImage("void00.png")),
 	COLUMN(false, new BufferedImage[] {
-			Tile.DEFAULT_TEXTURE}, true),
+		Tile.DEFAULT_TEXTURE}, true),
 	DOOR(false, Tile.DEFAULT_TEXTURE, true),
 	SANDSTONE(false, false, new BufferedImage[] {
-			getImage("sandstone00.png"),
-			getImage("sandstone01.png"),
-			getImage("sandstone02.png"),
-			getImage("sandstone03.png"),
-			getImage("sandstone04.png"),
-			getImage("drymud00.png")}, false, true), //will change to look like bricks
+		getImage("sandstone00.png"),
+		getImage("sandstone01.png"),
+		getImage("sandstone02.png"),
+		getImage("sandstone03.png"),
+		getImage("sandstone04.png"),
+		getImage("drymud00.png")}, false, true), //will change to look like bricks
 	FLOOR(true, new BufferedImage[] {
 		getImage("floor00-floor00.png"),
 		getImage("floor01-floor01.png"),

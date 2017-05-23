@@ -3,7 +3,11 @@ package snorri.world;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
+
 import java.io.Serializable;
+
+import java.lang.Math;
+
 import java.util.ArrayList;
 
 import snorri.main.FocusedWindow;
@@ -67,6 +71,14 @@ public class Vector implements Serializable, Comparable<Vector> {
 	
 	public int getY() {
 		return (int) y;
+	}
+	
+	public int getXGrid() {
+		return (int) x / Tile.WIDTH;
+	}
+	
+	public int getYGrid() {
+		return (int) y / Tile.WIDTH;
 	}
 	
 	/*public double getXdouble() {
@@ -321,6 +333,17 @@ public class Vector implements Serializable, Comparable<Vector> {
 		
 		return out;
 		
+	}
+
+	public boolean isToCloseTo(int x2, int y2) {
+		//if (Math.abs(getX() - x2) < 3 && Math.abs(getY() - y2) < 3) {
+		//	return true;
+		//}
+		return false;
+	}
+
+	public boolean isNormalTo(int x2, int y2) {
+		return (getX() == x2 || getY() == y2);
 	}
 		
 }

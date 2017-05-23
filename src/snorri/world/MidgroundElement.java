@@ -7,6 +7,7 @@ import snorri.audio.ClipWrapper;
 import snorri.main.Main;
 import snorri.main.Util;
 
+
 public enum MidgroundElement implements TileType {
 	
 	NONE,
@@ -19,7 +20,8 @@ public enum MidgroundElement implements TileType {
 	WALL_CORNER_LEFT(false, TileType.getReflections(getImage("wallcorner02.png"))),
 	WALL_CORNER_BOTTOM(false, TileType.getReflections(getImage("wallcorner03.png"))),
 	WALL_TOP(false, TileType.getRotations(getImage("wall00.png"))),
-	WALL_BOTTOM(false, TileType.getRotations(getImage("wall01.png"))),;
+	WALL_BOTTOM(false, TileType.getRotations(getImage("wall01.png"))),
+	WALL_DEFAULT(false, Tile.DEFAULT_TEXTURE);
 	
 	private BufferedImage[]	textures;
 	private boolean pathable, changable = true; //some things (like paths and tiles) will be unpathable
