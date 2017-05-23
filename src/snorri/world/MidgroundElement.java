@@ -15,6 +15,7 @@ public enum MidgroundElement implements TileType {
 	DOOR(false, getImage("door00.png")),
 	DEBRIS(false, getImage("debris00.png")),
 	BROKEN_DEBRIS(false, getImage("brokendebris00.png"), true),
+<<<<<<< HEAD
 	WALL_CORNER_TOP(false, TileType.getReflections(getImage("wallcorner00.png"))),
 	WALL_CORNER_RIGHT(false, TileType.getReflections(getImage("wallcorner01.png"))),
 	WALL_CORNER_LEFT(false, TileType.getReflections(getImage("wallcorner02.png"))),
@@ -22,6 +23,13 @@ public enum MidgroundElement implements TileType {
 	WALL_TOP(false, TileType.getRotations(getImage("wall00.png"))),
 	WALL_BOTTOM(false, TileType.getRotations(getImage("wall01.png"))),
 	WALL_DEFAULT(false, Tile.DEFAULT_TEXTURE);
+=======
+	WALL(false, TileType.getRotations(getImage("wall00.png"))),
+	WALL_CONCAVE(false, TileType.getRotations(getImage("wallconcave00.png"))),
+	WALL_CONVEX(false, TileType.getRotations(getImage("wallconvex00.png"))),
+	WALL_END_LEFT(false, TileType.getRotations(getImage("wallendleft00.png"))),
+	WALL_END_RIGHT(false, TileType.getRotations(getImage("wallendright00.png")));
+>>>>>>> master
 	
 	private BufferedImage[]	textures;
 	private boolean pathable, changable = true; //some things (like paths and tiles) will be unpathable
