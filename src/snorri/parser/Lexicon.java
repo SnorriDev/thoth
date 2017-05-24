@@ -19,12 +19,13 @@ import snorri.nonterminals.AbstractNoun;
 import snorri.nonterminals.Name;
 import snorri.nonterminals.Noun;
 import snorri.semantics.Above;
+import snorri.semantics.And;
 import snorri.semantics.At;
 import snorri.semantics.Be;
 import snorri.semantics.Boom;
 import snorri.semantics.Break;
 import snorri.semantics.Burn;
-import snorri.semantics.ConditionalDef;
+import snorri.semantics.If;
 import snorri.semantics.CreateObject;
 import snorri.semantics.Cross;
 import snorri.semantics.Damage;
@@ -147,8 +148,9 @@ public class Lexicon extends HashMap<String, Definition> {
 		lexicon.put("dmi", new Cross());
 		//lexicon.put("sxpr", new CreateUnit()); //conjure
 		
-		//Conditionals
-		lexicon.put("Dr", new ConditionalDef());
+		//Connectives
+		lexicon.put("Dr", new If());
+		lexicon.put("AND", new And());
 				
 	}
 	

@@ -1,6 +1,8 @@
 package snorri.nonterminals;
 
 import snorri.events.SpellEvent;
+import snorri.main.Main;
+import snorri.semantics.ConnectiveDef;
 
 public class Sentence extends NonTerminal {
 
@@ -10,6 +12,12 @@ public class Sentence extends NonTerminal {
 		
 		if (children.size() == 1) {
 			return children.get(0).getMeaning(e);
+		}
+		
+		Main.debug(children.size());
+		Main.debug(children.get(1));
+		if (children.size() == 3 && children.get(1).isConnective()) {
+			return ((ConnectiveDef) children.get(1).getMeaning(e)).exec(children.get(0), children.get(2));
 		}
 		
 		if (children.get(0) instanceof AdverbPhrase) {

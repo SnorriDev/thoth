@@ -32,6 +32,7 @@ public class Glyph extends Detector {
 	@Override
 	public void onCollision(CollisionEvent e) {
 		
+		//FIXME i think this code doesn't work?
 		if (!activated && (e.getTarget() instanceof Player || e.getTarget() instanceof Explosion)) {
 			activate();
 		}
@@ -50,6 +51,11 @@ public class Glyph extends Detector {
 		animation = new Animation(ACTIVATE);
 		activated = true;
 		TriggerType.BROADCAST.activate(tag);
+	}
+	
+	@Override
+	public void onExplosion(CollisionEvent e) {
+		activate();
 	}
 
 }

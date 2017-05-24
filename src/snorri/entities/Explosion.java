@@ -9,9 +9,7 @@ public class Explosion extends Detector {
 
 	private static final long serialVersionUID = 1L;
 	private static final Animation ANIMATION = new Animation("/textures/animations/explosion");
-	
-	private double damage = 100;
-	
+		
 	public Explosion(Vector pos, int r) {
 		super(pos, r);
 		animation = new Animation(ANIMATION);
@@ -25,12 +23,10 @@ public class Explosion extends Detector {
 	
 	public Explosion(Vector pos, int r, double damage) {
 		this(pos, r);
-		this.damage = damage;
 	}
 	
 	public Explosion(Vector pos, double damage) {
 		this(pos);
-		this.damage = damage;
 	}
 	
 	@Override
@@ -40,15 +36,7 @@ public class Explosion extends Detector {
 
 	@Override
 	public void onCollision(CollisionEvent e) {
-
-		if (e.getTarget() instanceof Unit) {
-			((Unit) e.getTarget()).damage(damage);
-		}
-		
-		if (e.getTarget() instanceof Glyph) {
-			((Glyph) e.getTarget()).activate();
-		}
-		
+		e.getTarget().onExplosion(e);	
 	}
 	
 	@Override
