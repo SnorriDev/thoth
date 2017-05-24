@@ -21,10 +21,5 @@ public interface Node extends Serializable {
 	public String getOrthography();
 	
 	public Node copy();
-
-	//TODO convert this into a real type system that takes generics
-	default boolean isConnective() {
-		return false;
-	}
 		
 }

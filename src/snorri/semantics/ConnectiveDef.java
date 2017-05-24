@@ -1,11 +1,11 @@
 package snorri.semantics;
 
-import snorri.nonterminals.SemiTerminal;
+import snorri.nonterminals.Connective;
 import snorri.parser.Node;
 
 public abstract class ConnectiveDef extends OperatorDef {
 		
-	public ConnectiveDef(Class<? extends SemiTerminal> c) {
+	public ConnectiveDef(Class<? extends Connective> c) {
 		super(c);
 	}
 		

@@ -10,7 +10,7 @@ public class Statement extends NonTerminal {
 
 	public Object getMeaning(SpellEvent e) {
 		
-		if (children.size() == 3 && children.get(1).isConnective()) {
+		if (children.size() == 3 && children.get(1) instanceof Connective) {
 			boolean arg1 = (boolean) children.get(0).getMeaning(e);
 			boolean arg2 = (boolean) children.get(2).getMeaning(e);
 			return ((ConnectiveDef) children.get(1).getMeaning(e)).eval(arg1, arg2);

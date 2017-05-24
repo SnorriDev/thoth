@@ -16,7 +16,7 @@ public class Sentence extends NonTerminal {
 		
 		Main.debug(children.size());
 		Main.debug(children.get(1));
-		if (children.size() == 3 && children.get(1).isConnective()) {
+		if (children.size() == 3 && children.get(1) instanceof Connective) {
 			return ((ConnectiveDef) children.get(1).getMeaning(e)).exec(children.get(0), children.get(2));
 		}
 		
