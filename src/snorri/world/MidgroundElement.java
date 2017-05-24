@@ -11,17 +11,19 @@ public enum MidgroundElement implements TileType {
 	
 	NONE,
 	COL_BOT(false, getImage("colbot00.png")),
-	DOOR(false, getImage("door00.png")),
+	DOOR(false, TileType.getRotations(getImage("door00.png")), NONE),
 	DEBRIS(false, getImage("debris00.png")),
 	BROKEN_DEBRIS(false, getImage("brokendebris00.png"), true),
 	WALL(false, TileType.getRotations(getImage("wall00.png"))),
 	WALL_CONCAVE(false, TileType.getRotations(getImage("wallconcave00.png"))),
 	WALL_CONVEX(false, TileType.getRotations(getImage("wallconvex00.png"))),
 	WALL_END_LEFT(false, TileType.getRotations(getImage("wallendleft00.png"))),
-	WALL_END_RIGHT(false, TileType.getRotations(getImage("wallendright00.png")));
+	WALL_END_RIGHT(false, TileType.getRotations(getImage("wallendright00.png"))),
+	WALL_STUB(false, TileType.getRotations(getImage("wallstub00.png")));
 	
 	private BufferedImage[]	textures;
 	private boolean pathable, changable = true; //some things (like paths and tiles) will be unpathable
+	private TileType replacementType;
 	
 	MidgroundElement() {
 		this(true, (BufferedImage) null);
@@ -48,6 +50,11 @@ public enum MidgroundElement implements TileType {
 	MidgroundElement(boolean pathable, BufferedImage texture, boolean changable) {
 		this(pathable, texture);
 		this.changable = changable;
+	}
+	
+	MidgroundElement(boolean pathable, BufferedImage[] textures, MidgroundElement replacementType) {
+		this(pathable, textures);
+		this.replacementType = replacementType;
 	}
 	
 	public static MidgroundElement byIdStatic(int id) {
@@ -160,5 +167,10 @@ public enum MidgroundElement implements TileType {
 	@Override
 	public boolean isLiquid() {
 		return false;
+	}
+
+	@Override
+	public TileType getReplacement() {
+		return replacementType;
 	}
 }

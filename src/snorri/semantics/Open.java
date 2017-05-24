@@ -1,19 +1,25 @@
 package snorri.semantics;
 
 import snorri.entities.Mummy;
+
 import snorri.entities.Entity;
 import snorri.entities.Sarcophagus;
 import snorri.masking.Mask;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
-import snorri.world.Level;
+import snorri.world.ForegroundElement;
 import snorri.world.MidgroundElement;
 import snorri.world.Tile;
+import snorri.world.TileType;
 
 public class Open extends VerbDef {
-
-	private static final Tile REPLACEMENT_TILE = new Tile(MidgroundElement.NONE);
+	
+	@SuppressWarnings("unchecked")
+	private static final Class<? extends TileType>[] CHECK_LEVELS = new Class[] { 
+			MidgroundElement.class,
+			ForegroundElement.class
+	};
 	
 	public Open() {
 		super(true);
@@ -50,21 +56,25 @@ public class Open extends VerbDef {
 	}
 		
 	public static boolean openDoor(World w, Vector pos) {
-		
-		Level middle = w.getLevel(MidgroundElement.class);
-		
-		if (middle.getTileGrid(pos) == null) {
-			return false;
-		}
-		
-		if (middle.getTileGrid(pos).getType() == MidgroundElement.DOOR) {
-			TriggerType.DOOR_OPEN.activate(pos);
-			w.wrapGridUpdate(pos, new Tile(REPLACEMENT_TILE));
-			for (Vector trans : Mask.NEIGHBORS) {
-				openDoor(w, pos.copy().add(trans));
+				
+		for (Class<? extends TileType> levelType : CHECK_LEVELS) {
+			
+			Tile tile = w.getLevel(levelType).getTileGrid(pos);
+			if (tile == null) {
+				continue;
 			}
-			return true;
+			
+			Tile replacementTile = tile.getReplacementTile();
+			if (replacementTile != null) {
+				TriggerType.DOOR_OPEN.activate(pos);
+				w.wrapGridUpdate(pos, new Tile(replacementTile));
+				for (Vector trans : Mask.NEIGHBORS) {
+					openDoor(w, pos.copy().add(trans));
+				}
+				return true;
+			}
 		}
+		
 		return false;
 	}
 	

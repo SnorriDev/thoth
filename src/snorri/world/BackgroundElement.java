@@ -9,6 +9,7 @@ import snorri.main.Util;
 import snorri.world.TileType;
 
 public enum BackgroundElement implements TileType {
+	
 	SAND(true, false, new BufferedImage[] {
 		getImage("sand00.png"),
 		getImage("sand01.png"),
@@ -295,4 +296,10 @@ public enum BackgroundElement implements TileType {
 	public int getLayer() {
 		return 0;
 	}
+
+	@Override
+	public TileType getReplacement() {
+		return null;
+	}
+	
 }

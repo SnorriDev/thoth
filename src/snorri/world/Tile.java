@@ -259,5 +259,15 @@ public class Tile implements Comparable<Tile>, Nominal {
 		return new Rectangle(i * Tile.WIDTH, j * Tile.WIDTH, Tile.WIDTH, Tile.WIDTH);
 	}
 
+	public Tile getReplacementTile() {
+		
+		if (type.getReplacement() == null) {
+			return null;
+		}
+		
+		return new Tile(type.getReplacement(), style);
+		
+	}
+
 	
 }

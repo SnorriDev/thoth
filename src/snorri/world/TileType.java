@@ -131,5 +131,7 @@ public interface TileType extends Nominal {
 		return out.toArray(new BufferedImage[0]);
 		
 	}
+
+	public TileType getReplacement();
 	
 }
