@@ -13,11 +13,11 @@ public abstract class NonTerminal<S> implements Node<S> {
 	private static final long serialVersionUID = 1L;
 
 	protected List<Node<?>> children;
-	protected Category category;
+	protected Object category;
 	
 	public void setChildren(List<Node<?>> nodes) {
 		children = nodes;
-		//FIXME assign category
+		category = Category.combine(nodes);
 	}
 		
 	//TODO nonsyncategorematic semantics
@@ -89,7 +89,7 @@ public abstract class NonTerminal<S> implements Node<S> {
 	}
 	
 	@Override
-	public Category getCategory() {
+	public Object getCategory() {
 		return category;
 	}
 	

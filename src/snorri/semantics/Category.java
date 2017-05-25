@@ -1,5 +1,9 @@
 package snorri.semantics;
 
+import java.util.List;
+
+import snorri.parser.Node;
+
 public class Category {
 	
 	public final Object catA;
@@ -67,6 +71,27 @@ public class Category {
 			if ((result2 = Category.combine(result1,  type3)) != null) {
 				return result2;
 			}
+		}
+		
+		return null;
+		
+	}
+	
+	public static Object combine(List<Node<?>> nodes) {
+		
+		Object arg1, arg2, arg3;
+		switch (nodes.size()) {
+		case 1:
+			return nodes.get(0).getCategory();
+		case 2:
+			arg1 = nodes.get(0).getCategory();
+			arg2 = nodes.get(1).getCategory();
+			return Category.combine(arg1, arg2);
+		case 3:
+			arg1 = nodes.get(0).getCategory();
+			arg2 = nodes.get(1).getCategory();
+			arg3 = nodes.get(2).getCategory();
+			return Category.combine(arg1, arg2, arg3);
 		}
 		
 		return null;
