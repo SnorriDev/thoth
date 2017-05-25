@@ -3,28 +3,46 @@ package snorri.nonterminals;
 import java.util.ArrayList;
 import java.util.List;
 
+import snorri.events.SpellEvent;
 import snorri.main.Main;
 import snorri.parser.Node;
+import snorri.semantics.Lambda.Category;
 
 public abstract class NonTerminal<S> implements Node<S> {
 
 	private static final long serialVersionUID = 1L;
 
 	protected List<Node<?>> children;
+	protected Category category;
 	
 	public void setChildren(List<Node<?>> nodes) {
-		this.children = nodes;
+		children = nodes;
+		category = Category.fromChildren(children);
 	}
 		
-	//TODO: probably remove lambdables and stuff
-	//save lambdables for the meaning of terminals, but just use functions here
+	//TODO nonsyncategorematic semantics
+	//TODO replace trinary rules with binary branching structure?
+	//TODO choose exec/eval based on something in SpellEvent
+	@Override @SuppressWarnings("unchecked")
+	public S getMeaning(SpellEvent e) {
+		
+		switch(children.size()) {
+		
+		case 1:
+			return (S) children.get(0).getMeaning(e);
+		case 2:
+			
+		}
+		
+		return null;
+		
+	}
 	
 	@Override
 	public String toString() {
 		return getClass().getSimpleName();
 	}
 	
-	//TODO override this in special cases with equal signs
 	@Override
 	public String getOrthography() {
 		List<String> strings = new ArrayList<String>();
@@ -68,6 +86,11 @@ public abstract class NonTerminal<S> implements Node<S> {
 			return null;
 		}
 
+	}
+	
+	@Override
+	public Category getCategory() {
+		return category;
 	}
 	
 }

@@ -1,14 +1,13 @@
 package snorri.events;
 
 import snorri.entities.Entity;
-import snorri.main.GameWindow;
 import snorri.semantics.Nominal;
 import snorri.world.Vector;
 import snorri.world.World;
 
 public class SpellEvent {
 	
-	private GameWindow window; //used to retrieve first, third, and world
+	private World world; //used to retrieve first, third, and world
 	private Caster firstPerson; //the spell's caster
 	private Entity secondPerson; //the entity being affected by the spell
 	
@@ -32,22 +31,23 @@ public class SpellEvent {
 		
 	}
 	
-	public SpellEvent(GameWindow window, Caster firstPerson, Entity secondPerson) {
+	public SpellEvent(World world, Caster firstPerson, Entity secondPerson) {
 		this.firstPerson = firstPerson;
 		this.secondPerson = secondPerson;
-		this.window = window;
+		this.world = world;
 		loc = getSecondPerson().getPos().copy();
 		dest = getThirdPerson().getPos().copy();
 	}
 	
-	public SpellEvent(GameWindow window, Caster firstPerson, Entity secondPerson, double deltaTime) {
-		this(window, firstPerson, secondPerson);
+	public SpellEvent(World world, Caster firstPerson, Entity secondPerson, double deltaTime) {
+		this(world, firstPerson, secondPerson);
 		this.deltaTime = deltaTime;
 	}
 	
 	public SpellEvent(SpellEvent e) {
 		
-		window = e.window;
+		world = e.world;
+		firstPerson = e.firstPerson;
 		secondPerson = e.secondPerson;
 		
 		loc = e.loc.copy();
@@ -75,7 +75,7 @@ public class SpellEvent {
 	}
 	
 	public World getWorld() {
-		return window.getWorld();
+		return world;
 	}
 	
 	public Caster getFirstPerson() {
@@ -92,6 +92,9 @@ public class SpellEvent {
 	
 	public Entity getThirdPerson() {
 		Entity e = new Entity(firstPerson.getAimPosition());
+		if (getWorld() == null) {
+			return e;
+		}
 		Entity col = getWorld().getEntityTree().getFirstCollision(e, true);
 		return col == null ? e : col;
 	}

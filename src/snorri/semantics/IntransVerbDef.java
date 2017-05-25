@@ -3,6 +3,7 @@ package snorri.semantics;
 import snorri.events.SpellEvent;
 import snorri.nonterminals.IntransVerb;
 import snorri.parser.Node;
+import snorri.semantics.Lambda.Category;
 
 public abstract class IntransVerbDef extends VerbDef<Lambda<Object, Boolean>> {
 
@@ -12,7 +13,10 @@ public abstract class IntransVerbDef extends VerbDef<Lambda<Object, Boolean>> {
 	
 	@Override
 	public Lambda<Object, Boolean> getMeaning(SpellEvent e) {
-		return new Lambda<Object, Boolean>(Object.class) {
+		
+		Category category = new Category(Object.class, Boolean.class);
+		
+		return new Lambda<Object, Boolean>(category) {
 			
 			@Override
 			public Boolean eval(Object arg1) {

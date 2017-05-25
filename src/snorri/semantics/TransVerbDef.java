@@ -3,6 +3,7 @@ package snorri.semantics;
 import snorri.events.SpellEvent;
 import snorri.nonterminals.TransVerb;
 import snorri.parser.Node;
+import snorri.semantics.Lambda.Category;
 
 @SuppressWarnings("rawtypes")
 public abstract class TransVerbDef extends VerbDef<Lambda<Object, Lambda>> {
@@ -14,11 +15,14 @@ public abstract class TransVerbDef extends VerbDef<Lambda<Object, Lambda>> {
 	@Override
 	public Lambda<Object, Lambda> getMeaning(SpellEvent e) {
 		
-		return new Lambda<Object, Lambda>(Object.class) {
+		Category innerCat = new Category(Object.class, Boolean.class);
+		Category outerCat = new Category(Object.class, innerCat);
+		
+		return new Lambda<Object, Lambda>(outerCat) {
 			
 			@Override
 			public Lambda eval(Object arg1) {
-				return new Lambda<Object, Boolean>(Object.class) {
+				return new Lambda<Object, Boolean>(innerCat) {
 					@Override
 					public Boolean eval(Object arg2) {
 						return TransVerbDef.this.eval(arg2, arg1, e);
@@ -28,7 +32,7 @@ public abstract class TransVerbDef extends VerbDef<Lambda<Object, Lambda>> {
 			
 			@Override
 			public Lambda exec(Node<Object> arg1) {
-				return new Lambda<Object, Boolean>(Object.class) {
+				return new Lambda<Object, Boolean>(innerCat) {
 					@Override
 					public Boolean exec(Node<Object> arg2) {
 						return TransVerbDef.this.exec(arg1, e);

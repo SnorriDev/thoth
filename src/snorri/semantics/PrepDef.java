@@ -2,6 +2,7 @@ package snorri.semantics;
 
 import snorri.events.SpellEvent;
 import snorri.nonterminals.Prep;
+import snorri.semantics.Lambda.Category;
 import snorri.world.Tile;
 
 public abstract class PrepDef extends Definition<Lambda<Nominal, SpellEvent>> {
@@ -17,8 +18,9 @@ public abstract class PrepDef extends Definition<Lambda<Nominal, SpellEvent>> {
 	//unify these arguments with verb objects
 	
 	@Override
-	public Lambda<Nominal, SpellEvent> getMeaning(final SpellEvent e) {		
-		return new Lambda<Nominal, SpellEvent>(Nominal.class) {	
+	public Lambda<Nominal, SpellEvent> getMeaning(final SpellEvent e) {
+		Category category = new Category(Nominal.class, SpellEvent.class);
+		return new Lambda<Nominal, SpellEvent>(category) {	
 			@Override
 			public SpellEvent eval(Nominal obj) {
 				return PrepDef.this.eval(obj, new SpellEvent(e));

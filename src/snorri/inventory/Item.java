@@ -18,6 +18,7 @@ import snorri.main.Main;
 import snorri.main.Util;
 import snorri.parser.Node;
 import snorri.world.Vector;
+import snorri.world.World;
 
 public abstract class Item implements Droppable {
 	
@@ -269,19 +270,19 @@ public abstract class Item implements Droppable {
 	 * 	The target of the spell
 	 * @return
 	 */
-	public Object useSpellOn(Caster caster, Entity subject, double modifier) {
+	public Object useSpellOn(World world, Caster caster, Entity subject, double modifier) {
 				
 		if (spell == null) {
 			return null;
 		}
 						
-		SpellEvent e = new SpellEvent((GameWindow) Main.getWindow(), caster, subject, modifier);
+		SpellEvent e = new SpellEvent(world, caster, subject, modifier);
 		return spell.getMeaning(e);
 		
 	}
 	
-	public Object useSpellOn(Caster caster, Entity subject) {
-		return useSpellOn(caster, subject, 1);	
+	public Object useSpell(World world, Caster caster, Entity subject) {
+		return useSpellOn(world, caster, subject, 1);	
 	}
 
 	public static Item newItem() {

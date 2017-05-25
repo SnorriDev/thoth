@@ -3,6 +3,7 @@ package snorri.semantics;
 import snorri.events.SpellEvent;
 import snorri.nonterminals.Connective;
 import snorri.parser.Node;
+import snorri.semantics.Lambda.Category;
 
 @SuppressWarnings("rawtypes")
 public abstract class ConnectiveDef extends Definition<Lambda<Boolean, Lambda>> {
@@ -13,11 +14,15 @@ public abstract class ConnectiveDef extends Definition<Lambda<Boolean, Lambda>> 
 	
 	@Override
 	public Lambda<Boolean, Lambda> getMeaning(SpellEvent e) {
-		return new Lambda<Boolean, Lambda>(Boolean.class) {
+		
+		Category innerCat = new Category(Boolean.class, Boolean.class);
+		Category outerCat = new Category(Boolean.class, innerCat);
+		
+		return new Lambda<Boolean, Lambda>(outerCat) {
 			
 			@Override
 			public Lambda eval(Boolean arg1) {
-				return new Lambda<Boolean, Boolean>(Boolean.class) {
+				return new Lambda<Boolean, Boolean>(innerCat) {
 					@Override
 					public Boolean eval(Boolean arg2) {
 						return ConnectiveDef.this.eval(arg1, arg2, e);
@@ -27,7 +32,7 @@ public abstract class ConnectiveDef extends Definition<Lambda<Boolean, Lambda>> 
 			
 			@Override
 			public Lambda exec(Node<Boolean> arg1) {
-				return new Lambda<Boolean, Boolean>(Boolean.class) {
+				return new Lambda<Boolean, Boolean>(innerCat) {
 					@Override
 					public Boolean exec(Node<Boolean> arg2) {
 						return ConnectiveDef.this.exec(arg1, arg2, e);

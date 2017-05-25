@@ -3,6 +3,7 @@ package snorri.parser;
 import java.io.Serializable;
 
 import snorri.events.SpellEvent;
+import snorri.semantics.Lambda.Category;
 
 public interface Node<S> extends Serializable {
 
@@ -22,5 +23,7 @@ public interface Node<S> extends Serializable {
 	public String getOrthography();
 	
 	public Node<S> copy();
+	
+	public Category getCategory();
 		
 }

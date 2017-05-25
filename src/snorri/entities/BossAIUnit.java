@@ -9,6 +9,10 @@ public abstract class BossAIUnit extends AIUnit implements Caster {
 
 	private static final long serialVersionUID = 1L;
 
+	public BossAIUnit(Vector pos) {
+		this(pos, null, null, null);
+	}
+	
 	protected BossAIUnit(Vector pos, Entity target, Animation idle, Animation walking) {
 		super(pos, target, idle, walking);
 	}
@@ -25,7 +29,7 @@ public abstract class BossAIUnit extends AIUnit implements Caster {
 	
 	@Override
 	public void attack(World world, Entity e) {
-		inventory.getPapyrus(0).tryToActivate(this, e);
+		inventory.getPapyrus(0).tryToActivate(world, this, e);
 	}
 	
 	@Override

@@ -1,6 +1,7 @@
 package snorri.parser;
 
 import snorri.events.SpellEvent;
+import snorri.semantics.Lambda.Category;
 
 public class Terminal<S> implements Node<S> {
 
@@ -47,6 +48,12 @@ public class Terminal<S> implements Node<S> {
 	@Override
 	public Terminal<S> copy() {
 		return new Terminal<>(orthography);
+	}
+
+	@Override
+	public Category getCategory() {
+		//FIXME
+		return null;
 	}
 	
 }
