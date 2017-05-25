@@ -6,7 +6,7 @@ import java.util.List;
 import snorri.events.SpellEvent;
 import snorri.main.Main;
 import snorri.parser.Node;
-import snorri.semantics.Lambda.Category;
+import snorri.semantics.Category;
 
 public abstract class NonTerminal<S> implements Node<S> {
 
@@ -17,7 +17,7 @@ public abstract class NonTerminal<S> implements Node<S> {
 	
 	public void setChildren(List<Node<?>> nodes) {
 		children = nodes;
-		category = Category.fromChildren(children);
+		//FIXME assign category
 	}
 		
 	//TODO nonsyncategorematic semantics

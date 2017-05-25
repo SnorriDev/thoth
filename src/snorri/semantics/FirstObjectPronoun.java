@@ -7,7 +7,7 @@ import snorri.nonterminals.Noun;
 public class FirstObjectPronoun extends Definition<Caster> {
 
 	public FirstObjectPronoun() {
-		super(Noun.class);
+		super(Noun.class, Caster.class);
 	}
 
 	@Override

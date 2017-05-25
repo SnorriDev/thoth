@@ -7,7 +7,7 @@ import snorri.nonterminals.Noun;
 public class SecondObjectPronoun extends Definition<Entity> {
 
 	public SecondObjectPronoun() {
-		super(Noun.class);
+		super(Noun.class, Entity.class);
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import snorri.nonterminals.SuffixPronoun;
 public class SecondSuffixPronoun extends Definition<Entity> {
 
 	public SecondSuffixPronoun() {
-		super(SuffixPronoun.class);
+		super(SuffixPronoun.class, Entity.class);
 	}
 
 	@Override

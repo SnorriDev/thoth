@@ -3,36 +3,35 @@ package snorri.semantics;
 import snorri.events.SpellEvent;
 import snorri.nonterminals.TransVerb;
 import snorri.parser.Node;
-import snorri.semantics.Lambda.Category;
 
 @SuppressWarnings("rawtypes")
 public abstract class TransVerbDef extends VerbDef<Lambda<Object, Lambda>> {
 	
+	private static final Category INNER_CAT = new Category(Object.class, Boolean.class);
+	private static final Category OUTER_CAT = new Category(Object.class, INNER_CAT);
+	
 	protected TransVerbDef() {
-		super(TransVerb.class);
+		super(TransVerb.class, OUTER_CAT);
 	}
 	
 	@Override
 	public Lambda<Object, Lambda> getMeaning(SpellEvent e) {
 		
-		Category innerCat = new Category(Object.class, Boolean.class);
-		Category outerCat = new Category(Object.class, innerCat);
-		
-		return new Lambda<Object, Lambda>(outerCat) {
+		return new Lambda<Object, Lambda>(OUTER_CAT) {
 			
 			@Override
 			public Lambda eval(Object arg1) {
-				return new Lambda<Object, Boolean>(innerCat) {
+				return new Lambda<Object, Boolean>(INNER_CAT) {
 					@Override
 					public Boolean eval(Object arg2) {
-						return TransVerbDef.this.eval(arg2, arg1, e);
+						return TransVerbDef.this.eval(arg1, arg2, e);
 					}
 				};
 			}
 			
 			@Override
 			public Lambda exec(Node<Object> arg1) {
-				return new Lambda<Object, Boolean>(innerCat) {
+				return new Lambda<Object, Boolean>(INNER_CAT) {
 					@Override
 					public Boolean exec(Node<Object> arg2) {
 						return TransVerbDef.this.exec(arg1, e);

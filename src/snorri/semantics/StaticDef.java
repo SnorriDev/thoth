@@ -8,7 +8,7 @@ public class StaticDef extends Definition<Object> {
 	private Object meaning;
 	
 	public StaticDef(Class<? extends SemiTerminal<?>> partOfSpeech, Object meaning) {
-		super(partOfSpeech);
+		super(partOfSpeech, Object.class);
 		this.meaning = meaning;
 	}
 	

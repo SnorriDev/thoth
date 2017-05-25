@@ -8,7 +8,7 @@ public class DegreeModifierDef extends Definition<Integer> {
 	private final int degree;
 	
 	public DegreeModifierDef(int degree) {
-		super(DegreeModifier.class);
+		super(DegreeModifier.class, Integer.class);
 		this.degree = degree;
 	}
 
