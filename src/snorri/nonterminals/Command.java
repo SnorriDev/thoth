@@ -23,7 +23,7 @@ public class Command extends NonTerminal<Boolean> {
 			return lambda.exec(null);
 		case 2:
 			Lambda<Object, Lambda<Object, Boolean>> lambda2 = (Lambda<Object, Lambda<Object, Boolean>>) children.get(0).getMeaning(e);
-			return lambda2.exec((Node<Object>) children.get(1)).exec(null);
+			return lambda2.exec(null).exec((Node<Object>) children.get(1));
 		case 3:
 			Node<Boolean> arg1 = (Node<Boolean>) children.get(0);
 			Node<Boolean> arg2 = (Node<Boolean>) children.get(2);

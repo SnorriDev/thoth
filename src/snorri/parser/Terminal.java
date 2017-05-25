@@ -1,7 +1,7 @@
 package snorri.parser;
 
 import snorri.events.SpellEvent;
-import snorri.semantics.Lambda.Category;
+import snorri.semantics.Category;
 
 public class Terminal<S> implements Node<S> {
 

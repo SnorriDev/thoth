@@ -10,7 +10,7 @@ public abstract class AdverbDef extends Definition<SpellEvent> {
 	 */
 	
 	public AdverbDef() {
-		super(Adverb.class);
+		super(Adverb.class, SpellEvent.class);
 	}
 
 }

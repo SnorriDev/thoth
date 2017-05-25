@@ -9,7 +9,7 @@ public class ThirdSuffixPronoun extends Definition<Entity> {
 	//TODO create type hierarchy for pronouns
 	
 	public ThirdSuffixPronoun() {
-		super(SuffixPronoun.class);
+		super(SuffixPronoun.class, Entity.class);
 	}
 
 	@Override

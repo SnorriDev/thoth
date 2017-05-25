@@ -23,8 +23,8 @@ public class Statement extends NonTerminal<Boolean> {
 			
 			if (children.get(0) instanceof TransVerb) {
 				Lambda<Object, Lambda<Object, Boolean>> lambda2 = (Lambda<Object, Lambda<Object, Boolean>>) children.get(0).getMeaning(e);
-				Object arg1 = children.get(2).getMeaning(e);
-				Object arg2 = children.get(1).getMeaning(e);
+				Object arg1 = children.get(1).getMeaning(e);
+				Object arg2 = children.get(2).getMeaning(e);
 				meaning = lambda2.eval(arg1).eval(arg2);
 				break;
 			}

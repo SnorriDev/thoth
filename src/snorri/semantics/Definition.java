@@ -7,14 +7,23 @@ public abstract class Definition<S> {
 
 	//maybe we can pass a type parameter here
 	
-	private Class<? extends SemiTerminal<?>> partOfSpeech;
+	private final Class<? extends SemiTerminal<?>> partOfSpeech;
+	/**
+	 * Semantic category of a value is Class<S>, of a function is Category(A, B)
+	 */
+	private final Object semanticCategory;
 	
-	public Definition(Class<? extends SemiTerminal<?>> partOfSpeech) {
+	protected Definition(Class<? extends SemiTerminal<?>> partOfSpeech, Object semanticCategory) {
 		this.partOfSpeech = partOfSpeech;
+		this.semanticCategory = semanticCategory;
 	}
 	
 	public Class<? extends SemiTerminal<?>> getPOS() {
 		return partOfSpeech;
+	}
+	
+	public Object getCategory() {
+		return semanticCategory;
 	}
 	
 	public boolean isPOS(Class<? extends SemiTerminal<?>> c) {
