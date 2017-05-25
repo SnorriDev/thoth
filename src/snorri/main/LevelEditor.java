@@ -568,6 +568,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 								
 								if (wallPoints.firstElement().equals(wallPoints.lastElement())) {
 									makeWall();
+									deactivateWallMode();
 								}
 							}
 							else {
@@ -593,17 +594,17 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		if (!alternateWallOrientation) {
 			if (wallPoints.firstElement().equals(wallPoints.lastElement())) {
 				for (int i = 0; i < wallPoints.size(); i++) {
-					int cornerType = getCornerType(wallPoints.elementAt((i + 0) % wallPoints.size()), wallPoints.elementAt((i + 1) % wallPoints.size()), wallPoints.elementAt((i + 2) % wallPoints.size()));
+					int cornerType = getCornerType(wallPoints.elementAt((i + 0) % (wallPoints.size() - 1)), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)), wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)));
 					switch(cornerType) {
 						case 0: //NN
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getY() - 1; j > wallPoints.elementAt((i + 2)  % wallPoints.size()).getY(); j--) {
-								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), j, N0);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY() - 1; j > wallPoints.elementAt((i + 2)  % (wallPoints.size() - 1)).getY(); j--) {
+								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, N0);
 							}
 							break;
 							
 						case 1: //NS
-							for (int j = wallPoints.elementAt((i + 0)  % wallPoints.size()).getY() - 1; j >= wallPoints.elementAt((i + 1) % wallPoints.size()).getY(); j--) {
-								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), j, S0);
+							for (int j = wallPoints.elementAt((i + 0)  % (wallPoints.size() - 1)).getY() - 1; j >= wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(); j--) {
+								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, S0);
 							}
 							break;
 							
@@ -611,9 +612,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 //							for (int j = wallPoints.elementAt(i + 0).getY() - 1; j > wallPoints.elementAt(i + 1).getY(); j--) {
 //								env.getLevel(1).setTileGrid(wallPoints.elementAt(i + 1).getX(), j, N0);
 //							}
-							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), NEc0);
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getX() + 1; j < wallPoints.elementAt((i + 2) % wallPoints.size()).getX(); j++) {
-								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), E0);
+							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), NEc0);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX() + 1; j < wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j++) {
+								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), E0);
 							}
 							break;
 							
@@ -621,22 +622,22 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 //							for (int j = wallPoints.elementAt(i + 0).getY() - 1; j > wallPoints.elementAt(i + 1).getY(); j--) {
 //								env.getLevel(1).setTileGrid(wallPoints.elementAt(i + 1).getX(), j, N0);
 //							}
-							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), NWc0);
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getX() - 1; j > wallPoints.elementAt((i + 2) % wallPoints.size()).getX(); j--) {
-								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), W0);
+							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), NWc0);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX() - 1; j > wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j--) {
+								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), W0);
 							}
 							break;
 							
 							
 						case 4: //SN
-							for (int j = wallPoints.elementAt((i + 0) % wallPoints.size()).getY() + 1; j < wallPoints.elementAt((i + 1) % wallPoints.size()).getY(); j++) {
-								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), j, N0);
+							for (int j = wallPoints.elementAt((i + 0) % (wallPoints.size() - 1)).getY() + 1; j < wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(); j++) {
+								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, N0);
 							}
 							break;
 							
 						case 5: //SS
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getY() + 1; j < wallPoints.elementAt((i + 2)  % wallPoints.size()).getY(); j++) {
-								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), j, S0);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY() + 1; j < wallPoints.elementAt((i + 2)  % (wallPoints.size() - 1)).getY(); j++) {
+								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, S0);
 							}
 							break;
 							
@@ -644,9 +645,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 //							for (int j = wallPoints.elementAt(i + 0).getY() + 1; j < wallPoints.elementAt(i + 1).getY(); j++) {
 //								env.getLevel(1).setTileGrid(wallPoints.elementAt(i + 1).getX(), j, S0);
 //							}
-							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), SEc0);
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getX() + 1; j < wallPoints.elementAt((i + 2) % wallPoints.size()).getX(); j++) {
-								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), E0);
+							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), SEc0);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX() + 1; j < wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j++) {
+								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), E0);
 							}
 							break;
 							
@@ -654,9 +655,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 //							for (int j = wallPoints.elementAt(i + 0).getY() + 1; j < wallPoints.elementAt(i + 1).getY(); j++) {
 //								env.getLevel(1).setTileGrid(wallPoints.elementAt(i + 1).getX(), j, S0);
 //							}
-							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), SWc0);
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getX() - 1; j > wallPoints.elementAt((i + 2) % wallPoints.size()).getX(); j--) {
-								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), W0);
+							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), SWc0);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX() - 1; j > wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j--) {
+								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), W0);
 							}
 							break;
 							
@@ -665,9 +666,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 //							for (int j = wallPoints.elementAt(i + 0).getX() + 1; j < wallPoints.elementAt(i + 1).getX(); j++) {
 //								env.getLevel(1).setTileGrid(j, wallPoints.elementAt(i + 1).getY(), E0);
 //							}
-							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), ENc0);
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getY() - 1; j > wallPoints.elementAt((i + 2) % wallPoints.size()).getY(); j--) {
-								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), j, N0);
+							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), ENc0);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY() - 1; j > wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getY(); j--) {
+								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, N0);
 							}
 							break;
 							
@@ -675,21 +676,21 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 //							for (int j = wallPoints.elementAt(i + 0).getX() + 1; j < wallPoints.elementAt(i + 1).getX(); j++) {
 //								env.getLevel(1).setTileGrid(j, wallPoints.elementAt(i + 1).getY(), E0);
 //							}
-							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), ESc0);
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getY() + 1; j < wallPoints.elementAt((i + 2) % wallPoints.size()).getY(); j++) {
-								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), j, S0);
+							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), ESc0);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY() + 1; j < wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getY(); j++) {
+								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, S0);
 							}
 							break;
 							
 						case 10: //EE
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getX() + 1; j < wallPoints.elementAt((i + 2) % wallPoints.size()).getX(); j++) {
-								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), E0);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX() + 1; j < wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j++) {
+								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), E0);
 							}
 							break;
 							
 						case 11: //EW
-							for (int j = wallPoints.elementAt((i + 0) % wallPoints.size()).getX() + 1; j < wallPoints.elementAt((i + 1) % wallPoints.size()).getX(); j++) {
-								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), W0);
+							for (int j = wallPoints.elementAt((i + 0) % (wallPoints.size() - 1)).getX() + 1; j < wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(); j++) {
+								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), W0);
 							}
 							break;
 							
@@ -698,9 +699,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 //							for (int j = wallPoints.elementAt(i + 0).getX() - 1; j > wallPoints.elementAt(i + 1).getX(); j--) {
 //								env.getLevel(1).setTileGrid(j, wallPoints.elementAt(i + 1).getY(), W0);
 //							}
-							env.getLevel(1).setTileGrid(wallPoints.elementAt(i + 1).getX(), wallPoints.elementAt(i + 1).getY(), WNc0);
-							for (int j = wallPoints.elementAt(i + 1).getY() - 1; j > wallPoints.elementAt(i + 2).getY(); j--) {
-								env.getLevel(1).setTileGrid(wallPoints.elementAt(i + 1).getX(), j, N0);
+							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), WNc0);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY() - 1; j > wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getY(); j--) {
+								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, N0);
 							}
 							break;
 							
@@ -708,21 +709,21 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 //							for (int j = wallPoints.elementAt(i + 0).getX() - 1; j > wallPoints.elementAt(i + 1).getX(); j--) {
 //								env.getLevel(1).setTileGrid(j, wallPoints.elementAt(i + 1).getY(), W0);
 //							}
-							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), WSc0);
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getY() + 1; j < wallPoints.elementAt((i + 2) % wallPoints.size()).getY(); j++) {
-								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), j, S0);
+							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), WSc0);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY() + 1; j < wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getY(); j++) {
+								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, S0);
 							}
 							break;
 							
 						case 14: //WE
-							for (int j = wallPoints.elementAt((i + 0) % wallPoints.size()).getX() - 1; j > wallPoints.elementAt((i + 1) % wallPoints.size()).getX(); j--) {
-								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), E0);
+							for (int j = wallPoints.elementAt((i + 0) % (wallPoints.size() - 1)).getX() - 1; j > wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(); j--) {
+								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), E0);
 							}
 							break;
 							
 						case 15: //WW
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getX() - 1; j > wallPoints.elementAt((i + 2) % wallPoints.size()).getX(); j--) {
-								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), W0);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX() - 1; j > wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j--) {
+								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), W0);
 							}
 							break;
 					}
@@ -917,17 +918,17 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		else {
 			if (wallPoints.firstElement().equals(wallPoints.lastElement())) {
 				for (int i = 0; i < wallPoints.size(); i++) {
-					int cornerType = getCornerType(wallPoints.elementAt((i + 0) % wallPoints.size()), wallPoints.elementAt((i + 1) % wallPoints.size()), wallPoints.elementAt((i + 2) % wallPoints.size()));
+					int cornerType = getCornerType(wallPoints.elementAt((i + 0) % (wallPoints.size() - 1)), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)), wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)));
 					switch(cornerType) {
 						case 0: //NN
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getY() - 1; j > wallPoints.elementAt((i + 2)  % wallPoints.size()).getY(); j--) {
-								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), j, N0);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY() - 1; j > wallPoints.elementAt((i + 2)  % (wallPoints.size() - 1)).getY(); j--) {
+								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, N1);
 							}
 							break;
 							
 						case 1: //NS
-							for (int j = wallPoints.elementAt((i + 0)  % wallPoints.size()).getY() - 1; j >= wallPoints.elementAt((i + 1) % wallPoints.size()).getY(); j--) {
-								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), j, S0);
+							for (int j = wallPoints.elementAt((i + 0)  % (wallPoints.size() - 1)).getY() - 1; j >= wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(); j--) {
+								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, S1);
 							}
 							break;
 							
@@ -935,9 +936,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 //							for (int j = wallPoints.elementAt(i + 0).getY() - 1; j > wallPoints.elementAt(i + 1).getY(); j--) {
 //								env.getLevel(1).setTileGrid(wallPoints.elementAt(i + 1).getX(), j, N0);
 //							}
-							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), NEc0);
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getX() + 1; j < wallPoints.elementAt((i + 2) % wallPoints.size()).getX(); j++) {
-								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), E0);
+							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), NEc1);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX() + 1; j < wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j++) {
+								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), E1);
 							}
 							break;
 							
@@ -945,22 +946,22 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 //							for (int j = wallPoints.elementAt(i + 0).getY() - 1; j > wallPoints.elementAt(i + 1).getY(); j--) {
 //								env.getLevel(1).setTileGrid(wallPoints.elementAt(i + 1).getX(), j, N0);
 //							}
-							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), NWc0);
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getX() - 1; j > wallPoints.elementAt((i + 2) % wallPoints.size()).getX(); j--) {
-								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), W0);
+							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), NWc1);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX() - 1; j > wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j--) {
+								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), W1);
 							}
 							break;
 							
 							
 						case 4: //SN
-							for (int j = wallPoints.elementAt((i + 0) % wallPoints.size()).getY() + 1; j < wallPoints.elementAt((i + 1) % wallPoints.size()).getY(); j++) {
-								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), j, N0);
+							for (int j = wallPoints.elementAt((i + 0) % (wallPoints.size() - 1)).getY() + 1; j < wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(); j++) {
+								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, N1);
 							}
 							break;
 							
 						case 5: //SS
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getY() + 1; j < wallPoints.elementAt((i + 2)  % wallPoints.size()).getY(); j++) {
-								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), j, S0);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY() + 1; j < wallPoints.elementAt((i + 2)  % (wallPoints.size() - 1)).getY(); j++) {
+								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, S1);
 							}
 							break;
 							
@@ -968,9 +969,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 //							for (int j = wallPoints.elementAt(i + 0).getY() + 1; j < wallPoints.elementAt(i + 1).getY(); j++) {
 //								env.getLevel(1).setTileGrid(wallPoints.elementAt(i + 1).getX(), j, S0);
 //							}
-							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), SEc0);
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getX() + 1; j < wallPoints.elementAt((i + 2) % wallPoints.size()).getX(); j++) {
-								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), E0);
+							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), SEc1);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX() + 1; j < wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j++) {
+								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), E1);
 							}
 							break;
 							
@@ -978,9 +979,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 //							for (int j = wallPoints.elementAt(i + 0).getY() + 1; j < wallPoints.elementAt(i + 1).getY(); j++) {
 //								env.getLevel(1).setTileGrid(wallPoints.elementAt(i + 1).getX(), j, S0);
 //							}
-							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), SWc0);
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getX() - 1; j > wallPoints.elementAt((i + 2) % wallPoints.size()).getX(); j--) {
-								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), W0);
+							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), SWc1);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX() - 1; j > wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j--) {
+								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), W1);
 							}
 							break;
 							
@@ -989,9 +990,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 //							for (int j = wallPoints.elementAt(i + 0).getX() + 1; j < wallPoints.elementAt(i + 1).getX(); j++) {
 //								env.getLevel(1).setTileGrid(j, wallPoints.elementAt(i + 1).getY(), E0);
 //							}
-							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), ENc0);
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getY() - 1; j > wallPoints.elementAt((i + 2) % wallPoints.size()).getY(); j--) {
-								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), j, N0);
+							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), ENc1);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY() - 1; j > wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getY(); j--) {
+								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, N1);
 							}
 							break;
 							
@@ -999,21 +1000,21 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 //							for (int j = wallPoints.elementAt(i + 0).getX() + 1; j < wallPoints.elementAt(i + 1).getX(); j++) {
 //								env.getLevel(1).setTileGrid(j, wallPoints.elementAt(i + 1).getY(), E0);
 //							}
-							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), ESc0);
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getY() + 1; j < wallPoints.elementAt((i + 2) % wallPoints.size()).getY(); j++) {
-								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), j, S0);
+							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), ESc1);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY() + 1; j < wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getY(); j++) {
+								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, S1);
 							}
 							break;
 							
 						case 10: //EE
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getX() + 1; j < wallPoints.elementAt((i + 2) % wallPoints.size()).getX(); j++) {
-								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), E0);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX() + 1; j < wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j++) {
+								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), E1);
 							}
 							break;
 							
 						case 11: //EW
-							for (int j = wallPoints.elementAt((i + 0) % wallPoints.size()).getX() + 1; j < wallPoints.elementAt((i + 1) % wallPoints.size()).getX(); j++) {
-								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), W0);
+							for (int j = wallPoints.elementAt((i + 0) % (wallPoints.size() - 1)).getX() + 1; j < wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(); j++) {
+								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), W1);
 							}
 							break;
 							
@@ -1022,9 +1023,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 //							for (int j = wallPoints.elementAt(i + 0).getX() - 1; j > wallPoints.elementAt(i + 1).getX(); j--) {
 //								env.getLevel(1).setTileGrid(j, wallPoints.elementAt(i + 1).getY(), W0);
 //							}
-							env.getLevel(1).setTileGrid(wallPoints.elementAt(i + 1).getX(), wallPoints.elementAt(i + 1).getY(), WNc0);
-							for (int j = wallPoints.elementAt(i + 1).getY() - 1; j > wallPoints.elementAt(i + 2).getY(); j--) {
-								env.getLevel(1).setTileGrid(wallPoints.elementAt(i + 1).getX(), j, N0);
+							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), WNc1);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY() - 1; j > wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getY(); j--) {
+								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, N1);
 							}
 							break;
 							
@@ -1032,21 +1033,21 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 //							for (int j = wallPoints.elementAt(i + 0).getX() - 1; j > wallPoints.elementAt(i + 1).getX(); j--) {
 //								env.getLevel(1).setTileGrid(j, wallPoints.elementAt(i + 1).getY(), W0);
 //							}
-							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), WSc0);
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getY() + 1; j < wallPoints.elementAt((i + 2) % wallPoints.size()).getY(); j++) {
-								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % wallPoints.size()).getX(), j, S0);
+							env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), WSc1);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY() + 1; j < wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getY(); j++) {
+								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, S1);
 							}
 							break;
 							
 						case 14: //WE
-							for (int j = wallPoints.elementAt((i + 0) % wallPoints.size()).getX() - 1; j > wallPoints.elementAt((i + 1) % wallPoints.size()).getX(); j--) {
-								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), E0);
+							for (int j = wallPoints.elementAt((i + 0) % (wallPoints.size() - 1)).getX() - 1; j > wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(); j--) {
+								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), E1);
 							}
 							break;
 							
 						case 15: //WW
-							for (int j = wallPoints.elementAt((i + 1) % wallPoints.size()).getX() - 1; j > wallPoints.elementAt((i + 2) % wallPoints.size()).getX(); j--) {
-								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % wallPoints.size()).getY(), W0);
+							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX() - 1; j > wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j--) {
+								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), W1);
 							}
 							break;
 					}
@@ -1304,11 +1305,6 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		if (Key.Q.isPressed(e)) {
 			changeSpeed();
 		}
-		if (Key.N.isPressed(e)) {
-			alternateWallOrientation = !alternateWallOrientation;
-			makeWall();
-			deactivateWallMode();
-		}
 		if (Key.M.isPressed(e)) {
 			if (!wallMode) {
 				activateWallMode();
@@ -1319,9 +1315,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			}
 		}
 		if (Key.N.isPressed(e)) {
-			if (wallMode) {
-				makeWall();
-			}
+			alternateWallOrientation = !alternateWallOrientation;
+			makeWall();
+			deactivateWallMode();
 		}
 		if (Key.ONE.isPressed(e)) {
 			if (!selectedTile.equals(new Tile(BackgroundElement.class, 0, 0))) {
@@ -1359,7 +1355,6 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	private void deactivateWallMode() {
 		wallMode = false;
 		selectedTile = previousTile;
-		previousTile = new Tile(MidgroundElement.class, 10, 0);
 	}
 
 	private void changeSpeed() {
