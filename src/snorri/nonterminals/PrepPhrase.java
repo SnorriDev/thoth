@@ -1,8 +1,8 @@
 package snorri.nonterminals;
 
 import snorri.events.SpellEvent;
+import snorri.semantics.Lambda;
 import snorri.semantics.Nominal;
-import snorri.semantics.PrepDef;
 
 public class PrepPhrase extends NonTerminal<SpellEvent> {
 
@@ -11,6 +11,7 @@ public class PrepPhrase extends NonTerminal<SpellEvent> {
 	/**
 	 * @return a modified copy of SpellEvent which carries the necessary semantics
 	 */
+	@Override @SuppressWarnings("unchecked")
 	public SpellEvent getMeaning(SpellEvent e) {
 		
 		//the supplied object is a class, not an object
@@ -18,8 +19,8 @@ public class PrepPhrase extends NonTerminal<SpellEvent> {
 			return null;
 		}
 		
-		PrepDef prep = (PrepDef) children.get(0).getMeaning(e);
-		return ((PrepDef) prep.getMeaning(e)).getModified((Nominal) children.get(1).getMeaning(e));
+		Lambda<Nominal, SpellEvent> lambda = (Lambda<Nominal, SpellEvent>) children.get(0).getMeaning(e);
+		return lambda.eval((Nominal) children.get(1).getMeaning(e));
 		
 	}
 

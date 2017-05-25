@@ -4,7 +4,7 @@ import snorri.events.SpellEvent;
 import snorri.nonterminals.Prep;
 import snorri.world.Tile;
 
-public abstract class PrepDef extends Definition<PrepDef> {
+public abstract class PrepDef extends Definition<Lambda<Nominal, SpellEvent>> {
 	
 	protected static final int DISPLACE_DISTANCE = Tile.WIDTH * 3;
 	
@@ -14,17 +14,23 @@ public abstract class PrepDef extends Definition<PrepDef> {
 		super(Prep.class);
 	}
 
+	//unify these arguments with verb objects
+	
 	@Override
-	public PrepDef getMeaning(SpellEvent e) {		
-		this.e = new SpellEvent(e);
-		return this;
+	public Lambda<Nominal, SpellEvent> getMeaning(final SpellEvent e) {		
+		return new Lambda<Nominal, SpellEvent>(Nominal.class) {	
+			@Override
+			public SpellEvent eval(Nominal obj) {
+				return PrepDef.this.eval(obj, new SpellEvent(e));
+			}
+		};
 	}
 		
 	/**
-	 * do the action associated with the imperative mood of this verb
-	 * @param obj the direct object associated with a verb (null for intransitive usage)
-	 * @return a location
+	 * Returns modified context given the prepositional object
+	 * @param obj the object of the preposition
+	 * @return the new SpellEvent
 	 */
-	public abstract SpellEvent getModified(Nominal obj);
+	public abstract SpellEvent eval(Nominal obj, SpellEvent e);
 
 }
