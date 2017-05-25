@@ -3,46 +3,64 @@ package snorri.nonterminals;
 import java.util.ArrayList;
 import java.util.List;
 
+import snorri.events.SpellEvent;
 import snorri.main.Main;
 import snorri.parser.Node;
+import snorri.semantics.Lambda.Category;
 
-public abstract class NonTerminal implements Node {
+public abstract class NonTerminal<S> implements Node<S> {
 
 	private static final long serialVersionUID = 1L;
 
-	protected List<Node> children;
+	protected List<Node<?>> children;
+	protected Category category;
 	
-	public void setChildren(List<Node> children) {
-		this.children = children;
+	public void setChildren(List<Node<?>> nodes) {
+		children = nodes;
+		category = Category.fromChildren(children);
 	}
 		
-	//TODO: probably remove lambdables and stuff
-	//save lambdables for the meaning of terminals, but just use functions here
+	//TODO nonsyncategorematic semantics
+	//TODO replace trinary rules with binary branching structure?
+	//TODO choose exec/eval based on something in SpellEvent
+	@Override @SuppressWarnings("unchecked")
+	public S getMeaning(SpellEvent e) {
+		
+		switch(children.size()) {
+		
+		case 1:
+			return (S) children.get(0).getMeaning(e);
+		case 2:
+			
+		}
+		
+		return null;
+		
+	}
 	
 	@Override
 	public String toString() {
 		return getClass().getSimpleName();
 	}
 	
-	//TODO override this in special cases with equal signs
 	@Override
 	public String getOrthography() {
 		List<String> strings = new ArrayList<String>();
-		for (Node child : children) {
+		for (Node<?> child : children) {
 			strings.add(child.getOrthography());
 		}
 		return String.join(" ", strings);
 	}
 
 	@Deprecated
-	public List<Node> getChildren() {
+	public List<Node<?>> getChildren() {
 		return children;
 	}
 	
 	@Override
 	public boolean altersMovement() {
 		
-		for (Node child : children) {
+		for (Node<?> child : children) {
 			if (child.altersMovement()) {
 				return true;
 			}
@@ -51,15 +69,15 @@ public abstract class NonTerminal implements Node {
 		return false;
 	}
 	
-	@Override
-	public NonTerminal copy() {
-		List<Node> newChildren = new ArrayList<>();
-		for (Node child : children) {
+	@Override @SuppressWarnings("unchecked")
+	public NonTerminal<S> copy() {
+		List<Node<?>> newChildren = new ArrayList<>();
+		for (Node<?> child : children) {
 			newChildren.add(child.copy());
 		}
-		NonTerminal copy;
+		NonTerminal<S> copy;
 		try {
-			copy = getClass().newInstance();
+			copy = (NonTerminal<S>) getClass().newInstance();
 			copy.setChildren(newChildren);
 			return copy;
 		} catch (InstantiationException | IllegalAccessException e) {
@@ -68,6 +86,11 @@ public abstract class NonTerminal implements Node {
 			return null;
 		}
 
+	}
+	
+	@Override
+	public Category getCategory() {
+		return category;
 	}
 	
 }

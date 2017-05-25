@@ -1,5 +1,6 @@
 package snorri.semantics;
 
+import snorri.events.SpellEvent;
 import snorri.nonterminals.Conditional;
 import snorri.parser.Node;
 
@@ -10,7 +11,7 @@ public class If extends ConnectiveDef {
 	}
 
 	@Override
-	public boolean exec(Node arg1, Node arg2) {
+	public boolean exec(Node<Boolean> arg1, Node<Boolean> arg2, SpellEvent e) {
 		if ((boolean) arg2.getMeaning(e)) {
 			return (boolean) arg1.getMeaning(e);
 		}
@@ -18,7 +19,7 @@ public class If extends ConnectiveDef {
 	}
 
 	@Override
-	public boolean eval(boolean arg1, boolean arg2) {
+	public boolean eval(boolean arg1, boolean arg2, SpellEvent e) {
 		return !arg2 || arg1;
 	}
 	

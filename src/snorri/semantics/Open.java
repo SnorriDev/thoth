@@ -4,7 +4,9 @@ import snorri.entities.Mummy;
 
 import snorri.entities.Entity;
 import snorri.entities.Sarcophagus;
+import snorri.events.SpellEvent;
 import snorri.masking.Mask;
+import snorri.parser.Node;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -13,7 +15,7 @@ import snorri.world.MidgroundElement;
 import snorri.world.Tile;
 import snorri.world.TileType;
 
-public class Open extends VerbDef {
+public class Open extends TransVerbDef {
 	
 	@SuppressWarnings("unchecked")
 	private static final Class<? extends TileType>[] CHECK_LEVELS = new Class[] { 
@@ -22,14 +24,16 @@ public class Open extends VerbDef {
 	};
 	
 	public Open() {
-		super(true);
+		super();
 	}
 
 	/**
 	 * Opens the tile under the object.
 	 */
 	@Override
-	public boolean exec(Object obj) {
+	public boolean exec(Node<Object> object, SpellEvent e) {
+		
+		Object obj = object.getMeaning(e);
 		
 		if (obj instanceof Sarcophagus) {
 			e.getWorld().delete((Entity) obj);
@@ -48,7 +52,7 @@ public class Open extends VerbDef {
 	 * @return whether the terrain under the object is pathable
 	 */
 	@Override
-	public boolean eval(Object subj, Object obj) {
+	public boolean eval(Object subj, Object obj, SpellEvent e) {
 		if (obj instanceof Entity) {
 			return e.getWorld().getLevel(MidgroundElement.class).isPathable(((Entity) obj).getPos().copy().toGridPos());
 		}

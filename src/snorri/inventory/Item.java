@@ -18,12 +18,13 @@ import snorri.main.Main;
 import snorri.main.Util;
 import snorri.parser.Node;
 import snorri.world.Vector;
+import snorri.world.World;
 
 public abstract class Item implements Droppable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	protected Node spell; // spell/enchantment associated with the item
+	protected Node<Boolean> spell; // spell/enchantment associated with the item
 	protected String nickname; //name which the player gives the item so they know what it does
 	protected ItemType type; // what type of item it is; you can get ID, maxQuantity, enchantable from this
 	
@@ -245,7 +246,7 @@ public abstract class Item implements Droppable {
 	/**
 	 * changes the spell on the item iff it's enchantable
 	 */
-	public boolean setSpell(Node newSpell) {
+	public boolean setSpell(Node<Boolean> newSpell) {
 		
 		if (! type.isEnchantable()) {
 			return false;
@@ -257,7 +258,7 @@ public abstract class Item implements Droppable {
 	}
 
 	// returns the spell on the item
-	public Node getSpell() {
+	public Node<Boolean> getSpell() {
 		return spell;
 	}
 	
@@ -269,19 +270,19 @@ public abstract class Item implements Droppable {
 	 * 	The target of the spell
 	 * @return
 	 */
-	public Object useSpellOn(Caster caster, Entity subject, double modifier) {
+	public Object useSpellOn(World world, Caster caster, Entity subject, double modifier) {
 				
 		if (spell == null) {
 			return null;
 		}
 						
-		SpellEvent e = new SpellEvent((GameWindow) Main.getWindow(), caster, subject, modifier);
+		SpellEvent e = new SpellEvent(world, caster, subject, modifier);
 		return spell.getMeaning(e);
 		
 	}
 	
-	public Object useSpellOn(Caster caster, Entity subject) {
-		return useSpellOn(caster, subject, 1);	
+	public Object useSpell(World world, Caster caster, Entity subject) {
+		return useSpellOn(world, caster, subject, 1);	
 	}
 
 	public static Item newItem() {

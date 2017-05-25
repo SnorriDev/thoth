@@ -1,10 +1,12 @@
 package snorri.semantics;
 
 import snorri.entities.Entity;
+import snorri.events.SpellEvent;
+import snorri.parser.Node;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Break extends VerbDef {
+public class Break extends TransVerbDef {
 
 	/**
 	 * Only use this interface with Entities
@@ -19,11 +21,13 @@ public class Break extends VerbDef {
 	}
 	
 	public Break() {
-		super(true);
+		super();
 	}
 
 	@Override
-	public boolean exec(Object obj) {
+	public boolean exec(Node<Object> object, SpellEvent e) {
+		
+		Object obj = object.getMeaning(e);
 		
 		if (!(obj instanceof Entity)) {
 			return false;
@@ -43,7 +47,7 @@ public class Break extends VerbDef {
 	}
 
 	@Override
-	public boolean eval(Object subj, Object obj) {
+	public boolean eval(Object subj, Object obj, SpellEvent e) {
 		return (Entity) obj instanceof Smashable;
 	}
 

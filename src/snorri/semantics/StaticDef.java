@@ -3,11 +3,11 @@ package snorri.semantics;
 import snorri.events.SpellEvent;
 import snorri.nonterminals.SemiTerminal;
 
-public class StaticDef extends Definition {
+public class StaticDef extends Definition<Object> {
 
 	private Object meaning;
 	
-	public StaticDef(Class<? extends SemiTerminal> partOfSpeech, Object meaning) {
+	public StaticDef(Class<? extends SemiTerminal<?>> partOfSpeech, Object meaning) {
 		super(partOfSpeech);
 		this.meaning = meaning;
 	}

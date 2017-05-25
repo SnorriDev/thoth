@@ -4,10 +4,11 @@ import snorri.events.SpellEvent;
 import snorri.semantics.Nominal;
 import snorri.semantics.Nominal.AbstractSemantics;
 
-public class NounPhrase extends NonTerminal {
+public class NounPhrase extends NonTerminal<Object> {
 
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	public Object getMeaning(SpellEvent e) {
 		
 		if (children.size() == 1) {

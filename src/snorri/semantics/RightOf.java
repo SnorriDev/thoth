@@ -7,7 +7,7 @@ import snorri.world.Vector;
 public class RightOf extends PrepDef {
 
 	@Override
-	public SpellEvent getModified(Nominal obj) {
+	public SpellEvent eval(Nominal obj, SpellEvent e) {
 		
 		Object pos = obj.get(e.getWorld(), AbstractSemantics.POSITION);
 		

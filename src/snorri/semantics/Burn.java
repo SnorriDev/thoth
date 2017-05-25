@@ -1,18 +1,19 @@
 package snorri.semantics;
 
 import snorri.entities.Unit;
+import snorri.events.SpellEvent;
 import snorri.modifiers.BurnModifier;
+import snorri.parser.Node;
 
-public class Burn extends VerbDef {
-
-	//TODO: maybe this verb is actually transitive?
+public class Burn extends TransVerbDef {
 	
 	public Burn() {
-		super(true);
+		super();
 	}
 
 	@Override
-	public boolean exec(Object obj) {
+	public boolean exec(Node<Object> object, SpellEvent e) {
+		Object obj = object.getMeaning(e);
 		if (obj instanceof Unit) {
 			((Unit) obj).addModifier(new BurnModifier());
 		}
@@ -20,7 +21,7 @@ public class Burn extends VerbDef {
 	}
 
 	@Override
-	public boolean eval(Object subj, Object obj) {
+	public boolean eval(Object subj, Object obj, SpellEvent e) {
 		return obj instanceof Unit && ((Unit) obj).hasModifier(BurnModifier.class);
 	}
 

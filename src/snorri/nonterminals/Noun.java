@@ -1,6 +1,7 @@
 package snorri.nonterminals;
 
-public class Noun extends SemiTerminal {
+//TODO clear up this type system
+public class Noun extends SemiTerminal<Object> {
 
 	private static final long serialVersionUID = 1L;
 

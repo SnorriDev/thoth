@@ -1,29 +1,37 @@
 package snorri.nonterminals;
 
 import snorri.events.SpellEvent;
-import snorri.semantics.ConnectiveDef;
-import snorri.semantics.VerbDef;
+import snorri.parser.Node;
+import snorri.semantics.Lambda;
 
-public class Command extends NonTerminal {
+public class Command extends NonTerminal<Boolean> {
 
 	private static final long serialVersionUID = 1L;
 
-	public Object getMeaning(SpellEvent e) {
+	@Override @SuppressWarnings("unchecked")
+	public Boolean getMeaning(SpellEvent e) {
 		
 		if (e.isNegated()) {
 			return false;
 		}
 		
-		//TODO maybe clean up this gross system of semantics
+		//TODO make this all more elegant
 		
 		switch (children.size()) {
 		case 1:
-			return ((VerbDef) children.get(0).getMeaning(e)).exec(null);
+			Lambda<Object, Boolean> lambda = (Lambda<Object, Boolean>) children.get(0).getMeaning(e);
+			return lambda.exec(null);
 		case 2:
-			return ((VerbDef) children.get(0).getMeaning(e)).exec(children.get(1).getMeaning(e));
-		default:
-			return ((ConnectiveDef) children.get(1).getMeaning(e)).exec(children.get(0), children.get(2));
+			Lambda<Object, Lambda<Object, Boolean>> lambda2 = (Lambda<Object, Lambda<Object, Boolean>>) children.get(0).getMeaning(e);
+			return lambda2.exec((Node<Object>) children.get(1)).exec(null);
+		case 3:
+			Node<Boolean> arg1 = (Node<Boolean>) children.get(0);
+			Node<Boolean> arg2 = (Node<Boolean>) children.get(2);
+			Lambda<Boolean, Lambda<Boolean, Boolean>> lambda3 = (Lambda<Boolean, Lambda<Boolean, Boolean>>) children.get(1).getMeaning(e);
+			return lambda3.exec(arg1).exec(arg2);
 		}
+		
+		return null;
 		
 	}
 

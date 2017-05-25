@@ -4,17 +4,21 @@ import java.lang.reflect.InvocationTargetException;
 
 import snorri.entities.Entity;
 import snorri.entities.Plant;
+import snorri.events.SpellEvent;
 import snorri.main.Main;
+import snorri.parser.Node;
 import snorri.world.Vector;
 
-public class Grow extends VerbDef {
+public class Grow extends TransVerbDef {
 
 	public Grow() {
-		super(true);
+		super();
 	}
 
 	@Override @SuppressWarnings("unchecked")
-	public boolean exec(Object obj) {
+	public boolean exec(Node<Object> object, SpellEvent e) {
+		
+		Object obj = object.getMeaning(e);
 		
 		if (obj instanceof Class<?> && Plant.class.isAssignableFrom((Class<?>) obj)) {
 			try {
@@ -22,9 +26,9 @@ public class Grow extends VerbDef {
 				e.getWorld().add(ent);
 				return true;
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-					| NoSuchMethodException | SecurityException e) {
+					| NoSuchMethodException | SecurityException e2) {
 				Main.error("could not instantiate entity type " + obj.toString());
-				e.printStackTrace();
+				e2.printStackTrace();
 			}
 		}
 		
@@ -33,7 +37,7 @@ public class Grow extends VerbDef {
 	}
 
 	@Override
-	public boolean eval(Object subj, Object obj) {
+	public boolean eval(Object subj, Object obj, SpellEvent e) {
 		return false;
 	}
 

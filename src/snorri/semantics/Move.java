@@ -1,15 +1,19 @@
 package snorri.semantics;
 
 import snorri.entities.Entity;
+import snorri.events.SpellEvent;
+import snorri.parser.Node;
 
-public class Move extends VerbDef {
+public class Move extends TransVerbDef {
 
 	public Move() {
-		super(true);
+		super();
 	}
 
 	@Override
-	public boolean exec(Object obj) {
+	public boolean exec(Node<Object> object, SpellEvent e) {
+		
+		Object obj = object.getMeaning(e);
 		
 		//TODO perhaps this shouldn't use the default grpah?
 		if (!e.getWorld().getPathfinding().getDefaultGraph().isContextPathable(e.getDestination())) {
@@ -24,7 +28,7 @@ public class Move extends VerbDef {
 	}
 
 	@Override
-	public boolean eval(Object subj, Object obj) {
+	public boolean eval(Object subj, Object obj, SpellEvent e) {
 		return false;
 	}
 	

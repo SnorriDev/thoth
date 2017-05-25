@@ -1,20 +1,22 @@
 package snorri.semantics;
 
 import snorri.entities.Entity;
+import snorri.events.SpellEvent;
+import snorri.parser.Node;
 
-public class Be extends VerbDef {
+public class Be extends TransVerbDef {
 
 	public Be() {
-		super(true);
+		super();
 	}
 
 	@Override
-	public boolean exec(Object obj) {
+	public boolean exec(Node<Object> object, SpellEvent e) {
 		return false;
 	}
 
 	@Override
-	public boolean eval(Object subj, Object obj) {
+	public boolean eval(Object subj, Object obj, SpellEvent e) {
 		
 		// TODO add more tests for equivalence
 		if (subj instanceof Entity && obj instanceof Entity) {

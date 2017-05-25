@@ -1,10 +1,11 @@
 package snorri.semantics;
 
 import snorri.entities.Projectile;
+import snorri.events.SpellEvent;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Go extends VerbDef {
+public class Go extends IntransVerbDef {
 	
 	private static final double SPEED = 350;
 	private static final double DELETE_MARGIN = 5;
@@ -24,11 +25,11 @@ public class Go extends VerbDef {
 	}
 	
 	public Go() {
-		super(false);
+		super();
 	}
 
 	@Override
-	public boolean exec(Object obj) {
+	public boolean exec(SpellEvent e) {
 		if (e.getSecondPerson() instanceof Walker) {
 			Vector trans = e.getDestination().copy().sub(e.getSecondPerson().getPos());
 			if (trans.magnitude() < DELETE_MARGIN) {
@@ -46,7 +47,7 @@ public class Go extends VerbDef {
 	 * @return whether or not something is a projectile
 	 */
 	@Override
-	public boolean eval(Object subj, Object obj) {
+	public boolean eval(Object subj, SpellEvent e) {
 		return subj instanceof Projectile;
 	}
 	

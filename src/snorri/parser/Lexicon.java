@@ -59,7 +59,7 @@ import snorri.semantics.With;
 import snorri.semantics.Write;
 import snorri.world.BackgroundElement;
 
-public class Lexicon extends HashMap<String, Definition> {
+public class Lexicon extends HashMap<String, Definition<?>> {
 	
 	/**
 	 * Maps strings -> meaning. By design, each word can only have one meaning.
@@ -165,7 +165,7 @@ public class Lexicon extends HashMap<String, Definition> {
 	 * @return
 	 * 	The added item.
 	 */
-	public Definition put(String key, Definition value, Tier dropTier) {
+	public Definition<?> put(String key, Definition<?> value, Tier dropTier) {
 		dropTier.add(key);
 		return super.put(key, value);
 	}
@@ -181,20 +181,20 @@ public class Lexicon extends HashMap<String, Definition> {
 	 * @return
 	 * 	The added item.
 	 */
-	public Definition put(String key, Definition value, Tier[] dropTiers) {
+	public Definition<?> put(String key, Definition<?> value, Tier[] dropTiers) {
 		for (Tier dropTier : dropTiers) {
 			dropTier.add(key);
 		}
 		return super.put(key, value);
 	}
 	
-	public static Definition lookup(String form) {
+	public static Definition<?> lookup(String form) {
 		if (lexicon.containsKey(form))
 			return lexicon.get(form);
 		return null;
 	}
 		
-	public static Set<Entry<String, Definition>> getAllTerminals() {
+	public static Set<Entry<String, Definition<?>>> getAllTerminals() {
 		return lexicon.entrySet();
 	}
 	
@@ -202,7 +202,7 @@ public class Lexicon extends HashMap<String, Definition> {
 		return lexicon.keySet();
 	}
 	
-	public static Collection<Definition> getILang() {
+	public static Collection<Definition<?>> getILang() {
 		return lexicon.values();
 	}
 

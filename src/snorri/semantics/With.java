@@ -5,7 +5,7 @@ import snorri.events.SpellEvent;
 public class With extends PrepDef {
 
 	@Override
-	public SpellEvent getModified(Nominal obj) {
+	public SpellEvent eval(Nominal obj, SpellEvent e) {
 		
 		e.setInstrument(obj);
 		return e;

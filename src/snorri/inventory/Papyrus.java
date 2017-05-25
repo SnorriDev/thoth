@@ -8,6 +8,7 @@ import snorri.events.SpellEvent.Caster;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.nonterminals.Sentence;
+import snorri.world.World;
 
 public class Papyrus extends Item {
 
@@ -21,13 +22,14 @@ public class Papyrus extends Item {
 	}
 	
 	public boolean tryToActivate(Entity subject) {
-		return tryToActivate(((GameWindow) Main.getWindow()).getFocusAsCaster(), subject);
+		GameWindow window = (GameWindow) Main.getWindow();
+		return tryToActivate(window.getWorld(), window.getFocusAsCaster(), subject);
 	}
 	
-	public boolean tryToActivate(Caster caster, Entity subject) {
+	public boolean tryToActivate(World world, Caster caster, Entity subject) {
 		
 		if (timer.activate() && spell != null) {
-			Object o = useSpellOn(caster, subject);
+			Object o = useSpell(world, caster, subject);
 			if (Main.getWindow() instanceof GameWindow && spellIsStatement()) {
 				((GameWindow) Main.getWindow()).showMessage(new SpellMessage(spell.getOrthography(), o));
 			} else {
