@@ -6,6 +6,8 @@ import snorri.events.SpellEvent;
 
 public interface Node extends Serializable {
 
+	//FIXME add abstract classes Unary, Binary, and TernaryNode with generics
+	
 	/**
 	 * @param e
 	 * 	a <code>SpellEvent</code> represented some context

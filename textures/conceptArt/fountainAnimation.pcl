@@ -1,0 +1,23 @@
+<!DOCTYPE PencilDocument>
+<document>
+  <editor>
+    <currentLayer value="2"/>
+    <currentFrame value="4"/>
+    <currentFps value="12"/>
+    <currentView dx="0" dy="0" m21="0" m11="1" m22="1" m12="0"/>
+  </editor>
+  <object>
+    <layer visibility="1" type="1" id="1" name="Bitmap Layer">
+      <image topLeftX="-15" topLeftY="-30" frame="1" src="001.001.png"/>
+    </layer>
+    <layer visibility="1" type="1" id="4" name="Water">
+      <image topLeftX="-6" topLeftY="-12" frame="1" src="004.001.png"/>
+      <image topLeftX="-20" topLeftY="-3" frame="2" src="004.002.png"/>
+      <image topLeftX="-9" topLeftY="-6" frame="3" src="004.003.png"/>
+      <image topLeftX="-276" topLeftY="-207" frame="4" src="004.004.png"/>
+    </layer>
+    <layer width="60" visibility="1" height="60" type="5" name="Camera Layer">
+      <camera dx="0" dy="0" m21="0" m11="1" m22="1" m12="0" frame="1"/>
+    </layer>
+  </object>
+</document>

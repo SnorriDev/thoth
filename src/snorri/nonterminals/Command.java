@@ -1,6 +1,7 @@
 package snorri.nonterminals;
 
 import snorri.events.SpellEvent;
+import snorri.semantics.ConnectiveDef;
 import snorri.semantics.VerbDef;
 
 public class Command extends NonTerminal {
@@ -12,17 +13,16 @@ public class Command extends NonTerminal {
 		if (e.isNegated()) {
 			return false;
 		}
-				
+		
+		//TODO maybe clean up this gross system of semantics
+		
 		switch (children.size()) {
 		case 1:
 			return ((VerbDef) children.get(0).getMeaning(e)).exec(null);
 		case 2:
 			return ((VerbDef) children.get(0).getMeaning(e)).exec(children.get(1).getMeaning(e));
 		default:
-			if ((boolean) children.get(2).getMeaning(e)) {
-				return children.get(0).getMeaning(e);
-			}
-			return false; //imperative logical system, so statements are vacuously false
+			return ((ConnectiveDef) children.get(1).getMeaning(e)).exec(children.get(0), children.get(2));
 		}
 		
 	}

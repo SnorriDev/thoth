@@ -49,7 +49,6 @@ public class Grammar extends HashMap<Class<? extends NonTerminal>, List<Rule>> {
 		grammar.add(new Rule(new Object[] {TransVerb.class, SuffixPronoun.class, NounPhrase.class}, Statement.class));
 		grammar.add(new Rule(new Object[] {IntransVerb.class, SuffixPronoun.class}, Statement.class));
 				
-		grammar.add(new Rule(new Object[] {Command.class, Conditional.class, Statement.class}, Command.class));
 		grammar.add(new Rule(new Object[] {TransVerb.class, NounPhrase.class}, Command.class));
 		grammar.add(new Rule(new Object[] {IntransVerb.class}, Command.class));
 		
@@ -68,6 +67,7 @@ public class Grammar extends HashMap<Class<? extends NonTerminal>, List<Rule>> {
 		grammar.add(new Rule(new Object[] {Statement.class}, Sentence.class));
 		grammar.add(new Rule(new Object[] {Command.class}, Sentence.class));
 		
+		grammar.add(new Rule(new Object[] {Command.class, Conditional.class, Statement.class}, Command.class));
 		grammar.add(new Rule(new Object[] {Command.class, Conjunction.class, Command.class}, Sentence.class));
 		grammar.add(new Rule(new Object[] {Statement.class, Conjunction.class, Statement.class}, Statement.class));
 		//with these rules, all adverb attachment is on the outer level

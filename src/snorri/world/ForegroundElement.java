@@ -9,11 +9,18 @@ import snorri.main.Util;
 import snorri.semantics.Nominal;
 
 public enum ForegroundElement implements Nominal, TileType {
+	
 	NONE,
 	COL_MID(getImage("colmid00.png")),
-	COL_TOP(getImage("coltop00.png"));
+	COL_TOP(getImage("coltop00.png")),
+	GATE(TileType.getRotations(getImage("gate00.png"))),
+	GATE_LEFT_OPEN(TileType.getRotations(getImage("gateleftopen00.png"))),
+	GATE_RIGHT_OPEN(TileType.getRotations(getImage("gaterightopen00.png"))),
+	GATE_LEFT(TileType.getRotations(getImage("gateleft00.png")), GATE_LEFT_OPEN),
+	GATE_RIGHT(TileType.getRotations(getImage("gateright00.png")), GATE_RIGHT_OPEN);
 	
 	private BufferedImage[]	textures;
+	private TileType replacementType;
 	
 	ForegroundElement() {
 		this((BufferedImage) null);
@@ -25,6 +32,11 @@ public enum ForegroundElement implements Nominal, TileType {
 	
 	ForegroundElement(BufferedImage texture) {
 		this(new BufferedImage[] {texture});
+	}
+	
+	ForegroundElement(BufferedImage[] textures, ForegroundElement replacementType) {
+		this(textures);
+		this.replacementType = replacementType;
 	}
 	
 	public static ForegroundElement byIdStatic(int id) {
@@ -139,4 +151,10 @@ public enum ForegroundElement implements Nominal, TileType {
 	public boolean isLiquid() {
 		return false;
 	}
+
+	@Override
+	public TileType getReplacement() {
+		return replacementType;
+	}
+	
 }

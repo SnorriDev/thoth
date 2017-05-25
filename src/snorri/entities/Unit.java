@@ -7,6 +7,7 @@ import snorri.animations.Animation;
 import snorri.audio.ClipWrapper;
 import snorri.collisions.Collider;
 import snorri.collisions.RectCollider;
+import snorri.events.CollisionEvent;
 import snorri.events.SpellEvent;
 import snorri.main.Debug;
 import snorri.main.Main;
@@ -335,6 +336,11 @@ public abstract class Unit extends Entity implements Walker {
 			return new ClipWrapper(deathSounds[x]);
 		else
 			return null;
+	}
+	
+	@Override
+	public void onExplosion(CollisionEvent e) {
+		damage(100);
 	}
 	
 }

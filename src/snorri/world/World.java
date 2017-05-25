@@ -216,6 +216,7 @@ public class World implements Playable, Editable {
 	 *         
 	 */
 	public boolean delete(Entity e) {
+		e.onDelete(this);
 		return col.delete(e);
 	}
 
@@ -430,6 +431,10 @@ public class World implements Playable, Editable {
 	 */
 	public boolean isPathable(int x, int y) {
 		return pathfinding.isPathable(x, y);
+	}
+
+	public void wrapGridUpdate(int x, int y, Tile tile) {
+		wrapGridUpdate(new Vector(x, y), tile);
 	}
 
 }
