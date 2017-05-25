@@ -65,6 +65,24 @@ public interface TileType extends Nominal {
 		
 	}
 	
+	public static TileType lookup(int layer, int id) {
+		
+		if (layer == 0) {
+			return BackgroundElement.byIdStatic(id);
+		}
+		
+		if (layer == 1) {
+			return MidgroundElement.byIdStatic(id);
+		}
+		
+		if (layer == 2) {
+			return ForegroundElement.byIdStatic(id);
+		}
+		
+		return null;
+		
+	}
+	
 	public boolean isLiquid();
 	
 	public int ordinal();

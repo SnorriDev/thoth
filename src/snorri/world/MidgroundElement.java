@@ -7,6 +7,7 @@ import snorri.audio.ClipWrapper;
 import snorri.main.Main;
 import snorri.main.Util;
 
+
 public enum MidgroundElement implements TileType {
 	
 	NONE,
@@ -19,6 +20,7 @@ public enum MidgroundElement implements TileType {
 	WALL_CONVEX(false, TileType.getRotations(getImage("wallconvex00.png"))),
 	WALL_END_LEFT(false, TileType.getRotations(getImage("wallendleft00.png"))),
 	WALL_END_RIGHT(false, TileType.getRotations(getImage("wallendright00.png"))),
+	WALL_DEFAULT(false, Tile.DEFAULT_TEXTURE),
 	WALL_STUB(false, TileType.getRotations(getImage("wallstub00.png")));
 	
 	private BufferedImage[]	textures;

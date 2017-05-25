@@ -32,7 +32,9 @@ public enum Key implements Binding {
 	
 	Q(81, 'q'), //speed key
 	I(73, 'i'), //UNUSED
-	P(80, 'p'); //pick key
+	P(80, 'p'), //pick key
+	M(77, 'm'), //WALL MODE
+	N(78, 'n'); //CREATE WALL
 	
 	private int id;
 	private char ch;

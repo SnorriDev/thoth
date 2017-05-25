@@ -71,6 +71,11 @@ public class Tile implements Comparable<Tile>, Nominal {
 		type = (layer == 0 ? BackgroundElement.byIdStatic(Integer.parseInt(l[1])) : (layer == 1 ? MidgroundElement.byIdStatic(Integer.parseInt(l[1])) : ForegroundElement.byIdStatic(Integer.parseInt(l[1]))));
 		style = Integer.parseInt(l[2]);
 	}
+	
+	public Tile(int layer, int id, int style) {
+		this(TileType.lookup(layer, id));
+		this.style = style;
+	}
 
 	public static ArrayList<Tile> getAllTypes(Class<? extends TileType> c) {
 		ArrayList<Tile> list = new ArrayList<Tile>();
