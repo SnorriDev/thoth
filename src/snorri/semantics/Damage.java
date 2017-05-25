@@ -1,26 +1,31 @@
 package snorri.semantics;
 
 import snorri.entities.Unit;
+import snorri.events.SpellEvent;
+import snorri.parser.Node;
 
-public class Damage extends VerbDef {
+public class Damage extends TransVerbDef {
 
 	private static final int AMOUNT = 30;
 	
 	public Damage() {
-		super(true);
+		super();
 	}
 
 	@Override
-	public boolean exec(Object obj) {
+	public boolean exec(Node<Object> object, SpellEvent e) {
+		
+		Object obj = object.getMeaning(e);
+		
 		if (obj instanceof Unit) {
 			((Unit) obj).damage(AMOUNT, e);
 		}
 		return false;
+		
 	}
 
 	@Override
-	public boolean eval(Object subj, Object obj) {
-		//TODO come up with something here?
+	public boolean eval(Object subj, Object obj, SpellEvent e) {
 		return false;
 	}
 

@@ -1,16 +1,17 @@
 package snorri.semantics;
 
+import snorri.entities.Entity;
 import snorri.events.SpellEvent;
 import snorri.nonterminals.Noun;
 
-public class SecondObjectPronoun extends Definition {
+public class SecondObjectPronoun extends Definition<Entity> {
 
 	public SecondObjectPronoun() {
 		super(Noun.class);
 	}
 
 	@Override
-	public Object getMeaning(SpellEvent e) {
+	public Entity getMeaning(SpellEvent e) {
 		return e.getSecondPerson();
 	}
 

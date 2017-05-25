@@ -6,14 +6,14 @@ import java.util.List;
 import snorri.main.Main;
 import snorri.parser.Node;
 
-public abstract class NonTerminal implements Node {
+public abstract class NonTerminal<S> implements Node<S> {
 
 	private static final long serialVersionUID = 1L;
 
-	protected List<Node> children;
+	protected List<Node<?>> children;
 	
-	public void setChildren(List<Node> children) {
-		this.children = children;
+	public void setChildren(List<Node<?>> nodes) {
+		this.children = nodes;
 	}
 		
 	//TODO: probably remove lambdables and stuff
@@ -28,21 +28,21 @@ public abstract class NonTerminal implements Node {
 	@Override
 	public String getOrthography() {
 		List<String> strings = new ArrayList<String>();
-		for (Node child : children) {
+		for (Node<?> child : children) {
 			strings.add(child.getOrthography());
 		}
 		return String.join(" ", strings);
 	}
 
 	@Deprecated
-	public List<Node> getChildren() {
+	public List<Node<?>> getChildren() {
 		return children;
 	}
 	
 	@Override
 	public boolean altersMovement() {
 		
-		for (Node child : children) {
+		for (Node<?> child : children) {
 			if (child.altersMovement()) {
 				return true;
 			}
@@ -51,15 +51,15 @@ public abstract class NonTerminal implements Node {
 		return false;
 	}
 	
-	@Override
-	public NonTerminal copy() {
-		List<Node> newChildren = new ArrayList<>();
-		for (Node child : children) {
+	@Override @SuppressWarnings("unchecked")
+	public NonTerminal<S> copy() {
+		List<Node<?>> newChildren = new ArrayList<>();
+		for (Node<?> child : children) {
 			newChildren.add(child.copy());
 		}
-		NonTerminal copy;
+		NonTerminal<S> copy;
 		try {
-			copy = getClass().newInstance();
+			copy = (NonTerminal<S>) getClass().newInstance();
 			copy.setChildren(newChildren);
 			return copy;
 		} catch (InstantiationException | IllegalAccessException e) {

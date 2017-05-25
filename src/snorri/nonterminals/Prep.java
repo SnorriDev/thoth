@@ -1,6 +1,8 @@
 package snorri.nonterminals;
 
-public class Prep extends SemiTerminal {
+import snorri.semantics.PrepDef;
+
+public class Prep extends SemiTerminal<PrepDef> {
 
 	private static final long serialVersionUID = 1L;
 	

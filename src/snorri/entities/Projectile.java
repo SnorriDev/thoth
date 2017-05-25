@@ -87,6 +87,8 @@ public class Projectile extends Detector implements Walker {
 	@Override
 	public void kill(World world) {
 		
+		//TODO unify this with onDelete
+		
 		if (killed) { //prevent infinite loops when the spell kills this object
 			return;
 		}
@@ -94,7 +96,7 @@ public class Projectile extends Detector implements Walker {
 		super.kill(world);
 		
 		if (root instanceof Caster && orb != null) {
-			Object output = orb.useSpellOn((Caster) root, this); //
+			Object output = orb.useSpellOn((Caster) root, this);
 			if (Debug.SHOW_ORB_OUTPUT) {
 				Main.log("orb output: " + output);
 			}

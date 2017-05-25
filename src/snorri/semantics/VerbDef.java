@@ -1,27 +1,11 @@
 package snorri.semantics;
 
-import snorri.nonterminals.IntransVerb;
-import snorri.nonterminals.TransVerb;
+import snorri.nonterminals.SemiTerminal;
 
-public abstract class VerbDef extends OperatorDef {
-	
-	public VerbDef(boolean trans) {
-		super(trans ? TransVerb.class : IntransVerb.class);
+public abstract class VerbDef<S> extends Definition<S> {
+
+	protected VerbDef(Class<? extends SemiTerminal<?>> partOfSpeech) {
+		super(partOfSpeech);
 	}
-		
-	/**
-	 * do the action associated with the imperative mood of this verb
-	 * @param obj the direct object associated with a verb (null for intransitive usage)
-	 * @return whether or not any action has been taken (imperative logic)
-	 */
-	public abstract boolean exec(Object obj);
-
-	/**
-	 * evaluate the state associated with the indicative mood of this verb
-	 * @param subj the subject
-	 * @param obj the direct object (null for intransitive usage)
-	 * @return the truth value of the statement in the game world (boolean algebraic logic)
-	 */
-	public abstract boolean eval(Object subj, Object obj);
 
 }

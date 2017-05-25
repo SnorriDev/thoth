@@ -2,19 +2,23 @@ package snorri.semantics;
 
 import snorri.entities.Entity;
 import snorri.entities.Spike;
+import snorri.events.SpellEvent;
+import snorri.parser.Node;
 import snorri.world.Level;
 import snorri.world.MidgroundElement;
 import snorri.world.Tile;
 import snorri.world.Vector;
 
-public class CreateObject extends VerbDef {
+public class CreateObject extends TransVerbDef {
 	
 	public CreateObject() {
-		super(true);
+		super();
 	}
 
 	@Override @SuppressWarnings("unchecked")
-	public boolean exec(Object obj) {
+	public boolean exec(Node<Object> object, SpellEvent e) {
+		
+		Object obj = object.getMeaning(e);
 				
 		if (obj instanceof Tile) {
 			
@@ -55,7 +59,7 @@ public class CreateObject extends VerbDef {
 	}
 
 	@Override
-	public boolean eval(Object subj, Object obj) {
+	public boolean eval(Object subj, Object obj, SpellEvent e) {
 		return false;
 	}
 

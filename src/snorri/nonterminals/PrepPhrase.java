@@ -4,14 +4,14 @@ import snorri.events.SpellEvent;
 import snorri.semantics.Nominal;
 import snorri.semantics.PrepDef;
 
-public class PrepPhrase extends NonTerminal {
+public class PrepPhrase extends NonTerminal<SpellEvent> {
 
 	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * @return a modified copy of SpellEvent which carries the necessary semantics
 	 */
-	public Object getMeaning(SpellEvent e) {
+	public SpellEvent getMeaning(SpellEvent e) {
 		
 		//the supplied object is a class, not an object
 		if (!(children.get(1).getMeaning(e) instanceof Nominal)) {

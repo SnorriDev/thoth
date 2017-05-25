@@ -3,22 +3,24 @@ package snorri.semantics;
 import java.awt.Rectangle;
 
 import snorri.entities.Entity;
+import snorri.events.SpellEvent;
 import snorri.main.Main;
+import snorri.parser.Node;
 import snorri.world.Vector;
 
-public class See extends VerbDef {
+public class See extends TransVerbDef {
 
 	public See() {
-		super(true);
+		super();
 	}
 
 	@Override
-	public boolean exec(Object obj) {
+	public boolean exec(Node<Object> object, SpellEvent e) {
 		return false;
 	}
 
 	@Override
-	public boolean eval(Object subj, Object obj) {
+	public boolean eval(Object subj, Object obj, SpellEvent e) {
 		if (subj instanceof Entity && obj instanceof Entity) {
 			Vector center = ((Entity) subj).getPos();
 			Vector dim = Main.getWindow().getDimensions();

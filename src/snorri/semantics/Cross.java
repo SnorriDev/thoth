@@ -1,22 +1,24 @@
 package snorri.semantics;
 
 import snorri.entities.Entity;
+import snorri.events.SpellEvent;
+import snorri.parser.Node;
 import snorri.world.Level;
 import snorri.world.TileType;
 
-public class Cross extends VerbDef {
+public class Cross extends TransVerbDef {
 
 	public Cross() {
-		super(true);
+		super();
 	}
 
 	@Override
-	public boolean exec(Object obj) {
+	public boolean exec(Node<Object> object, SpellEvent e) {
 		return false;
 	}
 
 	@Override
-	public boolean eval(Object subj, Object obj) {
+	public boolean eval(Object subj, Object obj, SpellEvent e) {
 		
 		//if the subject isn't an entity, then return false
 		if (!(subj instanceof Entity)) {

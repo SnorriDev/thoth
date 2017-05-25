@@ -23,7 +23,7 @@ public abstract class Item implements Droppable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	protected Node spell; // spell/enchantment associated with the item
+	protected Node<Boolean> spell; // spell/enchantment associated with the item
 	protected String nickname; //name which the player gives the item so they know what it does
 	protected ItemType type; // what type of item it is; you can get ID, maxQuantity, enchantable from this
 	
@@ -245,7 +245,7 @@ public abstract class Item implements Droppable {
 	/**
 	 * changes the spell on the item iff it's enchantable
 	 */
-	public boolean setSpell(Node newSpell) {
+	public boolean setSpell(Node<Boolean> newSpell) {
 		
 		if (! type.isEnchantable()) {
 			return false;
@@ -257,7 +257,7 @@ public abstract class Item implements Droppable {
 	}
 
 	// returns the spell on the item
-	public Node getSpell() {
+	public Node<Boolean> getSpell() {
 		return spell;
 	}
 	

@@ -2,7 +2,7 @@ package snorri.parser;
 
 import snorri.events.SpellEvent;
 
-public class Terminal implements Node {
+public class Terminal<S> implements Node<S> {
 
 	private static final long serialVersionUID = 1L;
 	private String orthography;
@@ -11,7 +11,7 @@ public class Terminal implements Node {
 		this.orthography = orthography;
 	}
 	
-	public boolean equals(Terminal other) {
+	public boolean equals(Terminal<?> other) {
 		return orthography.equals(other.orthography);
 	}
 	
@@ -23,9 +23,10 @@ public class Terminal implements Node {
 		return orthography;
 	}
 	
-	public Object getMeaning(SpellEvent e) {
+	@Override @SuppressWarnings("unchecked")
+	public S getMeaning(SpellEvent e) {
 		if (Lexicon.lookup(orthography) != null)
-			return Lexicon.lookup(orthography).getMeaning(e);
+			return (S) Lexicon.lookup(orthography).getMeaning(e);
 		return null;
 	}
 	
@@ -44,8 +45,8 @@ public class Terminal implements Node {
 	}
 
 	@Override
-	public Terminal copy() {
-		return new Terminal(orthography);
+	public Terminal<S> copy() {
+		return new Terminal<>(orthography);
 	}
 	
 }

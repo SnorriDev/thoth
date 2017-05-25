@@ -26,7 +26,7 @@ public class Drop extends Detector {
 	public Drop(Vector pos, String prize, String spell) {
 		this(pos, Droppable.fromString(prize));
 		if (this.prize instanceof Item) {
-			((Item) this.prize).setSpell(Grammar.parseString(spell));
+			((Item) this.prize).setSpell(Grammar.parseSentence(spell));
 			Main.log("spawned enchanted drop");
 		}
 	}

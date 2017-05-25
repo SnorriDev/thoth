@@ -161,7 +161,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		list.setCellRenderer(new ItemCellRenderer());
 		
 		JScrollPane scrollPane = new JScrollPane(list);
-		// TODO make this look nice like other one
 		scrollPane.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, LEFT_PANEL_HEIGHT)); //Left Panel Size
 		scrollPane.setOpaque(false);
 		scrollPane.getViewport().setOpaque(false);
@@ -252,6 +251,10 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		panel.add(scrollPane, c);
 		
 		add(panel);
+		
+		if (model.getSize() > 0) {
+			list.setSelectedIndex(0);
+		}
 		
 	}
 	
@@ -347,7 +350,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 		if (e.getActionCommand().equals("ENCHANT") && list.getSelectedValue() != null) {
 			String rawSpell = getTagless();
-			list.getSelectedValue().setSpell(Grammar.parseString(rawSpell));
+			list.getSelectedValue().setSpell(Grammar.parseSentence(rawSpell));
 			spellsEnchanted.add(rawSpell);
 			setGlyphs();
 		}

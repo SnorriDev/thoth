@@ -1,30 +1,32 @@
 package snorri.nonterminals;
 
 import snorri.events.SpellEvent;
-import snorri.main.Main;
-import snorri.semantics.ConnectiveDef;
+import snorri.parser.Node;
+import snorri.semantics.Lambda;
 
-public class Sentence extends NonTerminal {
+public class Sentence extends NonTerminal<Boolean> {
 
 	private static final long serialVersionUID = 1L;
 	
-	public Object getMeaning(SpellEvent e) {
+	@Override @SuppressWarnings("unchecked")
+	public Boolean getMeaning(SpellEvent e) {
 		
 		if (children.size() == 1) {
-			return children.get(0).getMeaning(e);
+			return (boolean) children.get(0).getMeaning(e);
 		}
 		
-		Main.debug(children.size());
-		Main.debug(children.get(1));
 		if (children.size() == 3 && children.get(1) instanceof Connective) {
-			return ((ConnectiveDef) children.get(1).getMeaning(e)).exec(children.get(0), children.get(2));
+			Node<Boolean> arg1 = (Node<Boolean>) children.get(0);
+			Node<Boolean> arg2 = (Node<Boolean>) children.get(2);
+			Lambda<Boolean, Lambda<Boolean, Boolean>> lambda3 = (Lambda<Boolean, Lambda<Boolean, Boolean>>) children.get(1).getMeaning(e);
+			return lambda3.exec(arg1).exec(arg2);
 		}
 		
 		if (children.get(0) instanceof AdverbPhrase) {
-			return children.get(1).getMeaning((SpellEvent) children.get(0).getMeaning(e));
+			return (boolean) children.get(1).getMeaning((SpellEvent) children.get(0).getMeaning(e));
 		}
 		
-		return children.get(0).getMeaning((SpellEvent) children.get(1).getMeaning(e));
+		return (boolean) children.get(0).getMeaning((SpellEvent) children.get(1).getMeaning(e));
 		
 	}
 	

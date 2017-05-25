@@ -1,6 +1,6 @@
 package snorri.nonterminals;
 
-public class Name extends SemiTerminal {
+public class Name extends SemiTerminal<String> {
 	
 	/**
 	 * Grammatically the same as a noun, but does not need

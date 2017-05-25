@@ -19,7 +19,7 @@ public class VocabDrop implements Droppable {
 		return orthography;
 	}
 	
-	public Definition getMeaning() {
+	public Definition<?> getMeaning() {
 		return Lexicon.lookup(orthography);
 	}
 	

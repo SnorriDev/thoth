@@ -1,6 +1,8 @@
 package snorri.nonterminals;
 
-public class Adverb extends SemiTerminal {
+import snorri.semantics.AdverbDef;
+
+public class Adverb extends SemiTerminal<AdverbDef> {
 
 	private static final long serialVersionUID = 1L;
 

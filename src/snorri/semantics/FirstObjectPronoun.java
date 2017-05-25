@@ -1,16 +1,17 @@
 package snorri.semantics;
 
 import snorri.events.SpellEvent;
+import snorri.events.SpellEvent.Caster;
 import snorri.nonterminals.Noun;
 
-public class FirstObjectPronoun extends Definition {
+public class FirstObjectPronoun extends Definition<Caster> {
 
 	public FirstObjectPronoun() {
 		super(Noun.class);
 	}
 
 	@Override
-	public Object getMeaning(SpellEvent e) {
+	public Caster getMeaning(SpellEvent e) {
 		return e.getFirstPerson();
 	}
 

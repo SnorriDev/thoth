@@ -4,7 +4,7 @@ import snorri.events.SpellEvent;
 import snorri.nonterminals.Prep;
 import snorri.world.Tile;
 
-public abstract class PrepDef extends Definition {
+public abstract class PrepDef extends Definition<PrepDef> {
 	
 	protected static final int DISPLACE_DISTANCE = Tile.WIDTH * 3;
 	
@@ -15,7 +15,7 @@ public abstract class PrepDef extends Definition {
 	}
 
 	@Override
-	public Object getMeaning(SpellEvent e) {		
+	public PrepDef getMeaning(SpellEvent e) {		
 		this.e = new SpellEvent(e);
 		return this;
 	}

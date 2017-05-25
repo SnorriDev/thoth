@@ -1,21 +1,22 @@
 package snorri.semantics;
 
 import snorri.entities.Entity;
+import snorri.events.SpellEvent;
 
-public class Fly extends VerbDef {
+public class Fly extends IntransVerbDef {
 
 	public Fly() {
-		super(false);
+		super();
 	}
 
 	@Override
-	public boolean exec(Object obj) {
+	public boolean exec(SpellEvent e) {
 		e.getSecondPerson().startFlying();
 		return true;
 	}
 
 	@Override
-	public boolean eval(Object subj, Object obj) {
+	public boolean eval(Object subj, SpellEvent e) {
 		if (subj instanceof Entity) {
 			return ((Entity) subj).isFlying();
 		}
