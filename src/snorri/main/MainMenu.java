@@ -64,9 +64,7 @@ public class MainMenu extends GamePanel {
 		case "WORLD EDITOR":
 			Main.launchEditor();
 		}
-		
-		//TODO: for continue story, look to saved campaign
-		
+				
 	}
 		
 }

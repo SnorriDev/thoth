@@ -139,17 +139,14 @@ public class World implements Playable, Editable {
 
 	}
 
-	public void update(double d) {
-
-		if (!(Main.getWindow() instanceof FocusedWindow)) {
-			return;
-		}
+	@Override
+	public void update(Entity focus, double d) {
 
 		if (Debug.LOG_WORLD) {
 			Main.log("world update");
 		}
 
-		col.updateAround(this, d, ((FocusedWindow) Main.getWindow()).getFocus());
+		col.updateAround(this, d, focus);
 
 	}
 

@@ -21,9 +21,6 @@ import snorri.world.World;
 
 public abstract class FocusedWindow extends GamePanel implements MouseListener, KeyListener {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 		
 	protected KeyStates states = new KeyStates();
