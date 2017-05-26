@@ -16,8 +16,6 @@ import snorri.parser.Grammar;
 
 public class Hieroglyphs {
 
-	//TODO redo this with a hieroglyph object
-	//private static List<String> glyphs;
 	private static final HashMap<String, Image> glyphIcons;
 	
 	static {

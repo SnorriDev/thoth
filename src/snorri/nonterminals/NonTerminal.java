@@ -16,8 +16,7 @@ public abstract class NonTerminal<S> implements Node<S> {
 	private Object category;
 	
 	//TODO replace trinary rules with binary branching structure?
-	//TODO choose exec/eval based on something in SpellEvent
-	//TODO can use this to have generalized type system
+	//choose exec/eval based on something in SpellEvent
 	public void setChildren(List<Node<?>> nodes) {
 		children = nodes;
 		category = Category.combine(nodes);

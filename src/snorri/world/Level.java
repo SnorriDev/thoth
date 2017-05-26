@@ -28,14 +28,12 @@ public class Level implements Editable {
 	
 	/**An array of tiles. Note that coordinates are Cartesian, not matrix-based**/
 	private Tile[][] map;
-	private Vector dim; //TODO: remove this
 
 	public Level(int width, int height, TileType bg) {
 		map = new Tile[width][height];
-		dim = new Vector(width, height);
 		
-		for (int i = 0; i < dim.getX(); i++) {
-			for (int j = 0; j < dim.getY(); j++) {
+		for (int i = 0; i < getWidth(); i++) {
+			for (int j = 0; j < getHeight(); j++) {
 				map[i][j] = new Tile(bg);
 			}
 		}
@@ -82,41 +80,40 @@ public class Level implements Editable {
 	private Level(Level l, int newWidth, int newHeight, int layer) {
 		
 		map = new Tile[newWidth][newHeight];
-		dim = new Vector(newWidth, newHeight);
 		
 		if (layer == 0) {
-			for (int i = 0; i < dim.getX(); i++) {
-				for (int j = 0; j < dim.getY(); j++) {
+			for (int i = 0; i < getWidth(); i++) {
+				for (int j = 0; j < getHeight(); j++) {
 					map[i][j] = new Tile(BackgroundElement.SAND);
 				}
 			}
 		}
 		else if (layer == 1) {
-			for (int i = 0; i < dim.getX(); i++) {
-				for (int j = 0; j < dim.getY(); j++) {
+			for (int i = 0; i < getWidth(); i++) {
+				for (int j = 0; j < getHeight(); j++) {
 					map[i][j] = new Tile(MidgroundElement.NONE);
 				}
 			}
 		}
 		else {
-			for (int i = 0; i < dim.getX(); i++) {
-				for (int j = 0; j < dim.getY(); j++) {
+			for (int i = 0; i < getWidth(); i++) {
+				for (int j = 0; j < getHeight(); j++) {
 					map[i][j] = new Tile(ForegroundElement.NONE);
 				}
 			}
 		}
 		
-		for (int i = 0; i < dim.getX() && i < l.dim.getX(); i++) {
-			for (int j = 0; j < dim.getY() && j < l.dim.getY(); j++) {
+		for (int i = 0; i < getWidth() && i < l.getWidth(); i++) {
+			for (int j = 0; j < getHeight() && j < l.getHeight(); j++) {
 				map[i][j] = l.map[i][j];
 			}
 		}
 	}
 	
 	public Level getTransposed() {
-		Level t = new Level(dim.getInverted());
-		for (int x = 0; x < dim.getX(); x++) {
-			for (int y = 0; y < dim.getY(); y++) {
+		Level t = new Level(getDimensions().getInverted());
+		for (int x = 0; x < getWidth(); x++) {
+			for (int y = 0; y < getHeight(); y++) {
 				t.setTileGrid(y, x, getNewTileGrid(x, y));
 			}
 		}
@@ -129,10 +126,10 @@ public class Level implements Editable {
 	 * with a door facing out from all four sides if a door exists.
 	 */
 	public Level getXReflected() {
-		Level f = new Level(dim);
-		for (int x = 0; x < dim.getX(); x++) {
-			for (int y = 0; y < dim.getY(); y++) {
-				f.setTileGrid(dim.getX() - 1 - x, y, getNewTileGrid(x, y));
+		Level f = new Level(getDimensions());
+		for (int x = 0; x < getWidth(); x++) {
+			for (int y = 0; y < getHeight(); y++) {
+				f.setTileGrid(getWidth() - 1 - x, y, getNewTileGrid(x, y));
 			}
 		}
 		return f;
@@ -149,14 +146,13 @@ public class Level implements Editable {
 				newMap[i][j] = new Tile(BackgroundElement.SAND);
 			}
 		}
-		for (int i = 0; i < newDim.getX() && i < dim.getX(); i++) {
-			for (int j = 0; j < newDim.getY() && j < dim.getY(); j++) {
+		for (int i = 0; i < newDim.getX() && i < getWidth(); i++) {
+			for (int j = 0; j < newDim.getY() && j < getHeight(); j++) {
 				newMap[i][j] = map[i][j];
 			}
 		}
 		
 		map = newMap;
-		dim = newDim;
 		
 	}
 	
@@ -206,7 +202,7 @@ public class Level implements Editable {
 	}
 
 	public Vector getDimensions() {
-		return dim;
+		return new Vector(getWidth(), getHeight());
 	}
 	
 	@Override
@@ -252,7 +248,6 @@ public class Level implements Editable {
 		is.read(b);
 		int height = ByteBuffer.wrap(b).getInt();
 
-		dim = new Vector(width, height);
 		map = new Tile[width][height];
 
 		byte[] b2 = new byte[2];
@@ -279,13 +274,13 @@ public class Level implements Editable {
 		ByteBuffer b1 = ByteBuffer.allocate(4);
 		ByteBuffer b2 = ByteBuffer.allocate(4);
 
-		byte[] buffer = b1.putInt(dim.getX()).array();
+		byte[] buffer = b1.putInt(getWidth()).array();
 		os.write(buffer);
-		buffer = b2.putInt(dim.getY()).array();
+		buffer = b2.putInt(getHeight()).array();
 		os.write(buffer);
 
-		for (int i = 0; i < dim.getX(); i++) {
-			for (int j = 0; j < dim.getY(); j++) {
+		for (int i = 0; i < getWidth(); i++) {
+			for (int j = 0; j < getHeight(); j++) {
 				os.write(((byte) map[i][j].getType().getId()) & 0xFF);
 				os.write(((byte) map[i][j].getStyle()) & 0xFF);
 			}
@@ -451,19 +446,19 @@ public class Level implements Editable {
 	}
 	
 	public void setBitMasks() {
-		for (int x = 0; x < dim.getX(); x++) {
-			for (int y = 0; y < dim.getY(); y++) {
+		for (int x = 0; x < getWidth(); x++) {
+			for (int y = 0; y < getHeight(); y++) {
 				getTileGrid(x, y).setBitMasks(getBitMasks(x, y));
 			}
 		}
 	}
 	
 	public int getWidth() {
-		return dim.getX();
+		return map.length;
 	}
 	
 	public int getHeight() {
-		return dim.getY();
+		return map[0].length;
 	}
 
 	@Override

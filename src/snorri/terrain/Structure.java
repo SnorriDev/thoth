@@ -27,7 +27,6 @@ public class Structure {
 		DEFAULT_CHILDREN.add("bigMainRoom");
 		DEFAULT_CHILDREN.add("treasury");
 		//DEFAULT_CHILDREN.add("junction");
-//		TODO
 //		burial chamber
 //		annex
 //		treasury
@@ -39,9 +38,7 @@ public class Structure {
 	public Vector start;
 	public List<String> children;
 	
-	//TODO
 	public List<Vector> drops;
-	//public int DropType
 	
 	/**
 	 * Constructor which is called by YAML parser.

@@ -66,8 +66,6 @@ public class PathGraph {
 	}
 	
 	
-	//TODO: rework this method to be inside PathGraph, and store a list of PathGraphs in
-	// the Pathfinding class
 	public ArrayDeque<PathNode> findPath(Vector start, Vector goal) {
 		
 		if (Debug.DISABLE_PATHFINDING) {
@@ -221,9 +219,7 @@ public class PathGraph {
 	 * this is FAR less computationally intensive than computing all sub-graphs
 	 */
 	public void computePathability() {
-		
-		//TODO store components as hash-sets, not lists (makes everything better)
-		
+				
 		for (int i = width; i < getWidth() - width; i++) {
 			for (int j = height; j < getHeight() - height; j++) {
 				contextPathable[i][j] = true;
@@ -247,8 +243,6 @@ public class PathGraph {
 		
 		for (int x = 0; x < getWidth(); x++) {
 			for (int y = 0; y < getHeight(); y++) {
-
-				//TODO problem is here; nothing is context pathable for some reason???
 				
 				if (!isContextPathable(x, y) || visited[x][y]) {
 					continue;

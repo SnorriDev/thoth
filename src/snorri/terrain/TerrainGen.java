@@ -23,7 +23,7 @@ public class TerrainGen {
 	protected static final double DEFAULT_ELEVATION = 0.6;
 	private static final double POS_TRANS = 0.5;
 	private static final Vector RANDOM_RANGE = new Vector(10000, 10000);
-	//TODO: use random seed, not just translation
+
 	
 	protected Vector dim;
 	
@@ -40,8 +40,8 @@ public class TerrainGen {
 		
 		public static final Biome[] DEFAULT = Biome.values();
 		
-		//TODO: use some other variable like moisture for height
-		//TODO: multiple, randomly selected tile types
+		//use some other variable like moisture for height
+		//multiple, randomly selected tile types
 		private double ceiling;
 		private Tile tile;
 		
@@ -140,7 +140,7 @@ public class TerrainGen {
 		return genBackground(genHeightMap(), Biome.DEFAULT);
 	}
 	
-	public Level genMidground() { //TODO: modify for later
+	public Level genMidground() {
 		Level level = new Level(dim, 1);
 		for (int x = 0; x < dim.getX(); x++) {
 			for (int y = 0; y < dim.getY(); y++) {
@@ -150,7 +150,7 @@ public class TerrainGen {
 		return level;
 	}
 	
-	public Level genForeground() { //TODO: modify for later
+	public Level genForeground() {
 		Level level = new Level(dim, 1);
 		for (int x = 0; x < dim.getX(); x++) {
 			for (int y = 0; y < dim.getY(); y++) {

@@ -30,6 +30,4 @@ public class Boom extends IntransVerbDef {
 		return "explode";
 	}
 	
-	//TODO: boom whenever we return false?
-
 }

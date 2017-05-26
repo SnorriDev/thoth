@@ -25,7 +25,7 @@ public abstract class Lambda<A, B> {
 		return null;
 	}
 	
-	//TODO might want to store classB for this
+	//TODO work this out off the model of categories?
 	@SuppressWarnings("unchecked")
 	public <S> S eval(Object term1, Object term2, Class<S> c) {
 		Lambda<Object, Object> lambda;
@@ -37,9 +37,7 @@ public abstract class Lambda<A, B> {
 		}
 		return null;
 	}
-	
-	//TODO do something equivalent with exec
-	
+		
 	public boolean fitsArg(Object arg) {
 		return category.fitsArg(arg);
 	}
