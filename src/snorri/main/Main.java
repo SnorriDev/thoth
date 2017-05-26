@@ -95,15 +95,14 @@ public class Main {
 								
 		frame = new JFrame("The Book of Thoth");
 		frame.setSize(1800, 900);
-		frame.addComponentListener(new Main.ResizeListener());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 
 		pane = new JLayeredPane();
 		getLayeredPane().setOpaque(true);
+		getLayeredPane().addComponentListener(new Main.ResizeListener());
 
 		frame.getContentPane().add(getLayeredPane());
-		//frame.setLocationRelativeTo(null);
 		// FOR FULL SCREEN: frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		launchMenu();

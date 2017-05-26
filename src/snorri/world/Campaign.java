@@ -81,8 +81,8 @@ public class Campaign implements Playable {
 	}
 
 	@Override
-	public void update(double deltaTime) {
-		getCurrentWorld().update(deltaTime);
+	public void update(Entity focus, double deltaTime) {
+		getCurrentWorld().update(focus, deltaTime);
 	}
 
 	@Override

@@ -21,7 +21,10 @@ public enum MidgroundElement implements TileType {
 	WALL_END_LEFT(TileType.getRotations(getImage("wallendleft00.png"))),
 	WALL_END_RIGHT(TileType.getRotations(getImage("wallendright00.png"))),
 	WALL_DEFAULT(Tile.DEFAULT_TEXTURE),
-	WALL_STUB(TileType.getRotations(getImage("wallstub00.png")));
+	WALL_STUB(TileType.getRotations(getImage("wallstub00.png"))),
+	BROKEN_WALL(false, TileType.getRotations(getImage("brokenwall00.png"))),
+	BROKEN_WALL_END_LEFT(false, TileType.getRotations(getImage("brokenwallendleft00.png"))),
+	BROKEN_WALL_END_RIGHT(false, TileType.getRotations(getImage("brokenwallendright00.png")));
 	
 	protected BufferedImage[]	textures;
 	protected boolean pathable, changable = true; //some things (like paths and tiles) will be unpathable
