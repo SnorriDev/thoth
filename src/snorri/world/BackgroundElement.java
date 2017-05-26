@@ -8,7 +8,6 @@ import snorri.main.Main;
 import snorri.main.Util;
 import snorri.world.TileType;
 
-
 public enum BackgroundElement implements TileType {
 	
 	SAND(true, new BufferedImage[] {
