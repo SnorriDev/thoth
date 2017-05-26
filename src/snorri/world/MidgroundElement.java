@@ -23,9 +23,10 @@ public enum MidgroundElement implements TileType {
 	WALL_DEFAULT(false, Tile.DEFAULT_TEXTURE),
 	WALL_STUB(false, TileType.getRotations(getImage("wallstub00.png")));
 	
-	private BufferedImage[]	textures;
-	private boolean pathable, changable = true; //some things (like paths and tiles) will be unpathable
-	private TileType replacementType;
+	protected BufferedImage[]	textures;
+	protected boolean pathable, changable = true; //some things (like paths and tiles) will be unpathable
+	protected TileType replacementType;
+	protected double blendOrder;
 	
 	MidgroundElement() {
 		this(true, (BufferedImage) null);
@@ -174,5 +175,10 @@ public enum MidgroundElement implements TileType {
 	@Override
 	public TileType getReplacement() {
 		return replacementType;
+	}
+	
+	@Override
+	public double getBlendOrder() {
+		return blendOrder;
 	}
 }

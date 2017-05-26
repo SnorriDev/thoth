@@ -152,4 +152,9 @@ public interface TileType extends Nominal {
 
 	public TileType getReplacement();
 	
+	public double getBlendOrder();
+	
+	default void customInitializer() {
+	}
+	
 }

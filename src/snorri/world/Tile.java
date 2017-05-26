@@ -25,12 +25,12 @@ public class Tile implements Comparable<Tile>, Nominal {
 	public static final BufferedImage DEFAULT_FOREGROUND_TEXTURE = getImage("/textures/tiles/default_foreground00.png");
 	public static final BufferedImage BLANK_TEXTURE = getImage("/textures/tiles/blank00.png");
 									
-	private TileType type;
+	protected TileType type;
 	private int style;
 	private boolean reachable, surroundingsPathable = true;
 	private List<Entity> entities;
 	
-	private Mask[] bitMasks;
+	protected Mask[] bitMasks;
 	
 	protected static ClipWrapper[] sounds;
 	
