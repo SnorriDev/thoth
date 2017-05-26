@@ -11,12 +11,25 @@ import snorri.world.TileType;
 
 public enum BackgroundElement implements TileType {
 	
-	SAND(true, false, new BufferedImage[] {
+	SAND(true, new BufferedImage[] {
 		getImage("sand00.png"),
 		getImage("sand01.png"),
 		getImage("sand02.png"),
-		getImage("sand03.png")}, false, true),
-	TREE(false, Tile.DEFAULT_TEXTURE),
+		getImage("sand03.png")}) {
+		@Override
+		public void customInitializer() {
+			swimmable = false;
+			atTop = false;
+			changable = true;
+			Main.debug("hello world!");
+		}
+	},
+	TREE(false, Tile.DEFAULT_TEXTURE) {
+		@Override
+		public void customInitializer() {
+			pathable = false;
+		}
+	},
 	FOUNDATION(false, Tile.DEFAULT_TEXTURE),
 	HUT(false, Tile.DEFAULT_TEXTURE),
 	WATER(false, true, getImage("water00.png")),
@@ -82,8 +95,9 @@ public enum BackgroundElement implements TileType {
 		getImage("wall08.png"),
 		getImage("wall09.png"),}, true);
 	
-	private boolean	pathable, canShootOver, atTop, changable;
-	private BufferedImage[]	textures;
+	protected boolean pathable, canShootOver, atTop, changable, swimmable;
+	protected double blendOrder;
+	protected BufferedImage[] textures;
 								
 	BackgroundElement() {
 		this(true);
@@ -105,8 +119,11 @@ public enum BackgroundElement implements TileType {
 		this.pathable = pathable;
 		this.textures = textures;
 		canShootOver = pathable;
+		swimmable = false;
 		changable = false;
 		atTop = false;
+		blendOrder = 0.0;
+		customInitializer();
 	}
 	
 	/**
@@ -301,6 +318,11 @@ public enum BackgroundElement implements TileType {
 	@Override
 	public TileType getReplacement() {
 		return null;
+	}
+	
+	@Override
+	public double getBlendOrder() {
+		return blendOrder;
 	}
 	
 }

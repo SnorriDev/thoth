@@ -19,8 +19,9 @@ public enum ForegroundElement implements Nominal, TileType {
 	GATE_LEFT(TileType.getRotations(getImage("gateleft00.png")), GATE_LEFT_OPEN),
 	GATE_RIGHT(TileType.getRotations(getImage("gateright00.png")), GATE_RIGHT_OPEN);
 	
-	private BufferedImage[]	textures;
-	private TileType replacementType;
+	protected BufferedImage[] textures;
+	protected TileType replacementType;
+	protected double blendOrder;
 	
 	ForegroundElement() {
 		this((BufferedImage) null);
@@ -155,6 +156,11 @@ public enum ForegroundElement implements Nominal, TileType {
 	@Override
 	public TileType getReplacement() {
 		return replacementType;
+	}
+	
+	@Override
+	public double getBlendOrder() {
+		return blendOrder;
 	}
 	
 }
