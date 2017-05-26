@@ -5,6 +5,7 @@ import java.util.Map;
 import snorri.dialog.Dialog;
 import snorri.dialog.Objective;
 import snorri.entities.Entity;
+import snorri.entities.NPC;
 import snorri.main.FocusedWindow;
 import snorri.main.GamePanel;
 import snorri.main.GameWindow;
@@ -60,6 +61,20 @@ public abstract class Action {
 						if (window instanceof FocusedWindow) {
 							((FocusedWindow) window).showDialog((Dialog) args.get("dialog"));
 						}
+					}
+				};
+			}
+		}),
+		
+		SET_NPC_DIALOG(new Action() {
+			@Override
+			public Runnable build(World world, Map<String, Object> args) {
+				return new Runnable() {
+					@Override
+					public void run() {
+						NPC npc = (NPC) Trigger.getByTag((String) args.get("npc"));
+						Dialog dialog = (Dialog) args.get("dialog");
+						npc.setDialog(dialog);
 					}
 				};
 			}

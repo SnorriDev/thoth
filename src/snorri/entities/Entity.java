@@ -14,6 +14,7 @@ import snorri.animations.Animation;
 import snorri.collisions.CircleCollider;
 import snorri.collisions.Collider;
 import snorri.events.CollisionEvent;
+import snorri.events.InteractEvent;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
@@ -58,6 +59,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		EDIT_SPAWNABLE.add(Glyph.class);
 		EDIT_SPAWNABLE.add(Thoth.class);
 		EDIT_SPAWNABLE.add(Fountain.class);
+		EDIT_SPAWNABLE.add(NPC.class);
 		
 		//alphabetize the list for nice view in the editor
 		Collections.sort(EDIT_SPAWNABLE, new Comparator<Class<? extends Entity>>() {
@@ -412,10 +414,15 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		return new Vector(collider.getRadiusX(), collider.getRadiusY()).multiply(2).toGridPosRounded();
 	}
 
+	//A bunch of event handlers
+	
 	public void onDelete(World world) {
 	}
 
 	public void onExplosion(CollisionEvent e) {
+	}
+	
+	public void onInteract(InteractEvent e) {
 	}
 
 }

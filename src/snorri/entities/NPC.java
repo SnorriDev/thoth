@@ -1,51 +1,70 @@
 package snorri.entities;
 
 import snorri.animations.Animation;
-import snorri.collisions.Collider;
+import snorri.dialog.Dialog;
+import snorri.events.InteractEvent;
+import snorri.main.FocusedWindow;
+import snorri.main.GamePanel;
+import snorri.main.Main;
 import snorri.world.Vector;
 
-public abstract class NPC extends Unit {
+public class NPC extends AIUnit {
 	
-	private static final long serialVersionUID = 5405304168680948365L;
+	private static final long serialVersionUID = 1L;
+	private static final Dialog DEFAULT_DIALOG = new Dialog();
+	private static final Animation IDLE = new Animation("/textures/animations/unit/idle");
+	private static final Animation WALKING = new Animation("/textures/animations/unit/walking");
 	
-	private java.util.Vector<String> dialogue;
+	static {
+		DEFAULT_DIALOG.text = "After you.";
+		DEFAULT_DIALOG.image = "priest";
+		DEFAULT_DIALOG.name = "Imhotep";
+	}
+		
+	private Dialog dialog;
 
-	public NPC(Vector pos, Animation idle, Animation walking, java.util.Vector<String> dialogue) {
-		super(pos, idle, walking);
-		this.dialogue = dialogue;
+	public NPC(Vector pos) {
+		this(pos, IDLE, WALKING, DEFAULT_DIALOG);
 	}
 	
-	public NPC(Vector pos, Animation idle, Animation walking, Animation attack, java.util.Vector<String> dialogue) {
-		super(pos, idle, walking, attack);
-		this.dialogue = dialogue;
+	public NPC(Vector pos, Animation idle, Animation walking, Dialog dialog) {
+		super(pos, null, idle, walking);
+		this.dialog = dialog;
 	}
 	
-	public NPC(Vector pos, Collider c, java.util.Vector<String> dialogue) {
-		super(pos, c);
-		this.dialogue = dialogue;
+	public void setDialog(Dialog dialog) {
+		this.dialog = dialog;
 	}
 	
-	public NPC(Vector pos, Animation idle, Animation walking) {
-		this(pos, idle, walking, new java.util.Vector<String>());
-	}
-	
-	public NPC(Vector pos, Animation idle, Animation walking, Animation attack) {
-		this(pos, idle, walking, attack, new java.util.Vector<String>());
-	}
-	
-	public NPC(Vector pos, Collider c) {
-		this(pos, c, new java.util.Vector<String>());
-	}
-	
-	public java.util.Vector<String> getDialogue() {
-		return dialogue;
-	}
-	
-	public String getDialogue(int idx) {
-		return dialogue.elementAt(idx);
+	public Dialog getDialog() {
+		return dialog;
 	}
 	
 	public void speak() {
-		
+		GamePanel window = Main.getWindow();
+		if (window instanceof FocusedWindow) {
+			((FocusedWindow) window).showDialog(dialog);
+		}
+	}
+	
+	@Override
+	public void onInteract(InteractEvent e) {
+		speak();
+	}
+	
+	@Override
+	public Mode getDefaultMode() {
+		return Mode.SEEK;
+	}
+	
+	@Override
+	public int getBaseSpeed() {
+		return Player.PLAYER_BASE_SPEED;
+	}
+	
+	@Override
+	public void updateEntityStats() {
+		super.updateEntityStats();
+		stopRange = 200;
 	}
 }

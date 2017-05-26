@@ -32,12 +32,14 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 	
 	protected Inventory inventory;
 	protected Entity target;
+	protected Mode mode;
 	
 	private ArrayDeque<PathNode> path;
 	
 	protected AIUnit(Vector pos, Entity target, Animation idle, Animation walking) {
 		super(pos, idle, walking);
 		this.target = target;
+		this.mode = getDefaultMode();
 	}
 
 	public void setTarget(Entity target) {
@@ -70,7 +72,9 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 		inventory.attack(world, this, Vector.ZERO.copy(), e.getPos().copy().sub(pos));
 	}
 	
-	//TODO don't walk into each other
+	protected enum Mode {
+		IDLE, SEEK, ATTACK;
+	}
 	
 	@Override
 	public synchronized void update(World world, double deltaTime) {
@@ -86,37 +90,43 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 				return;
 			}
 		}
-							
-		if (canAttack(target, world)) {
-			attack(world, target);
-			return;
-		}
 		
-		//if we are very close to the target, don't even try to move
-		if (target.pos.distanceSquared(pos) <= stopRange * stopRange) {
-			return;
-		}
+		switch (mode) {
 		
-		Component graph = world.getPathfinding().getGraph(this).getComponent(this);
-		Component targetGraph = world.getPathfinding().getGraph(this).getComponent(target);
-		
-		//Main.debug("comp size: " + graph.size());
-		
-		if (path != null) {
-			
-			if (target.pos.distanceSquared(lastSeenPos) > CHANGE_PATH_MARGIN * CHANGE_PATH_MARGIN
-					&& targetGraph == graph && graph != null) {
-				stopPath();
-			} else {
-				follow(world, deltaTime);
+		case ATTACK:
+						
+			if (canAttack(target, world)) {
+				attack(world, target);
+				return;
 			}
-
-		} else if (!recalculatingPath && (pos.distanceSquared(target.pos) <= seekRange * seekRange)) {
-			
-			if (graph != null && graph == targetGraph) {
-				startPath(world);
+		case SEEK:
+						
+			//if we are very close to the target, don't even try to move
+			if (target.pos.distanceSquared(pos) <= stopRange * stopRange) {
+				return;
 			}
-
+			
+			Component graph = world.getPathfinding().getGraph(this).getComponent(this);
+			Component targetGraph = world.getPathfinding().getGraph(this).getComponent(target);
+						
+			if (path != null) {
+				
+				if (target.pos.distanceSquared(lastSeenPos) > CHANGE_PATH_MARGIN * CHANGE_PATH_MARGIN
+						&& targetGraph == graph && graph != null) {
+					stopPath();
+				} else {
+					follow(world, deltaTime);
+				}
+	
+			} else if (!recalculatingPath && (pos.distanceSquared(target.pos) <= seekRange * seekRange)) {
+				
+				if (graph != null && graph == targetGraph) {
+					startPath(world);
+				}
+	
+			}
+		default:
+		
 		}
 						
 	}
@@ -185,6 +195,14 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 		super.updateEntityStats();
 		inventory = new Inventory(this);
 		seekRange = 1000;
+	}
+	
+	public Mode getDefaultMode() {
+		return Mode.ATTACK;
+	}
+	
+	public Mode getMode() {
+		return mode;
 	}
 
 }

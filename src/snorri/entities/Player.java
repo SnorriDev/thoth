@@ -6,6 +6,7 @@ import java.awt.Image;
 import javax.swing.SwingUtilities;
 
 import snorri.animations.Animation;
+import snorri.events.InteractEvent;
 import snorri.events.SpellEvent.Caster;
 import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
@@ -33,6 +34,7 @@ public class Player extends Unit implements Carrier, Caster {
 	private static final Image GREY_HEART = Main.getImage("/textures/hud/greyHeart.png");
 
 	private static final int HEALTH_RES = 20;
+	private static final int INTERACT_RANGE = 300;
 	protected static final int PLAYER_BASE_SPEED = 190;
 	
 	private static final long serialVersionUID = 1L;
@@ -95,13 +97,14 @@ public class Player extends Unit implements Carrier, Caster {
 		
 		//check if we're hitting a desk
 		if (Key.SPACE.isPressed()) {
-			Entity interactRegion = new Entity(pos, Unit.RADIUS + Desk.INTERACT_RANGE);
-			for (Entity entity : world.getEntityTree().getAllCollisions(interactRegion)) {
-				if (entity instanceof Desk && Main.getWindow() instanceof GameWindow) {
-					((GameWindow) Main.getWindow()).openInventory();
-					return;
-				}
+			
+			Vector mousePos = window.getMousePosAbsolute();
+			Entity selected = world.getEntityTree().getFirstCollision(mousePos);
+			if (selected != null && selected.pos.distance(pos) <= INTERACT_RANGE) {
+				selected.onInteract(new InteractEvent(world, this));
+				return;
 			}
+			
 		}
 		
 		inventory.checkKeys();

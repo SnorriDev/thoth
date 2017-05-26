@@ -545,7 +545,6 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 									}
 									else {
 										for (int i = yGrid + 1; i < wallPoints.lastElement().getY(); ++i) {
-											Main.debug(i);
 											env.getLevel(selectedTile.getType().getLayer()).setTileGrid(xGrid, i, new Tile(selectedTile));
 										}
 									}

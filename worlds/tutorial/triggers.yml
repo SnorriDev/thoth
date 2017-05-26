@@ -3,6 +3,13 @@ onStart:
     - TIMELINE:
         object: start
   actions:
+    - SET_NPC_DIALOG:
+        npc: imhotep
+        dialog:
+          !dialog
+            image: priest
+            name: Imhotep
+            text: <p>After you!</p>
     - SET_OBJECTIVE:
         objective:
           !objective
@@ -16,8 +23,9 @@ onStart:
         dialog:
           !dialog
             image: priest
+            name: Imhotep
             text: |
-              <p><span class="name">Imhotep:</span> Welcome to the temple archives, Prince Setna!
+              <p>Welcome to the temple archives, Prince Setna!
               Now that you are an apprentice scribe, feel free to take a look around.</p>
             showObjective: true
 
@@ -35,8 +43,9 @@ onZone1:
         dialog:
           !dialog
             image: priest
+            name: Imhotep
             text: |
-              <p><span class="name">Imhotep:</span> The world listens to sorcerers who speak the language of Thoth.
+              <p>The world listens to sorcerers who speak the language of Thoth.
               It is time for you to try your hand at spellcasting - a powerful gift that few possess, 
               and even fewer have mastered.</p>
             showObjective: true
@@ -59,8 +68,9 @@ onPickupPapyrus:
         dialog:
           !dialog
             image: priest
+            name: Imhotep
             text: |
-              <p><span class="name">Imhotep:</span> Now use the vocabulary to write a spell.</p>
+              <p>Now use the vocabulary to write a spell.</p>
             showObjective: true
 
 onEnchant:
@@ -79,8 +89,9 @@ onEnchant:
         dialog:
           !dialog
             image: priest
+            name: Imhotep
             text: |
-              <p><span class="name">Imhotep:</span> Cast your spell on the door to see if it works.
+              <p>Cast your spell on the door to see if it works.
               Wait a second! Let me stand back so you don't blow me up.</p>
             showObjective: true
 
@@ -97,8 +108,9 @@ onDoorOpen:
         dialog:
           !dialog
             image: priest
+            name: Imhotep
             text: |
-              <p><span class="name">Imhotep:</span> By Thoth, you're a natural! Now go grab that sling on the ground.
+              <p>By Thoth, you're a natural! Now go grab that sling on the ground.
               You never know what you'll run into down here.</p>    
 
 onPickup:
@@ -109,7 +121,7 @@ onPickup:
     - SET_OBJECTIVE:
         objective:
           !objective
-          shortDesc: shoot at the mummies by clicking
+          shortDesc: shoot at the snake by clicking
           longDesc: |
             <p class="instruction">Shoot by clicking at a target location. If you hearts
             reach zero, you will die!</p>
@@ -117,8 +129,9 @@ onPickup:
         dialog:
           !dialog
             image: priest
+            name: Imhotep
             text: |
-              <p><span class="name">Imhotep:</span> A snake, up ahead!</p>
+              <p>A snake, up ahead!</p>
             showObjective: true
     - SPAWN_ENTITY:
         type: cobra
@@ -138,6 +151,7 @@ onKill:
         dialog:
           !dialog
             image: priest
+            name: Imhotep
             text: |
               <p><span class="name">Imhotep:</span> That thing fought pretty well considering it has no legs! Let's keep going.</p>
 
@@ -156,8 +170,9 @@ onWall:
         dialog:
           !dialog
             image: priest
+            name: Imhotep
             text: |
-              <p><span class="name">Imhotep:</span> Hmm, it's blocked off. See if you can shoot
+              <p>Hmm, it's blocked off. See if you can shoot
               through this wall using your sling.</p> 
             showObjective: true      
 
@@ -174,8 +189,9 @@ onZone2:
         dialog:
           !dialog
             image: priest
+            name: Imhotep
             text: |
-              <p><span class="name">Imhotep:</span> This crypt must be hundreds of years old.
+              <p>This crypt must be hundreds of years old.
               I wonder who left that urn here!</p>
             showObjective: true
 
@@ -194,8 +210,9 @@ onWrite:
         dialog:
           !dialog
             image: priest
+            name: Imhotep
             text: |
-              <p><span class="name">Imhotep:</span> DHwty - the ancient, venerated name of Thoth! Speaking such a word unleashes
+              <p>DHwty - the ancient, venerated name of Thoth! Speaking such a word unleashes
               mystical energy. See what happens if you pray to that name.</p>
             showObjective: true
 
@@ -208,11 +225,11 @@ prayThoth:
         dialog:
           !dialog
             image: ghost
+            name: Neferkaptah
             text: |
-              <p><span class="name">Ghost:</span> Hail, sorcerer! I was Neferkaptah, High Priest of Thoth to Ramesses II, 
-              Pharaoh of Upper and Lower Egypt. We have much to discuss.</p>
+              <p>Sorcerer, you have awoken my ancient spirit. We have much to discuss.</p>
               
-              <p>Your curiosity has led you to my old study, which had been untouched for 1,000 years. It may also 
+              <p>Your curiosity has led you to this ruin, which had been untouched for 1,000 years. It may also 
               lead you on another great quest: recovering the Book of Thoth, which contains powerful secrets about the language of the gods.
               Trust me, don't go looking for this dangerous tome!</p>
               

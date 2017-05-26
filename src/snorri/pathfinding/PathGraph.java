@@ -352,7 +352,7 @@ public class PathGraph {
 	 *            position, in grid coordinates
 	 */
 	public void setPathableGrid(Vector v) {
-
+		
 		updateSurroundingContext(v);
 		
 		for (int x = v.getX() - width; x <= v.getX() + width; x++) {
@@ -372,7 +372,7 @@ public class PathGraph {
 				}
 				
 			}
-						
+									
 		}
 	
 	}
@@ -462,9 +462,10 @@ public class PathGraph {
 				largest = graph;
 			}
 		}
-				
+						
 		for (Component graph : graphs) {
-			if (graph != largest && components.remove(graph)) {
+			if (!graph.equals(largest)) {
+				components.remove(graph);
 				largest.addAll(graph);
 				for (Vector v : graph) {
 					setComponent(v, largest);

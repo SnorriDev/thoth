@@ -1,6 +1,7 @@
 package snorri.overlay;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -129,10 +130,20 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 			super(DIALOG_BOX);
 			GridBagConstraints c = new GridBagConstraints();
 			
+			//FIXME adjust the y-axis padding and margins
+			
 			JLabel portrait = new JLabel(dialog.getIcon());
 			c.gridx = 0;
 			c.gridy = 0;
+			c.weighty = 1;
 			add(portrait, c);
+			
+			JLabel name = new JLabel(dialog.getName());
+			name.setFont(name.getFont().deriveFont(Font.BOLD, 16));
+			c.gridx = 0;
+			c.gridy = 1;
+			c.weighty = 2;
+			add(name, c);
 			
 			pane = new JTextPane();
 			pane.setEditorKit(getHTMLEditorKit());
@@ -154,6 +165,8 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 			scroll.setViewportBorder(null);
 			c.gridx = 1;
 			c.gridy = 0;
+			c.weighty = 0;
+			c.gridheight = 2;
 			add(scroll, c);
 			
 			if (Overlay.this instanceof KeyListener) {
@@ -186,15 +199,6 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 	}
-	
-//	@Override
-//	public void paintComponent(Graphics g) {
-//		Dimension size = getSize();
-//		Main.log("drawing shit");
-//		g.setColor(Color.BLACK);
-//		g.drawRect(0, 0, size.width, size.height);
-//		super.paintComponent(g);
-//	}
 	
 	@Override
 	public void keyPressed(KeyEvent e) {

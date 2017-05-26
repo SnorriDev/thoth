@@ -106,5 +106,9 @@ public interface EntityGroup {
 			graph.removeEntity(e);
 		}
 	}
+
+	default Entity getFirstCollision(Vector mousePos) {
+		return getFirstCollision(new Entity(mousePos));
+	}
 	
 }
