@@ -13,16 +13,16 @@ public class Pray extends TransVerbDef {
 	@Override
 	public boolean exec(Node<Object> object, SpellEvent e) {
 		Object obj = object.getMeaning(e);
-		if (obj instanceof String) {
-			TriggerType.PRAY.activate(obj);
-			return true;
+		if (obj == null) {
+			return false;
 		}
-		return false;
+		TriggerType.PRAY.activate(obj.toString());
+		return true;
 	}
 
 	@Override
 	public boolean eval(Object subj, Object obj, SpellEvent e) {
-		return obj instanceof String && e.getWorld().getTriggerMap().contains(TriggerType.PRAY, obj);
+		return e.getWorld().getTriggerMap().contains(TriggerType.PRAY, obj.toString());
 	}
 
 	@Override

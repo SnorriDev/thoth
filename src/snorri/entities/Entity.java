@@ -256,11 +256,8 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		if (attr == AbstractSemantics.TILE) {
 			return world.getLevel().getTile(pos); //FIXME
 		}
-		if (attr == AbstractSemantics.NAME) {
-			return toString();
-		}
 		
-		return null;
+		return Nominal.super.get(world, attr);
 	}
 	
 	/**

@@ -13,16 +13,23 @@ public abstract class NonTerminal<S> implements Node<S> {
 	private static final long serialVersionUID = 1L;
 
 	protected List<Node<?>> children;
-	protected Object category;
+	private Object category;
 	
+	//TODO replace trinary rules with binary branching structure?
+	//TODO choose exec/eval based on something in SpellEvent
+	//TODO can use this to have generalized type system
 	public void setChildren(List<Node<?>> nodes) {
 		children = nodes;
 		category = Category.combine(nodes);
 	}
+	
+	public void computeCategory() {
+		for (Node<?> child : children) {
+			child.computeCategory();
+		}
+		category = Category.combine(children);
+	}
 		
-	//TODO nonsyncategorematic semantics
-	//TODO replace trinary rules with binary branching structure?
-	//TODO choose exec/eval based on something in SpellEvent
 	@Override @SuppressWarnings("unchecked")
 	public S getMeaning(SpellEvent e) {
 		

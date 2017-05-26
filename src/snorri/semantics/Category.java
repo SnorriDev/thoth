@@ -23,14 +23,14 @@ public class Category {
 	}
 	
 	public Object apply(Object arg) {
-		if (catA.equals(arg)) {
+		if (fitsArg(arg)) {
 			return catB;
 		}
 		return null;
 	}
 	
 	public boolean fitsArg(Object arg) {
-		return catA.equals(arg);
+		return isHypernym(catA, arg);
 	}
 
 	public static Object getCategory(Object value) {
@@ -61,14 +61,9 @@ public class Category {
 				
 		Object result1, result2;
 		
+		//this should capture both possibilities
 		if ((result1 = Category.combine(type1, type2)) != null) {
 			if ((result2 = Category.combine(result1, type3)) != null) {
-				return result2;
-			}
-		}
-		
-		if ((result1 = Category.combine(type2, type1)) != null) {
-			if ((result2 = Category.combine(result1,  type3)) != null) {
 				return result2;
 			}
 		}
@@ -77,6 +72,7 @@ public class Category {
 		
 	}
 	
+	//FIXME category computation breaks for Command, Conditional, Statement
 	public static Object combine(List<Node<?>> nodes) {
 		
 		Object arg1, arg2, arg3;
@@ -96,6 +92,26 @@ public class Category {
 		
 		return null;
 		
+	}
+	
+	public static boolean isHypernym(Object type1, Object type2) {
+		
+		if (type1 instanceof Category && type2 instanceof Category) {
+			return isHypernym(((Category) type1).catA, ((Category) type2).catA) &&
+					isHypernym(((Category) type1).catB, ((Category) type2).catB);
+		}
+		
+		if (type1 instanceof Class && type2 instanceof Class) {
+			return ((Class<?>) type1).isAssignableFrom((Class<?>) type2);
+		}
+		
+		return false;
+		
+	}
+	
+	@Override
+	public String toString() {
+		return "<" + catA.toString() + ", " + catB.toString() + ">";
 	}
 	
 }

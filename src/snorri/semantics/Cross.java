@@ -43,9 +43,9 @@ public class Cross extends TransVerbDef {
 			
 		}
 			
-		if (obj instanceof Class) {
+		if (obj instanceof ClassWrapper) {
 		
-			Class<?> c = (Class<?>) obj;
+			Class<?> c = ((ClassWrapper) obj).rawClass;
 			
 			//return true if we are intersecting an entity of the right type
 			if (Entity.class.isAssignableFrom(c)) {
