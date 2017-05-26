@@ -12,9 +12,9 @@ public enum MidgroundElement implements TileType {
 	
 	NONE,
 	COL_BOT(getImage("colbot00.png")),
-	DOOR(false, TileType.getRotations(getImage("door00.png")), NONE),
+	DOOR(TileType.getRotations(getImage("door00.png")), Param.replacementType(NONE)),
 	DEBRIS(getImage("debris00.png")),
-	BROKEN_DEBRIS(false, getImage("brokendebris00.png"), true),
+	BROKEN_DEBRIS(getImage("brokendebris00.png"), Param.replacementType(NONE)),
 	WALL(TileType.getRotations(getImage("wall00.png"))),
 	WALL_CONCAVE(TileType.getRotations(getImage("wallconcave00.png"))),
 	WALL_CONVEX(TileType.getRotations(getImage("wallconvex00.png"))),
@@ -22,12 +22,12 @@ public enum MidgroundElement implements TileType {
 	WALL_END_RIGHT(TileType.getRotations(getImage("wallendright00.png"))),
 	WALL_DEFAULT(Tile.DEFAULT_TEXTURE),
 	WALL_STUB(TileType.getRotations(getImage("wallstub00.png"))),
-	BROKEN_WALL(false, TileType.getRotations(getImage("brokenwall00.png"))),
-	BROKEN_WALL_END_LEFT(false, TileType.getRotations(getImage("brokenwallendleft00.png"))),
-	BROKEN_WALL_END_RIGHT(false, TileType.getRotations(getImage("brokenwallendright00.png")));
+	BROKEN_WALL(TileType.getRotations(getImage("brokenwall00.png"))),
+	BROKEN_WALL_END_LEFT(TileType.getRotations(getImage("brokenwallendleft00.png"))),
+	BROKEN_WALL_END_RIGHT(TileType.getRotations(getImage("brokenwallendright00.png")));
 	
 	protected BufferedImage[]	textures;
-	protected boolean pathable, changable = true; //some things (like paths and tiles) will be unpathable
+	protected boolean pathable; //some things (like paths and tiles) will be unpathable
 	protected TileType replacementType;
 	protected double blendOrder;
 	
@@ -42,7 +42,6 @@ public enum MidgroundElement implements TileType {
 	MidgroundElement(BufferedImage[] textures) {
 		this.textures = textures;
 		pathable = false;
-		changable = false;
 		replacementType = null;
 		blendOrder = 0.0;
 	}
@@ -72,18 +71,6 @@ public enum MidgroundElement implements TileType {
 	MidgroundElement(boolean pathable, BufferedImage texture) {
 		this(texture);
 		this.pathable = pathable;
-	}
-	
-	@Deprecated
-	MidgroundElement(boolean pathable, BufferedImage texture, boolean changable) {
-		this(pathable, texture);
-		this.changable = changable;
-	}
-	
-	@Deprecated
-	MidgroundElement(boolean pathable, BufferedImage[] textures, MidgroundElement replacementType) {
-		this(pathable, textures);
-		this.replacementType = replacementType;
 	}
 	
 	public static MidgroundElement byIdStatic(int id) {
@@ -185,7 +172,7 @@ public enum MidgroundElement implements TileType {
 
 	@Override
 	public boolean isChangable() {
-		return changable;
+		return replacementType != null;
 	}
 	
 	@Override 
@@ -213,9 +200,6 @@ public enum MidgroundElement implements TileType {
 		switch (param.getKey()) {
 			case PATHABLE:
 				pathable = (Boolean) param.getValue();
-				break;
-			case CHANGABLE:
-				changable = (Boolean) param.getValue();
 				break;
 			case REPLACEMENT_TYPE:
 				replacementType = (TileType) param.getValue();

@@ -61,7 +61,7 @@ public class Hieroglyphs {
 			}
 			out.add(word);
 		}
-		return "<p>" + String.join("", out) + "</p>";
+		return String.join("", out);
 	}
 	
 	static String getPath(String raw) {
@@ -74,7 +74,7 @@ public class Hieroglyphs {
 			return null;
 		}
 		try {
-			return "<span><img class='hiero' src=\'" + f.toURI().toURL() + "'/>&nbsp;</span>";
+			return "<img class='hiero' src=\'" + f.toURI().toURL() + "'/>";
 		} catch (MalformedURLException e) {
 			Main.error("bad URL for file " + raw);
 			return null;

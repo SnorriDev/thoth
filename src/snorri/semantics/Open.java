@@ -2,6 +2,9 @@ package snorri.semantics;
 
 import snorri.entities.Mummy;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import snorri.entities.Entity;
 import snorri.entities.Sarcophagus;
 import snorri.events.SpellEvent;
@@ -22,6 +25,14 @@ public class Open extends TransVerbDef {
 			MidgroundElement.class,
 			ForegroundElement.class
 	};
+	
+	private static final Set<TileType> DOOR_TYPES = new HashSet<>();
+	
+	static {
+		DOOR_TYPES.add(MidgroundElement.DOOR);
+		DOOR_TYPES.add(ForegroundElement.GATE_LEFT);
+		DOOR_TYPES.add(ForegroundElement.GATE_RIGHT);
+	}
 	
 	public Open() {
 		super();
@@ -64,7 +75,7 @@ public class Open extends TransVerbDef {
 		for (Class<? extends TileType> levelType : CHECK_LEVELS) {
 			
 			Tile tile = w.getLevel(levelType).getTileGrid(pos);
-			if (tile == null) {
+			if (!isDoor(tile)) {
 				continue;
 			}
 			
@@ -80,6 +91,13 @@ public class Open extends TransVerbDef {
 		}
 		
 		return false;
+	}
+	
+	public static boolean isDoor(Tile tile) {
+		if (tile == null) {
+			return false;
+		}
+		return DOOR_TYPES.contains(tile.getType());
 	}
 	
 	@Override

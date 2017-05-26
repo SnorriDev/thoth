@@ -3,13 +3,6 @@ onStart:
     - TIMELINE:
         object: start
   actions:
-    - SET_NPC_DIALOG:
-        npc: imhotep
-        dialog:
-          !dialog
-            image: priest
-            name: Imhotep
-            text: <p>After you!</p>
     - SET_OBJECTIVE:
         objective:
           !objective
@@ -153,7 +146,7 @@ onKill:
             image: priest
             name: Imhotep
             text: |
-              <p><span class="name">Imhotep:</span> That thing fought pretty well considering it has no legs! Let's keep going.</p>
+              <p>That thing fought pretty well considering it has no legs! Let's keep going.</p>
 
 onWall:
   actions:

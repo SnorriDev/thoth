@@ -16,7 +16,7 @@ public class NPC extends AIUnit {
 	private static final Animation WALKING = new Animation("/textures/animations/unit/walking");
 	
 	static {
-		DEFAULT_DIALOG.text = "After you.";
+		DEFAULT_DIALOG.text = "<p>After you!</p>";
 		DEFAULT_DIALOG.image = "priest";
 		DEFAULT_DIALOG.name = "Imhotep";
 	}

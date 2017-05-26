@@ -157,8 +157,8 @@ public enum ForegroundElement implements Nominal, TileType {
 	}
 
 	@Override
-	public boolean isChangable() { //FIXME
-		return true;
+	public boolean isChangable() { 
+		return replacementType != null;
 	}
 	
 	@Override 

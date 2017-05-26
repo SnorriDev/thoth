@@ -21,6 +21,7 @@ h2 {
 
 
 body {
+    /*padding-left: 10px;*/
     font-family: Avenir, Arial;
     font-size: 14;
 }
@@ -44,6 +45,9 @@ span.hiero {
 
 img.hiero {
     display: inline-block;
+    padding: 0px;
+    width: 100%;
+    height: 46;
 }
 
 span.name {
