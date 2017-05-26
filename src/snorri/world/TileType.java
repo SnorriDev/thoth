@@ -107,15 +107,15 @@ public interface TileType extends Nominal {
 	
 	public static TileType[] getValues(Class<? extends TileType> c) {
 		
-		if (c.equals(BackgroundElement.class)) {
+		if (BackgroundElement.class.isAssignableFrom(c)) {
 			return BackgroundElement.values();
 		}
-		
-		if (c.equals(MidgroundElement.class)) {
+				
+		if (MidgroundElement.class.isAssignableFrom(c)) {
 			return MidgroundElement.values();
 		}
 		
-		if (c.equals(ForegroundElement.class)) {
+		if (ForegroundElement.class.isAssignableFrom(c)) {
 			return ForegroundElement.values();
 		}
 		
