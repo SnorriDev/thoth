@@ -230,8 +230,9 @@ public class Tile implements Comparable<Tile>, Nominal {
 			return 0;
 		}
 		
-		int n = TileType.getValues(type.getClass()).length;
-		return Integer.compare(style * n + type.getId(),  t.style * n + t.type.getId());
+		//int n = TileType.getValues(type.getClass()).length;
+		//return Integer.compare(style * n + type.getId(),  t.style * n + t.type.getId()); //FIXME: the small number multiplication might cause a few bugs
+		return Double.compare(type.getBlendOrder() + 0.0001 * type.getId() + 0.0000001 * style, t.type.getBlendOrder() + 0.0001 * t.type.getId() + 0.0000001 * t.style);
 		
 //		if (type.equals(t.type)) {
 //			return Integer.compare(style, t.style);

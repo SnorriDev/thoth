@@ -27,14 +27,32 @@ public enum ForegroundElement implements Nominal, TileType {
 		this((BufferedImage) null);
 	}
 	
-	ForegroundElement(BufferedImage[] textures) {
-		this.textures = textures;
-	}
-	
 	ForegroundElement(BufferedImage texture) {
 		this(new BufferedImage[] {texture});
 	}
 	
+	ForegroundElement(BufferedImage[] textures) {
+		this.textures = textures;
+		replacementType = null;
+		blendOrder = 0.0;
+	}
+	
+	ForegroundElement(Param<?>...params) {
+		this(Tile.DEFAULT_FOREGROUND_TEXTURE, params);
+	}
+	
+	ForegroundElement(BufferedImage texture, Param<?>...params) {
+		this(new BufferedImage[] {texture}, params);
+	}
+	
+	ForegroundElement(BufferedImage[] textures, Param<?>...params) {
+		this(textures);
+		for (Param<?> p : params) {
+			setParam(p);
+		}
+	}
+	
+	@Deprecated
 	ForegroundElement(BufferedImage[] textures, ForegroundElement replacementType) {
 		this(textures);
 		this.replacementType = replacementType;
@@ -161,6 +179,20 @@ public enum ForegroundElement implements Nominal, TileType {
 	@Override
 	public double getBlendOrder() {
 		return blendOrder;
+	}
+
+	@Override
+	public void setParam(Param<?> param) {
+		switch (param.getKey()) {
+			case REPLACEMENT_TYPE:
+				replacementType = (TileType) param.getValue();
+				break;
+			case BLEND_ORDER:
+				blendOrder = (Double) param.getValue();
+				break;
+			default:
+				break;
+		}
 	}
 	
 }

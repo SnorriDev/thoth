@@ -10,6 +10,60 @@ import snorri.semantics.Nominal;
 
 public interface TileType extends Nominal {
 	
+	public static class Param<T> {
+	  
+		protected enum Key {
+			PATHABLE, SWIMMABLE, CHANGABLE, AT_TOP, CAN_SHOOT_OVER, BLEND_ORDER, REPLACEMENT_TYPE;
+		}
+		
+		protected final Key key;
+		protected final T value;
+		
+		protected Param(Key key, T value) {
+			this.key = key;
+			this.value = value;
+		}
+		
+		public Key getKey() {
+			return key;
+		}
+		
+		public T getValue() {
+			return value;
+		}
+		
+		public static Param<Boolean> pathable(Boolean value) {
+			return new Param<>(Key.PATHABLE, value);
+		}
+		
+		public static Param<Boolean> swimmable(Boolean value) {
+			return new Param<>(Key.SWIMMABLE, value);
+		}
+		
+		public static Param<Boolean> changable(Boolean value) {
+			return new Param<>(Key.CHANGABLE, value);
+		}
+		
+		public static Param<Boolean> atTop(Boolean value) {
+			return new Param<>(Key.AT_TOP, value);
+		}
+		
+		public static Param<Boolean> canShootOver(Boolean value) {
+			return new Param<>(Key.CAN_SHOOT_OVER, value);
+		}
+		
+		public static Param<Double> blendOrder(Double value) {
+			return new Param<>(Key.BLEND_ORDER, value);
+		}
+		
+		public static Param<TileType> replacementType(TileType value) {
+			return new Param<>(Key.REPLACEMENT_TYPE, value);
+		}
+	}
+	
+	// use a method like this to set parameters on TileType
+	public void setParam(Param<?> param);
+	
 	//BufferedImage getImage(String string);
 	
 	TileType byId(int id);
@@ -153,8 +207,5 @@ public interface TileType extends Nominal {
 	public TileType getReplacement();
 	
 	public double getBlendOrder();
-	
-	default void customInitializer() {
-	}
 	
 }

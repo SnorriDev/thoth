@@ -11,17 +11,17 @@ import snorri.main.Util;
 public enum MidgroundElement implements TileType {
 	
 	NONE,
-	COL_BOT(false, getImage("colbot00.png")),
+	COL_BOT(getImage("colbot00.png")),
 	DOOR(false, TileType.getRotations(getImage("door00.png")), NONE),
-	DEBRIS(false, getImage("debris00.png")),
+	DEBRIS(getImage("debris00.png")),
 	BROKEN_DEBRIS(false, getImage("brokendebris00.png"), true),
-	WALL(false, TileType.getRotations(getImage("wall00.png"))),
-	WALL_CONCAVE(false, TileType.getRotations(getImage("wallconcave00.png"))),
-	WALL_CONVEX(false, TileType.getRotations(getImage("wallconvex00.png"))),
-	WALL_END_LEFT(false, TileType.getRotations(getImage("wallendleft00.png"))),
-	WALL_END_RIGHT(false, TileType.getRotations(getImage("wallendright00.png"))),
-	WALL_DEFAULT(false, Tile.DEFAULT_TEXTURE),
-	WALL_STUB(false, TileType.getRotations(getImage("wallstub00.png"))),
+	WALL(TileType.getRotations(getImage("wall00.png"))),
+	WALL_CONCAVE(TileType.getRotations(getImage("wallconcave00.png"))),
+	WALL_CONVEX(TileType.getRotations(getImage("wallconvex00.png"))),
+	WALL_END_LEFT(TileType.getRotations(getImage("wallendleft00.png"))),
+	WALL_END_RIGHT(TileType.getRotations(getImage("wallendright00.png"))),
+	WALL_DEFAULT(Tile.DEFAULT_TEXTURE),
+	WALL_STUB(TileType.getRotations(getImage("wallstub00.png"))),
 	BROKEN_WALL(false, TileType.getRotations(getImage("brokenwall00.png"))),
 	BROKEN_WALL_END_LEFT(false, TileType.getRotations(getImage("brokenwallendleft00.png"))),
 	BROKEN_WALL_END_RIGHT(false, TileType.getRotations(getImage("brokenwallendright00.png")));
@@ -32,32 +32,55 @@ public enum MidgroundElement implements TileType {
 	protected double blendOrder;
 	
 	MidgroundElement() {
-		this(true, (BufferedImage) null);
-	}
-	
-	MidgroundElement(BufferedImage[] textures) {
-		this.textures = textures;
+		this((BufferedImage) null, Param.pathable(true));
 	}
 	
 	MidgroundElement(BufferedImage texture) {
 		this(new BufferedImage[] {texture});
 	}
 	
+	MidgroundElement(BufferedImage[] textures) {
+		this.textures = textures;
+		pathable = false;
+		changable = false;
+		replacementType = null;
+		blendOrder = 0.0;
+	}
+	
+	MidgroundElement(Param<?>...params) {
+		this(Tile.DEFAULT_FOREGROUND_TEXTURE, params);
+	}
+	
+	MidgroundElement(BufferedImage texture, Param<?>...params) {
+		this(new BufferedImage[] {texture}, params);
+	}
+	
+	MidgroundElement(BufferedImage[] textures, Param<?>...params) {
+		this(textures);
+		for (Param<?> p : params) {
+			setParam(p);
+		}
+	}
+	
+	@Deprecated
 	MidgroundElement(boolean pathable, BufferedImage[] textures) {
 		this(textures);
 		this.pathable = pathable;
 	}
 	
+	@Deprecated
 	MidgroundElement(boolean pathable, BufferedImage texture) {
 		this(texture);
 		this.pathable = pathable;
 	}
 	
+	@Deprecated
 	MidgroundElement(boolean pathable, BufferedImage texture, boolean changable) {
 		this(pathable, texture);
 		this.changable = changable;
 	}
 	
+	@Deprecated
 	MidgroundElement(boolean pathable, BufferedImage[] textures, MidgroundElement replacementType) {
 		this(pathable, textures);
 		this.replacementType = replacementType;
@@ -183,5 +206,25 @@ public enum MidgroundElement implements TileType {
 	@Override
 	public double getBlendOrder() {
 		return blendOrder;
+	}
+	
+	@Override
+	public void setParam(Param<?> param) {
+		switch (param.getKey()) {
+			case PATHABLE:
+				pathable = (Boolean) param.getValue();
+				break;
+			case CHANGABLE:
+				changable = (Boolean) param.getValue();
+				break;
+			case REPLACEMENT_TYPE:
+				replacementType = (TileType) param.getValue();
+				break;
+			case BLEND_ORDER:
+				blendOrder = (Double) param.getValue();
+				break;
+			default:
+				break;
+		}
 	}
 }
