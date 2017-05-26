@@ -15,40 +15,26 @@ public enum BackgroundElement implements TileType {
 		getImage("sand00.png"),
 		getImage("sand01.png"),
 		getImage("sand02.png"),
-		getImage("sand03.png")}) {
-		@Override
-		public void customInitializer() {
-			swimmable = false;
-			atTop = false;
-			changable = true;
-			Main.debug("hello world!");
-		}
-	},
-	TREE(false, Tile.DEFAULT_TEXTURE) {
-		@Override
-		public void customInitializer() {
-			pathable = false;
-		}
-	},
-	FOUNDATION(false, Tile.DEFAULT_TEXTURE),
-	HUT(false, Tile.DEFAULT_TEXTURE),
-	WATER(false, true, getImage("water00.png")),
-	LAVA(false, true, new BufferedImage[] {
-		getImage("lava00.png")}),
-	GRASS(true, false, new BufferedImage[] {
+		getImage("sand03.png")}, Param.changable(true), Param.blendOrder(1.5)),
+	TREE(Param.pathable(false), Param.atTop(true)),
+	FOUNDATION(Param.pathable(false), Param.atTop(true)),
+	HUT(Param.pathable(false), Param.atTop(true)),
+	WATER(false, getImage("water00.png"), Param.changable(true), Param.swimmable(true), Param.blendOrder(101.0)),
+	LAVA(false, new BufferedImage[] {
+		getImage("lava00.png")}, Param.swimmable(true), Param.blendOrder(99.0)),
+	GRASS(true, new BufferedImage[] {
 		getImage("grass00.png"),
-		getImage("grass01.png")}, false, true),
-	VOID(false, false, getImage("void00.png")),
-	COLUMN(false, new BufferedImage[] {
-		Tile.DEFAULT_TEXTURE}, true),
-	DOOR(false, Tile.DEFAULT_TEXTURE, true),
-	SANDSTONE(false, false, new BufferedImage[] {
+		getImage("grass01.png")}, Param.changable(true), Param.blendOrder(1.8)),
+	VOID(false, getImage("void00.png"), Param.atTop(true), Param.canShootOver(false), Param.blendOrder(-1.0)),
+	COLUMN(Param.pathable(false), Param.atTop(true)),
+	DOOR(Param.pathable(false), Param.atTop(true), Param.canShootOver(false)),
+	SANDSTONE(false, new BufferedImage[] {
 		getImage("sandstone00.png"),
 		getImage("sandstone01.png"),
 		getImage("sandstone02.png"),
 		getImage("sandstone03.png"),
 		getImage("sandstone04.png"),
-		getImage("drymud00.png")}, false, true), //will change to look like bricks
+		getImage("drymud00.png")}, Param.canShootOver(false), Param.blendOrder(1.0)), //will change to look like bricks
 	FLOOR(true, new BufferedImage[] {
 		getImage("floor00-floor00.png"),
 		getImage("floor01-floor01.png"),
@@ -62,28 +48,28 @@ public enum BackgroundElement implements TileType {
 		getImage("floor09-floor09.png"),
 		getImage("floor10-floor10.png"),
 		getImage("floor11-floor11.png"),
-		getImage("floor12-floor12.png")}, true),
+		getImage("floor12-floor12.png")}, Param.atTop(true)),
 		//TODO add some of the nice-looking mixed ones
-	GRAVEL(true, false, getImage("gravel00.png"), false, true),
+	GRAVEL(true, getImage("gravel00.png"), Param.changable(true), Param.blendOrder(3.0)),
 	STONE(false, new BufferedImage[] {
 		getImage("stone00.png"),
 		getImage("stone01.png"),
 		getImage("stone02.png"),
 		getImage("stone03.png"),
-		getImage("stone04.png")}),
-	DEEP_WATER(false, false, getImage("water01.png")),
+		getImage("stone04.png")}, Param.canShootOver(false), Param.blendOrder(0.1)),
+	DEEP_WATER(false, getImage("water01.png"), Param.swimmable(true), Param.canShootOver(true), Param.blendOrder(100.0)),
 	EARTH(true, new BufferedImage[] {
 		getImage("earth00.png"),
 		getImage("earth01.png"),
 		getImage("earth02.png"),
-		getImage("earth03.png")}, true),
+		getImage("earth03.png")}, Param.changable(true), Param.blendOrder(5.0)),
 	WOOD(true, new BufferedImage[] {
 		getImage("wood00.png"),
 		getImage("wood01.png"),
 		getImage("wood02.png"),
 		getImage("wood03.png"),
-		getImage("wood04.png")}, true),
-	BRICK(true, new BufferedImage[] {
+		getImage("wood04.png")}, Param.atTop(true)),
+	BRICK(false, new BufferedImage[] {
 		getImage("wall00.png"),
 		getImage("wall01.png"),
 		getImage("wall02.png"),
@@ -93,122 +79,78 @@ public enum BackgroundElement implements TileType {
 		getImage("wall06.png"),
 		getImage("wall07.png"),
 		getImage("wall08.png"),
-		getImage("wall09.png"),}, true);
+		getImage("wall09.png")}, Param.atTop(true), Param.canShootOver(false), Param.blendOrder(0.0));
 	
 	protected boolean pathable, canShootOver, atTop, changable, swimmable;
 	protected double blendOrder;
 	protected BufferedImage[] textures;
-								
+	
 	BackgroundElement() {
-		this(true);
+		this(Tile.DEFAULT_BACKGROUND_TEXTURE);
 	}
 	
-	private static BufferedImage getImage(String string) {
-		return Tile.getImage("/textures/tiles/background/" + string, 0);
+	BackgroundElement(BufferedImage texture) {
+		this(new BufferedImage[] {texture});
 	}
 	
+	BackgroundElement(BufferedImage[] textures) {
+		this.textures = textures;
+		pathable = true;
+		swimmable = false;
+		changable = false;
+		atTop = false;
+		canShootOver = true;
+		blendOrder = 2.0;
+	}
+	
+	BackgroundElement(Param<?>...params) {
+		this(new BufferedImage[] {Tile.DEFAULT_BACKGROUND_TEXTURE}, params);
+	}
+	
+	BackgroundElement(BufferedImage texture, Param<?>...params) {
+		this(new BufferedImage[] {texture}, params);
+	}
+	
+	BackgroundElement(BufferedImage[] textures, Param<?>...params) {
+		this(textures);
+		for (Param<?> p : params) {
+			setParam(p);
+		}
+	}
+	
+	@Deprecated
 	BackgroundElement(boolean pathable) {
 		this(pathable, new BufferedImage[] {Tile.DEFAULT_BACKGROUND_TEXTURE});
 	}
 	
+	@Deprecated
 	BackgroundElement(boolean pathable, BufferedImage texture) {
 		this(pathable, new BufferedImage[] {texture});
 	}
 	
+	@Deprecated
 	BackgroundElement(boolean pathable, BufferedImage[] textures) {
+		this(textures);
 		this.pathable = pathable;
-		this.textures = textures;
-		canShootOver = pathable;
-		swimmable = false;
-		changable = false;
-		atTop = false;
-		blendOrder = 0.0;
-		customInitializer();
 	}
 	
-	/**
-	 * Create a a liquid tile
-	 * @param pathable
-	 * 	Whether this tile can be walked over
-	 * @param liquidEditable
-	 * 	Whether the player can modify this tile with spells
-	 * @param textures
-	 * 	A list of textures
-	 */
-	BackgroundElement(boolean pathable, boolean liquidEditable, BufferedImage[] textures) {
+	@Deprecated
+	BackgroundElement(boolean pathable, BufferedImage[] textures, Param<?>...params) {
 		this(pathable, textures);
-		canShootOver = true;
-		changable = liquidEditable;
+		for (Param<?> p : params) {
+			setParam(p);
+		}
 	}
 	
-	BackgroundElement(boolean pathable, boolean liquidEditable, BufferedImage texture) {
-		this(pathable, texture);
-		canShootOver = true;
-		changable = liquidEditable;
+	@Deprecated
+	BackgroundElement(boolean pathable, BufferedImage texture, Param<?>...params) {
+		this(pathable, new BufferedImage[] {texture}, params);
 	}
 	
-	BackgroundElement(boolean pathable, boolean liquidEditable, BufferedImage[] textures, boolean atTop) {
-		this(pathable, textures);
-		canShootOver = true;
-		changable = liquidEditable;
-		this.atTop = atTop;
-	}
 	
-	BackgroundElement(boolean pathable, boolean liquidEditable, BufferedImage texture, boolean atTop) {
-		this(pathable, texture);
-		canShootOver = true;
-		changable = liquidEditable;
-		this.atTop = atTop;
+	private static BufferedImage getImage(String string) {
+		return Tile.getImage("/textures/tiles/background/" + string, 0);
 	}
-	
-	BackgroundElement(boolean pathable, BufferedImage[] textures, boolean atTop) {
-		this(pathable , textures);
-		this.atTop = atTop;
-	}
-	
-	BackgroundElement(boolean pathable, BufferedImage texture, boolean atTop) {
-		this(pathable , texture);
-		this.atTop = atTop;
-	}
-	
-	/**
-	 * Use to make tile types which can be changed with sandstorms, etc.
-	 * @param pathable
-	 * 	Whether it can be walked on
-	 * @param swimmable
-	 * 	Whether it is a liquid
-	 * @param texture
-	 * 	The texture to display
-	 * @param atTop
-	 * 	Whether it should be bitmapped over
-	 * @param changable
-	 * 	Whether it can be changed
-	 */
-	BackgroundElement(boolean pathable, boolean swimmable, BufferedImage texture, boolean atTop, boolean changable) {
-		this(pathable , texture, atTop);
-		this.changable = changable;
-	}
-	
-
-	/**
-	 * Use to make tile types which can be changed with sandstorms, etc.
-	 * @param pathable
-	 * 	Whether it can be walked on
-	 * @param swimmable
-	 * 	Whether it is a liquid
-	 * @param texture
-	 * 	The texture to display
-	 * @param atTop
-	 * 	Whether it should be bitmapped over
-	 * @param changable
-	 * 	Whether it can be changed
-	 */
-
-	BackgroundElement(boolean pathable, boolean swimmable, BufferedImage[] textures, boolean atTop, boolean changable) {
-		this(pathable , textures, atTop);
-		this.changable = changable;
-	}
-	
 
 
 	public boolean isLiquid() {
@@ -325,4 +267,29 @@ public enum BackgroundElement implements TileType {
 		return blendOrder;
 	}
 	
+	@Override
+	public void setParam(Param<?> param) {
+		switch (param.getKey()) {
+			case PATHABLE:
+				pathable = (Boolean) param.getValue();
+				break;
+			case SWIMMABLE:
+				swimmable = (Boolean) param.getValue();
+				break;
+			case CHANGABLE:
+				changable = (Boolean) param.getValue();
+				break;
+			case AT_TOP:
+				atTop = (Boolean) param.getValue();
+				break;
+			case CAN_SHOOT_OVER:
+				canShootOver = (Boolean) param.getValue();
+				break;
+			case BLEND_ORDER:
+				blendOrder = (Double) param.getValue();
+				break;
+			default:
+				break;
+		}
+	}
 }
