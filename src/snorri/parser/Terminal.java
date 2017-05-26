@@ -1,12 +1,12 @@
 package snorri.parser;
 
 import snorri.events.SpellEvent;
-import snorri.semantics.Category;
 
 public class Terminal<S> implements Node<S> {
 
 	private static final long serialVersionUID = 1L;
 	private String orthography;
+	private Object category;
 	
 	public Terminal(String orthography) {
 		this.orthography = orthography;
@@ -51,9 +51,13 @@ public class Terminal<S> implements Node<S> {
 	}
 
 	@Override
-	public Category getCategory() {
-		//FIXME
-		return null;
+	public void computeCategory() {
+		category = Lexicon.lookup(orthography).getCategory();
+	}
+	
+	@Override
+	public Object getCategory() {
+		return category;
 	}
 	
 }

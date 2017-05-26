@@ -23,6 +23,8 @@ public interface Node<S> extends Serializable {
 	
 	public Node<S> copy();
 	
+	public void computeCategory();
+	
 	public Object getCategory();
 		
 }

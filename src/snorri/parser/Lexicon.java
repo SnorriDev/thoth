@@ -9,6 +9,7 @@ import java.util.Set;
 import snorri.entities.Mummy;
 import snorri.entities.Entity;
 import snorri.entities.Flower;
+import snorri.entities.Fountain;
 import snorri.entities.Glyph;
 import snorri.entities.Spike;
 import snorri.entities.Urn;
@@ -25,6 +26,7 @@ import snorri.semantics.Be;
 import snorri.semantics.Boom;
 import snorri.semantics.Break;
 import snorri.semantics.Burn;
+import snorri.semantics.ClassWrapper;
 import snorri.semantics.If;
 import snorri.semantics.CreateObject;
 import snorri.semantics.Cross;
@@ -40,6 +42,7 @@ import snorri.semantics.Heal;
 import snorri.semantics.LeftOf;
 import snorri.semantics.Move;
 import snorri.semantics.Nominal.AbstractSemantics;
+import snorri.semantics.Nominal.NameConstant;
 import snorri.semantics.Not;
 import snorri.semantics.Open;
 import snorri.semantics.Order;
@@ -88,18 +91,19 @@ public class Lexicon extends HashMap<String, Definition<?>> {
 		
 		//Nouns
 		lexicon.put("nht", new StaticDef(Noun.class, BackgroundElement.TREE)); //tree
-		lexicon.put("Hrrt", new StaticDef(Noun.class, Flower.class)); //flower, gotta make this an entity
+		lexicon.put("Hrrt", new StaticDef(Noun.class, new ClassWrapper(Flower.class))); //flower, gotta make this an entity
 		lexicon.put("mw", new StaticDef(Noun.class, BackgroundElement.WATER));
 		lexicon.put("Say", new StaticDef(Noun.class, BackgroundElement.SAND));
 		lexicon.put("nsr", new StaticDef(Noun.class, BackgroundElement.LAVA)); //technically this is fire
-		lexicon.put("snbt", new StaticDef(Noun.class, Urn.class));
+		lexicon.put("snbt", new StaticDef(Noun.class, new ClassWrapper(Urn.class)));
 		lexicon.put("bit", new StaticDef(Noun.class, null)); //TODO: bee
-		lexicon.put("txn", new StaticDef(Noun.class, Spike.class));
+		lexicon.put("txn", new StaticDef(Noun.class, new ClassWrapper(Spike.class)));
 		lexicon.put("anx", new StaticDef(Noun.class, Glyph.class));
-		lexicon.put("z", new StaticDef(Noun.class, Entity.class));
-		lexicon.put("saH", new StaticDef(Noun.class, Mummy.class)); //TODO kAr.t is better
+		lexicon.put("z", new StaticDef(Noun.class, new ClassWrapper(Entity.class)));
+		lexicon.put("saH", new StaticDef(Noun.class, new ClassWrapper(Mummy.class))); //TODO kAr.t is better
 		lexicon.put("rwDt", new StaticDef(Noun.class, BackgroundElement.SANDSTONE));
 		lexicon.put("mAAt", new StaticDef(Noun.class, new Order()));
+		lexicon.put("FOUNTAIN", new StaticDef(Noun.class, new ClassWrapper(Fountain.class)));
 		
 		lexicon.put("bw", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));
 		lexicon.put("aHAw", new StaticDef(AbstractNoun.class, AbstractSemantics.WEAPON));
@@ -111,7 +115,7 @@ public class Lexicon extends HashMap<String, Definition<?>> {
 		lexicon.put("nSni", new StaticDef(AbstractNoun.class, AbstractSemantics.STORM));
 				
 		//Names
-		lexicon.put("DHwty", new StaticDef(Name.class, "DHwty"));
+		lexicon.put("DHwty", new StaticDef(Name.class, new NameConstant("Thoth")));
 				
 		//Suffix Pronouns
 		lexicon.put("i", new FirstSuffixPronoun());

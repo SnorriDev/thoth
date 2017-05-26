@@ -1,5 +1,9 @@
 package snorri.semantics;
 
+import java.util.List;
+
+import snorri.parser.Node;
+
 public class Category {
 	
 	public final Object catA;
@@ -19,14 +23,14 @@ public class Category {
 	}
 	
 	public Object apply(Object arg) {
-		if (catA.equals(arg)) {
+		if (fitsArg(arg)) {
 			return catB;
 		}
 		return null;
 	}
 	
 	public boolean fitsArg(Object arg) {
-		return catA.equals(arg);
+		return isHypernym(catA, arg);
 	}
 
 	public static Object getCategory(Object value) {
@@ -57,20 +61,57 @@ public class Category {
 				
 		Object result1, result2;
 		
+		//this should capture both possibilities
 		if ((result1 = Category.combine(type1, type2)) != null) {
 			if ((result2 = Category.combine(result1, type3)) != null) {
 				return result2;
 			}
 		}
 		
-		if ((result1 = Category.combine(type2, type1)) != null) {
-			if ((result2 = Category.combine(result1,  type3)) != null) {
-				return result2;
-			}
+		return null;
+		
+	}
+	
+	//FIXME category computation breaks for Command, Conditional, Statement
+	public static Object combine(List<Node<?>> nodes) {
+		
+		Object arg1, arg2, arg3;
+		switch (nodes.size()) {
+		case 1:
+			return nodes.get(0).getCategory();
+		case 2:
+			arg1 = nodes.get(0).getCategory();
+			arg2 = nodes.get(1).getCategory();
+			return Category.combine(arg1, arg2);
+		case 3:
+			arg1 = nodes.get(0).getCategory();
+			arg2 = nodes.get(1).getCategory();
+			arg3 = nodes.get(2).getCategory();
+			return Category.combine(arg1, arg2, arg3);
 		}
 		
 		return null;
 		
+	}
+	
+	public static boolean isHypernym(Object type1, Object type2) {
+		
+		if (type1 instanceof Category && type2 instanceof Category) {
+			return isHypernym(((Category) type1).catA, ((Category) type2).catA) &&
+					isHypernym(((Category) type1).catB, ((Category) type2).catB);
+		}
+		
+		if (type1 instanceof Class && type2 instanceof Class) {
+			return ((Class<?>) type1).isAssignableFrom((Class<?>) type2);
+		}
+		
+		return false;
+		
+	}
+	
+	@Override
+	public String toString() {
+		return "<" + catA.toString() + ", " + catB.toString() + ">";
 	}
 	
 }

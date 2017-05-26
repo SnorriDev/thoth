@@ -1,6 +1,5 @@
 package snorri.semantics;
 
-import snorri.dialog.SpellMessage;
 import snorri.events.SpellEvent;
 import snorri.main.GameWindow;
 import snorri.main.Main;
@@ -9,6 +8,8 @@ import snorri.triggers.Trigger.TriggerType;
 
 public class Write extends TransVerbDef {
 
+	protected static final String NONE = "null";
+	
 	public Write() {
 		super();
 	}
@@ -16,9 +17,11 @@ public class Write extends TransVerbDef {
 	@Override
 	public boolean exec(Node<Object> object, SpellEvent e) {
 		Object obj = object.getMeaning(e);
-		if (Main.getWindow() instanceof GameWindow) {
-			TriggerType.WRITE.activate((String) obj);
-			((GameWindow) Main.getWindow()).showMessage(new SpellMessage(obj));
+		if (Main.getWindow() instanceof GameWindow && obj != null) {
+			String objString = obj.toString();
+			String text = objString != null ? objString : NONE;
+			TriggerType.WRITE.activate(text);
+			((GameWindow) Main.getWindow()).showMessage(text);
 			return true;
 		}
 		return false;
