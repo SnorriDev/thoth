@@ -15,11 +15,26 @@ public interface Nominal {
 		}
 		
 	}
+	
+	public static class NameConstant implements Nominal {
+		
+		private final String name;
+		
+		public NameConstant(String name) {
+			this.name = name;
+		}
+		
+		@Override
+		public String toString() {
+			return name;
+		}
+		
+	}
 
 	default Object get(World world, AbstractSemantics attr) {
 		
 		if (attr == AbstractSemantics.NAME) {
-			return toString();
+			return new NameConstant(toString());
 		}
 		
 		return null;

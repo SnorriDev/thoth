@@ -24,7 +24,7 @@ import snorri.world.Vector;
 
 public class Util {
 
-	public static final double GOLDEN_RATIO = 1.61803398875; // TODO use this
+	public static final double GOLDEN_RATIO = 1.61803398875;
 
 	public static Integer getInteger(String input) {
 		try {
@@ -241,6 +241,26 @@ public class Util {
 			gr.drawLine(p1.getX() - player.getX(), p1.getY() - player.getY(), p2.getX() - player.getX(), p2.getY() - player.getY());
 			p1 = p2;
 		}
+	}
+
+	public static String toTitleCase(String input) {
+		StringBuilder titleCase = new StringBuilder();
+		boolean nextTitleCase = true;
+
+		for (char c : input.toCharArray()) {
+			if (Character.isSpaceChar(c)) {
+				nextTitleCase = true;
+			} else if (nextTitleCase) {
+				c = Character.toTitleCase(c);
+				nextTitleCase = false;
+			} else {
+				c = Character.toLowerCase(c);
+			}
+
+			titleCase.append(c);
+		}
+
+		return titleCase.toString();
 	}
 
 }

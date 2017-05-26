@@ -202,7 +202,7 @@ onWrite:
 prayThoth:
   events:
     - PRAY:
-        object: DHwty
+        object: Thoth
   actions:
     - SHOW_DIALOG:
         dialog:

@@ -79,6 +79,9 @@ public abstract class Message {
 	}
 	
 	protected static final int getLineWidth(Graphics gr, String line) {
+		if (line == null) {
+			return 4;
+		}
 		return gr.getFontMetrics().stringWidth(line);
 	}
 		

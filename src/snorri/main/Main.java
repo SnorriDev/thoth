@@ -80,7 +80,7 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-
+		
 		try {
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 		} catch (Exception e) {
@@ -92,8 +92,8 @@ public class Main {
 		RandomDrop.load();
 		Portraits.load();
 		setupFont();
-						
-		frame = new JFrame("the Book of Thoth");
+								
+		frame = new JFrame("The Book of Thoth");
 		frame.setSize(1800, 900);
 		frame.addComponentListener(new Main.ResizeListener());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

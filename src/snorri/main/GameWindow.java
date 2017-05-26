@@ -15,6 +15,7 @@ import javax.swing.UIManager;
 import snorri.dialog.DropMessage;
 import snorri.dialog.Message;
 import snorri.dialog.Objective;
+import snorri.dialog.SpellMessage;
 import snorri.entities.Player;
 import snorri.events.SpellEvent.Caster;
 import snorri.inventory.Droppable;
@@ -127,6 +128,10 @@ public class GameWindow extends FocusedWindow {
 	
 	public Player getFocus() {
 		return focus;
+	}
+	
+	public void showMessage(String msg) {
+		showMessage(new SpellMessage(msg));
 	}
 	
 	public void showMessage(Droppable drop) {

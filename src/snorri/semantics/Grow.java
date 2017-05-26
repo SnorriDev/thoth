@@ -18,7 +18,11 @@ public class Grow extends TransVerbDef {
 	@Override @SuppressWarnings("unchecked")
 	public boolean exec(Node<Object> object, SpellEvent e) {
 		
-		Object obj = object.getMeaning(e);
+		Object meaning = object.getMeaning(e);
+		if (!(meaning instanceof ClassWrapper)) {
+			return false;
+		}
+		Class<?> obj = ((ClassWrapper) meaning).rawClass;
 		
 		if (obj instanceof Class<?> && Plant.class.isAssignableFrom((Class<?>) obj)) {
 			try {

@@ -45,13 +45,13 @@ public class CreateObject extends TransVerbDef {
 			return true;
 		}
 				
-		if (obj instanceof Class<?> && Entity.canSpawn((Class<?>) obj)) {
-			//TODO check if the entity can fit at the position (probably do this in spawnNew)
-//			if (e.getWorld().tileHasEntity(e.getLocative().copy().toGridPos()) && obj != Spike.class) {
-//				return false;
-//			}
-			boolean checkCollisions = obj != Spike.class;
-			return Entity.spawnNew(e.getWorld(), e.getLocative(), (Class<? extends Entity>) obj, checkCollisions) != null;
+		if (obj instanceof ClassWrapper) {
+			Class<? extends Entity> c = (Class<? extends Entity>) ((ClassWrapper) obj).rawClass;
+			if (!Entity.canSpawn(c)) {
+				return false;
+			}
+			boolean checkCollisions = c != Spike.class;
+			return Entity.spawnNew(e.getWorld(), e.getLocative(), c, checkCollisions) != null;
 		}
 		
 		return false;

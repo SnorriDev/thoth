@@ -34,7 +34,7 @@ public abstract class TransVerbDef extends VerbDef<Lambda<Object, Lambda>> {
 				return new Lambda<Object, Boolean>(INNER_CAT) {
 					@Override
 					public Boolean exec(Node<Object> arg2) {
-						return TransVerbDef.this.exec(arg1, e);
+						return TransVerbDef.this.exec(arg2, e);
 					}
 				};
 			}
