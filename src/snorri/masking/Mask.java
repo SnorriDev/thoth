@@ -99,6 +99,10 @@ public class Mask implements Comparable<Mask>, Comparator<Mask> {
 	public int compare(Mask m1, Mask m2) {
 		return m1.compareTo(m2);
 	}
+	
+	public final Tile getTile()  {
+		return tile;
+	}
 
 //	/**
 //	 * @return the order

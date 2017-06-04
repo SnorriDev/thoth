@@ -429,9 +429,6 @@ public class Level implements Editable {
 		for (Vector v: Mask.CORNERS) {
 			Tile t = getTileGrid(v.copy().add(x, y));
 			if (t != null && !t.getType().isAtTop() && tile.compareTo(t) > 0) {
-//				if (masks.length > maxK) {
-//					maxK = masks.length;
-//				}
 				for (k = 0; k < masks.length; k++) {
 					if (masks[k] == null) {
 						masks[k] = new Mask(t, true);
@@ -445,8 +442,19 @@ public class Level implements Editable {
 			bitVal *= 2;
 		}
 		
-		//This fixes the corner mask glitches
-		Arrays.parallelSort(masks, 0, k+1);
+		//FIXME: This fixes the corner mask glitches, but it is kind of inefficient, proabably should be optimized
+		if (k+j > 1) {
+			int masksSize = 0;
+			for (Mask m : masks) {
+				if (m == null) {
+					break;
+				}
+				else {
+					++masksSize;
+				}
+			}
+			Arrays.parallelSort(masks, 0, masksSize);
+		}
 		
 		return masks;
 		
