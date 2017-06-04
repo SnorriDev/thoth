@@ -2,13 +2,14 @@ package snorri.masking;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import snorri.main.Util;
 import snorri.world.Tile;
 import snorri.world.Vector;
 
-public class Mask {
+public class Mask implements Comparable<Mask>, Comparator<Mask> {
 	
 	//TODO can rework this so each tile stores one BufferedImage, which
 	//gets changed with setImage
@@ -41,11 +42,13 @@ public class Mask {
 	private boolean corner;
 	private BufferedImage texture;
 	private short bitmask;
+	//private double order; //low order masks go on top of high ones
 	
 	public Mask(Tile tile, boolean corner) {
 		this.tile = tile;
 		this.bitmask = (short) (corner ? 16 : 0);
 		this.corner = corner;
+		//this.setOrder(order);
 	}
 	
 	private void setTexture() {
@@ -86,5 +89,30 @@ public class Mask {
 		}
 		return out;
 	}
+
+	@Override
+	public int compareTo(Mask m) {
+		return -1 * tile.compareTo(m.tile);
+	}
+
+	@Override
+	public int compare(Mask m1, Mask m2) {
+		return m1.compareTo(m2);
+	}
+
+//	/**
+//	 * @return the order
+//	 */
+//	public double getOrder() {
+//		return order;
+//	}
+//
+//	@Deprecated
+//	/**
+//	 * @param order the order to set
+//	 */
+//	public void setOrder(double order) {
+//		this.order = order;
+//	}
 
 }

@@ -8,6 +8,7 @@ public class Debug {
 
 	public static final boolean ALL_HIEROGLYPHS_UNLOCKED = false;
 	public static final boolean RENDER_GRAPHS = false;
+	public static final boolean RENDER_TILE_GRID = false;
 	public static final boolean LOG_FOCUS = false;
 	public static final boolean LOG_WORLD = false;
 	public static final boolean LOG_PARSES = false;

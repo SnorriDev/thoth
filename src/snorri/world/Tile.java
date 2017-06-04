@@ -127,6 +127,12 @@ public class Tile implements Comparable<Tile>, Nominal {
 		gr.drawImage(type.getTexture(style), relPos.getX(), relPos.getY(), g);
 		
 		if (Debug.HIDE_MASKS || bitMasks == null) {
+			if (Debug.RENDER_TILE_GRID) {
+				//World w = g.getWorld();
+				gr.setColor(Color.BLUE);
+				gr.drawRect(relPos.getX(), relPos.getY(), Tile.WIDTH, Tile.WIDTH);
+				gr.setColor(Color.BLACK);
+			}
 			return;
 		}
 				
@@ -137,6 +143,13 @@ public class Tile implements Comparable<Tile>, Nominal {
 				break;
 			}
 			gr.drawImage(m.getTexture(), relPos.getX(), relPos.getY(), g);
+		}
+		
+		if (Debug.RENDER_TILE_GRID) {
+			//World w = g.getWorld();
+			gr.setColor(Color.BLUE);
+			gr.drawRect(relPos.getX(), relPos.getY(), Tile.WIDTH, Tile.WIDTH);
+			gr.setColor(Color.BLACK);
 		}
 		
 	}
@@ -229,6 +242,20 @@ public class Tile implements Comparable<Tile>, Nominal {
 			Main.error("comparing TileTypes from different layers");
 			return 0;
 		}
+		
+		if (type == null || t.type == null) {
+			if (type == null && t.type == null) {
+				return 0;
+			}
+			else if (type == null) {
+				return -1;
+			}
+			else {
+				return 1;
+			}
+		}
+		
+		
 		
 		//int n = TileType.getValues(type.getClass()).length;
 		//return Integer.compare(style * n + type.getId(),  t.style * n + t.type.getId()); //FIXME: the small number multiplication might cause a few bugs

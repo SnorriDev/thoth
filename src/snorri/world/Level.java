@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 
 import snorri.entities.Entity;
 import snorri.main.FocusedWindow;
@@ -404,10 +405,11 @@ public class Level implements Editable {
 		Mask[] masks = new Mask[8];
 		
 		short bitVal = 1;
+		int j = 0;
 		for (Vector v : Mask.NEIGHBORS) {
 			Tile t = getTileGrid(v.copy().add(x, y));
 			if (t != null && !t.getType().isAtTop() && tile.compareTo(t) > 0) {
-				for (int j = 0; j < masks.length; j++) {
+				for (j = 0; j < masks.length; j++) {
 					if (masks[j] == null) {
 						masks[j] = new Mask(t, false);
 					}
@@ -421,25 +423,30 @@ public class Level implements Editable {
 			bitVal *= 2;
 		}
 		
-		//TODO check to make sure there isn't an overriding mask
-		//TODO this is where corners are fucked up
-		
 		bitVal = 1;
+		int k = 0;
+		//int maxK = 0;
 		for (Vector v: Mask.CORNERS) {
 			Tile t = getTileGrid(v.copy().add(x, y));
 			if (t != null && !t.getType().isAtTop() && tile.compareTo(t) > 0) {
-				for (int j = 0; j < masks.length; j++) {
-					if (masks[j] == null) {
-						masks[j] = new Mask(t, true);
+//				if (masks.length > maxK) {
+//					maxK = masks.length;
+//				}
+				for (k = 0; k < masks.length; k++) {
+					if (masks[k] == null) {
+						masks[k] = new Mask(t, true);
 					}
-					if (masks[j].hasTile(t) && masks[j].isCorner()) {
-						masks[j].add(bitVal);
+					if (masks[k].hasTile(t) && masks[k].isCorner()) {
+						masks[k].add(bitVal);
 						break;
 					}
 				}
 			}
 			bitVal *= 2;
 		}
+		
+		//This fixes the corner mask glitches
+		Arrays.parallelSort(masks, 0, k+1);
 		
 		return masks;
 		
