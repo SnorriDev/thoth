@@ -2,7 +2,9 @@ package snorri.events;
 
 import snorri.entities.Entity;
 import snorri.inventory.Carrier;
+import snorri.semantics.Chaos;
 import snorri.semantics.Nominal;
+import snorri.semantics.Order;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -195,6 +197,16 @@ public class SpellEvent {
 	
 	public double getDeltaTime() {
 		return deltaTime;
+	}
+	
+	public int getEntropyLevel() {
+		if (instrument instanceof Order) {
+			return -1;
+		}
+		if (instrument instanceof Chaos) {
+			return 1;
+		}
+		return 0;
 	}
 	
 }
