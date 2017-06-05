@@ -443,18 +443,18 @@ public class Level implements Editable {
 		}
 		
 		//FIXME: This fixes the corner mask glitches, but it is kind of inefficient, proabably should be optimized
-		if (k+j > 1) {
-			int masksSize = 0;
-			for (Mask m : masks) {
-				if (m == null) {
-					break;
-				}
-				else {
-					++masksSize;
-				}
+		//if (k+j > 1) {
+		int masksSize = 0;
+		for (Mask m : masks) {
+			if (m == null) {
+				break;
 			}
-			Arrays.parallelSort(masks, 0, masksSize);
+			else {
+				++masksSize;
+			}
 		}
+		Arrays.parallelSort(masks, 0, masksSize);
+		//}
 		
 		return masks;
 		
