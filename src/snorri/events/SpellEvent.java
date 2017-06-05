@@ -1,7 +1,10 @@
 package snorri.events;
 
 import snorri.entities.Entity;
+import snorri.inventory.Carrier;
+import snorri.semantics.Chaos;
 import snorri.semantics.Nominal;
+import snorri.semantics.Order;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -25,7 +28,7 @@ public class SpellEvent {
 	private double speedModifier = 1;//modifies velocities
 	private double healthInteractModifier = 1; //modifies healing/damage effects
 	
-	public interface Caster {
+	public interface Caster extends Carrier {
 		
 		public Vector getAimPosition();
 		
@@ -194,6 +197,16 @@ public class SpellEvent {
 	
 	public double getDeltaTime() {
 		return deltaTime;
+	}
+	
+	public int getEntropyLevel() {
+		if (instrument instanceof Order) {
+			return -1;
+		}
+		if (instrument instanceof Chaos) {
+			return 1;
+		}
+		return 0;
 	}
 	
 }
