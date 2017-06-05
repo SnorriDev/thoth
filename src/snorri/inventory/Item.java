@@ -228,10 +228,14 @@ public abstract class Item implements Droppable {
 		return false;
 	}
 
+	/**
+	 * 
+	 * @param other
+	 * 	The item to compare against
+	 * @return <code>true</code> iff the items have the same <code>ItemType</code>
+	 */
 	@Override
 	public boolean equals(Object other) {
-		//TODO perhaps check if spell and nickname are equal?
-		//this will require equality for spells, which could be hard
 		if (!(other instanceof Item)) {
 			return false;
 		}

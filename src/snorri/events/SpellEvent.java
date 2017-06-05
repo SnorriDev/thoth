@@ -1,6 +1,7 @@
 package snorri.events;
 
 import snorri.entities.Entity;
+import snorri.inventory.Carrier;
 import snorri.semantics.Nominal;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -25,7 +26,7 @@ public class SpellEvent {
 	private double speedModifier = 1;//modifies velocities
 	private double healthInteractModifier = 1; //modifies healing/damage effects
 	
-	public interface Caster {
+	public interface Caster extends Carrier {
 		
 		public Vector getAimPosition();
 		
