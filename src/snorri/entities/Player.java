@@ -34,7 +34,7 @@ public class Player extends Unit implements Carrier, Caster {
 	private static final Image GREY_HEART = Main.getImage("/textures/hud/greyHeart.png");
 
 	private static final int HEALTH_RES = 20;
-	private static final int INTERACT_RANGE = 300;
+	private static final int INTERACT_RANGE = 100;
 	protected static final int PLAYER_BASE_SPEED = 190;
 	
 	private static final long serialVersionUID = 1L;
@@ -44,6 +44,12 @@ public class Player extends Unit implements Carrier, Caster {
 	private static final String[] DEATH_SOUNDS = {"/sound/arrow.wav"};
 	
 	private Inventory inventory;
+	
+	public interface Interactor {
+		
+		public void onInteract(InteractEvent e);
+		
+	}
 	
 	public Player(Vector pos) {
 		
@@ -95,13 +101,20 @@ public class Player extends Unit implements Carrier, Caster {
 			
 		});
 		
+		Entity checker = new Entity(pos, INTERACT_RANGE);
+		for (Entity e : world.getEntityTree().getAllCollisions(checker)) {
+			if (e instanceof Interactor) {
+				e.setBorderVisible(true);
+			}
+		}
+		
 		//check if we're hitting a desk
 		if (Key.SPACE.isPressed()) {
 			
 			Vector mousePos = window.getMousePosAbsolute();
 			Entity selected = world.getEntityTree().getFirstCollision(mousePos);
-			if (selected != null && selected.pos.distance(pos) <= INTERACT_RANGE) {
-				selected.onInteract(new InteractEvent(world, this));
+			if (selected != null && selected instanceof Interactor && selected.pos.distance(pos) <= INTERACT_RANGE) {
+				((Interactor) selected).onInteract(new InteractEvent(world, this));
 				return;
 			}
 			

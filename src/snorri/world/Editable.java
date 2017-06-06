@@ -23,5 +23,7 @@ public interface Editable extends Savable {
 	public Editable getXReflected();
 
 	public List<Entity> getEntities();
+	
+	public Vector getDimensions();
 		
 }

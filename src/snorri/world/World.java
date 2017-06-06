@@ -195,8 +195,8 @@ public class World implements Playable, Editable {
 		return new Level[] { background, midground, foreground };
 	}
 
-	public void add(Entity e) {
-		col.insert(e, pathfinding);
+	public boolean add(Entity e) {
+		return col.insert(e, pathfinding);
 	}
 
 	/**
@@ -432,6 +432,11 @@ public class World implements Playable, Editable {
 
 	public void wrapGridUpdate(int x, int y, Tile tile) {
 		wrapGridUpdate(new Vector(x, y), tile);
+	}
+
+	@Override
+	public Vector getDimensions() {
+		return getLevel().getDimensions();
 	}
 
 }

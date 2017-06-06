@@ -14,7 +14,6 @@ import snorri.animations.Animation;
 import snorri.collisions.CircleCollider;
 import snorri.collisions.Collider;
 import snorri.events.CollisionEvent;
-import snorri.events.InteractEvent;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
@@ -87,6 +86,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	/** used to determine which entities should be rendered over others **/
 	protected int z;
 	protected String tag;
+	protected boolean borderVisible = false;
 	
 	private boolean flying;
 	protected boolean killed = false;
@@ -144,7 +144,9 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			if (checkCollisions && !e.shouldIgnoreCollisions() && world.getEntityTree().getFirstCollision(e) != null) {
 				return null;
 			}
-			world.add(e);
+			if (!world.add(e)) {
+				return null;
+			}
 			return e;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
@@ -229,10 +231,15 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public void update(World world, double d) {
 	}
 	
+	public void setBorderVisible(boolean flag) {
+		borderVisible = flag;
+	}
+	
 	public void renderAround(FocusedWindow g, Graphics gr, double timeDelta) {
 		
-		if (Debug.SHOW_COLLIDERS || animation == null) {
+		if (Debug.SHOW_COLLIDERS || borderVisible || animation == null) {
 			collider.render(g, gr);
+			borderVisible = false;
 		}
 		
 		if (animation == null) {
@@ -420,9 +427,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 
 	public void onExplosion(CollisionEvent e) {
-	}
-	
-	public void onInteract(InteractEvent e) {
 	}
 
 }

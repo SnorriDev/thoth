@@ -51,7 +51,8 @@ public class CreateObject extends TransVerbDef {
 				return false;
 			}
 			boolean checkCollisions = c != Spike.class;
-			return Entity.spawnNew(e.getWorld(), e.getLocative(), c, checkCollisions) != null;
+			Entity spawned = Entity.spawnNew(e.getWorld(), e.getLocative(), c, checkCollisions);
+			return spawned != null;
 		}
 		
 		return false;

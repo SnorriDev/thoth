@@ -47,9 +47,6 @@ import snorri.world.Vector;
 import snorri.world.World;
 import snorri.world.BackgroundElement;
 
-//TODO: add image to world feature
-//TODO: fix overflow with a 2d boolean array (look at methods in Level which compute pathfinding graphs)
-
 public class LevelEditor extends FocusedWindow implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -144,7 +141,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 		repaint();
 
-		focus = new Entity(new Vector(8, 8));
+		focus = new Entity(new Vector(20, 20));
 
 		lastRenderTime = getTimestamp();
 		
@@ -376,6 +373,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			} else {
 				env = new World();
 			}
+			centerCamera();
 			break;
 		case "Generate":
 			DialogMap inputs = new DialogMap();
@@ -400,18 +398,21 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 					| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
 				Main.error("generator " + gen + " has no vector size constructor");
 			}
+			centerCamera();
 			break;
 		case "Open":
 			World w1 = World.wrapLoad();
 			if (w1 != null) {
 				env = w1;
 			}
+			centerCamera();
 			break;
 		case "Open Level":
 			Level l1 = Level.wrapLoad();
 			if (l1 != null) {
 				env = l1;
 			}
+			centerCamera();
 			break;
 		case "Save":
 			if (env == null) {
@@ -458,6 +459,11 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 		repaint();
 
+	}
+	
+	//FIXME why isn't this working? debugging this would be nice
+	public void centerCamera() {
+		focus.getPos().add(env.getDimensions().copy().divide(2));
 	}
 
 	@Override
@@ -506,8 +512,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				}
 				if (focus.getPos().getY() >= env.getLevel(selectedTile.getType().getLayer()).getDimensions().getY() * Tile.WIDTH + SCALE_FACTOR) {
 					canGoDown = false;
-				}
-				
+				}	
 				
 				if (states.getMovementVector().getX() < 0 && !canGoLeft) {
 					focus.getPos().sub(states.getMovementVector().getProjectionX().scale(speed));

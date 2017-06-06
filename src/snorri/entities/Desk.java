@@ -2,12 +2,13 @@ package snorri.entities;
 
 import snorri.animations.Animation;
 import snorri.collisions.RectCollider;
+import snorri.entities.Player.Interactor;
 import snorri.events.InteractEvent;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.world.Vector;
 
-public class Desk extends Entity {
+public class Desk extends Entity implements Interactor {
 
 	/**
 	 * Desks are the stations where you can edit inventory and spells
