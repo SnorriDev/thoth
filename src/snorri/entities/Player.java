@@ -1,5 +1,6 @@
 package snorri.entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -48,6 +49,8 @@ public class Player extends Unit implements Carrier, Caster {
 	public interface Interactor {
 		
 		public void onInteract(InteractEvent e);
+		
+		public void setBorderColor(Color color);
 		
 	}
 	
@@ -104,7 +107,7 @@ public class Player extends Unit implements Carrier, Caster {
 		Entity checker = new Entity(pos, INTERACT_RANGE);
 		for (Entity e : world.getEntityTree().getAllCollisions(checker)) {
 			if (e instanceof Interactor) {
-				e.setBorderVisible(true);
+				e.setBorderColor(Color.GREEN);
 			}
 		}
 		

@@ -1,5 +1,6 @@
 package snorri.entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
@@ -86,7 +87,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	/** used to determine which entities should be rendered over others **/
 	protected int z;
 	protected String tag;
-	protected boolean borderVisible = false;
 	
 	private boolean flying;
 	protected boolean killed = false;
@@ -231,15 +231,15 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public void update(World world, double d) {
 	}
 	
-	public void setBorderVisible(boolean flag) {
-		borderVisible = flag;
+	public void setBorderColor(Color color) {
+		collider.setColor(color);
 	}
 	
 	public void renderAround(FocusedWindow g, Graphics gr, double timeDelta) {
 		
-		if (Debug.SHOW_COLLIDERS || borderVisible || animation == null) {
+		if (Debug.SHOW_COLLIDERS || collider.hasColor() || animation == null) {
 			collider.render(g, gr);
-			borderVisible = false;
+			collider.setColor(null);
 		}
 		
 		if (animation == null) {

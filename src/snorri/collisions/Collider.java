@@ -15,6 +15,7 @@ public abstract class Collider implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	protected Entity focus;
+	protected Color border = null;
 	
 	protected static final Color BORDER_COLOR = Color.GREEN;
 	
@@ -42,6 +43,14 @@ public abstract class Collider implements Serializable {
 		Area a = new Area(other);
 		a.subtract(new Area(getShape()));
 		return a.isEmpty();
+	}
+	
+	public void setColor(Color color) {
+		border = color;
+	}
+	
+	public boolean hasColor() {
+		return border != null;
 	}
 		
 	/**
