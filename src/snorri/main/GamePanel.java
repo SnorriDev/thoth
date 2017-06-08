@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
-import java.lang.Thread.UncaughtExceptionHandler;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -16,49 +15,25 @@ import snorri.world.Vector;
 public abstract class GamePanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private static final int FRAME_DELTA = 15; // 33 -> 30 FPS (20 -> 50 FPS
 	public static final int MARGIN = 20;
 
 	private static final Color BACKGROUND_COLOR = new Color(255, 242, 197);
 	private static final Color BUTTON_COLOR = new Color(55, 135, 206);
 
-	private boolean stopped = false;
-
 	protected GamePanel() {
 		setBackground(BACKGROUND_COLOR);
 	}
 
-	public static double getBaseDelta() {
-		return FRAME_DELTA / 1000d;
+	/**
+	 * End any background threads.
+	 */
+	protected void stopBackgroundThread() {
 	}
-
-	protected void startAnimation() {
-
-		Thread thread = new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				onStart();
-				try {
-					while (!stopped) {
-						onFrame();
-						Thread.sleep(FRAME_DELTA);
-					}
-				} catch (InterruptedException e) {
-					Main.error("thread interrupted");
-				}
-			}
-		});
-		
-		thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-			@Override
-			public void uncaughtException(Thread t, Throwable e) {
-				Main.error("unhandled exception");
-				e.printStackTrace();
-			}
-		});
-		thread.start();
-
+	
+	/**
+	 * Windows that have render or update background threads should override this.
+	 */
+	protected void startBackgroundThread() {
 	}
 
 	/**
@@ -85,10 +60,6 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 		return inputs;
 	}
 
-	public void onClose() {
-		stopped = true;
-	}
-
 	protected JButton createButton(String text) {
 		JButton button = new JButton(text);
 		button.setOpaque(true);
@@ -105,12 +76,6 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 
 	public Vector getCenter() {
 		return getDimensions().divide(2);
-	}
-
-	protected void onStart() {
-	}
-
-	protected void onFrame() {
 	}
 
 	/**

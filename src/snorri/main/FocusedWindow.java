@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.lang.Thread.UncaughtExceptionHandler;
 
 import snorri.dialog.Dialog;
 import snorri.entities.Entity;
@@ -22,10 +23,11 @@ import snorri.world.World;
 public abstract class FocusedWindow extends GamePanel implements MouseListener, KeyListener {
 	
 	private static final long serialVersionUID = 1L;
+	private static final int FRAME_DELTA = 15; // 33 -> 30 FPS (20 -> 50 FPS
 		
 	protected KeyStates states = new KeyStates();
 	protected long lastRenderTime;
-	private boolean paused = false;
+	private boolean paused = false, stopped = false;
 	
 	public FocusedWindow() {
 		super();
@@ -33,7 +35,7 @@ public abstract class FocusedWindow extends GamePanel implements MouseListener, 
 		addMouseListener(this);
 		addKeyListener(this);
 		lastRenderTime = getTimestamp();
-		startAnimation();
+		startBackgroundThread();
 	}
 	
 	public synchronized void pause() {
@@ -134,6 +136,49 @@ public abstract class FocusedWindow extends GamePanel implements MouseListener, 
 		return null;
 		
 	}
+	
+	public static double getBaseDelta() {
+		return FRAME_DELTA / 1000d;
+	}
+	
+	@Override
+	protected void startBackgroundThread() {
+
+		Thread thread = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				onStart();
+				try {
+					while (!stopped) {
+						onFrame();
+						Thread.sleep(FRAME_DELTA);
+					}
+				} catch (InterruptedException e) {
+					Main.error("thread interrupted");
+				}
+			}
+		});
+		
+		thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+			@Override
+			public void uncaughtException(Thread t, Throwable e) {
+				Main.error("unhandled exception");
+				e.printStackTrace();
+			}
+		});
+		thread.start();
+
+	}
+	
+	@Override
+	public void stopBackgroundThread() {
+		stopped = true;
+	}
+	
+	protected abstract void onStart();
+
+	protected abstract void onFrame();
 
 	public abstract World getWorld();
 

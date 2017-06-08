@@ -140,7 +140,7 @@ public class World implements Playable, Editable {
 	}
 
 	@Override
-	public void update(Entity focus, double d) {
+	public synchronized void update(Entity focus, double d) {
 
 		if (Debug.LOG_WORLD) {
 			Main.log("world update");

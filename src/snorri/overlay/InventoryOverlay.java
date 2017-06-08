@@ -507,8 +507,8 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	}
 	
 	@Override
-	public void onClose() {
-		super.onClose();
+	public void stopBackgroundThread() {
+		super.stopBackgroundThread();
 		for (String spell : spellsEnchanted) {
 			TriggerType.ENCHANT.activate(spell);
 		}

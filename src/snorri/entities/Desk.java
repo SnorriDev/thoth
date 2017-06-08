@@ -1,7 +1,5 @@
 package snorri.entities;
 
-import java.awt.Color;
-
 import snorri.animations.Animation;
 import snorri.collisions.RectCollider;
 import snorri.entities.Player.Interactor;

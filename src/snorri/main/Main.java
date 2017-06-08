@@ -244,7 +244,7 @@ public class Main {
 	 */
 	public static final void setWindow(GamePanel newWindow) {
 		if (window != null) {
-			window.onClose();
+			window.stopBackgroundThread();
 			getLayeredPane().remove(window);
 			getLayeredPane().revalidate();
 		}
@@ -265,7 +265,7 @@ public class Main {
 	 */
 	public static final void setOverlay(GamePanel newOverlay) {
 		if (outerOverlay != null) {
-			outerOverlay.onClose();
+			outerOverlay.stopBackgroundThread();
 			getLayeredPane().remove(outerOverlay);
 			getLayeredPane().revalidate();
 		}

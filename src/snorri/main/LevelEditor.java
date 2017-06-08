@@ -1711,4 +1711,8 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		
 		return x;
 	}
+
+	@Override
+	protected void onStart() {
+	}
 }
