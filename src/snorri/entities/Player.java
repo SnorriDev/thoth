@@ -7,6 +7,7 @@ import javax.swing.SwingUtilities;
 
 import snorri.animations.Animation;
 import snorri.events.InteractEvent;
+import snorri.events.SpellEvent;
 import snorri.events.SpellEvent.Caster;
 import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
@@ -130,13 +131,13 @@ public class Player extends Unit implements Carrier, Caster {
 	}
 	
 	@Override
-	public Object get(World world, AbstractSemantics attr) {
+	public Object get(AbstractSemantics attr, SpellEvent e) {
 
 		if (attr == AbstractSemantics.WEAPON) {
 			return inventory.getWeapon();
 		}
 		
-		return super.get(world, attr);
+		return super.get(attr, e);
 		
 	}
 	

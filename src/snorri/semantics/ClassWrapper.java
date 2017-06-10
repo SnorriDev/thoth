@@ -1,5 +1,7 @@
 package snorri.semantics;
 
+import snorri.entities.Entity;
+import snorri.events.SpellEvent;
 import snorri.main.Util;
 
 /**
@@ -19,6 +21,30 @@ public class ClassWrapper implements Nominal {
 	@Override
 	public String toString() {
 		return "a " + Util.clean(rawClass.getSimpleName());
+	}
+	
+	@Override
+	public Object get(AbstractSemantics attr, SpellEvent e) {
+		
+		switch (attr) {
+		case ONE:
+			return resolve(e);
+		case POSITION:
+			Entity ent = resolve(e);
+			return (ent == null) ? null : ent.getPos();
+		default:
+			return Nominal.super.get(attr, e);
+		}
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Entity resolve(SpellEvent e) {
+		if (Entity.class.isAssignableFrom(rawClass)) {
+			return e.resolveEntity((Class<? extends Entity>) rawClass);
+		}
+		return null;
+		
 	}
 	
 }

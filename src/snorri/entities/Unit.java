@@ -191,13 +191,13 @@ public abstract class Unit extends Entity implements Walker {
 	}
 	
 	@Override
-	public Object get(World world, AbstractSemantics attr) {
+	public Object get(AbstractSemantics attr, SpellEvent e) {
 		
 		if (attr == AbstractSemantics.HEALTH) {
 			return (int) health;
 		}
 		
-		return super.get(world, attr);
+		return super.get(attr, e);
 		
 	}
 	

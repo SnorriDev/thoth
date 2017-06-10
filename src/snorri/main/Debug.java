@@ -32,7 +32,7 @@ public class Debug {
 	}
 
 	/**
-	 * Use this to print things for debugging purposes
+	 * Use this to print temporary debugging messages to the game log.
 	 * @param o
 	 * 	the object to print
 	 */
@@ -41,7 +41,7 @@ public class Debug {
 	}
 
 	/**
-	 * Use this to print nice messages to the game log
+	 * Use this to print long-term messages to the game log.
 	 * @param s
 	 * 	the string to print
 	 */
@@ -50,7 +50,7 @@ public class Debug {
 	}
 
 	/**
-	 * Use this to print error messages to the game log
+	 * Use this to print error messages to the game log.
 	 * @param s
 	 * 	the error string to print
 	 */

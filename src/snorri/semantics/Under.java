@@ -9,7 +9,7 @@ public class Under extends PrepDef {
 	@Override
 	public SpellEvent eval(Nominal obj, SpellEvent e) {
 		
-		Object pos = obj.get(e.getWorld(), AbstractSemantics.POSITION);
+		Object pos = obj.get(AbstractSemantics.POSITION, e);
 				
 		if (pos instanceof Vector) {
 			Vector v = ((Vector) pos).copy().add(new Vector(0, DISPLACE_DISTANCE));

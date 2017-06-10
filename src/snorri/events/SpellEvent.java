@@ -1,7 +1,10 @@
 package snorri.events;
 
+import snorri.collisions.Collider;
+import snorri.collisions.RectCollider;
 import snorri.entities.Entity;
 import snorri.inventory.Carrier;
+import snorri.main.Main;
 import snorri.semantics.Chaos;
 import snorri.semantics.Nominal;
 import snorri.semantics.Order;
@@ -208,6 +211,13 @@ public class SpellEvent {
 			return 1;
 		}
 		return 0;
+	}
+	
+	public <E extends Entity> E resolveEntity(Class<E> c) {
+		//TODO narrow the search range
+		Collider collider = new RectCollider(new Vector(Main.getWindow()));
+		Entity sweeper = new Entity(getSecondPerson().getPos(), collider);
+		return world.getEntityTree().getFirstCollision(sweeper, c);
 	}
 	
 }

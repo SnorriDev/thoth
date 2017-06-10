@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import snorri.audio.ClipWrapper;
+import snorri.events.SpellEvent;
 import snorri.main.Util;
 import snorri.semantics.Nominal;
 
@@ -152,7 +153,7 @@ public interface TileType extends Nominal {
 	}
 	
 	@Override
-	public default Object get(World world, AbstractSemantics attr) {
+	public default Object get(AbstractSemantics attr, SpellEvent e) {
 		if (attr == AbstractSemantics.FLOOD && isLiquid()) {
 			return new Tile(this);
 		}
@@ -161,7 +162,7 @@ public interface TileType extends Nominal {
 			return new Tile(this, 1);
 		}
 		
-		return Nominal.super.get(world, attr);
+		return Nominal.super.get(attr, e);
 	}
 	
 	public static TileType[] getValues(Class<? extends TileType> c) {

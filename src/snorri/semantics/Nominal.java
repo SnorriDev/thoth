@@ -1,13 +1,13 @@
 package snorri.semantics;
 
+import snorri.events.SpellEvent;
 import snorri.main.Util;
-import snorri.world.World;
 
 public interface Nominal {
 	
 	public enum AbstractSemantics implements Nominal {
 		
-		POSITION, WEAPON, TILE, NAME, SOURCE, HEALTH, FLOOD, STORM;
+		POSITION, WEAPON, TILE, NAME, SOURCE, HEALTH, FLOOD, STORM, ONE;
 
 		@Override
 		public String toString() {
@@ -31,7 +31,7 @@ public interface Nominal {
 		
 	}
 
-	default Object get(World world, AbstractSemantics attr) {
+	default Object get(AbstractSemantics attr, SpellEvent e) {
 		
 		if (attr == AbstractSemantics.NAME) {
 			return new NameConstant(toString());

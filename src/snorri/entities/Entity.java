@@ -15,6 +15,7 @@ import snorri.collisions.CircleCollider;
 import snorri.collisions.Collider;
 import snorri.entities.Player.Interactor;
 import snorri.events.CollisionEvent;
+import snorri.events.SpellEvent;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.GameWindow;
@@ -257,16 +258,16 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 
 	@Override
-	public Object get(World world, AbstractSemantics attr) {
+	public Object get(AbstractSemantics attr, SpellEvent e) {
 		
 		if (attr == AbstractSemantics.POSITION) {
 			return pos;
 		}
 		if (attr == AbstractSemantics.TILE) {
-			return world.getLevel().getTile(pos); //FIXME
+			return e.getWorld().getLevel().getTile(pos);
 		}
 		
-		return Nominal.super.get(world, attr);
+		return Nominal.super.get(attr, e);
 	}
 	
 	/**

@@ -1,6 +1,7 @@
 package snorri.entities;
 
 import snorri.events.CollisionEvent;
+import snorri.events.SpellEvent;
 import snorri.events.SpellEvent.Caster;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
@@ -104,13 +105,13 @@ public class Projectile extends Detector implements Walker {
 	}
 	
 	@Override
-	public Object get(World world, AbstractSemantics attr) {
+	public Object get(AbstractSemantics attr, SpellEvent e) {
 		
 		if (attr == AbstractSemantics.SOURCE) {
 			return root;
 		}
 		
-		return super.get(world, attr);
+		return super.get(attr, e);
 		
 	}
 
