@@ -81,20 +81,16 @@ public class Projectile extends Detector implements Walker {
 			((Unit) e.getTarget()).damage(weapon.getSharpness());
 		}
 		
-		kill(e.getWorld());
+		e.getWorld().delete(this);
 		
 	}
 	
 	@Override
-	public void kill(World world) {
+	public boolean onDelete(World world) {
 		
-		//TODO unify this with onDelete
-		
-		if (killed) { //prevent infinite loops when the spell kills this object
-			return;
+		if (!super.onDelete(world)) {
+			return false;
 		}
-		
-		super.kill(world);
 		
 		if (root instanceof Caster && orb != null) {
 			Object output = orb.useSpell(world, (Caster) root, this);
@@ -102,6 +98,7 @@ public class Projectile extends Detector implements Walker {
 				Debug.log("orb output: " + output);
 			}
 		}
+		return true;
 		
 	}
 	

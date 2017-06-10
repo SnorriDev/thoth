@@ -237,10 +237,9 @@ public abstract class Unit extends Entity implements Walker {
 		return team;
 	}
 	
-	@Override
 	public void kill(World world) {
 		damage(100);
-		super.kill(world);
+		world.delete(this);
 	}
 	
 	public String[] getSpeechSounds() {

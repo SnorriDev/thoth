@@ -92,12 +92,12 @@ public abstract class GamePanel extends JPanel implements ActionListener, FocusL
 	
 	@Override
 	public void focusGained(FocusEvent e) {
-		Debug.log("focus gained in " + getClass().getSimpleName());
+//		Debug.log("focus gained in " + getClass().getSimpleName());
 	}
 
 	@Override
     public void focusLost(FocusEvent e) {
-		Debug.log("focus lost in " + getClass().getSimpleName());
+//		Debug.log("focus lost in " + getClass().getSimpleName());
     }
 
 }
