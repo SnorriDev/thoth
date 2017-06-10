@@ -258,7 +258,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 
 	@Override
-	public Object get(AbstractSemantics attr, SpellEvent e) {
+	public Nominal get(AbstractSemantics attr, SpellEvent e) {
 		
 		if (attr == AbstractSemantics.POSITION) {
 			return pos;

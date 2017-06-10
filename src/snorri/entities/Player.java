@@ -22,6 +22,7 @@ import snorri.main.FocusedWindow;
 import snorri.main.GamePanel;
 import snorri.main.GameWindow;
 import snorri.main.Main;
+import snorri.semantics.Nominal;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -131,7 +132,7 @@ public class Player extends Unit implements Carrier, Caster {
 	}
 	
 	@Override
-	public Object get(AbstractSemantics attr, SpellEvent e) {
+	public Nominal get(AbstractSemantics attr, SpellEvent e) {
 
 		if (attr == AbstractSemantics.WEAPON) {
 			return inventory.getWeapon();

@@ -1,13 +1,13 @@
 package snorri.inventory;
 
 import java.awt.Image;
-import java.io.Serializable;
 
 import snorri.animations.Animation;
 import snorri.inventory.Item.ItemType;
 import snorri.parser.Lexicon;
+import snorri.semantics.Nominal;
 
-public interface Droppable extends Serializable, Comparable<Droppable> {
+public interface Droppable extends Comparable<Droppable>, Nominal {
 	
 	public static final Animation SPARKLE = new Animation("/textures/animations/sparkle");
 	

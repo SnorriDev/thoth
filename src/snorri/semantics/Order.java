@@ -8,12 +8,12 @@ import snorri.events.SpellEvent;
  * @author snorri
  *
  */
-//TODO this route and other route have lots of specialization
-//upgrade this word over time?
 public class Order implements Nominal {
 
+	private static final long serialVersionUID = 1L;
+
 	@Override
-	public Object get(AbstractSemantics attr, SpellEvent e) {
+	public Nominal get(AbstractSemantics attr, SpellEvent e) {
 		
 		switch(attr) {
 		

@@ -7,6 +7,7 @@ import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.main.Debug;
 import snorri.semantics.Go.Walker;
+import snorri.semantics.Nominal;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -105,7 +106,7 @@ public class Projectile extends Detector implements Walker {
 	}
 	
 	@Override
-	public Object get(AbstractSemantics attr, SpellEvent e) {
+	public Nominal get(AbstractSemantics attr, SpellEvent e) {
 		
 		if (attr == AbstractSemantics.SOURCE) {
 			return root;

@@ -153,7 +153,7 @@ public interface TileType extends Nominal {
 	}
 	
 	@Override
-	public default Object get(AbstractSemantics attr, SpellEvent e) {
+	public default Nominal get(AbstractSemantics attr, SpellEvent e) {
 		if (attr == AbstractSemantics.FLOOD && isLiquid()) {
 			return new Tile(this);
 		}

@@ -1,9 +1,11 @@
 package snorri.semantics;
 
+import java.io.Serializable;
+
 import snorri.events.SpellEvent;
 import snorri.main.Util;
 
-public interface Nominal {
+public interface Nominal extends Serializable {
 	
 	public enum AbstractSemantics implements Nominal {
 		
@@ -18,6 +20,7 @@ public interface Nominal {
 	
 	public static class NameConstant implements Nominal {
 		
+		private static final long serialVersionUID = 1L;
 		private final String name;
 		
 		public NameConstant(String name) {
@@ -31,7 +34,7 @@ public interface Nominal {
 		
 	}
 
-	default Object get(AbstractSemantics attr, SpellEvent e) {
+	default Nominal get(AbstractSemantics attr, SpellEvent e) {
 		
 		if (attr == AbstractSemantics.NAME) {
 			return new NameConstant(toString());

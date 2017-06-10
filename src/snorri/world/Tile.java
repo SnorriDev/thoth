@@ -18,6 +18,8 @@ import snorri.world.TileType;
 
 public class Tile implements Comparable<Tile>, Nominal {
 	
+	private static final long serialVersionUID = 1L;
+	
 	public static final int	WIDTH	= 64;
 	public static final BufferedImage DEFAULT_TEXTURE = Main.DEFAULT_TEXTURE;
 	public static final BufferedImage DEFAULT_BACKGROUND_TEXTURE = getImage("/textures/tiles/default_background00.png");
