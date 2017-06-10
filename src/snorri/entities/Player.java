@@ -34,9 +34,7 @@ public class Player extends Unit implements Carrier, Caster {
 	private static final Image GREY_HEART = Main.getImage("/textures/hud/greyHeart.png");
 
 	private static final int HEALTH_RES = 20;
-	private static final int INTERACT_RANGE = 300;
 	protected static final int PLAYER_BASE_SPEED = 190;
-	
 	private static final long serialVersionUID = 1L;
 	
 	private static final String[] SPEECH_SOUNDS = {"/sound/arrow.wav"};
@@ -44,6 +42,27 @@ public class Player extends Unit implements Carrier, Caster {
 	private static final String[] DEATH_SOUNDS = {"/sound/arrow.wav"};
 	
 	private Inventory inventory;
+	
+	public interface Interactor {
+		
+		public static final int INTERACT_RANGE = 100;
+		public static final int WIDE_INTERACT_RANGE = INTERACT_RANGE + Math.min(Unit.RADIUS_X, Unit.RADIUS_Y);
+
+		public void onInteract(InteractEvent e);
+				
+		public Vector getPos();
+		
+		/**
+		 * This function sometimes returns false negative results. But it holds generally that 
+		 * <code>inRange(p)</code> => the interactor is in range to interact with <code>p</code>.
+		 * @param p
+		 * @return
+		 */
+		default boolean inRange(Player p) {
+			return getPos().distance(p.pos) < Interactor.WIDE_INTERACT_RANGE;
+		}
+		
+	}
 	
 	public Player(Vector pos) {
 		
@@ -79,10 +98,10 @@ public class Player extends Unit implements Carrier, Caster {
 	public void update(World world, double deltaTime) {
 				
 		if (Debug.LOG_FOCUS) {
-			Main.log("main player updated");
+			Debug.log("main player updated");
 		}
 		
-		FocusedWindow window = (FocusedWindow) Main.getWindow();
+		FocusedWindow<?> window = (FocusedWindow<?>) Main.getWindow();
 		super.update(world, deltaTime);
 		inventory.update(deltaTime);
 				
@@ -95,23 +114,18 @@ public class Player extends Unit implements Carrier, Caster {
 			
 		});
 		
-		//check if we're hitting a desk
-		if (Key.SPACE.isPressed()) {
-			
-			Vector mousePos = window.getMousePosAbsolute();
-			Entity selected = world.getEntityTree().getFirstCollision(mousePos);
-			if (selected != null && selected.pos.distance(pos) <= INTERACT_RANGE) {
-				selected.onInteract(new InteractEvent(world, this));
-				return;
-			}
-			
-		}
-		
 		inventory.checkKeys();
 		
 		Vector movement = window.getMovementVector();
 		Vector dir = window.getShotDirection();
 		inventory.attack(world, this, movement, dir);
+		
+		//TODO move all input checking to a new broadcastBinding event
+		Entity checker = new Entity(pos, Interactor.INTERACT_RANGE); //construct this new entity because positions can be assigned/pointers fucked up
+		Interactor selected = world.getEntityTree().getFirstCollision(checker, Interactor.class);
+		if (selected != null && Key.SPACE.isPressed()) {
+			((Interactor) selected).onInteract(new InteractEvent(world, this));
+		}
 				
 	}
 	
@@ -167,7 +181,7 @@ public class Player extends Unit implements Carrier, Caster {
 
 	@Override
 	public Vector getAimPosition() {
-		return ((FocusedWindow) Main.getWindow()).getMousePosAbsolute();
+		return ((FocusedWindow<?>) Main.getWindow()).getMousePosAbsolute();
 	}
 
 }

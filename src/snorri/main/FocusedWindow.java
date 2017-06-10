@@ -1,10 +1,14 @@
 package snorri.main;
 
 import java.awt.MouseInfo;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.lang.Thread.UncaughtExceptionHandler;
+
+import javax.swing.SwingUtilities;
 
 import snorri.dialog.Dialog;
 import snorri.entities.Entity;
@@ -12,6 +16,7 @@ import snorri.inventory.Inventory;
 import snorri.keyboard.Key;
 import snorri.keyboard.KeyStates;
 import snorri.keyboard.MouseButton;
+import snorri.main.Main.ResizeListener;
 import snorri.overlay.DialogOverlay;
 import snorri.overlay.InventoryOverlay;
 import snorri.overlay.PauseOverlay;
@@ -19,21 +24,24 @@ import snorri.world.Playable;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public abstract class FocusedWindow extends GamePanel implements MouseListener, KeyListener {
+public abstract class FocusedWindow<F extends Entity> extends GamePanel implements MouseListener, KeyListener {
 	
 	private static final long serialVersionUID = 1L;
+	private static final int FRAME_DELTA = 15; // 33 -> 30 FPS (20 -> 50 FPS
 		
-	protected KeyStates states = new KeyStates();
-	protected long lastRenderTime;
-	private boolean paused = false;
+	protected final KeyStates states = new KeyStates();
+	protected final F focus;
 	
-	public FocusedWindow() {
+	protected long lastRenderTime;
+	private boolean paused = false, stopped = false;
+	
+	public FocusedWindow(F focus) {
 		super();
 		setFocusable(true);
 		addMouseListener(this);
 		addKeyListener(this);
+		this.focus = focus;
 		lastRenderTime = getTimestamp();
-		startAnimation();
 	}
 	
 	public synchronized void pause() {
@@ -49,25 +57,42 @@ public abstract class FocusedWindow extends GamePanel implements MouseListener, 
 	}
 	
 	public synchronized void showDialog(Dialog dialog) {
-		Main.setOverlay(new DialogOverlay(this, dialog));
-		paused = true;
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				Main.setOverlay(new DialogOverlay(FocusedWindow.this, dialog));
+				paused = true;
+			}
+		});
 	}
 	
 	public synchronized void openInventory(Inventory inv) {
-		Main.setOverlay(new InventoryOverlay(this, inv));
-		paused = true;
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				Main.setOverlay(new InventoryOverlay(FocusedWindow.this, inv));
+				paused = true;
+			}
+		});
 	}
 	
 	public synchronized void editInventory(Inventory inv) {
-		Main.setOverlay(new InventoryOverlay(this, inv, true));
-		paused = true;
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				Main.setOverlay(new InventoryOverlay(FocusedWindow.this, inv, true));
+				paused = true;
+			}
+		});
 	}
 	
 	public boolean isPaused() {
 		return paused;
 	}
 	
-	public abstract Entity getFocus();
+	public F getFocus() {
+		return focus;
+	}
 	
 	/**
 	 * @return mouse position relative to the player
@@ -134,6 +159,52 @@ public abstract class FocusedWindow extends GamePanel implements MouseListener, 
 		return null;
 		
 	}
+	
+	public static double getBaseDelta() {
+		return FRAME_DELTA / 1000d;
+	}
+	
+	@Override
+	public void startBackgroundThread() {
+
+		Thread thread = new Thread(new Runnable() {
+
+			@Override @SuppressWarnings("unused")
+			public void run() {
+				onStart();
+				try {
+					while (!stopped) {
+						if (Debug.LOG_PAUSES && isPaused()) {
+							Debug.log("paused");
+						}
+						onFrame();
+						Thread.sleep(FRAME_DELTA);
+					}
+				} catch (InterruptedException e) {
+					Debug.error("thread interrupted");
+				}
+			}
+		});
+		
+		thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+			@Override
+			public void uncaughtException(Thread t, Throwable e) {
+				Debug.error("unhandled exception");
+				e.printStackTrace();
+			}
+		});
+		thread.start();
+
+	}
+	
+	@Override
+	public void stopBackgroundThread() {
+		stopped = true;
+	}
+	
+	protected abstract void onStart();
+
+	protected abstract void onFrame();
 
 	public abstract World getWorld();
 
@@ -141,6 +212,12 @@ public abstract class FocusedWindow extends GamePanel implements MouseListener, 
 	
 	public KeyStates getKeyStates() {
 		return states;
+	}
+	
+	@Override
+	public void focusGained(FocusEvent e) {
+		ResizeListener.resize(this);
+		startBackgroundThread();
 	}
 		
 }

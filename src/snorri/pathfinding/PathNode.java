@@ -122,7 +122,7 @@ public class PathNode implements Comparable<PathNode>, Serializable {
 		return D * (d.x + d.y) + (D2 - 2 * D) * Double.min(d.x, d.y);
 	}
 	
-	public void render(Graphics gr, FocusedWindow window) {
+	public void render(Graphics gr, FocusedWindow<?> window) {
 		
 		if (origin == null) {
 			return;

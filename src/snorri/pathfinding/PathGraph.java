@@ -18,7 +18,6 @@ import java.util.Set;
 
 import snorri.entities.Entity;
 import snorri.main.Debug;
-import snorri.main.Main;
 import snorri.collisions.Collider;
 import snorri.world.Level;
 import snorri.world.Tile;
@@ -253,7 +252,7 @@ public class PathGraph {
 			}
 		}
 
-		Main.log("found " + components.size() + " pathfinding components");
+		Debug.log("found " + components.size() + " pathfinding components");
 
 		computeGraphHash();
 
@@ -273,7 +272,7 @@ public class PathGraph {
 	public void loadComponents(File f) throws FileNotFoundException, IOException {
 
 		if (!f.exists()) {
-			Main.log("graph data not found in world; computing it from scratch");
+			Debug.log("graph data not found in world; computing it from scratch");
 			computePathfinding();
 			return;
 		}
@@ -283,7 +282,7 @@ public class PathGraph {
 			components = (Set<Component>) in.readObject();
 			computeGraphHash();
 		} catch (ClassNotFoundException e) {
-			Main.error("recalculating corrupted pathfinding data");
+			Debug.error("recalculating corrupted pathfinding data");
 			computeComponents();
 		}
 		in.close();

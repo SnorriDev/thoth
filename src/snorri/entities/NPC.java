@@ -2,13 +2,14 @@ package snorri.entities;
 
 import snorri.animations.Animation;
 import snorri.dialog.Dialog;
+import snorri.entities.Player.Interactor;
 import snorri.events.InteractEvent;
 import snorri.main.FocusedWindow;
 import snorri.main.GamePanel;
 import snorri.main.Main;
 import snorri.world.Vector;
 
-public class NPC extends AIUnit {
+public class NPC extends AIUnit implements Interactor {
 	
 	private static final long serialVersionUID = 1L;
 	private static final Dialog DEFAULT_DIALOG = new Dialog();
@@ -43,7 +44,7 @@ public class NPC extends AIUnit {
 	public void speak() {
 		GamePanel window = Main.getWindow();
 		if (window instanceof FocusedWindow) {
-			((FocusedWindow) window).showDialog(dialog);
+			((FocusedWindow<?>) window).showDialog(dialog);
 		}
 	}
 	

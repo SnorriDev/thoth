@@ -11,7 +11,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import snorri.collisions.RectCollider;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
-import snorri.main.Main;
 import snorri.world.EntityGroup;
 import snorri.world.Level;
 import snorri.world.Tile;
@@ -277,7 +276,7 @@ public class QuadTree extends Entity implements EntityGroup {
 	 * Render all entities in the tree, and add in the passed list
 	 */
 	@Override
-	public void renderAround(FocusedWindow window, Graphics gr, double deltaTime) {
+	public void renderAround(FocusedWindow<?> window, Graphics gr, double deltaTime) {
 		
 		Vector playerPos = window.getFocus().getPos();
 		Vector dim = window.getDimensions();
@@ -287,7 +286,7 @@ public class QuadTree extends Entity implements EntityGroup {
 		PriorityQueue<Entity> renderQueue = getRenderQueue(view);
 		
 		if (Debug.LOG_RENDER_QUEUE) {
-			Main.log("render queue: " + renderQueue);
+			Debug.log("render queue: " + renderQueue);
 		}
 		
 		while (!renderQueue.isEmpty()) {
@@ -312,7 +311,7 @@ public class QuadTree extends Entity implements EntityGroup {
 
 	@Override
 	public void traverse() {
-		Main.log("traverse not yet implemented for QuadTree");
+		Debug.log("traverse not yet implemented for QuadTree");
 	}
 
 	@Override
@@ -330,6 +329,26 @@ public class QuadTree extends Entity implements EntityGroup {
 		for (Entity each : entities) {
 			if (!each.shouldIgnoreCollisions() && each.intersects(e) && !each.equals(other)) {
 				return each;
+			}
+		}
+		return null;
+	}
+
+	@Override @SuppressWarnings("unchecked")
+	public <P> P getFirstCollision(Entity checker, Class<P> class1) {
+		if (nodes != null) {
+			for (QuadTree node : nodes) {
+				if (!node.isEmpty() && node.intersects(checker)) {
+					P col = node.getFirstCollision(checker, class1);
+					if (col != null) {
+						return col;
+					}
+				}
+			}
+		}
+		for (Entity each : entities) {
+			if (class1.isInstance(each) && each.intersects(checker)) {
+				return (P) each;
 			}
 		}
 		return null;

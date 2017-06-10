@@ -7,6 +7,7 @@ import snorri.parser.Node;
 import snorri.world.Level;
 import snorri.world.MidgroundElement;
 import snorri.world.Tile;
+import snorri.world.TileType;
 import snorri.world.Vector;
 
 public class CreateObject extends TransVerbDef {
@@ -22,7 +23,7 @@ public class CreateObject extends TransVerbDef {
 				
 		if (obj instanceof Tile) {
 			
-			int layer = ((Tile) obj).getType().getLayer();
+			Class<? extends TileType> layer = ((Tile) obj).getType().getClass();			
 			Tile tile = e.getWorld().getLevel(layer).getTile(e.getLocative());
 			if (tile == null || !tile.getType().isChangable()) {
 				return false;
@@ -51,7 +52,8 @@ public class CreateObject extends TransVerbDef {
 				return false;
 			}
 			boolean checkCollisions = c != Spike.class;
-			return Entity.spawnNew(e.getWorld(), e.getLocative(), c, checkCollisions) != null;
+			Entity spawned = Entity.spawnNew(e.getWorld(), e.getLocative(), c, checkCollisions);
+			return spawned != null;
 		}
 		
 		return false;

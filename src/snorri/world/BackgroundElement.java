@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import snorri.audio.ClipWrapper;
-import snorri.main.Main;
+import snorri.main.Debug;
 import snorri.main.Util;
 import snorri.world.TileType;
 
@@ -245,7 +245,7 @@ public enum BackgroundElement implements TileType {
 		if (x < Tile.sounds.length)
 			return Tile.sounds[x];
 		else {
-			Main.error("index out of bounds");
+			Debug.error("index out of bounds");
 			return null;
 		}
 	}

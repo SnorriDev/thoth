@@ -77,7 +77,7 @@ public enum Key implements Binding {
 		if (!(Main.getWindow() instanceof FocusedWindow)) {
 			return false;
 		}
-		return isPressed(((FocusedWindow) Main.getWindow()).getKeyStates());
+		return isPressed(((FocusedWindow<?>) Main.getWindow()).getKeyStates());
 	}
 	
 	//for changing controls?
@@ -85,5 +85,5 @@ public enum Key implements Binding {
 		id = c;
 		this.ch = ch;
 	}
-	
+		
 }

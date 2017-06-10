@@ -9,6 +9,7 @@ import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineEvent.Type;
 import javax.sound.sampled.LineListener;
 
+import snorri.main.Debug;
 import snorri.main.Main;
 
 public class Audio {
@@ -39,7 +40,7 @@ public class Audio {
 			clip.open(AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(Main.getFile(path)))));
 			return clip;
 		} catch (Exception e) {
-			Main.error("could not load clip " + path);
+			Debug.error("could not load clip " + path);
 			e.printStackTrace();
 			return null;
 		}
@@ -68,7 +69,7 @@ public class Audio {
 					clip.stop();
 					clip.setFramePosition(0);
 				} catch (Exception e) {
-					Main.error("could not play clip");
+					Debug.error("could not play clip");
 					e.printStackTrace();
 				}
 			}

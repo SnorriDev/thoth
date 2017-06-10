@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import snorri.events.SpellEvent;
-import snorri.main.Main;
+import snorri.main.Debug;
 import snorri.parser.Node;
 import snorri.semantics.Category;
 
@@ -89,7 +89,7 @@ public abstract class NonTerminal<S> implements Node<S> {
 			copy.setChildren(newChildren);
 			return copy;
 		} catch (InstantiationException | IllegalAccessException e) {
-			Main.error("could not copy NonTerminal");
+			Debug.error("could not copy NonTerminal");
 			e.printStackTrace();
 			return null;
 		}

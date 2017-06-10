@@ -38,7 +38,7 @@ public class MainMenu extends GamePanel {
 	}
 
 	@Override
-	public void onClose() {
+	public void stopBackgroundThread() {
 		Music.MAIN_THEME.stop();
 	}
 	

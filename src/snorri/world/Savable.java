@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import snorri.main.Debug;
 import snorri.main.Main;
 
 public interface Savable {
@@ -36,7 +37,7 @@ public interface Savable {
 		try {
 			save(f, true);
 		} catch (IOException er) {
-			Main.error("cannot save world " + f.getName() + "; are all objects serializable?");
+			Debug.error("cannot save world " + f.getName() + "; are all objects serializable?");
 			er.printStackTrace(); //see what is non-serializable
 		}
 	}

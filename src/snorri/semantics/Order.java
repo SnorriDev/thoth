@@ -18,7 +18,7 @@ public class Order implements Nominal {
 		switch(attr) {
 		
 		case STORM:
-			return Vortex.class;
+			return new ClassWrapper(Vortex.class);
 			
 		default:
 			return Nominal.super.get(world, attr);

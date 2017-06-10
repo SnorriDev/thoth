@@ -1,5 +1,6 @@
 package snorri.collisions;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.geom.Ellipse2D;
@@ -46,13 +47,15 @@ public class CircleCollider extends Collider {
 	}
 
 	@Override
-	public void render(FocusedWindow g, Graphics gr) {
+	public void render(FocusedWindow<?> g, Graphics gr) {
 		Vector pos = getPos();
 		if (pos == null || g.getFocus().getPos() == null) {
 			return;
 		}
 		Vector rel = pos.copy().sub(g.getFocus().getPos());
+		gr.setColor(BORDER_COLOR);
 		gr.drawOval(rel.getX() - r + g.getBounds().width / 2, rel.getY() - r + g.getBounds().height / 2, 2 * r, 2 * r);
+		gr.setColor(Color.BLACK);
 	}
 
 	@Override

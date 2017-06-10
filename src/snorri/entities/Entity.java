@@ -13,11 +13,11 @@ import java.util.List;
 import snorri.animations.Animation;
 import snorri.collisions.CircleCollider;
 import snorri.collisions.Collider;
+import snorri.entities.Player.Interactor;
 import snorri.events.CollisionEvent;
-import snorri.events.InteractEvent;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
-import snorri.main.Main;
+import snorri.main.GameWindow;
 import snorri.main.Util;
 import snorri.semantics.Nominal;
 import snorri.triggers.Trigger;
@@ -98,7 +98,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public Entity(Vector pos, Collider collider) {
 		this.pos = (pos == null) ? null : pos.copy();
 		if (collider == null) {
-			Main.error("spawning entity with null collider: " + this);
+			Debug.error("spawning entity with null collider: " + this);
 		} else {
 			this.collider = collider.cloneOnto(this);
 		}
@@ -144,7 +144,9 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			if (checkCollisions && !e.shouldIgnoreCollisions() && world.getEntityTree().getFirstCollision(e) != null) {
 				return null;
 			}
-			world.add(e);
+			if (!world.add(e)) {
+				return null;
+			}
 			return e;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
@@ -209,7 +211,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		for (int i = 0; i < depth; i++) {
 			indent += "  ";
 		}
-		Main.log(indent + toString());
+		Debug.log(indent + toString());
 	}
 	
 	public void traverse() {
@@ -229,9 +231,9 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public void update(World world, double d) {
 	}
 	
-	public void renderAround(FocusedWindow g, Graphics gr, double timeDelta) {
+	public void renderAround(FocusedWindow<?> g, Graphics gr, double timeDelta) {
 		
-		if (Debug.SHOW_COLLIDERS || animation == null) {
+		if (Debug.SHOW_COLLIDERS || animation == null || inInteractRange(g)) {
 			collider.render(g, gr);
 		}
 		
@@ -247,6 +249,11 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		Vector rel = pos.copy().sub(g.getFocus().getPos());
 		gr.drawImage(sprite, rel.getX() + (g.getBounds().width - sprite.getWidth()) / 2, rel.getY() + (g.getBounds().height - sprite.getHeight()) / 2, sprite.getWidth(null), sprite.getHeight(null), null);
 		
+	}
+	
+	private boolean inInteractRange(FocusedWindow<?> g) {
+		return this instanceof Interactor && g instanceof GameWindow &&
+				((Interactor) this).inRange(((GameWindow) g).getFocus());
 	}
 
 	@Override
@@ -365,7 +372,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			copy.collider = copy.collider.cloneOnto(this);
 			return copy;
 		} catch (CloneNotSupportedException e) {
-			Main.log("issue cloning entity " + this);
+			Debug.log("issue cloning entity " + this);
 			e.printStackTrace();
 			return null;
 		}
@@ -379,7 +386,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			newEnt.animation = new Animation(animation);
 			return newEnt;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
-			Main.error("could not find valid constructor for entity " + this);
+			Debug.error("could not find valid constructor for entity " + this);
 			e.printStackTrace();
 			return null;
 		}
@@ -420,9 +427,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 
 	public void onExplosion(CollisionEvent e) {
-	}
-	
-	public void onInteract(InteractEvent e) {
 	}
 
 }

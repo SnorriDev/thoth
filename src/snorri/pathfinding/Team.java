@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import snorri.entities.Unit;
-import snorri.main.Main;
+import snorri.main.Debug;
 import snorri.world.World;
 
 /**
@@ -31,13 +31,13 @@ public class Team extends ArrayList<Unit> {
 			ObjectInputStream stream = new ObjectInputStream(new FileInputStream(teamsFile));
 			List<Team> teams = (List<Team>) stream.readObject();
 			if (teams == null) {
-				Main.log("loaded null list of teams");
+				Debug.log("loaded null list of teams");
 			} else {
-				Main.log("loaded " + teams.size() + " teams");
+				Debug.log("loaded " + teams.size() + " teams");
 			}
 			return teams;
 		} catch (ClassNotFoundException e) {
-			Main.error("corrupted team data");
+			Debug.error("corrupted team data");
 			return null;
 		}
 	}
@@ -47,7 +47,7 @@ public class Team extends ArrayList<Unit> {
 		ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(teamsFile));
 		stream.writeObject(teams);
 		if (teams != null) {
-			Main.log("saved " + teams.size() + " teams");
+			Debug.log("saved " + teams.size() + " teams");
 		}
 	}
 	

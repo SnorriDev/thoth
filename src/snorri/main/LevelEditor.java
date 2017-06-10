@@ -47,10 +47,7 @@ import snorri.world.Vector;
 import snorri.world.World;
 import snorri.world.BackgroundElement;
 
-//TODO: add image to world feature
-//TODO: fix overflow with a 2d boolean array (look at methods in Level which compute pathfinding graphs)
-
-public class LevelEditor extends FocusedWindow implements ActionListener {
+public class LevelEditor extends FocusedWindow<Entity> implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -60,7 +57,6 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	private double speed = SCALE_FACTOR;
 
 	private Editable env;
-	private Entity focus;
 	private Tile selectedTile;
 	private Tile previousTile;
 	private Class<? extends Entity> selectedEntityClass;
@@ -135,7 +131,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	JCheckBoxMenuItem cbMenuItem;
 
 	public LevelEditor() {
-		super();
+		super(new Entity(new Vector(20, 20)));
 
 		previousTile = new Tile(BackgroundElement.class, 0, 0);
 		selectedTile = new Tile(BackgroundElement.class, 0, 0);
@@ -143,8 +139,6 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		createMenu();
 
 		repaint();
-
-		focus = new Entity(new Vector(8, 8));
 
 		lastRenderTime = getTimestamp();
 		
@@ -376,6 +370,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			} else {
 				env = new World();
 			}
+			centerCamera();
 			break;
 		case "Generate":
 			DialogMap inputs = new DialogMap();
@@ -390,28 +385,31 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				Object g = gen.getConstructor(int.class, int.class).newInstance(inputs.getInteger("Width"),
 						inputs.getInteger("Height"));
 				if (!(g instanceof TerrainGen)) {
-					Main.error(gen.getSimpleName() + " is not a terrain generator");
+					Debug.error(gen.getSimpleName() + " is not a terrain generator");
 
 				}
-				Main.log("generating " + gen.getSimpleName() + " world...");
+				Debug.log("generating " + gen.getSimpleName() + " world...");
 				env = ((TerrainGen) g).genWorld();
-				Main.log("world successfully generated");
+				Debug.log("world successfully generated");
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
-				Main.error("generator " + gen + " has no vector size constructor");
+				Debug.error("generator " + gen + " has no vector size constructor");
 			}
+			centerCamera();
 			break;
 		case "Open":
 			World w1 = World.wrapLoad();
 			if (w1 != null) {
 				env = w1;
 			}
+			centerCamera();
 			break;
 		case "Open Level":
 			Level l1 = Level.wrapLoad();
 			if (l1 != null) {
 				env = l1;
 			}
+			centerCamera();
 			break;
 		case "Save":
 			if (env == null) {
@@ -439,14 +437,14 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			break;
 		case "Undo":
 			if (env == null || !canUndo) {
-				Main.error("unable to undo");
+				Debug.error("unable to undo");
 				return;
 			}
 			undo();
 			break;
 		case "Redo":
 			if (env == null || !canRedo) {
-				Main.error("unable to redo");
+				Debug.error("unable to redo");
 				return;
 			}
 			redo();
@@ -458,6 +456,11 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 
 		repaint();
 
+	}
+	
+	//FIXME why isn't this working? debugging this would be nice
+	public void centerCamera() {
+		focus.getPos().add(env.getDimensions().copy().divide(2));
 	}
 
 	@Override
@@ -472,7 +475,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		long time = getTimestamp();
 		double deltaTime = (time - lastRenderTime) / 1000000000d;
 		lastRenderTime = time;
-
+		
 		env.render(this, gr, deltaTime, false);
 		renderMousePos(gr);
 
@@ -506,8 +509,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				}
 				if (focus.getPos().getY() >= env.getLevel(selectedTile.getType().getLayer()).getDimensions().getY() * Tile.WIDTH + SCALE_FACTOR) {
 					canGoDown = false;
-				}
-				
+				}	
 				
 				if (states.getMovementVector().getX() < 0 && !canGoLeft) {
 					focus.getPos().sub(states.getMovementVector().getProjectionX().scale(speed));
@@ -562,7 +564,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 									}
 								}
 							
-								Main.log("Added Tile (" + xGrid + ", " + yGrid + ") to wall");
+								Debug.log("Added Tile (" + xGrid + ", " + yGrid + ") to wall");
 								wallPoints.add(new Vector(xGrid,yGrid));
 								
 								if (wallPoints.firstElement().equals(wallPoints.lastElement())) {
@@ -571,12 +573,12 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 								}
 							}
 							else {
-								Main.error("Cannot add Tile (" + xGrid + ", " + yGrid + ") to wall, in wall mode, tiles must be properly spaced and normal to each other");
+								Debug.error("Cannot add Tile (" + xGrid + ", " + yGrid + ") to wall, in wall mode, tiles must be properly spaced and normal to each other");
 							}
 						}
 						else {
 							env.getLevel(selectedTile.getType().getLayer()).setTileGrid(xGrid, yGrid, new Tile(selectedTile));
-							Main.log("Added Tile (" + xGrid + ", " + yGrid + ") to wall");
+							Debug.log("Added Tile (" + xGrid + ", " + yGrid + ") to wall");
 							wallPoints.add(new Vector(xGrid,yGrid));
 						}
 					}
@@ -1371,8 +1373,6 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		Vector location = getMousePosAbsolute().copy();
 		int x = location.getX() / Tile.WIDTH;
 		int y = location.getY() / Tile.WIDTH;
-		//Main.debug(selectedTile.toString());
-		//Main.debug(selectedTile.getType().getLayer());
 		int w = env.getLevel(selectedTile.getType().getLayer()).getWidth();
 		int h = env.getLevel(selectedTile.getType().getLayer()).getHeight();
 
@@ -1479,7 +1479,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 	private void spawnEntity() {
 
 		if (!(env instanceof World)) {
-			Main.error("tried to spawn entity in non-world");
+			Debug.error("tried to spawn entity in non-world");
 			return;
 		}
 		World world = (World) env;
@@ -1533,14 +1533,14 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				| SecurityException e) {
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
-			Main.error("cannot spawn entity type " + selectedEntityClass.getSimpleName());
+			Debug.error("cannot spawn entity type " + selectedEntityClass.getSimpleName());
 		}
 	}
 
 	private void deleteEntity() {
 
 		if (!(env instanceof World)) {
-			Main.error("tried to delete entity in non-world");
+			Debug.error("tried to delete entity in non-world");
 			return;
 		}
 		World world = (World) env;
@@ -1564,7 +1564,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			canRedo = false;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			Main.error("unable to autosave for undo");
+			Debug.error("unable to autosave for undo");
 			e.printStackTrace();
 		}
 	}
@@ -1576,7 +1576,7 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 			canRedo = true;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			Main.error("unable to autosave for redo");
+			Debug.error("unable to autosave for redo");
 			canRedo = false;
 			e.printStackTrace();
 		}
@@ -1589,14 +1589,14 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 				env.load(Main.getFile("/saves/.undo1"));
 				canUndo = false;
 				canRedo = true;
-				Main.log("undone!");
+				Debug.log("undone!");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				Main.error("cannot undo, IOException");
+				Debug.error("cannot undo, IOException");
 				e.printStackTrace();
 			}
 		} else {
-			Main.error("cannot undo right now");
+			Debug.error("cannot undo right now");
 		}
 	}
 
@@ -1604,15 +1604,15 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		if (canRedo) {
 			try {
 				env.load(Main.getFile("/saves/.redo1"));
-				Main.log("redo!");
+				Debug.log("redo!");
 				canUndo = true;
 				canRedo = false;
 			} catch (IOException e) {
-				Main.error("cannot redo, IOException");
+				Debug.error("cannot redo, IOException");
 				e.printStackTrace();
 			}
 		} else {
-			Main.error("cannot redo right now");
+			Debug.error("cannot redo right now");
 		}
 	}
 
@@ -1705,5 +1705,9 @@ public class LevelEditor extends FocusedWindow implements ActionListener {
 		}
 		
 		return x;
+	}
+
+	@Override
+	protected void onStart() {
 	}
 }

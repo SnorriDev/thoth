@@ -71,7 +71,7 @@ public class Main {
 			resize(window);
 		}
 		
-		private static void resize(JComponent component) {
+		public static void resize(JComponent component) {
 			if (component != null) {
 				component.setBounds(frame.getContentPane().getBounds());
 			}
@@ -113,33 +113,6 @@ public class Main {
 		return frame.getBounds();
 	}
 
-	/**
-	 * Use this to print error messages to the game log
-	 * @param s
-	 * 	the error string to print
-	 */
-	public static void error(String s) {
-		System.err.println("[ERROR] " + s);
-	}
-
-	/**
-	 * Use this to print nice messages to the game log
-	 * @param s
-	 * 	the string to print
-	 */
-	public static void log(String s) {
-		System.out.println("[LOG] " + s);
-	}
-
-	/**
-	 * Use this to print things for debugging purposes
-	 * @param o
-	 * 	the object to print
-	 */
-	public static void debug(Object o) {
-		System.out.println("[DEBUG] " + o);
-	}
-
 	public static GamePanel getWindow() {
 		return window;
 	}
@@ -156,7 +129,7 @@ public class Main {
 		customFont = loadFont("/fonts/avenir.otf");		
 		UIManager.put("Button.font", getCustomFont(20));
 		UIManager.put("Label.font", getCustomFont(13));
-		log("default font loaded");
+		Debug.log("default font loaded");
 	}
 
 	public static Font getCustomFont(float size) {
@@ -171,7 +144,7 @@ public class Main {
 			ge.registerFont(f);
 			return f;
 		} catch (IOException | FontFormatException e) {
-			Main.error("font not found at " + path);
+			Debug.error("font not found at " + path);
 			return null;
 		}
 	}
@@ -180,10 +153,10 @@ public class Main {
 		try {
 			return ImageIO.read(file);
 		} catch (IllegalArgumentException e) {
-			Main.error("unable to find image " + file.getName());
+			Debug.error("unable to find image " + file.getName());
 			return null;
 		} catch (IOException e) {
-			Main.error("issue loading image " + file.getName());
+			Debug.error("issue loading image " + file.getName());
 			return null;
 		}
 	}
@@ -244,17 +217,20 @@ public class Main {
 	 */
 	public static final void setWindow(GamePanel newWindow) {
 		if (window != null) {
-			window.onClose();
+			window.stopBackgroundThread();
 			getLayeredPane().remove(window);
-			getLayeredPane().revalidate();
 		}
+		
 		window = newWindow;
-		window.setVisible(true);
+		
 		getLayeredPane().add(window, JLayeredPane.DEFAULT_LAYER);
-		getLayeredPane().revalidate();
-		getLayeredPane().repaint();
-		window.requestFocusInWindow();
+		
+		window.grabFocus();
 		ResizeListener.resize(window);
+		
+		frame.revalidate();
+		frame.repaint();
+		
 	}
 
 	/**
@@ -265,19 +241,20 @@ public class Main {
 	 */
 	public static final void setOverlay(GamePanel newOverlay) {
 		if (outerOverlay != null) {
-			outerOverlay.onClose();
+			outerOverlay.stopBackgroundThread();
 			getLayeredPane().remove(outerOverlay);
-			getLayeredPane().revalidate();
 		}
 		outerOverlay = newOverlay;
 		if (newOverlay != null) {
-			outerOverlay.setVisible(true);
-			ResizeListener.resize(outerOverlay);
+			
 			getLayeredPane().add(outerOverlay, JLayeredPane.PALETTE_LAYER);
-			getLayeredPane().revalidate();
-			getLayeredPane().repaint();
-			outerOverlay.requestFocusInWindow();
+			
+			outerOverlay.grabFocus();
+			ResizeListener.resize(outerOverlay);
+						
 		}
+		frame.revalidate();
+		frame.repaint();
 	}
 
 	public static JLayeredPane getLayeredPane() {

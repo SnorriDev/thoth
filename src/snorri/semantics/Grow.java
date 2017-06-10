@@ -5,7 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import snorri.entities.Entity;
 import snorri.entities.Plant;
 import snorri.events.SpellEvent;
-import snorri.main.Main;
+import snorri.main.Debug;
 import snorri.parser.Node;
 import snorri.world.Vector;
 
@@ -31,7 +31,7 @@ public class Grow extends TransVerbDef {
 				return true;
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 					| NoSuchMethodException | SecurityException e2) {
-				Main.error("could not instantiate entity type " + obj.toString());
+				Debug.error("could not instantiate entity type " + obj.toString());
 				e2.printStackTrace();
 			}
 		}

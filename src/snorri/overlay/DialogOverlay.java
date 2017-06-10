@@ -14,7 +14,7 @@ public class DialogOverlay extends Overlay {
 
 	private static final long serialVersionUID = 1L;
 		
-	public DialogOverlay(FocusedWindow focusedWindow, Dialog dialog) {
+	public DialogOverlay(FocusedWindow<?> focusedWindow, Dialog dialog) {
 		
 		super(focusedWindow);
 		setLayout(null);

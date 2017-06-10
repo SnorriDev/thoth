@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Arrays;
 
 import snorri.entities.Entity;
+import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.masking.Mask;
@@ -207,7 +208,7 @@ public class Level implements Editable {
 	}
 	
 	@Override
-	public void render(FocusedWindow g, Graphics gr, double deltaTime, boolean renderOutside) {
+	public void render(FocusedWindow<?> g, Graphics gr, double deltaTime, boolean renderOutside) {
 		
 		//TODO add some shit that checks if layer is empty etc.
 		
@@ -238,7 +239,7 @@ public class Level implements Editable {
 
 	public void load(File file, Class<? extends TileType> c) throws FileNotFoundException, IOException {
 
-		Main.log("loading " + file + "...");
+		Debug.log("loading " + file + "...");
 
 		byte[] b = new byte[4];
 
@@ -269,7 +270,7 @@ public class Level implements Editable {
 	
 	public void save(File file, boolean saveGraphs) throws IOException {
 
-		Main.log("saving " + file.getName() + "...");
+		Debug.log("saving " + file.getName() + "...");
 
 		FileOutputStream os = new FileOutputStream(file);
 		ByteBuffer b1 = ByteBuffer.allocate(4);
@@ -333,7 +334,7 @@ public class Level implements Editable {
 		try {
 			return new Level(file);
 		} catch (IOException er) {
-			Main.error("error opening world " + file.getName());
+			Debug.error("error opening world " + file.getName());
 			return null;
 		}
 		

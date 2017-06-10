@@ -15,6 +15,7 @@ import net.sourceforge.yamlbeans.YamlReader;
 import snorri.entities.Mummy;
 import snorri.entities.Entity;
 import snorri.entities.Player;
+import snorri.main.Debug;
 import snorri.main.Main;
 import snorri.world.BackgroundElement;
 import snorri.world.Editable;
@@ -38,7 +39,7 @@ public class DungeonGen extends TerrainGen {
 		structures = new HashMap<>();
 
 		try {
-			Main.log("loading dungeon structures...");
+			Debug.log("loading dungeon structures...");
 			YamlReader reader = Main.getYamlReader("/worlds/structures/doors.yaml");
 			structures = (HashMap<String, Structure>) reader.read();
 			for (String key : structures.keySet()) {
@@ -51,12 +52,12 @@ public class DungeonGen extends TerrainGen {
 				}
 				structures.get(key).setTemplate(l);
 			}
-			Main.log("structures loaded successfully!");
+			Debug.log("structures loaded successfully!");
 		} catch (IOException e) {
-			Main.error("could not locate file while loading structures");
+			Debug.error("could not locate file while loading structures");
 			e.printStackTrace();
 		} catch (YamlException e) {
-			Main.error("could not parse YAML in doors file");
+			Debug.error("could not parse YAML in doors file");
 			e.printStackTrace();
 		}
 		

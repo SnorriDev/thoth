@@ -13,7 +13,7 @@ public class TextOverlay extends Overlay {
 
 	private static final long serialVersionUID = 1L;
 	
-	public TextOverlay(FocusedWindow focusedWindow, Dialog dialog) {
+	public TextOverlay(FocusedWindow<?> focusedWindow, Dialog dialog) {
 		super(focusedWindow);
 		
 		setLayout(new GridBagLayout());

@@ -14,7 +14,7 @@ public class PauseOverlay extends Overlay {
 
 	private static final long serialVersionUID = 1L;
 	
-	public PauseOverlay(FocusedWindow focusedWindow) {
+	public PauseOverlay(FocusedWindow<?> focusedWindow) {
 		super(focusedWindow);
 		setLayout(new GridBagLayout());
 		JPanel menu = new MenuPanel();

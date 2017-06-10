@@ -46,13 +46,13 @@ public class DialogMap extends HashMap<String, JTextField> {
 		try {
 			return Class.forName(getText(key));
 		} catch (ClassNotFoundException e) {
-			Main.error("coud not load class " + key);
+			Debug.error("coud not load class " + key);
 			return null;
 		}
 	}
 
 	public Team getTeam(String key) {
-		World world = ((FocusedWindow) Main.getWindow()).getWorld();
+		World world = ((FocusedWindow<?>) Main.getWindow()).getWorld();
 		return Team.getByName(key, world);
 	}
 

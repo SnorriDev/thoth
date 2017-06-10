@@ -3,6 +3,7 @@ package snorri.collisions;
 import java.awt.Graphics;
 import java.io.Serializable;
 
+import java.awt.Color;
 import java.awt.geom.Area;
 import java.awt.Shape;
 
@@ -14,6 +15,8 @@ public abstract class Collider implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	protected Entity focus;
+	
+	protected static final Color BORDER_COLOR = Color.GREEN;
 	
 	public void setFocus(Entity focus) {
 		this.focus = focus;
@@ -64,7 +67,7 @@ public abstract class Collider implements Serializable {
 		return intersects(other.getShape());
 	}
 	
-	public abstract void render(FocusedWindow g, Graphics gr);
+	public abstract void render(FocusedWindow<?> g, Graphics gr);
 	
 	public abstract Collider cloneOnto(Entity root);
 	

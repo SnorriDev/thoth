@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Queue;
 
 import snorri.entities.Entity;
-import snorri.main.Main;
+import snorri.main.Debug;
 import snorri.world.Editable;
 import snorri.world.Level;
 import snorri.world.Vector;
@@ -144,7 +144,7 @@ public class Structure {
 		Vector dim = getLevel().getDimensions();
 		
 		if (pos == null) {
-			Main.error("tried to spawn room at null");
+			Debug.error("tried to spawn room at null");
 			return false;
 		}
 		

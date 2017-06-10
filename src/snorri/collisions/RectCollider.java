@@ -1,5 +1,6 @@
 package snorri.collisions;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
@@ -68,7 +69,7 @@ public class RectCollider extends Collider {
 	}
 
 	@Override
-	public void render(FocusedWindow g, Graphics gr) {
+	public void render(FocusedWindow<?> g, Graphics gr) {
 		Vector pos = getPos();
 		if (pos == null || g.getFocus().getPos() == null) {
 			return;
@@ -77,7 +78,9 @@ public class RectCollider extends Collider {
 		Rectangle rect = getShape();
 		int x = (int) (rel.getX() + g.getCenter().getX() - rect.getWidth() / 2);
 		int y = (int) (rel.getY() + g.getCenter().getY() - rect.getHeight() / 2);
+		gr.setColor(BORDER_COLOR);
 		gr.drawRect(x, y, (int) rect.getWidth(), (int) rect.getHeight());
+		gr.setColor(Color.BLACK);
 	}
 
 	@Override

@@ -20,14 +20,42 @@ public class Debug {
 	public static final boolean DISABLE_PATHFINDING = false;
 	public static final boolean SHOW_COLLIDERS = false;
 	public static final boolean HIDE_MASKS = false;
+	public static final boolean LOG_PAUSES = false;
 
 	public static void castWTFMode(String s, SpellEvent e) {
 		Node<?> spell = Grammar.parseString(s);
-		Main.log("\"" + s + "\": " + spell.getMeaning(e));
+		Debug.log("\"" + s + "\": " + spell.getMeaning(e));
 	}
 
 	public static void castWTFMode(Node<?> spell, SpellEvent e) {
-		Main.log(spell + ": " + spell.getMeaning(e));
+		Debug.log(spell + ": " + spell.getMeaning(e));
+	}
+
+	/**
+	 * Use this to print things for debugging purposes
+	 * @param o
+	 * 	the object to print
+	 */
+	public static void raw(Object o) {
+		System.out.println("[RAW] " + o);
+	}
+
+	/**
+	 * Use this to print nice messages to the game log
+	 * @param s
+	 * 	the string to print
+	 */
+	public static void log(String s) {
+		System.out.println("[LOG] " + s);
+	}
+
+	/**
+	 * Use this to print error messages to the game log
+	 * @param s
+	 * 	the error string to print
+	 */
+	public static void error(String s) {
+		System.err.println("[ERROR] " + s);
 	}
 
 }

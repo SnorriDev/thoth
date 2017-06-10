@@ -199,6 +199,7 @@ public class SpellEvent {
 		return deltaTime;
 	}
 	
+	//TODO scale entropy level by how good a player is or something?
 	public int getEntropyLevel() {
 		if (instrument instanceof Order) {
 			return -1;

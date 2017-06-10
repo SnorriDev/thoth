@@ -118,11 +118,11 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		}
 	}
 	
-	public InventoryOverlay(FocusedWindow focusedWindow, Inventory inventory) {
+	public InventoryOverlay(FocusedWindow<?> focusedWindow, Inventory inventory) {
 		this(focusedWindow, inventory, false);
 	}
 	
-	public InventoryOverlay(FocusedWindow focusedWindow, Inventory inventory, boolean editMode) {
+	public InventoryOverlay(FocusedWindow<?> focusedWindow, Inventory inventory, boolean editMode) {
 		
 		super(focusedWindow);
 		inv = inventory;
@@ -307,7 +307,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private boolean add(Droppable d) {
 		
 		if (d == null) {
-			Main.error("adding null item to inventory");
+			Debug.error("adding null item to inventory");
 		}
 		
 		if (!inv.add(d)) {
@@ -507,8 +507,8 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	}
 	
 	@Override
-	public void onClose() {
-		super.onClose();
+	public void stopBackgroundThread() {
+		super.stopBackgroundThread();
 		for (String spell : spellsEnchanted) {
 			TriggerType.ENCHANT.activate(spell);
 		}
