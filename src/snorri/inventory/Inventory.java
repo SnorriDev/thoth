@@ -6,6 +6,7 @@ import java.io.Serializable;
 import snorri.entities.Player;
 import snorri.entities.Unit;
 import snorri.keyboard.Key;
+import snorri.main.Debug;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.parser.Grammar;
@@ -153,7 +154,7 @@ public class Inventory implements Serializable {
 	
 	public Orb getOrb(int index) {
 		if (index < 0 || index >= ORB_SLOTS) {
-			Main.error("index out of range, returning empty");
+			Debug.error("index out of range, returning empty");
 			return null;
 		}
 		return orbSlots[index];
@@ -161,7 +162,7 @@ public class Inventory implements Serializable {
 	
 	public void setOrb(int slot, Orb newProjectile) {
 		if (slot < 0 || slot >= ORB_SLOTS) {
-			Main.error("slot out of range");
+			Debug.error("slot out of range");
 			return;
 		}
 		int oldI = getIndex(newProjectile);
@@ -174,7 +175,7 @@ public class Inventory implements Serializable {
 	
 	public Papyrus getPapyrus(int index) {
 		if (index < 0 || index >= PAPYRUS_SLOTS) {
-			Main.error("index out of range, returning empty");
+			Debug.error("index out of range, returning empty");
 			return null;
 		}
 		return papyrusSlots[index];
@@ -182,7 +183,7 @@ public class Inventory implements Serializable {
 	
 	public void setPapyrus(int slot, Papyrus newPapyrus) {
 		if (slot < 0 || slot >= PAPYRUS_SLOTS) {
-			Main.error("slot out of range");
+			Debug.error("slot out of range");
 			return;
 		}
 		int oldI = getIndex(newPapyrus);

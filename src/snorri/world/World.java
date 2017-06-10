@@ -77,7 +77,7 @@ public class World implements Playable, Editable {
 		pathfinding = new Pathfinding(getPathfindingLevels());
 		
 		if (computeFocus() == null) {
-			Main.log("world without player detected");
+			Debug.log("world without player detected");
 		}
 
 	}
@@ -114,7 +114,7 @@ public class World implements Playable, Editable {
 				return pos;
 			}
 		}
-		Main.error("could not find suitable spawn");
+		Debug.error("could not find suitable spawn");
 		return null;
 	}
 
@@ -133,7 +133,7 @@ public class World implements Playable, Editable {
 		try {
 			return new World(file);
 		} catch (IOException er) {
-			Main.error("error opening world " + file.getName());
+			Debug.error("error opening world " + file.getName());
 			return null;
 		}
 
@@ -143,7 +143,7 @@ public class World implements Playable, Editable {
 	public synchronized void update(Entity focus, double d) {
 
 		if (Debug.LOG_WORLD) {
-			Main.log("world update");
+			Debug.log("world update");
 		}
 
 		col.updateAround(this, d, focus);
@@ -151,7 +151,7 @@ public class World implements Playable, Editable {
 	}
 
 	@Override
-	public synchronized void render(FocusedWindow g, Graphics gr, double deltaTime, boolean showOutlands) {
+	public synchronized void render(FocusedWindow<?> g, Graphics gr, double deltaTime, boolean showOutlands) {
 		background.render(g, gr, deltaTime, showOutlands);
 		midground.render(g, gr, deltaTime, false);
 		col.renderAround(g, gr, deltaTime);
@@ -166,6 +166,10 @@ public class World implements Playable, Editable {
 		return background;
 	}
 
+	/**
+	 * @see <code>getLevel(Class<? extends TileType> c)</code>
+	 */
+	@Deprecated
 	public Level getLevel(int layer) {	
 		switch(layer) {
 		case Level.BACKGROUND:
@@ -180,14 +184,11 @@ public class World implements Playable, Editable {
 
 	public Level getLevel(Class<? extends TileType> c) {
 		if (c == BackgroundElement.class) {
-			// Main.debug("should return background layer");
-			return getLevel(0);
+			return background;
 		} else if (c == MidgroundElement.class) {
-			// Main.debug("should return midground layer");
-			return getLevel(1);
+			return midground;
 		} else {
-			// Main.debug("should return foreground layer");
-			return getLevel(2);
+			return foreground;
 		}
 	}
 
@@ -221,12 +222,12 @@ public class World implements Playable, Editable {
 	public void save(File f, boolean recomputeGraphs) throws IOException {
 
 		if (f.exists() && !f.isDirectory()) {
-			Main.error("tried to save world " + f.getName() + " to non-directory");
+			Debug.error("tried to save world " + f.getName() + " to non-directory");
 			throw new IOException();
 		}
 
 		if (!f.exists()) {
-			Main.log("creating new world directory...");
+			Debug.log("creating new world directory...");
 			f.mkdir();
 		}
 
@@ -243,12 +244,12 @@ public class World implements Playable, Editable {
 	public void load(File f) throws FileNotFoundException, IOException {
 
 		if (!f.exists()) {
-			Main.error("could not find world " + f.getName());
+			Debug.error("could not find world " + f.getName());
 			throw new FileNotFoundException();
 		}
 
 		if (!f.isDirectory()) {
-			Main.error("world file " + f.getName() + " is not a directory");
+			Debug.error("world file " + f.getName() + " is not a directory");
 			throw new IOException();
 		}
 

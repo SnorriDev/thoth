@@ -1,15 +1,20 @@
 package snorri.keyboard;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import snorri.world.Vector;
 
 public class KeyStates {
 	
-	private boolean[] states;
-	private boolean[] mouseStates;
+	private final boolean[] states;
+	private final boolean[] mouseStates;
+	private final Queue<Binding> actionQ;
 	
 	public KeyStates() {
 		states = new boolean[256];
 		mouseStates = new boolean[100];
+		actionQ = new LinkedList<>();
 	}
 	
 	public void set(int id, boolean state) {
@@ -51,6 +56,14 @@ public class KeyStates {
 		for (int i = 0; i < mouseStates.length; i++) {
 			mouseStates[i] = false;
 		}
+	}
+	
+	public void registerAction(Binding b) {
+		actionQ.add(b);
+	}
+	
+	public Binding popAction() {
+		return actionQ.poll();
 	}
 	
 }

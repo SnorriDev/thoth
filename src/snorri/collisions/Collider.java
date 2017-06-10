@@ -15,7 +15,6 @@ public abstract class Collider implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	protected Entity focus;
-	protected Color border = null;
 	
 	protected static final Color BORDER_COLOR = Color.GREEN;
 	
@@ -44,14 +43,6 @@ public abstract class Collider implements Serializable {
 		a.subtract(new Area(getShape()));
 		return a.isEmpty();
 	}
-	
-	public void setColor(Color color) {
-		border = color;
-	}
-	
-	public boolean hasColor() {
-		return border != null;
-	}
 		
 	/**
 	 * @return whether this collider intersects a point given by pos
@@ -76,7 +67,7 @@ public abstract class Collider implements Serializable {
 		return intersects(other.getShape());
 	}
 	
-	public abstract void render(FocusedWindow g, Graphics gr);
+	public abstract void render(FocusedWindow<?> g, Graphics gr);
 	
 	public abstract Collider cloneOnto(Entity root);
 	

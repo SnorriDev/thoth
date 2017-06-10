@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import snorri.main.Debug;
 import snorri.main.Main;
 import snorri.main.Util;
 
@@ -20,7 +21,7 @@ public class Portraits {
 	}
 	
 	public static void load() {
-		Main.log(portraits.entrySet().size() + " portraits loaded");
+		Debug.log(portraits.entrySet().size() + " portraits loaded");
 	}
 	
 	public static Image get(String name) {

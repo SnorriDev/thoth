@@ -13,6 +13,7 @@ import java.util.Comparator;
 
 import javax.imageio.ImageIO;
 
+import snorri.main.Debug;
 import snorri.main.Main;
 import snorri.main.Util;
 import snorri.world.Vector;
@@ -92,12 +93,12 @@ public class Animation implements Serializable {
 			try {
 				tempFrames.add(ImageIO.read(frames[i]));
 			} catch (IOException e) {
-				Main.error("animation frame " + frames[i].getName() + " could not be loaded");
+				Debug.error("animation frame " + frames[i].getName() + " could not be loaded");
 			}
 		}
 
 		if (tempFrames.size() == 0) {
-			Main.error("animation " + folder.getName() + " has zero frames");
+			Debug.error("animation " + folder.getName() + " has zero frames");
 		}
 		
 		this.frames = new BufferedImage[tempFrames.size()];
@@ -138,7 +139,7 @@ public class Animation implements Serializable {
 			if (im != null) {
 				set(new Animation(im));
 			} else {
-				Main.error("could not load custom frame in animation");
+				Debug.error("could not load custom frame in animation");
 			}
 			return;
 		}

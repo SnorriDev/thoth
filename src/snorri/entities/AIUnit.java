@@ -1,6 +1,5 @@
 package snorri.entities;
 
-import java.awt.Graphics;
 import java.util.ArrayDeque;
 
 import snorri.animations.Animation;
@@ -9,7 +8,6 @@ import snorri.inventory.Inventory;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.main.Main;
-import snorri.main.FocusedWindow;
 import snorri.main.GameWindow;
 import snorri.pathfinding.Component;
 import snorri.pathfinding.PathNode;
@@ -177,17 +175,6 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 	@Override
 	public Inventory getInventory() {
 		return inventory;
-	}
-	
-	@Override
-	public void renderAround(FocusedWindow g, Graphics gr, double timeDelta) {
-						
-		if (path == null) {
-			super.renderAround(g, gr, timeDelta);
-			return;
-		}
-		
-		super.renderAround(g, gr, timeDelta);
 	}
 	
 	@Override

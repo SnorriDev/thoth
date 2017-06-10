@@ -12,6 +12,7 @@ import java.util.Queue;
 import net.sourceforge.yamlbeans.YamlException;
 import net.sourceforge.yamlbeans.YamlReader;
 import snorri.entities.Entity;
+import snorri.main.Debug;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.world.World;
@@ -88,7 +89,7 @@ public class Trigger {
 				Entry<String, Map<String, Object>> e = getFirstEntry(event);
 				TriggerType type = TriggerType.valueOf(e.getKey());
 				if (type == null) {
-					Main.error("unknown event type " + e.getKey());
+					Debug.error("unknown event type " + e.getKey());
 					return;
 				}
 				if (type == TriggerType.BROADCAST) {
@@ -121,12 +122,12 @@ public class Trigger {
 				new Trigger(world, name, data, triggers);
 			}
 			
-			Main.log(rawTriggers.size() + " triggers loaded");
+			Debug.log(rawTriggers.size() + " triggers loaded");
 			
 		} catch (FileNotFoundException e) {
-			Main.error("could not find trigger file " + triggerFile);
+			Debug.error("could not find trigger file " + triggerFile);
 		} catch (YamlException e) {
-			Main.error("could not parse YAML");
+			Debug.error("could not parse YAML");
 			e.printStackTrace();
 		} finally {
 			triggers.setLoaded();
@@ -160,7 +161,7 @@ public class Trigger {
 	 * Execute the action queue
 	 */
 	public void exec() {
-		Main.log("firing trigger " + name + "...");
+		Debug.log("firing trigger " + name + "...");
 		while (!runnableActions.isEmpty()) { //TODO are there still bugs with runnables?
 			new Thread(runnableActions.poll()).start();
 		}

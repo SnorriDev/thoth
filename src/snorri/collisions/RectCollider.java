@@ -69,7 +69,7 @@ public class RectCollider extends Collider {
 	}
 
 	@Override
-	public void render(FocusedWindow g, Graphics gr) {
+	public void render(FocusedWindow<?> g, Graphics gr) {
 		Vector pos = getPos();
 		if (pos == null || g.getFocus().getPos() == null) {
 			return;

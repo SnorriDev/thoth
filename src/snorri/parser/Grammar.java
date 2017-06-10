@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import snorri.main.Debug;
-import snorri.main.Main;
 import snorri.main.Util;
 import snorri.nonterminals.AbstractNoun;
 import snorri.nonterminals.Adverb;
@@ -77,7 +76,7 @@ public class Grammar extends HashMap<Class<? extends NonTerminal<?>>, List<Rule>
 		grammar.add(new Rule(new Object[] {Sentence.class, AdverbPhrase.class}, Sentence.class));
 		
 		List<Rule> allRules = grammar.get();
-		Main.log("CFG with " + allRules.size() + " high-level rules loaded");
+		Debug.log("CFG with " + allRules.size() + " high-level rules loaded");
 		maxLength = 0;
 		for (Rule rule : allRules) {
 			maxLength = Integer.max(maxLength, rule.getLength());
@@ -131,7 +130,7 @@ public class Grammar extends HashMap<Class<? extends NonTerminal<?>>, List<Rule>
 			}
 			List<Node<?>> parses = topDown(getNodes(input), Sentence.class);
 			if (Debug.LOG_PARSES) {
-				Main.log("parses for " + input + ": " + parses);
+				Debug.log("parses for " + input + ": " + parses);
 			}
 			return parses;
 		} catch (InstantiationException | IllegalAccessException e) {
@@ -185,7 +184,7 @@ public class Grammar extends HashMap<Class<? extends NonTerminal<?>>, List<Rule>
 				for (List<Node<?>> nodes : Util.computeCombinations(allPoss)) {
 					Class<? extends NonTerminal<?>> c = rewrite.fits(nodes);
 					if (c == null) {
-						Main.error("very weird parsing issue");
+						Debug.error("very weird parsing issue");
 						return null;
 					}
 					NonTerminal<?> node = c.newInstance();

@@ -5,7 +5,6 @@ import snorri.events.SpellEvent.Caster;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.main.Debug;
-import snorri.main.Main;
 import snorri.semantics.Go.Walker;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -57,7 +56,7 @@ public class Projectile extends Detector implements Walker {
 		if (root instanceof Caster && weapon != null) {
 			Object output = weapon.useSpellOn(world, ((Caster) root), this, deltaTime / getLifeSpan());
 			if (Debug.SHOW_WEAPON_OUTPUT) {
-				Main.log("weapon output: " + output);
+				Debug.log("weapon output: " + output);
 			}
 		}
 				
@@ -98,7 +97,7 @@ public class Projectile extends Detector implements Walker {
 		if (root instanceof Caster && orb != null) {
 			Object output = orb.useSpell(world, (Caster) root, this);
 			if (Debug.SHOW_ORB_OUTPUT) {
-				Main.log("orb output: " + output);
+				Debug.log("orb output: " + output);
 			}
 		}
 		

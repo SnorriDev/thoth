@@ -11,7 +11,7 @@ public class ObjectiveOverlay extends Overlay {
 
 	private static final long serialVersionUID = 1L;
 
-	protected ObjectiveOverlay(FocusedWindow focusedWindow) {
+	protected ObjectiveOverlay(FocusedWindow<?> focusedWindow) {
 		super(focusedWindow);
 		setLayout(new GridBagLayout());
 		TextPane display = this.new TextPane();

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import snorri.main.Main;
+import snorri.main.Debug;
 import snorri.main.Util;
 import snorri.parser.Lexicon;
 
@@ -69,7 +69,7 @@ public class RandomDrop implements Droppable {
 	
 	@Override
 	public int compareTo(Droppable o) {
-		Main.error("tried to compare Droppable to RandomDrop");
+		Debug.error("tried to compare Droppable to RandomDrop");
 		return 0;
 	}
 
@@ -98,7 +98,7 @@ public class RandomDrop implements Droppable {
 	}
 
 	public static void load() {
-		Main.log(Tier.values().length + " drop tiers loaded");
+		Debug.log(Tier.values().length + " drop tiers loaded");
 	}
 	
 	public String toString() {

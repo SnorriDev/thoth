@@ -26,6 +26,7 @@ import javax.swing.text.html.StyleSheet;
 
 import snorri.dialog.Dialog;
 import snorri.keyboard.Key;
+import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.GamePanel;
 import snorri.main.GameWindow;
@@ -38,7 +39,7 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 	
 	private static final long serialVersionUID = 1L;
 		
-	protected final FocusedWindow window;
+	protected final FocusedWindow<?> window;
 	
 	protected abstract class BoxPane extends JPanel {
 		
@@ -177,7 +178,7 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 		
 	}
 	
-	protected Overlay(FocusedWindow focusedWindow) {
+	protected Overlay(FocusedWindow<?> focusedWindow) {
 		super();
 		this.window = focusedWindow;
 		setOpaque(false);
@@ -222,7 +223,7 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 			s.importStyleSheet(Main.getFile("/info/style.css").toURI().toURL());
 			kit.setStyleSheet(s);
 		} catch (MalformedURLException e) {
-			Main.log("could not load stylesheet");
+			Debug.log("could not load stylesheet");
 		}
 		return kit;
 	}

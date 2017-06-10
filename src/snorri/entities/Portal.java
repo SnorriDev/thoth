@@ -2,6 +2,7 @@ package snorri.entities;
 
 import snorri.animations.Animation;
 import snorri.events.CollisionEvent;
+import snorri.main.Debug;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.world.Campaign;
@@ -38,7 +39,7 @@ public class Portal extends Detector {
 				((Campaign) universe).teleport(e.getTarget(), world, dest);
 			}
 		} else {
-			Main.error("can't use portal outside campaign");
+			Debug.error("can't use portal outside campaign");
 		}
 	}
 

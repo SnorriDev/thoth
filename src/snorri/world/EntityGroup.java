@@ -45,7 +45,7 @@ public interface EntityGroup {
 
 	public void updateAround(World world, double d, Entity focus);
 
-	public void renderAround(FocusedWindow g, Graphics gr, double deltaTime);
+	public void renderAround(FocusedWindow<?> g, Graphics gr, double deltaTime);
 
 	/**
 	 * This method does not just search immediate children, but all entities which are transitively children of the root EntityGroup
@@ -112,5 +112,7 @@ public interface EntityGroup {
 	default Entity getFirstCollision(Vector mousePos) {
 		return getFirstCollision(new Entity(mousePos));
 	}
+
+	public <P> P getFirstCollision(Entity checker,Class<P> class1);
 	
 }

@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.swing.ImageIcon;
 
+import snorri.main.Debug;
 import snorri.main.Main;
 import snorri.main.Util;
 import snorri.parser.Grammar;
@@ -35,7 +36,7 @@ public class Hieroglyphs {
 				glyphIcons.put(name, loadImage(name));
 			}
 		} else {
-			Main.error("could not find HTML glyph directory");
+			Debug.error("could not find HTML glyph directory");
 		}
 			
 	}
@@ -45,7 +46,7 @@ public class Hieroglyphs {
 	}
 	
 	public static void load() {
-		Main.log(glyphIcons.size() + " HTML glyphs loaded");
+		Debug.log(glyphIcons.size() + " HTML glyphs loaded");
 	}
 		
 	public static String transliterate(String raw) {
@@ -74,7 +75,7 @@ public class Hieroglyphs {
 		try {
 			return "<img class='hiero' src=\'" + f.toURI().toURL() + "'/>";
 		} catch (MalformedURLException e) {
-			Main.error("bad URL for file " + raw);
+			Debug.error("bad URL for file " + raw);
 			return null;
 		}
 	}

@@ -105,7 +105,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 		return style;
 	}
 	
-	public void drawTile(FocusedWindow g, Graphics gr, Vector v) {
+	public void drawTile(FocusedWindow<?> g, Graphics gr, Vector v) {
 		
 		// TODO should have some sort of quad-binary search for more efficient rendering
 		if (getTexture() == null) {
@@ -239,7 +239,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 	public int compareTo(Tile t) {
 		
 		if (!type.getClass().equals(t.type.getClass())) {
-			Main.error("comparing TileTypes from different layers");
+			Debug.error("comparing TileTypes from different layers");
 			return 0;
 		}
 		

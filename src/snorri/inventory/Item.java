@@ -12,6 +12,7 @@ import snorri.collisions.CircleCollider;
 import snorri.entities.Entity;
 import snorri.events.SpellEvent;
 import snorri.events.SpellEvent.Caster;
+import snorri.main.Debug;
 import snorri.main.GamePanel;
 import snorri.main.GameWindow;
 import snorri.main.Main;
@@ -149,7 +150,7 @@ public abstract class Item implements Droppable {
 			try {
 				return c.getConstructor(ItemType.class).newInstance(this);
 			} catch (Exception e) {
-				Main.error("invalid parameters specified for " + this.toString());
+				Debug.error("invalid parameters specified for " + this.toString());
 				return null;
 			}
 		}
@@ -164,7 +165,7 @@ public abstract class Item implements Droppable {
 			} catch (IllegalArgumentException e) {
 				return null;
 			} catch (IndexOutOfBoundsException e) {
-				Main.log("invalid item number " + raw + " specified");
+				Debug.log("invalid item number " + raw + " specified");
 				return null;
 			}
 		}
@@ -425,7 +426,7 @@ public abstract class Item implements Droppable {
 			return copy;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
-			Main.error("could not copy Item");
+			Debug.error("could not copy Item");
 			e.printStackTrace();
 			return null;
 		}

@@ -25,7 +25,7 @@ import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Playable;
 import snorri.world.World;
 
-public class GameWindow extends FocusedWindow {
+public class GameWindow extends FocusedWindow<Player> {
 		
 	/**
 	 * Main game window
@@ -33,7 +33,6 @@ public class GameWindow extends FocusedWindow {
 	private static final long serialVersionUID = 1L;
 	
 	private Playable universe;
-	private Player focus;
 	private Queue<Message> messageQ;
 	private boolean hasDied;
 	private long lastTime;
@@ -41,9 +40,8 @@ public class GameWindow extends FocusedWindow {
 	private Objective objective;
 		
 	public GameWindow(Playable universe, Player focus) {
-		super();
+		super(focus);
 		this.universe = universe;
-		this.focus = focus;
 		messageQ = new LinkedList<>();
 		lastTime = getTimestamp();
 		hasDied = false;
@@ -70,7 +68,7 @@ public class GameWindow extends FocusedWindow {
 		lastTime = time;
 		
 		if (deltaTime > 0.2) { //this is shitty
-			Main.log("high delta time detected (" + deltaTime + " sec)");
+			Debug.log("high delta time detected (" + deltaTime + " sec)");
 		}
 		
 		if (messageQ != null && messageQ.peek() != null && messageQ.peek().update(deltaTime)) {
@@ -126,10 +124,6 @@ public class GameWindow extends FocusedWindow {
 		
 	}
 	
-	public Player getFocus() {
-		return focus;
-	}
-	
 	public void showMessage(String msg) {
 		showMessage(new SpellMessage(msg));
 	}
@@ -139,7 +133,7 @@ public class GameWindow extends FocusedWindow {
 	}
 	
 	public void showMessage(Message m) {
-		Main.log(m.toString());
+		Debug.log(m.toString());
 		messageQ.add(m);
 	}
 	
@@ -165,7 +159,7 @@ public class GameWindow extends FocusedWindow {
 	public void keyPressed(KeyEvent e) {
 		
 		super.keyPressed(e);
-		
+				
 		if (Key.ESC.isPressed(e)) {
 			pause();
 		}

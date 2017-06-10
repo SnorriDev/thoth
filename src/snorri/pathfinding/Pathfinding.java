@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.List;
 
 import snorri.entities.Entity;
-import snorri.main.Main;
+import snorri.main.Debug;
 import snorri.world.Level;
 import snorri.world.Tile;
 import snorri.world.Vector;
@@ -35,7 +35,7 @@ public class Pathfinding {
 	
 	public PathGraph getGraph(Pathfinder p) {
 		if (getGraph(p.getGridBounds()) == null) {
-			Main.error("missing pathfinding graph for " + p);
+			Debug.error("missing pathfinding graph for " + p);
 			return getDefaultGraph();
 		}
 		return getGraph(p.getGridBounds());

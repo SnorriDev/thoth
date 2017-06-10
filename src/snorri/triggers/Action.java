@@ -6,6 +6,7 @@ import snorri.dialog.Dialog;
 import snorri.dialog.Objective;
 import snorri.entities.Entity;
 import snorri.entities.NPC;
+import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.GamePanel;
 import snorri.main.GameWindow;
@@ -59,7 +60,7 @@ public abstract class Action {
 					public void run() {
 						GamePanel window = Main.getWindow();
 						if (window instanceof FocusedWindow) {
-							((FocusedWindow) window).showDialog((Dialog) args.get("dialog"));
+							((FocusedWindow<?>) window).showDialog((Dialog) args.get("dialog"));
 						}
 					}
 				};
@@ -90,7 +91,7 @@ public abstract class Action {
 						if (window instanceof GameWindow) {
 							((GameWindow) window).setObjective((Objective) args.get("objective"));
 						} else {
-							Main.error("Setting objective in non-GameWindow");
+							Debug.error("Setting objective in non-GameWindow");
 						}
 					}
 				};
@@ -105,7 +106,7 @@ public abstract class Action {
 					@Override
 					public void run() {
 						if (type == null) {
-							Main.error("tried to spawn null entity type in trigger action");
+							Debug.error("tried to spawn null entity type in trigger action");
 							return;
 						}
 						Entity e = Entity.spawnNew(world, (Vector) args.get("pos"), type);

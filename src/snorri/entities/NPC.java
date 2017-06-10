@@ -44,7 +44,7 @@ public class NPC extends AIUnit implements Interactor {
 	public void speak() {
 		GamePanel window = Main.getWindow();
 		if (window instanceof FocusedWindow) {
-			((FocusedWindow) window).showDialog(dialog);
+			((FocusedWindow<?>) window).showDialog(dialog);
 		}
 	}
 	

@@ -4,7 +4,7 @@ import snorri.events.CollisionEvent;
 import snorri.inventory.Droppable;
 import snorri.inventory.Item;
 import snorri.inventory.RandomDrop;
-import snorri.main.Main;
+import snorri.main.Debug;
 import snorri.parser.Grammar;
 import snorri.world.Vector;
 
@@ -27,7 +27,7 @@ public class Drop extends Detector {
 		this(pos, Droppable.fromString(prize));
 		if (this.prize instanceof Item) {
 			((Item) this.prize).setSpell(Grammar.parseSentence(spell));
-			Main.log("spawned enchanted drop");
+			Debug.log("spawned enchanted drop");
 		}
 	}
 	

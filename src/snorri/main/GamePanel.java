@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -12,7 +14,7 @@ import javax.swing.JPanel;
 
 import snorri.world.Vector;
 
-public abstract class GamePanel extends JPanel implements ActionListener {
+public abstract class GamePanel extends JPanel implements ActionListener, FocusListener {
 
 	private static final long serialVersionUID = 1L;
 	public static final int MARGIN = 20;
@@ -22,12 +24,15 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 
 	protected GamePanel() {
 		setBackground(BACKGROUND_COLOR);
+		setFocusable(true);
+		setVisible(true);
+		addFocusListener(this);
 	}
 
 	/**
 	 * End any background threads.
 	 */
-	protected void stopBackgroundThread() {
+	public void stopBackgroundThread() {
 	}
 	
 	/**
@@ -84,5 +89,15 @@ public abstract class GamePanel extends JPanel implements ActionListener {
 	protected long getTimestamp() {
 		return System.nanoTime();
 	}
+	
+	@Override
+	public void focusGained(FocusEvent e) {
+		Debug.log("focus gained in " + getClass().getSimpleName());
+	}
+
+	@Override
+    public void focusLost(FocusEvent e) {
+		Debug.log("focus lost in " + getClass().getSimpleName());
+    }
 
 }

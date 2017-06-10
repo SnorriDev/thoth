@@ -10,7 +10,6 @@ import snorri.collisions.RectCollider;
 import snorri.events.CollisionEvent;
 import snorri.events.SpellEvent;
 import snorri.main.Debug;
-import snorri.main.Main;
 import snorri.modifiers.Modifier;
 import snorri.pathfinding.Team;
 import snorri.semantics.Go.Walker;
@@ -84,7 +83,7 @@ public abstract class Unit extends Entity implements Walker {
 		if (isDead()) {
 			world.delete(this);
 			if (Debug.LOG_DEATHS) {
-				Main.log(tag + " died");
+				Debug.log(tag + " died");
 			}
 			TriggerType.KILL.activate(tag);
 		}
@@ -150,7 +149,7 @@ public abstract class Unit extends Entity implements Walker {
 	
 	public void damage(double d) {
 		if (Debug.LOG_DAMAGE_EVENTS) {
-			Main.log(this + "(" + (int) health + "/" + MAX_HEALTH + ") took " + d + " damage");
+			Debug.log(this + "(" + (int) health + "/" + MAX_HEALTH + ") took " + d + " damage");
 		}
 		health -= d;
 	}
