@@ -51,7 +51,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 	private static final long serialVersionUID = 1L;
 
-	private static final double SCALE_FACTOR = 15.9;
+	private static final double SCALE_FACTOR = 9d;
 	private static final double SPEED_MULTIPLIER = 3.9;
 	
 	private double speed = SCALE_FACTOR;
