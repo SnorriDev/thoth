@@ -11,6 +11,7 @@ import snorri.main.FocusedWindow;
 import snorri.main.GamePanel;
 import snorri.main.GameWindow;
 import snorri.main.Main;
+import snorri.semantics.Open;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -101,16 +102,29 @@ public abstract class Action {
 		SPAWN_ENTITY(new Action() {
 			@Override
 			public Runnable build(World world, Map<String, Object> args) {
-				final Class<? extends Entity> type = Entity.getSpawnableByName((String) args.get("type"));
 				return new Runnable() {
 					@Override
 					public void run() {
+						final Class<? extends Entity> type = Entity.getSpawnableByName((String) args.get("type"));
 						if (type == null) {
 							Debug.error("tried to spawn null entity type in trigger action");
 							return;
 						}
 						Entity e = Entity.spawnNew(world, (Vector) args.get("pos"), type);
 						e.setTag((String) args.get("tag"));
+					}
+				};
+			}
+		}),
+		
+		OPEN_DOOR(new Action() {
+			@Override
+			public Runnable build(World world, Map<String, Object> args) {
+				final Vector pos = (Vector) args.get("door");
+				return new Runnable() {
+					@Override
+					public void run() {
+						Open.openDoor(world, pos);
 					}
 				};
 			}

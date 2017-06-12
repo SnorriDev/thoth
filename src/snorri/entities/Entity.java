@@ -22,6 +22,7 @@ import snorri.main.GameWindow;
 import snorri.main.Util;
 import snorri.semantics.Nominal;
 import snorri.triggers.Trigger;
+import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -418,6 +419,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public boolean onDelete(World world) {
 		boolean out = !deleted;
 		deleted = true;
+		TriggerType.DESTROY.activate(tag);
 		return out;
 	}
 
