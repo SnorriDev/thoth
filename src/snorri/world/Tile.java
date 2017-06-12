@@ -13,6 +13,7 @@ import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.masking.Mask;
+import snorri.pathfinding.Component;
 import snorri.semantics.Nominal;
 import snorri.world.TileType;
 
@@ -115,25 +116,16 @@ public class Tile implements Comparable<Tile>, Nominal {
 		}
 		
 		Vector relPos = v.getRelPosGrid(g);
-		
-		if (Debug.RENDER_GRAPHS) {
-			World w = g.getWorld();
-			if (w.getPathfinding().getDefaultGraph().getComponent(v) != null) {
-				gr.setColor(w.getPathfinding().getDefaultGraph().getComponent(v).getColor());
-				gr.drawRect(relPos.getX(), relPos.getY(), Tile.WIDTH, Tile.WIDTH);
-				gr.setColor(Color.BLACK);
-				return;
-			}
-		}
-		
 		gr.drawImage(type.getTexture(style), relPos.getX(), relPos.getY(), g);
 		
 		if (Debug.HIDE_MASKS || bitMasks == null) {
 			if (Debug.RENDER_TILE_GRID) {
-				//World w = g.getWorld();
-				gr.setColor(Color.BLUE);
-				gr.drawRect(relPos.getX(), relPos.getY(), Tile.WIDTH, Tile.WIDTH);
-				gr.setColor(Color.BLACK);
+				Component c = g.getWorld().getPathfinding().getDefaultGraph().getComponent(v);
+				if (c != null) {
+					gr.setColor(c.getColor());
+					gr.drawRect(relPos.getX(), relPos.getY(), Tile.WIDTH, Tile.WIDTH);
+					gr.setColor(Color.BLACK);
+				}
 			}
 			return;
 		}
@@ -148,10 +140,12 @@ public class Tile implements Comparable<Tile>, Nominal {
 		}
 		
 		if (Debug.RENDER_TILE_GRID) {
-			//World w = g.getWorld();
-			gr.setColor(Color.BLUE);
-			gr.drawRect(relPos.getX(), relPos.getY(), Tile.WIDTH, Tile.WIDTH);
-			gr.setColor(Color.BLACK);
+			Component c = g.getWorld().getPathfinding().getDefaultGraph().getComponent(v);
+			if (c != null) {
+				gr.setColor(c.getColor());
+				gr.drawRect(relPos.getX(), relPos.getY(), Tile.WIDTH, Tile.WIDTH);
+				gr.setColor(Color.BLACK);
+			}
 		}
 		
 	}
