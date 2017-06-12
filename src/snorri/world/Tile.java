@@ -109,7 +109,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 	
 	public void drawTile(FocusedWindow<?> g, Graphics gr, Vector v) {
 		
-		// TODO should have some sort of quad-binary search for more efficient rendering
+		// TODO some sort of quad-search for rendering
 		if (getTexture() == null) {
 			return;
 		}

@@ -26,7 +26,7 @@ public enum ForegroundElement implements Nominal, TileType {
 	protected double blendOrder;
 	
 	ForegroundElement() {
-		this((BufferedImage) null);
+		this(new BufferedImage[] {});
 	}
 	
 	ForegroundElement(BufferedImage texture) {
@@ -80,19 +80,13 @@ public enum ForegroundElement implements Nominal, TileType {
 
 	@Override
 	public BufferedImage[] getTextures() {
-		if (textures != null)
-			return textures;
-		else {
-			//Main.error("no textures found, returning default texture");
-			return new BufferedImage[] {Tile.DEFAULT_FOREGROUND_TEXTURE};
-		}
+		return textures;
 	}
 
 	@Override
 	public BufferedImage getTexture(int index) {
 		if (index >= textures.length) {
-			//Main.error("texture not found, index out of bounds, returning default texture");
-			return Tile.DEFAULT_FOREGROUND_TEXTURE;
+			return null;
 		}
 		return textures[index];
 	}

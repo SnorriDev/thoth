@@ -26,13 +26,13 @@ public enum MidgroundElement implements TileType {
 	BROKEN_WALL_END_LEFT(TileType.getRotations(getImage("brokenwallendleft00.png"))),
 	BROKEN_WALL_END_RIGHT(TileType.getRotations(getImage("brokenwallendright00.png")));
 	
-	protected BufferedImage[]	textures;
+	protected BufferedImage[] textures;
 	protected boolean pathable; //some things (like paths and tiles) will be unpathable
 	protected TileType replacementType;
 	protected double blendOrder;
 	
 	MidgroundElement() {
-		this((BufferedImage) null, Param.pathable(true));
+		this(new BufferedImage[] {}, Param.pathable(true));
 	}
 	
 	MidgroundElement(BufferedImage texture) {
@@ -47,7 +47,7 @@ public enum MidgroundElement implements TileType {
 	}
 	
 	MidgroundElement(Param<?>...params) {
-		this(Tile.DEFAULT_FOREGROUND_TEXTURE, params);
+		this(new BufferedImage[] {}, params);
 	}
 	
 	MidgroundElement(BufferedImage texture, Param<?>...params) {
@@ -93,19 +93,13 @@ public enum MidgroundElement implements TileType {
 
 	@Override
 	public BufferedImage[] getTextures() {
-		if (textures != null)
-			return textures;
-		else {
-			//Main.error("no textures found, returning default texture");
-			return new BufferedImage[] {Tile.DEFAULT_MIDGROUND_TEXTURE};
-		}
+		return textures;
 	}
 
 	@Override
 	public BufferedImage getTexture(int index) {
 		if (index >= textures.length) {
-			//Main.error("texture not found, index out of bounds, returning default texture");
-			return Tile.DEFAULT_MIDGROUND_TEXTURE;
+			return null;
 		}
 		return textures[index];
 	}
