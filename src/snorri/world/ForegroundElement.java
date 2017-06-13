@@ -14,12 +14,12 @@ public enum ForegroundElement implements Nominal, TileType {
 	COL_MID(getImage("colmid00.png")),
 	COL_TOP(getImage("coltop00.png")),
 	GATE(TileType.getRotations(getImage("gate00.png"))),
-	GATE_LEFT_OPEN(TileType.getRotations(getImage("gateleftopen00.png"))),
-	GATE_RIGHT_OPEN(TileType.getRotations(getImage("gaterightopen00.png"))),
-	GATE_LEFT(TileType.getRotations(getImage("gateleft00.png")), GATE_LEFT_OPEN),
-	GATE_RIGHT(TileType.getRotations(getImage("gateright00.png")), GATE_RIGHT_OPEN),
-	WALL_END_LEFT(Tile.DEFAULT_FOREGROUND_TEXTURE),
-	WALL_END_RIGHT(Tile.DEFAULT_FOREGROUND_TEXTURE);
+	GATE_LEFT_OPEN(TileType.addAll(TileType.getRotations(getImage("gateleftopen00.png")),TileType.getRotations(getImage("gateleftopen01.png")))),
+	GATE_RIGHT_OPEN(TileType.addAll(TileType.getRotations(getImage("gaterightopen00.png")),TileType.getRotations(getImage("gaterightopen01.png")))),
+	GATE_LEFT(TileType.addAll(TileType.getRotations(getImage("gateleft00.png")),TileType.getRotations(getImage("gateleft01.png"))), GATE_LEFT_OPEN),
+	GATE_RIGHT(TileType.addAll(TileType.getRotations(getImage("gateright00.png")),TileType.getRotations(getImage("gateright01.png"))), GATE_RIGHT_OPEN),
+	WALL_END_LEFT(TileType.getRotations(getImage("wallendleft01.png"))),
+	WALL_END_RIGHT(TileType.getRotations(getImage("wallendright01.png")));
 	
 	protected BufferedImage[] textures;
 	protected TileType replacementType;
