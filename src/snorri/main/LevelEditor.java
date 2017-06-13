@@ -460,7 +460,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 	
 	//FIXME why isn't this working? debugging this would be nice
 	public void centerCamera() {
-		focus.getPos().add(env.getDimensions().copy().divide(2));
+//		focus.getPos().add(env.getDimensions().copy().divide(2));
 	}
 
 	@Override

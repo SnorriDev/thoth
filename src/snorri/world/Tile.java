@@ -2,6 +2,7 @@ package snorri.world;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import snorri.entities.Entity;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
+import snorri.main.Util;
 import snorri.masking.Mask;
 import snorri.pathfinding.Component;
 import snorri.semantics.Nominal;
@@ -21,7 +23,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 	
 	private static final long serialVersionUID = 1L;
 	
-	public static final int	WIDTH	= 64;
+	public static final int	WIDTH = 64;
 	public static final BufferedImage DEFAULT_TEXTURE = Main.DEFAULT_TEXTURE;
 	public static final BufferedImage DEFAULT_BACKGROUND_TEXTURE = getImage("/textures/tiles/default_background00.png");
 	public static final BufferedImage DEFAULT_MIDGROUND_TEXTURE = getImage("/textures/tiles/default_midground00.png");
@@ -33,34 +35,27 @@ public class Tile implements Comparable<Tile>, Nominal {
 	private boolean reachable, surroundingsPathable = true;
 	private List<Entity> entities;
 	
-	protected Mask[] bitMasks;
+	private BufferedImage texture;
 	
 	protected static ClipWrapper[] sounds;
 	
-
-	private Tile() {
-		entities = new ArrayList<>();
-	}
-	
-	public Tile(TileType type) { //FIXME
-		this();
-		this.type = type;
-		style = 0;
-	}
-	
 	public Tile(TileType type, int style) {
-		this(type);
+		this.type = type;
 		this.style = style;
+		entities = new ArrayList<>();
+		texture = getBaseTexture(); //by default, should just point to the type texture
 	}
 	
-	public Tile(Class<? extends TileType> c, int id) {
-		this(TileType.lookup(c, id));
-		style = 0;
+	private Tile() {
+		this((TileType) null, 0);
+	}
+	
+	public Tile(TileType type) {
+		this(type, 0);
 	}
 	
 	public Tile(Class<? extends TileType> c, int id, int style) {
-		this(c, id);
-		this.style = style;
+		this(TileType.lookup(c, id), style);
 	}
 	
 	public Tile(Tile tile) {
@@ -116,28 +111,19 @@ public class Tile implements Comparable<Tile>, Nominal {
 		}
 		
 		Vector relPos = v.getRelPosGrid(g);
-		gr.drawImage(type.getTexture(style), relPos.getX(), relPos.getY(), g);
+		gr.drawImage(texture, relPos.getX(), relPos.getY(), g);
 		
-		if (Debug.HIDE_MASKS || bitMasks == null) {
-			if (Debug.RENDER_TILE_GRID) {
-				Component c = g.getWorld().getPathfinding().getDefaultGraph().getComponent(v);
-				if (c != null) {
-					gr.setColor(c.getColor());
-					gr.drawRect(relPos.getX(), relPos.getY(), Tile.WIDTH, Tile.WIDTH);
-					gr.setColor(Color.BLACK);
-				}
-			}
-			return;
-		}
-				
-		//TODO g vs. null as ImageObserver
-		//TODO figure out why we are getting 8
-		for (Mask m : bitMasks) {
-			if (m == null) {
-				break;
-			}
-			gr.drawImage(m.getTexture(), relPos.getX(), relPos.getY(), g);
-		}
+//		if (Debug.HIDE_MASKS || bitMasks == null) {
+//			if (Debug.RENDER_TILE_GRID) {
+//				Component c = g.getWorld().getPathfinding().getDefaultGraph().getComponent(v);
+//				if (c != null) {
+//					gr.setColor(c.getColor());
+//					gr.drawRect(relPos.getX(), relPos.getY(), Tile.WIDTH, Tile.WIDTH);
+//					gr.setColor(Color.BLACK);
+//				}
+//			}
+//			return;
+//		}
 		
 		if (Debug.RENDER_TILE_GRID) {
 			Component c = g.getWorld().getPathfinding().getDefaultGraph().getComponent(v);
@@ -150,8 +136,12 @@ public class Tile implements Comparable<Tile>, Nominal {
 		
 	}
 	
-	public BufferedImage getTexture() {
+	public BufferedImage getBaseTexture() {
 		return type.getTexture(style);
+	}
+	
+	public BufferedImage getTexture() {
+		return texture;
 	}
 	
 	@Override
@@ -265,7 +255,21 @@ public class Tile implements Comparable<Tile>, Nominal {
 	}
 	
 	public void setBitMasks(Mask[] b) {
-		bitMasks = b;
+		if (b == null) { //if there are no masks on this tile
+			return;
+		}
+		texture = Util.deepCopy(getBaseTexture());
+		Graphics2D gr = texture.createGraphics();
+		for (Mask m : b) {
+			if (m == null) {
+				break;
+			}
+			BufferedImage mask = m.getTexture();
+			if (mask != null) {
+				gr.drawImage(mask, 0, 0, null);
+			}
+		}
+		gr.dispose();
 	}
 	
 	public void setBitMasks(Level l, int x, int y) {
