@@ -6,9 +6,9 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Queue;
+import java.util.PriorityQueue;
 
 import snorri.audio.ClipWrapper;
 import snorri.entities.Entity;
@@ -37,7 +37,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 	private boolean reachable, surroundingsPathable = true;
 	private List<Entity> entities;
 	
-	private Queue<Mask> maskQ;
+	private PriorityQueue<Mask> maskQ;
 	private BufferedImage texture;
 	
 	protected static ClipWrapper[] sounds;
@@ -45,7 +45,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 	public Tile(TileType type, int style) {
 		this.type = type;
 		this.style = style;
-		maskQ = new LinkedList<>();
+		maskQ = new PriorityQueue<>();
 		entities = new ArrayList<>();
 		texture = getBaseTexture(); //by default, should just point to the type texture
 	}
@@ -259,8 +259,8 @@ public class Tile implements Comparable<Tile>, Nominal {
 		gr.dispose();
 	}
 	
-	public void enqueueBitMask(Mask m) {
-		maskQ.add(m);
+	public void enqueueBitMasks(Collection<Mask> masks) {
+		maskQ.addAll(masks);
 	}
 	
 	public void addEntity(Entity e) {

@@ -11,7 +11,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.HashMap;
 
 import snorri.entities.Entity;
@@ -436,12 +435,9 @@ public class Level implements Editable {
 			bitVal *= 2;
 		}
 		
-		PriorityQueue<Mask> pq = new PriorityQueue<>();
-		pq.addAll(edges.values());
-		pq.addAll(corners.values());
-		while (!pq.isEmpty()) {
-			tile.enqueueBitMask(pq.poll());
-		}
+		//TODO should be able to directly enqueue bitmasks above
+		tile.enqueueBitMasks(edges.values());
+		tile.enqueueBitMasks(corners.values());
 		
 	}
 	
