@@ -1,0 +1,7 @@
+onUrnDestroy:
+  events:
+    - DESTROY:
+        object: keyUrn
+  actions:
+    - OPEN_DOOR:
+        door: !door {x: 61, y: 97}

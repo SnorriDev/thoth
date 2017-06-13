@@ -15,12 +15,14 @@ import snorri.collisions.CircleCollider;
 import snorri.collisions.Collider;
 import snorri.entities.Player.Interactor;
 import snorri.events.CollisionEvent;
+import snorri.events.SpellEvent;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.GameWindow;
 import snorri.main.Util;
 import snorri.semantics.Nominal;
 import snorri.triggers.Trigger;
+import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -87,10 +89,8 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	/** used to determine which entities should be rendered over others **/
 	protected int z;
 	protected String tag;
-	
-	private boolean flying;
-	protected boolean killed = false;
-
+		
+	private boolean flying = false, deleted = false;
 
 	/**
 	 * This method will automatically set the collider focus to the entity
@@ -257,16 +257,16 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 
 	@Override
-	public Object get(World world, AbstractSemantics attr) {
+	public Nominal get(AbstractSemantics attr, SpellEvent e) {
 		
 		if (attr == AbstractSemantics.POSITION) {
 			return pos;
 		}
 		if (attr == AbstractSemantics.TILE) {
-			return world.getLevel().getTile(pos); //FIXME
+			return e.getWorld().getLevel().getTile(pos);
 		}
 		
-		return Nominal.super.get(world, attr);
+		return Nominal.super.get(attr, e);
 	}
 	
 	/**
@@ -405,11 +405,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		return false;
 	}
 	
-	public void kill(World world) {
-		world.delete(this);
-		killed = true;
-	}
-	
 	/**
 	 * This method can be called manually to update the stats and other parameters of old entitites in a world.
 	 */
@@ -420,10 +415,12 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public Vector getGridBounds() {
 		return new Vector(collider.getRadiusX(), collider.getRadiusY()).multiply(2).toGridPosRounded();
 	}
-
-	//A bunch of event handlers
-	
-	public void onDelete(World world) {
+		
+	public boolean onDelete(World world) {
+		boolean out = !deleted;
+		deleted = true;
+		TriggerType.DESTROY.activate(tag);
+		return out;
 	}
 
 	public void onExplosion(CollisionEvent e) {

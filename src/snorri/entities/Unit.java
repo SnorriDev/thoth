@@ -13,6 +13,8 @@ import snorri.main.Debug;
 import snorri.modifiers.Modifier;
 import snorri.pathfinding.Team;
 import snorri.semantics.Go.Walker;
+import snorri.semantics.Nominal;
+import snorri.semantics.Wrapper;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -191,13 +193,13 @@ public abstract class Unit extends Entity implements Walker {
 	}
 	
 	@Override
-	public Object get(World world, AbstractSemantics attr) {
+	public Nominal get(AbstractSemantics attr, SpellEvent e) {
 		
 		if (attr == AbstractSemantics.HEALTH) {
-			return (int) health;
+			return new Wrapper<Integer>((int) health);
 		}
 		
-		return super.get(world, attr);
+		return super.get(attr, e);
 		
 	}
 	
@@ -235,10 +237,9 @@ public abstract class Unit extends Entity implements Walker {
 		return team;
 	}
 	
-	@Override
 	public void kill(World world) {
 		damage(100);
-		super.kill(world);
+		world.delete(this);
 	}
 	
 	public String[] getSpeechSounds() {

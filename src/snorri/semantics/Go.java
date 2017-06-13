@@ -33,7 +33,7 @@ public class Go extends IntransVerbDef {
 		if (e.getSecondPerson() instanceof Walker) {
 			Vector trans = e.getDestination().copy().sub(e.getSecondPerson().getPos());
 			if (trans.magnitude() < DELETE_MARGIN) {
-				e.getSecondPerson().kill(e.getWorld());
+				e.getWorld().delete(e.getSecondPerson());
 				return false;
 			}
 			((Walker) e.getSecondPerson()).walkNormalized(e.getWorld(), trans, SPEED * e.getDeltaTime());

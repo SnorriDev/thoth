@@ -9,7 +9,7 @@ public class To extends PrepDef {
 	@Override
 	public SpellEvent eval(Nominal obj, SpellEvent e) {
 		
-		Object pos = obj.get(e.getWorld(), AbstractSemantics.POSITION);
+		Object pos = obj.get(AbstractSemantics.POSITION, e);
 		
 		if (pos instanceof Vector) {
 			e.setDestination(((Vector) pos).copy()); //e is a copy of the SpellEvent, not the real thing

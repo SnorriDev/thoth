@@ -48,16 +48,15 @@ public class Mask implements Comparable<Mask>, Comparator<Mask> {
 		this.tile = tile;
 		this.bitmask = (short) (corner ? 16 : 0);
 		this.corner = corner;
-		//this.setOrder(order);
 	}
 	
-	private void setTexture() {
-		texture = AlphaMask.getMask(bitmask).getMasked(tile.getTexture());
+	private void calculateTexture() {
+		texture = AlphaMask.getMask(bitmask).getMasked(tile.getBaseTexture());
 	}
 	
 	public BufferedImage getTexture() {
 		if (texture == null) {
-			setTexture();
+			calculateTexture();
 		}
 		return texture;
 	}

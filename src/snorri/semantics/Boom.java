@@ -15,7 +15,7 @@ public class Boom extends IntransVerbDef {
 	
 	@Override
 	public boolean exec(SpellEvent e) {
-		e.getSecondPerson().kill(e.getWorld()); //delete the thing that is exploding
+		e.getWorld().delete(e.getSecondPerson());
 		e.getWorld().add(new Explosion(e.getSecondPerson().getPos(), DAMAGE));
 		return true;
 	}

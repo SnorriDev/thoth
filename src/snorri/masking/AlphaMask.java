@@ -2,6 +2,7 @@ package snorri.masking;
 
 import java.awt.image.BufferedImage;
 
+import snorri.main.Debug;
 import snorri.main.Main;
 import snorri.main.Util;
 import snorri.world.Tile;
@@ -12,10 +13,10 @@ public class AlphaMask {
 	private static final AlphaMask[] MASKS = new AlphaMask[32];
 	
 	static {
-		
 		for (int i = 0; i < 32; i++) {
 			MASKS[i] = new AlphaMask(i % 16, i / 16);
-		}		
+		}
+		Debug.log("alpha masks initialized");
 	}
 
 	private final BufferedImage mask;
@@ -26,6 +27,10 @@ public class AlphaMask {
 	}
 
 	public BufferedImage getMasked(BufferedImage i) {
+		
+		if (i == null) {
+			Debug.raw("got null");
+		}
 		
 		BufferedImage image = Util.deepCopy(i);
 		

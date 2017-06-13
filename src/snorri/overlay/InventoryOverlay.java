@@ -465,7 +465,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	
 	@Override
 	public void focusGained(FocusEvent e) {
-		if (list.getSelectedValue().getSpell() == null) {
+		if (list.getSelectedValue() == null || list.getSelectedValue().getSpell() == null) {
 			field.setText("");
 			return;
 		}

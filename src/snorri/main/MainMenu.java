@@ -27,8 +27,8 @@ public class MainMenu extends GamePanel {
 		
 		JPanel menu = new MenuPanel();
 		menu.add(createButton("TUTORIAL"));
-		menu.add(createButton("OASIS ADVENTURE"));
-		menu.add(createButton("DUNGEON ADVENTURE"));
+//		menu.add(createButton("OASIS ADVENTURE"));
+//		menu.add(createButton("DUNGEON ADVENTURE"));
 		menu.add(createButton("LOAD WORLD"));
 		menu.add(createButton("WORLD EDITOR"));
 		outerFrame.add(menu);

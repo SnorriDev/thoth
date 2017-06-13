@@ -1,18 +1,19 @@
 package snorri.world;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
-
-import java.io.Serializable;
 
 import java.lang.Math;
 
 import java.util.ArrayList;
 
 import snorri.main.FocusedWindow;
+import snorri.main.GamePanel;
+import snorri.semantics.Nominal;
 
-public class Vector implements Serializable, Comparable<Vector> {
+public class Vector implements Nominal, Comparable<Vector> {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -50,6 +51,14 @@ public class Vector implements Serializable, Comparable<Vector> {
 	public Vector(Vector v) {
 		this.x = v.x;
 		this.y = v.y;
+	}
+	
+	public Vector (Dimension d) {
+		this(d.width, d.height);
+	}
+	
+	public Vector(GamePanel panel) {
+		this(panel.getSize());
 	}
 	
 	/**

@@ -22,7 +22,7 @@ public class Grow extends TransVerbDef {
 		if (!(meaning instanceof ClassWrapper)) {
 			return false;
 		}
-		Class<?> obj = ((ClassWrapper) meaning).rawClass;
+		Class<?> obj = ((ClassWrapper) meaning).getValue();
 		
 		if (obj instanceof Class<?> && Plant.class.isAssignableFrom((Class<?>) obj)) {
 			try {

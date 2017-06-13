@@ -1,11 +1,13 @@
 package snorri.entities;
 
 import snorri.events.CollisionEvent;
+import snorri.events.SpellEvent;
 import snorri.events.SpellEvent.Caster;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.main.Debug;
 import snorri.semantics.Go.Walker;
+import snorri.semantics.Nominal;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -79,20 +81,16 @@ public class Projectile extends Detector implements Walker {
 			((Unit) e.getTarget()).damage(weapon.getSharpness());
 		}
 		
-		kill(e.getWorld());
+		e.getWorld().delete(this);
 		
 	}
 	
 	@Override
-	public void kill(World world) {
+	public boolean onDelete(World world) {
 		
-		//TODO unify this with onDelete
-		
-		if (killed) { //prevent infinite loops when the spell kills this object
-			return;
+		if (!super.onDelete(world)) {
+			return false;
 		}
-		
-		super.kill(world);
 		
 		if (root instanceof Caster && orb != null) {
 			Object output = orb.useSpell(world, (Caster) root, this);
@@ -100,17 +98,18 @@ public class Projectile extends Detector implements Walker {
 				Debug.log("orb output: " + output);
 			}
 		}
+		return true;
 		
 	}
 	
 	@Override
-	public Object get(World world, AbstractSemantics attr) {
+	public Nominal get(AbstractSemantics attr, SpellEvent e) {
 		
 		if (attr == AbstractSemantics.SOURCE) {
 			return root;
 		}
 		
-		return super.get(world, attr);
+		return super.get(attr, e);
 		
 	}
 

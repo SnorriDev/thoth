@@ -47,7 +47,7 @@ public class CreateObject extends TransVerbDef {
 		}
 				
 		if (obj instanceof ClassWrapper) {
-			Class<? extends Entity> c = (Class<? extends Entity>) ((ClassWrapper) obj).rawClass;
+			Class<? extends Entity> c = (Class<? extends Entity>) ((ClassWrapper) obj).getValue();
 			if (!Entity.canSpawn(c)) {
 				return false;
 			}

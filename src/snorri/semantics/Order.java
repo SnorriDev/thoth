@@ -1,19 +1,19 @@
 package snorri.semantics;
 
 import snorri.entities.Vortex;
-import snorri.world.World;
+import snorri.events.SpellEvent;
 
 /**
  * Class holding complex semantics for the concept mAAt ("order")
  * @author snorri
  *
  */
-//TODO this route and other route have lots of specialization
-//upgrade this word over time?
 public class Order implements Nominal {
 
+	private static final long serialVersionUID = 1L;
+
 	@Override
-	public Object get(World world, AbstractSemantics attr) {
+	public Nominal get(AbstractSemantics attr, SpellEvent e) {
 		
 		switch(attr) {
 		
@@ -21,7 +21,7 @@ public class Order implements Nominal {
 			return new ClassWrapper(Vortex.class);
 			
 		default:
-			return Nominal.super.get(world, attr);
+			return Nominal.super.get(attr, e);
 			
 		}
 				

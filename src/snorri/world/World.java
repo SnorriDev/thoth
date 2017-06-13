@@ -211,9 +211,12 @@ public class World implements Playable, Editable {
 
 	/**
 	 * @param e the entity to delete
-	 *         
+	 * @return whether the delete was successful
 	 */
 	public boolean delete(Entity e) {
+		if (e == null) {
+			return false;
+		}
 		e.onDelete(this);
 		return col.delete(e);
 	}

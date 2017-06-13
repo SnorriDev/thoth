@@ -51,7 +51,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 	private static final long serialVersionUID = 1L;
 
-	private static final double SCALE_FACTOR = 1.9;
+	private static final double SCALE_FACTOR = 1d;
 	private static final double SPEED_MULTIPLIER = 3.9;
 	
 	private double speed = SCALE_FACTOR;
@@ -460,7 +460,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 	
 	//FIXME why isn't this working? debugging this would be nice
 	public void centerCamera() {
-		focus.getPos().add(env.getDimensions().copy().divide(2));
+//		focus.getPos().add(env.getDimensions().copy().divide(2));
 	}
 
 	@Override
