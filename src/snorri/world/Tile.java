@@ -6,7 +6,9 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import snorri.audio.ClipWrapper;
 import snorri.entities.Entity;
@@ -35,6 +37,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 	private boolean reachable, surroundingsPathable = true;
 	private List<Entity> entities;
 	
+	private Queue<Mask> maskQ;
 	private BufferedImage texture;
 	
 	protected static ClipWrapper[] sounds;
@@ -42,6 +45,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 	public Tile(TileType type, int style) {
 		this.type = type;
 		this.style = style;
+		maskQ = new LinkedList<>();
 		entities = new ArrayList<>();
 		texture = getBaseTexture(); //by default, should just point to the type texture
 	}
@@ -108,6 +112,10 @@ public class Tile implements Comparable<Tile>, Nominal {
 		// TODO some sort of quad-search for rendering
 		if (getTexture() == null) {
 			return;
+		}
+		
+		if (!maskQ.isEmpty()) {
+			renderTexture();
 		}
 		
 		Vector relPos = v.getRelPosGrid(g);
@@ -254,30 +262,17 @@ public class Tile implements Comparable<Tile>, Nominal {
 //			return 0;
 	}
 	
-	public void setBitMasks(Mask[] b) {
-		if (b == null) { //if there are no masks on this tile
-			return;
-		}
+	public void renderTexture() {
 		texture = Util.deepCopy(getBaseTexture());
 		Graphics2D gr = texture.createGraphics();
-		for (Mask m : b) {
-			if (m == null) {
-				break;
-			}
-			BufferedImage mask = m.getTexture();
-			if (mask != null) {
-				gr.drawImage(mask, 0, 0, null);
-			}
+		while (!maskQ.isEmpty()) {
+			gr.drawImage(maskQ.poll().getTexture(), 0, 0, null);
 		}
 		gr.dispose();
 	}
 	
-	public void setBitMasks(Level l, int x, int y) {
-		setBitMasks(l.getBitMasks(x, y));
-	}
-	
-	public void setBitMasks(Level l, Vector pos) {
-		setBitMasks(l, pos.getX(), pos.getY());
+	public void enqueueBitMask(Mask m) {
+		maskQ.add(m);
 	}
 	
 	public void addEntity(Entity e) {

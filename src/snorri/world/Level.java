@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.HashMap;
 
 import snorri.entities.Entity;
 import snorri.main.Debug;
@@ -64,12 +66,12 @@ public class Level implements Editable {
 
 	public Level(File file, Class<? extends TileType> c) throws FileNotFoundException, IOException {
 		load(file, c);
-		setBitMasks();
+		enqueueAllBitMasks();
 	}
 	
 	public Level(File file) throws FileNotFoundException, IOException {
 		load(file);
-		setBitMasks();
+		enqueueAllBitMasks();
 	}
 	
 	/**
@@ -378,11 +380,11 @@ public class Level implements Editable {
 	}
 	
 	private void updateMasksGrid(Vector pos) {
-		getTileGrid(pos).setBitMasks(this, pos);
+		enqueueBitMasks(pos);
 		for (Vector trans : Mask.NEIGHBORS_AND_CORNERS) {
 			Vector p = pos.copy().add(trans);
 			if (getTileGrid(p) != null) {
-				getTileGrid(p).setBitMasks(this, p);
+				enqueueBitMasks(p);
 			}
 		}
 	}
@@ -393,78 +395,64 @@ public class Level implements Editable {
 	}
 	
 	/**
-	 * Returns an array of bitmasks (8 maximum).
-	 * Excess space in the array is null.
+	 * Enqueues all bitmasks onto a tile
 	 */
-	public Mask[] getBitMasks(int x, int y) {
+	public void enqueueBitMasks(int x, int y) {
 		
 		Tile tile = getTileGrid(x, y);
 		if (tile == null || tile.getType().isAtTop()) {
-			return null;
+			return;
 		}
 		
-		Mask[] masks = new Mask[8];
+		Map<TileType, Mask> edges = new HashMap<>();
 		
 		short bitVal = 1;
-		int j = 0;
 		for (Vector v : Mask.NEIGHBORS) {
 			Tile t = getTileGrid(v.copy().add(x, y));
 			if (t != null && !t.getType().isAtTop() && tile.compareTo(t) > 0) {
-				for (j = 0; j < masks.length; j++) {
-					if (masks[j] == null) {
-						masks[j] = new Mask(t, false);
-					}
-					if (masks[j].hasTile(t)) {
-						masks[j].add(bitVal);
-						break;
-				
-					}
+				Mask mask = edges.get(t.getType());
+				if (mask == null) {
+					mask = new Mask(t, false);
+					edges.put(t.getType(), mask);
 				}
+				mask.add(bitVal);
 			}
 			bitVal *= 2;
 		}
 		
+		Map<TileType, Mask> corners = new HashMap<>();
+		
 		bitVal = 1;
-		int k = 0;
-		//int maxK = 0;
 		for (Vector v: Mask.CORNERS) {
 			Tile t = getTileGrid(v.copy().add(x, y));
 			if (t != null && !t.getType().isAtTop() && tile.compareTo(t) > 0) {
-				for (k = 0; k < masks.length; k++) {
-					if (masks[k] == null) {
-						masks[k] = new Mask(t, true);
-					}
-					if (masks[k].hasTile(t) && masks[k].isCorner()) {
-						masks[k].add(bitVal);
-						break;
-					}
+				Mask mask = corners.get(t.getType());
+				if (mask == null) {
+					mask = new Mask(t, true);
+					corners.put(t.getType(), mask);
 				}
+				mask.add(bitVal);
 			}
 			bitVal *= 2;
 		}
 		
-		//FIXME: This fixes the corner mask glitches, but it is kind of inefficient, proabably should be optimized
-		//if (k+j > 1) {
-		int masksSize = 0;
-		for (Mask m : masks) {
-			if (m == null) {
-				break;
-			}
-			else {
-				++masksSize;
-			}
+		PriorityQueue<Mask> pq = new PriorityQueue<>();
+		pq.addAll(edges.values());
+		pq.addAll(corners.values());
+		while (!pq.isEmpty()) {
+			tile.enqueueBitMask(pq.poll());
 		}
-		Arrays.parallelSort(masks, 0, masksSize);
-		//}
-		
-		return masks;
 		
 	}
 	
-	public void setBitMasks() {
+	public void enqueueBitMasks(Vector v) {
+		enqueueBitMasks(v.getX(), v.getY());
+	}
+	
+	public void enqueueAllBitMasks() {
 		for (int x = 0; x < getWidth(); x++) {
 			for (int y = 0; y < getHeight(); y++) {
-				getTileGrid(x, y).setBitMasks(getBitMasks(x, y));
+				enqueueBitMasks(x, y);
 			}
 		}
 	}
