@@ -103,19 +103,4 @@ public class Mask implements Comparable<Mask>, Comparator<Mask> {
 		return tile;
 	}
 
-//	/**
-//	 * @return the order
-//	 */
-//	public double getOrder() {
-//		return order;
-//	}
-//
-//	@Deprecated
-//	/**
-//	 * @param order the order to set
-//	 */
-//	public void setOrder(double order) {
-//		this.order = order;
-//	}
-
 }
