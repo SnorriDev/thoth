@@ -115,7 +115,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 		}
 		
 		if (!maskQ.isEmpty()) {
-			renderTexture();
+			calculateTexture();
 		}
 		
 		Vector relPos = v.getRelPosGrid(g);
@@ -262,7 +262,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 //			return 0;
 	}
 	
-	public void renderTexture() {
+	public void calculateTexture() {
 		texture = Util.deepCopy(getBaseTexture());
 		Graphics2D gr = texture.createGraphics();
 		while (!maskQ.isEmpty()) {
