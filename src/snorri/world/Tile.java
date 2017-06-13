@@ -121,18 +121,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 		Vector relPos = v.getRelPosGrid(g);
 		gr.drawImage(texture, relPos.getX(), relPos.getY(), g);
 		
-//		if (Debug.HIDE_MASKS || bitMasks == null) {
-//			if (Debug.RENDER_TILE_GRID) {
-//				Component c = g.getWorld().getPathfinding().getDefaultGraph().getComponent(v);
-//				if (c != null) {
-//					gr.setColor(c.getColor());
-//					gr.drawRect(relPos.getX(), relPos.getY(), Tile.WIDTH, Tile.WIDTH);
-//					gr.setColor(Color.BLACK);
-//				}
-//			}
-//			return;
-//		}
-		
 		if (Debug.RENDER_TILE_GRID) {
 			Component c = g.getWorld().getPathfinding().getDefaultGraph().getComponent(v);
 			if (c != null) {

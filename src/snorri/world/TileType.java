@@ -3,7 +3,6 @@ package snorri.world;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.Object;
 import java.lang.reflect.Array;
 
 import snorri.audio.ClipWrapper;
@@ -240,6 +239,7 @@ public interface TileType extends Nominal {
 	* @since 2.1
 	* @throws IllegalArgumentException if the array types are incompatible
 	*/
+	@SuppressWarnings("unchecked")
 	public static <T> T[] addAll(T[] array1, T... array2) {
 		if (array1 == null) {
 			return addAll(array2);
@@ -248,7 +248,6 @@ public interface TileType extends Nominal {
 			return array1;
 		}
 		final Class<?> type1 = array1.getClass().getComponentType();
-		@SuppressWarnings("unchecked") // OK, because array is of type T
 		T[] joinedArray = (T[]) Array.newInstance(type1, array1.length + array2.length);
 		System.arraycopy(array1, 0, joinedArray, 0, array1.length);
 		try {
