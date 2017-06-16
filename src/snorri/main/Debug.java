@@ -1,13 +1,17 @@
 package snorri.main;
 
+import java.io.IOException;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+
 import snorri.events.SpellEvent;
 import snorri.parser.Grammar;
 import snorri.parser.Node;
 
 public class Debug {
-
+	
 	public static final boolean ALL_HIEROGLYPHS_UNLOCKED = false;
-	public static final boolean RENDER_TILE_GRID = false;
+	public static final boolean RENDER_TILE_GRID = true;
 	public static final boolean LOG_FOCUS = false;
 	public static final boolean LOG_WORLD = false;
 	public static final boolean LOG_PARSES = false;
@@ -19,6 +23,20 @@ public class Debug {
 	public static final boolean DISABLE_PATHFINDING = false;
 	public static final boolean SHOW_COLLIDERS = false;
 	public static final boolean LOG_PAUSES = false;
+	
+	private static final Logger logger = Logger.getLogger("Thoth");
+	
+	static {
+		try {
+			logger.addHandler(new FileHandler("thoth.log"));
+		} catch (SecurityException e) {
+			error("no permission to open log file");
+			e.printStackTrace();
+		} catch (IOException e) {
+			error("could not find log file");
+			e.printStackTrace();
+		}
+	}
 
 	public static void castWTFMode(String s, SpellEvent e) {
 		Node<?> spell = Grammar.parseString(s);
@@ -35,7 +53,7 @@ public class Debug {
 	 * 	the object to print
 	 */
 	public static void raw(Object o) {
-		System.out.println("[RAW] " + o);
+		logger.info("[RAW] " + o);
 	}
 
 	/**
@@ -44,7 +62,7 @@ public class Debug {
 	 * 	the string to print
 	 */
 	public static void log(String s) {
-		System.out.println("[LOG] " + s);
+		logger.info(s);
 	}
 
 	/**
@@ -53,7 +71,11 @@ public class Debug {
 	 * 	the error string to print
 	 */
 	public static void error(String s) {
-		System.err.println("[ERROR] " + s);
+		logger.severe(s);
+	}
+	
+	public static void warning(String s) {
+		logger.warning(s);
 	}
 
 }

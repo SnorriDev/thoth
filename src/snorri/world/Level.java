@@ -435,9 +435,12 @@ public class Level implements Editable {
 			bitVal *= 2;
 		}
 		
+		//TODO unify corners and edges masks
+		
+		//TODO get rid of the mask class and just store a number
 		//TODO should be able to directly enqueue bitmasks above
-		tile.enqueueBitMasks(edges.values());
 		tile.enqueueBitMasks(corners.values());
+		tile.enqueueBitMasks(edges.values());
 		
 	}
 	

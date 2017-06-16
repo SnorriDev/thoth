@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2017-06-15T23:47:03</date>
+  <millis>1497584823948</millis>
+  <sequence>0</sequence>
+  <logger>Thoth</logger>
+  <level>INFO</level>
+  <class>snorri.main.Debug</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>68 HTML glyphs loaded</message>
+</record>
+<record>
+  <date>2017-06-15T23:47:03</date>
+  <millis>1497584823968</millis>
+  <sequence>1</sequence>
+  <logger>Thoth</logger>
+  <level>INFO</level>
+  <class>snorri.main.Debug</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>5 drop tiers loaded</message>
+</record>
+<record>
+  <date>2017-06-15T23:47:03</date>
+  <millis>1497584823982</millis>
+  <sequence>2</sequence>
+  <logger>Thoth</logger>
+  <level>INFO</level>
+  <class>snorri.main.Debug</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>6 portraits loaded</message>
+</record>
+<record>
+  <date>2017-06-15T23:47:05</date>
+  <millis>1497584825402</millis>
+  <sequence>3</sequence>
+  <logger>Thoth</logger>
+  <level>INFO</level>
+  <class>snorri.main.Debug</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>default font loaded</message>
+</record>
+<record>
+  <date>2017-06-15T23:47:17</date>
+  <millis>1497584837609</millis>
+  <sequence>4</sequence>
+  <logger>Thoth</logger>
+  <level>INFO</level>
+  <class>snorri.main.Debug</class>
+  <method>log</method>
+  <thread>19</thread>
+  <message>loading ./worlds/tutorial/background.lvl...</message>
+</record>
+<record>
+  <date>2017-06-15T23:47:17</date>
+  <millis>1497584837683</millis>
+  <sequence>5</sequence>
+  <logger>Thoth</logger>
+  <level>INFO</level>
+  <class>snorri.main.Debug</class>
+  <method>log</method>
+  <thread>19</thread>
+  <message>loading ./worlds/tutorial/midground.lvl...</message>
+</record>
+<record>
+  <date>2017-06-15T23:47:17</date>
+  <millis>1497584837718</millis>
+  <sequence>6</sequence>
+  <logger>Thoth</logger>
+  <level>INFO</level>
+  <class>snorri.main.Debug</class>
+  <method>log</method>
+  <thread>19</thread>
+  <message>loading ./worlds/tutorial/foreground.lvl...</message>
+</record>
+<record>
+  <date>2017-06-15T23:47:20</date>
+  <millis>1497584840535</millis>
+  <sequence>7</sequence>
+  <logger>Thoth</logger>
+  <level>INFO</level>
+  <class>snorri.main.Debug</class>
+  <method>log</method>
+  <thread>19</thread>
+  <message>11 triggers loaded</message>
+</record>
+<record>
+  <date>2017-06-15T23:47:20</date>
+  <millis>1497584840536</millis>
+  <sequence>8</sequence>
+  <logger>Thoth</logger>
+  <level>INFO</level>
+  <class>snorri.main.Debug</class>
+  <method>log</method>
+  <thread>19</thread>
+  <message>loaded null list of teams</message>
+</record>
+<record>
+  <date>2017-06-15T23:47:20</date>
+  <millis>1497584840602</millis>
+  <sequence>9</sequence>
+  <logger>Thoth</logger>
+  <level>INFO</level>
+  <class>snorri.main.Debug</class>
+  <method>log</method>
+  <thread>19</thread>
+  <message>found 13 pathfinding components</message>
+</record>
+<record>
+  <date>2017-06-15T23:47:20</date>
+  <millis>1497584840610</millis>
+  <sequence>10</sequence>
+  <logger>Thoth</logger>
+  <level>INFO</level>
+  <class>snorri.main.Debug</class>
+  <method>log</method>
+  <thread>19</thread>
+  <message>loading ./worlds/tutorial/background.lvl...</message>
+</record>
+<record>
+  <date>2017-06-15T23:47:20</date>
+  <millis>1497584840644</millis>
+  <sequence>11</sequence>
+  <logger>Thoth</logger>
+  <level>INFO</level>
+  <class>snorri.main.Debug</class>
+  <method>log</method>
+  <thread>19</thread>
+  <message>loading ./worlds/tutorial/midground.lvl...</message>
+</record>
+<record>
+  <date>2017-06-15T23:47:20</date>
+  <millis>1497584840670</millis>
+  <sequence>12</sequence>
+  <logger>Thoth</logger>
+  <level>INFO</level>
+  <class>snorri.main.Debug</class>
+  <method>log</method>
+  <thread>19</thread>
+  <message>loading ./worlds/tutorial/foreground.lvl...</message>
+</record>
+<record>
+  <date>2017-06-15T23:47:22</date>
+  <millis>1497584842352</millis>
+  <sequence>13</sequence>
+  <logger>Thoth</logger>
+  <level>INFO</level>
+  <class>snorri.main.Debug</class>
+  <method>log</method>
+  <thread>19</thread>
+  <message>11 triggers loaded</message>
+</record>
+<record>
+  <date>2017-06-15T23:47:22</date>
+  <millis>1497584842353</millis>
+  <sequence>14</sequence>
+  <logger>Thoth</logger>
+  <level>INFO</level>
+  <class>snorri.main.Debug</class>
+  <method>log</method>
+  <thread>19</thread>
+  <message>loaded null list of teams</message>
+</record>
+<record>
+  <date>2017-06-15T23:47:22</date>
+  <millis>1497584842371</millis>
+  <sequence>15</sequence>
+  <logger>Thoth</logger>
+  <level>INFO</level>
+  <class>snorri.main.Debug</class>
+  <method>log</method>
+  <thread>19</thread>
+  <message>found 13 pathfinding components</message>
+</record>
+<record>
+  <date>2017-06-15T23:47:22</date>
+  <millis>1497584842387</millis>
+  <sequence>16</sequence>
+  <logger>Thoth</logger>
+  <level>INFO</level>
+  <class>snorri.main.Debug</class>
+  <method>log</method>
+  <thread>53</thread>
+  <message>firing trigger onStart...</message>
+</record>
+<record>
+  <date>2017-06-15T23:47:22</date>
+  <millis>1497584842417</millis>
+  <sequence>17</sequence>
+  <logger>Thoth</logger>
+  <level>INFO</level>
+  <class>snorri.main.Debug</class>
+  <method>log</method>
+  <thread>15</thread>
+  <message>alpha masks initialized</message>
+</record>
+<record>
+  <date>2017-06-15T23:47:22</date>
+  <millis>1497584842965</millis>
+  <sequence>18</sequence>
+  <logger>Thoth</logger>
+  <level>INFO</level>
+  <class>snorri.main.Debug</class>
+  <method>log</method>
+  <thread>53</thread>
+  <message>high delta time detected (0.575152883 sec)</message>
+</record>
+</log>
