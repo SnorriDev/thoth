@@ -199,11 +199,23 @@ public interface TileType extends Nominal {
 		
 	}
 	
-	static BufferedImage[] getRotations(BufferedImage image) {
+	public static BufferedImage[] getRotations(BufferedImage image) {
 		
 		List<BufferedImage> out = new ArrayList<>();
 		
 		for (double theta = 0; theta < Math.PI * 2; theta += Math.PI / 2) {
+			out.add(Util.getRotated(image, theta));
+		}
+		
+		return out.toArray(new BufferedImage[0]);
+		
+	}
+	
+	public static BufferedImage[] getTwoRotations(BufferedImage image) {
+		
+		List<BufferedImage> out = new ArrayList<>();
+		
+		for (double theta = 0; theta < Math.PI; theta += Math.PI / 2) {
 			out.add(Util.getRotated(image, theta));
 		}
 		

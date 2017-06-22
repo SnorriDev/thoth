@@ -19,7 +19,9 @@ public enum ForegroundElement implements Nominal, TileType {
 	GATE_LEFT(TileType.addAll(TileType.getRotations(getImage("gateleft00.png")),TileType.getRotations(getImage("gateleft01.png"))), GATE_LEFT_OPEN),
 	GATE_RIGHT(TileType.addAll(TileType.getRotations(getImage("gateright00.png")),TileType.getRotations(getImage("gateright01.png"))), GATE_RIGHT_OPEN),
 	WALL_END_LEFT(TileType.getRotations(getImage("wallendleft01.png"))),
-	WALL_END_RIGHT(TileType.getRotations(getImage("wallendright01.png")));
+	WALL_END_RIGHT(TileType.getRotations(getImage("wallendright01.png"))),
+	TRIPWIRE(TileType.getTwoRotations(getImage("tripwire00.png"))),
+	TRIPWIRE_END(TileType.getRotations(getImage("tripwireend00.png")));
 	
 	protected BufferedImage[] textures;
 	protected TileType replacementType;
