@@ -1,6 +1,6 @@
 saves/.undo1/
 saves/.redo1/
-thoth.log
+thoth.log*
 
 /.buildpath
 /build/
