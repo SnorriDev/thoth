@@ -13,15 +13,16 @@ public class SpellMessage extends Message {
 	private final Object output;
 	private final String header;
 	
-	public SpellMessage(String header, Object output) {
+	public SpellMessage(String header, Object output, boolean isStatement) {
 		super(ICON);
 		this.output = output;
-		this.header = header;
-		success = output != null;
+		//TODO change this format more based on the spell type
+		this.header = header + (isStatement ? " output" : " result");
+		success = output != null && !new Boolean(false).equals(output);
 	}
 	
-	public SpellMessage(Object output) {
-		this("spell", output);
+	public SpellMessage(Object output, boolean isStatement) {
+		this("", output, isStatement);
 	}
 	
 	@Override

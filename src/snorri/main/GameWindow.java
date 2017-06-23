@@ -125,7 +125,7 @@ public class GameWindow extends FocusedWindow<Player> {
 	}
 	
 	public void showMessage(String msg) {
-		showMessage(new SpellMessage(msg));
+		showMessage(new SpellMessage(msg, true));
 	}
 	
 	public void showMessage(Droppable drop) {
