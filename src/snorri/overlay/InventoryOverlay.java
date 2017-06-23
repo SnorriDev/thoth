@@ -382,15 +382,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 		super.keyPressed(e);
 		
-		if (list.getSelectedValue() instanceof Orb) {
-			for (int i = 0; i < Inventory.ORB_KEYS.length; i++) {
-				if (Inventory.ORB_KEYS[i].isPressed(e)) {
-					inv.setOrb(i, (Orb) list.getSelectedValue());
-					model.redraw();
-				}
-			}
-		}
-		
 		if (list.getSelectedValue() instanceof Papyrus) {
 			for (int i = 0; i < Inventory.PAPYRUS_KEYS.length; i++) {
 				if (Inventory.PAPYRUS_KEYS[i].isPressed(e)) {
@@ -409,6 +400,11 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			
 			if (list.getSelectedValue() instanceof Armor) {
 				inv.setArmor((Armor) list.getSelectedValue());
+				model.redraw();
+			}
+			
+			if (list.getSelectedValue() instanceof Orb) {
+				inv.setOrb((Orb) list.getSelectedValue());
 				model.redraw();
 			}
 			

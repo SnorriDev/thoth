@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import snorri.inventory.Timer;
+import snorri.main.GamePanel;
 import snorri.main.GameWindow;
 import snorri.main.Util;
 import snorri.world.Vector;
@@ -12,11 +13,11 @@ import snorri.world.Vector;
 public abstract class Message {
 
 	protected static final double LENGTH = 2.5;
-	protected static final int TRANS_DOWN = 65;
 	protected static final int HEIGHT = 28;
 	protected static final int IMAGE_BUFFER = 5;
 	protected static final int ICON_SIZE = 20;
 	protected static final int BOX_BUFFER = 3;
+	protected static final Vector BASE_POS = new Vector(500, GamePanel.MARGIN * 2);
 	
 	protected static final Color BACKGROUND = new Color(222, 196, 169, 230);
 	
@@ -43,7 +44,8 @@ public abstract class Message {
 	}
 	
 	protected Vector getPos(GameWindow window, int xTrans) {
-		return window.getFocus().getHealthBarPos().add(0, TRANS_DOWN + xTrans);
+		return BASE_POS.copy().add(0, xTrans);
+//		return window.getFocus().getHealthBarPos().add(0, TRANS_DOWN + xTrans);
 	}
 	
 	public abstract String toString();

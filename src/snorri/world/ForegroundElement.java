@@ -21,7 +21,7 @@ public enum ForegroundElement implements Nominal, TileType {
 	WALL_END_LEFT(TileType.getRotations(getImage("wallendleft01.png"))),
 	WALL_END_RIGHT(TileType.getRotations(getImage("wallendright01.png"))),
 	TRIPWIRE(TileType.getTwoRotations(getImage("tripwire00.png"))),
-	TRIPWIRE_END(TileType.getRotations(getImage("tripwireend00.png")));
+	TRIPWIRE_END(TileType.getReflections(getImage("tripwireend00.png")));
 	
 	protected BufferedImage[] textures;
 	protected TileType replacementType;

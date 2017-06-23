@@ -12,6 +12,7 @@ import snorri.events.SpellEvent;
 import snorri.main.Debug;
 import snorri.modifiers.Modifier;
 import snorri.pathfinding.Team;
+import snorri.semantics.Break;
 import snorri.semantics.Go.Walker;
 import snorri.semantics.Nominal;
 import snorri.semantics.Wrapper;
@@ -81,6 +82,9 @@ public abstract class Unit extends Entity implements Walker {
 				modifiers.remove(m);
 			}
 		}
+		
+		//if the unit is standing on a tripwire, cut it
+		Break.cutTripwire(world, pos.copy().toGridPos());
 		
 		if (isDead()) {
 			world.delete(this);

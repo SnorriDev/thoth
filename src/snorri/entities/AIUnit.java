@@ -49,7 +49,7 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 	}
 	
 	public void setOrb(Orb orb) {
-		inventory.setOrb(0, orb);
+		inventory.setOrb(orb);
 	}
 	
 	/**

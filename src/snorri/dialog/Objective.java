@@ -26,7 +26,7 @@ public class Objective extends Message implements Serializable {
 	}
 	
 	public void render(Graphics gr, GameWindow window) {
-		Vector objPos = window.getFocus().getHealthBarPos().add(0, 33);
+		Vector objPos = getPos(window, -1);
 		drawLine(gr, window, objPos, Color.DARK_GRAY);
 //		gr.drawString(shortDesc, objPos.getX(), objPos.getY());
 	}
