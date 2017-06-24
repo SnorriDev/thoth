@@ -28,7 +28,7 @@ public enum ForegroundElement implements Nominal, TileType {
 	protected double blendOrder;
 	
 	ForegroundElement() {
-		this(new BufferedImage[] {});
+		this(new BufferedImage[] {null});
 	}
 	
 	ForegroundElement(BufferedImage texture) {

@@ -32,7 +32,7 @@ public enum MidgroundElement implements TileType {
 	protected double blendOrder;
 	
 	MidgroundElement() {
-		this(new BufferedImage[] {}, Param.pathable(true));
+		this(new BufferedImage[] {null}, Param.pathable(true));
 	}
 	
 	MidgroundElement(BufferedImage texture) {

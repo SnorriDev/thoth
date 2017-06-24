@@ -7,6 +7,7 @@ import java.util.List;
 import snorri.entities.Entity;
 import snorri.events.SpellEvent;
 import snorri.parser.Node;
+import snorri.triggers.Trigger.TriggerType;
 import snorri.world.ForegroundElement;
 import snorri.world.Level;
 import snorri.world.Tile;
@@ -91,6 +92,7 @@ public class Break extends TransVerbDef {
 			return false;
 		}
 		world.wrapGridUpdate(v, new Tile(ForegroundElement.NONE));
+		TriggerType.TRIP.activate(v);
 		for (Vector trans : TRIPWIRE_CONNECTIONS) {
 			cutTripwire(world, v.copy().add(trans));
 		}

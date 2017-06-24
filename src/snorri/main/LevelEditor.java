@@ -51,7 +51,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 	private static final long serialVersionUID = 1L;
 
-	private static final double SCALE_FACTOR = 3d;
+	private static final double SCALE_FACTOR = 1.5d;
 	private static final double SPEED_MULTIPLIER = 3.9;
 	
 	private double speed = SCALE_FACTOR;
@@ -239,7 +239,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		for (Tile t : Tile.getAllTypes(MidgroundElement.class)) {
 
 			if (t == null || t.getTexture() == null) {
-				if (t.getType().ordinal() == 0) {
+				if (t.getType() == MidgroundElement.NONE) {
 					subsubmenu = new JMenu(t.toStringShort());
 					for (Tile s : t.getType().getSubTypes()) {
 						rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(Tile.BLANK_TEXTURE));

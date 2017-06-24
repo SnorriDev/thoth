@@ -170,6 +170,7 @@ public class Main {
 		reader.getConfig().setClassTag("door", Vector.class);
 		reader.getConfig().setClassTag("spawn", Vector.class);
 		reader.getConfig().setClassTag("vector", Vector.class);
+		reader.getConfig().setClassTag("pos", Vector.class);
 		reader.getConfig().setClassTag("struct", Structure.class);
 		reader.getConfig().setClassTag("objective", Objective.class);
 		reader.getConfig().setClassTag("dialog", Dialog.class);

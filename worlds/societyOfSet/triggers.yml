@@ -5,3 +5,9 @@ onUrnDestroy:
   actions:
     - OPEN_DOOR:
         door: !door {x: 61, y: 97}
+    - DROP_TREASURE:
+        pos: !pos {x: 55, y: 97}
+        drop: '!COMMON'
+    - DROP_TREASURE:
+        pos: !pos {x: 61, y: 97}
+        drop: '!COMMON'

@@ -4,8 +4,10 @@ import java.util.Map;
 
 import snorri.dialog.Dialog;
 import snorri.dialog.Objective;
+import snorri.entities.Drop;
 import snorri.entities.Entity;
 import snorri.entities.NPC;
+import snorri.inventory.Droppable;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.GamePanel;
@@ -128,7 +130,25 @@ public abstract class Action {
 					}
 				};
 			}
+		}),
+		
+		DROP_TREASURE(new Action() {
+			@Override
+			public Runnable build(World world, Map<String, Object> args) {
+				final Vector pos = ((Vector) args.get("pos")).toGlobalPos();
+				final Droppable reward = Droppable.fromString((String) args.get("drop"));
+				return new Runnable() {
+					@Override
+					public void run() {
+						Debug.raw((String) args.get("drop"));
+						Debug.raw(reward);
+						world.add(new Drop(pos, reward));
+					}
+				};
+			}
 		});
+		
+		//TODO action that prints to notification queue?
 		
 		private final Action action;
 		

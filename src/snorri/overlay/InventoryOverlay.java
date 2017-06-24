@@ -16,9 +16,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -29,6 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
@@ -91,12 +90,12 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private final JPanel craftingSpace;
 	private final JPanel inputPanel;
 	private final JLabel nullInputText;
-	private final JPanel vocabBox;
+	private final JTable vocabBox;
 	private final JButton enchantButton;
 	private final JEditorPane field;
 	
 	private final SortedListModel<Item> model;
-	private final Map<String, JComponent> vocabModel;
+	private final VocabTableModel vocabModel;
 	
 	private boolean editMode;
 	private List<String> spellsEnchanted;
@@ -219,15 +218,13 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		vocabInfo.setOpaque(false);
 		vocabInfo.setLayout(new GridLayout(0, 1));
 		
-		vocabBox = new JPanel();
+		vocabModel = new VocabTableModel(fullInv.getVocab());
+		vocabBox = new JTable(vocabModel);
 		vocabBox.setOpaque(false);
-		vocabBox.setLayout(new WrapLayout());
-		vocabBox.setOpaque(false);
-		vocabModel = new HashMap<>();
-		
-		for (VocabDrop drop : fullInv.getVocab()) {
-			addWordPanel(drop);
-		}
+		vocabBox.setRowHeight(30);
+		vocabBox.setBackground(SELECTED_BG);
+		vocabBox.setFocusable(false);
+		vocabBox.setCellSelectionEnabled(false);
 		
 		vocabInfo.add(vocabBox);
 		if (editMode) {
@@ -299,8 +296,8 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		wordPanel.add(pos);
 		wordPanel.add(desc);
 		
-		vocabModel.put(drop.getOrthography(), wordPanel);
-		vocabBox.add(wordPanel);
+//		vocabModel.put(drop.getOrthography(), wordPanel);
+//		vocabBox.add(wordPanel);
 		
 	}
 	
@@ -336,8 +333,8 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			model.removeElement((Item) d);
 		}
 		if (d instanceof VocabDrop) {
-			vocabBox.remove(vocabModel.get(((VocabDrop) d).getOrthography()));
-			vocabModel.remove(((VocabDrop) d).getOrthography());
+//			vocabBox.remove(vocabModel.get(((VocabDrop) d).getOrthography()));
+//			vocabModel.remove(((VocabDrop) d).getOrthography());
 			vocabBox.revalidate();
 		}
 		

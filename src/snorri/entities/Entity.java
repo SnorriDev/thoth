@@ -415,7 +415,14 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public Vector getGridBounds() {
 		return new Vector(collider.getRadiusX(), collider.getRadiusY()).multiply(2).toGridPosRounded();
 	}
-		
+	
+	/**
+	 * To prevent infinite loops from certain user spells, all {@code onDelete} events
+	 * should do nothing when this method returns {@code false}.
+	 * @param world
+	 * 	The world in which the delete event is taking place.
+	 * @return Whether the entity has already been deleted.
+	 */
 	public boolean onDelete(World world) {
 		boolean out = !deleted;
 		deleted = true;
