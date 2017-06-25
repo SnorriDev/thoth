@@ -97,7 +97,7 @@ public class Main {
 		frame.setSize(1800, 900);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-
+		
 		pane = new JLayeredPane();
 		getLayeredPane().setOpaque(true);
 		getLayeredPane().addComponentListener(new Main.ResizeListener());

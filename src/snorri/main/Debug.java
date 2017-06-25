@@ -1,6 +1,7 @@
 package snorri.main;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
@@ -27,15 +28,23 @@ public class Debug {
 	private static final Logger logger = Logger.getLogger("Thoth");
 	
 	static {
+		
 		try {
-			logger.addHandler(new FileHandler("thoth.log"));
+			logger.addHandler(new FileHandler("logs/thoth.log"));
 		} catch (SecurityException e) {
-			error("no permission to open log file");
+			System.out.println("no permission to open log file");
 			e.printStackTrace();
 		} catch (IOException e) {
-			error("could not find log file");
+			System.out.println("could not find log file");
 			e.printStackTrace();
 		}
+		
+		System.setErr(new PrintStream(System.err) {
+			public void print(final String string) {
+				error(string);
+			}
+		});
+		
 	}
 
 	public static void castWTFMode(String s, SpellEvent e) {
@@ -77,5 +86,5 @@ public class Debug {
 	public static void warning(String s) {
 		logger.warning(s);
 	}
-
+	
 }
