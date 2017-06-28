@@ -14,6 +14,8 @@ import snorri.main.GamePanel;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.semantics.Open;
+import snorri.world.MidgroundElement;
+import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -140,9 +142,24 @@ public abstract class Action {
 				return new Runnable() {
 					@Override
 					public void run() {
-						Debug.raw((String) args.get("drop"));
-						Debug.raw(reward);
 						world.add(new Drop(pos, reward));
+					}
+				};
+			}
+		}),
+		
+		BREAK_WALL(new Action() {
+			@Override
+			public Runnable build(World world, Map<String, Object> args) {
+				final Vector pos1 = ((Vector) args.get("pos1"));
+				final Vector pos2 = ((Vector) args.get("pos2"));
+				final Vector unit = pos2.copy().sub(pos1).normalize();
+				return new Runnable() {
+					@Override
+					public void run() {
+						for (Vector pos = pos1.copy(); pos.distance(pos1) <= pos2.distance(pos1); pos.add(unit)) {
+							world.wrapGridUpdate(pos, new Tile(MidgroundElement.NONE));
+						}
 					}
 				};
 			}
