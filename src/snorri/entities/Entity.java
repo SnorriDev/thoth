@@ -231,6 +231,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public void update(World world, double d) {
 	}
 	
+	@SuppressWarnings("unused")
 	public void renderAround(FocusedWindow<?> g, Graphics gr, double timeDelta) {
 		
 		if (Debug.SHOW_COLLIDERS || animation == null || inInteractRange(g)) {
@@ -417,17 +418,20 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 	
 	/**
-	 * To prevent infinite loops from certain user spells, all {@code onDelete} events
-	 * should do nothing when this method returns {@code false}.
-	 * @param world
-	 * 	The world in which the delete event is taking place.
-	 * @return Whether the entity has already been deleted.
+	 * To prevent infinite loops, this method calls another method, which is the one that implementations should extend.
+	 * @return Whether the deletion was successful.
 	 */
-	public boolean onDelete(World world) {
-		boolean out = !deleted;
-		deleted = true;
-		TriggerType.DESTROY.activate(tag);
-		return out;
+	public final boolean onDelete(World world) {
+		if (!deleted) {
+			deleted = true;
+			onSafeDelete(world);
+			TriggerType.DESTROY.activate(tag);
+			return true;
+		}
+		return false;
+	}
+	
+	protected void onSafeDelete(World world) {
 	}
 
 	public void onExplosion(CollisionEvent e) {

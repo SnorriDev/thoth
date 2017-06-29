@@ -19,14 +19,10 @@ public class Urn extends Despawner implements Smashable {
 	}
 	
 	@Override
-	public boolean onDelete(World world) {
-		if (!super.onDelete(world)) {
-			return false;
-		}
+	protected void onSafeDelete(World world) {
 		if (Math.random() < DROP_CHANCE) {
 			world.add(new Drop(pos.copy(), new RandomDrop(RandomDrop.Tier.COMMON)));
 		}
-		return true;
 	}
 
 }

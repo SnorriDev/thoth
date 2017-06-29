@@ -86,20 +86,13 @@ public class Projectile extends Detector implements Walker {
 	}
 	
 	@Override
-	public boolean onDelete(World world) {
-		
-		if (!super.onDelete(world)) {
-			return false;
-		}
-		
+	protected void onSafeDelete(World world) {
 		if (root instanceof Caster && orb != null) {
 			Object output = orb.useSpell(world, (Caster) root, this);
 			if (Debug.SHOW_ORB_OUTPUT) {
 				Debug.log("orb output: " + output);
 			}
-		}
-		return true;
-		
+		}		
 	}
 	
 	@Override

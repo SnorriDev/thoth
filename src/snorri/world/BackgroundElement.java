@@ -77,7 +77,21 @@ public enum BackgroundElement implements TileType {
 		getImage("wall06.png"),
 		getImage("wall07.png"),
 		getImage("wall08.png"),
-		getImage("wall09.png")}, Param.atTop(true), Param.canShootOver(false), Param.blendOrder(0.0));
+		getImage("wall09.png")}, Param.atTop(true), Param.canShootOver(false), Param.blendOrder(0.0)),
+	THRESHOLD(true, new BufferedImage[] {
+		getImage("floor00-floor00.png"),
+		getImage("floor01-floor01.png"),
+		getImage("floor02-floor02.png"),
+		getImage("floor03-floor03.png"),
+		getImage("floor04-floor04.png"),
+		getImage("floor05-floor05.png"),
+		getImage("floor06-floor06.png"),
+		getImage("floor07-floor07.png"),
+		getImage("floor08-floor08.png"),
+		getImage("floor09-floor09.png"),
+		getImage("floor10-floor10.png"),
+		getImage("floor11-floor11.png"),
+		getImage("floor12-floor12.png")});
 	
 	protected boolean pathable, canShootOver, atTop, changable, swimmable;
 	protected double blendOrder;

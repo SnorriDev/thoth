@@ -1,6 +1,7 @@
 package snorri.entities;
 
 import snorri.animations.Animation;
+import snorri.collisions.Collider;
 import snorri.world.Vector;
 
 /**
@@ -18,6 +19,10 @@ public abstract class CloseRangeAIUnit extends AIUnit {
 	
 	public CloseRangeAIUnit(Vector pos, Entity target, Animation walk, Animation attack) {
 		super(pos, target, walk, attack);
+	}
+	
+	public CloseRangeAIUnit(Vector pos, Entity target, Collider collider, Animation walk, Animation attack) {
+		super(pos, target, collider, walk, attack);
 	}
 	
 	public CloseRangeAIUnit(Vector pos, Entity target, Animation animation) {

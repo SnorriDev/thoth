@@ -1,6 +1,7 @@
 package snorri.entities;
 
 import snorri.animations.Animation;
+import snorri.collisions.RectCollider;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
 import snorri.world.Vector;
@@ -14,7 +15,7 @@ public class Crocodile extends CloseRangeAIUnit {
 
 	//TODO custom colliders?
 	public Crocodile(Vector pos, Entity target) {
-		super(pos, target, new Animation(IDLE), new Animation(ATTACK));
+		super(pos, target, new RectCollider(120, 40), new Animation(IDLE), new Animation(ATTACK));
 	}
 
 	public Crocodile(Vector pos) {

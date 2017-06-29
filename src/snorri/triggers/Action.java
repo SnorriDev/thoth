@@ -163,9 +163,20 @@ public abstract class Action {
 					}
 				};
 			}
-		});
+		}),
 		
-		//TODO action that prints to notification queue?
+		DELETE_ENTITY(new Action() {
+			@Override
+			public Runnable build(World world, Map<String, Object> args) {
+				return new Runnable() {
+					@Override
+					public void run() {
+						Entity e = Trigger.getByTag((String) args.get("entity"));
+						world.delete(e);
+					}
+				};
+			}
+		});
 		
 		private final Action action;
 		

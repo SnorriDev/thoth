@@ -36,3 +36,10 @@ onKill:
             name: Setna
             text: |
               <p>Crocodiles out here in the desert? I must be getting close to an oasis.</p>
+
+onMummies:
+  actions:
+    - DELETE_ENTITY:
+        entity: topSarcophagus
+    - DELETE_ENTITY:
+        entity: botSarcophagus

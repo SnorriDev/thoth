@@ -3,6 +3,7 @@ package snorri.entities;
 import java.util.ArrayDeque;
 
 import snorri.animations.Animation;
+import snorri.collisions.Collider;
 import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
 import snorri.inventory.Orb;
@@ -33,6 +34,12 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 	protected Mode mode;
 	
 	private ArrayDeque<PathNode> path;
+	
+	protected AIUnit(Vector pos, Entity target, Collider collider, Animation idle, Animation walking) {
+		super(pos, collider, idle, walking);
+		this.target = target;
+		this.mode = getDefaultMode();
+	}
 	
 	protected AIUnit(Vector pos, Entity target, Animation idle, Animation walking) {
 		super(pos, idle, walking);
