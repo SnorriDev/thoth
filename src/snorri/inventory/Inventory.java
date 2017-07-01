@@ -7,6 +7,7 @@ import snorri.entities.Player;
 import snorri.entities.Unit;
 import snorri.keyboard.Key;
 import snorri.main.Debug;
+import snorri.main.FocusedWindow;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.parser.Grammar;
@@ -327,6 +328,16 @@ public class Inventory implements Serializable {
 				usePapyrus(i);
 			}
 		}
+		
+		FocusedWindow<?> window = (FocusedWindow<?>) Main.getWindow();
+		
+		Vector movement = window.getMovementVector();
+		Vector dir = window.getShotDirection();
+		
+		if (window.getFocus() instanceof Unit) {
+			attack(window.getWorld(), (Unit) window.getFocus(), movement, dir);
+		}
+		
 		
 	}
 	

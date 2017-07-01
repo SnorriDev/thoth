@@ -110,12 +110,8 @@ public class Player extends Unit implements Carrier, Caster {
 			}
 			
 		});
-		
+				
 		inventory.checkKeys();
-		
-		Vector movement = window.getMovementVector();
-		Vector dir = window.getShotDirection();
-		inventory.attack(world, this, movement, dir);
 		
 		//TODO move all input checking to a new broadcastBinding event
 		Entity checker = new Entity(pos, Interactor.INTERACT_RANGE); //construct this new entity because positions can be assigned/pointers fucked up
