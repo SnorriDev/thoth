@@ -15,6 +15,7 @@ public class Pathfinding {
 	/** An array of bounding-box sizes for which pathfinding grids should be calculated */
 	private static final Vector[] SIZES = new Vector[] {
 		new Vector(1, 1), //cobra
+		new Vector(2, 1), //crocodile
 	};
 	
 	private PathGraph[][] graphs = new PathGraph[MAX_WIDTH][MAX_HEIGHT];

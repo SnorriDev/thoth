@@ -42,7 +42,8 @@ public class SpellEvent {
 		this.secondPerson = secondPerson;
 		this.world = world;
 		loc = getSecondPerson().getPos().copy();
-		dest = getThirdPerson().getPos().copy();
+//		dest = getThirdPerson().getPos().copy();
+		dest = null;
 	}
 	
 	public SpellEvent(World world, Caster firstPerson, Entity secondPerson, double deltaTime) {
@@ -57,7 +58,7 @@ public class SpellEvent {
 		secondPerson = e.secondPerson;
 		
 		loc = e.loc.copy();
-		dest = e.dest.copy();
+		dest = (dest == null) ? null : e.dest.copy();
 		
 		instrument = e.instrument;
 		

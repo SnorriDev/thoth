@@ -30,7 +30,7 @@ public class Go extends IntransVerbDef {
 
 	@Override
 	public boolean exec(SpellEvent e) {
-		if (e.getSecondPerson() instanceof Walker) {
+		if (e.getSecondPerson() instanceof Walker && e.getDestination() != null) {
 			Vector trans = e.getDestination().copy().sub(e.getSecondPerson().getPos());
 			if (trans.magnitude() < DELETE_MARGIN) {
 				e.getWorld().delete(e.getSecondPerson());

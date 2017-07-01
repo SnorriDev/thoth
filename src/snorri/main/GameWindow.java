@@ -1,6 +1,7 @@
 package snorri.main;
 
 import java.awt.Graphics;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -120,6 +121,10 @@ public class GameWindow extends FocusedWindow<Player> {
 		List<Message> reverse = new ArrayList<>(messageQ);
 		for (ListIterator<Message> iter = reverse.listIterator(reverse.size()); iter.hasPrevious();) {
 			xTrans += iter.previous().render(this, g, xTrans);
+		}
+		
+		if (Debug.LOG_FOCUS) {
+			Debug.log("Focused component: " + KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner());
 		}
 		
 	}

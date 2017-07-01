@@ -1,6 +1,7 @@
 package snorri.main;
 
 import java.awt.Graphics;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -478,6 +479,10 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		
 		env.render(this, gr, deltaTime, false);
 		renderMousePos(gr);
+		
+		if (Debug.LOG_FOCUS) {
+			Debug.log("Focused component: " + KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner());
+		}
 
 	}
 

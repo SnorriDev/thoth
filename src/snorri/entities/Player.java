@@ -17,7 +17,6 @@ import snorri.keyboard.Key;
 import snorri.inventory.Orb;
 import snorri.inventory.Papyrus;
 import snorri.inventory.Weapon;
-import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.GamePanel;
 import snorri.main.GameWindow;
@@ -98,10 +97,6 @@ public class Player extends Unit implements Carrier, Caster {
 	
 	@Override
 	public void update(World world, double deltaTime) {
-				
-		if (Debug.LOG_FOCUS) {
-			Debug.log("main player updated");
-		}
 		
 		FocusedWindow<?> window = (FocusedWindow<?>) Main.getWindow();
 		super.update(world, deltaTime);

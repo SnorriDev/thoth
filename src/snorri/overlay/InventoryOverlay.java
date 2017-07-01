@@ -184,6 +184,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		inputPanel = new JPanel();
 		inputPanel.setOpaque(false);
 		inputPanel.setVisible(false);
+		inputPanel.setFocusable(false);
 		craftingSpace.add(inputPanel);
 		
 		// the text which appears when nothing is selected
@@ -204,6 +205,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		enchantButton = createButton("ENCHANT");
 		enchantButton.setEnabled(false);
 		enchantButton.addKeyListener(this);
+		enchantButton.setFocusable(false);
 		inputPanel.add(enchantButton);
 		
 		c.fill = GridBagConstraints.CENTER;

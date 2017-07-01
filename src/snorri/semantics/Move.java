@@ -15,8 +15,8 @@ public class Move extends TransVerbDef {
 		
 		Object obj = object.getMeaning(e);
 		
-		//TODO perhaps this shouldn't use the default grpah?
-		if (!e.getWorld().getPathfinding().getDefaultGraph().isContextPathable(e.getDestination())) {
+		//TODO use the graph associated with secondPerson
+		if (e.getDestination() != null && !e.getWorld().getPathfinding().getDefaultGraph().isContextPathable(e.getDestination())) {
 			return false;
 		}
 		

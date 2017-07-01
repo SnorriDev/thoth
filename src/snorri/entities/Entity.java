@@ -231,7 +231,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public void update(World world, double d) {
 	}
 	
-	@SuppressWarnings("unused")
 	public void renderAround(FocusedWindow<?> g, Graphics gr, double timeDelta) {
 		
 		if (Debug.SHOW_COLLIDERS || animation == null || inInteractRange(g)) {
