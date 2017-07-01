@@ -34,7 +34,7 @@ public class VocabTableModel implements TableModel {
 		
 	}
 	
-	private final VocabDrop[] data;
+	private VocabDrop[] data;
 	
 	public VocabTableModel(VocabDrop[] c) {
 		data = c;
@@ -99,6 +99,10 @@ public class VocabTableModel implements TableModel {
 	@Override
 	public void removeTableModelListener(TableModelListener l) {
 		// TODO Auto-generated method stub	
+	}
+	
+	public void refresh(VocabDrop[] data) {
+		this.data = data;
 	}
 
 }

@@ -28,6 +28,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
@@ -51,7 +52,6 @@ import snorri.main.Debug;
 import snorri.main.DialogMap;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
-import snorri.main.Util;
 import snorri.parser.Grammar;
 import snorri.triggers.Trigger.TriggerType;
 
@@ -78,10 +78,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private static final double TEXT_BOX_HEIGHT_MULTIPLIER = 0.55;
 	private static final int TEXT_BOX_WIDTH = CRAFTING_SPACE_WIDTH - 2 * PADDING; // 547
 	private static final int TEXT_BOX_HEIGHT = (int) (CRAFTING_SPACE_HEIGHT * TEXT_BOX_HEIGHT_MULTIPLIER);// 94
-	//private static final int VOCAB_BOX_WIDTH = CRAFTING_SPACE_WIDTH - 4*PADDING;
-	//private static final int VOCAB_BOX_HEIGHT = INVENTORY_HEIGHT-CRAFTING_SPACE_HEIGHT - 6*PADDING;
-	private static final int HIEROGLYPH_SIZE = 18;
-	private static final int HIEROGLYPH_TRANSLATION_FONT_SIZE = 12;
 	
 	private final Inventory inv;
 	private final FullInventory fullInv;
@@ -95,7 +91,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private final JEditorPane field;
 	
 	private final SortedListModel<Item> model;
-	private final VocabTableModel vocabModel;
 	
 	private boolean editMode;
 	private List<String> spellsEnchanted;
@@ -220,8 +215,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		vocabInfo.setOpaque(false);
 		vocabInfo.setLayout(new GridLayout(0, 1));
 		
-		vocabModel = new VocabTableModel(fullInv.getVocab());
-		vocabBox = new JTable(vocabModel);
+		vocabBox = new JTable(new VocabTableModel(fullInv.getVocab()));
 		vocabBox.setOpaque(false);
 		vocabBox.setRowHeight(30);
 		vocabBox.setBackground(SELECTED_BG);
@@ -253,6 +247,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 		if (model.getSize() > 0) {
 			list.setSelectedIndex(0);
+			setGlyphs();
 		}
 		
 	}
@@ -273,36 +268,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		// TODO update vocab
 	}
 	
-	private void addWordPanel(VocabDrop drop) {
-		
-		JPanel wordPanel = new JPanel();
-		wordPanel.setBackground(SELECTED_BG);
-		wordPanel.setBorder(getThinBorder());
-		
-		JLabel icon;
-		if (Hieroglyphs.getIcon(drop.getOrthography()) == null) {
-			icon = new JLabel();
-		}
-		else {
-			icon = new JLabel(Util.resize(Hieroglyphs.getIcon(drop.getOrthography()), 0, HIEROGLYPH_SIZE));
-		}
-		JLabel orth = new JLabel(drop.getOrthography());
-		orth.setFont(new Font(orth.getFont().getName(), Font.BOLD, HIEROGLYPH_TRANSLATION_FONT_SIZE));
-		JLabel pos = new JLabel(drop.getMeaning().getPOS().getSimpleName());
-		pos.setFont(new Font(pos.getFont().getName(), Font.ITALIC, HIEROGLYPH_TRANSLATION_FONT_SIZE));
-		String d = drop.getMeaning().toString();
-		JLabel desc = new JLabel(d == null ? "unknown" : d);
-		desc.setFont(new Font(pos.getFont().getName(), Font.PLAIN, HIEROGLYPH_TRANSLATION_FONT_SIZE));
-		wordPanel.add(icon);
-		wordPanel.add(orth);
-		wordPanel.add(pos);
-		wordPanel.add(desc);
-		
-//		vocabModel.put(drop.getOrthography(), wordPanel);
-//		vocabBox.add(wordPanel);
-		
-	}
-	
 	private boolean add(Droppable d) {
 		
 		if (d == null) {
@@ -317,8 +282,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			model.addElement((Item) d);
 		}
 		if (d instanceof VocabDrop) {
-			addWordPanel((VocabDrop) d);
-			vocabBox.revalidate();
+			vocabBox.setModel(new VocabTableModel(fullInv.getVocab()));
 		}
 		
 		return true;
@@ -335,9 +299,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			model.removeElement((Item) d);
 		}
 		if (d instanceof VocabDrop) {
-//			vocabBox.remove(vocabModel.get(((VocabDrop) d).getOrthography()));
-//			vocabModel.remove(((VocabDrop) d).getOrthography());
-			vocabBox.revalidate();
+			vocabBox.setModel(new VocabTableModel(fullInv.getVocab()));
 		}
 		
 		return true;
@@ -352,8 +314,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			list.getSelectedValue().setSpell(Grammar.parseSentence(rawSpell));
 			spellsEnchanted.add(rawSpell);
 			setGlyphs();
-		}
-		if (e.getActionCommand().equals("ADD")) {
+		} else if (e.getActionCommand().equals("ADD")) {
 			
 			DialogMap inputs = new DialogMap();
 			inputs.put("Droppable", "Enter word or item here");
@@ -361,8 +322,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			
 			add(Droppable.fromString(inputs.getText("Droppable")));
 			redrawVocab();
-		}
-		if (e.getActionCommand().equals("DELETE")) {
+		} else if (e.getActionCommand().equals("DELETE")) {
 			
 			DialogMap inputs = new DialogMap();
 			inputs.put("Word", "Enter here...");
@@ -479,6 +439,9 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	
 	@Override
 	public void focusLost(FocusEvent e) {
+		if (e.getComponent() instanceof JTextPane) {
+			setGlyphs();
+		}
 	}
 	
 	@Override
