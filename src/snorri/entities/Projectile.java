@@ -51,17 +51,25 @@ public class Projectile extends Detector implements Walker {
 	@Override
 	public void update(World world, double deltaTime) {
 		
-		Object output = true;
+		boolean walked = false;
+		if (weapon == null || !weapon.altersMovement()) {
+			walk(world, velocity.copy().multiply(deltaTime));
+			walked = true;
+		} 
+		
 		if (root instanceof Caster && weapon != null) {
-			output = weapon.useSpellOn(world, ((Caster) root), this, deltaTime / getLifeSpan());
+			
+			Object output = weapon.useSpellOn(world, ((Caster) root), this, deltaTime / getLifeSpan());
 			if (Debug.SHOW_WEAPON_OUTPUT) {
 				Debug.log("weapon output: " + output);
 			}
+			
+			//we can't unify this with the above if clause because it matters when spells are applied
+			if (!walked && output.equals(false)) {
+				walk(world, velocity.copy().multiply(deltaTime));
+			}
+			
 		}
-		
-		if (weapon == null || !weapon.altersMovement() || !output.equals(true)) {
-			walk(world, velocity.copy().multiply(deltaTime));
-		} 
 				
 		//if we hit the edge of the map or a wall, end
 		if (!world.canShootOver(pos)) {

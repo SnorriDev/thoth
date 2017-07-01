@@ -28,7 +28,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
@@ -424,7 +423,9 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			field.setText("");
 			return;
 		}
-		field.setText(list.getSelectedValue().getSpell().getOrthography());
+		if (e.getComponent() instanceof JEditorPane) {
+			field.setText(list.getSelectedValue().getSpell().getOrthography());
+		}
 	}
 	
 	@Override
@@ -439,7 +440,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	
 	@Override
 	public void focusLost(FocusEvent e) {
-		if (e.getComponent() instanceof JTextPane) {
+		if (e.getComponent() instanceof JEditorPane) {
 			setGlyphs();
 		}
 	}
