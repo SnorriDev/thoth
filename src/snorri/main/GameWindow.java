@@ -117,6 +117,11 @@ public class GameWindow extends FocusedWindow<Player> {
 			objective.render(g, this);
 		}
 		
+		//otherwise new ArrayList<>(messageQ) throws an error
+		if (messageQ.isEmpty()) {
+			return;
+		}
+		
 		int xTrans = 0;
 		List<Message> reverse = new ArrayList<>(messageQ);
 		for (ListIterator<Message> iter = reverse.listIterator(reverse.size()); iter.hasPrevious();) {

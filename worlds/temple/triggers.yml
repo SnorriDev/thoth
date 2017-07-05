@@ -3,13 +3,8 @@ onUrnDestroy:
     - DESTROY:
         object: keyUrn
   actions:
-    - OPEN_DOOR:
-        door: !door {x: 61, y: 97}
     - DROP_TREASURE:
         pos: !pos {x: 55, y: 97}
-        drop: '!COMMON'
-    - DROP_TREASURE:
-        pos: !pos {x: 61, y: 97}
         drop: '!COMMON'
 
 onTrip:
@@ -35,7 +30,7 @@ onKill:
             image: player
             name: Setna
             text: |
-              <p>Crocodiles out here in the desert? I must be getting close to an oasis.</p>
+              <p>Crocodiles out here in the desert? I must be getting close to the oasis.</p>
 
 onMummies:
   actions:
@@ -43,3 +38,13 @@ onMummies:
         entity: topSarcophagus
     - DELETE_ENTITY:
         entity: botSarcophagus
+
+onNearCoffins:
+  actions:
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            image: player
+            name: Setna
+            text: |
+              <p>I can probably find some new hieroglyphs if I open these sarcophagi..</p>

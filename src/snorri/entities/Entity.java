@@ -62,6 +62,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		EDIT_SPAWNABLE.add(Thoth.class);
 		EDIT_SPAWNABLE.add(Fountain.class);
 		EDIT_SPAWNABLE.add(NPC.class);
+		EDIT_SPAWNABLE.add(Ballista.class);
 		
 		//alphabetize the list for nice view in the editor
 		Collections.sort(EDIT_SPAWNABLE, new Comparator<Class<? extends Entity>>() {
@@ -89,6 +90,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	/** used to determine which entities should be rendered over others **/
 	protected int z;
 	protected String tag;
+	protected Vector dir;
 		
 	private boolean flying = false, deleted = false;
 
@@ -113,7 +115,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public Entity(Vector pos, int r) {
 		this(pos, new CircleCollider(r));
 	}
-	
+		
 	public Entity(Vector pos) {
 		this(pos, 1);
 	}
@@ -434,6 +436,27 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 
 	public void onExplosion(CollisionEvent e) {
+	}
+	
+	public void setDirection(Vector dir) {
+		this.dir = dir.copy();
+		if (animation != null) {
+			setAnimation(animation);
+		}
+	}
+	
+	/**
+	 * Set the animation of this entity to a copy of the specified animation with
+	 * the correct rotation.
+	 * @param animation
+	 * 	The animation to copy.
+	 */
+	public void setAnimation(Animation animation) {
+//		if (dir == null) {
+//			this.animation = new Animation(animation);
+//			return;
+//		}
+		this.animation = animation.getRotated(dir == null ? new Vector(1, 0) : dir);
 	}
 
 }

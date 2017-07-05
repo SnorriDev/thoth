@@ -26,7 +26,8 @@ public class Projectile extends Detector implements Walker {
 	public Projectile(Entity root, Vector rootVelocity, Vector path, Weapon weapon, Orb orb) {
 		super(root.getPos().copy(), 3); //radius of a projectile is 1
 		velocity = rootVelocity.copy().add(path.copy().scale(PROJECTILE_SPEED));
-		this.animation = orb.getProjectileAnimation().getRotated(path.copy().normalize()); //new Animation(ANIMATION);
+		this.animation = orb.getProjectileAnimation();
+		setDirection(path);
 		this.root = root;
 		this.weapon = weapon;
 		this.orb = orb;

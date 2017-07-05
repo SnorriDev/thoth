@@ -126,7 +126,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 		JPanel panel = new JPanel(new GridBagLayout()) {
 			private static final long serialVersionUID = 1L;
-			
 			@Override
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -179,6 +178,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		inputPanel.setOpaque(false);
 		inputPanel.setVisible(false);
 		inputPanel.setFocusable(false);
+		inputPanel.addKeyListener(this);
 		craftingSpace.add(inputPanel);
 		
 		// the text which appears when nothing is selected
@@ -263,10 +263,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		return String.join(" ", Grammar.getWords(field.getText()));
 	}
 	
-	private void redrawVocab() {
-		// TODO update vocab
-	}
-	
 	private boolean add(Droppable d) {
 		
 		if (d == null) {
@@ -320,7 +316,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			dialog("Enter droppable to add to inventory", inputs);
 			
 			add(Droppable.fromString(inputs.getText("Droppable")));
-			redrawVocab();
 		} else if (e.getActionCommand().equals("DELETE")) {
 			
 			DialogMap inputs = new DialogMap();
@@ -328,7 +323,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			dialog("Enter word to remove from inventory", inputs);
 			
 			delete(Droppable.fromString(inputs.getText("Word")), false);
-			redrawVocab();
 		}
 		
 		list.requestFocus();
@@ -440,6 +434,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	
 	@Override
 	public void focusLost(FocusEvent e) {
+		Debug.raw("focus lost");
 		if (e.getComponent() instanceof JEditorPane) {
 			setGlyphs();
 		}

@@ -24,6 +24,7 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
+import snorri.entities.Ballista;
 import snorri.entities.Drop;
 import snorri.entities.Entity;
 import snorri.entities.Listener;
@@ -1528,6 +1529,15 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 					return;
 				}
 				world.add(new Listener(spawnPos, inputs.getInteger("Radius"), inputs.getText("Tag")));
+			} else if (selectedEntityClass.equals(Ballista.class)) {
+				DialogMap inputs = new DialogMap();
+				inputs.put("X", "1");
+				inputs.put("Y", "0");
+				if (dialog("Ballista Direction", inputs) == null) {
+					return;
+				}
+				Vector dir = new Vector(inputs.getDouble("X"), inputs.getDouble("Y"));
+				world.add(new Ballista(spawnPos, dir));
 			}
 
 			else {
