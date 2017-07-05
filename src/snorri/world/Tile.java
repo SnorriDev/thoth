@@ -78,8 +78,8 @@ public class Tile implements Comparable<Tile>, Nominal {
 	}
 	
 	public Tile(int layer, int id, int style) {
-		this(TileType.lookup(layer, id));
-		this.style = style;
+		this(TileType.lookup(layer, id), style);
+		//this.style = style;
 	}
 
 	public static ArrayList<Tile> getAllTypes(Class<? extends TileType> c) {
