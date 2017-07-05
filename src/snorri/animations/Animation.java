@@ -65,6 +65,11 @@ public class Animation implements Serializable {
 		computeFlipped();
 	}
 
+	/**
+	 * Shallow copy of the specified animation.
+	 * @param other
+	 * 	The animation to copy.
+	 */
 	public Animation(Animation other) {
 		set(other);
 	}
@@ -218,7 +223,10 @@ public class Animation implements Serializable {
 	public Animation getRotated(Vector dir) {
 		Animation other = new Animation(this);
 		for (int i = 0; i < frames.length; i++) {
+			Debug.raw("width before rotation: " + frames[i].getWidth());
 			other.frames[i] = Util.getRotated(frames[i], dir);
+			Debug.raw("width after rotation: " + frames[i].getWidth());
+			Debug.raw("rotated width: " + other.frames[i].getWidth());
 			assert frames[i] != other.frames[i];
 		}
 		other.computeFlipped();

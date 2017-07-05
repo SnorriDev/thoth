@@ -9,6 +9,7 @@ import java.lang.Math;
 
 import java.util.ArrayList;
 
+import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.GamePanel;
 import snorri.semantics.Nominal;
@@ -144,9 +145,8 @@ public class Vector implements Nominal, Comparable<Vector> {
 		return this;
 	}
 	
-	//rounds to an int for convenience
-	public int distance(Vector pos) {
-		return (int) Math.sqrt(distanceSquared(pos));
+	public double distance(Vector pos) {
+		return Math.sqrt(distanceSquared(pos));
 	}
 	
 	public double distanceSquared(Vector pos) {
@@ -156,7 +156,7 @@ public class Vector implements Nominal, Comparable<Vector> {
 		return (x - pos.x) * (x - pos.x) + (y - pos.y) * (y - pos.y);
 	}
 	
-	public int magnitude() {
+	public double magnitude() {
 		return distance(ZERO);
 	}
 	

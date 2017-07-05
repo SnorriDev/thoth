@@ -443,6 +443,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		if (animation != null) {
 			setAnimation(animation);
 		}
+		Debug.raw("set direction of " + toString());
 	}
 	
 	/**
@@ -456,7 +457,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 //			this.animation = new Animation(animation);
 //			return;
 //		}
-		this.animation = animation.getRotated(dir == null ? new Vector(1, 0) : dir);
+		this.animation = new Animation(animation).getRotated(dir == null ? new Vector(1, 0) : dir);
 	}
 
 }

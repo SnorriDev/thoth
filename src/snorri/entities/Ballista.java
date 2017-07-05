@@ -1,6 +1,7 @@
 package snorri.entities;
 
 import snorri.animations.Animation;
+import snorri.main.Debug;
 import snorri.world.Vector;
 
 public class Ballista extends Entity {
@@ -12,9 +13,10 @@ public class Ballista extends Entity {
 	
 	public Ballista(Vector pos, Vector dir) {
 		super(pos, 35);
-		setAnimation(IDLE);
+		setAnimation(SHOOT);	
+		Debug.raw("animation: " + animation);
 		setDirection(dir);
-		assert animation != IDLE;
+//		assert animation != IDLE;
 	}
 
 }
