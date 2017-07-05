@@ -222,6 +222,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 	 */
 	@Override
 	public int compareTo(Tile t) {
+		//Debug.log("comparing tiles");
 		
 		if (!type.getClass().equals(t.type.getClass())) {
 			Debug.error("comparing TileTypes from different layers");
@@ -229,6 +230,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 		}
 		
 		if (type == null || t.type == null) {
+			Debug.error("1 or more tiles is null");
 			if (type == null && t.type == null) {
 				return 0;
 			}
@@ -244,7 +246,10 @@ public class Tile implements Comparable<Tile>, Nominal {
 		
 		//int n = TileType.getValues(type.getClass()).length;
 		//return Integer.compare(style * n + type.getId(),  t.style * n + t.type.getId()); //FIXME: the small number multiplication might cause a few bugs
-		return Double.compare(type.getBlendOrder() + 0.0001 * type.getId() + 0.0000001 * style, t.type.getBlendOrder() + 0.0001 * t.type.getId() + 0.0000001 * t.style);
+		/*if (Double.compare(type.getBlendOrder() + 0.0001 * type.getId() + 0.0000001 * style, t.type.getBlendOrder() + 0.0001 * t.type.getId() + 0.0000001 * t.style) != 0) {
+			Debug.log("" + Double.compare(type.getBlendOrder() + 0.0001 * type.getId() + 0.0000001 * style, t.type.getBlendOrder() + 0.0001 * t.type.getId() + 0.0000001 * t.style));
+		}*/
+		return Double.compare(getOrderValue(), t.getOrderValue());
 		
 //		if (type.equals(t.type)) {
 //			return Integer.compare(style, t.style);
@@ -256,14 +261,24 @@ public class Tile implements Comparable<Tile>, Nominal {
 	public void calculateTexture() {
 		texture = Util.deepCopy(getBaseTexture());
 		Graphics2D gr = texture.createGraphics();
+		Debug.log("Calculating Tecture");
 		while (!maskQ.isEmpty()) {
+			//Debug.log("[" + maskQ.size() + "]" + " " + maskQ.peek().getTile().getOrderValue());
 			gr.drawImage(maskQ.poll().getTexture(), 0, 0, null);
 		}
 		gr.dispose();
 	}
 	
-	public void enqueueBitMasks(Collection<Mask> masks) {
-		maskQ.addAll(masks);
+	private double getOrderValue() {
+		return type.getBlendOrder() + 0.0001 * type.getId() + 0.0000001 * style;
+	}
+
+	public void enqueueBitMasks(Mask[] masks) {
+		for (Mask m : masks) {
+			if (m !=null) {
+				maskQ.add(m);
+			}
+		}
 	}
 	
 	public void addEntity(Entity e) {

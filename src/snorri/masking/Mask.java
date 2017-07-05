@@ -88,7 +88,7 @@ public class Mask implements Comparable<Mask>, Comparator<Mask> {
 
 	@Override
 	public int compareTo(Mask m) {
-		return -1 * tile.compareTo(m.tile);
+		return m.tile.compareTo(tile);
 	}
 
 	@Override
@@ -98,6 +98,10 @@ public class Mask implements Comparable<Mask>, Comparator<Mask> {
 	
 	public final Tile getTile()  {
 		return tile;
+	}
+	
+	public short getBitVal() {
+		return bitmask;
 	}
 
 }
