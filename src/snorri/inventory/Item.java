@@ -41,21 +41,28 @@ public abstract class Item implements Droppable {
 	protected static final BufferedImage[] ACTIVE_BORDERS_TOP;
 	protected static final BufferedImage[] INACTIVE_BORDERS_TOP;
 	
-	protected static final BufferedImage ACTIVE_BORDER_WEAPON;
-	protected static final BufferedImage INACTIVE_BORDER_WEAPON;
+	protected static final BufferedImage[] ACTIVE_BORDERS_BOTTOM;
+	protected static final BufferedImage[] INACTIVE_BORDERS_BOTTOM;
 	
 	static {
 		
 		ACTIVE_BORDERS_TOP = new BufferedImage[5];
 		INACTIVE_BORDERS_TOP = new BufferedImage[5];
 		
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 3; i++) {
 			ACTIVE_BORDERS_TOP[i] = Main.getImage("/textures/hud/items/item" + (i + 1) + ".png");
 			INACTIVE_BORDERS_TOP[i] = Main.getImage("/textures/hud/items/item" + (i + 1) + "Alt.png");
 		}
 		
-		ACTIVE_BORDER_WEAPON = Main.getImage("/textures/hud/items/itemMouse.png");
-		INACTIVE_BORDER_WEAPON = Main.getImage("/textures/hud/items/itemMouseAlt.png");
+		ACTIVE_BORDERS_BOTTOM = new BufferedImage[] {
+			Main.getImage("/textures/hud/items/itemMouse.png"),
+			Main.getImage("/textures/hud/items/itemOrb.png")
+		};
+		
+		INACTIVE_BORDERS_BOTTOM = new BufferedImage[] {
+			Main.getImage("/textures/hud/items/itemMouseAlt.png"),
+			Main.getImage("/textures/hud/items/itemOrbAlt.png")
+		};
 		
 	}
 	
@@ -322,12 +329,9 @@ public abstract class Item implements Droppable {
 	
 	public static BufferedImage getBorder(int i, boolean top, boolean selected) {
 		if (!top) {
-			return selected ? ACTIVE_BORDER_WEAPON : INACTIVE_BORDER_WEAPON;
+			return (selected ? ACTIVE_BORDERS_BOTTOM : INACTIVE_BORDERS_BOTTOM)[i];
 		}
-		if (selected) {
-			return ACTIVE_BORDERS_TOP[i];
-		}
-		return INACTIVE_BORDERS_TOP[i];
+		return (selected ? ACTIVE_BORDERS_TOP : INACTIVE_BORDERS_TOP)[i];
 	}
 	
 	public Color getArcColor() {
@@ -337,8 +341,9 @@ public abstract class Item implements Droppable {
 	//TODO: use an ImageViewer to scale things
 	
 	public static Vector getPos(int i, boolean top) {
-		int y = top ? GamePanel.MARGIN : (((GameWindow) Main.getWindow()).getDimensions().getY() - Item.getBigSlotWidth() - GamePanel.MARGIN);
-		return new Vector(GamePanel.MARGIN + i * (Item.getSlotWidth() + Item.SLOT_SPACE), y);
+		int y = top ? GamePanel.MARGIN : (((GameWindow) Main.getWindow()).getDimensions().getY() - (i == 0 ? Item.getBigSlotWidth() : Item.getSlotWidth()) - GamePanel.MARGIN);
+		int width = top ? Item.getSlotWidth() : Item.getBigSlotWidth();
+		return new Vector(GamePanel.MARGIN + i * (width + Item.SLOT_SPACE), y);
 	}
 	
 	/**
@@ -389,12 +394,11 @@ public abstract class Item implements Droppable {
 	}
 	
 	public static int getSlotWidth() {
-		return (int) (ACTIVE_BORDER_WEAPON.getWidth(null) * SEPARATION_FACTOR);
+		return (int) (getBigSlotWidth() * SEPARATION_FACTOR);
 	}
 	
 	public static int getBigSlotWidth() {
-		return (int) (getSlotWidth() / SEPARATION_FACTOR);
-		//return BIG_SLOT_SIZE * getSlotWidth();
+		return ACTIVE_BORDERS_BOTTOM[0].getWidth(null);
 	}
 	
 	@Override

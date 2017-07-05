@@ -17,7 +17,6 @@ import snorri.keyboard.Key;
 import snorri.inventory.Orb;
 import snorri.inventory.Papyrus;
 import snorri.inventory.Weapon;
-import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.GamePanel;
 import snorri.main.GameWindow;
@@ -98,10 +97,6 @@ public class Player extends Unit implements Carrier, Caster {
 	
 	@Override
 	public void update(World world, double deltaTime) {
-				
-		if (Debug.LOG_FOCUS) {
-			Debug.log("main player updated");
-		}
 		
 		FocusedWindow<?> window = (FocusedWindow<?>) Main.getWindow();
 		super.update(world, deltaTime);
@@ -115,14 +110,10 @@ public class Player extends Unit implements Carrier, Caster {
 			}
 			
 		});
-		
+				
 		inventory.checkKeys();
 		
-		Vector movement = window.getMovementVector();
-		Vector dir = window.getShotDirection();
-		inventory.attack(world, this, movement, dir);
-		
-		//TODO move all input checking to a new broadcastBinding event
+		//TODO move some input checking to a new broadcastBinding event
 		Entity checker = new Entity(pos, Interactor.INTERACT_RANGE); //construct this new entity because positions can be assigned/pointers fucked up
 		Interactor selected = world.getEntityTree().getFirstCollision(checker, Interactor.class);
 		if (selected != null && Key.SPACE.isPressed()) {

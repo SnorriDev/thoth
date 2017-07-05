@@ -47,7 +47,9 @@ public class Tile implements Comparable<Tile>, Nominal {
 		this.style = style;
 		maskQ = new PriorityQueue<>();
 		entities = new ArrayList<>();
-		texture = getBaseTexture(); //by default, should just point to the type texture
+		if (this.type != null) {
+			texture = getBaseTexture(); //by default, should just point to the type texture
+		}
 	}
 	
 	private Tile() {
@@ -72,6 +74,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 		int layer = Integer.parseInt(l[0]);
 		type = (layer == 0 ? BackgroundElement.byIdStatic(Integer.parseInt(l[1])) : (layer == 1 ? MidgroundElement.byIdStatic(Integer.parseInt(l[1])) : ForegroundElement.byIdStatic(Integer.parseInt(l[1]))));
 		style = Integer.parseInt(l[2]);
+		texture = getBaseTexture();
 	}
 	
 	public Tile(int layer, int id, int style) {

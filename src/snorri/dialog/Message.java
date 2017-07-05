@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import snorri.inventory.Timer;
+import snorri.main.GamePanel;
 import snorri.main.GameWindow;
 import snorri.main.Util;
 import snorri.world.Vector;
@@ -12,8 +13,7 @@ import snorri.world.Vector;
 public abstract class Message {
 
 	protected static final double LENGTH = 2.5;
-	protected static final int TRANS_DOWN = 65;
-	protected static final int HEIGHT = 28;
+	protected static final int HEIGHT = 32;
 	protected static final int IMAGE_BUFFER = 5;
 	protected static final int ICON_SIZE = 20;
 	protected static final int BOX_BUFFER = 3;
@@ -42,8 +42,12 @@ public abstract class Message {
 		return timer.isOffCooldown();
 	}
 	
-	protected Vector getPos(GameWindow window, int xTrans) {
-		return window.getFocus().getHealthBarPos().add(0, TRANS_DOWN + xTrans);
+	protected static Vector getBasePos(GameWindow window, int width) {
+		return new Vector(window.getCenter().getX() - width / 2, GamePanel.MARGIN + HEIGHT);
+	}
+	
+	protected static Vector getPos(GameWindow window, int width, int xTrans) {
+		return getBasePos(window, width).add(0, xTrans);
 	}
 	
 	public abstract String toString();
@@ -53,11 +57,12 @@ public abstract class Message {
 	}
 	
 	protected int drawLine(Graphics gr, GameWindow window, int xTrans) {
-		return drawLine(gr, window, getPos(window, xTrans), success ? Color.GREEN : Color.RED);
+		return drawLine(gr, window, xTrans, Color.BLACK);
 	}
 	
-	protected int drawLine(Graphics gr, GameWindow window, Vector pos, Color color) {
+	protected int drawLine(Graphics gr, GameWindow window, int xTrans, Color color) {
 		int width = getLineWidth(gr, toString()) + 2 * BOX_BUFFER;
+		Vector pos = getPos(window, width, xTrans);
 		gr.setColor(BACKGROUND);
 		gr.fillRect(pos.getX(), pos.getY(), width + 2 * BOX_BUFFER, ICON_SIZE + 2 * BOX_BUFFER);
 		gr.setColor(color);
@@ -67,12 +72,12 @@ public abstract class Message {
 	}
 	
 	protected int drawLineWithIcon(String line, Graphics gr, GameWindow window, int xTrans) {
-		Vector pos = getPos(window, xTrans);
-		int width = icon.getWidth(null) + getLineWidth(gr, line) + IMAGE_BUFFER + 2 * BOX_BUFFER;
+		int width = getLineWidth(gr, toString()) + 2 * BOX_BUFFER + icon.getWidth(null) + IMAGE_BUFFER;
+		Vector pos = getPos(window, width, xTrans);
 		gr.setColor(BACKGROUND);
-		gr.fillRect(pos.getX(), pos.getY(), width + 2 * BOX_BUFFER, ICON_SIZE + 2 * BOX_BUFFER);
+		gr.fillRect(pos.getX(), pos.getY(), width, ICON_SIZE + 2 * BOX_BUFFER);
 		gr.setColor(success ? Color.GREEN : Color.RED);
-		gr.drawRect(pos.getX(), pos.getY(), width + 2 * BOX_BUFFER, ICON_SIZE + 2 * BOX_BUFFER);
+		gr.drawRect(pos.getX(), pos.getY(), width, ICON_SIZE + 2 * BOX_BUFFER);
 		gr.drawImage(icon, pos.getX() + BOX_BUFFER, pos.getY() + BOX_BUFFER, null);
 		gr.drawString(line, icon.getWidth(null) + BOX_BUFFER + IMAGE_BUFFER + pos.getX(), pos.getY() + HEIGHT / 2 + BOX_BUFFER);
 		return HEIGHT;

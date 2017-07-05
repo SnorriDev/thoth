@@ -213,7 +213,7 @@ public class World implements Playable, Editable {
 	 * @param e the entity to delete
 	 * @return whether the delete was successful
 	 */
-	public boolean delete(Entity e) {
+	public synchronized boolean delete(Entity e) {
 		if (e == null) {
 			return false;
 		}
@@ -389,7 +389,7 @@ public class World implements Playable, Editable {
 	}
 	
 	//TODO add wrapGridUpdates
-	public void wrapGridUpdate(Vector posGrid, Tile tile) {
+	public synchronized void wrapGridUpdate(Vector posGrid, Tile tile) {
 				
 		Level l = getLevel(tile.getType().getClass());
 		Tile oldTile = l.getTileGrid(posGrid);
@@ -442,5 +442,7 @@ public class World implements Playable, Editable {
 	public Vector getDimensions() {
 		return getLevel().getDimensions();
 	}
+	
+//	TODO there's some issues here with multithreading
 
 }

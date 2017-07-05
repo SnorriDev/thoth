@@ -452,8 +452,7 @@ public class Level implements Editable {
 //				++masksSize;
 //			}
 //		}
-		
-		//TODO should be able to directly enqueue bitmasks above
+
 		//FIXME: dis shit ain't working
 		tile.enqueueBitMasks(masks);
 		

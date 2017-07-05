@@ -5,7 +5,6 @@ import java.awt.Color;
 import snorri.dialog.SpellMessage;
 import snorri.entities.Entity;
 import snorri.events.SpellEvent.Caster;
-import snorri.main.Debug;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.nonterminals.Sentence;
@@ -31,10 +30,8 @@ public class Papyrus extends Item {
 		
 		if (timer.activate() && spell != null) {
 			Object o = useSpell(world, caster, subject);
-			if (Main.getWindow() instanceof GameWindow && spellIsStatement()) {
-				((GameWindow) Main.getWindow()).showMessage(new SpellMessage(spell.getOrthography(), o));
-			} else {
-				Debug.log(SpellMessage.format(spell.getOrthography(), o));
+			if (Main.getWindow() instanceof GameWindow) {
+				((GameWindow) Main.getWindow()).showMessage(new SpellMessage(spell.getOrthography(), o, spellIsStatement()));
 			}
 			return true;
 		}

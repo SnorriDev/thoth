@@ -11,9 +11,6 @@ import snorri.world.Vector;
 
 public class Mask implements Comparable<Mask>, Comparator<Mask> {
 	
-	//TODO can rework this so each tile stores one BufferedImage, which
-	//gets changed with setImage
-	
 	public static final Vector[] NEIGHBORS;
 	public static final Vector[] CORNERS;
 	public static final Vector[] NEIGHBORS_AND_CORNERS;

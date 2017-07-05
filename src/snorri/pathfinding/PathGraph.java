@@ -344,7 +344,7 @@ public class PathGraph {
 	 * @param v
 	 *            position, in grid coordinates
 	 */
-	public void setPathableGrid(Vector v) {
+	public synchronized void setPathableGrid(Vector v) {
 		
 		updateSurroundingContext(v);
 		
@@ -375,7 +375,7 @@ public class PathGraph {
 	 * 
 	 * @see <code>setPathableGrid</code>
 	 */
-	public void setUnpathableGrid(Vector v) {
+	public synchronized void setUnpathableGrid(Vector v) {
 		for (Component component : updateSurroundingContext(v)) {
 			splitGraph(component);
 		}

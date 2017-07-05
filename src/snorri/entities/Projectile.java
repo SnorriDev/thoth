@@ -26,7 +26,8 @@ public class Projectile extends Detector implements Walker {
 	public Projectile(Entity root, Vector rootVelocity, Vector path, Weapon weapon, Orb orb) {
 		super(root.getPos().copy(), 3); //radius of a projectile is 1
 		velocity = rootVelocity.copy().add(path.copy().scale(PROJECTILE_SPEED));
-		this.animation = orb.getProjectileAnimation().getRotated(path.copy().normalize()); //new Animation(ANIMATION);
+		this.animation = orb.getProjectileAnimation();
+		setDirection(path);
 		this.root = root;
 		this.weapon = weapon;
 		this.orb = orb;
@@ -51,15 +52,24 @@ public class Projectile extends Detector implements Walker {
 	@Override
 	public void update(World world, double deltaTime) {
 		
+		boolean walked = false;
 		if (weapon == null || !weapon.altersMovement()) {
 			walk(world, velocity.copy().multiply(deltaTime));
+			walked = true;
 		} 
 		
 		if (root instanceof Caster && weapon != null) {
+			
 			Object output = weapon.useSpellOn(world, ((Caster) root), this, deltaTime / getLifeSpan());
 			if (Debug.SHOW_WEAPON_OUTPUT) {
 				Debug.log("weapon output: " + output);
 			}
+			
+			//we can't unify this with the above if clause because it matters when spells are applied
+			if (!walked && output.equals(false)) {
+				walk(world, velocity.copy().multiply(deltaTime));
+			}
+			
 		}
 				
 		//if we hit the edge of the map or a wall, end
@@ -86,20 +96,13 @@ public class Projectile extends Detector implements Walker {
 	}
 	
 	@Override
-	public boolean onDelete(World world) {
-		
-		if (!super.onDelete(world)) {
-			return false;
-		}
-		
+	protected void onSafeDelete(World world) {
 		if (root instanceof Caster && orb != null) {
 			Object output = orb.useSpell(world, (Caster) root, this);
 			if (Debug.SHOW_ORB_OUTPUT) {
 				Debug.log("orb output: " + output);
 			}
-		}
-		return true;
-		
+		}		
 	}
 	
 	@Override

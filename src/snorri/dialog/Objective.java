@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.io.Serializable;
 
 import snorri.main.GameWindow;
-import snorri.world.Vector;
 
 /**
  * A wrapper class to hold strings that explain what the player has to do.
@@ -26,9 +25,7 @@ public class Objective extends Message implements Serializable {
 	}
 	
 	public void render(Graphics gr, GameWindow window) {
-		Vector objPos = window.getFocus().getHealthBarPos().add(0, 33);
-		drawLine(gr, window, objPos, Color.DARK_GRAY);
-//		gr.drawString(shortDesc, objPos.getX(), objPos.getY());
+		drawLine(gr, window, -HEIGHT, Color.DARK_GRAY);
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import snorri.triggers.Trigger.TriggerType;
 public class TriggerMap extends HashMap<Trigger.TriggerType, ArrayList<Trigger>> {
 
 	private static final long serialVersionUID = 1L;
+	//TODO map objects within the map to lists of triggers
 	
 	private boolean loaded = false;
 

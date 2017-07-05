@@ -7,6 +7,7 @@ import snorri.entities.Player;
 import snorri.entities.Unit;
 import snorri.keyboard.Key;
 import snorri.main.Debug;
+import snorri.main.FocusedWindow;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.parser.Grammar;
@@ -24,20 +25,16 @@ public class Inventory implements Serializable {
 	
 	private Weapon weaponSlot;
 	private Armor armorSlot;
-	private Orb[] orbSlots;
+	private Orb orbSlot;
 	private Papyrus[] papyrusSlots;
-	private int selectedOrb = 0;
 	
 	public static final Key[] PAPYRUS_KEYS = new Key[] { Key.ONE, Key.TWO, Key.THREE };
-	public static final Key[] ORB_KEYS = new Key[] { Key.FOUR, Key.FIVE };
 	
-	private static final int ORB_SLOTS = 2;
 	private static final int PAPYRUS_SLOTS = 3;
 	
 	public Inventory(Unit player) {
 		this.player = player;
 		fullInventory = new FullInventory(this);
-		orbSlots = new Orb[ORB_SLOTS];
 		papyrusSlots = new Papyrus[PAPYRUS_SLOTS];
 	}
 	
@@ -51,10 +48,8 @@ public class Inventory implements Serializable {
 			armorSlot.updateCooldown(deltaTime);
 		}
 		
-		for (int i = 0; i < ORB_SLOTS; i++) {
-			if (orbSlots[i] != null) {
-				orbSlots[i].updateCooldown(deltaTime);
-			}
+		if (orbSlot != null) {
+			orbSlot.updateCooldown(deltaTime);
 		}
 		
 		for (int i = 0; i < PAPYRUS_SLOTS; i++) {
@@ -69,14 +64,8 @@ public class Inventory implements Serializable {
 		return fullInventory;
 	}
 	
-	public boolean addOrb(Orb newProjectile) {
-		for (int i = 0; i < ORB_SLOTS; i++) {
-			if (orbSlots[i] == null) {
-				orbSlots[i] = newProjectile;
-				return true;
-			}
-		}
-		return false;
+	public void setOrb(Orb newOrb) {
+		orbSlot = newOrb;
 	}
 	
 	public boolean addPapyrus(Papyrus newPapyrus) {
@@ -92,6 +81,14 @@ public class Inventory implements Serializable {
 	public boolean addWeapon(Weapon newWeapon) {
 		if (weaponSlot == null) {
 			weaponSlot = newWeapon;
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean addOrb(Orb newOrb) {
+		if (orbSlot == null) {
+			orbSlot = newOrb;
 			return true;
 		}
 		return false;
@@ -136,11 +133,11 @@ public class Inventory implements Serializable {
 	 */
 	public boolean attack(World world, Unit focus, Vector movement, Vector dir) {
 		
-		if (weaponSlot == null || dir == null || dir.equals(Vector.ZERO) || dir.notInPlane()) {
+		if (weaponSlot == null || orbSlot == null || dir == null || dir.equals(Vector.ZERO) || dir.notInPlane()) {
 			return false;
 		}
 		
-		return weaponSlot.attack(world, focus, movement, dir, getSelectedOrb());
+		return weaponSlot.attack(world, focus, movement, dir, orbSlot);
 		
 	}
 		
@@ -152,25 +149,8 @@ public class Inventory implements Serializable {
 		armorSlot = newArmor;
 	}
 	
-	public Orb getOrb(int index) {
-		if (index < 0 || index >= ORB_SLOTS) {
-			Debug.error("index out of range, returning empty");
-			return null;
-		}
-		return orbSlots[index];
-	}
-	
-	public void setOrb(int slot, Orb newProjectile) {
-		if (slot < 0 || slot >= ORB_SLOTS) {
-			Debug.error("slot out of range");
-			return;
-		}
-		int oldI = getIndex(newProjectile);
-		if (oldI != Integer.MAX_VALUE) {
-			removeOrb(oldI);
-		}
-		orbSlots[slot] = newProjectile;
-		return;
+	public Orb getOrb() {
+		return orbSlot;
 	}
 	
 	public Papyrus getPapyrus(int index) {
@@ -193,23 +173,6 @@ public class Inventory implements Serializable {
 		papyrusSlots[slot] = newPapyrus;
 	}
 	
-	public Orb getSelectedOrb() {
-		return getOrb(selectedOrb);
-	}
-	
-	public void selectOrb(int i) {
-		if (getOrb(i) != null) {
-			selectedOrb = i;
-		}
-	}
-	
-	public void removeOrb(int i) {
-		orbSlots[i] = null;
-		if (selectedOrb == i) {
-			selectedOrb = 0;
-		}
-	}
-	
 	public void render(GameWindow window, Graphics g) {
 		
 		// 1,2,3
@@ -217,13 +180,9 @@ public class Inventory implements Serializable {
 			drawItemContainer(g, i, true, papyrusSlots[i], Papyrus.class);
 		}
 		
-		// 4,5
-		for (int i = 0; i < ORB_SLOTS; i++) {
-			drawItemContainer(g, i + PAPYRUS_SLOTS, true, orbSlots[i], Orb.class, selectedOrb == i);
-		}
-		
-		// Sling
+		// Sling and Orb
 		drawItemContainer(g, 0, false, weaponSlot, Weapon.class);
+		drawItemContainer(g, 1, false, orbSlot, Orb.class);
 		// drawItemContainer(g, 1, false, armorSlot, Armor.class);
 		
 	}
@@ -291,10 +250,8 @@ public class Inventory implements Serializable {
 			if (compare(d, armorSlot, specific)) {
 				armorSlot = null;
 			}
-			for (int i = 0; i < orbSlots.length; i++) {
-				if (compare(d, orbSlots[i], specific)) {
-					orbSlots[i] = null;
-				}
+			if (compare(d, orbSlot, specific)) {
+				orbSlot = null;
 			}
 			for (int i = 0; i < papyrusSlots.length; i++) {
 				if (compare(d, papyrusSlots[i], specific)) {
@@ -308,15 +265,6 @@ public class Inventory implements Serializable {
 		
 	}
 	
-	public int getIndex(Orb orb) {
-		for (int i = 0; i < orbSlots.length; i++) {
-			if (orb == orbSlots[i]) {
-				return i;
-			}
-		}
-		return Integer.MAX_VALUE;
-	}
-	
 	private int getIndex(Papyrus papyrus) {
 		for (int i = 0; i < papyrusSlots.length; i++) {
 			if (papyrus == papyrusSlots[i]) {
@@ -328,6 +276,10 @@ public class Inventory implements Serializable {
 	
 	private int getIndex(Weapon weapon) {
 		return weaponSlot == weapon ? 0 : Integer.MAX_VALUE;
+	}
+	
+	private int getIndex(Orb orb) {
+		return orbSlot == orb ? 0 : Integer.MAX_VALUE;
 	}
 	
 	private int getIndex(Armor armor) {
@@ -363,13 +315,6 @@ public class Inventory implements Serializable {
 			}
 			return PAPYRUS_KEYS[index];
 		}
-		if (item instanceof Orb) {
-			index = getIndex((Orb) item);
-			if (index == Integer.MAX_VALUE) {
-				return null;
-			}
-			return ORB_KEYS[getIndex((Orb) item)];
-		}
 		
 		return null;
 	}
@@ -378,17 +323,21 @@ public class Inventory implements Serializable {
 	 * of the current focused window */
 	public void checkKeys() {
 		
-		for (int i = 0; i < ORB_KEYS.length; i++) {
-			if (ORB_KEYS[i].isPressed()) {
-				selectOrb(i);
-			}
-		}
-		
 		for (int i = 0; i < PAPYRUS_KEYS.length; i++) {
 			if (PAPYRUS_KEYS[i].isPressed()) {
 				usePapyrus(i);
 			}
 		}
+		
+		FocusedWindow<?> window = (FocusedWindow<?>) Main.getWindow();
+		
+		Vector movement = window.getMovementVector();
+		Vector dir = window.getShotDirection();
+		
+		if (window.getFocus() instanceof Unit) {
+			attack(window.getWorld(), (Unit) window.getFocus(), movement, dir);
+		}
+		
 		
 	}
 	

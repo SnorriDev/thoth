@@ -1,6 +1,7 @@
 package snorri.main;
 
 import java.awt.Graphics;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -23,6 +24,7 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
+import snorri.entities.Ballista;
 import snorri.entities.Drop;
 import snorri.entities.Entity;
 import snorri.entities.Listener;
@@ -51,7 +53,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 	private static final long serialVersionUID = 1L;
 
-	private static final double SCALE_FACTOR = 1d;
+	private static final double SCALE_FACTOR = 1.5d;
 	private static final double SPEED_MULTIPLIER = 3.9;
 	
 	private double speed = SCALE_FACTOR;
@@ -239,7 +241,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		for (Tile t : Tile.getAllTypes(MidgroundElement.class)) {
 
 			if (t == null || t.getTexture() == null) {
-				if (t.getType().ordinal() == 0) {
+				if (t.getType() == MidgroundElement.NONE) {
 					subsubmenu = new JMenu(t.toStringShort());
 					for (Tile s : t.getType().getSubTypes()) {
 						rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(Tile.BLANK_TEXTURE));
@@ -478,6 +480,10 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		
 		env.render(this, gr, deltaTime, false);
 		renderMousePos(gr);
+		
+		if (Debug.LOG_FOCUS) {
+			Debug.log("Focused component: " + KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner());
+		}
 
 	}
 
@@ -1523,6 +1529,15 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 					return;
 				}
 				world.add(new Listener(spawnPos, inputs.getInteger("Radius"), inputs.getText("Tag")));
+			} else if (selectedEntityClass.equals(Ballista.class)) {
+				DialogMap inputs = new DialogMap();
+				inputs.put("X", "1");
+				inputs.put("Y", "0");
+				if (dialog("Ballista Direction", inputs) == null) {
+					return;
+				}
+				Vector dir = new Vector(inputs.getDouble("X"), inputs.getDouble("Y"));
+				world.add(new Ballista(spawnPos, dir));
 			}
 
 			else {

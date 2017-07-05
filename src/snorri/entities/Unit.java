@@ -12,6 +12,7 @@ import snorri.events.SpellEvent;
 import snorri.main.Debug;
 import snorri.modifiers.Modifier;
 import snorri.pathfinding.Team;
+import snorri.semantics.Break;
 import snorri.semantics.Go.Walker;
 import snorri.semantics.Nominal;
 import snorri.semantics.Wrapper;
@@ -41,15 +42,13 @@ public abstract class Unit extends Entity implements Walker {
 	protected String[] damageSounds;
 	protected String[] deathSounds;
 
-		
-	protected Unit(Vector pos, Animation idle, Animation walking) {
-		this(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)));
-		initializeAnimations(idle, walking, idle);
+	protected Unit(Vector pos, Collider collider, Animation idle, Animation walking) {
+		this(pos, collider);
+		initializeAnimations(idle, walking, idle); //TODO attack animations
 	}
 	
-	protected Unit(Vector pos, Animation idle, Animation walking, Animation attack) {
-		this(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)));
-		initializeAnimations(idle, walking, attack);
+	protected Unit(Vector pos, Animation idle, Animation walking) {
+		this(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)), idle, walking);
 	}
 		
 	/**
@@ -81,6 +80,9 @@ public abstract class Unit extends Entity implements Walker {
 				modifiers.remove(m);
 			}
 		}
+		
+		//if the unit is standing on a tripwire, cut it
+		Break.cutTripwire(world, pos.copy().toGridPos());
 		
 		if (isDead()) {
 			world.delete(this);

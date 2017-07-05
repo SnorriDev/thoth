@@ -1,7 +1,5 @@
 package snorri.semantics;
 
-import snorri.entities.Mummy;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,8 +46,7 @@ public class Open extends TransVerbDef {
 		
 		if (obj instanceof Sarcophagus) {
 			e.getWorld().delete((Entity) obj);
-			Vector spawnPos = e.getWorld().getGoodSpawn(((Sarcophagus) obj).getPos().copy().toGridPos());
-			Entity.spawnNew(e.getWorld(), spawnPos, Mummy.class);
+			return true;
 		}
 		
 		if (obj instanceof Entity) {

@@ -19,6 +19,8 @@ public class Hieroglyphs {
 
 	private static final HashMap<String, Image> glyphIcons;
 	
+	private static final int SMALL_GLYPH_HEIGHT = 20;
+	
 	static {
 		
 		glyphIcons = new HashMap<>();
@@ -86,6 +88,14 @@ public class Hieroglyphs {
 			return null;
 		}
 		return new ImageIcon(image);
+	}
+	
+	public static ImageIcon getSmallIcon(String raw) {
+		Image image = getImage(raw);
+		if (image == null) {
+			return null;
+		}
+		return new ImageIcon(Util.resize(image, 0, SMALL_GLYPH_HEIGHT));
 	}
 	
 	public static Image getImage(String raw) {

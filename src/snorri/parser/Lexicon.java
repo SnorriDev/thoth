@@ -98,7 +98,7 @@ public class Lexicon extends HashMap<String, Definition<?>> {
 		lexicon.put("snbt", new StaticDef(Noun.class, new ClassWrapper(Urn.class)));
 //		lexicon.put("bit", new StaticDef(Noun.class, null)); //bee
 		lexicon.put("txn", new StaticDef(Noun.class, new ClassWrapper(Spike.class)));
-		lexicon.put("anx", new StaticDef(Noun.class, Glyph.class));
+		lexicon.put("anx", new StaticDef(Noun.class, new ClassWrapper(Glyph.class)));
 		lexicon.put("z", new StaticDef(Noun.class, new ClassWrapper(Entity.class)));
 		lexicon.put("saH", new StaticDef(Noun.class, new ClassWrapper(Mummy.class)));
 		lexicon.put("rwDt", new StaticDef(Noun.class, BackgroundElement.SANDSTONE));

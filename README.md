@@ -12,4 +12,4 @@ For more info:
 
 * Download the [latest release](https://github.com/viking-sudo-rm/SpokenWord/releases)
 
-* Vote for *the Book of Thoth* on [Greenlight](http://steamcommunity.com/sharedfiles/filedetails/?id=792472433&result=1)
+* Join our [Discord](https://discord.gg/GpV988e)

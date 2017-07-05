@@ -219,6 +219,7 @@ public class Animation implements Serializable {
 		Animation other = new Animation(this);
 		for (int i = 0; i < frames.length; i++) {
 			other.frames[i] = Util.getRotated(frames[i], dir);
+			assert frames[i] != other.frames[i];
 		}
 		other.computeFlipped();
 		return other;

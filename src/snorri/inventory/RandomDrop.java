@@ -62,8 +62,12 @@ public class RandomDrop implements Droppable {
 		this.col = col;
 	}
 	
+	public RandomDrop(Tier tier) {
+		this(tier.getCollection());
+	}
+	
 	public RandomDrop(String name) {
-		this(Tier.valueOf(name.toUpperCase()).getCollection());
+		this(Tier.valueOf(name.toUpperCase()));
 		this.name = name.toUpperCase();
 	}
 	
