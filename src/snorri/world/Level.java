@@ -403,41 +403,59 @@ public class Level implements Editable {
 			return;
 		}
 		
-		Map<TileType, Mask> edges = new HashMap<>();
+		Mask[] masks = new Mask[8];
 		
 		short bitVal = 1;
+		int j = 0;
 		for (Vector v : Mask.NEIGHBORS) {
 			Tile t = getTileGrid(v.copy().add(x, y));
 			if (t != null && !t.getType().isAtTop() && tile.compareTo(t) > 0) {
-				Mask mask = edges.get(t.getType());
-				if (mask == null) {
-					mask = new Mask(t, false);
-					edges.put(t.getType(), mask);
+				for (j = 0; j < masks.length; j++) {
+					if (masks[j] == null) {
+						masks[j] = new Mask(t, false);
+					}
+					if (masks[j].hasTile(t)) {
+						masks[j].add(bitVal);
+						break;
+				
+					}
 				}
-				mask.add(bitVal);
 			}
 			bitVal *= 2;
 		}
 		
-		Map<TileType, Mask> corners = new HashMap<>();
-		
 		bitVal = 1;
+		int k = 0;
+		//int maxK = 0;
 		for (Vector v: Mask.CORNERS) {
 			Tile t = getTileGrid(v.copy().add(x, y));
 			if (t != null && !t.getType().isAtTop() && tile.compareTo(t) > 0) {
-				Mask mask = corners.get(t.getType());
-				if (mask == null) {
-					mask = new Mask(t, true);
-					corners.put(t.getType(), mask);
+				for (k = 0; k < masks.length; k++) {
+					if (masks[k] == null) {
+						masks[k] = new Mask(t, true);
+					}
+					if (masks[k].hasTile(t) && masks[k].isCorner()) {
+						masks[k].add(bitVal);
+						break;
+					}
 				}
-				mask.add(bitVal);
 			}
 			bitVal *= 2;
 		}
+
+//		int masksSize = 0;
+//		for (Mask m : masks) {
+//			if (m == null) {
+//				break;
+//			}
+//			else {
+//				++masksSize;
+//			}
+//		}
 		
 		//TODO should be able to directly enqueue bitmasks above
-		tile.enqueueBitMasks(edges.values());
-		tile.enqueueBitMasks(corners.values());
+		//FIXME: dis shit ain't working
+		tile.enqueueBitMasks(masks);
 		
 	}
 	
