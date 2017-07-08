@@ -9,7 +9,6 @@ import java.lang.Math;
 
 import java.util.ArrayList;
 
-import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.GamePanel;
 import snorri.semantics.Nominal;
@@ -19,6 +18,7 @@ public class Vector implements Nominal, Comparable<Vector> {
 	private static final long serialVersionUID = 1L;
 
 	public static final Vector ZERO = new Vector(0, 0);
+	public static final Vector ORIENTATION = new Vector(1, 0);
 	
 	public static final Vector RIGHT = new Vector(1, 0);
 	public static final Vector DOWN = new Vector(0, 1);
@@ -353,6 +353,11 @@ public class Vector implements Nominal, Comparable<Vector> {
 
 	public boolean isNormalTo(int x2, int y2) {
 		return (getX() == x2 || getY() == y2);
+	}
+
+	public double getStandardAngle() {
+		double theta = getAngleBetween(ORIENTATION);
+		return y > 0 ? theta : 2 * Math.PI - theta;
 	}
 		
 }

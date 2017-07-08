@@ -192,9 +192,7 @@ public class Util {
 	 * 	The rotated image
 	 */
 	public static BufferedImage getRotated(BufferedImage image, Vector dir) {
-		Debug.raw(dir);
-		double theta = dir.getAngleBetween(new Vector(1, 0));
-		Debug.raw(theta);
+		double theta = dir.getStandardAngle();
 		return getRotated(image, theta);
 	}
 	

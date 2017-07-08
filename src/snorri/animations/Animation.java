@@ -36,7 +36,6 @@ public class Animation implements Serializable {
 	private double currentTime = 0;
 	private boolean hasCycled = false;
 	/** Play the animation once, and then remain in the last frame **/
-	private boolean cycleOnce;
 	private String path;
 	private boolean flipped = false;
 	
@@ -45,7 +44,7 @@ public class Animation implements Serializable {
 	 * @param path
 	 * @throws URISyntaxException
 	 */
-	public Animation(String str, boolean cycleOnce) {
+	public Animation(String str) {
 		if (str.endsWith(".png")) {
 			loadImage(Main.getImage(str));
 		} else {
@@ -53,11 +52,6 @@ public class Animation implements Serializable {
 		}
 		computeFlipped();
 		path = str;
-		this.cycleOnce = cycleOnce;
-	}
-	
-	public Animation(String str) {
-		this(str, false);
 	}
 	
 	public Animation(BufferedImage image) {
@@ -114,6 +108,10 @@ public class Animation implements Serializable {
 		}
 
 	}
+	
+	protected Animation(int numFrames) {
+		frames = new BufferedImage[numFrames];
+	}
 
 	private void loadImage(BufferedImage image) {
 		if (image == null) {
@@ -166,7 +164,6 @@ public class Animation implements Serializable {
 		frames = animation.frames;
 		flippedFrames = animation.flippedFrames;
 		hasCycled = animation.hasCycled;
-		cycleOnce = animation.cycleOnce;
 		currentTime = animation.currentTime;
 	}
 
@@ -180,12 +177,8 @@ public class Animation implements Serializable {
 	 * @return the current image
 	 */
 	public synchronized BufferedImage getSprite(double timeDelta) {
-		
-		if (!cycleOnce || getFrameIndex() != frames.length - 1) {
-			hasCycled |= (currentTime + timeDelta) >= (frames.length * SEC_PER_FRAME);
-			currentTime = (currentTime + timeDelta) % (frames.length * SEC_PER_FRAME);
-		}
-			
+		hasCycled |= (currentTime + timeDelta) >= (frames.length * SEC_PER_FRAME);
+		currentTime = (currentTime + timeDelta) % (frames.length * SEC_PER_FRAME);		
 		return (flipped ? flippedFrames : frames)[getFrameIndex()];
 	}
 	
@@ -221,13 +214,9 @@ public class Animation implements Serializable {
 	 * 	The new rotated animation.
 	 */
 	public Animation getRotated(Vector dir) {
-		Animation other = new Animation(this);
+		Animation other = new Animation(frames.length);
 		for (int i = 0; i < frames.length; i++) {
-			Debug.raw("width before rotation: " + frames[i].getWidth());
 			other.frames[i] = Util.getRotated(frames[i], dir);
-			Debug.raw("width after rotation: " + frames[i].getWidth());
-			Debug.raw("rotated width: " + other.frames[i].getWidth());
-			assert frames[i] != other.frames[i];
 		}
 		other.computeFlipped();
 		return other;

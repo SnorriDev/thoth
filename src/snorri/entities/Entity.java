@@ -93,6 +93,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	protected Vector dir;
 		
 	private boolean flying = false, deleted = false;
+	private boolean hasCycled = false;
 
 	/**
 	 * This method will automatically set the collider focus to the entity
@@ -231,6 +232,10 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 	
 	public void update(World world, double d) {
+		if (!hasCycled && animation.hasCycled()) {
+			onCycleComplete(world);
+			hasCycled = true;
+		}
 	}
 	
 	public void renderAround(FocusedWindow<?> g, Graphics gr, double timeDelta) {
@@ -443,7 +448,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		if (animation != null) {
 			setAnimation(animation);
 		}
-		Debug.raw("set direction of " + toString());
 	}
 	
 	/**
@@ -453,11 +457,20 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	 * 	The animation to copy.
 	 */
 	public void setAnimation(Animation animation) {
-//		if (dir == null) {
-//			this.animation = new Animation(animation);
-//			return;
-//		}
+		if (dir == null) {
+			this.animation = new Animation(animation);
+			return;
+		}
 		this.animation = new Animation(animation).getRotated(dir == null ? new Vector(1, 0) : dir);
+	}
+	
+	/**
+	 * This event fires after the entity's animation completes a cycle.
+	 * Note that this is called by <code>update</code>, so it won't get called in the LevelEditor view.
+	 * @param world
+	 * The world in which the cycle was completed.
+	 */
+	public void onCycleComplete(World world) {
 	}
 
 }
