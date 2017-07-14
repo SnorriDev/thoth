@@ -45,7 +45,7 @@ public class Weapon extends Item {
 		return 0;
 	}
 	
-	boolean attack(World world, Entity focus, Vector movement, Vector dir, Orb orb) {
+	public boolean attack(World world, Entity focus, Vector movement, Vector dir, Orb orb) {
 		if (timer.activate()) {
 			Audio.playClip(clip);
 			world.add(new Projectile(focus, movement, dir, this, orb));

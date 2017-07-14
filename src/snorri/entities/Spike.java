@@ -33,7 +33,7 @@ public class Spike extends Detector {
 	}
 	
 	@Override
-	public void onCycleComplete(World world) {
+	protected void onCycleComplete(World world) {
 		world.delete(this);
 	}
 

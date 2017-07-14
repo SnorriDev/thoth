@@ -457,6 +457,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	 * 	The animation to copy.
 	 */
 	public void setAnimation(Animation animation) {
+		hasCycled = false;
 		if (dir == null) {
 			this.animation = new Animation(animation);
 			return;
@@ -470,7 +471,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	 * @param world
 	 * The world in which the cycle was completed.
 	 */
-	public void onCycleComplete(World world) {
+	protected void onCycleComplete(World world) {
 	}
 
 }

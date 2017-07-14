@@ -23,7 +23,7 @@ public class MeleeWeapon extends Weapon {
 	}
 	
 	@Override
-	boolean attack(World world, Entity focus, Vector movement, Vector dir, Orb orb) {
+	public boolean attack(World world, Entity focus, Vector movement, Vector dir, Orb orb) {
 		if (timer.activate()) {
 			Vector pos = focus.getPos().copy().add(dir.copy().scale(getOffsetMagnitude()));
 			Entity checker = new Entity(pos, getCollider());

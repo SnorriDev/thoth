@@ -82,7 +82,8 @@ public abstract class Item implements Droppable {
 		ARROW(5, Orb.class, Main.getImage("/textures/items/arrow.png"), new Animation("/textures/objects/pellet.png")),
 		SNAKE_BITE(Weapon.class, null, 75d, 1d, "/sound/arrow.wav"),
 		VENOM(5, Orb.class, null, new Animation("/textures/objects/venom.png")),
-		CROCODILE_BITE(MeleeWeapon.class, null, 100d, 1d, "/sound/arrow.wav", 50, new CircleCollider(100));
+		CROCODILE_BITE(MeleeWeapon.class, null, 100d, 1d, "/sound/arrow.wav", 50, new CircleCollider(100)),
+		BOLT(5, Orb.class, null, new Animation("/textures/objects/bolt.png"));
 
 		private Class<? extends Item> c;
 		private int maxQuantity = 1; //number of inventory slots; use Consumable class with data field for charges
