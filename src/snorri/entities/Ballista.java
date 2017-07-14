@@ -5,7 +5,6 @@ import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
-import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.world.Vector;
@@ -49,14 +48,10 @@ public class Ballista extends Entity {
 	// TODO pass spell event, use shooter interface
 	public boolean shoot(World world) {
 
-		// Debug.raw("shooting: " + shooting);
-		// Debug.raw("cannot use: " + !bow.canUse());
-
 		if (shooting || !bow.canUse()) {
 			return false;
 		}
 
-		// TODO timer
 		// TODO Entities subclasses of each other?
 
 		shooting = true;
@@ -69,7 +64,6 @@ public class Ballista extends Entity {
 	@Override
 	protected void onCycleComplete(World world) {
 		if (shooting) {
-			Debug.raw("stopped shooting");
 			setAnimation(IDLE);
 			shooting = false;
 		}
