@@ -132,6 +132,8 @@ public class GameWindow extends FocusedWindow<Player> {
 			Debug.log("Focused component: " + KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner());
 		}
 		
+		g.dispose();
+		
 	}
 	
 	public void showMessage(String msg) {

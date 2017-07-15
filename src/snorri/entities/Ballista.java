@@ -19,7 +19,7 @@ public class Ballista extends Entity {
 	private static final double FIRE_DISTANCE = 1000d;
 	private static final double SHOT_MARGIN = Math.PI / 4;
 
-	private boolean shooting = false;
+	private boolean shooting = false, active = false;
 	private Entity target;
 	private final Weapon bow = (Weapon) Item.newItem(ItemType.BOW);
 	private final Orb bolt = (Orb) Item.newItem(ItemType.BOLT);
@@ -36,12 +36,16 @@ public class Ballista extends Entity {
 		if (target == null) {
 			target = ((FocusedWindow<?>) Main.getWindow()).getFocus();
 		}
+		
+		bow.updateCooldown(d);
+		if (!active) {
+			return;
+		}
 
 		if (target.getPos().distance(pos) < FIRE_DISTANCE //this logic should only apply in auto mode
 				&& dir.getAngleBetween(target.getPos().copy().sub(pos)) < SHOT_MARGIN) {
 			shoot(world);
 		}
-		bow.updateCooldown(d);
 
 	}
 
@@ -67,6 +71,14 @@ public class Ballista extends Entity {
 			setAnimation(IDLE);
 			shooting = false;
 		}
+	}
+	
+	public void activate() {
+		active = true;
+	}
+	
+	public void deactivate() {
+		active = false;
 	}
 
 }

@@ -17,6 +17,7 @@ import snorri.main.GamePanel;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.main.Util;
+import snorri.nonterminals.Sentence;
 import snorri.parser.Node;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -258,8 +259,10 @@ public abstract class Item implements Droppable {
 	
 	/**
 	 * changes the spell on the item iff it's enchantable
+	 * @param newSpell
+	 * 	The spell to enchant this item with.
 	 */
-	public boolean setSpell(Node<Boolean> newSpell) {
+	public boolean setSpell(Sentence newSpell) {
 		
 		if (! type.isEnchantable()) {
 			return false;

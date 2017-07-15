@@ -260,9 +260,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 	public void calculateTexture() {
 		texture = Util.deepCopy(getBaseTexture());
 		Graphics2D gr = texture.createGraphics();
-		Debug.log("Calculating Tecture");
 		while (!maskQ.isEmpty()) {
-			//Debug.log("[" + maskQ.size() + "]" + " " + maskQ.peek().getTile().getOrderValue());
 			gr.drawImage(maskQ.poll().getTexture(), 0, 0, null);
 		}
 		gr.dispose();

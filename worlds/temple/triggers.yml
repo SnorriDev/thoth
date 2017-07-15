@@ -48,3 +48,21 @@ onNearCoffins:
             name: Setna
             text: |
               <p>I can probably find some new hieroglyphs if I open these sarcophagi..</p>
+
+onWarnBallista:
+  actions:
+    - SHOW_DIALOG:
+        dialog:
+          !dialog
+            image: player
+            name: Setna
+            text: |
+              <p> It's a trap! That tripwire must fire the ballista. Maybe I can use a spell like <span class="hiero">bm Dr ..</span> to break the wire before I walk through..</p>
+
+onBallistaTripwire:
+  events:
+    - TRIP:
+        object: !pos {x: 128, y: 87}
+  actions:
+    - FIRE_BALLISTA:
+        ballista: ballista

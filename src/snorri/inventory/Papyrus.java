@@ -15,10 +15,10 @@ public class Papyrus extends Item {
 	private static final long serialVersionUID = 1L;
 
 	private static final Color PAPYRUS_COOLDOWN_COLOR = new Color(118, 45, 50, 150);
-
+	
 	public Papyrus(ItemType t) {
 		super(t);
-		timer = new Timer(5);
+		timer = new Timer(0); //no cooldown
 	}
 
 	public boolean tryToActivate(Entity subject) {
@@ -28,7 +28,7 @@ public class Papyrus extends Item {
 
 	public boolean tryToActivate(World world, Caster caster, Entity subject) {
 
-		String orthography;
+		String orthography; //TODO use firstWord here?
 		if (spell != null && !"".equals(orthography = spell.getOrthography()) && timer.activate()) {
 			Object o = useSpell(world, caster, subject);
 			if (Main.getWindow() instanceof GameWindow) {

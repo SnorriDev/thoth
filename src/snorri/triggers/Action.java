@@ -4,6 +4,7 @@ import java.util.Map;
 
 import snorri.dialog.Dialog;
 import snorri.dialog.Objective;
+import snorri.entities.Ballista;
 import snorri.entities.Drop;
 import snorri.entities.Entity;
 import snorri.entities.NPC;
@@ -173,6 +174,21 @@ public abstract class Action {
 					public void run() {
 						Entity e = Trigger.getByTag((String) args.get("entity"));
 						world.delete(e);
+					}
+				};
+			}
+		}),
+		
+		FIRE_BALLISTA(new Action() {
+			@Override
+			public Runnable build(World world, Map<String, Object> args) {
+				return new Runnable() {
+					@Override
+					public void run() {
+						Entity e = Trigger.getByTag((String) args.get("ballista"));
+						if (e instanceof Ballista) {
+							((Ballista) e).shoot(world);
+						}
 					}
 				};
 			}
