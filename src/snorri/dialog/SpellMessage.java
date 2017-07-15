@@ -35,7 +35,7 @@ public class SpellMessage extends Message {
 		if (output == null) {
 			return 0;
 		}
-		return drawLineWithIcon(output.toString(), gr, window, xTrans);
+		return drawLineWithIcon(output.toString(), gr, window, xTrans, getSuccessColor());
 	}
 	
 	/**

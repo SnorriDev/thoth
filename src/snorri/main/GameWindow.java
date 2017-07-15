@@ -73,7 +73,7 @@ public class GameWindow extends FocusedWindow<Player> {
 		}
 		
 		if (messageQ != null && messageQ.peek() != null && messageQ.peek().update(deltaTime)) {
-			messageQ.poll();
+			messageQ.poll().onClear();
 		}
 				
 		if (isPaused()) {

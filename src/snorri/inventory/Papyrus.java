@@ -3,6 +3,7 @@ package snorri.inventory;
 import java.awt.Color;
 
 import snorri.dialog.SpellMessage;
+import snorri.dialog.TextMessage;
 import snorri.entities.Entity;
 import snorri.events.SpellEvent.Caster;
 import snorri.main.GameWindow;
@@ -13,8 +14,9 @@ import snorri.world.World;
 public class Papyrus extends Item {
 
 	private static final long serialVersionUID = 1L;
-
 	private static final Color PAPYRUS_COOLDOWN_COLOR = new Color(118, 45, 50, 150);
+	
+	private boolean ignoreMessages = false;
 	
 	public Papyrus(ItemType t) {
 		super(t);
@@ -28,8 +30,21 @@ public class Papyrus extends Item {
 
 	public boolean tryToActivate(World world, Caster caster, Entity subject) {
 
-		String orthography; //TODO use firstWord here?
-		if (spell != null && !"".equals(orthography = spell.getOrthography()) && timer.activate()) {
+		String orthography; //TODO calculate firstWord here?
+		if (spell == null || "".equals(orthography = spell.getOrthography())) {
+			if (!ignoreMessages && Main.getWindow() instanceof GameWindow) {
+				((GameWindow) Main.getWindow()).showMessage(new TextMessage(null, "you can't cast an empty papyrus!", false, new Runnable() {
+					@Override
+					public void run() {
+						ignoreMessages = false;
+					}
+				}));
+				ignoreMessages = true;
+			}
+			return false;
+		}
+		
+		if (timer.activate()) {
 			Object o = useSpell(world, caster, subject);
 			if (Main.getWindow() instanceof GameWindow) {
 				((GameWindow) Main.getWindow()).showMessage(new SpellMessage(orthography, o, spellIsStatement()));
@@ -38,6 +53,15 @@ public class Papyrus extends Item {
 			return true;
 		}
 
+		if (!ignoreMessages && Main.getWindow() instanceof GameWindow) {
+			((GameWindow) Main.getWindow()).showMessage(new TextMessage(null, "papyrus is on cooldown!", false, new Runnable() {
+				@Override
+				public void run() {
+					ignoreMessages = false;
+				}
+			}));
+			ignoreMessages = true;
+		}
 		return false;
 
 	}

@@ -21,6 +21,7 @@ public abstract class Message {
 	protected static final Color BACKGROUND = new Color(222, 196, 169, 230);
 	
 	protected final Timer timer;
+	protected Runnable onClear = null;
 	protected boolean success = true;
 	
 	private Image icon;
@@ -36,6 +37,8 @@ public abstract class Message {
 			icon = Util.resize(image, -1, ICON_SIZE);
 		}
 	}
+	
+	//TODO this class needs to be cleaned up quite a bit
 	
 	public boolean update(double deltaTime) {
 		timer.update(deltaTime);
@@ -57,7 +60,7 @@ public abstract class Message {
 	}
 	
 	protected int drawLine(Graphics gr, GameWindow window, int xTrans) {
-		return drawLine(gr, window, xTrans, Color.BLACK);
+		return drawLine(gr, window, xTrans, getSuccessColor());
 	}
 	
 	protected int drawLine(Graphics gr, GameWindow window, int xTrans, Color color) {
@@ -72,11 +75,15 @@ public abstract class Message {
 	}
 	
 	protected int drawLineWithIcon(String line, Graphics gr, GameWindow window, int xTrans) {
+		return this.drawLineWithIcon(line, gr, window, xTrans, getSuccessColor());
+	}
+	
+	protected int drawLineWithIcon(String line, Graphics gr, GameWindow window, int xTrans, Color color) {
 		int width = getLineWidth(gr, toString()) + 2 * BOX_BUFFER + icon.getWidth(null) + IMAGE_BUFFER;
 		Vector pos = getPos(window, width, xTrans);
 		gr.setColor(BACKGROUND);
 		gr.fillRect(pos.getX(), pos.getY(), width, ICON_SIZE + 2 * BOX_BUFFER);
-		gr.setColor(success ? Color.GREEN : Color.RED);
+		gr.setColor(color);
 		gr.drawRect(pos.getX(), pos.getY(), width, ICON_SIZE + 2 * BOX_BUFFER);
 		gr.drawImage(icon, pos.getX() + BOX_BUFFER, pos.getY() + BOX_BUFFER, null);
 		gr.drawString(line, icon.getWidth(null) + BOX_BUFFER + IMAGE_BUFFER + pos.getX(), pos.getY() + HEIGHT / 2 + BOX_BUFFER);
@@ -88,6 +95,20 @@ public abstract class Message {
 			return 4;
 		}
 		return gr.getFontMetrics().stringWidth(line);
+	}
+	
+	protected Color getSuccessColor() {
+		return success ? Color.GREEN : Color.RED;
+	}
+	
+	public boolean hasIcon() {
+		return icon != null;
+	}
+	
+	public void onClear() {
+		if (onClear != null) {
+			onClear.run();
+		}
 	}
 		
 }
