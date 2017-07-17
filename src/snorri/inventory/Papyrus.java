@@ -33,7 +33,7 @@ public class Papyrus extends Item {
 		String orthography; //TODO calculate firstWord here?
 		if (spell == null || "".equals(orthography = spell.getOrthography())) {
 			if (!ignoreMessages && Main.getWindow() instanceof GameWindow) {
-				((GameWindow) Main.getWindow()).showMessage(new TextMessage(null, "you can't cast an empty papyrus!", false, new Runnable() {
+				((GameWindow) Main.getWindow()).showMessage(new TextMessage(null, "write on your papyrus before casting it!", false, new Runnable() {
 					@Override
 					public void run() {
 						ignoreMessages = false;

@@ -29,6 +29,7 @@ public abstract class Item implements Droppable {
 	protected Node<Boolean> spell; // spell/enchantment associated with the item
 	protected String nickname; //name which the player gives the item so they know what it does
 	protected ItemType type; // what type of item it is; you can get ID, maxQuantity, enchantable from this
+	protected BufferedImage texture;
 	
 	private static final int ARC_SIZE = 32;
 	private static final int SMALL_ICON_SIZE = 32;
@@ -188,6 +189,7 @@ public abstract class Item implements Droppable {
 	
 	public Item(ItemType t) {
 		type = t;
+		texture = computeTexture();
 	}
 
 	// returns the item type
@@ -195,14 +197,23 @@ public abstract class Item implements Droppable {
 		return type;
 	}
 	
-	@Override
-	public BufferedImage getTexture() {
+	//TODO require this method in Droppable?
+	/**
+	 * Compute the texture for this item.
+	 * @return The representing the texture.
+	 */
+	private BufferedImage computeTexture() {
 		return Util.getBufferedImage(type.getTexture());
 	}
 	
 	@Override
+	public BufferedImage getTexture() {
+		return texture;
+	}
+	
+	@Override
 	public Animation getAnimation() {
-		return new Animation(getTexture());
+		return new Animation(computeTexture());
 	}
 	
 	public void updateCooldown(double deltaTime) {
