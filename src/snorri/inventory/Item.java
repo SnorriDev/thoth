@@ -194,7 +194,6 @@ public abstract class Item implements Droppable {
 	
 	public Item(ItemType t) {
 		type = t;
-		Debug.raw(toString() + ": computed texture");
 		computeTexture();
 	}
 
@@ -215,9 +214,10 @@ public abstract class Item implements Droppable {
 		String firstWord;
 		texture = Util.getBufferedImage(type.getTexture());
 		if (spell != null && (firstWord = spell.getFirstWord()) != null) {
+			Debug.raw("got to first word: " + firstWord);
 			Graphics2D gr = (Graphics2D) texture.getGraphics();
 			Image hieroglyph = Hieroglyphs.getImage(firstWord);
-			gr.drawImage(hieroglyph, 0, 0, null);
+			gr.drawImage(hieroglyph, 0, 0, hieroglyph.getWidth(null) / 2, hieroglyph.getHeight(null) / 2, null);
 			gr.dispose();
 		}
 	}
@@ -471,7 +471,6 @@ public abstract class Item implements Droppable {
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
 		computeTexture();
-		Debug.raw("computed texture for " + toString());
 	}
 
 }

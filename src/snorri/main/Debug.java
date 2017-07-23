@@ -3,6 +3,7 @@ package snorri.main;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import snorri.events.SpellEvent;
@@ -62,7 +63,7 @@ public class Debug {
 	 * 	the object to print
 	 */
 	public static void raw(Object o) {
-		logger.info("[RAW] " + o);
+		logger.log(Level.FINE, o.toString());
 	}
 
 	/**
@@ -71,7 +72,7 @@ public class Debug {
 	 * 	the string to print
 	 */
 	public static void log(String s) {
-		logger.info(s);
+		logger.log(Level.INFO, s);
 	}
 
 	/**
@@ -80,11 +81,16 @@ public class Debug {
 	 * 	the error string to print
 	 */
 	public static void error(String s) {
-		logger.severe(s);
+		logger.log(Level.SEVERE, s);
 	}
 	
+	/**
+	 * Use this to print warning messages to the game log.
+	 * @param s
+	 * the warning string to print
+	 */
 	public static void warning(String s) {
-		logger.warning(s);
+		logger.log(Level.WARNING, s);
 	}
 	
 }

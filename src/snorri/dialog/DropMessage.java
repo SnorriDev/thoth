@@ -3,7 +3,6 @@ package snorri.dialog;
 import java.awt.Graphics;
 
 import snorri.inventory.Droppable;
-import snorri.main.Debug;
 import snorri.main.GameWindow;
 
 public class DropMessage extends Message {
@@ -12,7 +11,6 @@ public class DropMessage extends Message {
 	
 	public DropMessage(Droppable drop) {
 		super(drop.getTexture());
-		Debug.raw(drop.getTexture());
 		this.drop = drop;
 	}
 	
