@@ -134,7 +134,7 @@ public class Animation implements Serializable {
 	}
 
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		
+				
 		String read = (String) in.readObject();
 		
 		if (read.equals("...")) { //signifies "nowhere"

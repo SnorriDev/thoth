@@ -73,7 +73,7 @@ public class GameWindow extends FocusedWindow<Player> {
 		}
 		
 		if (messageQ != null && messageQ.peek() != null && messageQ.peek().update(deltaTime)) {
-			messageQ.poll().onClear();
+			messageQ.poll().onClear(); //why is this sometimes null?
 		}
 				
 		if (isPaused()) {

@@ -134,6 +134,7 @@ public class World implements Playable, Editable {
 			return new World(file);
 		} catch (IOException er) {
 			Debug.error("error opening world " + file.getName());
+			er.printStackTrace();
 			return null;
 		}
 

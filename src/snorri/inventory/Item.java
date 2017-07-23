@@ -2,7 +2,11 @@ package snorri.inventory;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.ImageIcon;
@@ -12,6 +16,7 @@ import snorri.collisions.CircleCollider;
 import snorri.entities.Entity;
 import snorri.events.SpellEvent;
 import snorri.events.SpellEvent.Caster;
+import snorri.hieroglyphs.Hieroglyphs;
 import snorri.main.Debug;
 import snorri.main.GamePanel;
 import snorri.main.GameWindow;
@@ -29,7 +34,7 @@ public abstract class Item implements Droppable {
 	protected Node<Boolean> spell; // spell/enchantment associated with the item
 	protected String nickname; //name which the player gives the item so they know what it does
 	protected ItemType type; // what type of item it is; you can get ID, maxQuantity, enchantable from this
-	protected BufferedImage texture;
+	protected transient BufferedImage texture;
 	
 	private static final int ARC_SIZE = 32;
 	private static final int SMALL_ICON_SIZE = 32;
@@ -189,7 +194,8 @@ public abstract class Item implements Droppable {
 	
 	public Item(ItemType t) {
 		type = t;
-		texture = computeTexture();
+		Debug.raw(toString() + ": computed texture");
+		computeTexture();
 	}
 
 	// returns the item type
@@ -200,10 +206,20 @@ public abstract class Item implements Droppable {
 	//TODO require this method in Droppable?
 	/**
 	 * Compute the texture for this item.
-	 * @return The representing the texture.
+	 * @return The BufferedImage representing the texture.
 	 */
-	private BufferedImage computeTexture() {
-		return Util.getBufferedImage(type.getTexture());
+	private void computeTexture() {
+		if (type.getTexture() == null) {
+			return;
+		}
+		String firstWord;
+		texture = Util.getBufferedImage(type.getTexture());
+		if (spell != null && (firstWord = spell.getFirstWord()) != null) {
+			Graphics2D gr = (Graphics2D) texture.getGraphics();
+			Image hieroglyph = Hieroglyphs.getImage(firstWord);
+			gr.drawImage(hieroglyph, 0, 0, null);
+			gr.dispose();
+		}
 	}
 	
 	@Override
@@ -213,7 +229,7 @@ public abstract class Item implements Droppable {
 	
 	@Override
 	public Animation getAnimation() {
-		return new Animation(computeTexture());
+		return new Animation(texture);
 	}
 	
 	public void updateCooldown(double deltaTime) {
@@ -280,6 +296,7 @@ public abstract class Item implements Droppable {
 		}
 		
 		spell = newSpell;
+		computeTexture();
 		resetTimer();
 		return true;
 	}
@@ -449,6 +466,12 @@ public abstract class Item implements Droppable {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		computeTexture();
+		Debug.raw("computed texture for " + toString());
 	}
 
 }

@@ -26,5 +26,16 @@ public interface Node<S> extends Serializable {
 	public void computeCategory();
 	
 	public Object getCategory();
+
+	/**
+	 * @return The first word of a spell, or null if it is empty.
+	 */
+	default String getFirstWord() {
+		String[] words = getOrthography().split(" ");
+		if (words.length == 0) {
+			return null;
+		}
+		return words[0];
+	}
 		
 }
