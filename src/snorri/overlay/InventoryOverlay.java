@@ -266,7 +266,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private boolean add(Droppable d) {
 		
 		if (d == null) {
-			Debug.error("adding null item to inventory");
+			Debug.warning("adding null item to inventory");
 		}
 		
 		if (!inv.add(d)) {

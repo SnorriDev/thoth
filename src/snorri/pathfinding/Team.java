@@ -37,7 +37,7 @@ public class Team extends ArrayList<Unit> {
 			}
 			return teams;
 		} catch (ClassNotFoundException e) {
-			Debug.error("corrupted team data");
+			Debug.error("corrupted team data", e);
 			return null;
 		}
 	}

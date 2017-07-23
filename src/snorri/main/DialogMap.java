@@ -46,7 +46,7 @@ public class DialogMap extends HashMap<String, JTextField> {
 		try {
 			return Class.forName(getText(key));
 		} catch (ClassNotFoundException e) {
-			Debug.error("coud not load class " + key);
+			Debug.error(e);
 			return null;
 		}
 	}

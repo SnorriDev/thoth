@@ -114,7 +114,7 @@ public class World implements Playable, Editable {
 				return pos;
 			}
 		}
-		Debug.error("could not find suitable spawn");
+		Debug.warning("could not find suitable spawn");
 		return null;
 	}
 
@@ -133,8 +133,7 @@ public class World implements Playable, Editable {
 		try {
 			return new World(file);
 		} catch (IOException er) {
-			Debug.error("error opening world " + file.getName());
-			er.printStackTrace();
+			Debug.error(er);
 			return null;
 		}
 
@@ -226,8 +225,7 @@ public class World implements Playable, Editable {
 	public void save(File f, boolean recomputeGraphs) throws IOException {
 
 		if (f.exists() && !f.isDirectory()) {
-			Debug.error("tried to save world " + f.getName() + " to non-directory");
-			throw new IOException();
+			throw new IOException("tried to save world to non-directory");
 		}
 
 		if (!f.exists()) {
@@ -248,13 +246,11 @@ public class World implements Playable, Editable {
 	public void load(File f) throws FileNotFoundException, IOException {
 
 		if (!f.exists()) {
-			Debug.error("could not find world " + f.getName());
-			throw new FileNotFoundException();
+			throw new FileNotFoundException("no world called " + f.getName());
 		}
 
 		if (!f.isDirectory()) {
-			Debug.error("world file " + f.getName() + " is not a directory");
-			throw new IOException();
+			throw new IOException("world file " + f.getName() + " is not a directory");
 		}
 
 		background = new Level(new File(f, "background.lvl"), BackgroundElement.class);

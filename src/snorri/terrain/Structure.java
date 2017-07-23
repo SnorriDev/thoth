@@ -144,7 +144,7 @@ public class Structure {
 		Vector dim = getLevel().getDimensions();
 		
 		if (pos == null) {
-			Debug.error("tried to spawn room at null");
+			Debug.warning("tried to spawn room at null");
 			return false;
 		}
 		

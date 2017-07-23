@@ -38,8 +38,8 @@ public class Portal extends Detector {
 			if ((!(e.getTarget() instanceof Detector) || ((Detector) e.getTarget()).isTreeMember())) {
 				((Campaign) universe).teleport(e.getTarget(), world, dest);
 			}
-		} else {
-			Debug.error("can't use portal outside campaign");
+		} else { //TODO fix this shit; use events instead of portals
+			Debug.warning("can't use portal outside campaign");
 		}
 	}
 

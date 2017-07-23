@@ -3,8 +3,6 @@ package snorri.world;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import snorri.audio.ClipWrapper;
-import snorri.main.Debug;
 import snorri.main.Util;
 import snorri.world.TileType;
 
@@ -236,32 +234,6 @@ public enum BackgroundElement implements TileType {
 			list.add(new Tile(BackgroundElement.class, i,j));
 		}
 		return list;
-	}
-	
-	@Override
-	public boolean hasSounds() {
-		//return (sounds != null && sounds.length >= 1);
-		return Tile.sounds.length >= 1;
-	}
-	
-	@Override
-	public int getNumSounds() {
-		return Tile.sounds.length;
-	}
-	
-	@Override
-	public ClipWrapper[] getSounds() {
-		return Tile.sounds;
-	}
-	
-	@Override
-	public ClipWrapper getSound(int x) { //FIXME: what happens when a null sound gets played?  Should there be a default sound?
-		if (x < Tile.sounds.length)
-			return Tile.sounds[x];
-		else {
-			Debug.error("index out of bounds");
-			return null;
-		}
 	}
 	
 	@Override 

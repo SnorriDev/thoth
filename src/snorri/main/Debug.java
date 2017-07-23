@@ -1,7 +1,6 @@
 package snorri.main;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,15 +35,14 @@ public class Debug {
 			System.out.println("no permission to open log file");
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("could not find log file");
-			e.printStackTrace();
+			error(e);
 		}
 		
-		System.setErr(new PrintStream(System.err) {
-			public void print(final String string) {
-				error(string);
-			}
-		});
+//		System.setErr(new PrintStream(System.err) {
+//			public void print(final String string) {
+//				error(string);
+//			}
+//		});
 		
 	}
 
@@ -80,8 +78,17 @@ public class Debug {
 	 * @param s
 	 * 	the error string to print
 	 */
-	public static void error(String s) {
-		logger.log(Level.SEVERE, s);
+	public static void error(Throwable e) {
+		error(e.getMessage(), e);
+	}
+	
+	public static void error(String msg, Throwable e) {
+		logger.log(Level.SEVERE, msg, e);
+	}
+	
+	@Deprecated
+	public static void error(String msg) {
+		logger.log(Level.SEVERE, msg);
 	}
 	
 	/**

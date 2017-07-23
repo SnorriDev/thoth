@@ -37,8 +37,7 @@ public interface Savable {
 		try {
 			save(f, true);
 		} catch (IOException er) {
-			Debug.error("cannot save world " + f.getName() + "; are all objects serializable?");
-			er.printStackTrace(); //see what is non-serializable
+			Debug.error("are all object serializable?", er);
 		}
 	}
 	

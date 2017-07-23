@@ -68,10 +68,6 @@ public class GameWindow extends FocusedWindow<Player> {
 		double deltaTime = (time - lastTime) / 1000000000d;
 		lastTime = time;
 		
-		if (deltaTime > 0.2) { //this is shitty
-			Debug.log("high delta time detected (" + deltaTime + " sec)");
-		}
-		
 		if (messageQ != null && messageQ.peek() != null && messageQ.peek().update(deltaTime)) {
 			messageQ.poll().onClear(); //why is this sometimes null?
 		}

@@ -17,7 +17,7 @@ public class WorldSelection {
 		try {
 			return new World(Main.getFile(name));
 		} catch (IOException e1) {
-			Debug.error("could not load " + name);
+			Debug.error(e1);
 			return null;
 		}
 		

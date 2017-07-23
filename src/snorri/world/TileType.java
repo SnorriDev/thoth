@@ -7,6 +7,7 @@ import java.lang.reflect.Array;
 
 import snorri.audio.ClipWrapper;
 import snorri.events.SpellEvent;
+import snorri.main.Debug;
 import snorri.main.Util;
 import snorri.semantics.Nominal;
 
@@ -88,13 +89,28 @@ public interface TileType extends Nominal {
 	
 	ArrayList<Tile> getSubTypes();
 	
-	boolean hasSounds();
+	//TODO what the fuck are these methods? should be moved
 	
-	int getNumSounds();
+	default boolean hasSounds() {
+		return Tile.sounds.length >= 1;
+	}
 	
-	ClipWrapper[] getSounds();
+	default int getNumSounds() {
+		return Tile.sounds.length;
+	}
 	
-	public ClipWrapper getSound(int x);
+	default ClipWrapper[] getSounds() {
+		return Tile.sounds;
+	}
+	
+	default ClipWrapper getSound(int x) {
+		if (x < Tile.sounds.length)
+			return Tile.sounds[x];
+		else {
+			Debug.warning("audio clip index out of bounds");
+			return null;
+		}
+	}
 	
 	String name();
 	

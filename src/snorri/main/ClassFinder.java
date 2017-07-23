@@ -21,7 +21,7 @@ public class ClassFinder {
 		try {
 			return new File(URLDecoder.decode(scannedDir, "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
-			Debug.error("package " + scannedPackage + " not found");
+			Debug.error(e);
 			return null;
 		}
 	}
@@ -30,7 +30,7 @@ public class ClassFinder {
 		File dir = getPackageFolder(scannedPackage); // allows directories with spaces
 		List<Class<? extends Entity>> classes = new ArrayList<Class<? extends Entity>>();
 		if (!dir.isDirectory()) {
-			Debug.error("could not find class " + scannedPackage);
+			Debug.warning("could not find class " + scannedPackage);
 			return null;
 		}
 		for (File file : dir.listFiles()) {

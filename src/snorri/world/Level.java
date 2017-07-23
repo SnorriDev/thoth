@@ -333,7 +333,7 @@ public class Level implements Editable {
 		try {
 			return new Level(file);
 		} catch (IOException er) {
-			Debug.error("error opening world " + file.getName());
+			Debug.error(er);
 			return null;
 		}
 		

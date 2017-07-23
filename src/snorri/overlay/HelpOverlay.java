@@ -21,8 +21,7 @@ public class HelpOverlay extends Overlay {
 		try {
 			display.setPage(Main.getFile("/info/index.html").toURI().toURL());
 		} catch (IOException e) {
-			Debug.error("could not find HTML info page");
-			e.printStackTrace();
+			Debug.error(e);
 		}
 		add(display);
 		

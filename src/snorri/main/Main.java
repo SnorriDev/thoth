@@ -144,7 +144,7 @@ public class Main {
 			ge.registerFont(f);
 			return f;
 		} catch (IOException | FontFormatException e) {
-			Debug.error("font not found at " + path);
+			Debug.error(e);
 			return null;
 		}
 	}
@@ -153,10 +153,10 @@ public class Main {
 		try {
 			return ImageIO.read(file);
 		} catch (IllegalArgumentException e) {
-			Debug.error("unable to find image " + file.getName());
+			Debug.error(e);
 			return null;
 		} catch (IOException e) {
-			Debug.error("issue loading image " + file.getName());
+			Debug.error(e);
 			return null;
 		}
 	}

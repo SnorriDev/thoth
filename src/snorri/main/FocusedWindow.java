@@ -181,7 +181,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 						Thread.sleep(FRAME_DELTA);
 					}
 				} catch (InterruptedException e) {
-					Debug.error("thread interrupted");
+					Debug.error(e);
 				}
 			}
 		});
@@ -189,8 +189,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 		thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
 			@Override
 			public void uncaughtException(Thread t, Throwable e) {
-				Debug.error("unhandled exception");
-				e.printStackTrace();
+				Debug.error(e);
 			}
 		});
 		thread.start();

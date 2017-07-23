@@ -31,8 +31,7 @@ public class Grow extends TransVerbDef {
 				return true;
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 					| NoSuchMethodException | SecurityException e2) {
-				Debug.error("could not instantiate entity type " + obj.toString());
-				e2.printStackTrace();
+				Debug.error(e2);
 			}
 		}
 		

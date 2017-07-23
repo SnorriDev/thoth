@@ -165,7 +165,7 @@ public abstract class Item implements Droppable {
 			try {
 				return c.getConstructor(ItemType.class).newInstance(this);
 			} catch (Exception e) {
-				Debug.error("invalid parameters specified for " + this.toString());
+				Debug.error(e);
 				return null;
 			}
 		}
@@ -462,8 +462,7 @@ public abstract class Item implements Droppable {
 			return copy;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
-			Debug.error("could not copy Item");
-			e.printStackTrace();
+			Debug.error(e);
 			return null;
 		}
 	}

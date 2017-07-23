@@ -38,7 +38,7 @@ public class Hieroglyphs {
 				glyphIcons.put(name, loadImage(name));
 			}
 		} else {
-			Debug.error("could not find HTML glyph directory");
+			Debug.warning("could not find HTML glyph directory");
 		}
 			
 	}
@@ -77,7 +77,7 @@ public class Hieroglyphs {
 		try {
 			return "<img class='hiero' src=\'" + f.toURI().toURL() + "'/>";
 		} catch (MalformedURLException e) {
-			Debug.error("bad URL for file " + raw);
+			Debug.error(e);
 			return null;
 		}
 	}

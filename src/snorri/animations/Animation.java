@@ -92,12 +92,12 @@ public class Animation implements Serializable {
 			try {
 				tempFrames.add(ImageIO.read(frames[i]));
 			} catch (IOException e) {
-				Debug.error("animation frame " + frames[i].getName() + " could not be loaded");
+				Debug.error("animation frame " + frames[i].getName() + " could not be loaded", e);
 			}
 		}
 
 		if (tempFrames.size() == 0) {
-			Debug.error("animation " + folder.getName() + " has zero frames");
+			Debug.warning("animation " + folder.getName() + " has zero frames");
 		}
 		
 		this.frames = new BufferedImage[tempFrames.size()];
@@ -142,7 +142,7 @@ public class Animation implements Serializable {
 			if (im != null) {
 				set(new Animation(im));
 			} else {
-				Debug.error("could not load custom frame in animation");
+				Debug.warning("could not load custom frame in animation");
 			}
 			return;
 		}

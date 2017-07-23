@@ -101,7 +101,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public Entity(Vector pos, Collider collider) {
 		this.pos = (pos == null) ? null : pos.copy();
 		if (collider == null) {
-			Debug.error("spawning entity with null collider: " + this);
+			Debug.warning("spawning entity with null collider: " + this);
 		} else {
 			this.collider = collider.cloneOnto(this);
 		}
@@ -393,8 +393,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			newEnt.animation = new Animation(animation);
 			return newEnt;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
-			Debug.error("could not find valid constructor for entity " + this);
-			e.printStackTrace();
+			Debug.error(e);
 			return null;
 		}
 	}

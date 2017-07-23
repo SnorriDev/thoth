@@ -54,11 +54,9 @@ public class DungeonGen extends TerrainGen {
 			}
 			Debug.log("structures loaded successfully!");
 		} catch (IOException e) {
-			Debug.error("could not locate file while loading structures");
-			e.printStackTrace();
+			Debug.error(e);
 		} catch (YamlException e) {
-			Debug.error("could not parse YAML in doors file");
-			e.printStackTrace();
+			Debug.error(e);
 		}
 		
 	}

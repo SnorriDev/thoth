@@ -7,7 +7,6 @@ import java.util.Arrays;
 
 import snorri.entities.Entity;
 import snorri.entities.Player;
-import snorri.main.Debug;
 import snorri.main.Util;
 
 public class Campaign implements Playable {
@@ -100,7 +99,6 @@ public class Campaign implements Playable {
 	public void load(File folder) throws FileNotFoundException, IOException {
 		
 		if (!folder.isDirectory()) {
-			Debug.error("path for campaign is not a folder");
 			throw new IOException();
 		}
 		

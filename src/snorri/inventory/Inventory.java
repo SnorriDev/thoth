@@ -155,7 +155,7 @@ public class Inventory implements Serializable {
 	
 	public Papyrus getPapyrus(int index) {
 		if (index < 0 || index >= PAPYRUS_SLOTS) {
-			Debug.error("index out of range, returning empty");
+			Debug.warning("indexing papyrus out of range");
 			return null;
 		}
 		return papyrusSlots[index];
@@ -163,7 +163,7 @@ public class Inventory implements Serializable {
 	
 	public void setPapyrus(int slot, Papyrus newPapyrus) {
 		if (slot < 0 || slot >= PAPYRUS_SLOTS) {
-			Debug.error("slot out of range");
+			Debug.warning("setting papyrus out of range");
 			return;
 		}
 		int oldI = getIndex(newPapyrus);
