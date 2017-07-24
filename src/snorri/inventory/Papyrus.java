@@ -9,6 +9,7 @@ import snorri.dialog.TextMessage;
 import snorri.entities.Entity;
 import snorri.events.SpellEvent.Caster;
 import snorri.hieroglyphs.Hieroglyphs;
+import snorri.main.Debug;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.main.Util;
@@ -90,17 +91,16 @@ public class Papyrus extends Item {
 			return;
 		}
 		String firstWord;
-		texture = Util.deepCopy(type.getTexture());
-		for (int i = 0; i < 10; i++) { //this part works for some entity stuff, but not always
-			for (int j = 0; j < 10; j ++) {
-				texture.setRGB(i, j, 100);
-			}
-		}
 		if (spell != null && (firstWord = spell.getFirstWord()) != null) {
+			texture = Util.deepCopy(type.getTexture());
 			Graphics2D gr = (Graphics2D) texture.getGraphics();
 			BufferedImage hieroglyph = Hieroglyphs.getImage(firstWord);
-			gr.drawImage(hieroglyph, 8, 1, hieroglyph.getWidth(null) / 3, hieroglyph.getHeight(null) / 3, null);
+			int sWidth = texture.getWidth();
+			int hWidth = hieroglyph.getWidth();
+			gr.drawImage(hieroglyph, sWidth / 2 - hWidth / 6, 1, hWidth / 3, hieroglyph.getHeight() / 3, null);
 			gr.dispose();
+		} else {
+			super.computeTexture();
 		}
 	}
 

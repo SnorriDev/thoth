@@ -2,9 +2,7 @@ package snorri.entities;
 
 import snorri.events.CollisionEvent;
 import snorri.inventory.Droppable;
-import snorri.inventory.Item;
 import snorri.inventory.RandomDrop;
-import snorri.parser.Grammar;
 import snorri.world.Vector;
 
 public class Drop extends Detector {
@@ -19,14 +17,11 @@ public class Drop extends Detector {
 		this.prize = prize;
 		age = -1;
 		ignoreCollisions = true;
-		animation = prize.getAnimation();
+		animation = prize.getAnimation(); //TODO maybe make a method getAnimation()?
 	}
 	
 	public Drop(Vector pos, String prize, String spell) {
-		this(pos, Droppable.fromString(prize));
-		if (this.prize instanceof Item) {
-			((Item) this.prize).setSpell(Grammar.parseSentence(spell));
-		}
+		this(pos, Droppable.fromStringWithSpell(prize, spell));
 	}
 	
 	public Droppable getPrize() {

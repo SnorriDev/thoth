@@ -2,9 +2,7 @@ package snorri.inventory;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -26,7 +24,7 @@ import snorri.parser.Node;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public abstract class Item implements Droppable, ImageObserver {
+public abstract class Item implements Droppable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -456,9 +454,9 @@ public abstract class Item implements Droppable, ImageObserver {
 		in.defaultReadObject();
 	}
 	
-	public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
-		return true;
-	}
+//	public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
+//		return true;
+//	}
 
 	public ImageIcon getIcon() {
 		BufferedImage texture = getTexture();
