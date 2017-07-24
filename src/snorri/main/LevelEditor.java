@@ -469,7 +469,6 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 	public void paintComponent(Graphics gr) {
 
 		super.paintComponent(gr);
-
 		if (env == null) {
 			return;
 		}

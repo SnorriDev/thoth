@@ -93,7 +93,8 @@ public class GameWindow extends FocusedWindow<Player> {
 	
 	@Override
 	public void paintComponent(Graphics g){
-				
+			
+		super.paintComponent(g);
 		if (focus == null) {
 			return;
 		}
@@ -101,8 +102,6 @@ public class GameWindow extends FocusedWindow<Player> {
 		long time = getTimestamp();
 		double deltaTime = (time - lastRenderTime) / 1000000000d;
 		lastRenderTime = time;
-		
-		super.paintComponent(g);
 						
 		universe.getCurrentWorld().render(this, g, deltaTime, true);
 		focus.getInventory().render(this, g);
