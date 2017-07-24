@@ -276,12 +276,7 @@ public class World implements Playable, Editable {
 	 */
 	@Override
 	public Player computeFocus() {
-		for (Entity e : col.getAllEntities()) {
-			if (e instanceof Player) {
-				return (Player) e;
-			}
-		}
-		return null;
+		return col.getFirst(Player.class);
 	}
 
 	@Override
@@ -296,26 +291,26 @@ public class World implements Playable, Editable {
 	@Override
 	public World getTransposed() {
 		World w = new World(background.getTransposed(), midground.getTransposed(), foreground.getTransposed());
-		for (Entity e : col.getAllEntities()) {
+		col.mapOverEntities(e -> {
 			Entity e2 = e.copy();
 			e2.getPos().invert();
 			w.add(e2);
-		}
+		});
 		return w;
 	}
 
 	@Override
 	public World getXReflected() {
 		World w = new World(background.getXReflected(), midground.getXReflected(), foreground.getXReflected());
-		for (Entity e : col.getAllEntities()) {
+		col.mapOverEntities(e -> {
 			Entity e2 = e.copy();
 			e2.setPos(e2.getPos().getXReflected(background.getDimensions().copy().toGlobalPos()));
 			w.add(e2);
-		}
+		});
 		return w;
 	}
 
-	@Override
+	@Override @Deprecated
 	public List<Entity> getEntities() {
 		return col.getAllEntities();
 	}
@@ -440,6 +435,18 @@ public class World implements Playable, Editable {
 		return getLevel().getDimensions();
 	}
 	
-//	TODO there's some issues here with multithreading
-
+//	/**
+//	 * Search for a spawn marker, and put the player at that location
+//	 * @param player
+//	 * 	The player to spawn
+//	 * @return
+//	 * 	Whether or not the spawn marker was found
+//	 */
+//	public boolean spawnPlayer(Player player) {
+//		for (Entity e : getEntityTree().getAllEntities()) { 
+//			
+//		}
+//		return true;
+//	}
+	
 }

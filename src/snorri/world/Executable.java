@@ -3,8 +3,8 @@ package snorri.world;
 //TODO unify this with lambdas, etc.
 
 @FunctionalInterface
-public interface WorldRunnable {
+public interface Executable<E> {
 
-	public void exec(World world);
+	public void exec(E obj);
 	
 }

@@ -12,6 +12,7 @@ import snorri.collisions.RectCollider;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.world.EntityGroup;
+import snorri.world.Executable;
 import snorri.world.Level;
 import snorri.world.Tile;
 import snorri.world.Vector;
@@ -295,7 +296,7 @@ public class QuadTree extends Entity implements EntityGroup {
 		
 	}
 
-	@Override
+	@Override @Deprecated
 	public List<Entity> getAllEntities() {
 		List<Entity> result = new ArrayList<>();
 		result.addAll(entities);
@@ -307,6 +308,23 @@ public class QuadTree extends Entity implements EntityGroup {
 			}
 		}
 		return result;
+	}
+	
+	/**
+	 * Efficient method for mapping an executable over all 
+	 */
+	@Override
+	public void mapOverEntities(Executable<Entity> exec) {
+		for (Entity e : entities) {
+			exec.exec(e);
+		}
+		if (nodes != null) {
+			for (QuadTree node : nodes) {
+				if (!node.isEmpty()) {
+					node.mapOverEntities(exec);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -348,6 +366,26 @@ public class QuadTree extends Entity implements EntityGroup {
 		}
 		for (Entity each : entities) {
 			if (class1.isInstance(each) && each.intersects(checker)) {
+				return (P) each;
+			}
+		}
+		return null;
+	}
+	
+	@Override @SuppressWarnings("unchecked")
+	public <P> P getFirst(Class<P> class1) {
+		if (nodes != null) {
+			for (QuadTree node : nodes) {
+				if (!node.isEmpty()) {
+					P col = node.getFirst(class1);
+					if (col != null) {
+						return col;
+					}
+				}
+			}
+		}
+		for (Entity each : entities) {
+			if (class1.isInstance(each)) {
 				return (P) each;
 			}
 		}

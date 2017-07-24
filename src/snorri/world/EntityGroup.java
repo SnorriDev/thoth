@@ -21,7 +21,7 @@ import snorri.pathfinding.Pathfinding;
 import snorri.triggers.Trigger;
 
 public interface EntityGroup {
-
+	
 	default boolean insert(Entity e) {
 		if (e.getTag() != null) {
 			Trigger.setTag(e.getTag(), e);
@@ -43,6 +43,7 @@ public interface EntityGroup {
 		return getAllCollisions(e, false);
 	}
 
+	//TODO can probably rewrite these methods using the map functionality
 	public void updateAround(World world, double d, Entity focus);
 
 	public void renderAround(FocusedWindow<?> g, Graphics gr, double deltaTime);
@@ -85,7 +86,10 @@ public interface EntityGroup {
 		in.close();
 	}
 
+	@Deprecated
 	public List<Entity> getAllEntities();
+	
+	public void mapOverEntities(Executable<Entity> exec);
 
 	public void move(Entity obj, Vector newPos);
 
@@ -113,6 +117,24 @@ public interface EntityGroup {
 		return getFirstCollision(new Entity(mousePos));
 	}
 
-	public <P> P getFirstCollision(Entity checker,Class<P> class1);
+	/**
+	 * P is unrestricted to subclasses of entity so that it is also possible to search for interfaces.
+	 * @param checker
+	 * 	The entity whose collider to use
+	 * @param class1
+	 * 	The class to check for
+	 * @return
+	 * 	The first entity found, or null if no such entity exists
+	 */
+	public <P> P getFirstCollision(Entity checker, Class<P> class1);
+	
+	/**
+	 * P is unrestricted to subclasses of entity so that it is also possible to search for interfaces.
+	 * @param class1
+	 * 	The class to check for.
+	 * @return
+	 * 	The first entity found, or null if no such entity exists
+	 */
+	public <P> P getFirst(Class<P> class1);
 	
 }

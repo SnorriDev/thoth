@@ -9,7 +9,6 @@ import snorri.dialog.TextMessage;
 import snorri.entities.Entity;
 import snorri.events.SpellEvent.Caster;
 import snorri.hieroglyphs.Hieroglyphs;
-import snorri.main.Debug;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.main.Util;
