@@ -2,9 +2,9 @@ package snorri.inventory;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -16,7 +16,6 @@ import snorri.collisions.CircleCollider;
 import snorri.entities.Entity;
 import snorri.events.SpellEvent;
 import snorri.events.SpellEvent.Caster;
-import snorri.hieroglyphs.Hieroglyphs;
 import snorri.main.Debug;
 import snorri.main.GamePanel;
 import snorri.main.GameWindow;
@@ -27,7 +26,7 @@ import snorri.parser.Node;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public abstract class Item implements Droppable {
+public abstract class Item implements Droppable, ImageObserver {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -37,8 +36,8 @@ public abstract class Item implements Droppable {
 	protected transient BufferedImage texture;
 	
 	private static final int ARC_SIZE = 32;
-	private static final int SMALL_ICON_SIZE = 32;
 	private static final int ENTITY_SIZE = 44;
+	private static final int SMALL_ICON_SIZE = 32;
 	private static final int SLOT_SPACE = 16;
 	//private static final int BIG_SLOT_SIZE = 2;
 	private static final double SEPARATION_FACTOR = 1.0/1.8;
@@ -139,11 +138,6 @@ public abstract class Item implements Droppable {
 			return texture;
 		}
 		
-		public ImageIcon getIcon() {
-			BufferedImage texture = getTexture();
-			return new ImageIcon(texture.getScaledInstance(SMALL_ICON_SIZE, (int) (((double) texture.getHeight(null)) / texture.getWidth(null) * SMALL_ICON_SIZE), BufferedImage.SCALE_SMOOTH));
-		}
-		
 		public boolean isEnchantable() {
 			return enchantable;
 		}
@@ -194,7 +188,6 @@ public abstract class Item implements Droppable {
 	
 	public Item(ItemType t) {
 		type = t;
-		computeTexture();
 	}
 
 	// returns the item type
@@ -207,29 +200,21 @@ public abstract class Item implements Droppable {
 	 * Compute the texture for this item.
 	 * @return The BufferedImage representing the texture.
 	 */
-	private void computeTexture() {
-		if (type.getTexture() == null) {
-			return;
-		}
-		String firstWord;
-		texture = Util.getBufferedImage(type.getTexture());
-		if (spell != null && (firstWord = spell.getFirstWord()) != null) {
-			Debug.raw("got to first word: " + firstWord);
-			Graphics2D gr = (Graphics2D) texture.getGraphics();
-			Image hieroglyph = Hieroglyphs.getImage(firstWord);
-			gr.drawImage(hieroglyph, 0, 0, hieroglyph.getWidth(null) / 2, hieroglyph.getHeight(null) / 2, null);
-			gr.dispose();
-		}
+	protected void computeTexture() {
+		texture = type.getTexture();
 	}
 	
 	@Override
 	public BufferedImage getTexture() {
+		if (texture == null && type.getTexture() != null) {
+			computeTexture();
+		}
 		return texture;
 	}
 	
 	@Override
 	public Animation getAnimation() {
-		return new Animation(texture);
+		return new Animation(getTexture());
 	}
 	
 	public void updateCooldown(double deltaTime) {
@@ -389,7 +374,7 @@ public abstract class Item implements Droppable {
 	public int drawThumbnail(Graphics g, int i, boolean top, boolean selected) {
 		
 		BufferedImage border = getBorder(i, top, selected);
-		BufferedImage icon = type.getTexture();
+		BufferedImage icon = getTexture();
 		
 		Vector pos = getPos(i, top);
 		Vector iconPos = pos.copy().add(new Vector(border.getWidth(null) - icon.getWidth(null), border.getHeight(null) - icon.getHeight(null)).divide(2));
@@ -469,7 +454,15 @@ public abstract class Item implements Droppable {
 	
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
-		computeTexture();
+	}
+	
+	public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
+		return true;
+	}
+
+	public ImageIcon getIcon() {
+		BufferedImage texture = getTexture();
+		return new ImageIcon(texture.getScaledInstance(SMALL_ICON_SIZE, (int) (((double) texture.getHeight(null)) / texture.getWidth(null) * SMALL_ICON_SIZE), BufferedImage.SCALE_SMOOTH));
 	}
 
 }

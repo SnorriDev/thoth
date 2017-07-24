@@ -1,13 +1,17 @@
 package snorri.inventory;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 import snorri.dialog.SpellMessage;
 import snorri.dialog.TextMessage;
 import snorri.entities.Entity;
 import snorri.events.SpellEvent.Caster;
+import snorri.hieroglyphs.Hieroglyphs;
 import snorri.main.GameWindow;
 import snorri.main.Main;
+import snorri.main.Util;
 import snorri.nonterminals.Sentence;
 import snorri.world.World;
 
@@ -78,6 +82,26 @@ public class Papyrus extends Item {
 	@Override
 	public int getInvPos() {
 		return 2;
+	}
+	
+	@Override
+	protected void computeTexture() {
+		if (type.getTexture() == null) {
+			return;
+		}
+		String firstWord;
+		texture = Util.deepCopy(type.getTexture());
+		for (int i = 0; i < 10; i++) { //this part works for some entity stuff, but not always
+			for (int j = 0; j < 10; j ++) {
+				texture.setRGB(i, j, 100);
+			}
+		}
+		if (spell != null && (firstWord = spell.getFirstWord()) != null) {
+			Graphics2D gr = (Graphics2D) texture.getGraphics();
+			BufferedImage hieroglyph = Hieroglyphs.getImage(firstWord);
+			gr.drawImage(hieroglyph, 8, 1, hieroglyph.getWidth(null) / 3, hieroglyph.getHeight(null) / 3, null);
+			gr.dispose();
+		}
 	}
 
 }

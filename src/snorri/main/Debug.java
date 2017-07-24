@@ -1,6 +1,7 @@
 package snorri.main;
 
 import java.io.IOException;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,9 +26,16 @@ public class Debug {
 	public static final boolean SHOW_COLLIDERS = false;
 	public static final boolean LOG_PAUSES = false;
 	
-	private static final Logger logger = Logger.getLogger("Thoth");
+	private static final Logger logger;
 	
 	static {
+		
+		logger = Logger.getLogger("Thoth");
+		logger.setLevel(Level.ALL);
+		
+		ConsoleHandler consoleHandler = new ConsoleHandler();
+		consoleHandler.setLevel(Level.ALL);
+		logger.addHandler(consoleHandler);
 		
 		try {
 			logger.addHandler(new FileHandler("logs/thoth.log"));
@@ -61,7 +69,7 @@ public class Debug {
 	 * 	the object to print
 	 */
 	public static void raw(Object o) {
-		logger.log(Level.FINE, o.toString());
+		logger.log(Level.FINE, o == null ? null : o.toString());
 	}
 
 	/**

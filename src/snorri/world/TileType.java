@@ -89,7 +89,7 @@ public interface TileType extends Nominal {
 	
 	ArrayList<Tile> getSubTypes();
 	
-	//TODO what the fuck are these methods? should be moved
+	//TODO what are these methods? should be moved
 	
 	default boolean hasSounds() {
 		return Tile.sounds.length >= 1;
