@@ -46,15 +46,8 @@ public class Cross extends TransVerbDef {
 		if (obj instanceof ClassWrapper) {
 		
 			Class<?> c = ((ClassWrapper) obj).getValue();
-			
-			//return true if we are intersecting an entity of the right type
-			if (Entity.class.isAssignableFrom(c)) {
-				for (Entity e2 : e.getWorld().getEntityTree().getAllCollisions(ent, true)) {
-					if (c.isInstance(e2)) {
-						return true;
-					}
-				}
-			}
+			Object other = e.getWorld().getEntityTree().getFirstCollision(ent, true, c);
+			return other != null;
 		
 		}
 		

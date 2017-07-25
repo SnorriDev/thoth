@@ -37,8 +37,16 @@ public interface EntityGroup {
 		return getFirstCollision(e, false);
 	}
 	
+	public void mapOverCollisions(Entity e, boolean hitAll, Executable<Entity> exec);
+	
+	default void mapOverCollisions(Entity e, Executable<Entity> exec) {
+		mapOverCollisions(e, false, exec);
+	}
+	
+	@Deprecated
 	public List<Entity> getAllCollisions(Entity e, boolean hitAll);
 	
+	@Deprecated
 	default List<Entity> getAllCollisions(Entity e) {
 		return getAllCollisions(e, false);
 	}
@@ -123,10 +131,25 @@ public interface EntityGroup {
 	 * 	The entity whose collider to use
 	 * @param class1
 	 * 	The class to check for
+	 * @param hitAll
+	 * 	Whether or not to ignore entities that have been flagged as collision-ignorable
 	 * @return
 	 * 	The first entity found, or null if no such entity exists
 	 */
-	public <P> P getFirstCollision(Entity checker, Class<P> class1);
+	public <P> P getFirstCollision(Entity checker, boolean hitAll, Class<P> class1);
+	
+	/**
+	 * P is unrestricted to subclasses of entity so that it is also possible to search for interfaces.
+	 * @param checker
+	 * 	The entity whose collider to use
+	 * @param class1
+	 * 	The class to check for
+	 * @return
+	 * 	The first entity found, or null if no such entity exists
+	 */
+	default <P> P getFirstCollision(Entity checker, Class<P> class1) {
+		return getFirstCollision(checker, false, class1);
+	}
 	
 	/**
 	 * P is unrestricted to subclasses of entity so that it is also possible to search for interfaces.

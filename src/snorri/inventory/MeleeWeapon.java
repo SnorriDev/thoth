@@ -27,11 +27,11 @@ public class MeleeWeapon extends Weapon {
 		if (timer.activate()) {
 			Vector pos = focus.getPos().copy().add(dir.copy().scale(getOffsetMagnitude()));
 			Entity checker = new Entity(pos, getCollider());
-			for (Entity e : world.getEntityTree().getAllCollisions(checker)) {
+			world.getEntityTree().mapOverCollisions(checker, e -> {
 				if (e != focus && e instanceof Unit) {
 					((Unit) e).damage(getSharpness());
 				}
-			}
+			});
 			return true;
 		}
 		return false;
