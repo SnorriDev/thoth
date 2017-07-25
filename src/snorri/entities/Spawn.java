@@ -13,7 +13,8 @@ public class Spawn extends Entity {
 	private static final long serialVersionUID = 1L;
 	
 	public Spawn(Vector pos) {
-		super(pos);
+		super(pos, 30);
+		ignoreCollisions = true;
 	}
 	
 }

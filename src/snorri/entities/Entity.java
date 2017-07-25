@@ -19,6 +19,7 @@ import snorri.events.SpellEvent;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.GameWindow;
+import snorri.main.LevelEditor;
 import snorri.main.Util;
 import snorri.semantics.Nominal;
 import snorri.triggers.Trigger;
@@ -52,7 +53,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		EDIT_SPAWNABLE.add(Explosion.class);
 		EDIT_SPAWNABLE.add(Flower.class);
 		EDIT_SPAWNABLE.add(Player.class);
-		EDIT_SPAWNABLE.add(Portal.class);
 		EDIT_SPAWNABLE.add(Unit.class);
 		EDIT_SPAWNABLE.add(Sarcophagus.class);
 		EDIT_SPAWNABLE.add(Listener.class);
@@ -233,7 +233,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 	
 	public void update(World world, double d) {
-		if (!hasCycled && animation.hasCycled()) {
+		if (!hasCycled && (animation == null || animation.hasCycled())) {
 			onCycleComplete(world);
 			hasCycled = true;
 		}
@@ -241,7 +241,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	
 	public void renderAround(FocusedWindow<?> g, Graphics gr, double timeDelta) {
 		
-		if (Debug.SHOW_COLLIDERS || animation == null || inInteractRange(g)) {
+		if (Debug.SHOW_COLLIDERS || (animation == null && g instanceof LevelEditor)  || inInteractRange(g)) {
 			collider.render(g, gr);
 		}
 		

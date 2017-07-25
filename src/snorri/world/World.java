@@ -11,6 +11,7 @@ import snorri.entities.Mummy;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.entities.QuadTree;
+import snorri.entities.Spawn;
 import snorri.entities.Unit;
 import snorri.entities.LongRangeAIUnit.ShootAttempt;
 import snorri.main.Debug;
@@ -67,19 +68,30 @@ public class World implements Playable, Editable {
 	}
 
 	public World(String folderName) throws FileNotFoundException, IOException {
-		this(new File(folderName));
+		this(folderName, null);
+	}
+	
+	public World(String folderName, Player p) throws FileNotFoundException, IOException {
+		this(new File(folderName), p);
 	}
 
-	public World(File file) throws FileNotFoundException, IOException {
+	public World(File file, Player p) throws FileNotFoundException, IOException {
 
 		load(file);
+		if (p != null) {
+			spawnPlayer(p);
+		}
 
 		pathfinding = new Pathfinding(getPathfindingLevels());
 		
 		if (computeFocus() == null) {
-			Debug.log("world without player detected");
+			Debug.warning("world without player detected");
 		}
 
+	}
+		
+	public World(File file) throws FileNotFoundException, IOException {
+		this(file, null);
 	}
 
 	public World(Level l0, Level l1, Level l2) {
@@ -122,21 +134,9 @@ public class World implements Playable, Editable {
 		return getRandomSpawnPos(Unit.RADIUS);
 	}
 
-	public static World wrapLoad() {
-
+	public static File wrapLoad() {
 		File file = Main.getFileDialog("Select file to load", FileDialog.LOAD);
-
-		if (file == null) {
-			return null;
-		}
-
-		try {
-			return new World(file);
-		} catch (IOException er) {
-			Debug.error(er);
-			return null;
-		}
-
+		return file == null ? null : file;
 	}
 
 	@Override
@@ -435,18 +435,21 @@ public class World implements Playable, Editable {
 		return getLevel().getDimensions();
 	}
 	
-//	/**
-//	 * Search for a spawn marker, and put the player at that location
-//	 * @param player
-//	 * 	The player to spawn
-//	 * @return
-//	 * 	Whether or not the spawn marker was found
-//	 */
-//	public boolean spawnPlayer(Player player) {
-//		for (Entity e : getEntityTree().getAllEntities()) { 
-//			
-//		}
-//		return true;
-//	}
+	/**
+	 * Search for a spawn marker, and put the player at that location
+	 * @param player
+	 * 	The player to spawn
+	 * @return
+	 * 	Whether or not the spawn marker was found
+	 */
+	public boolean spawnPlayer(Player player) {
+		Spawn spawn = getEntityTree().getFirst(Spawn.class);
+		if (spawn == null) {
+			return false;
+		}
+		player.setPos(spawn.getPos());
+		add(player);
+		return true;
+	}
 	
 }

@@ -94,7 +94,7 @@ public class Player extends Unit implements Carrier, Caster {
 		tag = "player";
 		
 	}
-	
+
 	@Override
 	public void update(World world, double deltaTime) {
 		

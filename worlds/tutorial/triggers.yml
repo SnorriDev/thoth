@@ -230,5 +230,10 @@ prayThoth:
               Wisdom is the only truth in this world - those who believe in destiny are fools.</p>
     - SET_OBJECTIVE:
         objective:
-          !objective
+          !objectivex
             shortDesc: you have beaten the tutorial!
+
+onExit:
+  actions:
+    - ENTER_WORLD:
+        path: /saves/spawnTest

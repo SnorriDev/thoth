@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-//import java.util.Vector as javaVector;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -29,7 +28,6 @@ import snorri.entities.Drop;
 import snorri.entities.Entity;
 import snorri.entities.Listener;
 import snorri.entities.Player;
-import snorri.entities.Portal;
 import snorri.entities.Unit;
 import snorri.inventory.Carrier;
 import snorri.inventory.Droppable;
@@ -38,7 +36,6 @@ import snorri.keyboard.Key;
 import snorri.masking.Mask;
 import snorri.pathfinding.Team;
 import snorri.terrain.TerrainGen;
-import snorri.world.Campaign.WorldId;
 import snorri.world.Editable;
 import snorri.world.ForegroundElement;
 import snorri.world.MidgroundElement;
@@ -400,18 +397,28 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			centerCamera();
 			break;
 		case "Open":
-			World w1 = World.wrapLoad();
-			if (w1 != null) {
-				env = w1;
+			World w1;
+			try {
+				w1 = new World(World.wrapLoad());
+				if (w1 != null) {
+					env = w1;
+				}
+				centerCamera();
+			} catch (IOException e1) {
+				Debug.error(e1);
 			}
-			centerCamera();
 			break;
 		case "Open Level":
-			Level l1 = Level.wrapLoad();
-			if (l1 != null) {
-				env = l1;
+			Level l1;
+			try {
+				l1 = new Level(World.wrapLoad());
+				if (l1 != null) {
+					env = l1;
+				}
+				centerCamera();
+			} catch (IOException e1) {
+				Debug.error(e1);
 			}
-			centerCamera();
 			break;
 		case "Save":
 			if (env == null) {
@@ -1502,17 +1509,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 		try {
 
-			if (selectedEntityClass.equals(Portal.class)) {
-				DialogMap inputs = new DialogMap();
-				inputs.put("World", WorldId.SPAWN_TOWN.name());
-				inputs.put("X", "" + focus.getPos().getX());
-				inputs.put("Y", "" + focus.getPos().getY());
-				if (dialog("Portal Destination", inputs) == null) {
-					return;
-				}
-				Vector dest = new Vector(inputs.getDouble("X"), inputs.getDouble("Y"));
-				world.add(new Portal(spawnPos, inputs.getText("World"), dest));
-			} else if (selectedEntityClass.equals(Drop.class)) {
+			if (selectedEntityClass.equals(Drop.class)) {
 				DialogMap inputs = new DialogMap();
 				inputs.put("Prize", "Enter item name/id or vocab word");
 				inputs.put("Spell", "");
