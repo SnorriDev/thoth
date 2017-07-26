@@ -28,7 +28,7 @@ public class Animation implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final int FRAMERATE = 30;
+	private static final int FRAMERATE = 15;
 	private static final double SEC_PER_FRAME = 1d / FRAMERATE;
 
 	protected BufferedImage[] frames;
