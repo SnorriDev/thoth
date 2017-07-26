@@ -36,7 +36,6 @@ public class Animation implements Serializable {
 	private double currentTime = 0;
 	private boolean hasCycled = false;
 	/** Play the animation once, and then remain in the last frame **/
-	private boolean cycleOnce;
 	private String path;
 	private boolean flipped = false;
 	
@@ -45,7 +44,7 @@ public class Animation implements Serializable {
 	 * @param path
 	 * @throws URISyntaxException
 	 */
-	public Animation(String str, boolean cycleOnce) {
+	public Animation(String str) {
 		if (str.endsWith(".png")) {
 			loadImage(Main.getImage(str));
 		} else {
@@ -53,11 +52,6 @@ public class Animation implements Serializable {
 		}
 		computeFlipped();
 		path = str;
-		this.cycleOnce = cycleOnce;
-	}
-	
-	public Animation(String str) {
-		this(str, false);
 	}
 	
 	public Animation(BufferedImage image) {
@@ -65,6 +59,11 @@ public class Animation implements Serializable {
 		computeFlipped();
 	}
 
+	/**
+	 * Shallow copy of the specified animation.
+	 * @param other
+	 * 	The animation to copy.
+	 */
 	public Animation(Animation other) {
 		set(other);
 	}
@@ -93,12 +92,12 @@ public class Animation implements Serializable {
 			try {
 				tempFrames.add(ImageIO.read(frames[i]));
 			} catch (IOException e) {
-				Debug.error("animation frame " + frames[i].getName() + " could not be loaded");
+				Debug.error("animation frame " + frames[i].getName() + " could not be loaded", e);
 			}
 		}
 
 		if (tempFrames.size() == 0) {
-			Debug.error("animation " + folder.getName() + " has zero frames");
+			Debug.warning("animation " + folder.getName() + " has zero frames");
 		}
 		
 		this.frames = new BufferedImage[tempFrames.size()];
@@ -108,6 +107,10 @@ public class Animation implements Serializable {
 			i++;
 		}
 
+	}
+	
+	protected Animation(int numFrames) {
+		frames = new BufferedImage[numFrames];
 	}
 
 	private void loadImage(BufferedImage image) {
@@ -131,7 +134,7 @@ public class Animation implements Serializable {
 	}
 
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		
+				
 		String read = (String) in.readObject();
 		
 		if (read.equals("...")) { //signifies "nowhere"
@@ -139,7 +142,7 @@ public class Animation implements Serializable {
 			if (im != null) {
 				set(new Animation(im));
 			} else {
-				Debug.error("could not load custom frame in animation");
+				Debug.warning("could not load custom frame in animation");
 			}
 			return;
 		}
@@ -161,7 +164,6 @@ public class Animation implements Serializable {
 		frames = animation.frames;
 		flippedFrames = animation.flippedFrames;
 		hasCycled = animation.hasCycled;
-		cycleOnce = animation.cycleOnce;
 		currentTime = animation.currentTime;
 	}
 
@@ -175,12 +177,8 @@ public class Animation implements Serializable {
 	 * @return the current image
 	 */
 	public synchronized BufferedImage getSprite(double timeDelta) {
-		
-		if (!cycleOnce || getFrameIndex() != frames.length - 1) {
-			hasCycled |= (currentTime + timeDelta) >= (frames.length * SEC_PER_FRAME);
-			currentTime = (currentTime + timeDelta) % (frames.length * SEC_PER_FRAME);
-		}
-			
+		hasCycled |= (currentTime + timeDelta) >= (frames.length * SEC_PER_FRAME);
+		currentTime = (currentTime + timeDelta) % (frames.length * SEC_PER_FRAME);		
 		return (flipped ? flippedFrames : frames)[getFrameIndex()];
 	}
 	
@@ -216,10 +214,9 @@ public class Animation implements Serializable {
 	 * 	The new rotated animation.
 	 */
 	public Animation getRotated(Vector dir) {
-		Animation other = new Animation(this);
+		Animation other = new Animation(frames.length);
 		for (int i = 0; i < frames.length; i++) {
 			other.frames[i] = Util.getRotated(frames[i], dir);
-			assert frames[i] != other.frames[i];
 		}
 		other.computeFlipped();
 		return other;

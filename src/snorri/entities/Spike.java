@@ -4,11 +4,12 @@ import snorri.animations.Animation;
 import snorri.collisions.RectCollider;
 import snorri.events.CollisionEvent;
 import snorri.world.Vector;
+import snorri.world.World;
 
 public class Spike extends Detector {
 
 	private static final long serialVersionUID = 1L;
-	private static final Animation ANIMATION = new Animation("/textures/animations/spike", true);
+	private static final Animation ANIMATION = new Animation("/textures/animations/spike");
 	private static final double SPIKE_DMG = 10d;
 	
 	private boolean hasDamaged = false;
@@ -29,6 +30,11 @@ public class Spike extends Detector {
 	@Override
 	public double getLifeSpan() {
 		return 0.75;
+	}
+	
+	@Override
+	protected void onCycleComplete(World world) {
+		world.delete(this);
 	}
 
 }

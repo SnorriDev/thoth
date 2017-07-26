@@ -4,6 +4,7 @@ import java.awt.Image;
 
 import snorri.animations.Animation;
 import snorri.inventory.Item.ItemType;
+import snorri.parser.Grammar;
 import snorri.parser.Lexicon;
 import snorri.semantics.Nominal;
 
@@ -34,6 +35,14 @@ public interface Droppable extends Comparable<Droppable>, Nominal {
 			return new VocabDrop(raw);
 		}
 		return null;
+	}
+	
+	public static Droppable fromStringWithSpell(String prize, String spell) {
+		Droppable d = Droppable.fromString(prize);
+		if (d instanceof Item) {
+			((Item) d).setSpell(Grammar.parseSentence(spell));
+		}
+		return d;
 	}
 	
 	public int getMaxQuantity();

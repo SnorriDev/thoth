@@ -73,7 +73,7 @@ public class RandomDrop implements Droppable {
 	
 	@Override
 	public int compareTo(Droppable o) {
-		Debug.error("tried to compare Droppable to RandomDrop");
+		Debug.warning("tried to compare Droppable to RandomDrop");
 		return 0;
 	}
 

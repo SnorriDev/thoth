@@ -35,11 +35,11 @@ public abstract class Detector extends Despawner {
 	@Override
 	public void update(World world, double deltaTime) {
 		
-		for (Entity hit : world.getEntityTree().getAllCollisions(this, hitAll)) {
+		world.getEntityTree().mapOverCollisions(this, hitAll, hit -> {
 			if (hit != null) {
 				onCollision(new CollisionEvent(this, hit, world, deltaTime));
 			}
-		}
+		});
 		
 		super.update(world, deltaTime);
 		

@@ -35,7 +35,7 @@ public class SpellMessage extends Message {
 		if (output == null) {
 			return 0;
 		}
-		return drawLineWithIcon(output.toString(), gr, window, xTrans);
+		return drawLineWithIcon(output.toString(), gr, window, xTrans, getSuccessColor());
 	}
 	
 	/**
@@ -47,7 +47,10 @@ public class SpellMessage extends Message {
 	 * @return formatted text
 	 */
 	public static final String format(String header, Object output) {
-		return header + ": " + output;
+		StringBuilder formatted = new StringBuilder(header);
+		formatted.append(": ");
+		formatted.append(output.toString());
+		return formatted.toString();
 	}
 
 }

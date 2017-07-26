@@ -1,8 +1,9 @@
 package snorri.main;
 
 import java.io.IOException;
-import java.io.PrintStream;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import snorri.events.SpellEvent;
@@ -25,9 +26,16 @@ public class Debug {
 	public static final boolean SHOW_COLLIDERS = false;
 	public static final boolean LOG_PAUSES = false;
 	
-	private static final Logger logger = Logger.getLogger("Thoth");
+	private static final Logger logger;
 	
 	static {
+		
+		logger = Logger.getLogger("Thoth");
+		logger.setLevel(Level.ALL);
+		
+		ConsoleHandler consoleHandler = new ConsoleHandler();
+		consoleHandler.setLevel(Level.ALL);
+		logger.addHandler(consoleHandler);
 		
 		try {
 			logger.addHandler(new FileHandler("logs/thoth.log"));
@@ -35,15 +43,14 @@ public class Debug {
 			System.out.println("no permission to open log file");
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("could not find log file");
-			e.printStackTrace();
+			error(e);
 		}
 		
-		System.setErr(new PrintStream(System.err) {
-			public void print(final String string) {
-				error(string);
-			}
-		});
+//		System.setErr(new PrintStream(System.err) {
+//			public void print(final String string) {
+//				error(string);
+//			}
+//		});
 		
 	}
 
@@ -62,7 +69,7 @@ public class Debug {
 	 * 	the object to print
 	 */
 	public static void raw(Object o) {
-		logger.info("[RAW] " + o);
+		logger.log(Level.FINE, o == null ? null : o.toString());
 	}
 
 	/**
@@ -71,7 +78,7 @@ public class Debug {
 	 * 	the string to print
 	 */
 	public static void log(String s) {
-		logger.info(s);
+		logger.log(Level.INFO, s);
 	}
 
 	/**
@@ -79,12 +86,26 @@ public class Debug {
 	 * @param s
 	 * 	the error string to print
 	 */
-	public static void error(String s) {
-		logger.severe(s);
+	public static void error(Throwable e) {
+		error(e.getMessage(), e);
 	}
 	
+	public static void error(String msg, Throwable e) {
+		logger.log(Level.SEVERE, msg, e);
+	}
+	
+	@Deprecated
+	public static void error(String msg) {
+		logger.log(Level.SEVERE, msg);
+	}
+	
+	/**
+	 * Use this to print warning messages to the game log.
+	 * @param s
+	 * the warning string to print
+	 */
 	public static void warning(String s) {
-		logger.warning(s);
+		logger.log(Level.WARNING, s);
 	}
 	
 }

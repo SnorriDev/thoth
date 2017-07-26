@@ -11,6 +11,7 @@ import snorri.entities.Mummy;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.entities.QuadTree;
+import snorri.entities.Spawn;
 import snorri.entities.Unit;
 import snorri.entities.LongRangeAIUnit.ShootAttempt;
 import snorri.main.Debug;
@@ -67,19 +68,30 @@ public class World implements Playable, Editable {
 	}
 
 	public World(String folderName) throws FileNotFoundException, IOException {
-		this(new File(folderName));
+		this(folderName, null);
+	}
+	
+	public World(String folderName, Player p) throws FileNotFoundException, IOException {
+		this(new File(folderName), p);
 	}
 
-	public World(File file) throws FileNotFoundException, IOException {
+	public World(File file, Player p) throws FileNotFoundException, IOException {
 
 		load(file);
+		if (p != null) {
+			spawnPlayer(p);
+		}
 
 		pathfinding = new Pathfinding(getPathfindingLevels());
 		
 		if (computeFocus() == null) {
-			Debug.log("world without player detected");
+			Debug.warning("world without player detected");
 		}
 
+	}
+		
+	public World(File file) throws FileNotFoundException, IOException {
+		this(file, null);
 	}
 
 	public World(Level l0, Level l1, Level l2) {
@@ -114,7 +126,7 @@ public class World implements Playable, Editable {
 				return pos;
 			}
 		}
-		Debug.error("could not find suitable spawn");
+		Debug.warning("could not find suitable spawn");
 		return null;
 	}
 
@@ -122,21 +134,9 @@ public class World implements Playable, Editable {
 		return getRandomSpawnPos(Unit.RADIUS);
 	}
 
-	public static World wrapLoad() {
-
+	public static File wrapLoad() {
 		File file = Main.getFileDialog("Select file to load", FileDialog.LOAD);
-
-		if (file == null) {
-			return null;
-		}
-
-		try {
-			return new World(file);
-		} catch (IOException er) {
-			Debug.error("error opening world " + file.getName());
-			return null;
-		}
-
+		return file == null ? null : file;
 	}
 
 	@Override
@@ -225,8 +225,7 @@ public class World implements Playable, Editable {
 	public void save(File f, boolean recomputeGraphs) throws IOException {
 
 		if (f.exists() && !f.isDirectory()) {
-			Debug.error("tried to save world " + f.getName() + " to non-directory");
-			throw new IOException();
+			throw new IOException("tried to save world to non-directory");
 		}
 
 		if (!f.exists()) {
@@ -247,13 +246,11 @@ public class World implements Playable, Editable {
 	public void load(File f) throws FileNotFoundException, IOException {
 
 		if (!f.exists()) {
-			Debug.error("could not find world " + f.getName());
-			throw new FileNotFoundException();
+			throw new FileNotFoundException("no world called " + f.getName());
 		}
 
 		if (!f.isDirectory()) {
-			Debug.error("world file " + f.getName() + " is not a directory");
-			throw new IOException();
+			throw new IOException("world file " + f.getName() + " is not a directory");
 		}
 
 		background = new Level(new File(f, "background.lvl"), BackgroundElement.class);
@@ -279,12 +276,7 @@ public class World implements Playable, Editable {
 	 */
 	@Override
 	public Player computeFocus() {
-		for (Entity e : col.getAllEntities()) {
-			if (e instanceof Player) {
-				return (Player) e;
-			}
-		}
-		return null;
+		return col.getFirst(Player.class);
 	}
 
 	@Override
@@ -299,26 +291,26 @@ public class World implements Playable, Editable {
 	@Override
 	public World getTransposed() {
 		World w = new World(background.getTransposed(), midground.getTransposed(), foreground.getTransposed());
-		for (Entity e : col.getAllEntities()) {
+		col.mapOverEntities(e -> {
 			Entity e2 = e.copy();
 			e2.getPos().invert();
 			w.add(e2);
-		}
+		});
 		return w;
 	}
 
 	@Override
 	public World getXReflected() {
 		World w = new World(background.getXReflected(), midground.getXReflected(), foreground.getXReflected());
-		for (Entity e : col.getAllEntities()) {
+		col.mapOverEntities(e -> {
 			Entity e2 = e.copy();
 			e2.setPos(e2.getPos().getXReflected(background.getDimensions().copy().toGlobalPos()));
 			w.add(e2);
-		}
+		});
 		return w;
 	}
 
-	@Override
+	@Override @Deprecated
 	public List<Entity> getEntities() {
 		return col.getAllEntities();
 	}
@@ -443,6 +435,21 @@ public class World implements Playable, Editable {
 		return getLevel().getDimensions();
 	}
 	
-//	TODO there's some issues here with multithreading
-
+	/**
+	 * Search for a spawn marker, and put the player at that location
+	 * @param player
+	 * 	The player to spawn
+	 * @return
+	 * 	Whether or not the spawn marker was found
+	 */
+	public boolean spawnPlayer(Player player) {
+		Spawn spawn = getEntityTree().getFirst(Spawn.class);
+		if (spawn == null) {
+			return false;
+		}
+		player.setPos(spawn.getPos());
+		add(player);
+		return true;
+	}
+	
 }

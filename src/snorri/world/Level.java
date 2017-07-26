@@ -1,6 +1,5 @@
 package snorri.world;
 
-import java.awt.FileDialog;
 import java.awt.Graphics;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,13 +9,10 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 
 import snorri.entities.Entity;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
-import snorri.main.Main;
 import snorri.masking.Mask;
 import snorri.terrain.DungeonGen;
 import snorri.world.TileType;
@@ -322,23 +318,6 @@ public class Level implements Editable {
 	@Override
 	public Level getLevel(Class<? extends TileType> c) {
 		return this;
-	}
-
-	public static Level wrapLoad() {
-		
-		File file = Main.getFileDialog("Select file to load", FileDialog.LOAD, true);
-
-		if (file == null) {
-			return null;
-		}
-
-		try {
-			return new Level(file);
-		} catch (IOException er) {
-			Debug.error("error opening world " + file.getName());
-			return null;
-		}
-		
 	}
 
 	/**

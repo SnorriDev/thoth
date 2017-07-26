@@ -1,6 +1,7 @@
 package snorri.hieroglyphs;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import snorri.parser.Grammar;
 
 public class Hieroglyphs {
 
-	private static final HashMap<String, Image> glyphIcons;
+	private static final HashMap<String, BufferedImage> glyphIcons;
 	
 	private static final int SMALL_GLYPH_HEIGHT = 20;
 	
@@ -38,7 +39,7 @@ public class Hieroglyphs {
 				glyphIcons.put(name, loadImage(name));
 			}
 		} else {
-			Debug.error("could not find HTML glyph directory");
+			Debug.warning("could not find HTML glyph directory");
 		}
 			
 	}
@@ -77,7 +78,7 @@ public class Hieroglyphs {
 		try {
 			return "<img class='hiero' src=\'" + f.toURI().toURL() + "'/>";
 		} catch (MalformedURLException e) {
-			Debug.error("bad URL for file " + raw);
+			Debug.error(e);
 			return null;
 		}
 	}
@@ -98,12 +99,13 @@ public class Hieroglyphs {
 		return new ImageIcon(Util.resize(image, 0, SMALL_GLYPH_HEIGHT));
 	}
 	
-	public static Image getImage(String raw) {
+	public static BufferedImage getImage(String raw) {
 		return glyphIcons.get(raw);
 	}
 	
-	private static Image loadImage(String raw) {
-		return Main.getImage(getPath(raw));
+	//is it necessary that things are buffered images? idk
+	private static BufferedImage loadImage(String raw) {
+		return Util.getBufferedImage(Main.getImage(getPath(raw)));
 	}
 	
 }

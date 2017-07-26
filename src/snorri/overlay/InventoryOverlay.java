@@ -99,7 +99,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		public Component getListCellRendererComponent(JList<? extends Item> list, Item item, int index, boolean isSelected, boolean cellHasFocus) {
 			Key k = inv.getKey(item);
 			String text = item.toString() + (k == null ? "" : (" (" + k.getChar() + ")"));
-			JLabel label = new JLabel(text, item.getType().getIcon(), JLabel.LEFT);
+			JLabel label = new JLabel(text, item.getIcon(), JLabel.LEFT);
 			label.setPreferredSize(new Dimension(LEFT_PANEL_LABEL_WIDTH, LEFT_PANEL_ITEM_HEIGHT));
 			label.setFont(label.getFont().deriveFont(inv.getIndex(item) == Integer.MAX_VALUE ? Font.PLAIN : Font.BOLD));
 			if (isSelected) {
@@ -266,7 +266,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private boolean add(Droppable d) {
 		
 		if (d == null) {
-			Debug.error("adding null item to inventory");
+			Debug.warning("adding null item to inventory");
 		}
 		
 		if (!inv.add(d)) {

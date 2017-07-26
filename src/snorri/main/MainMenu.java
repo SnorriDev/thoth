@@ -2,14 +2,13 @@ package snorri.main;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import snorri.audio.Music;
-import snorri.terrain.DungeonGen;
-import snorri.terrain.TerrainGen;
 import snorri.world.World;
 
 public class MainMenu extends GamePanel {
@@ -47,18 +46,12 @@ public class MainMenu extends GamePanel {
 
 		switch (e.getActionCommand()) {
 		case "TUTORIAL":
-			Main.launchGame(new WorldSelection("/worlds/tutorial"));
-			break;
-		case "OASIS ADVENTURE":
-			Main.launchGame(new TerrainGen(200, 200));
-			break;
-		case "DUNGEON ADVENTURE":
-			Main.launchGame(new DungeonGen(200, 200));
+			Main.launchGame("/worlds/tutorial");
 			break;
 		case "LOAD WORLD":
-			World w = World.wrapLoad();
-			if (w != null) {
-				Main.launchGame(w);
+			File fh = World.wrapLoad();
+			if (fh != null) {
+				Main.launchGame(fh);
 			}
 			break;
 		case "WORLD EDITOR":

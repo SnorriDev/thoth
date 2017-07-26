@@ -3,6 +3,7 @@ package snorri.parser;
 import java.io.Serializable;
 
 import snorri.events.SpellEvent;
+import snorri.main.Debug;
 
 public interface Node<S> extends Serializable {
 
@@ -26,5 +27,17 @@ public interface Node<S> extends Serializable {
 	public void computeCategory();
 	
 	public Object getCategory();
+
+	/**
+	 * @return The first word of a spell, or null if it is empty.
+	 */
+	default String getFirstWord() {
+		String[] words = getOrthography().split(" ");
+		if (words.length == 0) {
+			return null;
+		}
+		Debug.raw("getting first word" + words[0]);
+		return words[0];
+	}
 		
 }

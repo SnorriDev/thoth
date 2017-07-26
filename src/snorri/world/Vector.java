@@ -18,6 +18,7 @@ public class Vector implements Nominal, Comparable<Vector> {
 	private static final long serialVersionUID = 1L;
 
 	public static final Vector ZERO = new Vector(0, 0);
+	public static final Vector ORIENTATION = new Vector(1, 0);
 	
 	public static final Vector RIGHT = new Vector(1, 0);
 	public static final Vector DOWN = new Vector(0, 1);
@@ -144,9 +145,8 @@ public class Vector implements Nominal, Comparable<Vector> {
 		return this;
 	}
 	
-	//rounds to an int for convenience
-	public int distance(Vector pos) {
-		return (int) Math.sqrt(distanceSquared(pos));
+	public double distance(Vector pos) {
+		return Math.sqrt(distanceSquared(pos));
 	}
 	
 	public double distanceSquared(Vector pos) {
@@ -156,7 +156,7 @@ public class Vector implements Nominal, Comparable<Vector> {
 		return (x - pos.x) * (x - pos.x) + (y - pos.y) * (y - pos.y);
 	}
 	
-	public int magnitude() {
+	public double magnitude() {
 		return distance(ZERO);
 	}
 	
@@ -353,6 +353,11 @@ public class Vector implements Nominal, Comparable<Vector> {
 
 	public boolean isNormalTo(int x2, int y2) {
 		return (getX() == x2 || getY() == y2);
+	}
+
+	public double getStandardAngle() {
+		double theta = getAngleBetween(ORIENTATION);
+		return y > 0 ? theta : 2 * Math.PI - theta;
 	}
 		
 }

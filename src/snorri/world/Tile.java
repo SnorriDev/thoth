@@ -6,7 +6,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -225,12 +224,12 @@ public class Tile implements Comparable<Tile>, Nominal {
 		//Debug.log("comparing tiles");
 		
 		if (!type.getClass().equals(t.type.getClass())) {
-			Debug.error("comparing TileTypes from different layers");
+			Debug.warning("comparing TileTypes from different layers");
 			return 0;
 		}
 		
 		if (type == null || t.type == null) {
-			Debug.error("1 or more tiles is null");
+			Debug.warning("one or more tiles are null");
 			if (type == null && t.type == null) {
 				return 0;
 			}
@@ -261,9 +260,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 	public void calculateTexture() {
 		texture = Util.deepCopy(getBaseTexture());
 		Graphics2D gr = texture.createGraphics();
-		Debug.log("Calculating Tecture");
 		while (!maskQ.isEmpty()) {
-			//Debug.log("[" + maskQ.size() + "]" + " " + maskQ.peek().getTile().getOrderValue());
 			gr.drawImage(maskQ.poll().getTexture(), 0, 0, null);
 		}
 		gr.dispose();

@@ -22,12 +22,11 @@ public class DropMessage extends Message {
 	/**
 	 * @return the height of the line
 	 */
-	@Override
 	public int render(GameWindow window, Graphics gr, int xTrans) {
-		if (drop.getTexture() == null) {
-			return drawLine(gr, window, xTrans);
-		} else {
+		if (hasIcon()) {
 			return drawLineWithIcon(" acquired", gr, window, xTrans);
 		}
-	}	
+		return super.render(window, gr, xTrans);
+	}
+	
 }

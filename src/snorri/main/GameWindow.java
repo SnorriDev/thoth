@@ -5,10 +5,8 @@ import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Queue;
 
 import javax.swing.UIManager;
@@ -68,12 +66,8 @@ public class GameWindow extends FocusedWindow<Player> {
 		double deltaTime = (time - lastTime) / 1000000000d;
 		lastTime = time;
 		
-		if (deltaTime > 0.2) { //this is shitty
-			Debug.log("high delta time detected (" + deltaTime + " sec)");
-		}
-		
 		if (messageQ != null && messageQ.peek() != null && messageQ.peek().update(deltaTime)) {
-			messageQ.poll();
+			messageQ.poll().onClear(); //why is this sometimes null?
 		}
 				
 		if (isPaused()) {
@@ -97,7 +91,8 @@ public class GameWindow extends FocusedWindow<Player> {
 	
 	@Override
 	public void paintComponent(Graphics g){
-				
+			
+		super.paintComponent(g);
 		if (focus == null) {
 			return;
 		}
@@ -105,8 +100,6 @@ public class GameWindow extends FocusedWindow<Player> {
 		long time = getTimestamp();
 		double deltaTime = (time - lastRenderTime) / 1000000000d;
 		lastRenderTime = time;
-		
-		super.paintComponent(g);
 						
 		universe.getCurrentWorld().render(this, g, deltaTime, true);
 		focus.getInventory().render(this, g);
@@ -123,14 +116,15 @@ public class GameWindow extends FocusedWindow<Player> {
 		}
 		
 		int xTrans = 0;
-		List<Message> reverse = new ArrayList<>(messageQ);
-		for (ListIterator<Message> iter = reverse.listIterator(reverse.size()); iter.hasPrevious();) {
-			xTrans += iter.previous().render(this, g, xTrans);
+		for (Iterator<Message> iter = ((LinkedList<Message>) messageQ).descendingIterator(); iter.hasNext();) {
+			xTrans += iter.next().render(this, g, xTrans);
 		}
 		
 		if (Debug.LOG_FOCUS) {
 			Debug.log("Focused component: " + KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner());
 		}
+		
+		g.dispose();
 		
 	}
 	

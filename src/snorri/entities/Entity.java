@@ -19,6 +19,7 @@ import snorri.events.SpellEvent;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.GameWindow;
+import snorri.main.LevelEditor;
 import snorri.main.Util;
 import snorri.semantics.Nominal;
 import snorri.triggers.Trigger;
@@ -52,7 +53,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		EDIT_SPAWNABLE.add(Explosion.class);
 		EDIT_SPAWNABLE.add(Flower.class);
 		EDIT_SPAWNABLE.add(Player.class);
-		EDIT_SPAWNABLE.add(Portal.class);
 		EDIT_SPAWNABLE.add(Unit.class);
 		EDIT_SPAWNABLE.add(Sarcophagus.class);
 		EDIT_SPAWNABLE.add(Listener.class);
@@ -63,6 +63,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		EDIT_SPAWNABLE.add(Fountain.class);
 		EDIT_SPAWNABLE.add(NPC.class);
 		EDIT_SPAWNABLE.add(Ballista.class);
+		EDIT_SPAWNABLE.add(Spawn.class);
 		
 		//alphabetize the list for nice view in the editor
 		Collections.sort(EDIT_SPAWNABLE, new Comparator<Class<? extends Entity>>() {
@@ -93,6 +94,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	protected Vector dir;
 		
 	private boolean flying = false, deleted = false;
+	private boolean hasCycled = false;
 
 	/**
 	 * This method will automatically set the collider focus to the entity
@@ -100,7 +102,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public Entity(Vector pos, Collider collider) {
 		this.pos = (pos == null) ? null : pos.copy();
 		if (collider == null) {
-			Debug.error("spawning entity with null collider: " + this);
+			Debug.warning("spawning entity with null collider: " + this);
 		} else {
 			this.collider = collider.cloneOnto(this);
 		}
@@ -231,11 +233,15 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 	
 	public void update(World world, double d) {
+		if (!hasCycled && (animation == null || animation.hasCycled())) {
+			onCycleComplete(world);
+			hasCycled = true;
+		}
 	}
 	
 	public void renderAround(FocusedWindow<?> g, Graphics gr, double timeDelta) {
 		
-		if (Debug.SHOW_COLLIDERS || animation == null || inInteractRange(g)) {
+		if (Debug.SHOW_COLLIDERS || (animation == null && g instanceof LevelEditor)  || inInteractRange(g)) {
 			collider.render(g, gr);
 		}
 		
@@ -388,8 +394,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			newEnt.animation = new Animation(animation);
 			return newEnt;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
-			Debug.error("could not find valid constructor for entity " + this);
-			e.printStackTrace();
+			Debug.error(e);
 			return null;
 		}
 	}
@@ -452,11 +457,21 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	 * 	The animation to copy.
 	 */
 	public void setAnimation(Animation animation) {
-//		if (dir == null) {
-//			this.animation = new Animation(animation);
-//			return;
-//		}
-		this.animation = animation.getRotated(dir == null ? new Vector(1, 0) : dir);
+		hasCycled = false;
+		if (dir == null) {
+			this.animation = new Animation(animation);
+			return;
+		}
+		this.animation = new Animation(animation).getRotated(dir == null ? new Vector(1, 0) : dir);
+	}
+	
+	/**
+	 * This event fires after the entity's animation completes a cycle.
+	 * Note that this is called by <code>update</code>, so it won't get called in the LevelEditor view.
+	 * @param world
+	 * The world in which the cycle was completed.
+	 */
+	protected void onCycleComplete(World world) {
 	}
 
 }

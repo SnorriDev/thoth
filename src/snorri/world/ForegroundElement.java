@@ -3,8 +3,6 @@ package snorri.world;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import snorri.audio.ClipWrapper;
-import snorri.main.Debug;
 import snorri.main.Util;
 import snorri.semantics.Nominal;
 
@@ -107,31 +105,6 @@ public enum ForegroundElement implements Nominal, TileType {
 			list.add(new Tile(ForegroundElement.class, i,j));
 		}
 		return list;
-	}
-
-	@Override
-	public boolean hasSounds() {
-		return Tile.sounds.length >= 1;
-	}
-
-	@Override
-	public int getNumSounds() {
-		return Tile.sounds.length;
-	}
-
-	@Override
-	public ClipWrapper[] getSounds() {
-		return Tile.sounds;
-	}
-
-	@Override
-	public ClipWrapper getSound(int x) {
-		if (x < Tile.sounds.length)
-			return Tile.sounds[x];
-		else {
-			Debug.error("index out of bounds");
-			return null;
-		}
 	}
 
 	@Override

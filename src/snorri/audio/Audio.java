@@ -40,8 +40,7 @@ public class Audio {
 			clip.open(AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(Main.getFile(path)))));
 			return clip;
 		} catch (Exception e) {
-			Debug.error("could not load clip " + path);
-			e.printStackTrace();
+			Debug.error(e);
 			return null;
 		}
 		
@@ -69,8 +68,7 @@ public class Audio {
 					clip.stop();
 					clip.setFramePosition(0);
 				} catch (Exception e) {
-					Debug.error("could not play clip");
-					e.printStackTrace();
+					Debug.error(e);
 				}
 			}
 		}).start();

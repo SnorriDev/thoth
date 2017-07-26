@@ -184,7 +184,7 @@ public class Grammar extends HashMap<Class<? extends NonTerminal<?>>, List<Rule>
 				for (List<Node<?>> nodes : Util.computeCombinations(allPoss)) {
 					Class<? extends NonTerminal<?>> c = rewrite.fits(nodes);
 					if (c == null) {
-						Debug.error("very weird parsing issue");
+						Debug.warning("very weird parsing issue");
 						return null;
 					}
 					NonTerminal<?> node = c.newInstance();

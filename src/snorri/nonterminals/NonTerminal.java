@@ -89,8 +89,7 @@ public abstract class NonTerminal<S> implements Node<S> {
 			copy.setChildren(newChildren);
 			return copy;
 		} catch (InstantiationException | IllegalAccessException e) {
-			Debug.error("could not copy NonTerminal");
-			e.printStackTrace();
+			Debug.error(e);
 			return null;
 		}
 

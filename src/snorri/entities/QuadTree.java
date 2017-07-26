@@ -12,6 +12,7 @@ import snorri.collisions.RectCollider;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.world.EntityGroup;
+import snorri.world.Executable;
 import snorri.world.Level;
 import snorri.world.Tile;
 import snorri.world.Vector;
@@ -156,6 +157,7 @@ public class QuadTree extends Entity implements EntityGroup {
 		return out;
 	}
 	
+	//TODO remove this priority queue? just draw things in whatever order?
 	public PriorityQueue<Entity> getRenderQueue(Rectangle r) {
 		
 		PriorityQueue<Entity> out = new PriorityQueue<>();
@@ -295,7 +297,7 @@ public class QuadTree extends Entity implements EntityGroup {
 		
 	}
 
-	@Override
+	@Override @Deprecated
 	public List<Entity> getAllEntities() {
 		List<Entity> result = new ArrayList<>();
 		result.addAll(entities);
@@ -307,6 +309,46 @@ public class QuadTree extends Entity implements EntityGroup {
 			}
 		}
 		return result;
+	}
+	
+	/**
+	 * Efficient method for mapping an executable over all 
+	 */
+	@Override
+	public void mapOverEntities(Executable<Entity> exec) {
+		for (Entity e : entities) {
+			exec.exec(e);
+		}
+		if (nodes != null) {
+			for (QuadTree node : nodes) {
+				if (!node.isEmpty()) {
+					node.mapOverEntities(exec);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Apply an executable over all entities that collide with e.
+	 * @param e
+	 * 	The entity with which to test collisions.
+	 * @param exec
+	 * 	The executable to run.
+	 */
+	@Override
+	public void mapOverCollisions(Entity e, boolean hitAll, Executable<Entity> exec) {
+		for (Entity each : entities) {
+			if ((hitAll || !each.shouldIgnoreCollisions()) && each.intersects(e) && !each.equals(e)) {
+				exec.exec(each);
+			}
+		}
+		if (nodes != null) {
+			for (QuadTree node : nodes) {
+				if (!node.isEmpty() && node.intersects(e)) {
+					node.mapOverCollisions(e, hitAll, exec);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -335,11 +377,11 @@ public class QuadTree extends Entity implements EntityGroup {
 	}
 
 	@Override @SuppressWarnings("unchecked")
-	public <P> P getFirstCollision(Entity checker, Class<P> class1) {
+	public <P> P getFirstCollision(Entity checker, boolean hitAll, Class<P> class1) {
 		if (nodes != null) {
 			for (QuadTree node : nodes) {
 				if (!node.isEmpty() && node.intersects(checker)) {
-					P col = node.getFirstCollision(checker, class1);
+					P col = node.getFirstCollision(checker, hitAll, class1);
 					if (col != null) {
 						return col;
 					}
@@ -347,7 +389,28 @@ public class QuadTree extends Entity implements EntityGroup {
 			}
 		}
 		for (Entity each : entities) {
-			if (class1.isInstance(each) && each.intersects(checker)) {
+			if ((hitAll || !each.shouldIgnoreCollisions()) && each.intersects(checker) && !each.equals(checker)
+					&& class1.isInstance(each)) {
+				return (P) each;
+			}
+		}
+		return null;
+	}
+	
+	@Override @SuppressWarnings("unchecked")
+	public <P> P getFirst(Class<P> class1) {
+		if (nodes != null) {
+			for (QuadTree node : nodes) {
+				if (!node.isEmpty()) {
+					P col = node.getFirst(class1);
+					if (col != null) {
+						return col;
+					}
+				}
+			}
+		}
+		for (Entity each : entities) {
+			if (class1.isInstance(each)) {
 				return (P) each;
 			}
 		}

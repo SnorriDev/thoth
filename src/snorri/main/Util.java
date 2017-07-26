@@ -192,10 +192,8 @@ public class Util {
 	 * 	The rotated image
 	 */
 	public static BufferedImage getRotated(BufferedImage image, Vector dir) {
-		double midX = image.getWidth() / 2, midY = image.getHeight() / 2;
-		AffineTransform tx = AffineTransform.getRotateInstance(dir.getX(), dir.getY(), midX, midY);
-		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
-		return op.filter(image, null);
+		double theta = dir.getStandardAngle();
+		return getRotated(image, theta);
 	}
 	
 	/**
@@ -208,10 +206,17 @@ public class Util {
 	 * 	The rotated image
 	 */
 	public static BufferedImage getRotated(BufferedImage image, double theta) {
+		
 		double midX = image.getWidth() / 2, midY = image.getHeight() / 2;
-		AffineTransform tx = AffineTransform.getRotateInstance(theta, midX, midY);
-		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
-		return op.filter(image, null);
+		BufferedImage copy = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
+				
+		Graphics2D g = copy.createGraphics();
+		g.rotate(theta, midX, midY);
+		g.drawRenderedImage(image, null);
+		g.dispose();
+		
+		return copy;
+		
 	}
 
 	public static BufferedImage getBufferedImage(Image img) {

@@ -91,7 +91,7 @@ public class Trigger {
 				Entry<String, Map<String, Object>> e = getFirstEntry(event);
 				TriggerType type = TriggerType.valueOf(e.getKey());
 				if (type == null) {
-					Debug.error("unknown event type " + e.getKey());
+					Debug.warning("unknown event type " + e.getKey());
 					return;
 				}
 				if (type == TriggerType.BROADCAST) {
@@ -127,10 +127,9 @@ public class Trigger {
 			Debug.log(rawTriggers.size() + " triggers loaded");
 			
 		} catch (FileNotFoundException e) {
-			Debug.error("could not find trigger file " + triggerFile);
+			Debug.error(e);
 		} catch (YamlException e) {
-			Debug.error("could not parse YAML");
-			e.printStackTrace();
+			Debug.error(e);
 		} finally {
 			triggers.setLoaded();
 		}

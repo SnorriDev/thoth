@@ -282,7 +282,8 @@ public class PathGraph {
 			components = (Set<Component>) in.readObject();
 			computeGraphHash();
 		} catch (ClassNotFoundException e) {
-			Debug.error("recalculating corrupted pathfinding data");
+			Debug.error(e);
+			Debug.log("recalculating corrupted pathfinding data");
 			computeComponents();
 		}
 		in.close();

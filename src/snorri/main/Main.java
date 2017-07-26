@@ -23,11 +23,11 @@ import net.sourceforge.yamlbeans.YamlReader;
 import snorri.dialog.Dialog;
 import snorri.dialog.Objective;
 import snorri.dialog.Portraits;
+import snorri.entities.Player;
 import snorri.hieroglyphs.Hieroglyphs;
 import snorri.inventory.RandomDrop;
 import snorri.parser.Lexicon;
 import snorri.terrain.Structure;
-import snorri.terrain.TerrainGen;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -144,7 +144,7 @@ public class Main {
 			ge.registerFont(f);
 			return f;
 		} catch (IOException | FontFormatException e) {
-			Debug.error("font not found at " + path);
+			Debug.error(e);
 			return null;
 		}
 	}
@@ -153,10 +153,10 @@ public class Main {
 		try {
 			return ImageIO.read(file);
 		} catch (IllegalArgumentException e) {
-			Debug.error("unable to find image " + file.getName());
+			Debug.error(e);
 			return null;
 		} catch (IOException e) {
-			Debug.error("issue loading image " + file.getName());
+			Debug.error(e);
 			return null;
 		}
 	}
@@ -261,57 +261,39 @@ public class Main {
 	public static JLayeredPane getLayeredPane() {
 		return pane;
 	}
-	
-	private static void launchWorld(World world) {
-		if (world == null) {
-			return;
-		}
-		setWindow(new GameWindow(world));
-	}
 
 	public static void launchMenu() {
 		setOverlay(null);
 		setWindow(new MainMenu());
 	}
-
-	public static void launchGame(WorldSelection worldSelect) {
+	
+	public static void launchGame(File path) {
+		launchGame(path, null);
+	}
+	
+	public static void launchGame(File path, Player p) {
 		loadInto(new Runnable() {
 			@Override
 			public void run() {
-				World w = worldSelect.loadWorld();
-				if (w != null) {
-					launchWorld(worldSelect.loadWorld());
-				} else {
-					setWindow(new MainMenu());
+				World world;
+				try {
+					world = new World(path, p);
+					setWindow(new GameWindow(world));
+				} catch (IOException e) {
+					Debug.error(e);
 				}
 			}
 		});
 	}
 	
-	public static void launchGame(TerrainGen gen) {
-		loadInto(new Runnable() {
-			@Override
-			public void run() {
-				launchWorld(gen.genWorld());
-			}
-		});
+	public static void launchGame(String path, Player p) {
+		launchGame(getFile(path), p);
 	}
 	
-	public static void launchGame(World world) {
-		loadInto(new Runnable() {
-			@Override
-			public void run() {
-				launchWorld(world);
-			}
-		});
+	public static void launchGame(String path) {
+		launchGame(getFile(path));
 	}
-	
-	//TODO set up loading screens well
-
-	public static void launchGame() {
-		launchGame(new TerrainGen(200, 200));
-	}
-
+		
 	public static void launchEditor() {
 		setWindow(new LevelEditor());
 	}

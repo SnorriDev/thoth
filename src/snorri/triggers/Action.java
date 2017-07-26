@@ -4,6 +4,7 @@ import java.util.Map;
 
 import snorri.dialog.Dialog;
 import snorri.dialog.Objective;
+import snorri.entities.Ballista;
 import snorri.entities.Drop;
 import snorri.entities.Entity;
 import snorri.entities.NPC;
@@ -24,13 +25,13 @@ public abstract class Action {
 	/**
 	 * Functional interface for trigger actions
 	 */
-		
-	private enum Actions {
-		
+
+	public enum Actions {
+
 		/**
 		 * Enumerates the various actions that exist
 		 */
-		
+
 		BROADCAST(new Action() {
 			@Override
 			public Runnable build(World world, Map<String, Object> args) {
@@ -42,7 +43,7 @@ public abstract class Action {
 				};
 			}
 		}),
-		
+
 		TELEPORT(new Action() {
 			@Override
 			public Runnable build(World world, Map<String, Object> args) {
@@ -56,7 +57,7 @@ public abstract class Action {
 				};
 			}
 		}),
-		
+
 		SHOW_DIALOG(new Action() {
 			@Override
 			public Runnable build(World world, Map<String, Object> args) {
@@ -71,7 +72,7 @@ public abstract class Action {
 				};
 			}
 		}),
-		
+
 		SET_NPC_DIALOG(new Action() {
 			@Override
 			public Runnable build(World world, Map<String, Object> args) {
@@ -85,7 +86,7 @@ public abstract class Action {
 				};
 			}
 		}),
-		
+
 		SET_OBJECTIVE(new Action() {
 			@Override
 			public Runnable build(World world, Map<String, Object> args) {
@@ -96,13 +97,13 @@ public abstract class Action {
 						if (window instanceof GameWindow) {
 							((GameWindow) window).setObjective((Objective) args.get("objective"));
 						} else {
-							Debug.error("Setting objective in non-GameWindow");
+							Debug.warning("setting objective in non-GameWindow");
 						}
 					}
 				};
 			}
 		}),
-		
+
 		SPAWN_ENTITY(new Action() {
 			@Override
 			public Runnable build(World world, Map<String, Object> args) {
@@ -111,7 +112,7 @@ public abstract class Action {
 					public void run() {
 						final Class<? extends Entity> type = Entity.getSpawnableByName((String) args.get("type"));
 						if (type == null) {
-							Debug.error("tried to spawn null entity type in trigger action");
+							Debug.warning("tried to spawn null entity type in trigger action");
 							return;
 						}
 						Entity e = Entity.spawnNew(world, (Vector) args.get("pos"), type);
@@ -120,7 +121,7 @@ public abstract class Action {
 				};
 			}
 		}),
-		
+
 		OPEN_DOOR(new Action() {
 			@Override
 			public Runnable build(World world, Map<String, Object> args) {
@@ -133,7 +134,7 @@ public abstract class Action {
 				};
 			}
 		}),
-		
+
 		DROP_TREASURE(new Action() {
 			@Override
 			public Runnable build(World world, Map<String, Object> args) {
@@ -147,7 +148,7 @@ public abstract class Action {
 				};
 			}
 		}),
-		
+
 		BREAK_WALL(new Action() {
 			@Override
 			public Runnable build(World world, Map<String, Object> args) {
@@ -164,7 +165,7 @@ public abstract class Action {
 				};
 			}
 		}),
-		
+
 		DELETE_ENTITY(new Action() {
 			@Override
 			public Runnable build(World world, Map<String, Object> args) {
@@ -176,25 +177,59 @@ public abstract class Action {
 					}
 				};
 			}
+		}),
+
+		FIRE_BALLISTA(new Action() {
+			@Override
+			public Runnable build(World world, Map<String, Object> args) {
+				return new Runnable() {
+					@Override
+					public void run() {
+						Entity e = Trigger.getByTag((String) args.get("ballista"));
+						if (e instanceof Ballista) {
+							((Ballista) e).shoot(world);
+						}
+					}
+				};
+			}
+		}),
+
+		ENTER_WORLD(new Action() {
+			@Override
+			public Runnable build(World world, Map<String, Object> args) {
+				return new Runnable() {
+					final String path = (String) args.get("path");
+					@Override
+					public void run() {
+						GamePanel window = Main.getWindow();
+						if (window instanceof GameWindow) {
+							((GameWindow) window).stopBackgroundThread();
+							Main.launchGame(path, ((GameWindow) window).getFocus());
+						} else {
+							throw new RuntimeException("trying to enter other world in non-GameWindow");
+						}
+					}
+				};
+			}
 		});
-		
+
 		private final Action action;
-		
+
 		Actions(Action action) {
 			this.action = action;
 		}
-		
+
 		public Runnable build(World world, Map<String, Object> args) {
 			return action.build(world, args);
 		}
-		
+
 	}
-	
+
 	public static Runnable getRunnable(String key, World world, Map<String, Object> args) {
 		Actions a = Actions.valueOf(key);
 		return (a == null) ? null : a.build(world, args);
 	}
-	
+
 	public abstract Runnable build(World world, Map<String, Object> args);
-	
+
 }
