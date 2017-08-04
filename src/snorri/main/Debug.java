@@ -25,6 +25,7 @@ public class Debug {
 	public static final boolean DISABLE_PATHFINDING = false;
 	public static final boolean SHOW_COLLIDERS = false;
 	public static final boolean LOG_PAUSES = false;
+	public static final boolean DISABLE_ANTIALIASING = true;
 	
 	private static final Logger logger;
 	

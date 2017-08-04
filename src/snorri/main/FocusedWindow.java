@@ -228,9 +228,11 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 		//anti-aliasing options: nearest neighbor, bilinear, bicubic
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		//TODO can set other keys as graphics options as well
+		if (! Debug.DISABLE_ANTIALIASING) {
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		}
 	}
 
 }

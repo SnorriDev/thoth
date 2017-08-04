@@ -94,7 +94,7 @@ public class Main {
 		setupFont();
 								
 		frame = new JFrame("The Book of Thoth");
-		frame.setSize(1800, 900);
+		frame.setSize(1280, 720);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		

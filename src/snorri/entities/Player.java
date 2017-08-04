@@ -28,7 +28,7 @@ import snorri.world.World;
 public class Player extends Unit implements Carrier, Caster {
 
 	private static final Animation IDLE = new Animation("/textures/animations/setna/idle");
-	private static final Animation WALKING = new Animation("/textures/animations/setna/walk");
+	private static final Animation WALKING = new Animation("/textures/animations/setna/walking");
 	
 	private static final Image HEART = Main.getImage("/textures/hud/heart.png");
 	private static final Image HALF_HEART = Main.getImage("/textures/hud/halfHeart.png");
