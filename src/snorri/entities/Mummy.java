@@ -10,7 +10,7 @@ public class Mummy extends LongRangeAIUnit {
 	private static final long serialVersionUID = 1L;
 	
 	private static final Animation IDLE = new Animation("/textures/animations/mummy/idle");
-	private static final Animation WALKING = new Animation("textures/animations/mummy/walking");
+	private static final Animation WALKING = new Animation("textures/animations/mummy/walk");
 	
 	public Mummy(Vector pos) {
 		this(pos, null);
