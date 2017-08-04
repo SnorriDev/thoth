@@ -610,7 +610,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 					int cornerType = getCornerType(wallPoints.elementAt((i + 0) % (wallPoints.size() - 1)), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)), wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)));
 					switch(cornerType) {
 						case 0: //NN
-							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY() - 1; j > wallPoints.elementAt((i + 2)  % (wallPoints.size() - 1)).getY(); j--) {
+							for (int j = wallPoints.elementAt((i + 0) % (wallPoints.size() - 1)).getY() - 1; j > wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getY(); j--) {
 								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, N0);
 							}
 							break;
@@ -649,7 +649,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 							break;
 							
 						case 5: //SS
-							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY() + 1; j < wallPoints.elementAt((i + 2)  % (wallPoints.size() - 1)).getY(); j++) {
+							for (int j = wallPoints.elementAt((i + 0) % (wallPoints.size() - 1)).getY() + 1; j < wallPoints.elementAt((i + 2)  % (wallPoints.size() - 1)).getY(); j++) {
 								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, S0);
 							}
 							break;
@@ -696,7 +696,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 							break;
 							
 						case 10: //EE
-							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX() + 1; j < wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j++) {
+							for (int j = wallPoints.elementAt((i + 0) % (wallPoints.size() - 1)).getX() + 1; j < wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j++) {
 								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), E0);
 							}
 							break;
@@ -735,7 +735,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 							break;
 							
 						case 15: //WW
-							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX() - 1; j > wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j--) {
+							for (int j = wallPoints.elementAt((i + 0) % (wallPoints.size() - 1)).getX() - 1; j > wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j--) {
 								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), W0);
 							}
 							break;
@@ -777,7 +777,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 					int cornerType = getCornerType(wallPoints.elementAt(i + 0), wallPoints.elementAt(i + 1), wallPoints.elementAt(i + 2));
 					switch(cornerType) {
 						case 0: //NN
-							for (int j = wallPoints.elementAt(i + 1).getY() - 1; j > wallPoints.elementAt(i + 2).getY(); j--) {
+							for (int j = wallPoints.elementAt(i + 0).getY() - 1; j > wallPoints.elementAt(i + 2).getY(); j--) {
 								env.getLevel(1).setTileGrid(wallPoints.elementAt(i + 1).getX(), j, N0);
 							}
 							break;
@@ -816,7 +816,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 							break;
 							
 						case 5: //SS
-							for (int j = wallPoints.elementAt(i + 1).getY() + 1; j < wallPoints.elementAt(i + 2).getY(); j++) {
+							for (int j = wallPoints.elementAt(i + 0).getY() + 1; j < wallPoints.elementAt(i + 2).getY(); j++) {
 								env.getLevel(1).setTileGrid(wallPoints.elementAt(i + 1).getX(), j, S0);
 							}
 							break;
@@ -863,7 +863,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 							break;
 							
 						case 10: //EE
-							for (int j = wallPoints.elementAt(i + 1).getX() + 1; j < wallPoints.elementAt(i + 2).getX(); j++) {
+							for (int j = wallPoints.elementAt(i + 0).getX() + 1; j < wallPoints.elementAt(i + 2).getX(); j++) {
 								env.getLevel(1).setTileGrid(j, wallPoints.elementAt(i + 1).getY(), E0);
 							}
 							break;
@@ -902,7 +902,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 							break;
 							
 						case 15: //WW
-							for (int j = wallPoints.elementAt(i + 1).getX() - 1; j > wallPoints.elementAt(i + 2).getX(); j--) {
+							for (int j = wallPoints.elementAt(i + 0).getX() - 1; j > wallPoints.elementAt(i + 2).getX(); j--) {
 								env.getLevel(1).setTileGrid(j, wallPoints.elementAt(i + 1).getY(), W0);
 							}
 							break;
@@ -934,7 +934,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 					int cornerType = getCornerType(wallPoints.elementAt((i + 0) % (wallPoints.size() - 1)), wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)), wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)));
 					switch(cornerType) {
 						case 0: //NN
-							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY() - 1; j > wallPoints.elementAt((i + 2)  % (wallPoints.size() - 1)).getY(); j--) {
+							for (int j = wallPoints.elementAt((i + 0) % (wallPoints.size() - 1)).getY() - 1; j > wallPoints.elementAt((i + 2)  % (wallPoints.size() - 1)).getY(); j--) {
 								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, N1);
 							}
 							break;
@@ -973,7 +973,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 							break;
 							
 						case 5: //SS
-							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY() + 1; j < wallPoints.elementAt((i + 2)  % (wallPoints.size() - 1)).getY(); j++) {
+							for (int j = wallPoints.elementAt((i + 0) % (wallPoints.size() - 1)).getY() + 1; j < wallPoints.elementAt((i + 2)  % (wallPoints.size() - 1)).getY(); j++) {
 								env.getLevel(1).setTileGrid(wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX(), j, S1);
 							}
 							break;
@@ -1020,7 +1020,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 							break;
 							
 						case 10: //EE
-							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX() + 1; j < wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j++) {
+							for (int j = wallPoints.elementAt((i + 0) % (wallPoints.size() - 1)).getX() + 1; j < wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j++) {
 								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), E1);
 							}
 							break;
@@ -1059,7 +1059,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 							break;
 							
 						case 15: //WW
-							for (int j = wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getX() - 1; j > wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j--) {
+							for (int j = wallPoints.elementAt((i + 0) % (wallPoints.size() - 1)).getX() - 1; j > wallPoints.elementAt((i + 2) % (wallPoints.size() - 1)).getX(); j--) {
 								env.getLevel(1).setTileGrid(j, wallPoints.elementAt((i + 1) % (wallPoints.size() - 1)).getY(), W1);
 							}
 							break;
@@ -1101,7 +1101,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 					int cornerType = getCornerType(wallPoints.elementAt(i + 0), wallPoints.elementAt(i + 1), wallPoints.elementAt(i + 2));
 					switch(cornerType) {
 						case 0: //NN
-							for (int j = wallPoints.elementAt(i + 1).getY() - 1; j > wallPoints.elementAt(i + 2).getY(); j--) {
+							for (int j = wallPoints.elementAt(i + 0).getY() - 1; j > wallPoints.elementAt(i + 2).getY(); j--) {
 								env.getLevel(1).setTileGrid(wallPoints.elementAt(i + 1).getX(), j, N1);
 							}
 							break;
@@ -1140,7 +1140,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 							break;
 							
 						case 5: //SS
-							for (int j = wallPoints.elementAt(i + 1).getY() + 1; j < wallPoints.elementAt(i + 2).getY(); j++) {
+							for (int j = wallPoints.elementAt(i + 0).getY() + 1; j < wallPoints.elementAt(i + 2).getY(); j++) {
 								env.getLevel(1).setTileGrid(wallPoints.elementAt(i + 1).getX(), j, S1);
 							}
 							break;
@@ -1187,7 +1187,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 							break;
 							
 						case 10: //EE
-							for (int j = wallPoints.elementAt(i + 1).getX() + 1; j < wallPoints.elementAt(i + 2).getX(); j++) {
+							for (int j = wallPoints.elementAt(i + 0).getX() + 1; j < wallPoints.elementAt(i + 2).getX(); j++) {
 								env.getLevel(1).setTileGrid(j, wallPoints.elementAt(i + 1).getY(), E1);
 							}
 							break;
@@ -1226,7 +1226,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 							break;
 							
 						case 15: //WW
-							for (int j = wallPoints.elementAt(i + 1).getX() - 1; j > wallPoints.elementAt(i + 2).getX(); j--) {
+							for (int j = wallPoints.elementAt(i + 0).getX() - 1; j > wallPoints.elementAt(i + 2).getX(); j--) {
 								env.getLevel(1).setTileGrid(j, wallPoints.elementAt(i + 1).getY(), W1);
 							}
 							break;
