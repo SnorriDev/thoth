@@ -19,9 +19,9 @@ import snorri.main.Util;
 import snorri.world.Vector;
 
 /**
- * stores all the animation frames as Images (PNGS)
- * to convert SWFs to PNGs, use the swfrender utility
- * getSprite() should be used to iterate over frames
+ * Stores all the animation frames as Images (PNGS).
+ * To convert SWFs to PNGs, use the swfrender utility.
+ * <code>getSprite()</code> should be used to get an animation's current frame.
  */
 
 public class Animation implements Serializable {
@@ -40,8 +40,9 @@ public class Animation implements Serializable {
 	private boolean flipped = false;
 	
 	/**
-	 * load an animation from a path (not package name)
+	 * Loads an animation from a path (not package name).
 	 * @param path
+	 * 	The path from which to load
 	 * @throws URISyntaxException
 	 */
 	public Animation(String str) {
