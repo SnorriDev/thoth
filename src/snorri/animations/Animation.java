@@ -200,6 +200,10 @@ public class Animation implements Serializable {
 	}
 	
 	public void computeFlipped() {
+		if (frames == null) {
+			Debug.warning("animation with null frames");
+			return;
+		}
 		flippedFrames = new BufferedImage[frames.length];
 		for (int i = 0; i < frames.length; i++) {
 			flippedFrames[i] = Util.getFlipped(frames[i], true, false);
