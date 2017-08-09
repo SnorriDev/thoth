@@ -64,6 +64,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		EDIT_SPAWNABLE.add(NPC.class);
 		EDIT_SPAWNABLE.add(Ballista.class);
 		EDIT_SPAWNABLE.add(Spawn.class);
+		EDIT_SPAWNABLE.add(Dummy.class);
 		
 		//alphabetize the list for nice view in the editor
 		Collections.sort(EDIT_SPAWNABLE, new Comparator<Class<? extends Entity>>() {

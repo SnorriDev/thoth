@@ -25,6 +25,7 @@ import javax.swing.SwingUtilities;
 
 import snorri.entities.Ballista;
 import snorri.entities.Drop;
+import snorri.entities.Dummy;
 import snorri.entities.Entity;
 import snorri.entities.Listener;
 import snorri.entities.Player;
@@ -1534,6 +1535,14 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 				}
 				Vector dir = new Vector(inputs.getDouble("X"), inputs.getDouble("Y"));
 				world.add(new Ballista(spawnPos, dir));
+			} else if (selectedEntityClass.equals(Dummy.class)) {
+				DialogMap inputs = new DialogMap();
+				inputs.put("Path", "/animations/path");
+				if (dialog("Dummy Animation", inputs) == null) {
+					return;
+				}
+				String animation = inputs.getText("Path");
+				world.add(new Dummy(spawnPos, animation));
 			}
 
 			else {

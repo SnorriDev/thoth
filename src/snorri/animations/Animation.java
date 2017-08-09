@@ -231,5 +231,13 @@ public class Animation implements Serializable {
 	public void flip(boolean facingLeft) {
 		flipped = facingLeft;
 	}
+	
+	public int getWidth() {
+		return frames[0].getWidth();
+	}
+	
+	public int getHeight() {
+		return frames[0].getHeight();
+	}
 
 }
