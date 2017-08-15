@@ -1,5 +1,5 @@
-title:            CodeInventory
-description:      "Talk is cheap. Show me the code!"
+title:            The Book of Thoth
+description:      "Speak magic. Experience the power of language!"
 logo:             logo.png
 disqus_shortname: codeinventorycom
 share:            true
@@ -7,13 +7,13 @@ dropcap:	   true
 # Change url to your domain. Leave localhost server or blank when working locally.
 # or use the hint from http://jekyllrb.com/docs/github-pages/ to keep this the same 
 # whether working locally or remotely. Start Jekyll with: jekyll serve --baseurl ''
-url:        	 http://www.codeinventory.com
+url:        	 http://snorridev.github.io/thoth/
 
 # Owner/author information
 owner:
-  name:           Amey Jadiye
+  name:           will Merrill
   avatar:         ameyjadiye.jpg
-  email:          ameyjadiye@gmail.com
+  email:          william.merrill@yale.edu
   # Use the coder's toolbox at http://coderstoolbox.net/string/#!encoding=xml&action=encode&charset=us_ascii to encode your description into XML string
   description:    Programming is 1% knowledge, 2% ability and 97% getting the ability to work with the knowledge :)
   # Social networking links used in footer. Update and remove as you like.
