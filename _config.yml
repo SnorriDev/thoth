@@ -1,7 +1,7 @@
 title:            The Book of Thoth
 description:      "Speak magic. Experience the power of language!"
 logo:             logo.png
-disqus_shortname: codeinventorycom
+disqus_shortname: snorridev.github.io/thoth
 share:            true
 dropcap:	   true
 # Change url to your domain. Leave localhost server or blank when working locally.
@@ -19,7 +19,7 @@ owner:
   # Social networking links used in footer. Update and remove as you like.
   twitter:        ameyjadiye
   facebook:       ameyjadiye
-  github:         ameyjadiye    
+  github:         github.com/viking-sudo-rm 
   instagram:      ameyjadiye
   # For Google Authorship https://plus.google.com/authorship
   google_plus:    https://plus.google.com/u/0/+AmeyJadiye
