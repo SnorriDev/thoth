@@ -162,7 +162,7 @@ main, .notepad-share-icons, .notepad-disqus {
   text-align: center;
   background-size: cover;
   background-color: black;
-  background-image: url("/images/UBB5kG4.jpg");}
+  background-image: url("/thoth/images/splash.png");}
   .notepad-site-head .notepad-site-head-content.with-bg-cover {
     background-color: rgba(0, 0, 0, 0.7); }
   .notepad-site-head .notepad-site-head-content .notepad-site-head-title-bg {
@@ -173,7 +173,7 @@ main, .notepad-share-icons, .notepad-disqus {
   .notepad-site-head .notepad-site-head-content h1, .notepad-site-head .notepad-site-head-content h2 {
     margin: 0;
     padding: 0;
-    color: white;
+    color: black; /* rgb(99, 96, 218), white */
     text-transform: uppercase; }
   .notepad-site-head .notepad-site-head-content h1 {
     padding-top: 4.375rem;
@@ -1069,3 +1069,9 @@ img.mfp-img {
   top: 0;
   right: 0;
   padding-top: 0; }
+
+.thoth-logo {
+  margin-top: 50px;
+  width: 250px;
+  height: 250px;
+}
