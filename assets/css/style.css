@@ -173,7 +173,7 @@ main, .notepad-share-icons, .notepad-disqus {
   .notepad-site-head .notepad-site-head-content h1, .notepad-site-head .notepad-site-head-content h2 {
     margin: 0;
     padding: 0;
-    color: rgb(99, 96, 218); /* white */
+    color: black; /* rgb(99, 96, 218), white */
     text-transform: uppercase; }
   .notepad-site-head .notepad-site-head-content h1 {
     padding-top: 4.375rem;
@@ -1069,3 +1069,9 @@ img.mfp-img {
   top: 0;
   right: 0;
   padding-top: 0; }
+
+img.thoth-logo {
+  padding-top: 100px;
+  width: 250px;
+  height: 250px;
+}
