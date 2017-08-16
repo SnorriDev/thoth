@@ -1071,7 +1071,7 @@ img.mfp-img {
   padding-top: 0; }
 
 .thoth-logo {
-  padding-top: 50px;
-  width: 250px;
-  height: 250px;
+  margin-top: 50px;
+  width: 50%;
+  height: 50%;
 }
