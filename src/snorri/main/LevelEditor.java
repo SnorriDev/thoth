@@ -1537,7 +1537,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 				world.add(new Ballista(spawnPos, dir));
 			} else if (selectedEntityClass.equals(Dummy.class)) {
 				DialogMap inputs = new DialogMap();
-				inputs.put("Path", "/animations/path");
+				inputs.put("Path", "/textures/animations/path");
 				if (dialog("Dummy Animation", inputs) == null) {
 					return;
 				}
