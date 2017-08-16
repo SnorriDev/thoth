@@ -1,0 +1,1934 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+
+
+
+<title type="text">The Book of Thoth</title>
+<generator uri="https://github.com/mojombo/jekyll">Jekyll</generator>
+<link rel="self" type="application/atom+xml" href="http://localhost:4000/feed.xml" />
+<link rel="alternate" type="text/html" href="http://localhost:4000/" />
+<updated>2017-08-16T02:05:57+05:30</updated>
+<id>http://localhost:4000/</id>
+<author>
+  <name>will Merrill</name>
+  <uri>http://localhost:4000/</uri>
+  <email>william.merrill@yale.edu</email>
+</author>
+
+
+<entry>
+  <title type="html"><![CDATA[Core Affinity]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/bin/linux,%20java/2016/12/21/core-affinity/"/>
+  <id>http://localhost:4000/bin/linux,%20java/2016/12/21/core-affinity</id>
+  <published>2016-12-21T07:25:00+05:30</published>
+  <updated>2016-12-21T07:25:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#java,%20linux" term="java, linux" />
+  <content type="html">
+  
+    &lt;p&gt;Core affinity &lt;em&gt;or&lt;/em&gt; Process affinity &lt;em&gt;always&lt;/em&gt; playes a great roll for abtaining optimal latency if your application runs with limited threads.&lt;/p&gt;
+
+&lt;p&gt;Ideally application must keep limited threads and reuse it and many application does it unless immature programmer has done the coding, many multithreading applications frameworks also keeps the threadpool to reuse them, problem usually happpens when huge ammount of data comes in to the syatem and each threads have to do lot of work without being idle, lot of work brings lot of paging and context switching which is a costly operation, you can use &lt;code class=&quot;highlighter-rouge&quot;&gt;sar -w 5 5&lt;/code&gt; to check your context swiching.&lt;/p&gt;
+
+&lt;p&gt;I’m working with java application which works in burst mode for some hours and  then works normal throughout a day, in that 1-2 hour  huge context switching happens which decrease  overall performance, i created small script which can divide threads evenly in all availabel cores and apply affinity to them so no context-switching happens which increases performance tremendously.&lt;/p&gt;
+
+&lt;p&gt;Below script takes pid of your java process and assigns core to each thread, there are lib which do the same from within java process but its way more hectic and i see  with shell its  waymore easy ;)&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+
+usage &lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Usage : affinity &amp;lt;java_pid&amp;gt;'&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;$#&quot;&lt;/span&gt; -ne 1 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;then
+  &lt;/span&gt;usage
+&lt;span class=&quot;k&quot;&gt;fi
+
+
+&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;_index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0
+&lt;span class=&quot;nv&quot;&gt;_cores&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;nproc&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;nid &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;jstack &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt; | grep nid  | cut -d&lt;span class=&quot;s1&quot;&gt;' '&lt;/span&gt; -f6 | grep nid | cut -d&lt;span class=&quot;s1&quot;&gt;'='&lt;/span&gt; -f2 | cut -d&lt;span class=&quot;s1&quot;&gt;'x'&lt;/span&gt; -f2&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;do 
+	&lt;/span&gt;taskset -p -c &lt;span class=&quot;k&quot;&gt;$((&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$_cores&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;$((&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#$nid)) &lt;/span&gt;
+	&lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;_index++&lt;span class=&quot;k&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;source is here https://github.com/ameyjadiye/core-affinity , you can always provide improvements by pull req.&lt;/p&gt;
+
+&lt;p&gt;Happy Coding .. :)&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/bin/linux,%20java/2016/12/21/core-affinity/&quot;&gt;Core Affinity&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on December 21, 2016.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Core Affinity]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/linux,%20java/2016/12/21/core-affinity/"/>
+  <id>http://localhost:4000/linux,%20java/2016/12/21/core-affinity</id>
+  <published>2016-12-21T07:25:00+05:30</published>
+  <updated>2016-12-21T07:25:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#java,%20linux" term="java, linux" />
+  <content type="html">
+  
+    &lt;p&gt;Core affinity &lt;em&gt;or&lt;/em&gt; Process affinity &lt;em&gt;always&lt;/em&gt; playes a great roll for abtaining optimal latency if your application runs with limited threads.&lt;/p&gt;
+
+&lt;p&gt;Ideally application must keep limited threads and reuse it and many application does it unless immature programmer has done the coding, many multithreading applications frameworks also keeps the threadpool to reuse them, problem usually happpens when huge ammount of data comes in to the syatem and each threads have to do lot of work without being idle, lot of work brings lot of paging and context switching which is a costly operation, you can use &lt;code class=&quot;highlighter-rouge&quot;&gt;sar -w 5 5&lt;/code&gt; to check your context swiching.&lt;/p&gt;
+
+&lt;p&gt;I’m working with java application which works in burst mode for some hours and  then works normal throughout a day, in that 1-2 hour  huge context switching happens which decrease  overall performance, i created small script which can divide threads evenly in all availabel cores and apply affinity to them so no context-switching happens which increases performance tremendously.&lt;/p&gt;
+
+&lt;p&gt;Below script takes pid of your java process and assigns core to each thread, there are lib which do the same from within java process but its way more hectic and i see  with shell its  waymore easy ;)&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+
+usage &lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Usage : affinity &amp;lt;java_pid&amp;gt;'&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;$#&quot;&lt;/span&gt; -ne 1 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;then
+  &lt;/span&gt;usage
+&lt;span class=&quot;k&quot;&gt;fi
+
+
+&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;_index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0
+&lt;span class=&quot;nv&quot;&gt;_cores&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;nproc&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;nid &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;jstack &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt; | grep nid  | cut -d&lt;span class=&quot;s1&quot;&gt;' '&lt;/span&gt; -f6 | grep nid | cut -d&lt;span class=&quot;s1&quot;&gt;'='&lt;/span&gt; -f2 | cut -d&lt;span class=&quot;s1&quot;&gt;'x'&lt;/span&gt; -f2&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;do 
+	&lt;/span&gt;taskset -p -c &lt;span class=&quot;k&quot;&gt;$((&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$_cores&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;$((&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#$nid)) &lt;/span&gt;
+	&lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;_index++&lt;span class=&quot;k&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;source is here https://github.com/ameyjadiye/core-affinity , you can always provide improvements by pull req.&lt;/p&gt;
+
+&lt;p&gt;Happy Coding .. :)&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/linux,%20java/2016/12/21/core-affinity/&quot;&gt;Core Affinity&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on December 21, 2016.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[IoT and nodemcu]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/bin/embedded/2016/10/18/iot-and-nodemcu/"/>
+  <id>http://localhost:4000/bin/embedded/2016/10/18/iot-and-nodemcu</id>
+  <published>2016-10-18T08:45:00+05:30</published>
+  <updated>2016-10-18T08:45:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#IoT,nodemcu,ESP8266" term="IoT,nodemcu,ESP8266" />
+  <content type="html">
+  
+    &lt;p&gt;Bought a brand new NodeMCU couple of days back and i bet its much better than Arduino.&lt;/p&gt;
+
+&lt;p&gt;It has built in WiFi and that’s very much like Arduino with batteries included ;) also arduino ide is compatible with NodeMCU that really sweet &amp;lt;3. Range of scanning Access Points is no less than any powerful Mobile Phone. Another best feature is this magic piece supports Lua :), Highlevel modern lang, fastest executing scripting language which competes performance with C, literally I have tested this, for small embedded devices to giants like &lt;a href=&quot;https://www.nginx.com/case-studies/appnexus-chooses-nginx-plus-to-enhance-its-real-time-bidding-platform/&quot; taarget=&quot;_blank&quot;&gt;AppNexus&lt;/a&gt; having billion request per sec using Lua for its performance.&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;50%&quot; height=&quot;50%&quot; src=&quot;http://localhost:4000/images/nodemcu.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Some of the interesting and core facts about NodeMCU.&lt;/p&gt;
+
+&lt;p&gt;NodeMCU is an open source IoT platform. It includes firmware which runs on the ESP8266 Wi-Fi SoC from Espressif Systems, and hardware which is based on the ESP-12 module. The term “NodeMCU” by default refers to the firmware rather than the dev kits. The firmware uses the Lua scripting language. It is based on the eLua project, and built on the Espressif Non-OS SDK for ESP8266. It uses many open source projects, such as lua-cjson and spiffs.&lt;/p&gt;
+
+&lt;p&gt;Some sample code&lt;/p&gt;
+
+&lt;h3 id=&quot;connecting-to-access-point&quot;&gt;Connecting to Access Point&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Lua&quot;&gt;print(wifi.sta.getip())
+--nil
+wifi.setmode(wifi.STATION)
+wifi.sta.config(&quot;SSID&quot;,&quot;password&quot;)
+-- wifi.sta.connect() not necessary because wifi.sta.config sets auto-connect = true
+tmr.create():alarm(1000, 1, function(cb_timer)
+  if wifi.sta.getip() == nil then
+    print(&quot;Connecting...&quot;)
+  else
+    cb_timer:unregister()
+    print(&quot;Connected, IP is &quot;..wifi.sta.getip())
+  end
+end)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;controlling-gpio&quot;&gt;Controlling GPIO&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Lua&quot;&gt;ledPin = 1
+swPin = 2
+gpio.mode(ledPin,gpio.OUTPUT)
+gpio.write(ledPin,gpio.HIGH)
+gpio.mode(swPin,gpio.INPUT)
+print(gpio.read(swPin))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;working-as-http-server&quot;&gt;working as http server&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Lua&quot;&gt;-- a simple HTTP server
+srv = net.createServer(net.TCP)
+srv:listen(80, function(conn)
+    conn:on(&quot;receive&quot;, function(sck, payload)
+        print(payload)
+        sck:send(&quot;HTTP/1.0 200 OK\r\nContent-Type: text/html\r\n\r\n&amp;lt;h1&amp;gt; Hello, NodeMCU.&amp;lt;/h1&amp;gt;&quot;)
+    end)
+    conn:on(&quot;sent&quot;, function(sck) sck:close() end)
+end)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;chatting-with-mqtt&quot;&gt;Chatting with MQTT&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Lua&quot;&gt;
+-- init mqtt client with keepalive timer 120sec
+m = mqtt.Client(&quot;clientid&quot;, 120, &quot;user&quot;, &quot;password&quot;)
+
+-- setup Last Will and Testament (optional)
+-- Broker will publish a message with qos = 0, retain = 0, data = &quot;offline&quot;
+-- to topic &quot;/lwt&quot; if client don't send keepalive packet
+m:lwt(&quot;/lwt&quot;, &quot;offline&quot;, 0, 0)
+
+m:on(&quot;connect&quot;, function(con) print (&quot;connected&quot;) end)
+m:on(&quot;offline&quot;, function(con) print (&quot;offline&quot;) end)
+
+-- on publish message receive event
+m:on(&quot;message&quot;, function(conn, topic, data)
+  print(topic .. &quot;:&quot; )
+  if data ~= nil then
+    print(data)
+  end
+end)
+
+-- for secure: m:connect(&quot;192.168.11.118&quot;, 1880, 1)
+m:connect(&quot;192.168.11.118&quot;, 1880, 0, function(conn) print(&quot;connected&quot;) end)
+
+-- subscribe topic with qos = 0
+m:subscribe(&quot;/topic&quot;,0, function(conn) print(&quot;subscribe success&quot;) end)
+-- or subscribe multiple topic (topic/0, qos = 0; topic/1, qos = 1; topic2 , qos = 2)
+-- m:subscribe({[&quot;topic/0&quot;]=0,[&quot;topic/1&quot;]=1,topic2=2}, function(conn) print(&quot;subscribe success&quot;) end)
+-- publish a message with data = hello, QoS = 0, retain = 0
+m:publish(&quot;/topic&quot;,&quot;hello&quot;,0,0, function(conn) print(&quot;sent&quot;) end)
+
+m:close();
+-- you can call m:connect again
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Happy Coding … :)&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/bin/embedded/2016/10/18/iot-and-nodemcu/&quot;&gt;IoT and nodemcu&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on October 18, 2016.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[IoT and nodemcu]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/embedded/2016/10/18/iot-and-nodemcu/"/>
+  <id>http://localhost:4000/embedded/2016/10/18/iot-and-nodemcu</id>
+  <published>2016-10-18T08:45:00+05:30</published>
+  <updated>2016-10-18T08:45:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#IoT,nodemcu,ESP8266" term="IoT,nodemcu,ESP8266" />
+  <content type="html">
+  
+    &lt;p&gt;Bought a brand new NodeMCU couple of days back and i bet its much better than Arduino.&lt;/p&gt;
+
+&lt;p&gt;It has built in WiFi and that’s very much like Arduino with batteries included ;) also arduino ide is compatible with NodeMCU that really sweet &amp;lt;3. Range of scanning Access Points is no less than any powerful Mobile Phone. Another best feature is this magic piece supports Lua :), Highlevel modern lang, fastest executing scripting language which competes performance with C, literally I have tested this, for small embedded devices to giants like &lt;a href=&quot;https://www.nginx.com/case-studies/appnexus-chooses-nginx-plus-to-enhance-its-real-time-bidding-platform/&quot; taarget=&quot;_blank&quot;&gt;AppNexus&lt;/a&gt; having billion request per sec using Lua for its performance.&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;50%&quot; height=&quot;50%&quot; src=&quot;http://localhost:4000/images/nodemcu.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Some of the interesting and core facts about NodeMCU.&lt;/p&gt;
+
+&lt;p&gt;NodeMCU is an open source IoT platform. It includes firmware which runs on the ESP8266 Wi-Fi SoC from Espressif Systems, and hardware which is based on the ESP-12 module. The term “NodeMCU” by default refers to the firmware rather than the dev kits. The firmware uses the Lua scripting language. It is based on the eLua project, and built on the Espressif Non-OS SDK for ESP8266. It uses many open source projects, such as lua-cjson and spiffs.&lt;/p&gt;
+
+&lt;p&gt;Some sample code&lt;/p&gt;
+
+&lt;h3 id=&quot;connecting-to-access-point&quot;&gt;Connecting to Access Point&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Lua&quot;&gt;print(wifi.sta.getip())
+--nil
+wifi.setmode(wifi.STATION)
+wifi.sta.config(&quot;SSID&quot;,&quot;password&quot;)
+-- wifi.sta.connect() not necessary because wifi.sta.config sets auto-connect = true
+tmr.create():alarm(1000, 1, function(cb_timer)
+  if wifi.sta.getip() == nil then
+    print(&quot;Connecting...&quot;)
+  else
+    cb_timer:unregister()
+    print(&quot;Connected, IP is &quot;..wifi.sta.getip())
+  end
+end)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;controlling-gpio&quot;&gt;Controlling GPIO&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Lua&quot;&gt;ledPin = 1
+swPin = 2
+gpio.mode(ledPin,gpio.OUTPUT)
+gpio.write(ledPin,gpio.HIGH)
+gpio.mode(swPin,gpio.INPUT)
+print(gpio.read(swPin))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;working-as-http-server&quot;&gt;working as http server&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Lua&quot;&gt;-- a simple HTTP server
+srv = net.createServer(net.TCP)
+srv:listen(80, function(conn)
+    conn:on(&quot;receive&quot;, function(sck, payload)
+        print(payload)
+        sck:send(&quot;HTTP/1.0 200 OK\r\nContent-Type: text/html\r\n\r\n&amp;lt;h1&amp;gt; Hello, NodeMCU.&amp;lt;/h1&amp;gt;&quot;)
+    end)
+    conn:on(&quot;sent&quot;, function(sck) sck:close() end)
+end)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;chatting-with-mqtt&quot;&gt;Chatting with MQTT&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Lua&quot;&gt;
+-- init mqtt client with keepalive timer 120sec
+m = mqtt.Client(&quot;clientid&quot;, 120, &quot;user&quot;, &quot;password&quot;)
+
+-- setup Last Will and Testament (optional)
+-- Broker will publish a message with qos = 0, retain = 0, data = &quot;offline&quot;
+-- to topic &quot;/lwt&quot; if client don't send keepalive packet
+m:lwt(&quot;/lwt&quot;, &quot;offline&quot;, 0, 0)
+
+m:on(&quot;connect&quot;, function(con) print (&quot;connected&quot;) end)
+m:on(&quot;offline&quot;, function(con) print (&quot;offline&quot;) end)
+
+-- on publish message receive event
+m:on(&quot;message&quot;, function(conn, topic, data)
+  print(topic .. &quot;:&quot; )
+  if data ~= nil then
+    print(data)
+  end
+end)
+
+-- for secure: m:connect(&quot;192.168.11.118&quot;, 1880, 1)
+m:connect(&quot;192.168.11.118&quot;, 1880, 0, function(conn) print(&quot;connected&quot;) end)
+
+-- subscribe topic with qos = 0
+m:subscribe(&quot;/topic&quot;,0, function(conn) print(&quot;subscribe success&quot;) end)
+-- or subscribe multiple topic (topic/0, qos = 0; topic/1, qos = 1; topic2 , qos = 2)
+-- m:subscribe({[&quot;topic/0&quot;]=0,[&quot;topic/1&quot;]=1,topic2=2}, function(conn) print(&quot;subscribe success&quot;) end)
+-- publish a message with data = hello, QoS = 0, retain = 0
+m:publish(&quot;/topic&quot;,&quot;hello&quot;,0,0, function(conn) print(&quot;sent&quot;) end)
+
+m:close();
+-- you can call m:connect again
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Happy Coding … :)&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/embedded/2016/10/18/iot-and-nodemcu/&quot;&gt;IoT and nodemcu&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on October 18, 2016.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[CUDA and Pain with GeForce GT 540M]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/bin/gpu/2016/06/29/CUDA-Pain-GT-540M/"/>
+  <id>http://localhost:4000/bin/gpu/2016/06/29/CUDA-Pain-GT-540M</id>
+  <published>2016-06-29T23:11:00+05:30</published>
+  <updated>2016-06-29T23:11:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#GPU" term="GPU" />
+  <content type="html">
+  
+    &lt;p&gt;Nvidia GT 540M is bit old now it was released back in 2012 when I purchased my XPS-L502X this awesome Graphics card was armed with it, Its still very solid to use with it’s 96 CUDA cores, specifications given here.. &lt;a href=&quot;http://www.geforce.com/hardware/notebook-gpus/geforce-gt-540m/specifications&quot;&gt;GT 540M&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;It was very painfull for me to run a CUDA program on it as its having &lt;a href=&quot;https://en.wikipedia.org/wiki/Fermi_%28microarchitecture%29&quot;&gt;Fermi Architechture&lt;/a&gt; and Compute capability of 2.1. most of the online tutorials says that you need Kepler architecture  and more to run CUDA, but I have tried a lot to run them on my GT 540M, It was so painfull to adjust settings and run program on it that i almost screwed my laptop may times and spent plenty of nights fixing it back again, formatted and installed fresh installation 3 times as my trying &amp;amp; screwing  went beyond limit.&lt;/p&gt;
+
+&lt;p&gt;finally I got the desired settings to do for GT 540M and i can smoothly run program on my XPS :).&lt;/p&gt;
+
+&lt;p&gt;here are very few things you have to do (i mean i did, not necessarily will work for you), but yes if you have GT 540M it will work for you as well.&lt;/p&gt;
+
+&lt;p&gt;Few things to consider..&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;It works if any only if your GPU is CUDA enabled.&lt;/li&gt;
+  &lt;li&gt;There are many versions of CUDA tool kit available, you have to find which works for your Graphics card.&lt;/li&gt;
+  &lt;li&gt;Nvidia released many versions of drivers as well, you have to find out which works for you.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Basic thing how CUDA works … (Hardware &amp;lt;- OS &amp;lt;- Driver &amp;lt;- CUDA toolkit &amp;lt;- Your Program)  and all this fine tuning is must and in equlibrium.&lt;/p&gt;
+
+&lt;p&gt;To run CUDA program on your XPS L502X with Nvidia GT 540M i’m using&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;OS : Linux Mint Rosa -  3.19.0-32-generic #37~14.04.1-Ubuntu SMP Thu Oct 22 09:41:40 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux&lt;/li&gt;
+  &lt;li&gt;CUDA toolkit - 5.5&lt;/li&gt;
+  &lt;li&gt;Nvidia Driver - 340.96&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If everything is properly installed and you dont see any problem viewing your screen you most prbably can run cuda programs compiled with nvcc on same machine.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;amey@xps ~/work/cuda &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;sudo apt-get install nvidia-cuda-toolkit
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;sudo] password &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;amey: 
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following extra packages will be installed:
+  libcublas5.5 libcudart5.5 libcufft5.5 libcufftw5.5 libcuinj64-5.5
+  libcurand5.5 libcusparse5.5 libnppc5.5 libnppi5.5 libnpps5.5 libnvtoolsext1
+  libnvvm2 libthrust-dev nvidia-340-uvm nvidia-cuda-dev nvidia-libopencl1-331
+  nvidia-libopencl1-340 nvidia-opencl-dev nvidia-profiler opencl-headers
+Suggested packages:
+  libcupti-dev
+Recommended packages:
+  libgl1-mesa-dev libgl-dev libvdpau-dev nvidia-cuda-doc nvidia-cuda-gdb
+  nvidia-visual-profiler
+The following packages will be REMOVED:
+  ocl-icd-libopencl1
+The following NEW packages will be installed:
+  libcublas5.5 libcudart5.5 libcufft5.5 libcufftw5.5 libcuinj64-5.5
+  libcurand5.5 libcusparse5.5 libnppc5.5 libnppi5.5 libnpps5.5 libnvtoolsext1
+  libnvvm2 libthrust-dev nvidia-340-uvm nvidia-cuda-dev nvidia-cuda-toolkit
+  nvidia-libopencl1-331 nvidia-libopencl1-340 nvidia-opencl-dev
+  nvidia-profiler opencl-headers
+0 upgraded, 21 newly installed, 1 to remove and 301 not upgraded.
+Need to get 104 MB/105 MB of archives.
+After this operation, 552 MB of additional disk space will be used.
+Do you want to &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;? &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Y/n] Y
+Get:1 http://archive.ubuntu.com/ubuntu/ trusty-updates/restricted nvidia-340-uvm amd64 340.96-0ubuntu0.14.04.1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;4,756 B]
+Get:2 http://archive.ubuntu.com/ubuntu/ trusty-updates/restricted nvidia-libopencl1-340 amd64 340.96-0ubuntu0.14.04.1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;16.5 kB]
+Get:3 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libcublas5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;10.1 MB]
+Get:4 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libcudart5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;94.5 kB]
+Get:5 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libcufft5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;13.8 MB]
+Get:6 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libcufftw5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;110 kB]
+Get:7 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libcuinj64-5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;674 kB]
+Get:8 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libcurand5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;18.2 MB]
+Get:9 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libcusparse5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;15.3 MB]
+Get:10 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libnppc5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;104 kB]
+Get:11 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libnppi5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;16.8 MB]
+Get:12 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libnpps5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1,967 kB]
+Get:13 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libnvtoolsext1 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;33.2 kB]
+Get:14 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libnvvm2 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;4,010 kB]
+Get:15 http://archive.ubuntu.com/ubuntu/ trusty-updates/restricted nvidia-libopencl1-331 amd64 340.96-0ubuntu0.14.04.1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;5,968 B]
+Get:16 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libthrust-dev all 1.7.0-1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;410 kB]
+Get:17 http://archive.ubuntu.com/ubuntu/ trusty/multiverse nvidia-cuda-dev amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;6,556 kB]
+Get:18 http://archive.ubuntu.com/ubuntu/ trusty/universe opencl-headers all 1.2-2013.10.23-1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;61.2 kB]
+Get:19 http://archive.ubuntu.com/ubuntu/ trusty/multiverse nvidia-opencl-dev amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;20.7 kB]
+Get:20 http://archive.ubuntu.com/ubuntu/ trusty/multiverse nvidia-cuda-toolkit amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;16.1 MB]
+Fetched 104 MB &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;6min 9s &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;283 kB/s&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;                                           
+Selecting previously unselected package nvidia-340-uvm.
+&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Reading database ... 243830 files and directories currently installed.&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Preparing to unpack .../nvidia-340-uvm_340.96-0ubuntu0.14.04.1_amd64.deb ...
+Unpacking nvidia-340-uvm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;340.96-0ubuntu0.14.04.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+dpkg: ocl-icd-libopencl1:amd64: dependency problems, but removing anyway as you requested:
+ nvidia-opencl-icd-340 depends on nvidia-libopencl1-340 | ocl-icd-libopencl1; however:
+  Package nvidia-libopencl1-340 is not installed.
+  Package ocl-icd-libopencl1:amd64 is to be removed.
+
+&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Reading database ... 243832 files and directories currently installed.&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Removing ocl-icd-libopencl1:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.1.3-4&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Processing triggers &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;man-db &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.6.7.1-1ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Processing triggers &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;doc-base &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.10.5&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Processing 1 removed doc-base file...
+Registering documents with scrollkeeper...
+Processing triggers &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;libc-bin &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.19-0ubuntu6.6&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package nvidia-libopencl1-340.
+&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Reading database ... 243819 files and directories currently installed.&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Preparing to unpack .../nvidia-libopencl1-340_340.96-0ubuntu0.14.04.1_amd64.deb ...
+Unpacking nvidia-libopencl1-340 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;340.96-0ubuntu0.14.04.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libcublas5.5:amd64.
+Preparing to unpack .../libcublas5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libcublas5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libcudart5.5:amd64.
+Preparing to unpack .../libcudart5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libcudart5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libcufft5.5:amd64.
+Preparing to unpack .../libcufft5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libcufft5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libcufftw5.5:amd64.
+Preparing to unpack .../libcufftw5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libcufftw5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libcuinj64-5.5:amd64.
+Preparing to unpack .../libcuinj64-5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libcuinj64-5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libcurand5.5:amd64.
+Preparing to unpack .../libcurand5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libcurand5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libcusparse5.5:amd64.
+Preparing to unpack .../libcusparse5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libcusparse5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libnppc5.5:amd64.
+Preparing to unpack .../libnppc5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libnppc5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libnppi5.5:amd64.
+Preparing to unpack .../libnppi5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libnppi5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libnpps5.5:amd64.
+Preparing to unpack .../libnpps5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libnpps5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libnvtoolsext1:amd64.
+Preparing to unpack .../libnvtoolsext1_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libnvtoolsext1:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libnvvm2:amd64.
+Preparing to unpack .../libnvvm2_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libnvvm2:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package nvidia-libopencl1-331.
+Preparing to unpack .../nvidia-libopencl1-331_340.96-0ubuntu0.14.04.1_amd64.deb ...
+Unpacking nvidia-libopencl1-331 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;340.96-0ubuntu0.14.04.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libthrust-dev.
+Preparing to unpack .../libthrust-dev_1.7.0-1_all.deb ...
+Unpacking libthrust-dev &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.7.0-1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package nvidia-cuda-dev.
+Preparing to unpack .../nvidia-cuda-dev_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking nvidia-cuda-dev &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package nvidia-profiler.
+Preparing to unpack .../nvidia-profiler_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking nvidia-profiler &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package opencl-headers.
+Preparing to unpack .../opencl-headers_1.2-2013.10.23-1_all.deb ...
+Unpacking opencl-headers &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.2-2013.10.23-1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package nvidia-opencl-dev:amd64.
+Preparing to unpack .../nvidia-opencl-dev_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking nvidia-opencl-dev:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package nvidia-cuda-toolkit.
+Preparing to unpack .../nvidia-cuda-toolkit_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking nvidia-cuda-toolkit &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up nvidia-340-uvm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;340.96-0ubuntu0.14.04.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up nvidia-libopencl1-340 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;340.96-0ubuntu0.14.04.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libcublas5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libcudart5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libcufft5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libcufftw5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libcuinj64-5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libcurand5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libcusparse5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libnppc5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libnppi5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libnpps5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libnvtoolsext1:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libnvvm2:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up nvidia-libopencl1-331 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;340.96-0ubuntu0.14.04.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libthrust-dev &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.7.0-1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up nvidia-cuda-dev &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up nvidia-profiler &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up opencl-headers &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.2-2013.10.23-1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up nvidia-opencl-dev:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up nvidia-cuda-toolkit &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Processing triggers &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;libc-bin &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.19-0ubuntu6.6&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+
+
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Happy Coding …&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/bin/gpu/2016/06/29/CUDA-Pain-GT-540M/&quot;&gt;CUDA and Pain with GeForce GT 540M&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on June 29, 2016.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[CUDA and Pain with GeForce GT 540M]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/gpu/2016/06/29/CUDA-Pain-GT-540M/"/>
+  <id>http://localhost:4000/gpu/2016/06/29/CUDA-Pain-GT-540M</id>
+  <published>2016-06-29T23:11:00+05:30</published>
+  <updated>2016-06-29T23:11:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#GPU" term="GPU" />
+  <content type="html">
+  
+    &lt;p&gt;Nvidia GT 540M is bit old now it was released back in 2012 when I purchased my XPS-L502X this awesome Graphics card was armed with it, Its still very solid to use with it’s 96 CUDA cores, specifications given here.. &lt;a href=&quot;http://www.geforce.com/hardware/notebook-gpus/geforce-gt-540m/specifications&quot;&gt;GT 540M&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;It was very painfull for me to run a CUDA program on it as its having &lt;a href=&quot;https://en.wikipedia.org/wiki/Fermi_%28microarchitecture%29&quot;&gt;Fermi Architechture&lt;/a&gt; and Compute capability of 2.1. most of the online tutorials says that you need Kepler architecture  and more to run CUDA, but I have tried a lot to run them on my GT 540M, It was so painfull to adjust settings and run program on it that i almost screwed my laptop may times and spent plenty of nights fixing it back again, formatted and installed fresh installation 3 times as my trying &amp;amp; screwing  went beyond limit.&lt;/p&gt;
+
+&lt;p&gt;finally I got the desired settings to do for GT 540M and i can smoothly run program on my XPS :).&lt;/p&gt;
+
+&lt;p&gt;here are very few things you have to do (i mean i did, not necessarily will work for you), but yes if you have GT 540M it will work for you as well.&lt;/p&gt;
+
+&lt;p&gt;Few things to consider..&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;It works if any only if your GPU is CUDA enabled.&lt;/li&gt;
+  &lt;li&gt;There are many versions of CUDA tool kit available, you have to find which works for your Graphics card.&lt;/li&gt;
+  &lt;li&gt;Nvidia released many versions of drivers as well, you have to find out which works for you.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Basic thing how CUDA works … (Hardware &amp;lt;- OS &amp;lt;- Driver &amp;lt;- CUDA toolkit &amp;lt;- Your Program)  and all this fine tuning is must and in equlibrium.&lt;/p&gt;
+
+&lt;p&gt;To run CUDA program on your XPS L502X with Nvidia GT 540M i’m using&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;OS : Linux Mint Rosa -  3.19.0-32-generic #37~14.04.1-Ubuntu SMP Thu Oct 22 09:41:40 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux&lt;/li&gt;
+  &lt;li&gt;CUDA toolkit - 5.5&lt;/li&gt;
+  &lt;li&gt;Nvidia Driver - 340.96&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If everything is properly installed and you dont see any problem viewing your screen you most prbably can run cuda programs compiled with nvcc on same machine.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;amey@xps ~/work/cuda &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;sudo apt-get install nvidia-cuda-toolkit
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;sudo] password &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;amey: 
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following extra packages will be installed:
+  libcublas5.5 libcudart5.5 libcufft5.5 libcufftw5.5 libcuinj64-5.5
+  libcurand5.5 libcusparse5.5 libnppc5.5 libnppi5.5 libnpps5.5 libnvtoolsext1
+  libnvvm2 libthrust-dev nvidia-340-uvm nvidia-cuda-dev nvidia-libopencl1-331
+  nvidia-libopencl1-340 nvidia-opencl-dev nvidia-profiler opencl-headers
+Suggested packages:
+  libcupti-dev
+Recommended packages:
+  libgl1-mesa-dev libgl-dev libvdpau-dev nvidia-cuda-doc nvidia-cuda-gdb
+  nvidia-visual-profiler
+The following packages will be REMOVED:
+  ocl-icd-libopencl1
+The following NEW packages will be installed:
+  libcublas5.5 libcudart5.5 libcufft5.5 libcufftw5.5 libcuinj64-5.5
+  libcurand5.5 libcusparse5.5 libnppc5.5 libnppi5.5 libnpps5.5 libnvtoolsext1
+  libnvvm2 libthrust-dev nvidia-340-uvm nvidia-cuda-dev nvidia-cuda-toolkit
+  nvidia-libopencl1-331 nvidia-libopencl1-340 nvidia-opencl-dev
+  nvidia-profiler opencl-headers
+0 upgraded, 21 newly installed, 1 to remove and 301 not upgraded.
+Need to get 104 MB/105 MB of archives.
+After this operation, 552 MB of additional disk space will be used.
+Do you want to &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;? &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Y/n] Y
+Get:1 http://archive.ubuntu.com/ubuntu/ trusty-updates/restricted nvidia-340-uvm amd64 340.96-0ubuntu0.14.04.1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;4,756 B]
+Get:2 http://archive.ubuntu.com/ubuntu/ trusty-updates/restricted nvidia-libopencl1-340 amd64 340.96-0ubuntu0.14.04.1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;16.5 kB]
+Get:3 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libcublas5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;10.1 MB]
+Get:4 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libcudart5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;94.5 kB]
+Get:5 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libcufft5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;13.8 MB]
+Get:6 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libcufftw5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;110 kB]
+Get:7 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libcuinj64-5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;674 kB]
+Get:8 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libcurand5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;18.2 MB]
+Get:9 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libcusparse5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;15.3 MB]
+Get:10 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libnppc5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;104 kB]
+Get:11 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libnppi5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;16.8 MB]
+Get:12 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libnpps5.5 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1,967 kB]
+Get:13 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libnvtoolsext1 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;33.2 kB]
+Get:14 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libnvvm2 amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;4,010 kB]
+Get:15 http://archive.ubuntu.com/ubuntu/ trusty-updates/restricted nvidia-libopencl1-331 amd64 340.96-0ubuntu0.14.04.1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;5,968 B]
+Get:16 http://archive.ubuntu.com/ubuntu/ trusty/multiverse libthrust-dev all 1.7.0-1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;410 kB]
+Get:17 http://archive.ubuntu.com/ubuntu/ trusty/multiverse nvidia-cuda-dev amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;6,556 kB]
+Get:18 http://archive.ubuntu.com/ubuntu/ trusty/universe opencl-headers all 1.2-2013.10.23-1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;61.2 kB]
+Get:19 http://archive.ubuntu.com/ubuntu/ trusty/multiverse nvidia-opencl-dev amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;20.7 kB]
+Get:20 http://archive.ubuntu.com/ubuntu/ trusty/multiverse nvidia-cuda-toolkit amd64 5.5.22-3ubuntu1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;16.1 MB]
+Fetched 104 MB &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;6min 9s &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;283 kB/s&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;                                           
+Selecting previously unselected package nvidia-340-uvm.
+&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Reading database ... 243830 files and directories currently installed.&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Preparing to unpack .../nvidia-340-uvm_340.96-0ubuntu0.14.04.1_amd64.deb ...
+Unpacking nvidia-340-uvm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;340.96-0ubuntu0.14.04.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+dpkg: ocl-icd-libopencl1:amd64: dependency problems, but removing anyway as you requested:
+ nvidia-opencl-icd-340 depends on nvidia-libopencl1-340 | ocl-icd-libopencl1; however:
+  Package nvidia-libopencl1-340 is not installed.
+  Package ocl-icd-libopencl1:amd64 is to be removed.
+
+&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Reading database ... 243832 files and directories currently installed.&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Removing ocl-icd-libopencl1:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.1.3-4&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Processing triggers &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;man-db &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.6.7.1-1ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Processing triggers &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;doc-base &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.10.5&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Processing 1 removed doc-base file...
+Registering documents with scrollkeeper...
+Processing triggers &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;libc-bin &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.19-0ubuntu6.6&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package nvidia-libopencl1-340.
+&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Reading database ... 243819 files and directories currently installed.&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Preparing to unpack .../nvidia-libopencl1-340_340.96-0ubuntu0.14.04.1_amd64.deb ...
+Unpacking nvidia-libopencl1-340 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;340.96-0ubuntu0.14.04.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libcublas5.5:amd64.
+Preparing to unpack .../libcublas5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libcublas5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libcudart5.5:amd64.
+Preparing to unpack .../libcudart5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libcudart5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libcufft5.5:amd64.
+Preparing to unpack .../libcufft5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libcufft5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libcufftw5.5:amd64.
+Preparing to unpack .../libcufftw5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libcufftw5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libcuinj64-5.5:amd64.
+Preparing to unpack .../libcuinj64-5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libcuinj64-5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libcurand5.5:amd64.
+Preparing to unpack .../libcurand5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libcurand5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libcusparse5.5:amd64.
+Preparing to unpack .../libcusparse5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libcusparse5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libnppc5.5:amd64.
+Preparing to unpack .../libnppc5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libnppc5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libnppi5.5:amd64.
+Preparing to unpack .../libnppi5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libnppi5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libnpps5.5:amd64.
+Preparing to unpack .../libnpps5.5_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libnpps5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libnvtoolsext1:amd64.
+Preparing to unpack .../libnvtoolsext1_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libnvtoolsext1:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libnvvm2:amd64.
+Preparing to unpack .../libnvvm2_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking libnvvm2:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package nvidia-libopencl1-331.
+Preparing to unpack .../nvidia-libopencl1-331_340.96-0ubuntu0.14.04.1_amd64.deb ...
+Unpacking nvidia-libopencl1-331 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;340.96-0ubuntu0.14.04.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package libthrust-dev.
+Preparing to unpack .../libthrust-dev_1.7.0-1_all.deb ...
+Unpacking libthrust-dev &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.7.0-1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package nvidia-cuda-dev.
+Preparing to unpack .../nvidia-cuda-dev_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking nvidia-cuda-dev &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package nvidia-profiler.
+Preparing to unpack .../nvidia-profiler_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking nvidia-profiler &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package opencl-headers.
+Preparing to unpack .../opencl-headers_1.2-2013.10.23-1_all.deb ...
+Unpacking opencl-headers &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.2-2013.10.23-1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package nvidia-opencl-dev:amd64.
+Preparing to unpack .../nvidia-opencl-dev_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking nvidia-opencl-dev:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Selecting previously unselected package nvidia-cuda-toolkit.
+Preparing to unpack .../nvidia-cuda-toolkit_5.5.22-3ubuntu1_amd64.deb ...
+Unpacking nvidia-cuda-toolkit &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up nvidia-340-uvm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;340.96-0ubuntu0.14.04.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up nvidia-libopencl1-340 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;340.96-0ubuntu0.14.04.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libcublas5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libcudart5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libcufft5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libcufftw5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libcuinj64-5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libcurand5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libcusparse5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libnppc5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libnppi5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libnpps5.5:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libnvtoolsext1:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libnvvm2:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up nvidia-libopencl1-331 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;340.96-0ubuntu0.14.04.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up libthrust-dev &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.7.0-1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up nvidia-cuda-dev &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up nvidia-profiler &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up opencl-headers &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.2-2013.10.23-1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up nvidia-opencl-dev:amd64 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Setting up nvidia-cuda-toolkit &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5.5.22-3ubuntu1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+Processing triggers &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;libc-bin &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.19-0ubuntu6.6&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ...
+
+
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Happy Coding …&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/gpu/2016/06/29/CUDA-Pain-GT-540M/&quot;&gt;CUDA and Pain with GeForce GT 540M&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on June 29, 2016.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[LM35->Arduino->RPi2]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/bin/embedded/2016/03/20/LM35DZ-Arduino-Rpi2/"/>
+  <id>http://localhost:4000/bin/embedded/2016/03/20/LM35DZ-Arduino-Rpi2</id>
+  <published>2016-03-20T22:45:00+05:30</published>
+  <updated>2016-03-20T22:45:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#raspberrypi,%20arduino" term="raspberrypi, arduino" />
+  <content type="html">
+  
+    &lt;p&gt;Just to add more fun in tech stuff i have started taking intrest in physical computing and electronics, this extends software field to embedded and electronics where i feel connected to realworld ;)&lt;/p&gt;
+
+&lt;p&gt;I did a small hobby project, goal of the project is just print a cool graph of temprature trend throughout a day at my home.&lt;/p&gt;
+
+&lt;h2 id=&quot;required-stuff-&quot;&gt;Required stuff :&lt;/h2&gt;
+
+&lt;p&gt;We are going to need few stuff like LM35DZ, Arduino, RaspberryPi, USB cable, jumper wires and bit of intresting mind.&lt;/p&gt;
+
+&lt;h3 id=&quot;lm35dz-temprature-sensor-&quot;&gt;LM35DZ (temprature sensor) :&lt;/h3&gt;
+&lt;p&gt;There are  veriety of temprature scensors avilabel in market but this one is really good at what it made for and its very cheap compared to other sensors, both reasons are equilly important to convinced myself to buy this little guy after a day of reserch.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://localhost:4000/images/lm35.jpg&quot; title=&quot;LM35DZ&quot;&gt;&lt;img src=&quot;http://localhost:4000/images/lm35.jpg&quot; style=&quot;height: 8%;width: 8%;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;arduino-uno-r3&quot;&gt;Arduino (UNO R3)&lt;/h3&gt;
+&lt;p&gt;This guy is really awesome when we talk about interacting with physical things like light, motion, temprature, humidity, directions, speed, inshort any type of sensors, its a best microcontroller avilabel for prototyping projects.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://localhost:4000/images/arduinouno.jpg&quot; title=&quot;Arduino UNO R3&quot;&gt;&lt;img src=&quot;http://localhost:4000/images/arduinouno.jpg&quot; style=&quot;height: 8%;width: 8%;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;raspberrypi-b2&quot;&gt;RaspberryPI (B2)&lt;/h3&gt;
+&lt;p&gt;This is the altimate brain of the project, this is a microprocessor which will be driving all things.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://localhost:4000/images/rpi2.jpg&quot; title=&quot;Raspberry Pi 2&quot;&gt;&lt;img src=&quot;http://localhost:4000/images/rpi2.jpg&quot; style=&quot;height: 8%;width: 8%;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;kick-off&quot;&gt;Kick Off&lt;/h2&gt;
+
+&lt;p&gt;Circuit is preety simple connect LM35 to arduino, load arduino program which poll LM35 each second and send output to serial port, connect raspberry pi to arduino and read serial output write to file, we wil use this dump for generating cool graphs.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://localhost:4000/images/lm35unorpi.jpg&quot; title=&quot;LM35-&amp;gt;Arduino-&amp;gt;RPi2&quot;&gt;&lt;img src=&quot;http://localhost:4000/images/lm35unorpi.jpg&quot; style=&quot;height: 30%;width: 30%;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;arduino-code&quot;&gt;Arduino Code&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span class=&quot;kt&quot;&gt;float&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tempC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reading&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tempPin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;analogReference&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTERNAL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Serial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9600&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;reading&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;analogRead&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tempPin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;tempC&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reading&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;31&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Serial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tempC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;delay&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;rpi-code&quot;&gt;RPi Code&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/python&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;serial&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;datetime&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;ser&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;serial&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Serial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'/dev/ttyACM0'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;9600&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+	&lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'temp.out'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'a'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;temprature&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;readline&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;ts&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;datetime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;datetime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;today&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strftime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Y-&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;m-&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;H:&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;M:&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;S'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;	
+	&lt;span class=&quot;n&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ts&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;|&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;temprature&lt;/span&gt;
+	&lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;#print line&lt;/span&gt;
+	&lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;output&quot;&gt;Output&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://localhost:4000/images/tmptrend.gif&quot; title=&quot;trend&quot;&gt;&lt;img src=&quot;http://localhost:4000/images/tmptrend.gif&quot; style=&quot;height: 60%;width: 60%;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/bin/embedded/2016/03/20/LM35DZ-Arduino-Rpi2/&quot;&gt;LM35->Arduino->RPi2&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on March 20, 2016.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[LM35->Arduino->RPi2]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/embedded/2016/03/20/LM35DZ-Arduino-Rpi2/"/>
+  <id>http://localhost:4000/embedded/2016/03/20/LM35DZ-Arduino-Rpi2</id>
+  <published>2016-03-20T22:45:00+05:30</published>
+  <updated>2016-03-20T22:45:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#raspberrypi,%20arduino" term="raspberrypi, arduino" />
+  <content type="html">
+  
+    &lt;p&gt;Just to add more fun in tech stuff i have started taking intrest in physical computing and electronics, this extends software field to embedded and electronics where i feel connected to realworld ;)&lt;/p&gt;
+
+&lt;p&gt;I did a small hobby project, goal of the project is just print a cool graph of temprature trend throughout a day at my home.&lt;/p&gt;
+
+&lt;h2 id=&quot;required-stuff-&quot;&gt;Required stuff :&lt;/h2&gt;
+
+&lt;p&gt;We are going to need few stuff like LM35DZ, Arduino, RaspberryPi, USB cable, jumper wires and bit of intresting mind.&lt;/p&gt;
+
+&lt;h3 id=&quot;lm35dz-temprature-sensor-&quot;&gt;LM35DZ (temprature sensor) :&lt;/h3&gt;
+&lt;p&gt;There are  veriety of temprature scensors avilabel in market but this one is really good at what it made for and its very cheap compared to other sensors, both reasons are equilly important to convinced myself to buy this little guy after a day of reserch.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://localhost:4000/images/lm35.jpg&quot; title=&quot;LM35DZ&quot;&gt;&lt;img src=&quot;http://localhost:4000/images/lm35.jpg&quot; style=&quot;height: 8%;width: 8%;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;arduino-uno-r3&quot;&gt;Arduino (UNO R3)&lt;/h3&gt;
+&lt;p&gt;This guy is really awesome when we talk about interacting with physical things like light, motion, temprature, humidity, directions, speed, inshort any type of sensors, its a best microcontroller avilabel for prototyping projects.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://localhost:4000/images/arduinouno.jpg&quot; title=&quot;Arduino UNO R3&quot;&gt;&lt;img src=&quot;http://localhost:4000/images/arduinouno.jpg&quot; style=&quot;height: 8%;width: 8%;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;raspberrypi-b2&quot;&gt;RaspberryPI (B2)&lt;/h3&gt;
+&lt;p&gt;This is the altimate brain of the project, this is a microprocessor which will be driving all things.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://localhost:4000/images/rpi2.jpg&quot; title=&quot;Raspberry Pi 2&quot;&gt;&lt;img src=&quot;http://localhost:4000/images/rpi2.jpg&quot; style=&quot;height: 8%;width: 8%;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;kick-off&quot;&gt;Kick Off&lt;/h2&gt;
+
+&lt;p&gt;Circuit is preety simple connect LM35 to arduino, load arduino program which poll LM35 each second and send output to serial port, connect raspberry pi to arduino and read serial output write to file, we wil use this dump for generating cool graphs.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://localhost:4000/images/lm35unorpi.jpg&quot; title=&quot;LM35-&amp;gt;Arduino-&amp;gt;RPi2&quot;&gt;&lt;img src=&quot;http://localhost:4000/images/lm35unorpi.jpg&quot; style=&quot;height: 30%;width: 30%;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;arduino-code&quot;&gt;Arduino Code&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span class=&quot;kt&quot;&gt;float&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tempC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reading&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tempPin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;analogReference&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTERNAL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Serial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9600&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;reading&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;analogRead&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tempPin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;tempC&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reading&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;31&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Serial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tempC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;delay&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;rpi-code&quot;&gt;RPi Code&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/python&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;serial&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;datetime&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;ser&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;serial&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Serial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'/dev/ttyACM0'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;9600&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+	&lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'temp.out'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'a'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;temprature&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;readline&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;ts&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;datetime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;datetime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;today&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strftime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Y-&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;m-&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;H:&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;M:&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;S'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;	
+	&lt;span class=&quot;n&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ts&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;|&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;temprature&lt;/span&gt;
+	&lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;#print line&lt;/span&gt;
+	&lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;output&quot;&gt;Output&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://localhost:4000/images/tmptrend.gif&quot; title=&quot;trend&quot;&gt;&lt;img src=&quot;http://localhost:4000/images/tmptrend.gif&quot; style=&quot;height: 60%;width: 60%;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/embedded/2016/03/20/LM35DZ-Arduino-Rpi2/&quot;&gt;LM35->Arduino->RPi2&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on March 20, 2016.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[RC Plane - Preplan]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/bin/embedded/2015/09/01/rc-plane-pre-planning/"/>
+  <id>http://localhost:4000/bin/embedded/2015/09/01/rc-plane-pre-planning</id>
+  <published>2015-09-01T09:00:00+05:30</published>
+  <updated>2015-09-01T09:00:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#Embedded" term="Embedded" />
+  <content type="html">
+  
+    &lt;p&gt;Flying is a great hobby, and i been always a technology hobbyist :)&lt;/p&gt;
+
+&lt;p&gt;Today i’m doing kickoff of rc plane builing as my hobby project, after tones of youtube and reading identified few components to buy. below list will explain what to buy and why.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Radio Transmiter-Reciver - Avionic RCB6i - 6 Channel (₹5000)&lt;/li&gt;
+  &lt;li&gt;Brushless motor (1400kv) (₹650)&lt;/li&gt;
+  &lt;li&gt;ESC (40A) (₹450)&lt;/li&gt;
+  &lt;li&gt;LiPo battery - 2200mAh 3S, 11V (₹3500)&lt;/li&gt;
+  &lt;li&gt;Balance charger (₹700)&lt;/li&gt;
+  &lt;li&gt;2 Servo motorts - 9g (₹200 *2)&lt;/li&gt;
+  &lt;li&gt;Foam or cardboar, big one.&lt;/li&gt;
+  &lt;li&gt;Cutter (₹150)&lt;/li&gt;
+  &lt;li&gt;Hinges and controll wire (₹50)&lt;/li&gt;
+  &lt;li&gt;Soldering Iron (₹250)&lt;/li&gt;
+  &lt;li&gt;Propeller 10*4.5 (₹160)&lt;/li&gt;
+  &lt;li&gt;Hot Glue Gun (₹500)&lt;/li&gt;
+  &lt;li&gt;2 Inch Cello tape (₹50)&lt;/li&gt;
+  &lt;li&gt;flight controller, (I ‘ll try if i can use RPi2 for this, extra gyro will need)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img align=&quot;center&quot; src=&quot;http://www.generalhobby.com/images/products/spirit-freewing-1.png&quot; /&gt;&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/bin/embedded/2015/09/01/rc-plane-pre-planning/&quot;&gt;RC Plane - Preplan&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on September 01, 2015.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[RC Plane - Preplan]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/embedded/2015/09/01/rc-plane-pre-planning/"/>
+  <id>http://localhost:4000/embedded/2015/09/01/rc-plane-pre-planning</id>
+  <published>2015-09-01T09:00:00+05:30</published>
+  <updated>2015-09-01T09:00:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#Embedded" term="Embedded" />
+  <content type="html">
+  
+    &lt;p&gt;Flying is a great hobby, and i been always a technology hobbyist :)&lt;/p&gt;
+
+&lt;p&gt;Today i’m doing kickoff of rc plane builing as my hobby project, after tones of youtube and reading identified few components to buy. below list will explain what to buy and why.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Radio Transmiter-Reciver - Avionic RCB6i - 6 Channel (₹5000)&lt;/li&gt;
+  &lt;li&gt;Brushless motor (1400kv) (₹650)&lt;/li&gt;
+  &lt;li&gt;ESC (40A) (₹450)&lt;/li&gt;
+  &lt;li&gt;LiPo battery - 2200mAh 3S, 11V (₹3500)&lt;/li&gt;
+  &lt;li&gt;Balance charger (₹700)&lt;/li&gt;
+  &lt;li&gt;2 Servo motorts - 9g (₹200 *2)&lt;/li&gt;
+  &lt;li&gt;Foam or cardboar, big one.&lt;/li&gt;
+  &lt;li&gt;Cutter (₹150)&lt;/li&gt;
+  &lt;li&gt;Hinges and controll wire (₹50)&lt;/li&gt;
+  &lt;li&gt;Soldering Iron (₹250)&lt;/li&gt;
+  &lt;li&gt;Propeller 10*4.5 (₹160)&lt;/li&gt;
+  &lt;li&gt;Hot Glue Gun (₹500)&lt;/li&gt;
+  &lt;li&gt;2 Inch Cello tape (₹50)&lt;/li&gt;
+  &lt;li&gt;flight controller, (I ‘ll try if i can use RPi2 for this, extra gyro will need)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img align=&quot;center&quot; src=&quot;http://www.generalhobby.com/images/products/spirit-freewing-1.png&quot; /&gt;&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/embedded/2015/09/01/rc-plane-pre-planning/&quot;&gt;RC Plane - Preplan&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on September 01, 2015.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Sentiment analysis with R]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/bin/analytics/2015/05/10/sentiment-analysis-with-R/"/>
+  <id>http://localhost:4000/bin/analytics/2015/05/10/sentiment-analysis-with-R</id>
+  <published>2015-05-10T20:00:00+05:30</published>
+  <updated>2015-05-10T20:00:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#R,%20analytics,%20sentiment,%20analysis" term="R, analytics, sentiment, analysis" />
+  <content type="html">
+  
+    &lt;p&gt;With lot of free time i did a small project based on WhatsApp group chat sentiment analysis with ‘R’. R is a great language for statistical calculations and analytics, this small code sample can show you a showcase usefullness of that.&lt;/p&gt;
+
+&lt;table border=&quot;0&quot; align=&quot;center&quot;&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;img src=&quot;http://codeinventory.com/images/WA1.png&quot; height=&quot;400&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
+&lt;td&gt;&lt;img src=&quot;http://codeinventory.com/images/WA2.png&quot; height=&quot;400&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;img src=&quot;http://codeinventory.com/images/SA1.png&quot; height=&quot;400&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
+&lt;td&gt;&lt;img src=&quot;http://codeinventory.com/images/SA2.png&quot; height=&quot;400&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Full project can be found here  &lt;a href=&quot;https://github.com/ameyjadiye/whatsapp-analyst&quot;&gt;https://github.com/ameyjadiye/whatsapp-analyst&lt;/a&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;c1&quot;&gt;#!/usr/bin/r
+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;# Load the necessary packages
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wordcloud&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;RColorBrewer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plyr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggplot2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentiment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read.csv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;__data_for_R&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;#cat(whatsapp_chat_txt)
+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;@\\w+&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;[[:punct:]]&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;[[:digit:]]&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http\\w+&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;[ \t]{2,}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;^\\s+|\\s+$&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;catch.error&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;NA&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;catch_error&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tryCatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tolower&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;inherits&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;catch_error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;error&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tolower&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sapply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;catch.error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;is.na&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_class_emo&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;classify_emotion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;algorithm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;bayes&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prior&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_class_emo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;is.na&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;unknown&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_class_pol&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;classify_polarity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;algorithm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;bayes&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;polarity&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_class_pol&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentiment_dataframe&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data.frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;polarity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;polarity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stringsAsFactors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentiment_dataframe&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;within&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentiment_dataframe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;factor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;decreasing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggplot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentiment_dataframe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;aes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;geom_bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;aes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;..count..&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fill&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scale_fill_brewer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;palette&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Dark2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggtitle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Sentiment Analysis with emotions categotisation'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;theme&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;legend.position&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'right'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ylab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Number of messages'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xlab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Emotion Categories'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggsave&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;./output/SA1.png&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggplot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentiment_dataframe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;aes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;polarity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;geom_bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;aes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;..count..&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fill&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;polarity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scale_fill_brewer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;palette&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Dark2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggtitle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Sentiment Analysis with polarity'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;theme&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;legend.position&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'right'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ylab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Number of messages'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xlab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Polarity Categories'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;#SA2
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggsave&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;./output/SA2.png&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_emos&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;factor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentiment_dataframe&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_whatsapp_chat_emos&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_emos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat.emo.docs&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;rep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_whatsapp_chat_emos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_whatsapp_chat_emos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_emos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat.emo.docs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;paste&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;collapse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot; &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Happy coding .. :)&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/bin/analytics/2015/05/10/sentiment-analysis-with-R/&quot;&gt;Sentiment analysis with R&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on May 10, 2015.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Sentiment analysis with R]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/analytics/2015/05/10/sentiment-analysis-with-R/"/>
+  <id>http://localhost:4000/analytics/2015/05/10/sentiment-analysis-with-R</id>
+  <published>2015-05-10T20:00:00+05:30</published>
+  <updated>2015-05-10T20:00:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#R,%20analytics,%20sentiment,%20analysis" term="R, analytics, sentiment, analysis" />
+  <content type="html">
+  
+    &lt;p&gt;With lot of free time i did a small project based on WhatsApp group chat sentiment analysis with ‘R’. R is a great language for statistical calculations and analytics, this small code sample can show you a showcase usefullness of that.&lt;/p&gt;
+
+&lt;table border=&quot;0&quot; align=&quot;center&quot;&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;img src=&quot;http://codeinventory.com/images/WA1.png&quot; height=&quot;400&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
+&lt;td&gt;&lt;img src=&quot;http://codeinventory.com/images/WA2.png&quot; height=&quot;400&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;img src=&quot;http://codeinventory.com/images/SA1.png&quot; height=&quot;400&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
+&lt;td&gt;&lt;img src=&quot;http://codeinventory.com/images/SA2.png&quot; height=&quot;400&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Full project can be found here  &lt;a href=&quot;https://github.com/ameyjadiye/whatsapp-analyst&quot;&gt;https://github.com/ameyjadiye/whatsapp-analyst&lt;/a&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;c1&quot;&gt;#!/usr/bin/r
+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;# Load the necessary packages
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wordcloud&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;RColorBrewer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plyr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggplot2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentiment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read.csv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;__data_for_R&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;#cat(whatsapp_chat_txt)
+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;@\\w+&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;[[:punct:]]&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;[[:digit:]]&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http\\w+&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;[ \t]{2,}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;^\\s+|\\s+$&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;catch.error&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;NA&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;catch_error&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tryCatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tolower&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;inherits&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;catch_error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;error&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tolower&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sapply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;catch.error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;is.na&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_class_emo&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;classify_emotion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;algorithm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;bayes&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prior&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_class_emo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;is.na&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;unknown&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_class_pol&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;classify_polarity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;algorithm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;bayes&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;polarity&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_class_pol&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentiment_dataframe&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data.frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;polarity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;polarity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stringsAsFactors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentiment_dataframe&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;within&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentiment_dataframe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;factor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;decreasing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggplot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentiment_dataframe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;aes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;geom_bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;aes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;..count..&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fill&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scale_fill_brewer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;palette&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Dark2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggtitle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Sentiment Analysis with emotions categotisation'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;theme&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;legend.position&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'right'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ylab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Number of messages'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xlab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Emotion Categories'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggsave&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;./output/SA1.png&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggplot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentiment_dataframe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;aes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;polarity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;geom_bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;aes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;..count..&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fill&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;polarity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scale_fill_brewer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;palette&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Dark2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggtitle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Sentiment Analysis with polarity'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;theme&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;legend.position&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'right'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ylab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Number of messages'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xlab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Polarity Categories'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;#SA2
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggsave&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;./output/SA2.png&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_emos&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;factor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sentiment_dataframe&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_whatsapp_chat_emos&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_emos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat.emo.docs&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;rep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_whatsapp_chat_emos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_whatsapp_chat_emos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_txt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;emotion&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat_emos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;whatsapp_chat.emo.docs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;paste&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;collapse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot; &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Happy coding .. :)&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/analytics/2015/05/10/sentiment-analysis-with-R/&quot;&gt;Sentiment analysis with R&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on May 10, 2015.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Alias makes life easy]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/bin/linux/2015/04/01/alias-makes-life-easy/"/>
+  <id>http://localhost:4000/bin/linux/2015/04/01/alias-makes-life-easy</id>
+  <published>2015-04-01T18:45:00+05:30</published>
+  <updated>2015-04-01T18:45:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#alias,%20commands" term="alias, commands" />
+  <content type="html">
+  
+    &lt;p&gt;From couple of years i’m using it but never thought its also shareable with community, alias is helping me shortning big and repeating commands, you just have to declare the short abbreviation of your short command and use it again n again, so here are usage :&lt;/p&gt;
+
+&lt;p&gt;I use commandline git a lot, may be maven build and deploy too, so i have defined few commands for easy use.&lt;/p&gt;
+
+&lt;p&gt;Open the ~/.bashrc and copy-paste below lines, close .bashrc and repoen terminal to use it.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;gs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'git status'&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;gps&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'git push origin master'&lt;/span&gt; 
+&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;gpl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'git pull origin master'&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;gc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'git commit -am'&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# i use it like gc &quot;this is commit message&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'mvn clean compile install &amp;amp;&amp;amp; cd target \ 
+	     &amp;amp;&amp;amp; scp -i xxx.pem 1.3.4.zip ubuntu@192.168.0.9:~/build/.'&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/bin/linux/2015/04/01/alias-makes-life-easy/&quot;&gt;Alias makes life easy&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on April 01, 2015.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Alias makes life easy]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/linux/2015/04/01/alias-makes-life-easy/"/>
+  <id>http://localhost:4000/linux/2015/04/01/alias-makes-life-easy</id>
+  <published>2015-04-01T18:45:00+05:30</published>
+  <updated>2015-04-01T18:45:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#alias,%20commands" term="alias, commands" />
+  <content type="html">
+  
+    &lt;p&gt;From couple of years i’m using it but never thought its also shareable with community, alias is helping me shortning big and repeating commands, you just have to declare the short abbreviation of your short command and use it again n again, so here are usage :&lt;/p&gt;
+
+&lt;p&gt;I use commandline git a lot, may be maven build and deploy too, so i have defined few commands for easy use.&lt;/p&gt;
+
+&lt;p&gt;Open the ~/.bashrc and copy-paste below lines, close .bashrc and repoen terminal to use it.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;gs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'git status'&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;gps&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'git push origin master'&lt;/span&gt; 
+&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;gpl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'git pull origin master'&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;gc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'git commit -am'&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# i use it like gc &quot;this is commit message&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'mvn clean compile install &amp;amp;&amp;amp; cd target \ 
+	     &amp;amp;&amp;amp; scp -i xxx.pem 1.3.4.zip ubuntu@192.168.0.9:~/build/.'&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/linux/2015/04/01/alias-makes-life-easy/&quot;&gt;Alias makes life easy&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on April 01, 2015.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Working with GIT patch]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/bin/linux/2014/12/31/working-with-git-patch/"/>
+  <id>http://localhost:4000/bin/linux/2014/12/31/working-with-git-patch</id>
+  <published>2014-12-31T11:36:00+05:30</published>
+  <updated>2014-12-31T11:36:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#git,%20patch" term="git, patch" />
+  <content type="html">
+  
+    &lt;p&gt;My last post in 2014 ;), &lt;em&gt;Working with git patches&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Git is a famous versioning tool now days, many times you git access to work directly with your remote repo but few times you dont, Patch file is to save you there.&lt;/p&gt;
+
+&lt;p&gt;you can work locally and commit all the changes to local repository, create patch file with your authority and send to review, reviewer will chech the code and signoff your commit to remote repo as you dont have assess.&lt;/p&gt;
+
+&lt;p&gt;So here are steps to work with it.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;create patch file with last few commits, say i want to send my last 3 commits to review and apply do :&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt; 
+git format-patch -3 HEAD --stdout &amp;gt; my-last-3-commits.patch&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Applying patch (this is for reviewer)
+First step is check the patch.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git apply --stat my-last-3-commits.patch&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Second  step is check the patch, git allows you to try it and see how troublesome is the code.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git apply --check my-last-3-commits.patch&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;If it didnt gave any error, you are good to go.&lt;/p&gt;
+
+&lt;p&gt;Now final part is to use git am rather than git apply as it allows you to &lt;em&gt;sign off&lt;/em&gt; the commit for future reffrence.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git am --signoff &amp;lt; my-last-3-commits.patch&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Happy coding and a happy new year 2015 :)&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/bin/linux/2014/12/31/working-with-git-patch/&quot;&gt;Working with GIT patch&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on December 31, 2014.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Working with GIT patch]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/linux/2014/12/31/working-with-git-patch/"/>
+  <id>http://localhost:4000/linux/2014/12/31/working-with-git-patch</id>
+  <published>2014-12-31T11:36:00+05:30</published>
+  <updated>2014-12-31T11:36:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#git,%20patch" term="git, patch" />
+  <content type="html">
+  
+    &lt;p&gt;My last post in 2014 ;), &lt;em&gt;Working with git patches&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Git is a famous versioning tool now days, many times you git access to work directly with your remote repo but few times you dont, Patch file is to save you there.&lt;/p&gt;
+
+&lt;p&gt;you can work locally and commit all the changes to local repository, create patch file with your authority and send to review, reviewer will chech the code and signoff your commit to remote repo as you dont have assess.&lt;/p&gt;
+
+&lt;p&gt;So here are steps to work with it.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;create patch file with last few commits, say i want to send my last 3 commits to review and apply do :&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt; 
+git format-patch -3 HEAD --stdout &amp;gt; my-last-3-commits.patch&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Applying patch (this is for reviewer)
+First step is check the patch.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git apply --stat my-last-3-commits.patch&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Second  step is check the patch, git allows you to try it and see how troublesome is the code.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git apply --check my-last-3-commits.patch&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;If it didnt gave any error, you are good to go.&lt;/p&gt;
+
+&lt;p&gt;Now final part is to use git am rather than git apply as it allows you to &lt;em&gt;sign off&lt;/em&gt; the commit for future reffrence.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git am --signoff &amp;lt; my-last-3-commits.patch&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Happy coding and a happy new year 2015 :)&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/linux/2014/12/31/working-with-git-patch/&quot;&gt;Working with GIT patch&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on December 31, 2014.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Install lollipop 5.0 to Nexus 4]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/bin/android/2014/11/23/install-lollipop-on-nexus-4/"/>
+  <id>http://localhost:4000/bin/android/2014/11/23/install-lollipop-on-nexus-4</id>
+  <published>2014-11-23T21:00:00+05:30</published>
+  <updated>2014-11-23T21:00:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#android" term="android" /><category scheme="http://localhost:4000/tags/#lollipop" term="lollipop" />
+  <content type="html">
+  
+    &lt;p&gt;Google takes lot of time to throw OTA update to your phone, may be they do it lot by lot for not loading their servers, if you are lucky you got it early else wait for may days :p.&lt;/p&gt;
+
+&lt;p&gt;I was lucky i got it early but my nexus4 also had Ubuntu so at the time of reboot i lost that upgrade routine :(, and i was so eager to see brand new Android 5.0 Lollipop i Flashed my Nexus 4(worth it!).&lt;/p&gt;
+
+&lt;p&gt;Here are few steps i did for flashing my Nexus 4, that will upgrade your kitkat 4.4.4 (KTU84P) to &lt;strong&gt;Lollipop 5.0 (LRX21T)&lt;/strong&gt;, easy to do for you guys :)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;First thing is to install ADB and Fastboot to your machine, i use ubuntu so &lt;strong&gt;apt-get&lt;/strong&gt; is easy way to get it.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;sudo add-apt-repository ppa:phablet-team/tools
+sudo apt-get update
+sudo apt-get install android-tools-adb android-tools-fastboot&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Now connect  Nexus 4 to your machine via USB, make sure you enable your USB debugging ON, so start USB Debugging go to Settings » Developer Options » USB debugging. (If you dont have Developer Options go to Settings » About Phone » Build number and tap on Build number until you become developer).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/images/nxs2.png&quot; style=&quot;height: 25%;width: 25%;&quot; /&gt;
+&lt;img src=&quot;http://localhost:4000/images/nxs1.png&quot; style=&quot;height: 25%;width: 25%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now try below commands to make sure you are connected to machine.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;gp&quot;&gt;amey@amey-xps:~$ &lt;/span&gt;adb devices -l
+List of devices attached 
+0202dc7rh2934b2a    device usb:3-2 product:occam model:Nexus_4 device:mako&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Now unlock bootloader 
+Turn off your Nexus 4.
+Press and hold Volume Down and Power to enter the Fastboot menu.
+Connect the Nexus 4 to your computer via USB cable.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;fastboot oem unlock&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Press the Volume Up button on the Nexus 4 to accept the command and press the Power button to confirm. The bootloader will now be unlocked, you will loss all data with this.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Download the factory image from &lt;a href=&quot;https://developers.google.com/android/nexus/images&quot;&gt;Google&lt;/a&gt;, OR direct download clicking &lt;a href=&quot;https://dl.google.com/dl/android/aosp/occam-lrx21t-factory-51cee750.tgz&quot;&gt;HERE&lt;/a&gt;.
+unzip it&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;tar -xf occam-lrx21t-factory-51cee750.tgz
+&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;occam-lrx21t&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Now the final step to Flash and install new lollipop image to your Nexus 4&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;adb reboot-bootloader
+sleep 15
+sudo ./flash-all.sh&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;This command will  generate following logs on your terminal, put your password if prompted, your phone may be rebooted few times.&lt;/p&gt;
+
+&lt;p&gt;&lt;img style=&quot;height: 25%;width: 25%;&quot; src=&quot;http://localhost:4000/images/nxs3.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;gp&quot;&gt;amey@amey-xps:~/Downloads/occam-lrx21t$ &lt;/span&gt;sudo ./flash-all.sh
+Password:
+sending &lt;span class=&quot;s1&quot;&gt;'bootloader'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2264 KB&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.091s]
+writing &lt;span class=&quot;s1&quot;&gt;'bootloader'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.667s]
+finished. total &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;: 0.758s
+rebooting into bootloader...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.001s]
+finished. total &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;: 0.001s
+&amp;lt; waiting &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;device &amp;gt;
+sending &lt;span class=&quot;s1&quot;&gt;'radio'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;45537 KB&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 1.607s]
+writing &lt;span class=&quot;s1&quot;&gt;'radio'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 3.458s]
+finished. total &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;: 5.065s
+rebooting into bootloader...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.001s]
+finished. total &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;: 0.001s
+&amp;lt; waiting &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;device &amp;gt;
+archive does not contain &lt;span class=&quot;s1&quot;&gt;'boot.sig'&lt;/span&gt;
+archive does not contain &lt;span class=&quot;s1&quot;&gt;'recovery.sig'&lt;/span&gt;
+
+archive does not contain &lt;span class=&quot;s1&quot;&gt;'system.sig'&lt;/span&gt;
+--------------------------------------------
+Bootloader Version...: MAKOZ30f
+Baseband Version.....: M9615A-CEFWMAZM-2.0.1701.04
+Serial Number........: 0202dc7d0b934b2a
+--------------------------------------------
+checking product...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.002s]
+checking version-bootloader...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.002s]
+checking version-baseband...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.002s]
+sending &lt;span class=&quot;s1&quot;&gt;'boot'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;6348 KB&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.725s]
+writing &lt;span class=&quot;s1&quot;&gt;'boot'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.357s]
+sending &lt;span class=&quot;s1&quot;&gt;'recovery'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;6892 KB&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.853s]
+writing &lt;span class=&quot;s1&quot;&gt;'recovery'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.453s]
+erasing &lt;span class=&quot;s1&quot;&gt;'system'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 2.274s]
+sending &lt;span class=&quot;s1&quot;&gt;'system'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;809641 KB&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 25.485s]
+writing &lt;span class=&quot;s1&quot;&gt;'system'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 63.027s]
+erasing &lt;span class=&quot;s1&quot;&gt;'userdata'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 40.306s]
+formatting &lt;span class=&quot;s1&quot;&gt;'userdata'&lt;/span&gt; partition...
+Creating filesystem with parameters:
+Size: 14129561600
+Block size: 4096
+Blocks per group: 32768
+Inodes per group: 8144
+Inode size: 256
+Journal blocks: 32768
+Label: 
+Blocks: 3449600
+Block groups: 106
+Reserved block group size: 847
+Created filesystem with 11/863264 inodes and 95427/3449600 blocks
+sending &lt;span class=&quot;s1&quot;&gt;'userdata'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;137438 KB&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;...
+writing &lt;span class=&quot;s1&quot;&gt;'userdata'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 15.651s]
+erasing &lt;span class=&quot;s1&quot;&gt;'cache'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.662s]
+formatting &lt;span class=&quot;s1&quot;&gt;'cache'&lt;/span&gt; partition...
+Creating filesystem with parameters:
+Size: 587202560
+Block size: 4096
+Blocks per group: 32768
+Inodes per group: 7168
+Inode size: 256
+Journal blocks: 2240
+Label: 
+Blocks: 143360
+Block groups: 5
+Reserved block group size: 39
+Created filesystem with 11/35840 inodes and 4616/143360 blocks
+sending &lt;span class=&quot;s1&quot;&gt;'cache'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;10984 KB&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;...
+writing &lt;span class=&quot;s1&quot;&gt;'cache'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 1.090s]
+rebooting...
+finished. total &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;: 150.897s&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;If your phone missbehave after finishing, just hard reboot it pressing power button for few seconds.&lt;/p&gt;
+
+&lt;p&gt;Happy coding ….. :)&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/bin/android/2014/11/23/install-lollipop-on-nexus-4/&quot;&gt;Install lollipop 5.0 to Nexus 4&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on November 23, 2014.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Install lollipop 5.0 to Nexus 4]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/android/2014/11/23/install-lollipop-on-nexus-4/"/>
+  <id>http://localhost:4000/android/2014/11/23/install-lollipop-on-nexus-4</id>
+  <published>2014-11-23T21:00:00+05:30</published>
+  <updated>2014-11-23T21:00:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#android" term="android" /><category scheme="http://localhost:4000/tags/#lollipop" term="lollipop" />
+  <content type="html">
+  
+    &lt;p&gt;Google takes lot of time to throw OTA update to your phone, may be they do it lot by lot for not loading their servers, if you are lucky you got it early else wait for may days :p.&lt;/p&gt;
+
+&lt;p&gt;I was lucky i got it early but my nexus4 also had Ubuntu so at the time of reboot i lost that upgrade routine :(, and i was so eager to see brand new Android 5.0 Lollipop i Flashed my Nexus 4(worth it!).&lt;/p&gt;
+
+&lt;p&gt;Here are few steps i did for flashing my Nexus 4, that will upgrade your kitkat 4.4.4 (KTU84P) to &lt;strong&gt;Lollipop 5.0 (LRX21T)&lt;/strong&gt;, easy to do for you guys :)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;First thing is to install ADB and Fastboot to your machine, i use ubuntu so &lt;strong&gt;apt-get&lt;/strong&gt; is easy way to get it.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;sudo add-apt-repository ppa:phablet-team/tools
+sudo apt-get update
+sudo apt-get install android-tools-adb android-tools-fastboot&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Now connect  Nexus 4 to your machine via USB, make sure you enable your USB debugging ON, so start USB Debugging go to Settings » Developer Options » USB debugging. (If you dont have Developer Options go to Settings » About Phone » Build number and tap on Build number until you become developer).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/images/nxs2.png&quot; style=&quot;height: 25%;width: 25%;&quot; /&gt;
+&lt;img src=&quot;http://localhost:4000/images/nxs1.png&quot; style=&quot;height: 25%;width: 25%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now try below commands to make sure you are connected to machine.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;gp&quot;&gt;amey@amey-xps:~$ &lt;/span&gt;adb devices -l
+List of devices attached 
+0202dc7rh2934b2a    device usb:3-2 product:occam model:Nexus_4 device:mako&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Now unlock bootloader 
+Turn off your Nexus 4.
+Press and hold Volume Down and Power to enter the Fastboot menu.
+Connect the Nexus 4 to your computer via USB cable.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;fastboot oem unlock&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Press the Volume Up button on the Nexus 4 to accept the command and press the Power button to confirm. The bootloader will now be unlocked, you will loss all data with this.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Download the factory image from &lt;a href=&quot;https://developers.google.com/android/nexus/images&quot;&gt;Google&lt;/a&gt;, OR direct download clicking &lt;a href=&quot;https://dl.google.com/dl/android/aosp/occam-lrx21t-factory-51cee750.tgz&quot;&gt;HERE&lt;/a&gt;.
+unzip it&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;tar -xf occam-lrx21t-factory-51cee750.tgz
+&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;occam-lrx21t&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Now the final step to Flash and install new lollipop image to your Nexus 4&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;adb reboot-bootloader
+sleep 15
+sudo ./flash-all.sh&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;This command will  generate following logs on your terminal, put your password if prompted, your phone may be rebooted few times.&lt;/p&gt;
+
+&lt;p&gt;&lt;img style=&quot;height: 25%;width: 25%;&quot; src=&quot;http://localhost:4000/images/nxs3.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;gp&quot;&gt;amey@amey-xps:~/Downloads/occam-lrx21t$ &lt;/span&gt;sudo ./flash-all.sh
+Password:
+sending &lt;span class=&quot;s1&quot;&gt;'bootloader'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2264 KB&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.091s]
+writing &lt;span class=&quot;s1&quot;&gt;'bootloader'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.667s]
+finished. total &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;: 0.758s
+rebooting into bootloader...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.001s]
+finished. total &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;: 0.001s
+&amp;lt; waiting &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;device &amp;gt;
+sending &lt;span class=&quot;s1&quot;&gt;'radio'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;45537 KB&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 1.607s]
+writing &lt;span class=&quot;s1&quot;&gt;'radio'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 3.458s]
+finished. total &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;: 5.065s
+rebooting into bootloader...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.001s]
+finished. total &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;: 0.001s
+&amp;lt; waiting &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;device &amp;gt;
+archive does not contain &lt;span class=&quot;s1&quot;&gt;'boot.sig'&lt;/span&gt;
+archive does not contain &lt;span class=&quot;s1&quot;&gt;'recovery.sig'&lt;/span&gt;
+
+archive does not contain &lt;span class=&quot;s1&quot;&gt;'system.sig'&lt;/span&gt;
+--------------------------------------------
+Bootloader Version...: MAKOZ30f
+Baseband Version.....: M9615A-CEFWMAZM-2.0.1701.04
+Serial Number........: 0202dc7d0b934b2a
+--------------------------------------------
+checking product...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.002s]
+checking version-bootloader...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.002s]
+checking version-baseband...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.002s]
+sending &lt;span class=&quot;s1&quot;&gt;'boot'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;6348 KB&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.725s]
+writing &lt;span class=&quot;s1&quot;&gt;'boot'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.357s]
+sending &lt;span class=&quot;s1&quot;&gt;'recovery'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;6892 KB&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.853s]
+writing &lt;span class=&quot;s1&quot;&gt;'recovery'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.453s]
+erasing &lt;span class=&quot;s1&quot;&gt;'system'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 2.274s]
+sending &lt;span class=&quot;s1&quot;&gt;'system'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;809641 KB&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 25.485s]
+writing &lt;span class=&quot;s1&quot;&gt;'system'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 63.027s]
+erasing &lt;span class=&quot;s1&quot;&gt;'userdata'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 40.306s]
+formatting &lt;span class=&quot;s1&quot;&gt;'userdata'&lt;/span&gt; partition...
+Creating filesystem with parameters:
+Size: 14129561600
+Block size: 4096
+Blocks per group: 32768
+Inodes per group: 8144
+Inode size: 256
+Journal blocks: 32768
+Label: 
+Blocks: 3449600
+Block groups: 106
+Reserved block group size: 847
+Created filesystem with 11/863264 inodes and 95427/3449600 blocks
+sending &lt;span class=&quot;s1&quot;&gt;'userdata'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;137438 KB&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;...
+writing &lt;span class=&quot;s1&quot;&gt;'userdata'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 15.651s]
+erasing &lt;span class=&quot;s1&quot;&gt;'cache'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 0.662s]
+formatting &lt;span class=&quot;s1&quot;&gt;'cache'&lt;/span&gt; partition...
+Creating filesystem with parameters:
+Size: 587202560
+Block size: 4096
+Blocks per group: 32768
+Inodes per group: 7168
+Inode size: 256
+Journal blocks: 2240
+Label: 
+Blocks: 143360
+Block groups: 5
+Reserved block group size: 39
+Created filesystem with 11/35840 inodes and 4616/143360 blocks
+sending &lt;span class=&quot;s1&quot;&gt;'cache'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;10984 KB&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;...
+writing &lt;span class=&quot;s1&quot;&gt;'cache'&lt;/span&gt;...
+OKAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; 1.090s]
+rebooting...
+finished. total &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;: 150.897s&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;If your phone missbehave after finishing, just hard reboot it pressing power button for few seconds.&lt;/p&gt;
+
+&lt;p&gt;Happy coding ….. :)&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/android/2014/11/23/install-lollipop-on-nexus-4/&quot;&gt;Install lollipop 5.0 to Nexus 4&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on November 23, 2014.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Bang-Bang, Be lazy!!]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/bin/linux/2014/09/14/bang-bang/"/>
+  <id>http://localhost:4000/bin/linux/2014/09/14/bang-bang</id>
+  <published>2014-09-14T09:00:00+05:30</published>
+  <updated>2014-09-14T09:00:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#linux" term="linux" />
+  <content type="html">
+  
+    &lt;p&gt;I found another great thing linux provides for the lazy programmers ;)
+Most of the time we need to repeat the commands we entered in linux terminal and many hardworking engineers typing it again and again ;)&lt;/p&gt;
+
+&lt;p&gt;Famous quote &lt;strong&gt;“Those who cannot remember the past are condemned to repeat it”&lt;/strong&gt; preety much applies here when you use commandline mode to operate your machine or working on remote server via ssh.&lt;/p&gt;
+
+&lt;p&gt;Linux provides many tools which remembers history and on top of that we can make our life easy.&lt;/p&gt;
+
+&lt;p&gt;Usually i work on servers and whenever try to fire few root access commands and it dont allow  me!! -_-,feels insulting. 
+Anyway &lt;strong&gt;sudo !!&lt;/strong&gt;  is here to rescue you :)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/images/bang-bang.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;gp&quot;&gt;amey@amey-xps:~/$ &lt;/span&gt;touch /etc/apache2/apache2.conf 
+touch: cannot touch ‘/etc/apache2/apache2.conf’: Permission denied
+&lt;span class=&quot;gp&quot;&gt;amey@amey-xps:~/work/blog/codeinventory.github.io/_posts$ &lt;/span&gt;sudo !!
+sudo touch /etc/apache2/apache2.conf 
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;sudo] password &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;amey: 
+&lt;span class=&quot;gp&quot;&gt;amey@amey-xps:~/$ &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Not only &lt;em&gt;sudo&lt;/em&gt;, Bang (!) can do may more things &amp;lt;3&lt;/p&gt;
+
+&lt;h2 id=&quot;repeating-commands&quot;&gt;Repeating Commands&lt;/h2&gt;
+&lt;h3 id=&quot;repeat-last-command&quot;&gt;Repeat last command&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!!&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;repeat-last-command-that-started-with-x&quot;&gt;Repeat last command that started with x&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!x&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;repeat-last-command-that-has-the-substring-x&quot;&gt;Repeat last command that has the substring x&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!?x&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;repeat-10th-command-in-the-history-file&quot;&gt;Repeat 10th command in the history file&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!10&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;repeat-10th-from-last-command-in-the-history-file&quot;&gt;Repeat 10th from last command in the history file&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!-10&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;fetching-parameters&quot;&gt;Fetching Parameters&lt;/h2&gt;
+&lt;h3 id=&quot;fetch-parameters-from-last-command&quot;&gt;Fetch parameters from last command&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!!&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;fetch-first-parameter-from-last-command&quot;&gt;Fetch first parameter from last command&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!!^&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;fetch-last-parameter-from-last-command&quot;&gt;Fetch last parameter from last command&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!!&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;fetch-third-parameter-from-last-command&quot;&gt;Fetch third parameter from last command&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!!3&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;modifiers&quot;&gt;Modifiers&lt;/h2&gt;
+&lt;h3 id=&quot;repeat-last-command-substituting-foo-for-bar&quot;&gt;Repeat last command substituting foo for bar&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!!:s/foo/bar/&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;print-last-command-without-running-it&quot;&gt;Print last command without running it&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!!:p&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Happy coding ….. :)&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/bin/linux/2014/09/14/bang-bang/&quot;&gt;Bang-Bang, Be lazy!!&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on September 14, 2014.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Bang-Bang, Be lazy!!]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/linux/2014/09/14/bang-bang/"/>
+  <id>http://localhost:4000/linux/2014/09/14/bang-bang</id>
+  <published>2014-09-14T09:00:00+05:30</published>
+  <updated>2014-09-14T09:00:00+05:30</updated>
+  <author>
+    <name>will Merrill</name>
+    <uri>http://localhost:4000</uri>
+    <email>william.merrill@yale.edu</email>
+  </author>
+  <category scheme="http://localhost:4000/tags/#linux" term="linux" />
+  <content type="html">
+  
+    &lt;p&gt;I found another great thing linux provides for the lazy programmers ;)
+Most of the time we need to repeat the commands we entered in linux terminal and many hardworking engineers typing it again and again ;)&lt;/p&gt;
+
+&lt;p&gt;Famous quote &lt;strong&gt;“Those who cannot remember the past are condemned to repeat it”&lt;/strong&gt; preety much applies here when you use commandline mode to operate your machine or working on remote server via ssh.&lt;/p&gt;
+
+&lt;p&gt;Linux provides many tools which remembers history and on top of that we can make our life easy.&lt;/p&gt;
+
+&lt;p&gt;Usually i work on servers and whenever try to fire few root access commands and it dont allow  me!! -_-,feels insulting. 
+Anyway &lt;strong&gt;sudo !!&lt;/strong&gt;  is here to rescue you :)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/images/bang-bang.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;gp&quot;&gt;amey@amey-xps:~/$ &lt;/span&gt;touch /etc/apache2/apache2.conf 
+touch: cannot touch ‘/etc/apache2/apache2.conf’: Permission denied
+&lt;span class=&quot;gp&quot;&gt;amey@amey-xps:~/work/blog/codeinventory.github.io/_posts$ &lt;/span&gt;sudo !!
+sudo touch /etc/apache2/apache2.conf 
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;sudo] password &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;amey: 
+&lt;span class=&quot;gp&quot;&gt;amey@amey-xps:~/$ &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Not only &lt;em&gt;sudo&lt;/em&gt;, Bang (!) can do may more things &amp;lt;3&lt;/p&gt;
+
+&lt;h2 id=&quot;repeating-commands&quot;&gt;Repeating Commands&lt;/h2&gt;
+&lt;h3 id=&quot;repeat-last-command&quot;&gt;Repeat last command&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!!&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;repeat-last-command-that-started-with-x&quot;&gt;Repeat last command that started with x&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!x&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;repeat-last-command-that-has-the-substring-x&quot;&gt;Repeat last command that has the substring x&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!?x&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;repeat-10th-command-in-the-history-file&quot;&gt;Repeat 10th command in the history file&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!10&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;repeat-10th-from-last-command-in-the-history-file&quot;&gt;Repeat 10th from last command in the history file&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!-10&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;fetching-parameters&quot;&gt;Fetching Parameters&lt;/h2&gt;
+&lt;h3 id=&quot;fetch-parameters-from-last-command&quot;&gt;Fetch parameters from last command&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!!&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;fetch-first-parameter-from-last-command&quot;&gt;Fetch first parameter from last command&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!!^&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;fetch-last-parameter-from-last-command&quot;&gt;Fetch last parameter from last command&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!!&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;fetch-third-parameter-from-last-command&quot;&gt;Fetch third parameter from last command&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!!3&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;modifiers&quot;&gt;Modifiers&lt;/h2&gt;
+&lt;h3 id=&quot;repeat-last-command-substituting-foo-for-bar&quot;&gt;Repeat last command substituting foo for bar&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!!:s/foo/bar/&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;print-last-command-without-running-it&quot;&gt;Print last command without running it&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;!!:p&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Happy coding ….. :)&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/linux/2014/09/14/bang-bang/&quot;&gt;Bang-Bang, Be lazy!!&lt;/a&gt; was originally published by will Merrill at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on September 14, 2014.&lt;/p&gt;</content>
+</entry>
+
+</feed>
