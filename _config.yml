@@ -7,7 +7,7 @@ dropcap:	   true
 # Change url to your domain. Leave localhost server or blank when working locally.
 # or use the hint from http://jekyllrb.com/docs/github-pages/ to keep this the same 
 # whether working locally or remotely. Start Jekyll with: jekyll serve --baseurl ''
-url:        	 http://snorridev.github.io/thoth/
+url:        	 http://snorridev.github.io/thoth #todo use this for images and stuff
 
 # Owner/author information
 owner:
@@ -38,7 +38,7 @@ links:
     external: false
     icon: home
   - title: About
-    url: /thoth/2017/08/13/What-is-The-Book-of-Thoth/
+    url: /announcements/2017/08/13/What-is-The-Book-of-Thoth/
   - title: Categories
     url: /categories
   - title: Join Discord
