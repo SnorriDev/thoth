@@ -122,6 +122,371 @@
 
             
 	
+    <!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WORKING WITH GIT PATCH &vert; THE BOOK OF THOTH</title>
+<meta name="description" content="Speak magic. Unleash the power of language!">
+<meta name="keywords" content="git, patch">
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://localhost:4000/images/logo.png">
+<meta name="twitter:title" content="Working with GIT patch">
+<meta name="twitter:description" content="Speak magic. Unleash the power of language!">
+<meta name="twitter:creator" content="@SnorriDev">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Working with GIT patch">
+<meta property="og:description" content="Speak magic. Unleash the power of language!">
+<meta property="og:url" content="http://localhost:4000/linux/2014/12/31/working-with-git-patch/">
+<meta property="og:site_name" content="The Book of Thoth">
+<meta property="og:image" content="http://localhost:4000/images/">
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/linux/2014/12/31/working-with-git-patch/">
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="The Book of Thoth Feed">
+<link rel="author" href="https://plus.google.com/u/0/+AmeyJadiye?rel=author">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:400,600,300,800,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/font-awesome.min.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/normalize.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/nprogress.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/foundation.min.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/style.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/post.css">
+
+
+
+
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="http://localhost:4000/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://localhost:4000/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://localhost:4000/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://localhost:4000/images/apple-touch-icon-144x144-precomposed.png">
+
+<style type="text/css">@media only screen and (min-width:43.75em){.notepad-post-content div>p:first-child:first-letter{float:left;font-size:4.688rem;line-height:4.375rem;padding-top:.25rem;padding-right:.5rem;padding-left:.188rem;font-family:serif}}</style>
+</head>
+<body class="post-template" itemscope itemtype="http://schema.org/WebPage">  
+
+        <main id="notepad-post-container-simple" class="notepad-post-container-simple" role="main">
+            <header class="notepad-post-header-simple">
+                <div class="notepad-post-menu-header-simple">
+
+                    <a class="notepad-blog-logo" href="http://localhost:4000">
+                        <img src="http://localhost:4000/images/logo.png" alt="Blog Logo" />
+                    </a>
+
+                <div class="notepad-blog-menu">      
+    <div class="notepad-mobile-menu show-for-small">
+        <a href="#"><i class="fa fa-bars"></i></a>
+    </div>
+    <ul class="notepad-menu">
+        <li class="notepad-mobile-close-btn show-for-small text-right">
+            <a href="#"><i class="fa fa-times"></i></a>
+        </li>
+
+            <li>
+                    <a href="http://localhost:4000/">Home</a>
+                 </li>
+
+            <li>
+                    <a href="http://localhost:4000/categories">Categories</a>
+                 </li>
+
+            <li>
+                    <a href="http://localhost:4000/about">About</a>
+                 </li>
+            
+           <li><a href="http://localhost:4000/feed.xml" title="Atom/RSS feed"><i class="icon-rss"></i> Feed</a></li>
+    </ul>
+
+</div>
+            </div>
+
+                <div class="notepad-post-title-simple row">
+                    <div class="small-12 columns">
+                        <div class="notepad-post-meta-simple">
+
+                            <h1>Working with GIT patch</h1>
+                            <p>by <strong>SnorriDev</strong> &#8212; on <a href="http://localhost:4000/tags/index.html#git, patch" data-toggle="tooltip" title="Posts tagged with git, patch" rel="tag">git, patch</a> <strong><time datetime="2014-12-31T11:36:00+05:30">31 Dec 2014</time></strong></p>
+                        
+
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- codein1 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-7466474470517357"
+     data-ad-slot="6700962438"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+
+
+
+</div>
+                    </div>
+                </div>
+            </header>
+
+        <article class="notepad-post-content post tag-simple">
+            <div><p>My last post in 2014 ;), <em>Working with git patches</em>.</p>
+
+<p>Git is a famous versioning tool now days, many times you git access to work directly with your remote repo but few times you dont, Patch file is to save you there.</p>
+
+<p>you can work locally and commit all the changes to local repository, create patch file with your authority and send to review, reviewer will chech the code and signoff your commit to remote repo as you dont have assess.</p>
+
+<p>So here are steps to work with it.</p>
+
+<ul>
+  <li>create patch file with last few commits, say i want to send my last 3 commits to review and apply do :</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"> 
+git format-patch -3 HEAD --stdout &gt; my-last-3-commits.patch</code></pre></figure>
+
+<ul>
+  <li>Applying patch (this is for reviewer)
+First step is check the patch.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">git apply --stat my-last-3-commits.patch</code></pre></figure>
+
+<p>Second  step is check the patch, git allows you to try it and see how troublesome is the code.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">git apply --check my-last-3-commits.patch</code></pre></figure>
+
+<p>If it didnt gave any error, you are good to go.</p>
+
+<p>Now final part is to use git am rather than git apply as it allows you to <em>sign off</em> the commit for future reffrence.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">git am --signoff &lt; my-last-3-commits.patch</code></pre></figure>
+
+<p>Happy coding and a happy new year 2015 :)</p>
+
+            </div>
+
+<div style="text-align: center;">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- codein2-footer -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-7466474470517357"
+     data-ad-slot="9952356430"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+
+
+
+        </article>
+        <div class="cf"></div>
+        <div class="row text-center">
+            <section class="notepad-post-share">
+                <a class="twitter-icon" href="https://twitter.com/intent/tweet?text=&quot;Working with GIT patch&quot;%20http://localhost:4000/linux/2014/12/31/working-with-git-patch/%20via%20&#64;SnorriDev"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;" title="Share on Twitter">
+                    <i class="fa fa-twitter"></i>
+                </a>
+                <a class="facebook-icon" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/linux/2014/12/31/working-with-git-patch/"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;" title="Share on Facebook">
+                    <i class="fa fa-facebook"></i>
+                </a>
+                <a class="google-icon" href="https://plus.google.com/share?url=http://localhost:4000/linux/2014/12/31/working-with-git-patch/"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;" title="Share on Google+">
+                    <i class="fa fa-google-plus"></i>
+                </a>
+            </section>
+        </div>
+        <div class="cf"></div>
+        
+            <div class="notepad-author-info">
+                <div class="row">
+                    <section class="notepad-post-author small-12 columns">
+                        
+                            <img src="http://localhost:4000/images/ameyjadiye.jpg" class="notepad-post-author-avatar" alt="SnorriDev's photo">
+                        
+                        
+                            <span class="author-label">Author</span>
+                            <h1>SnorriDev</h1>
+                        
+                        
+                            <p><a href="mailto:snorri.devteam@gmail.com" class="author-website">snorri.devteam@gmail.com</a>
+
+			    <iframe src="//www.facebook.com/plugins/follow?href=https%3A%2F%2Fwww.facebook.com%2Fameyjadiye&amp;layout=standard&amp;show_faces=true&amp;colorscheme=light&amp;width=450&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:80px;" allowTransparency="true"></iframe> 
+			    </p>
+                        
+                        
+                            <p>Programming is 1% knowledge, 2% ability and 97% getting the ability to work with the knowledge :)</p>
+                        
+                    </section>
+                </div>
+            </div>
+ 
+        
+        <div class="cf"></div>
+        
+        <section class="notepad-disqus row">
+    <div class="small-12 columns">
+        <h1 class="notepad-comments-header">Comments</h1>
+        <div id="disqus_thread"></div>
+        
+<!--
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'snorridev.github.io/thoth'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+-->
+
+ 
+<div class="fb-comments" data-href="http://localhost:4000/linux/2014/12/31/working-with-git-patch/" data-num-posts="4" data-width="706" data-version="v2.3"></div>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId=1595152237390753&version=v2.3";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, "script", "facebook-jssdk"));</script>
+
+    </div>
+</section>
+
+        <div class="cf"></div>
+
+    <footer class="notepad-site-footer">
+    <div class="copyright">
+        <section>All content copyright <a href="http://localhost:4000/about">SnorriDev</a> &copy; 2017 &bull; All rights reserved.</section>
+	<p><a href='http://www.catb.org/hacker-emblem/' target="_blank"><img src='/assets/img/hacker.png' alt='hacker emblem' /></a>
+          <a href="http://endsoftpatents.org/innovating-without-patents" target="_blank"><img style="border-width:0" src="/assets/img/patent-free.png"></a></p>
+    </div>
+    <div class="social-icons">
+        
+        
+        <a href="http://twitter.com/SnorriDev">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-twitter fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="https://plus.google.com/u/0/+AmeyJadiye">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-google-plus fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="http://instagram.com/lambdaviking">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-instagram fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="http://github.com/viking-sudo-rm">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-github fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="http://facebook.com/SnorriDev">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-facebook fa-stack-1x"></i>
+            </span>
+        </a>
+        
+    </div>
+    
+    <div class="cf"></div>
+</footer>
+ 
+</main>    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="http://localhost:4000/assets/js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
+    <script src="http://localhost:4000/assets/js/vendor/modernizr.js"></script>
+    <script src="http://localhost:4000/assets/js/foundation.min.js"></script>
+    
+    <script src="http://localhost:4000/assets/js/notepad.js"></script>
+    <script src="http://localhost:4000/assets/js/scripts.min.js"></script>
+    <script src="http://localhost:4000/assets/js/vendor/nprogress.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/sigma.js/1.0.3/sigma.min.js"></script>
+
+    <script>
+      $(document).foundation();
+    </script>
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-46791108-1', 'auto');
+  ga('require', 'displayfeatures');
+  ga('send', 'pageview');
+
+</script>
+
+<script>NProgress.start();var interval=setInterval(function(){NProgress.inc()},1000);jQuery(window).load(function(){clearInterval(interval);NProgress.done()});jQuery(window).unload(function(){NProgress.start()});</script>
+ 
+</body>
+</html>
+
     <article class="notepad-index-post post row">
         <div class="small-12 medium-3 large-2 columns datetime">
             <span class="notepad-post-meta">
@@ -155,6 +520,487 @@
         </div>
     </article>
 	
+    <!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>INSTALL LOLLIPOP 5.0 TO NEXUS 4 &vert; THE BOOK OF THOTH</title>
+<meta name="description" content="Speak magic. Unleash the power of language!">
+<meta name="keywords" content="android, lollipop">
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://localhost:4000/images/logo.png">
+<meta name="twitter:title" content="Install lollipop 5.0 to Nexus 4">
+<meta name="twitter:description" content="Speak magic. Unleash the power of language!">
+<meta name="twitter:creator" content="@SnorriDev">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Install lollipop 5.0 to Nexus 4">
+<meta property="og:description" content="Speak magic. Unleash the power of language!">
+<meta property="og:url" content="http://localhost:4000/bin/android/2014/11/23/install-lollipop-on-nexus-4/">
+<meta property="og:site_name" content="The Book of Thoth">
+<meta property="og:image" content="http://localhost:4000/images/">
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/bin/android/2014/11/23/install-lollipop-on-nexus-4/">
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="The Book of Thoth Feed">
+<link rel="author" href="https://plus.google.com/u/0/+AmeyJadiye?rel=author">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:400,600,300,800,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/font-awesome.min.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/normalize.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/nprogress.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/foundation.min.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/style.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/post.css">
+
+
+
+
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="http://localhost:4000/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://localhost:4000/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://localhost:4000/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://localhost:4000/images/apple-touch-icon-144x144-precomposed.png">
+
+<style type="text/css">@media only screen and (min-width:43.75em){.notepad-post-content div>p:first-child:first-letter{float:left;font-size:4.688rem;line-height:4.375rem;padding-top:.25rem;padding-right:.5rem;padding-left:.188rem;font-family:serif}}</style>
+</head>
+<body class="post-template" itemscope itemtype="http://schema.org/WebPage">  
+
+        <main id="notepad-post-container-simple" class="notepad-post-container-simple" role="main">
+            <header class="notepad-post-header-simple">
+                <div class="notepad-post-menu-header-simple">
+
+                    <a class="notepad-blog-logo" href="http://localhost:4000">
+                        <img src="http://localhost:4000/images/logo.png" alt="Blog Logo" />
+                    </a>
+
+                <div class="notepad-blog-menu">      
+    <div class="notepad-mobile-menu show-for-small">
+        <a href="#"><i class="fa fa-bars"></i></a>
+    </div>
+    <ul class="notepad-menu">
+        <li class="notepad-mobile-close-btn show-for-small text-right">
+            <a href="#"><i class="fa fa-times"></i></a>
+        </li>
+
+            <li>
+                    <a href="http://localhost:4000/">Home</a>
+                 </li>
+
+            <li>
+                    <a href="http://localhost:4000/categories">Categories</a>
+                 </li>
+
+            <li>
+                    <a href="http://localhost:4000/about">About</a>
+                 </li>
+            
+           <li><a href="http://localhost:4000/feed.xml" title="Atom/RSS feed"><i class="icon-rss"></i> Feed</a></li>
+    </ul>
+
+</div>
+            </div>
+
+                <div class="notepad-post-title-simple row">
+                    <div class="small-12 columns">
+                        <div class="notepad-post-meta-simple">
+
+                            <h1>Install lollipop 5.0 to Nexus 4</h1>
+                            <p>by <strong>SnorriDev</strong> &#8212; on <a href="http://localhost:4000/tags/index.html#android" data-toggle="tooltip" title="Posts tagged with android" rel="tag">android</a>&nbsp;&comma;&nbsp;<a href="http://localhost:4000/tags/index.html#lollipop" data-toggle="tooltip" title="Posts tagged with lollipop" rel="tag">lollipop</a> <strong><time datetime="2014-11-23T21:00:00+05:30">23 Nov 2014</time></strong></p>
+                        
+
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- codein1 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-7466474470517357"
+     data-ad-slot="6700962438"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+
+
+
+</div>
+                    </div>
+                </div>
+            </header>
+
+        <article class="notepad-post-content post tag-simple">
+            <div><p>Google takes lot of time to throw OTA update to your phone, may be they do it lot by lot for not loading their servers, if you are lucky you got it early else wait for may days :p.</p>
+
+<p>I was lucky i got it early but my nexus4 also had Ubuntu so at the time of reboot i lost that upgrade routine :(, and i was so eager to see brand new Android 5.0 Lollipop i Flashed my Nexus 4(worth it!).</p>
+
+<p>Here are few steps i did for flashing my Nexus 4, that will upgrade your kitkat 4.4.4 (KTU84P) to <strong>Lollipop 5.0 (LRX21T)</strong>, easy to do for you guys :)</p>
+
+<ul>
+  <li>First thing is to install ADB and Fastboot to your machine, i use ubuntu so <strong>apt-get</strong> is easy way to get it.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo add-apt-repository ppa:phablet-team/tools
+sudo apt-get update
+sudo apt-get install android-tools-adb android-tools-fastboot</code></pre></figure>
+
+<ul>
+  <li>Now connect  Nexus 4 to your machine via USB, make sure you enable your USB debugging ON, so start USB Debugging go to Settings » Developer Options » USB debugging. (If you dont have Developer Options go to Settings » About Phone » Build number and tap on Build number until you become developer).</li>
+</ul>
+
+<p><img src="http://localhost:4000/images/nxs2.png" style="height: 25%;width: 25%;" />
+<img src="http://localhost:4000/images/nxs1.png" style="height: 25%;width: 25%;" /></p>
+
+<p>Now try below commands to make sure you are connected to machine.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">amey@amey-xps:~$ </span>adb devices -l
+List of devices attached 
+0202dc7rh2934b2a    device usb:3-2 product:occam model:Nexus_4 device:mako</code></pre></figure>
+
+<ul>
+  <li>Now unlock bootloader 
+Turn off your Nexus 4.
+Press and hold Volume Down and Power to enter the Fastboot menu.
+Connect the Nexus 4 to your computer via USB cable.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">fastboot oem unlock</code></pre></figure>
+
+<p>Press the Volume Up button on the Nexus 4 to accept the command and press the Power button to confirm. The bootloader will now be unlocked, you will loss all data with this.</p>
+
+<ul>
+  <li>Download the factory image from <a href="https://developers.google.com/android/nexus/images">Google</a>, OR direct download clicking <a href="https://dl.google.com/dl/android/aosp/occam-lrx21t-factory-51cee750.tgz">HERE</a>.
+unzip it</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">tar -xf occam-lrx21t-factory-51cee750.tgz
+<span class="nb">cd </span>occam-lrx21t</code></pre></figure>
+
+<ul>
+  <li>Now the final step to Flash and install new lollipop image to your Nexus 4</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">adb reboot-bootloader
+sleep 15
+sudo ./flash-all.sh</code></pre></figure>
+
+<p>This command will  generate following logs on your terminal, put your password if prompted, your phone may be rebooted few times.</p>
+
+<p><img style="height: 25%;width: 25%;" src="http://localhost:4000/images/nxs3.jpg" /></p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">amey@amey-xps:~/Downloads/occam-lrx21t$ </span>sudo ./flash-all.sh
+Password:
+sending <span class="s1">'bootloader'</span> <span class="o">(</span>2264 KB<span class="o">)</span>...
+OKAY <span class="o">[</span> 0.091s]
+writing <span class="s1">'bootloader'</span>...
+OKAY <span class="o">[</span> 0.667s]
+finished. total <span class="nb">time</span>: 0.758s
+rebooting into bootloader...
+OKAY <span class="o">[</span> 0.001s]
+finished. total <span class="nb">time</span>: 0.001s
+&lt; waiting <span class="k">for </span>device &gt;
+sending <span class="s1">'radio'</span> <span class="o">(</span>45537 KB<span class="o">)</span>...
+OKAY <span class="o">[</span> 1.607s]
+writing <span class="s1">'radio'</span>...
+OKAY <span class="o">[</span> 3.458s]
+finished. total <span class="nb">time</span>: 5.065s
+rebooting into bootloader...
+OKAY <span class="o">[</span> 0.001s]
+finished. total <span class="nb">time</span>: 0.001s
+&lt; waiting <span class="k">for </span>device &gt;
+archive does not contain <span class="s1">'boot.sig'</span>
+archive does not contain <span class="s1">'recovery.sig'</span>
+
+archive does not contain <span class="s1">'system.sig'</span>
+--------------------------------------------
+Bootloader Version...: MAKOZ30f
+Baseband Version.....: M9615A-CEFWMAZM-2.0.1701.04
+Serial Number........: 0202dc7d0b934b2a
+--------------------------------------------
+checking product...
+OKAY <span class="o">[</span> 0.002s]
+checking version-bootloader...
+OKAY <span class="o">[</span> 0.002s]
+checking version-baseband...
+OKAY <span class="o">[</span> 0.002s]
+sending <span class="s1">'boot'</span> <span class="o">(</span>6348 KB<span class="o">)</span>...
+OKAY <span class="o">[</span> 0.725s]
+writing <span class="s1">'boot'</span>...
+OKAY <span class="o">[</span> 0.357s]
+sending <span class="s1">'recovery'</span> <span class="o">(</span>6892 KB<span class="o">)</span>...
+OKAY <span class="o">[</span> 0.853s]
+writing <span class="s1">'recovery'</span>...
+OKAY <span class="o">[</span> 0.453s]
+erasing <span class="s1">'system'</span>...
+OKAY <span class="o">[</span> 2.274s]
+sending <span class="s1">'system'</span> <span class="o">(</span>809641 KB<span class="o">)</span>...
+OKAY <span class="o">[</span> 25.485s]
+writing <span class="s1">'system'</span>...
+OKAY <span class="o">[</span> 63.027s]
+erasing <span class="s1">'userdata'</span>...
+OKAY <span class="o">[</span> 40.306s]
+formatting <span class="s1">'userdata'</span> partition...
+Creating filesystem with parameters:
+Size: 14129561600
+Block size: 4096
+Blocks per group: 32768
+Inodes per group: 8144
+Inode size: 256
+Journal blocks: 32768
+Label: 
+Blocks: 3449600
+Block groups: 106
+Reserved block group size: 847
+Created filesystem with 11/863264 inodes and 95427/3449600 blocks
+sending <span class="s1">'userdata'</span> <span class="o">(</span>137438 KB<span class="o">)</span>...
+writing <span class="s1">'userdata'</span>...
+OKAY <span class="o">[</span> 15.651s]
+erasing <span class="s1">'cache'</span>...
+OKAY <span class="o">[</span> 0.662s]
+formatting <span class="s1">'cache'</span> partition...
+Creating filesystem with parameters:
+Size: 587202560
+Block size: 4096
+Blocks per group: 32768
+Inodes per group: 7168
+Inode size: 256
+Journal blocks: 2240
+Label: 
+Blocks: 143360
+Block groups: 5
+Reserved block group size: 39
+Created filesystem with 11/35840 inodes and 4616/143360 blocks
+sending <span class="s1">'cache'</span> <span class="o">(</span>10984 KB<span class="o">)</span>...
+writing <span class="s1">'cache'</span>...
+OKAY <span class="o">[</span> 1.090s]
+rebooting...
+finished. total <span class="nb">time</span>: 150.897s</code></pre></figure>
+
+<p>If your phone missbehave after finishing, just hard reboot it pressing power button for few seconds.</p>
+
+<p>Happy coding ….. :)</p>
+
+            </div>
+
+<div style="text-align: center;">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- codein2-footer -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-7466474470517357"
+     data-ad-slot="9952356430"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+
+
+
+        </article>
+        <div class="cf"></div>
+        <div class="row text-center">
+            <section class="notepad-post-share">
+                <a class="twitter-icon" href="https://twitter.com/intent/tweet?text=&quot;Install lollipop 5.0 to Nexus 4&quot;%20http://localhost:4000/bin/android/2014/11/23/install-lollipop-on-nexus-4/%20via%20&#64;SnorriDev"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;" title="Share on Twitter">
+                    <i class="fa fa-twitter"></i>
+                </a>
+                <a class="facebook-icon" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/bin/android/2014/11/23/install-lollipop-on-nexus-4/"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;" title="Share on Facebook">
+                    <i class="fa fa-facebook"></i>
+                </a>
+                <a class="google-icon" href="https://plus.google.com/share?url=http://localhost:4000/bin/android/2014/11/23/install-lollipop-on-nexus-4/"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;" title="Share on Google+">
+                    <i class="fa fa-google-plus"></i>
+                </a>
+            </section>
+        </div>
+        <div class="cf"></div>
+        
+            <div class="notepad-author-info">
+                <div class="row">
+                    <section class="notepad-post-author small-12 columns">
+                        
+                            <img src="http://localhost:4000/images/ameyjadiye.jpg" class="notepad-post-author-avatar" alt="SnorriDev's photo">
+                        
+                        
+                            <span class="author-label">Author</span>
+                            <h1>SnorriDev</h1>
+                        
+                        
+                            <p><a href="mailto:snorri.devteam@gmail.com" class="author-website">snorri.devteam@gmail.com</a>
+
+			    <iframe src="//www.facebook.com/plugins/follow?href=https%3A%2F%2Fwww.facebook.com%2Fameyjadiye&amp;layout=standard&amp;show_faces=true&amp;colorscheme=light&amp;width=450&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:80px;" allowTransparency="true"></iframe> 
+			    </p>
+                        
+                        
+                            <p>Programming is 1% knowledge, 2% ability and 97% getting the ability to work with the knowledge :)</p>
+                        
+                    </section>
+                </div>
+            </div>
+ 
+        
+        <div class="cf"></div>
+        
+        <section class="notepad-disqus row">
+    <div class="small-12 columns">
+        <h1 class="notepad-comments-header">Comments</h1>
+        <div id="disqus_thread"></div>
+        
+<!--
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'snorridev.github.io/thoth'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+-->
+
+ 
+<div class="fb-comments" data-href="http://localhost:4000/bin/android/2014/11/23/install-lollipop-on-nexus-4/" data-num-posts="4" data-width="706" data-version="v2.3"></div>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId=1595152237390753&version=v2.3";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, "script", "facebook-jssdk"));</script>
+
+    </div>
+</section>
+
+        <div class="cf"></div>
+
+    <footer class="notepad-site-footer">
+    <div class="copyright">
+        <section>All content copyright <a href="http://localhost:4000/about">SnorriDev</a> &copy; 2017 &bull; All rights reserved.</section>
+	<p><a href='http://www.catb.org/hacker-emblem/' target="_blank"><img src='/assets/img/hacker.png' alt='hacker emblem' /></a>
+          <a href="http://endsoftpatents.org/innovating-without-patents" target="_blank"><img style="border-width:0" src="/assets/img/patent-free.png"></a></p>
+    </div>
+    <div class="social-icons">
+        
+        
+        <a href="http://twitter.com/SnorriDev">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-twitter fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="https://plus.google.com/u/0/+AmeyJadiye">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-google-plus fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="http://instagram.com/lambdaviking">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-instagram fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="http://github.com/viking-sudo-rm">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-github fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="http://facebook.com/SnorriDev">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-facebook fa-stack-1x"></i>
+            </span>
+        </a>
+        
+    </div>
+    
+    <div class="cf"></div>
+</footer>
+ 
+</main>    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="http://localhost:4000/assets/js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
+    <script src="http://localhost:4000/assets/js/vendor/modernizr.js"></script>
+    <script src="http://localhost:4000/assets/js/foundation.min.js"></script>
+    
+    <script src="http://localhost:4000/assets/js/notepad.js"></script>
+    <script src="http://localhost:4000/assets/js/scripts.min.js"></script>
+    <script src="http://localhost:4000/assets/js/vendor/nprogress.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/sigma.js/1.0.3/sigma.min.js"></script>
+
+    <script>
+      $(document).foundation();
+    </script>
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-46791108-1', 'auto');
+  ga('require', 'displayfeatures');
+  ga('send', 'pageview');
+
+</script>
+
+<script>NProgress.start();var interval=setInterval(function(){NProgress.inc()},1000);jQuery(window).load(function(){clearInterval(interval);NProgress.done()});jQuery(window).unload(function(){NProgress.start()});</script>
+ 
+</body>
+</html>
+
     <article class="notepad-index-post post row">
         <div class="small-12 medium-3 large-2 columns datetime">
             <span class="notepad-post-meta">
@@ -188,6 +1034,487 @@
         </div>
     </article>
 	
+    <!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>INSTALL LOLLIPOP 5.0 TO NEXUS 4 &vert; THE BOOK OF THOTH</title>
+<meta name="description" content="Speak magic. Unleash the power of language!">
+<meta name="keywords" content="android, lollipop">
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://localhost:4000/images/logo.png">
+<meta name="twitter:title" content="Install lollipop 5.0 to Nexus 4">
+<meta name="twitter:description" content="Speak magic. Unleash the power of language!">
+<meta name="twitter:creator" content="@SnorriDev">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Install lollipop 5.0 to Nexus 4">
+<meta property="og:description" content="Speak magic. Unleash the power of language!">
+<meta property="og:url" content="http://localhost:4000/android/2014/11/23/install-lollipop-on-nexus-4/">
+<meta property="og:site_name" content="The Book of Thoth">
+<meta property="og:image" content="http://localhost:4000/images/">
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/android/2014/11/23/install-lollipop-on-nexus-4/">
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="The Book of Thoth Feed">
+<link rel="author" href="https://plus.google.com/u/0/+AmeyJadiye?rel=author">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:400,600,300,800,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/font-awesome.min.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/normalize.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/nprogress.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/foundation.min.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/style.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/post.css">
+
+
+
+
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="http://localhost:4000/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://localhost:4000/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://localhost:4000/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://localhost:4000/images/apple-touch-icon-144x144-precomposed.png">
+
+<style type="text/css">@media only screen and (min-width:43.75em){.notepad-post-content div>p:first-child:first-letter{float:left;font-size:4.688rem;line-height:4.375rem;padding-top:.25rem;padding-right:.5rem;padding-left:.188rem;font-family:serif}}</style>
+</head>
+<body class="post-template" itemscope itemtype="http://schema.org/WebPage">  
+
+        <main id="notepad-post-container-simple" class="notepad-post-container-simple" role="main">
+            <header class="notepad-post-header-simple">
+                <div class="notepad-post-menu-header-simple">
+
+                    <a class="notepad-blog-logo" href="http://localhost:4000">
+                        <img src="http://localhost:4000/images/logo.png" alt="Blog Logo" />
+                    </a>
+
+                <div class="notepad-blog-menu">      
+    <div class="notepad-mobile-menu show-for-small">
+        <a href="#"><i class="fa fa-bars"></i></a>
+    </div>
+    <ul class="notepad-menu">
+        <li class="notepad-mobile-close-btn show-for-small text-right">
+            <a href="#"><i class="fa fa-times"></i></a>
+        </li>
+
+            <li>
+                    <a href="http://localhost:4000/">Home</a>
+                 </li>
+
+            <li>
+                    <a href="http://localhost:4000/categories">Categories</a>
+                 </li>
+
+            <li>
+                    <a href="http://localhost:4000/about">About</a>
+                 </li>
+            
+           <li><a href="http://localhost:4000/feed.xml" title="Atom/RSS feed"><i class="icon-rss"></i> Feed</a></li>
+    </ul>
+
+</div>
+            </div>
+
+                <div class="notepad-post-title-simple row">
+                    <div class="small-12 columns">
+                        <div class="notepad-post-meta-simple">
+
+                            <h1>Install lollipop 5.0 to Nexus 4</h1>
+                            <p>by <strong>SnorriDev</strong> &#8212; on <a href="http://localhost:4000/tags/index.html#android" data-toggle="tooltip" title="Posts tagged with android" rel="tag">android</a>&nbsp;&comma;&nbsp;<a href="http://localhost:4000/tags/index.html#lollipop" data-toggle="tooltip" title="Posts tagged with lollipop" rel="tag">lollipop</a> <strong><time datetime="2014-11-23T21:00:00+05:30">23 Nov 2014</time></strong></p>
+                        
+
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- codein1 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-7466474470517357"
+     data-ad-slot="6700962438"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+
+
+
+</div>
+                    </div>
+                </div>
+            </header>
+
+        <article class="notepad-post-content post tag-simple">
+            <div><p>Google takes lot of time to throw OTA update to your phone, may be they do it lot by lot for not loading their servers, if you are lucky you got it early else wait for may days :p.</p>
+
+<p>I was lucky i got it early but my nexus4 also had Ubuntu so at the time of reboot i lost that upgrade routine :(, and i was so eager to see brand new Android 5.0 Lollipop i Flashed my Nexus 4(worth it!).</p>
+
+<p>Here are few steps i did for flashing my Nexus 4, that will upgrade your kitkat 4.4.4 (KTU84P) to <strong>Lollipop 5.0 (LRX21T)</strong>, easy to do for you guys :)</p>
+
+<ul>
+  <li>First thing is to install ADB and Fastboot to your machine, i use ubuntu so <strong>apt-get</strong> is easy way to get it.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo add-apt-repository ppa:phablet-team/tools
+sudo apt-get update
+sudo apt-get install android-tools-adb android-tools-fastboot</code></pre></figure>
+
+<ul>
+  <li>Now connect  Nexus 4 to your machine via USB, make sure you enable your USB debugging ON, so start USB Debugging go to Settings » Developer Options » USB debugging. (If you dont have Developer Options go to Settings » About Phone » Build number and tap on Build number until you become developer).</li>
+</ul>
+
+<p><img src="http://localhost:4000/images/nxs2.png" style="height: 25%;width: 25%;" />
+<img src="http://localhost:4000/images/nxs1.png" style="height: 25%;width: 25%;" /></p>
+
+<p>Now try below commands to make sure you are connected to machine.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">amey@amey-xps:~$ </span>adb devices -l
+List of devices attached 
+0202dc7rh2934b2a    device usb:3-2 product:occam model:Nexus_4 device:mako</code></pre></figure>
+
+<ul>
+  <li>Now unlock bootloader 
+Turn off your Nexus 4.
+Press and hold Volume Down and Power to enter the Fastboot menu.
+Connect the Nexus 4 to your computer via USB cable.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">fastboot oem unlock</code></pre></figure>
+
+<p>Press the Volume Up button on the Nexus 4 to accept the command and press the Power button to confirm. The bootloader will now be unlocked, you will loss all data with this.</p>
+
+<ul>
+  <li>Download the factory image from <a href="https://developers.google.com/android/nexus/images">Google</a>, OR direct download clicking <a href="https://dl.google.com/dl/android/aosp/occam-lrx21t-factory-51cee750.tgz">HERE</a>.
+unzip it</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">tar -xf occam-lrx21t-factory-51cee750.tgz
+<span class="nb">cd </span>occam-lrx21t</code></pre></figure>
+
+<ul>
+  <li>Now the final step to Flash and install new lollipop image to your Nexus 4</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">adb reboot-bootloader
+sleep 15
+sudo ./flash-all.sh</code></pre></figure>
+
+<p>This command will  generate following logs on your terminal, put your password if prompted, your phone may be rebooted few times.</p>
+
+<p><img style="height: 25%;width: 25%;" src="http://localhost:4000/images/nxs3.jpg" /></p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">amey@amey-xps:~/Downloads/occam-lrx21t$ </span>sudo ./flash-all.sh
+Password:
+sending <span class="s1">'bootloader'</span> <span class="o">(</span>2264 KB<span class="o">)</span>...
+OKAY <span class="o">[</span> 0.091s]
+writing <span class="s1">'bootloader'</span>...
+OKAY <span class="o">[</span> 0.667s]
+finished. total <span class="nb">time</span>: 0.758s
+rebooting into bootloader...
+OKAY <span class="o">[</span> 0.001s]
+finished. total <span class="nb">time</span>: 0.001s
+&lt; waiting <span class="k">for </span>device &gt;
+sending <span class="s1">'radio'</span> <span class="o">(</span>45537 KB<span class="o">)</span>...
+OKAY <span class="o">[</span> 1.607s]
+writing <span class="s1">'radio'</span>...
+OKAY <span class="o">[</span> 3.458s]
+finished. total <span class="nb">time</span>: 5.065s
+rebooting into bootloader...
+OKAY <span class="o">[</span> 0.001s]
+finished. total <span class="nb">time</span>: 0.001s
+&lt; waiting <span class="k">for </span>device &gt;
+archive does not contain <span class="s1">'boot.sig'</span>
+archive does not contain <span class="s1">'recovery.sig'</span>
+
+archive does not contain <span class="s1">'system.sig'</span>
+--------------------------------------------
+Bootloader Version...: MAKOZ30f
+Baseband Version.....: M9615A-CEFWMAZM-2.0.1701.04
+Serial Number........: 0202dc7d0b934b2a
+--------------------------------------------
+checking product...
+OKAY <span class="o">[</span> 0.002s]
+checking version-bootloader...
+OKAY <span class="o">[</span> 0.002s]
+checking version-baseband...
+OKAY <span class="o">[</span> 0.002s]
+sending <span class="s1">'boot'</span> <span class="o">(</span>6348 KB<span class="o">)</span>...
+OKAY <span class="o">[</span> 0.725s]
+writing <span class="s1">'boot'</span>...
+OKAY <span class="o">[</span> 0.357s]
+sending <span class="s1">'recovery'</span> <span class="o">(</span>6892 KB<span class="o">)</span>...
+OKAY <span class="o">[</span> 0.853s]
+writing <span class="s1">'recovery'</span>...
+OKAY <span class="o">[</span> 0.453s]
+erasing <span class="s1">'system'</span>...
+OKAY <span class="o">[</span> 2.274s]
+sending <span class="s1">'system'</span> <span class="o">(</span>809641 KB<span class="o">)</span>...
+OKAY <span class="o">[</span> 25.485s]
+writing <span class="s1">'system'</span>...
+OKAY <span class="o">[</span> 63.027s]
+erasing <span class="s1">'userdata'</span>...
+OKAY <span class="o">[</span> 40.306s]
+formatting <span class="s1">'userdata'</span> partition...
+Creating filesystem with parameters:
+Size: 14129561600
+Block size: 4096
+Blocks per group: 32768
+Inodes per group: 8144
+Inode size: 256
+Journal blocks: 32768
+Label: 
+Blocks: 3449600
+Block groups: 106
+Reserved block group size: 847
+Created filesystem with 11/863264 inodes and 95427/3449600 blocks
+sending <span class="s1">'userdata'</span> <span class="o">(</span>137438 KB<span class="o">)</span>...
+writing <span class="s1">'userdata'</span>...
+OKAY <span class="o">[</span> 15.651s]
+erasing <span class="s1">'cache'</span>...
+OKAY <span class="o">[</span> 0.662s]
+formatting <span class="s1">'cache'</span> partition...
+Creating filesystem with parameters:
+Size: 587202560
+Block size: 4096
+Blocks per group: 32768
+Inodes per group: 7168
+Inode size: 256
+Journal blocks: 2240
+Label: 
+Blocks: 143360
+Block groups: 5
+Reserved block group size: 39
+Created filesystem with 11/35840 inodes and 4616/143360 blocks
+sending <span class="s1">'cache'</span> <span class="o">(</span>10984 KB<span class="o">)</span>...
+writing <span class="s1">'cache'</span>...
+OKAY <span class="o">[</span> 1.090s]
+rebooting...
+finished. total <span class="nb">time</span>: 150.897s</code></pre></figure>
+
+<p>If your phone missbehave after finishing, just hard reboot it pressing power button for few seconds.</p>
+
+<p>Happy coding ….. :)</p>
+
+            </div>
+
+<div style="text-align: center;">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- codein2-footer -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-7466474470517357"
+     data-ad-slot="9952356430"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+
+
+
+        </article>
+        <div class="cf"></div>
+        <div class="row text-center">
+            <section class="notepad-post-share">
+                <a class="twitter-icon" href="https://twitter.com/intent/tweet?text=&quot;Install lollipop 5.0 to Nexus 4&quot;%20http://localhost:4000/android/2014/11/23/install-lollipop-on-nexus-4/%20via%20&#64;SnorriDev"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;" title="Share on Twitter">
+                    <i class="fa fa-twitter"></i>
+                </a>
+                <a class="facebook-icon" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/android/2014/11/23/install-lollipop-on-nexus-4/"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;" title="Share on Facebook">
+                    <i class="fa fa-facebook"></i>
+                </a>
+                <a class="google-icon" href="https://plus.google.com/share?url=http://localhost:4000/android/2014/11/23/install-lollipop-on-nexus-4/"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;" title="Share on Google+">
+                    <i class="fa fa-google-plus"></i>
+                </a>
+            </section>
+        </div>
+        <div class="cf"></div>
+        
+            <div class="notepad-author-info">
+                <div class="row">
+                    <section class="notepad-post-author small-12 columns">
+                        
+                            <img src="http://localhost:4000/images/ameyjadiye.jpg" class="notepad-post-author-avatar" alt="SnorriDev's photo">
+                        
+                        
+                            <span class="author-label">Author</span>
+                            <h1>SnorriDev</h1>
+                        
+                        
+                            <p><a href="mailto:snorri.devteam@gmail.com" class="author-website">snorri.devteam@gmail.com</a>
+
+			    <iframe src="//www.facebook.com/plugins/follow?href=https%3A%2F%2Fwww.facebook.com%2Fameyjadiye&amp;layout=standard&amp;show_faces=true&amp;colorscheme=light&amp;width=450&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:80px;" allowTransparency="true"></iframe> 
+			    </p>
+                        
+                        
+                            <p>Programming is 1% knowledge, 2% ability and 97% getting the ability to work with the knowledge :)</p>
+                        
+                    </section>
+                </div>
+            </div>
+ 
+        
+        <div class="cf"></div>
+        
+        <section class="notepad-disqus row">
+    <div class="small-12 columns">
+        <h1 class="notepad-comments-header">Comments</h1>
+        <div id="disqus_thread"></div>
+        
+<!--
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'snorridev.github.io/thoth'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+-->
+
+ 
+<div class="fb-comments" data-href="http://localhost:4000/android/2014/11/23/install-lollipop-on-nexus-4/" data-num-posts="4" data-width="706" data-version="v2.3"></div>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId=1595152237390753&version=v2.3";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, "script", "facebook-jssdk"));</script>
+
+    </div>
+</section>
+
+        <div class="cf"></div>
+
+    <footer class="notepad-site-footer">
+    <div class="copyright">
+        <section>All content copyright <a href="http://localhost:4000/about">SnorriDev</a> &copy; 2017 &bull; All rights reserved.</section>
+	<p><a href='http://www.catb.org/hacker-emblem/' target="_blank"><img src='/assets/img/hacker.png' alt='hacker emblem' /></a>
+          <a href="http://endsoftpatents.org/innovating-without-patents" target="_blank"><img style="border-width:0" src="/assets/img/patent-free.png"></a></p>
+    </div>
+    <div class="social-icons">
+        
+        
+        <a href="http://twitter.com/SnorriDev">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-twitter fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="https://plus.google.com/u/0/+AmeyJadiye">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-google-plus fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="http://instagram.com/lambdaviking">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-instagram fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="http://github.com/viking-sudo-rm">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-github fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="http://facebook.com/SnorriDev">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-facebook fa-stack-1x"></i>
+            </span>
+        </a>
+        
+    </div>
+    
+    <div class="cf"></div>
+</footer>
+ 
+</main>    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="http://localhost:4000/assets/js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
+    <script src="http://localhost:4000/assets/js/vendor/modernizr.js"></script>
+    <script src="http://localhost:4000/assets/js/foundation.min.js"></script>
+    
+    <script src="http://localhost:4000/assets/js/notepad.js"></script>
+    <script src="http://localhost:4000/assets/js/scripts.min.js"></script>
+    <script src="http://localhost:4000/assets/js/vendor/nprogress.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/sigma.js/1.0.3/sigma.min.js"></script>
+
+    <script>
+      $(document).foundation();
+    </script>
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-46791108-1', 'auto');
+  ga('require', 'displayfeatures');
+  ga('send', 'pageview');
+
+</script>
+
+<script>NProgress.start();var interval=setInterval(function(){NProgress.inc()},1000);jQuery(window).load(function(){clearInterval(interval);NProgress.done()});jQuery(window).unload(function(){NProgress.start()});</script>
+ 
+</body>
+</html>
+
     <article class="notepad-index-post post row">
         <div class="small-12 medium-3 large-2 columns datetime">
             <span class="notepad-post-meta">
@@ -221,6 +1548,407 @@
         </div>
     </article>
 	
+    <!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>BANG-BANG, BE LAZY!! &vert; THE BOOK OF THOTH</title>
+<meta name="description" content="Speak magic. Unleash the power of language!">
+<meta name="keywords" content="linux">
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://localhost:4000/images/logo.png">
+<meta name="twitter:title" content="Bang-Bang, Be lazy!!">
+<meta name="twitter:description" content="Speak magic. Unleash the power of language!">
+<meta name="twitter:creator" content="@SnorriDev">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bang-Bang, Be lazy!!">
+<meta property="og:description" content="Speak magic. Unleash the power of language!">
+<meta property="og:url" content="http://localhost:4000/bin/linux/2014/09/14/bang-bang/">
+<meta property="og:site_name" content="The Book of Thoth">
+<meta property="og:image" content="http://localhost:4000/images/">
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/bin/linux/2014/09/14/bang-bang/">
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="The Book of Thoth Feed">
+<link rel="author" href="https://plus.google.com/u/0/+AmeyJadiye?rel=author">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:400,600,300,800,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/font-awesome.min.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/normalize.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/nprogress.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/foundation.min.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/style.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/post.css">
+
+
+
+
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="http://localhost:4000/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://localhost:4000/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://localhost:4000/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://localhost:4000/images/apple-touch-icon-144x144-precomposed.png">
+
+<style type="text/css">@media only screen and (min-width:43.75em){.notepad-post-content div>p:first-child:first-letter{float:left;font-size:4.688rem;line-height:4.375rem;padding-top:.25rem;padding-right:.5rem;padding-left:.188rem;font-family:serif}}</style>
+</head>
+<body class="post-template" itemscope itemtype="http://schema.org/WebPage">  
+
+        <main id="notepad-post-container-simple" class="notepad-post-container-simple" role="main">
+            <header class="notepad-post-header-simple">
+                <div class="notepad-post-menu-header-simple">
+
+                    <a class="notepad-blog-logo" href="http://localhost:4000">
+                        <img src="http://localhost:4000/images/logo.png" alt="Blog Logo" />
+                    </a>
+
+                <div class="notepad-blog-menu">      
+    <div class="notepad-mobile-menu show-for-small">
+        <a href="#"><i class="fa fa-bars"></i></a>
+    </div>
+    <ul class="notepad-menu">
+        <li class="notepad-mobile-close-btn show-for-small text-right">
+            <a href="#"><i class="fa fa-times"></i></a>
+        </li>
+
+            <li>
+                    <a href="http://localhost:4000/">Home</a>
+                 </li>
+
+            <li>
+                    <a href="http://localhost:4000/categories">Categories</a>
+                 </li>
+
+            <li>
+                    <a href="http://localhost:4000/about">About</a>
+                 </li>
+            
+           <li><a href="http://localhost:4000/feed.xml" title="Atom/RSS feed"><i class="icon-rss"></i> Feed</a></li>
+    </ul>
+
+</div>
+            </div>
+
+                <div class="notepad-post-title-simple row">
+                    <div class="small-12 columns">
+                        <div class="notepad-post-meta-simple">
+
+                            <h1>Bang-Bang, Be lazy!!</h1>
+                            <p>by <strong>SnorriDev</strong> &#8212; on <a href="http://localhost:4000/tags/index.html#linux" data-toggle="tooltip" title="Posts tagged with linux" rel="tag">linux</a> <strong><time datetime="2014-09-14T09:00:00+05:30">14 Sep 2014</time></strong></p>
+                        
+
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- codein1 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-7466474470517357"
+     data-ad-slot="6700962438"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+
+
+
+</div>
+                    </div>
+                </div>
+            </header>
+
+        <article class="notepad-post-content post tag-simple">
+            <div><p>I found another great thing linux provides for the lazy programmers ;)
+Most of the time we need to repeat the commands we entered in linux terminal and many hardworking engineers typing it again and again ;)</p>
+
+<p>Famous quote <strong>“Those who cannot remember the past are condemned to repeat it”</strong> preety much applies here when you use commandline mode to operate your machine or working on remote server via ssh.</p>
+
+<p>Linux provides many tools which remembers history and on top of that we can make our life easy.</p>
+
+<p>Usually i work on servers and whenever try to fire few root access commands and it dont allow  me!! -_-,feels insulting. 
+Anyway <strong>sudo !!</strong>  is here to rescue you :)</p>
+
+<p><img src="http://localhost:4000/images/bang-bang.jpg" /></p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">amey@amey-xps:~/$ </span>touch /etc/apache2/apache2.conf 
+touch: cannot touch ‘/etc/apache2/apache2.conf’: Permission denied
+<span class="gp">amey@amey-xps:~/work/blog/codeinventory.github.io/_posts$ </span>sudo !!
+sudo touch /etc/apache2/apache2.conf 
+<span class="o">[</span>sudo] password <span class="k">for </span>amey: 
+<span class="gp">amey@amey-xps:~/$ </span></code></pre></figure>
+
+<p>Not only <em>sudo</em>, Bang (!) can do may more things &lt;3</p>
+
+<h2 id="repeating-commands">Repeating Commands</h2>
+<h3 id="repeat-last-command">Repeat last command</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!!</code></pre></figure>
+
+<h3 id="repeat-last-command-that-started-with-x">Repeat last command that started with x</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!x</code></pre></figure>
+
+<h3 id="repeat-last-command-that-has-the-substring-x">Repeat last command that has the substring x</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!?x</code></pre></figure>
+
+<h3 id="repeat-10th-command-in-the-history-file">Repeat 10th command in the history file</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!10</code></pre></figure>
+
+<h3 id="repeat-10th-from-last-command-in-the-history-file">Repeat 10th from last command in the history file</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!-10</code></pre></figure>
+
+<h2 id="fetching-parameters">Fetching Parameters</h2>
+<h3 id="fetch-parameters-from-last-command">Fetch parameters from last command</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!!<span class="k">*</span></code></pre></figure>
+
+<h3 id="fetch-first-parameter-from-last-command">Fetch first parameter from last command</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!!^</code></pre></figure>
+
+<h3 id="fetch-last-parameter-from-last-command">Fetch last parameter from last command</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!!<span class="err">$</span></code></pre></figure>
+
+<h3 id="fetch-third-parameter-from-last-command">Fetch third parameter from last command</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!!3</code></pre></figure>
+
+<h2 id="modifiers">Modifiers</h2>
+<h3 id="repeat-last-command-substituting-foo-for-bar">Repeat last command substituting foo for bar</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!!:s/foo/bar/</code></pre></figure>
+
+<h3 id="print-last-command-without-running-it">Print last command without running it</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!!:p</code></pre></figure>
+
+<p>Happy coding ….. :)</p>
+
+            </div>
+
+<div style="text-align: center;">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- codein2-footer -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-7466474470517357"
+     data-ad-slot="9952356430"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+
+
+
+        </article>
+        <div class="cf"></div>
+        <div class="row text-center">
+            <section class="notepad-post-share">
+                <a class="twitter-icon" href="https://twitter.com/intent/tweet?text=&quot;Bang-Bang, Be lazy!!&quot;%20http://localhost:4000/bin/linux/2014/09/14/bang-bang/%20via%20&#64;SnorriDev"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;" title="Share on Twitter">
+                    <i class="fa fa-twitter"></i>
+                </a>
+                <a class="facebook-icon" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/bin/linux/2014/09/14/bang-bang/"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;" title="Share on Facebook">
+                    <i class="fa fa-facebook"></i>
+                </a>
+                <a class="google-icon" href="https://plus.google.com/share?url=http://localhost:4000/bin/linux/2014/09/14/bang-bang/"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;" title="Share on Google+">
+                    <i class="fa fa-google-plus"></i>
+                </a>
+            </section>
+        </div>
+        <div class="cf"></div>
+        
+            <div class="notepad-author-info">
+                <div class="row">
+                    <section class="notepad-post-author small-12 columns">
+                        
+                            <img src="http://localhost:4000/images/ameyjadiye.jpg" class="notepad-post-author-avatar" alt="SnorriDev's photo">
+                        
+                        
+                            <span class="author-label">Author</span>
+                            <h1>SnorriDev</h1>
+                        
+                        
+                            <p><a href="mailto:snorri.devteam@gmail.com" class="author-website">snorri.devteam@gmail.com</a>
+
+			    <iframe src="//www.facebook.com/plugins/follow?href=https%3A%2F%2Fwww.facebook.com%2Fameyjadiye&amp;layout=standard&amp;show_faces=true&amp;colorscheme=light&amp;width=450&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:80px;" allowTransparency="true"></iframe> 
+			    </p>
+                        
+                        
+                            <p>Programming is 1% knowledge, 2% ability and 97% getting the ability to work with the knowledge :)</p>
+                        
+                    </section>
+                </div>
+            </div>
+ 
+        
+        <div class="cf"></div>
+        
+        <section class="notepad-disqus row">
+    <div class="small-12 columns">
+        <h1 class="notepad-comments-header">Comments</h1>
+        <div id="disqus_thread"></div>
+        
+<!--
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'snorridev.github.io/thoth'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+-->
+
+ 
+<div class="fb-comments" data-href="http://localhost:4000/bin/linux/2014/09/14/bang-bang/" data-num-posts="4" data-width="706" data-version="v2.3"></div>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId=1595152237390753&version=v2.3";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, "script", "facebook-jssdk"));</script>
+
+    </div>
+</section>
+
+        <div class="cf"></div>
+
+    <footer class="notepad-site-footer">
+    <div class="copyright">
+        <section>All content copyright <a href="http://localhost:4000/about">SnorriDev</a> &copy; 2017 &bull; All rights reserved.</section>
+	<p><a href='http://www.catb.org/hacker-emblem/' target="_blank"><img src='/assets/img/hacker.png' alt='hacker emblem' /></a>
+          <a href="http://endsoftpatents.org/innovating-without-patents" target="_blank"><img style="border-width:0" src="/assets/img/patent-free.png"></a></p>
+    </div>
+    <div class="social-icons">
+        
+        
+        <a href="http://twitter.com/SnorriDev">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-twitter fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="https://plus.google.com/u/0/+AmeyJadiye">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-google-plus fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="http://instagram.com/lambdaviking">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-instagram fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="http://github.com/viking-sudo-rm">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-github fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="http://facebook.com/SnorriDev">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-facebook fa-stack-1x"></i>
+            </span>
+        </a>
+        
+    </div>
+    
+    <div class="cf"></div>
+</footer>
+ 
+</main>    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="http://localhost:4000/assets/js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
+    <script src="http://localhost:4000/assets/js/vendor/modernizr.js"></script>
+    <script src="http://localhost:4000/assets/js/foundation.min.js"></script>
+    
+    <script src="http://localhost:4000/assets/js/notepad.js"></script>
+    <script src="http://localhost:4000/assets/js/scripts.min.js"></script>
+    <script src="http://localhost:4000/assets/js/vendor/nprogress.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/sigma.js/1.0.3/sigma.min.js"></script>
+
+    <script>
+      $(document).foundation();
+    </script>
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-46791108-1', 'auto');
+  ga('require', 'displayfeatures');
+  ga('send', 'pageview');
+
+</script>
+
+<script>NProgress.start();var interval=setInterval(function(){NProgress.inc()},1000);jQuery(window).load(function(){clearInterval(interval);NProgress.done()});jQuery(window).unload(function(){NProgress.start()});</script>
+ 
+</body>
+</html>
+
     <article class="notepad-index-post post row">
         <div class="small-12 medium-3 large-2 columns datetime">
             <span class="notepad-post-meta">
@@ -254,6 +1982,407 @@
         </div>
     </article>
 	
+    <!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>BANG-BANG, BE LAZY!! &vert; THE BOOK OF THOTH</title>
+<meta name="description" content="Speak magic. Unleash the power of language!">
+<meta name="keywords" content="linux">
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://localhost:4000/images/logo.png">
+<meta name="twitter:title" content="Bang-Bang, Be lazy!!">
+<meta name="twitter:description" content="Speak magic. Unleash the power of language!">
+<meta name="twitter:creator" content="@SnorriDev">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bang-Bang, Be lazy!!">
+<meta property="og:description" content="Speak magic. Unleash the power of language!">
+<meta property="og:url" content="http://localhost:4000/linux/2014/09/14/bang-bang/">
+<meta property="og:site_name" content="The Book of Thoth">
+<meta property="og:image" content="http://localhost:4000/images/">
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/linux/2014/09/14/bang-bang/">
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="The Book of Thoth Feed">
+<link rel="author" href="https://plus.google.com/u/0/+AmeyJadiye?rel=author">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:400,600,300,800,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/font-awesome.min.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/normalize.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/nprogress.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/vendor/foundation.min.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/style.css">
+    <link rel="stylesheet" href="http://localhost:4000/assets/css/post.css">
+
+
+
+
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="http://localhost:4000/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://localhost:4000/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://localhost:4000/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://localhost:4000/images/apple-touch-icon-144x144-precomposed.png">
+
+<style type="text/css">@media only screen and (min-width:43.75em){.notepad-post-content div>p:first-child:first-letter{float:left;font-size:4.688rem;line-height:4.375rem;padding-top:.25rem;padding-right:.5rem;padding-left:.188rem;font-family:serif}}</style>
+</head>
+<body class="post-template" itemscope itemtype="http://schema.org/WebPage">  
+
+        <main id="notepad-post-container-simple" class="notepad-post-container-simple" role="main">
+            <header class="notepad-post-header-simple">
+                <div class="notepad-post-menu-header-simple">
+
+                    <a class="notepad-blog-logo" href="http://localhost:4000">
+                        <img src="http://localhost:4000/images/logo.png" alt="Blog Logo" />
+                    </a>
+
+                <div class="notepad-blog-menu">      
+    <div class="notepad-mobile-menu show-for-small">
+        <a href="#"><i class="fa fa-bars"></i></a>
+    </div>
+    <ul class="notepad-menu">
+        <li class="notepad-mobile-close-btn show-for-small text-right">
+            <a href="#"><i class="fa fa-times"></i></a>
+        </li>
+
+            <li>
+                    <a href="http://localhost:4000/">Home</a>
+                 </li>
+
+            <li>
+                    <a href="http://localhost:4000/categories">Categories</a>
+                 </li>
+
+            <li>
+                    <a href="http://localhost:4000/about">About</a>
+                 </li>
+            
+           <li><a href="http://localhost:4000/feed.xml" title="Atom/RSS feed"><i class="icon-rss"></i> Feed</a></li>
+    </ul>
+
+</div>
+            </div>
+
+                <div class="notepad-post-title-simple row">
+                    <div class="small-12 columns">
+                        <div class="notepad-post-meta-simple">
+
+                            <h1>Bang-Bang, Be lazy!!</h1>
+                            <p>by <strong>SnorriDev</strong> &#8212; on <a href="http://localhost:4000/tags/index.html#linux" data-toggle="tooltip" title="Posts tagged with linux" rel="tag">linux</a> <strong><time datetime="2014-09-14T09:00:00+05:30">14 Sep 2014</time></strong></p>
+                        
+
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- codein1 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-7466474470517357"
+     data-ad-slot="6700962438"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+
+
+
+</div>
+                    </div>
+                </div>
+            </header>
+
+        <article class="notepad-post-content post tag-simple">
+            <div><p>I found another great thing linux provides for the lazy programmers ;)
+Most of the time we need to repeat the commands we entered in linux terminal and many hardworking engineers typing it again and again ;)</p>
+
+<p>Famous quote <strong>“Those who cannot remember the past are condemned to repeat it”</strong> preety much applies here when you use commandline mode to operate your machine or working on remote server via ssh.</p>
+
+<p>Linux provides many tools which remembers history and on top of that we can make our life easy.</p>
+
+<p>Usually i work on servers and whenever try to fire few root access commands and it dont allow  me!! -_-,feels insulting. 
+Anyway <strong>sudo !!</strong>  is here to rescue you :)</p>
+
+<p><img src="http://localhost:4000/images/bang-bang.jpg" /></p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">amey@amey-xps:~/$ </span>touch /etc/apache2/apache2.conf 
+touch: cannot touch ‘/etc/apache2/apache2.conf’: Permission denied
+<span class="gp">amey@amey-xps:~/work/blog/codeinventory.github.io/_posts$ </span>sudo !!
+sudo touch /etc/apache2/apache2.conf 
+<span class="o">[</span>sudo] password <span class="k">for </span>amey: 
+<span class="gp">amey@amey-xps:~/$ </span></code></pre></figure>
+
+<p>Not only <em>sudo</em>, Bang (!) can do may more things &lt;3</p>
+
+<h2 id="repeating-commands">Repeating Commands</h2>
+<h3 id="repeat-last-command">Repeat last command</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!!</code></pre></figure>
+
+<h3 id="repeat-last-command-that-started-with-x">Repeat last command that started with x</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!x</code></pre></figure>
+
+<h3 id="repeat-last-command-that-has-the-substring-x">Repeat last command that has the substring x</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!?x</code></pre></figure>
+
+<h3 id="repeat-10th-command-in-the-history-file">Repeat 10th command in the history file</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!10</code></pre></figure>
+
+<h3 id="repeat-10th-from-last-command-in-the-history-file">Repeat 10th from last command in the history file</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!-10</code></pre></figure>
+
+<h2 id="fetching-parameters">Fetching Parameters</h2>
+<h3 id="fetch-parameters-from-last-command">Fetch parameters from last command</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!!<span class="k">*</span></code></pre></figure>
+
+<h3 id="fetch-first-parameter-from-last-command">Fetch first parameter from last command</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!!^</code></pre></figure>
+
+<h3 id="fetch-last-parameter-from-last-command">Fetch last parameter from last command</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!!<span class="err">$</span></code></pre></figure>
+
+<h3 id="fetch-third-parameter-from-last-command">Fetch third parameter from last command</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!!3</code></pre></figure>
+
+<h2 id="modifiers">Modifiers</h2>
+<h3 id="repeat-last-command-substituting-foo-for-bar">Repeat last command substituting foo for bar</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!!:s/foo/bar/</code></pre></figure>
+
+<h3 id="print-last-command-without-running-it">Print last command without running it</h3>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">!!:p</code></pre></figure>
+
+<p>Happy coding ….. :)</p>
+
+            </div>
+
+<div style="text-align: center;">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- codein2-footer -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-7466474470517357"
+     data-ad-slot="9952356430"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+
+
+
+        </article>
+        <div class="cf"></div>
+        <div class="row text-center">
+            <section class="notepad-post-share">
+                <a class="twitter-icon" href="https://twitter.com/intent/tweet?text=&quot;Bang-Bang, Be lazy!!&quot;%20http://localhost:4000/linux/2014/09/14/bang-bang/%20via%20&#64;SnorriDev"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;" title="Share on Twitter">
+                    <i class="fa fa-twitter"></i>
+                </a>
+                <a class="facebook-icon" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/linux/2014/09/14/bang-bang/"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;" title="Share on Facebook">
+                    <i class="fa fa-facebook"></i>
+                </a>
+                <a class="google-icon" href="https://plus.google.com/share?url=http://localhost:4000/linux/2014/09/14/bang-bang/"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;" title="Share on Google+">
+                    <i class="fa fa-google-plus"></i>
+                </a>
+            </section>
+        </div>
+        <div class="cf"></div>
+        
+            <div class="notepad-author-info">
+                <div class="row">
+                    <section class="notepad-post-author small-12 columns">
+                        
+                            <img src="http://localhost:4000/images/ameyjadiye.jpg" class="notepad-post-author-avatar" alt="SnorriDev's photo">
+                        
+                        
+                            <span class="author-label">Author</span>
+                            <h1>SnorriDev</h1>
+                        
+                        
+                            <p><a href="mailto:snorri.devteam@gmail.com" class="author-website">snorri.devteam@gmail.com</a>
+
+			    <iframe src="//www.facebook.com/plugins/follow?href=https%3A%2F%2Fwww.facebook.com%2Fameyjadiye&amp;layout=standard&amp;show_faces=true&amp;colorscheme=light&amp;width=450&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:80px;" allowTransparency="true"></iframe> 
+			    </p>
+                        
+                        
+                            <p>Programming is 1% knowledge, 2% ability and 97% getting the ability to work with the knowledge :)</p>
+                        
+                    </section>
+                </div>
+            </div>
+ 
+        
+        <div class="cf"></div>
+        
+        <section class="notepad-disqus row">
+    <div class="small-12 columns">
+        <h1 class="notepad-comments-header">Comments</h1>
+        <div id="disqus_thread"></div>
+        
+<!--
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'snorridev.github.io/thoth'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+-->
+
+ 
+<div class="fb-comments" data-href="http://localhost:4000/linux/2014/09/14/bang-bang/" data-num-posts="4" data-width="706" data-version="v2.3"></div>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId=1595152237390753&version=v2.3";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, "script", "facebook-jssdk"));</script>
+
+    </div>
+</section>
+
+        <div class="cf"></div>
+
+    <footer class="notepad-site-footer">
+    <div class="copyright">
+        <section>All content copyright <a href="http://localhost:4000/about">SnorriDev</a> &copy; 2017 &bull; All rights reserved.</section>
+	<p><a href='http://www.catb.org/hacker-emblem/' target="_blank"><img src='/assets/img/hacker.png' alt='hacker emblem' /></a>
+          <a href="http://endsoftpatents.org/innovating-without-patents" target="_blank"><img style="border-width:0" src="/assets/img/patent-free.png"></a></p>
+    </div>
+    <div class="social-icons">
+        
+        
+        <a href="http://twitter.com/SnorriDev">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-twitter fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="https://plus.google.com/u/0/+AmeyJadiye">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-google-plus fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="http://instagram.com/lambdaviking">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-instagram fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="http://github.com/viking-sudo-rm">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-github fa-stack-1x"></i>
+            </span>
+        </a>
+        
+        
+        <a href="http://facebook.com/SnorriDev">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-facebook fa-stack-1x"></i>
+            </span>
+        </a>
+        
+    </div>
+    
+    <div class="cf"></div>
+</footer>
+ 
+</main>    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="http://localhost:4000/assets/js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
+    <script src="http://localhost:4000/assets/js/vendor/modernizr.js"></script>
+    <script src="http://localhost:4000/assets/js/foundation.min.js"></script>
+    
+    <script src="http://localhost:4000/assets/js/notepad.js"></script>
+    <script src="http://localhost:4000/assets/js/scripts.min.js"></script>
+    <script src="http://localhost:4000/assets/js/vendor/nprogress.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/sigma.js/1.0.3/sigma.min.js"></script>
+
+    <script>
+      $(document).foundation();
+    </script>
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-46791108-1', 'auto');
+  ga('require', 'displayfeatures');
+  ga('send', 'pageview');
+
+</script>
+
+<script>NProgress.start();var interval=setInterval(function(){NProgress.inc()},1000);jQuery(window).load(function(){clearInterval(interval);NProgress.done()});jQuery(window).unload(function(){NProgress.start()});</script>
+ 
+</body>
+</html>
+
     <article class="notepad-index-post post row">
         <div class="small-12 medium-3 large-2 columns datetime">
             <span class="notepad-post-meta">
