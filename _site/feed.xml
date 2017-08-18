@@ -7,7 +7,7 @@
 <generator uri="https://github.com/mojombo/jekyll">Jekyll</generator>
 <link rel="self" type="application/atom+xml" href="http://localhost:4000/feed.xml" />
 <link rel="alternate" type="text/html" href="http://localhost:4000/" />
-<updated>2017-08-18T16:49:45-04:00</updated>
+<updated>2017-08-18T16:55:37-04:00</updated>
 <id>http://localhost:4000/</id>
 <author>
   <name>SnorriDev</name>
@@ -18,8 +18,8 @@
 
 <entry>
   <title type="html"><![CDATA[What is The Book of Thoth?]]></title>
-  <link rel="alternate" type="text/html" href="http://localhost:4000/intro/2017/08/13/What-is-The-Book-of-Thoth/"/>
-  <id>http://localhost:4000/intro/2017/08/13/What is The Book of Thoth?</id>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/announcements/2017/08/13/What-is-The-Book-of-Thoth/"/>
+  <id>http://localhost:4000/announcements/2017/08/13/What is The Book of Thoth?</id>
   <published>2017-08-13T00:00:00-04:00</published>
   <updated>2017-08-13T00:00:00-04:00</updated>
   <author>
@@ -37,14 +37,14 @@
 &lt;p&gt;You can follow the development of the project on this blog. We have already have approved to release the game on Steam, and our tentative release date is December 2017.&lt;/p&gt;
 
   
-  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/intro/2017/08/13/What-is-The-Book-of-Thoth/&quot;&gt;What is The Book of Thoth?&lt;/a&gt; was originally published by SnorriDev at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on August 13, 2017.&lt;/p&gt;</content>
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/announcements/2017/08/13/What-is-The-Book-of-Thoth/&quot;&gt;What is The Book of Thoth?&lt;/a&gt; was originally published by SnorriDev at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on August 13, 2017.&lt;/p&gt;</content>
 </entry>
 
 
 <entry>
   <title type="html"><![CDATA[New animations and level design]]></title>
-  <link rel="alternate" type="text/html" href="http://localhost:4000/features,%20art/2017/08/09/New-Animations-and-Level-Design/"/>
-  <id>http://localhost:4000/features,%20art/2017/08/09/New Animations and Level Design</id>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/art/2017/08/09/New-Animations-and-Level-Design/"/>
+  <id>http://localhost:4000/art/2017/08/09/New Animations and Level Design</id>
   <published>2017-08-09T00:00:00-04:00</published>
   <updated>2017-08-09T00:00:00-04:00</updated>
   <author>
@@ -62,14 +62,14 @@
 &lt;p&gt;In addition to these new character animations, we have also put a lot of thought into changing the level design to utilize screen space more efficiently and beautify the game environment. More on that soon.&lt;/p&gt;
 
   
-  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/features,%20art/2017/08/09/New-Animations-and-Level-Design/&quot;&gt;New animations and level design&lt;/a&gt; was originally published by SnorriDev at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on August 09, 2017.&lt;/p&gt;</content>
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/art/2017/08/09/New-Animations-and-Level-Design/&quot;&gt;New animations and level design&lt;/a&gt; was originally published by SnorriDev at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on August 09, 2017.&lt;/p&gt;</content>
 </entry>
 
 
 <entry>
   <title type="html"><![CDATA[Book of Thoth coming to Steam!]]></title>
-  <link rel="alternate" type="text/html" href="http://localhost:4000/announcements,%20steam/2017/08/01/Book-of-Thoth-coming-to-Steam!/"/>
-  <id>http://localhost:4000/announcements,%20steam/2017/08/01/Book of Thoth coming to Steam!</id>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/announcements/2017/08/01/Book-of-Thoth-coming-to-Steam!/"/>
+  <id>http://localhost:4000/announcements/2017/08/01/Book of Thoth coming to Steam!</id>
   <published>2017-08-01T00:00:00-04:00</published>
   <updated>2017-08-01T00:00:00-04:00</updated>
   <author>
@@ -93,7 +93,7 @@
 &lt;/ul&gt;
 
   
-  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/announcements,%20steam/2017/08/01/Book-of-Thoth-coming-to-Steam!/&quot;&gt;Book of Thoth coming to Steam!&lt;/a&gt; was originally published by SnorriDev at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on August 01, 2017.&lt;/p&gt;</content>
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/announcements/2017/08/01/Book-of-Thoth-coming-to-Steam!/&quot;&gt;Book of Thoth coming to Steam!&lt;/a&gt; was originally published by SnorriDev at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on August 01, 2017.&lt;/p&gt;</content>
 </entry>
 
 

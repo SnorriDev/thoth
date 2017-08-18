@@ -2,24 +2,24 @@
 	
 		{
 		  "title"      : "What is The Book of Thoth?",
-		  "category"   : "intro",
-		  "url"        : "http://localhost:4000/intro/2017/08/13/What-is-The-Book-of-Thoth/",
+		  "category"   : "announcements",
+		  "url"        : "http://localhost:4000/announcements/2017/08/13/What-is-The-Book-of-Thoth/",
 		  "date"       : "2017-08-13 00:00:00 -0400",
 		  "shortdate"  : "August 13, 2017"
 		} ,
 	
 		{
 		  "title"      : "New animations and level design",
-		  "category"   : "features, art",
-		  "url"        : "http://localhost:4000/features,%20art/2017/08/09/New-Animations-and-Level-Design/",
+		  "category"   : "art",
+		  "url"        : "http://localhost:4000/art/2017/08/09/New-Animations-and-Level-Design/",
 		  "date"       : "2017-08-09 00:00:00 -0400",
 		  "shortdate"  : "August 09, 2017"
 		} ,
 	
 		{
 		  "title"      : "Book of Thoth coming to Steam!",
-		  "category"   : "announcements, steam",
-		  "url"        : "http://localhost:4000/announcements,%20steam/2017/08/01/Book-of-Thoth-coming-to-Steam!/",
+		  "category"   : "announcements",
+		  "url"        : "http://localhost:4000/announcements/2017/08/01/Book-of-Thoth-coming-to-Steam!/",
 		  "date"       : "2017-08-01 00:00:00 -0400",
 		  "shortdate"  : "August 01, 2017"
 		} ,
