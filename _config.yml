@@ -37,10 +37,10 @@ links:
     url: /
     external: false
     icon: home
-  # - title: Categories
-  #   url: /categories
   - title: About
     url: /thoth/2017/08/13/What-is-The-Book-of-Thoth/
+  - title: Categories
+    url: /categories
 
 # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 timezone:    America/New_York
