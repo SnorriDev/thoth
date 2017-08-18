@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+
+
+
+<title type="text">The Book of Thoth</title>
+<generator uri="https://github.com/mojombo/jekyll">Jekyll</generator>
+<link rel="self" type="application/atom+xml" href="http://localhost:4000/feed.xml" />
+<link rel="alternate" type="text/html" href="http://localhost:4000/" />
+<updated>2017-08-18T17:05:39-04:00</updated>
+<id>http://localhost:4000/</id>
+<author>
+  <name>SnorriDev</name>
+  <uri>http://localhost:4000/</uri>
+  <email>snorri.devteam@gmail.com</email>
+</author>
+
+
+<entry>
+  <title type="html"><![CDATA[What is The Book of Thoth?]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/announcements/2017/08/13/What-is-The-Book-of-Thoth/"/>
+  <id>http://localhost:4000/announcements/2017/08/13/What is The Book of Thoth?</id>
+  <published>2017-08-13T00:00:00-04:00</published>
+  <updated>2017-08-13T00:00:00-04:00</updated>
+  <author>
+    <name>SnorriDev</name>
+    <uri>http://localhost:4000</uri>
+    <email>snorri.devteam@gmail.com</email>
+  </author>
+  
+  <content type="html">
+  
+    &lt;p&gt;&lt;em&gt;The Book of Thoth&lt;/em&gt; is a game that we at SnorriDev have been planning for the last year. The goal is to let our players experience and utilize magic more immersively than they thought was possible. We’ve done this by building a powerful spell language that players use to fight and solve puzzles. There are literally an infinite number of ways that you can put together the hieroglyphs you have unlocked to write spells. This dynamicism means that players need to be creative with the hieroglyphs that they know. It also means that many of the puzzles in our game have multiple solutions.&lt;/p&gt;
+
+&lt;p&gt;The story of &lt;em&gt;The Book of Thoth&lt;/em&gt; is based off of a real legend from Ancient Egypt. Prince Setna is the main character, and his goal is to find the Book of Thoth: a legendary artifact that contains forbidden divine knowledge about spellcasting. If a mortal reads the tome, legend has it that they can become powerful enough to defeat a god in combat. Setna’s journey takes him through many adventures in which he fights fellow humans, creatures of the underworld, and even the gods themselves.&lt;/p&gt;
+
+&lt;p&gt;You can follow the development of the project on this blog. We have already have approved to release the game on Steam, and our tentative release date is December 2017.&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/announcements/2017/08/13/What-is-The-Book-of-Thoth/&quot;&gt;What is The Book of Thoth?&lt;/a&gt; was originally published by SnorriDev at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on August 13, 2017.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[New animations and level design]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/art/2017/08/09/New-Animations-and-Level-Design/"/>
+  <id>http://localhost:4000/art/2017/08/09/New Animations and Level Design</id>
+  <published>2017-08-09T00:00:00-04:00</published>
+  <updated>2017-08-09T00:00:00-04:00</updated>
+  <author>
+    <name>SnorriDev</name>
+    <uri>http://localhost:4000</uri>
+    <email>snorri.devteam@gmail.com</email>
+  </author>
+  
+  <content type="html">
+  
+    &lt;p&gt;Toby and I are pleased to announce a new character art style in The Book of Thoth. While there are still many detail to hammer out, here is a preview:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/thoth/images/animpreview.png&quot; alt=&quot;Animations preview&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In addition to these new character animations, we have also put a lot of thought into changing the level design to utilize screen space more efficiently and beautify the game environment. More on that soon.&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/art/2017/08/09/New-Animations-and-Level-Design/&quot;&gt;New animations and level design&lt;/a&gt; was originally published by SnorriDev at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on August 09, 2017.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Book of Thoth coming to Steam!]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/announcements/2017/08/01/Book-of-Thoth-coming-to-Steam!/"/>
+  <id>http://localhost:4000/announcements/2017/08/01/Book of Thoth coming to Steam!</id>
+  <published>2017-08-01T00:00:00-04:00</published>
+  <updated>2017-08-01T00:00:00-04:00</updated>
+  <author>
+    <name>SnorriDev</name>
+    <uri>http://localhost:4000</uri>
+    <email>snorri.devteam@gmail.com</email>
+  </author>
+  
+  <content type="html">
+  
+    &lt;p&gt;I’m glad to announce that we have officially been approved to release &lt;em&gt;The Book of Thoth&lt;/em&gt; on Steam. While working on the game this summer, Toby and I have have squashed many bugs and made several dramatic decisions to revamp the gameplay and graphics. I hope to share more of our progress with you soon, but it can be summarized as follows:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Simplified multiworld&lt;/li&gt;
+  &lt;li&gt;More maps&lt;/li&gt;
+  &lt;li&gt;Better texture mending&lt;/li&gt;
+  &lt;li&gt;New professionally drawn animation set&lt;/li&gt;
+  &lt;li&gt;Ballistas&lt;/li&gt;
+  &lt;li&gt;Entity rotation&lt;/li&gt;
+  &lt;li&gt;Room-based levels&lt;/li&gt;
+  &lt;li&gt;Chaos-order dichotomy tech lines&lt;/li&gt;
+&lt;/ul&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/announcements/2017/08/01/Book-of-Thoth-coming-to-Steam!/&quot;&gt;Book of Thoth coming to Steam!&lt;/a&gt; was originally published by SnorriDev at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on August 01, 2017.&lt;/p&gt;</content>
+</entry>
+
+</feed>
