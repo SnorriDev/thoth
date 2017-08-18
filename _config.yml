@@ -43,7 +43,7 @@ links:
     url: /about
 
 # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-timezone:    Asia/Calcutta
+timezone:    North America/New York
 future:      true
 rouge: pygments
 markdown:    kramdown

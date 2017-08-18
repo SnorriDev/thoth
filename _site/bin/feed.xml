@@ -7,7 +7,7 @@
 <generator uri="https://github.com/mojombo/jekyll">Jekyll</generator>
 <link rel="self" type="application/atom+xml" href="http://localhost:4000/feed.xml" />
 <link rel="alternate" type="text/html" href="http://localhost:4000/" />
-<updated>2017-08-19T01:32:43+05:30</updated>
+<updated>2017-08-18T20:26:04+00:00</updated>
 <id>http://localhost:4000/</id>
 <author>
   <name>SnorriDev</name>
@@ -20,8 +20,8 @@
   <title type="html"><![CDATA[Core Affinity]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/linux,%20java/2016/12/21/core-affinity/"/>
   <id>http://localhost:4000/bin/linux,%20java/2016/12/21/core-affinity</id>
-  <published>2016-12-21T07:25:00+05:30</published>
-  <updated>2016-12-21T07:25:00+05:30</updated>
+  <published>2016-12-21T07:25:00+00:00</published>
+  <updated>2016-12-21T07:25:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -78,8 +78,8 @@ usage &lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
   <title type="html"><![CDATA[IoT and nodemcu]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/embedded/2016/10/18/iot-and-nodemcu/"/>
   <id>http://localhost:4000/bin/embedded/2016/10/18/iot-and-nodemcu</id>
-  <published>2016-10-18T08:45:00+05:30</published>
-  <updated>2016-10-18T08:45:00+05:30</updated>
+  <published>2016-10-18T08:45:00+00:00</published>
+  <updated>2016-10-18T08:45:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -188,8 +188,8 @@ m:close();
   <title type="html"><![CDATA[CUDA and Pain with GeForce GT 540M]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/gpu/2016/06/29/CUDA-Pain-GT-540M/"/>
   <id>http://localhost:4000/bin/gpu/2016/06/29/CUDA-Pain-GT-540M</id>
-  <published>2016-06-29T23:11:00+05:30</published>
-  <updated>2016-06-29T23:11:00+05:30</updated>
+  <published>2016-06-29T23:11:00+00:00</published>
+  <updated>2016-06-29T23:11:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -390,8 +390,8 @@ Processing triggers &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;libc-bin &l
   <title type="html"><![CDATA[LM35->Arduino->RPi2]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/embedded/2016/03/20/LM35DZ-Arduino-Rpi2/"/>
   <id>http://localhost:4000/bin/embedded/2016/03/20/LM35DZ-Arduino-Rpi2</id>
-  <published>2016-03-20T22:45:00+05:30</published>
-  <updated>2016-03-20T22:45:00+05:30</updated>
+  <published>2016-03-20T22:45:00+00:00</published>
+  <updated>2016-03-20T22:45:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -481,8 +481,8 @@ Processing triggers &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;libc-bin &l
   <title type="html"><![CDATA[RC Plane - Preplan]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/embedded/2015/09/01/rc-plane-pre-planning/"/>
   <id>http://localhost:4000/bin/embedded/2015/09/01/rc-plane-pre-planning</id>
-  <published>2015-09-01T09:00:00+05:30</published>
-  <updated>2015-09-01T09:00:00+05:30</updated>
+  <published>2015-09-01T09:00:00+00:00</published>
+  <updated>2015-09-01T09:00:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -523,8 +523,8 @@ Processing triggers &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;libc-bin &l
   <title type="html"><![CDATA[Sentiment analysis with R]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/analytics/2015/05/10/sentiment-analysis-with-R/"/>
   <id>http://localhost:4000/bin/analytics/2015/05/10/sentiment-analysis-with-R</id>
-  <published>2015-05-10T20:00:00+05:30</published>
-  <updated>2015-05-10T20:00:00+05:30</updated>
+  <published>2015-05-10T20:00:00+00:00</published>
+  <updated>2015-05-10T20:00:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -634,8 +634,8 @@ Processing triggers &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;libc-bin &l
   <title type="html"><![CDATA[Alias makes life easy]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/linux/2015/04/01/alias-makes-life-easy/"/>
   <id>http://localhost:4000/bin/linux/2015/04/01/alias-makes-life-easy</id>
-  <published>2015-04-01T18:45:00+05:30</published>
-  <updated>2015-04-01T18:45:00+05:30</updated>
+  <published>2015-04-01T18:45:00+00:00</published>
+  <updated>2015-04-01T18:45:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -667,8 +667,8 @@ Processing triggers &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;libc-bin &l
   <title type="html"><![CDATA[Working with GIT patch]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/linux/2014/12/31/working-with-git-patch/"/>
   <id>http://localhost:4000/bin/linux/2014/12/31/working-with-git-patch</id>
-  <published>2014-12-31T11:36:00+05:30</published>
-  <updated>2014-12-31T11:36:00+05:30</updated>
+  <published>2014-12-31T11:36:00+00:00</published>
+  <updated>2014-12-31T11:36:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -720,8 +720,8 @@ First step is check the patch.&lt;/li&gt;
   <title type="html"><![CDATA[Install lollipop 5.0 to Nexus 4]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/android/2014/11/23/install-lollipop-on-nexus-4/"/>
   <id>http://localhost:4000/bin/android/2014/11/23/install-lollipop-on-nexus-4</id>
-  <published>2014-11-23T21:00:00+05:30</published>
-  <updated>2014-11-23T21:00:00+05:30</updated>
+  <published>2014-11-23T21:00:00+00:00</published>
+  <updated>2014-11-23T21:00:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -889,8 +889,8 @@ finished. total &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;: 150.897s&lt;
   <title type="html"><![CDATA[Bang-Bang, Be lazy!!]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/linux/2014/09/14/bang-bang/"/>
   <id>http://localhost:4000/bin/linux/2014/09/14/bang-bang</id>
-  <published>2014-09-14T09:00:00+05:30</published>
-  <updated>2014-09-14T09:00:00+05:30</updated>
+  <published>2014-09-14T09:00:00+00:00</published>
+  <updated>2014-09-14T09:00:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -978,8 +978,8 @@ sudo touch /etc/apache2/apache2.conf
   <title type="html"><![CDATA[Javascript - ♥ Attach with events]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/javascript/2014/09/07/javascript-attache-with-events/"/>
   <id>http://localhost:4000/bin/javascript/2014/09/07/javascript-attache-with-events</id>
-  <published>2014-09-07T23:51:00+05:30</published>
-  <updated>2014-09-07T23:51:00+05:30</updated>
+  <published>2014-09-07T23:51:00+00:00</published>
+  <updated>2014-09-07T23:51:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -1065,8 +1065,8 @@ If true, useCapture indicates that the user wishes to initiate capture. After in
   <title type="html"><![CDATA[Super awesome automation testing]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/testing/2014/08/30/Super-awesome-automation/"/>
   <id>http://localhost:4000/bin/testing/2014/08/30/Super-awesome-automation</id>
-  <published>2014-08-30T21:45:00+05:30</published>
-  <updated>2014-08-30T21:45:00+05:30</updated>
+  <published>2014-08-30T21:45:00+00:00</published>
+  <updated>2014-08-30T21:45:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -1179,8 +1179,8 @@ Done :  &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&qu
   <title type="html"><![CDATA['N' for NodeJS]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/nodejs/2014/08/17/N-for-Node.js/"/>
   <id>http://localhost:4000/bin/nodejs/2014/08/17/N-for-Node.js</id>
-  <published>2014-08-17T11:45:00+05:30</published>
-  <updated>2014-08-17T11:45:00+05:30</updated>
+  <published>2014-08-17T11:45:00+00:00</published>
+  <updated>2014-08-17T11:45:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -1335,8 +1335,8 @@ Loved NodeJS ♥&lt;/p&gt;
   <title type="html"><![CDATA[Timezone conversion in python -Easy way]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/python/2014/08/08/python-timezone-convertion/"/>
   <id>http://localhost:4000/bin/python/2014/08/08/python-timezone-convertion</id>
-  <published>2014-08-08T10:17:00+05:30</published>
-  <updated>2014-08-08T10:17:00+05:30</updated>
+  <published>2014-08-08T10:17:00+00:00</published>
+  <updated>2014-08-08T10:17:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -1377,8 +1377,8 @@ Loved NodeJS ♥&lt;/p&gt;
   <title type="html"><![CDATA[Killer mailer script in Python]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/python/2014/08/04/killer-mailer/"/>
   <id>http://localhost:4000/bin/python/2014/08/04/killer-mailer</id>
-  <published>2014-08-04T09:23:00+05:30</published>
-  <updated>2014-08-04T09:23:00+05:30</updated>
+  <published>2014-08-04T09:23:00+00:00</published>
+  <updated>2014-08-04T09:23:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -1455,8 +1455,8 @@ Loved NodeJS ♥&lt;/p&gt;
   <title type="html"><![CDATA[Killer mailer script in Python]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/python/2014/08/04/killer-mailer/"/>
   <id>http://localhost:4000/python/2014/08/04/killer-mailer</id>
-  <published>2014-08-04T09:23:00+05:30</published>
-  <updated>2014-08-04T09:23:00+05:30</updated>
+  <published>2014-08-04T09:23:00+00:00</published>
+  <updated>2014-08-04T09:23:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -1533,8 +1533,8 @@ Loved NodeJS ♥&lt;/p&gt;
   <title type="html"><![CDATA[Functions in shell script]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/linux/2014/01/19/functions-in-shell-script/"/>
   <id>http://localhost:4000/bin/linux/2014/01/19/functions-in-shell-script</id>
-  <published>2014-01-19T15:09:00+05:30</published>
-  <updated>2014-01-19T15:09:00+05:30</updated>
+  <published>2014-01-19T15:09:00+00:00</published>
+  <updated>2014-01-19T15:09:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -1588,8 +1588,8 @@ sql_exec&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
   <title type="html"><![CDATA[Functions in shell script]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/linux/2014/01/19/functions-in-shell-script/"/>
   <id>http://localhost:4000/linux/2014/01/19/functions-in-shell-script</id>
-  <published>2014-01-19T15:09:00+05:30</published>
-  <updated>2014-01-19T15:09:00+05:30</updated>
+  <published>2014-01-19T15:09:00+00:00</published>
+  <updated>2014-01-19T15:09:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -1643,8 +1643,8 @@ sql_exec&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
   <title type="html"><![CDATA[Using MySQL dump]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/database/2013/12/17/using-mysql-dump/"/>
   <id>http://localhost:4000/bin/database/2013/12/17/using-mysql-dump</id>
-  <published>2013-12-17T20:00:00+05:30</published>
-  <updated>2013-12-17T20:00:00+05:30</updated>
+  <published>2013-12-17T20:00:00+00:00</published>
+  <updated>2013-12-17T20:00:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -1698,8 +1698,8 @@ sql_exec&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
   <title type="html"><![CDATA[Using MySQL dump]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/database/2013/12/17/using-mysql-dump/"/>
   <id>http://localhost:4000/database/2013/12/17/using-mysql-dump</id>
-  <published>2013-12-17T20:00:00+05:30</published>
-  <updated>2013-12-17T20:00:00+05:30</updated>
+  <published>2013-12-17T20:00:00+00:00</published>
+  <updated>2013-12-17T20:00:00+00:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
