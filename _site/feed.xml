@@ -7,7 +7,7 @@
 <generator uri="https://github.com/mojombo/jekyll">Jekyll</generator>
 <link rel="self" type="application/atom+xml" href="http://localhost:4000/feed.xml" />
 <link rel="alternate" type="text/html" href="http://localhost:4000/" />
-<updated>2017-08-18T20:26:04+00:00</updated>
+<updated>2017-08-18T16:49:45-04:00</updated>
 <id>http://localhost:4000/</id>
 <author>
   <name>SnorriDev</name>
@@ -17,11 +17,92 @@
 
 
 <entry>
+  <title type="html"><![CDATA[What is The Book of Thoth?]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/intro/2017/08/13/What-is-The-Book-of-Thoth/"/>
+  <id>http://localhost:4000/intro/2017/08/13/What is The Book of Thoth?</id>
+  <published>2017-08-13T00:00:00-04:00</published>
+  <updated>2017-08-13T00:00:00-04:00</updated>
+  <author>
+    <name>SnorriDev</name>
+    <uri>http://localhost:4000</uri>
+    <email>snorri.devteam@gmail.com</email>
+  </author>
+  
+  <content type="html">
+  
+    &lt;p&gt;&lt;em&gt;The Book of Thoth&lt;/em&gt; is a game that we at SnorriDev have been planning for the last year. The goal is to let our players experience and utilize magic more immersively than they thought was possible. We’ve done this by building a powerful spell language that players use to fight and solve puzzles. There are literally an infinite number of ways that you can put together the hieroglyphs you have unlocked to write spells. This dynamicism means that players need to be creative with the hieroglyphs that they know. It also means that many of the puzzles in our game have multiple solutions.&lt;/p&gt;
+
+&lt;p&gt;The story of &lt;em&gt;The Book of Thoth&lt;/em&gt; is based off of a real legend from Ancient Egypt. Prince Setna is the main character, and his goal is to find the Book of Thoth: a legendary artifact that contains forbidden divine knowledge about spellcasting. If a mortal reads the tome, legend has it that they can become powerful enough to defeat a god in combat. Setna’s journey takes him through many adventures in which he fights fellow humans, creatures of the underworld, and even the gods themselves.&lt;/p&gt;
+
+&lt;p&gt;You can follow the development of the project on this blog. We have already have approved to release the game on Steam, and our tentative release date is December 2017.&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/intro/2017/08/13/What-is-The-Book-of-Thoth/&quot;&gt;What is The Book of Thoth?&lt;/a&gt; was originally published by SnorriDev at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on August 13, 2017.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[New animations and level design]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/features,%20art/2017/08/09/New-Animations-and-Level-Design/"/>
+  <id>http://localhost:4000/features,%20art/2017/08/09/New Animations and Level Design</id>
+  <published>2017-08-09T00:00:00-04:00</published>
+  <updated>2017-08-09T00:00:00-04:00</updated>
+  <author>
+    <name>SnorriDev</name>
+    <uri>http://localhost:4000</uri>
+    <email>snorri.devteam@gmail.com</email>
+  </author>
+  
+  <content type="html">
+  
+    &lt;p&gt;Toby and I are pleased to announce a new character art style in The Book of Thoth. While there are still many detail to hammer out, here is a preview:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/thoth/images/animpreview.png&quot; alt=&quot;Animations preview&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In addition to these new character animations, we have also put a lot of thought into changing the level design to utilize screen space more efficiently and beautify the game environment. More on that soon.&lt;/p&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/features,%20art/2017/08/09/New-Animations-and-Level-Design/&quot;&gt;New animations and level design&lt;/a&gt; was originally published by SnorriDev at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on August 09, 2017.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Book of Thoth coming to Steam!]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/announcements,%20steam/2017/08/01/Book-of-Thoth-coming-to-Steam!/"/>
+  <id>http://localhost:4000/announcements,%20steam/2017/08/01/Book of Thoth coming to Steam!</id>
+  <published>2017-08-01T00:00:00-04:00</published>
+  <updated>2017-08-01T00:00:00-04:00</updated>
+  <author>
+    <name>SnorriDev</name>
+    <uri>http://localhost:4000</uri>
+    <email>snorri.devteam@gmail.com</email>
+  </author>
+  
+  <content type="html">
+  
+    &lt;p&gt;I’m glad to announce that we have officially been approved to release &lt;em&gt;The Book of Thoth&lt;/em&gt; on Steam. While working on the game this summer, Toby and I have have squashed many bugs and made several dramatic decisions to revamp the gameplay and graphics. I hope to share more of our progress with you soon, but it can be summarized as follows:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Simplified multiworld&lt;/li&gt;
+  &lt;li&gt;More maps&lt;/li&gt;
+  &lt;li&gt;Better texture mending&lt;/li&gt;
+  &lt;li&gt;New professionally drawn animation set&lt;/li&gt;
+  &lt;li&gt;Ballistas&lt;/li&gt;
+  &lt;li&gt;Entity rotation&lt;/li&gt;
+  &lt;li&gt;Room-based levels&lt;/li&gt;
+  &lt;li&gt;Chaos-order dichotomy tech lines&lt;/li&gt;
+&lt;/ul&gt;
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/announcements,%20steam/2017/08/01/Book-of-Thoth-coming-to-Steam!/&quot;&gt;Book of Thoth coming to Steam!&lt;/a&gt; was originally published by SnorriDev at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on August 01, 2017.&lt;/p&gt;</content>
+</entry>
+
+
+<entry>
   <title type="html"><![CDATA[Core Affinity]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/linux,%20java/2016/12/21/core-affinity/"/>
   <id>http://localhost:4000/bin/linux,%20java/2016/12/21/core-affinity</id>
-  <published>2016-12-21T07:25:00+00:00</published>
-  <updated>2016-12-21T07:25:00+00:00</updated>
+  <published>2016-12-21T07:25:00-05:00</published>
+  <updated>2016-12-21T07:25:00-05:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -78,8 +159,8 @@ usage &lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
   <title type="html"><![CDATA[IoT and nodemcu]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/embedded/2016/10/18/iot-and-nodemcu/"/>
   <id>http://localhost:4000/bin/embedded/2016/10/18/iot-and-nodemcu</id>
-  <published>2016-10-18T08:45:00+00:00</published>
-  <updated>2016-10-18T08:45:00+00:00</updated>
+  <published>2016-10-18T08:45:00-04:00</published>
+  <updated>2016-10-18T08:45:00-04:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -188,8 +269,8 @@ m:close();
   <title type="html"><![CDATA[CUDA and Pain with GeForce GT 540M]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/gpu/2016/06/29/CUDA-Pain-GT-540M/"/>
   <id>http://localhost:4000/bin/gpu/2016/06/29/CUDA-Pain-GT-540M</id>
-  <published>2016-06-29T23:11:00+00:00</published>
-  <updated>2016-06-29T23:11:00+00:00</updated>
+  <published>2016-06-29T23:11:00-04:00</published>
+  <updated>2016-06-29T23:11:00-04:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -390,8 +471,8 @@ Processing triggers &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;libc-bin &l
   <title type="html"><![CDATA[LM35->Arduino->RPi2]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/embedded/2016/03/20/LM35DZ-Arduino-Rpi2/"/>
   <id>http://localhost:4000/bin/embedded/2016/03/20/LM35DZ-Arduino-Rpi2</id>
-  <published>2016-03-20T22:45:00+00:00</published>
-  <updated>2016-03-20T22:45:00+00:00</updated>
+  <published>2016-03-20T22:45:00-04:00</published>
+  <updated>2016-03-20T22:45:00-04:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -481,8 +562,8 @@ Processing triggers &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;libc-bin &l
   <title type="html"><![CDATA[RC Plane - Preplan]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/embedded/2015/09/01/rc-plane-pre-planning/"/>
   <id>http://localhost:4000/bin/embedded/2015/09/01/rc-plane-pre-planning</id>
-  <published>2015-09-01T09:00:00+00:00</published>
-  <updated>2015-09-01T09:00:00+00:00</updated>
+  <published>2015-09-01T09:00:00-04:00</published>
+  <updated>2015-09-01T09:00:00-04:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -523,8 +604,8 @@ Processing triggers &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;libc-bin &l
   <title type="html"><![CDATA[Sentiment analysis with R]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/analytics/2015/05/10/sentiment-analysis-with-R/"/>
   <id>http://localhost:4000/bin/analytics/2015/05/10/sentiment-analysis-with-R</id>
-  <published>2015-05-10T20:00:00+00:00</published>
-  <updated>2015-05-10T20:00:00+00:00</updated>
+  <published>2015-05-10T20:00:00-04:00</published>
+  <updated>2015-05-10T20:00:00-04:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -634,8 +715,8 @@ Processing triggers &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;libc-bin &l
   <title type="html"><![CDATA[Alias makes life easy]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/linux/2015/04/01/alias-makes-life-easy/"/>
   <id>http://localhost:4000/bin/linux/2015/04/01/alias-makes-life-easy</id>
-  <published>2015-04-01T18:45:00+00:00</published>
-  <updated>2015-04-01T18:45:00+00:00</updated>
+  <published>2015-04-01T18:45:00-04:00</published>
+  <updated>2015-04-01T18:45:00-04:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -667,8 +748,8 @@ Processing triggers &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;libc-bin &l
   <title type="html"><![CDATA[Working with GIT patch]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/linux/2014/12/31/working-with-git-patch/"/>
   <id>http://localhost:4000/bin/linux/2014/12/31/working-with-git-patch</id>
-  <published>2014-12-31T11:36:00+00:00</published>
-  <updated>2014-12-31T11:36:00+00:00</updated>
+  <published>2014-12-31T11:36:00-05:00</published>
+  <updated>2014-12-31T11:36:00-05:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -720,8 +801,8 @@ First step is check the patch.&lt;/li&gt;
   <title type="html"><![CDATA[Install lollipop 5.0 to Nexus 4]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/android/2014/11/23/install-lollipop-on-nexus-4/"/>
   <id>http://localhost:4000/bin/android/2014/11/23/install-lollipop-on-nexus-4</id>
-  <published>2014-11-23T21:00:00+00:00</published>
-  <updated>2014-11-23T21:00:00+00:00</updated>
+  <published>2014-11-23T21:00:00-05:00</published>
+  <updated>2014-11-23T21:00:00-05:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -889,8 +970,8 @@ finished. total &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;: 150.897s&lt;
   <title type="html"><![CDATA[Bang-Bang, Be lazy!!]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/linux/2014/09/14/bang-bang/"/>
   <id>http://localhost:4000/bin/linux/2014/09/14/bang-bang</id>
-  <published>2014-09-14T09:00:00+00:00</published>
-  <updated>2014-09-14T09:00:00+00:00</updated>
+  <published>2014-09-14T09:00:00-04:00</published>
+  <updated>2014-09-14T09:00:00-04:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -978,8 +1059,8 @@ sudo touch /etc/apache2/apache2.conf
   <title type="html"><![CDATA[Javascript - ♥ Attach with events]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/javascript/2014/09/07/javascript-attache-with-events/"/>
   <id>http://localhost:4000/bin/javascript/2014/09/07/javascript-attache-with-events</id>
-  <published>2014-09-07T23:51:00+00:00</published>
-  <updated>2014-09-07T23:51:00+00:00</updated>
+  <published>2014-09-07T23:51:00-04:00</published>
+  <updated>2014-09-07T23:51:00-04:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -1065,8 +1146,8 @@ If true, useCapture indicates that the user wishes to initiate capture. After in
   <title type="html"><![CDATA[Super awesome automation testing]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/testing/2014/08/30/Super-awesome-automation/"/>
   <id>http://localhost:4000/bin/testing/2014/08/30/Super-awesome-automation</id>
-  <published>2014-08-30T21:45:00+00:00</published>
-  <updated>2014-08-30T21:45:00+00:00</updated>
+  <published>2014-08-30T21:45:00-04:00</published>
+  <updated>2014-08-30T21:45:00-04:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -1179,8 +1260,8 @@ Done :  &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&qu
   <title type="html"><![CDATA['N' for NodeJS]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/nodejs/2014/08/17/N-for-Node.js/"/>
   <id>http://localhost:4000/bin/nodejs/2014/08/17/N-for-Node.js</id>
-  <published>2014-08-17T11:45:00+00:00</published>
-  <updated>2014-08-17T11:45:00+00:00</updated>
+  <published>2014-08-17T11:45:00-04:00</published>
+  <updated>2014-08-17T11:45:00-04:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -1335,8 +1416,8 @@ Loved NodeJS ♥&lt;/p&gt;
   <title type="html"><![CDATA[Timezone conversion in python -Easy way]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/python/2014/08/08/python-timezone-convertion/"/>
   <id>http://localhost:4000/bin/python/2014/08/08/python-timezone-convertion</id>
-  <published>2014-08-08T10:17:00+00:00</published>
-  <updated>2014-08-08T10:17:00+00:00</updated>
+  <published>2014-08-08T10:17:00-04:00</published>
+  <updated>2014-08-08T10:17:00-04:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -1377,8 +1458,8 @@ Loved NodeJS ♥&lt;/p&gt;
   <title type="html"><![CDATA[Killer mailer script in Python]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/python/2014/08/04/killer-mailer/"/>
   <id>http://localhost:4000/bin/python/2014/08/04/killer-mailer</id>
-  <published>2014-08-04T09:23:00+00:00</published>
-  <updated>2014-08-04T09:23:00+00:00</updated>
+  <published>2014-08-04T09:23:00-04:00</published>
+  <updated>2014-08-04T09:23:00-04:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -1452,89 +1533,11 @@ Loved NodeJS ♥&lt;/p&gt;
 
 
 <entry>
-  <title type="html"><![CDATA[Killer mailer script in Python]]></title>
-  <link rel="alternate" type="text/html" href="http://localhost:4000/python/2014/08/04/killer-mailer/"/>
-  <id>http://localhost:4000/python/2014/08/04/killer-mailer</id>
-  <published>2014-08-04T09:23:00+00:00</published>
-  <updated>2014-08-04T09:23:00+00:00</updated>
-  <author>
-    <name>SnorriDev</name>
-    <uri>http://localhost:4000</uri>
-    <email>snorri.devteam@gmail.com</email>
-  </author>
-  <category scheme="http://localhost:4000/tags/#python" term="python" />
-  <content type="html">
-  
-    &lt;p&gt;Hey guys i always needed a mailer script which can send me hourly/daily/weekly updates of my diffrent programs running on linux box.&lt;/p&gt;
-
-&lt;p&gt;I tried &lt;strong&gt;sendmail&lt;/strong&gt; and &lt;strong&gt;mutt&lt;/strong&gt; but they were not much impressive.&lt;/p&gt;
-
-&lt;p&gt;I made a python script for myself and this works like KILLER.&lt;/p&gt;
-
-&lt;p&gt;I dont had a SMTP details of my clients server neither access to it.&lt;/p&gt;
-
-&lt;p&gt;This badass script in python  worked well for me, hope it will help you too ;)&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/python&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;# Import smtplib for the actual sending function&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;smtplib&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;argparse&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;# Import the email modules we will need&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;email.mime.text&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MIMEText&lt;/span&gt;
-
-
-&lt;span class=&quot;n&quot;&gt;parser&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argparse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ArgumentParser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'This is a demo script by Amey Jadiye'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;parser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add_argument&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'-s'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'--subject'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;help&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Subject'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;required&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;parser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add_argument&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'-b'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'--body'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;help&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Body'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;required&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;parser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add_argument&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'-t'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'--to'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;help&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'To'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;required&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;parser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add_argument&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'-f'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'--sender'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;help&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'From'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;required&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parse_args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;msg&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MIMEText&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# me == the sender's email address&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# you == the recipient's email address&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;me&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;demo@any-domain-you-want.com&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sender&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;me&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sender&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;you&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;msg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Subject'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subject&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;msg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'From'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;me&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;msg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'To'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;you&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;# Send the message via our own SMTP server, but don't include the&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# envelope header.&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;smtplib&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SMTP&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'localhost'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sendmail&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;me&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;you&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;msg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;as_string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;quit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;if you do adjust following things you can send attachment too.&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;email.mime.image&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MIMEImage&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;email.mime.multipart&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MIMEMultipart&lt;/span&gt;
-
-&lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'/home/amey-xps/logs/server.out.png'&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;fp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'rb'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;img&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MIMEImage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;fp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;msg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;attach&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;img&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;# I used image here , you can use diffrent file types with MIMEText, MIMEImage, MIMEAudio, MIMEBase&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Happy coding ….. :)&lt;/p&gt;
-
-  
-  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/python/2014/08/04/killer-mailer/&quot;&gt;Killer mailer script in Python&lt;/a&gt; was originally published by SnorriDev at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on August 04, 2014.&lt;/p&gt;</content>
-</entry>
-
-
-<entry>
   <title type="html"><![CDATA[Functions in shell script]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/linux/2014/01/19/functions-in-shell-script/"/>
   <id>http://localhost:4000/bin/linux/2014/01/19/functions-in-shell-script</id>
-  <published>2014-01-19T15:09:00+00:00</published>
-  <updated>2014-01-19T15:09:00+00:00</updated>
+  <published>2014-01-19T15:09:00-05:00</published>
+  <updated>2014-01-19T15:09:00-05:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -1585,66 +1588,11 @@ sql_exec&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
 
 
 <entry>
-  <title type="html"><![CDATA[Functions in shell script]]></title>
-  <link rel="alternate" type="text/html" href="http://localhost:4000/linux/2014/01/19/functions-in-shell-script/"/>
-  <id>http://localhost:4000/linux/2014/01/19/functions-in-shell-script</id>
-  <published>2014-01-19T15:09:00+00:00</published>
-  <updated>2014-01-19T15:09:00+00:00</updated>
-  <author>
-    <name>SnorriDev</name>
-    <uri>http://localhost:4000</uri>
-    <email>snorri.devteam@gmail.com</email>
-  </author>
-  <category scheme="http://localhost:4000/tags/#shell" term="shell" /><category scheme="http://localhost:4000/tags/#linux" term="linux" />
-  <content type="html">
-  
-    &lt;p&gt;Have  lot of repeated shell code ? try writing function in that :)&lt;/p&gt;
-
-&lt;p&gt;writing functions in any languages lowers the headache of any programmer , it implements DRY (Do not Repeat Yourself!) rule and that’s cool to why would i write code again and again ? that’s bullshit!&lt;/p&gt;
-
-&lt;p&gt;i am explaining very usefull methods and tricks to write and use functions within shell.&lt;/p&gt;
-
-&lt;p&gt;taking an example ,i need to fetch data from mysql again and again and have to write big repeated code again and again ,let’s write a function for that and just pass your query to it&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
- 
-sql_exec&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;root
-&lt;span class=&quot;nv&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;rut@123
-&lt;span class=&quot;nv&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;mysql -u &lt;span class=&quot;nv&quot;&gt;$user&lt;/span&gt; -p&lt;span class=&quot;s1&quot;&gt;'$password'&lt;/span&gt; mydb -se &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$@&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$result&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
- 
-&lt;span class=&quot;nv&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;sql_exec &lt;span class=&quot;s2&quot;&gt;&quot;select count(*) from my_table&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
- 
-&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'total number of rows are : '&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$count&lt;/span&gt;
- 
-&lt;span class=&quot;nv&quot;&gt;engr_count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;sql_exec &lt;span class=&quot;s2&quot;&gt;&quot;select count(*) from my_table where job='ENGR'&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
- 
-&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'total engineer count is '&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$engr_count&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;' this saved my code repeating '&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Here i passed all the coming arguments to functions to mysql by $@ you can differentiate  arguments by $1 $2 $3 ….. $n&lt;/p&gt;
-
-&lt;p&gt;Always remember unlike C ,Java or any other language you must write functions before calling to it.&lt;/p&gt;
-
-&lt;p&gt;you can either echo $result or return $result it doesn’t matter but i prefer echo as it doesn’t make side effects of escape characters like \t \n etc.&lt;/p&gt;
-
-&lt;p&gt;Hope you got how to use functions in shell.&lt;/p&gt;
-
-&lt;p&gt;Happy coding ….. :)&lt;/p&gt;
-
-  
-  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/linux/2014/01/19/functions-in-shell-script/&quot;&gt;Functions in shell script&lt;/a&gt; was originally published by SnorriDev at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on January 19, 2014.&lt;/p&gt;</content>
-</entry>
-
-
-<entry>
   <title type="html"><![CDATA[Using MySQL dump]]></title>
   <link rel="alternate" type="text/html" href="http://localhost:4000/bin/database/2013/12/17/using-mysql-dump/"/>
   <id>http://localhost:4000/bin/database/2013/12/17/using-mysql-dump</id>
-  <published>2013-12-17T20:00:00+00:00</published>
-  <updated>2013-12-17T20:00:00+00:00</updated>
+  <published>2013-12-17T20:00:00-05:00</published>
+  <updated>2013-12-17T20:00:00-05:00</updated>
   <author>
     <name>SnorriDev</name>
     <uri>http://localhost:4000</uri>
@@ -1691,61 +1639,6 @@ sql_exec&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
 
   
   &lt;p&gt;&lt;a href=&quot;http://localhost:4000/bin/database/2013/12/17/using-mysql-dump/&quot;&gt;Using MySQL dump&lt;/a&gt; was originally published by SnorriDev at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on December 17, 2013.&lt;/p&gt;</content>
-</entry>
-
-
-<entry>
-  <title type="html"><![CDATA[Using MySQL dump]]></title>
-  <link rel="alternate" type="text/html" href="http://localhost:4000/database/2013/12/17/using-mysql-dump/"/>
-  <id>http://localhost:4000/database/2013/12/17/using-mysql-dump</id>
-  <published>2013-12-17T20:00:00+00:00</published>
-  <updated>2013-12-17T20:00:00+00:00</updated>
-  <author>
-    <name>SnorriDev</name>
-    <uri>http://localhost:4000</uri>
-    <email>snorri.devteam@gmail.com</email>
-  </author>
-  <category scheme="http://localhost:4000/tags/#database" term="database" /><category scheme="http://localhost:4000/tags/#mysql" term="mysql" />
-  <content type="html">
-  
-    &lt;p&gt;HI All, mysqldump is a very handy and useful command for keeping backup of your Db or to migrate them to another server.&lt;/p&gt;
-
-&lt;p&gt;lets see how can we use it in different way ..&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;To take a backup of data from mysqlserver itsself&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;n&quot;&gt;mysqldump&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;u&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'my_password'&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;my_db_name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;my_dump_file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;sql&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;To take dump from remote server where i have access.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;n&quot;&gt;mysqldump&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;xxxxx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xxx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;us&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;east&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rds&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;amazonaws&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;com&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;u&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'my_aws_password'&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;my_remot_db_name&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vol1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;my_dump_file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;sql&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;To take dump from remote server but with only selected tables  where i have access.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;n&quot;&gt;mysqldump&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;xxxxx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xxx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;us&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;east&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rds&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;amazonaws&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;com&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;u&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'my_aws_password'&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;my_remot_db_name&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;table3&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table2&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vol1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;my_dump_file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;sql&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Resorting back dump  to local  mysqlserver&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;u&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'my_aws_password'&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;my_remot_db_name&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vol1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;my_dump_file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;sql&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Resorting back dump  to remote  mysqlserver&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;xxxxx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xxx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;us&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;east&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rds&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;amazonaws&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;com&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;u&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'my_aws_password'&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;my_remot_db_name&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vol1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;my_dump_file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;sql&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Happy Coding …. :)&lt;/p&gt;
-
-  
-  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/database/2013/12/17/using-mysql-dump/&quot;&gt;Using MySQL dump&lt;/a&gt; was originally published by SnorriDev at &lt;a href=&quot;http://localhost:4000&quot;&gt;The Book of Thoth&lt;/a&gt; on December 17, 2013.&lt;/p&gt;</content>
 </entry>
 
 </feed>

@@ -25,7 +25,7 @@ owner:
   google_plus:    https://plus.google.com/u/0/+AmeyJadiye
 
 # Analytics and webmaster tools stuff goes here
-google_analytics:   UA-46791108-1
+google_analytics:   UA-104939157-1
 google_verify:      
 # https://ssl.bing.com/webmaster/configure/verify/ownership Option 2 content= goes here
 bing_verify:         
@@ -37,13 +37,13 @@ links:
     url: /
     external: false
     icon: home
-  - title: Categories
-    url: /categories
+  # - title: Categories
+  #   url: /categories
   - title: About
-    url: /about
+    url: /thoth/2017/08/13/What-is-The-Book-of-Thoth/
 
 # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-timezone:    North America/New York
+timezone:    America/New_York
 future:      true
 rouge: pygments
 markdown:    kramdown
