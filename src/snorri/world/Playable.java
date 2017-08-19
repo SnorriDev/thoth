@@ -17,4 +17,6 @@ public interface Playable extends Savable {
 
 	public Player computeFocus();
 	
+	String getFilePath();
+	
 }

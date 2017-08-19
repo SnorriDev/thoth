@@ -1,7 +1,6 @@
 package snorri.main;
 
 import java.io.IOException;
-import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,9 +33,9 @@ public class Debug {
 		logger = Logger.getLogger("Thoth");
 		logger.setLevel(Level.ALL);
 		
-		ConsoleHandler consoleHandler = new ConsoleHandler();
-		consoleHandler.setLevel(Level.ALL);
-		logger.addHandler(consoleHandler);
+//		ConsoleHandler consoleHandler = new ConsoleHandler();
+//		consoleHandler.setLevel(Level.ALL);
+//		logger.addHandler(consoleHandler);
 		
 		try {
 			logger.addHandler(new FileHandler("logs/thoth.log"));
