@@ -1,0 +1,4 @@
+type: graph
+root: tutorial
+edges:
+  - {left: tutorial, right: temple}

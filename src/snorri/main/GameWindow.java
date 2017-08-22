@@ -84,7 +84,7 @@ public class GameWindow extends FocusedWindow<Player> {
 			return;
 		}
 		
-		universe.getCurrentWorld().update(focus, deltaTime);
+		universe.update(focus, deltaTime);
 		repaint();
 				
 	}

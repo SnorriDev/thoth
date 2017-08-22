@@ -7,6 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import net.sourceforge.yamlbeans.YamlException;
 import snorri.entities.Mummy;
 import snorri.entities.Entity;
 import snorri.entities.Player;
@@ -33,6 +36,7 @@ public class World implements Playable, Editable {
 	private static final int RANDOM_SPAWN_ATTEMPTS = 100;
 	public static final int UPDATE_RADIUS = 4000;
 	private static final int SPAWN_SEARCH_RADIUS = 12;
+	private static final int EDGE_TP_THRESHOLD = 10;
 
 	private String path;
 	
@@ -46,6 +50,7 @@ public class World implements Playable, Editable {
 	private List<Team> teams;
 	private TriggerMap triggers;
 	
+	private WorldGraph universe;
 	private World[] neighbors = new World[4];
 
 	public World() {
@@ -143,14 +148,25 @@ public class World implements Playable, Editable {
 		return file == null ? null : file;
 	}
 
-	@Override
 	public synchronized void update(Entity focus, double d) {
 
-		if (Debug.LOG_WORLD) {
+		if (Debug.LOG_WORLD) { //TODO make these into methods in Debug
 			Debug.log("world update");
 		}
 
 		col.updateAround(this, d, focus);
+		
+		if (touchingRight(focus)) {
+			universe.crossInto(getRightNeighbor(), EDGE_TP_THRESHOLD, focus.getPos().getY());
+		} else if (touchingBottom(focus)) {
+			universe.crossInto(getBottomNeighbor(), focus.getPos().getX(), EDGE_TP_THRESHOLD);
+		} else if (touchingLeft(focus)) {
+			World left = getLeftNeighbor();
+			universe.crossInto(left, left.getWidth() - EDGE_TP_THRESHOLD, focus.getPos().getY());
+		} else if (touchingTop(focus)) {
+			World top = getTopNeighbor();
+			universe.crossInto(top, focus.getPos().getX(), top.getHeight() - EDGE_TP_THRESHOLD);
+		}
 
 	}
 
@@ -236,6 +252,8 @@ public class World implements Playable, Editable {
 			Debug.log("creating new world directory...");
 			f.mkdir();
 		}
+		
+		Playable.tryCreatingDefaultConfig(f, "world");
 
 		String path = (f == null) ? this.path : f.getPath();
 		col.saveEntities(new File(path, "entities.dat"));
@@ -243,12 +261,11 @@ public class World implements Playable, Editable {
 		midground.save(new File(path, "midground.lvl"), recomputeGraphs);
 		foreground.save(new File(path, "foreground.lvl"), recomputeGraphs);
 		Team.save(new File(path, "teams.dat"), teams);
-
 	}
 
-	@Override
-	public void load(File f) throws FileNotFoundException, IOException {
-
+	@Override @SuppressWarnings("unchecked")
+	public void load(File f, Map<String, Object> yaml) throws FileNotFoundException, IOException, YamlException {
+		
 		if (!f.exists()) {
 			throw new FileNotFoundException("no world called " + f.getName());
 		}
@@ -258,6 +275,10 @@ public class World implements Playable, Editable {
 		}
 		
 		path = f.getName();
+		
+		if (yaml == null) {
+			yaml = Playable.getConfig(f, "world");
+		}
 
 		background = new Level(new File(f, "background.lvl"), BackgroundElement.class);
 		midground = new Level(new File(f, "midground.lvl"), MidgroundElement.class);
@@ -265,10 +286,7 @@ public class World implements Playable, Editable {
 		col = QuadTree.coverLevel(background);
 		col.loadEntities(new File(f, "entities.dat"), pathfinding);
 
-		File triggerFile = new File(f, "triggers.yml");
-		if (triggerFile.exists()) {
-			triggers = Trigger.load(triggerFile, this);
-		}
+		triggers = Trigger.load((Map<String, Object>) yaml.get("triggers"), this);
 
 		File teamsFile = new File(f, "teams.dat");
 		if (teamsFile.exists()) {
@@ -458,6 +476,8 @@ public class World implements Playable, Editable {
 		return true;
 	}
 	
+	//TODO just need to implement the cross-world panning mechanic
+	
 	public World getRightNeighbor() {
 		return neighbors[0];
 	}
@@ -488,6 +508,38 @@ public class World implements Playable, Editable {
 	
 	public void setTopNeighbor(World world) {
 		neighbors[3] = world;
+	}
+	
+	public boolean touchingRight(Entity e) {
+		return getWidth() - e.getPos().getX() < EDGE_TP_THRESHOLD;
+	}
+	
+	public boolean touchingBottom(Entity e) {
+		return getHeight() - e.getPos().getY() < EDGE_TP_THRESHOLD;
+	}
+	
+	public boolean touchingLeft(Entity e) {
+		return e.getPos().getX() < EDGE_TP_THRESHOLD;
+	}
+	
+	public boolean touchingTop(Entity e) {
+		return e.getPos().getY() < EDGE_TP_THRESHOLD;
+	}
+	
+	public void setUniverse(WorldGraph universe) {
+		this.universe = universe;
+	}
+	
+	public Playable getUniverse() {
+		return universe;
+	}
+	
+	public int getWidth() {
+		return getLevel().getWidth() * Tile.WIDTH;
+	}
+	
+	public int getHeight() {
+		return getLevel().getHeight() * Tile.WIDTH;
 	}
 	
 	@Override
