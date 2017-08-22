@@ -90,7 +90,7 @@ public class Lexicon extends HashMap<String, Definition<?>> {
 		lexicon.put("wrt", new DegreeModifierDef(1)); //"very"
 		
 		//Nouns
-		lexicon.put("nht", new StaticDef(Noun.class, BackgroundElement.TREE)); //tree
+		//lexicon.put("nht", new StaticDef(Noun.class, BackgroundElement.TREE)); //tree
 		lexicon.put("Hrrt", new StaticDef(Noun.class, new ClassWrapper(Flower.class))); //flower, gotta make this an entity
 		lexicon.put("mw", new StaticDef(Noun.class, BackgroundElement.WATER));
 		lexicon.put("Say", new StaticDef(Noun.class, BackgroundElement.SAND));

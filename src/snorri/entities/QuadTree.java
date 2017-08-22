@@ -23,17 +23,20 @@ public class QuadTree extends Entity implements EntityGroup {
 	private static final long serialVersionUID = 1L;
 
 	private static HashMap<Entity, QuadTree> nodeMap;
-	
+
+	public static final int CUSHION = Level.CUSHION * Tile.WIDTH;
+	public static final int SCALE_FACTOR = Level.SCALE_FACTOR;
+
 	static {
 		nodeMap = new HashMap<>();
 	}
-	
+
 	/** the entities in this level of the tree */
 	private CopyOnWriteArrayList<Entity> entities; // the entities in this level
 	private QuadTree parent;
 	private QuadTree[] nodes; // if this is a leaf, then nodes == null
 	private boolean isEmpty;
-	
+
 	public QuadTree(Vector pos, RectCollider collider, QuadTree parent) {
 		super(pos, collider);
 		isEmpty = true;
@@ -50,8 +53,9 @@ public class QuadTree extends Entity implements EntityGroup {
 
 	/**
 	 * Create a quad tree with dimensions <code>dim</code>.
+	 * 
 	 * @param dim
-	 * 	the dimensions to cover, in grid coordinates
+	 *            the dimensions to cover, in grid coordinates
 	 */
 	public static QuadTree coverLevel(Level l) {
 		Vector pos = l.getDimensions().copy().toGlobalPos().divide(2);
@@ -73,9 +77,10 @@ public class QuadTree extends Entity implements EntityGroup {
 		entities.add(e);
 		nodeMap.put(e, this);
 	}
-	
+
 	/**
 	 * Attempt to insert an entity into the <code>QuadTree</code>
+	 * 
 	 * @return <code>true</code> iff insertion is successful in this node or in
 	 *         a child node
 	 */
@@ -85,8 +90,8 @@ public class QuadTree extends Entity implements EntityGroup {
 		if (!contains(e)) {
 			return false;
 		}
-		
-		EntityGroup.super.insert(e); //update tags
+
+		EntityGroup.super.insert(e); // update tags
 
 		boolean inChild = false;
 		if (nodes != null) {
@@ -112,7 +117,7 @@ public class QuadTree extends Entity implements EntityGroup {
 	 *         child node
 	 */
 	public boolean delete(Entity e) {
-		
+
 		QuadTree local = nodeMap.get(e);
 		if (local == null) {
 			return false;
@@ -122,7 +127,7 @@ public class QuadTree extends Entity implements EntityGroup {
 		return out;
 
 	}
-	
+
 	public void move(Entity e, Vector newPos) {
 		QuadTree node = nodeMap.get(e);
 		e.setPos(newPos.copy());
@@ -131,14 +136,16 @@ public class QuadTree extends Entity implements EntityGroup {
 			insert(e);
 		}
 	}
-	
-	@Deprecated @SuppressWarnings("unused")
+
+	@Deprecated
+	@SuppressWarnings("unused")
 	private void backInsert(Entity e) {
 		if (!insert(e) && getParent() != null) {
 			getParent().backInsert(e);
 		}
 	}
 
+	@Deprecated
 	@Override
 	public List<Entity> getAllCollisions(Entity e, boolean hitAll) {
 		List<Entity> out = new ArrayList<>();
@@ -156,10 +163,10 @@ public class QuadTree extends Entity implements EntityGroup {
 		}
 		return out;
 	}
-	
-	//TODO remove this priority queue? just draw things in whatever order?
+
+	@Deprecated
 	public PriorityQueue<Entity> getRenderQueue(Rectangle r) {
-		
+
 		PriorityQueue<Entity> out = new PriorityQueue<>();
 		for (Entity each : entities) {
 			if (each.intersects(r)) {
@@ -194,7 +201,7 @@ public class QuadTree extends Entity implements EntityGroup {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * used to check for entities in tiles
 	 */
@@ -223,7 +230,7 @@ public class QuadTree extends Entity implements EntityGroup {
 			isEmpty &= nodes[0].isEmpty && nodes[1].isEmpty && nodes[2].isEmpty && nodes[3].isEmpty;
 		}
 	}
-	
+
 	private void calculateEmptyRec() {
 		calculateEmpty();
 		if (isEmpty() && getParent() != null) {
@@ -234,7 +241,7 @@ public class QuadTree extends Entity implements EntityGroup {
 	public QuadTree getParent() {
 		return parent;
 	}
-	
+
 	public boolean isEmpty() {
 		return isEmpty;
 	}
@@ -251,13 +258,13 @@ public class QuadTree extends Entity implements EntityGroup {
 	}
 
 	@Override
-	public void updateAround(World world, double deltaTime, Entity focus) {
+	public void updateAround(World world, double deltaTime, Entity centerObject) {
 
-		if (focus == null) {
+		if (centerObject == null) {
 			return;
 		}
 
-		Entity updateRange = new Entity(focus.pos, World.UPDATE_RADIUS);
+		Entity updateRange = new Entity(centerObject.pos, World.UPDATE_RADIUS);
 
 		for (Entity e : entities) {
 			if (e.intersects(updateRange)) {
@@ -267,7 +274,7 @@ public class QuadTree extends Entity implements EntityGroup {
 		if (nodes != null) {
 			for (QuadTree node : nodes) {
 				if (!node.isEmpty() && node.intersects(updateRange)) {
-					node.updateAround(world, deltaTime, focus);
+					node.updateAround(world, deltaTime, centerObject);
 				}
 			}
 		}
@@ -279,25 +286,21 @@ public class QuadTree extends Entity implements EntityGroup {
 	 */
 	@Override
 	public void renderAround(FocusedWindow<?> window, Graphics gr, double deltaTime) {
-		
-		Vector playerPos = window.getFocus().getPos();
+
+		Vector centerPos = window.getWorld().hasCenter() ? window.getCenterObject().getPos()
+				: window.getFocus().getPos();
 		Vector dim = window.getDimensions();
-		Rectangle view = new Rectangle(playerPos.getX() - dim.getX() / 2, playerPos.getY() - dim.getY() / 2, dim.getX(),
-				dim.getY());
-		
-		PriorityQueue<Entity> renderQueue = getRenderQueue(view);
-		
-		if (Debug.LOG_RENDER_QUEUE) {
-			Debug.log("render queue: " + renderQueue);
-		}
-		
-		while (!renderQueue.isEmpty()) {
-			renderQueue.poll().renderAround(window, gr, deltaTime);
-		}
-		
+		Entity test = new Entity(centerPos,
+				new RectCollider(dim.copy().multiply(SCALE_FACTOR).add(new Vector(CUSHION, CUSHION).multiply(2))));
+
+		this.mapOverCollisions(test, true, e -> {
+			e.renderAround(window, gr, deltaTime);
+		});
+
 	}
 
-	@Override @Deprecated
+	@Override
+	@Deprecated
 	public List<Entity> getAllEntities() {
 		List<Entity> result = new ArrayList<>();
 		result.addAll(entities);
@@ -310,9 +313,9 @@ public class QuadTree extends Entity implements EntityGroup {
 		}
 		return result;
 	}
-	
+
 	/**
-	 * Efficient method for mapping an executable over all 
+	 * Efficient method for mapping an executable over all
 	 */
 	@Override
 	public void mapOverEntities(Executable<Entity> exec) {
@@ -327,13 +330,14 @@ public class QuadTree extends Entity implements EntityGroup {
 			}
 		}
 	}
-	
+
 	/**
 	 * Apply an executable over all entities that collide with e.
+	 * 
 	 * @param e
-	 * 	The entity with which to test collisions.
+	 *            The entity with which to test collisions.
 	 * @param exec
-	 * 	The executable to run.
+	 *            The executable to run.
 	 */
 	@Override
 	public void mapOverCollisions(Entity e, boolean hitAll, Executable<Entity> exec) {
@@ -376,7 +380,8 @@ public class QuadTree extends Entity implements EntityGroup {
 		return null;
 	}
 
-	@Override @SuppressWarnings("unchecked")
+	@Override
+	@SuppressWarnings("unchecked")
 	public <P> P getFirstCollision(Entity checker, boolean hitAll, Class<P> class1) {
 		if (nodes != null) {
 			for (QuadTree node : nodes) {
@@ -396,8 +401,9 @@ public class QuadTree extends Entity implements EntityGroup {
 		}
 		return null;
 	}
-	
-	@Override @SuppressWarnings("unchecked")
+
+	@Override
+	@SuppressWarnings("unchecked")
 	public <P> P getFirst(Class<P> class1) {
 		if (nodes != null) {
 			for (QuadTree node : nodes) {

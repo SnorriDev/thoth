@@ -24,6 +24,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import snorri.entities.Ballista;
+import snorri.entities.Center;
 import snorri.entities.Drop;
 import snorri.entities.Dummy;
 import snorri.entities.Entity;
@@ -132,6 +133,8 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 	public LevelEditor() {
 		super(new Entity(new Vector(20, 20)));
+		
+		setCenterObject(getFocus());
 
 		previousTile = new Tile(BackgroundElement.class, 0, 0);
 		selectedTile = new Tile(BackgroundElement.class, 0, 0);
@@ -511,32 +514,32 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 				canGoUp = true;
 				canGoDown = true;
 
-				if (focus.getPos().getX() <= -SCALE_FACTOR) {
+				if (player.getPos().getX() <= -SCALE_FACTOR) {
 					canGoLeft = false;
 				}
-				if (focus.getPos().getX() >= env.getLevel(selectedTile.getType().getLayer()).getDimensions().getX() * Tile.WIDTH + SCALE_FACTOR) {
+				if (player.getPos().getX() >= env.getLevel(selectedTile.getType().getLayer()).getDimensions().getX() * Tile.WIDTH + SCALE_FACTOR) {
 					canGoRight = false;
 				}
-				if (focus.getPos().getY() <= -SCALE_FACTOR) {
+				if (player.getPos().getY() <= -SCALE_FACTOR) {
 					canGoUp = false;
 				}
-				if (focus.getPos().getY() >= env.getLevel(selectedTile.getType().getLayer()).getDimensions().getY() * Tile.WIDTH + SCALE_FACTOR) {
+				if (player.getPos().getY() >= env.getLevel(selectedTile.getType().getLayer()).getDimensions().getY() * Tile.WIDTH + SCALE_FACTOR) {
 					canGoDown = false;
 				}	
 				
 				if (states.getMovementVector().getX() < 0 && !canGoLeft) {
-					focus.getPos().sub(states.getMovementVector().getProjectionX().scale(speed));
+					player.getPos().sub(states.getMovementVector().getProjectionX().scale(speed));
 				}
 				if (states.getMovementVector().getX() > 0 && !canGoRight) {
-					focus.getPos().sub(states.getMovementVector().getProjectionX().scale(speed));
+					player.getPos().sub(states.getMovementVector().getProjectionX().scale(speed));
 				}
 				if (states.getMovementVector().getY() < 0 && !canGoUp) {
-					focus.getPos().sub(states.getMovementVector().getProjectionY().scale(speed));
+					player.getPos().sub(states.getMovementVector().getProjectionY().scale(speed));
 				}
 				if (states.getMovementVector().getY() > 0 && !canGoDown) {
-					focus.getPos().sub(states.getMovementVector().getProjectionY().scale(speed));
+					player.getPos().sub(states.getMovementVector().getProjectionY().scale(speed));
 				}
-				focus.getPos().add(states.getMovementVector().scale(speed));
+				player.getPos().add(states.getMovementVector().scale(speed));
 				
 
 				if (isClicking) {
@@ -1257,7 +1260,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 	@Override
 	public Entity getFocus() {
-		return focus;
+		return player;
 	}
 
 	@Override
@@ -1500,7 +1503,15 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		autosaveUndo();
 
 		if (selectedEntityClass.equals(Player.class)) {
-			world.delete(world.computeFocus()); // don't need to check null
+			if (world.computeFocus() != null) {
+				world.delete(world.computeFocus()); // don't need to check null
+			}
+		}
+		else if (selectedEntityClass.equals(Center.class)) {
+			if (world.hasCenter()) {
+				world.delete(world.getCenterObject()); // don't need to check null
+			}
+			world.nowHasCenter(true);
 		}
 
 		// TODO auto-detect options for constructor; have method that gives
@@ -1543,6 +1554,10 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 				}
 				String animation = inputs.getText("Path");
 				world.add(new Dummy(spawnPos, animation));
+			} else if (selectedEntityClass.equals(Center.class)) {
+				Entity e = selectedEntityClass.getConstructor(Vector.class).newInstance(spawnPos);
+				world.add(e);
+				world.setCenterObject(e);
 			}
 
 			else {
@@ -1565,8 +1580,14 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		}
 		World world = (World) env;
 
+		//Entity deletableEntity = world.getEntityTree().getFirstCollision(checker, hitAll, class1)n
 		Entity deletableEntity = world.getEntityTree().getFirstCollision(new Entity(getMousePosAbsolute()), true);
 
+		if (deletableEntity instanceof Center) {
+			world.setCenterObject(world.computeFocus());
+			world.nowHasCenter(false);
+		}
+		
 		autosaveUndo();
 		world.delete(deletableEntity);
 
@@ -1724,5 +1745,28 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 	@Override
 	protected void onStart() {
+	}
+	
+	@Override
+	public Entity getCenterObject() {
+		if (getWorld() != null) {
+//			if (getWorld().hasCenter()) {
+//				return getWorld().getCenterObject();
+//			}
+//			else {
+//				return getFocus();
+//			}
+			return getFocus();
+		}
+		else {
+			return null;
+		}
+	}
+	
+	@Override
+	public void setCenterObject(Entity e) {
+		if (getWorld() != null) {
+			getWorld().setCenterObject(e);
+		}
 	}
 }

@@ -88,6 +88,14 @@ public class Pathfinding {
 			getGraph(size).addEntity(e);
 		}
 	}
+	
+	@Deprecated
+	public Entity addEntityAndReturn(Entity e) {
+		for (Vector size : SIZES) {
+			getGraph(size).addEntity(e);
+		}
+		return e;
+	}
 
 	public void compute() {
 		for (Vector size : SIZES) {

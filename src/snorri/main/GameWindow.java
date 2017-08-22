@@ -15,6 +15,7 @@ import snorri.dialog.DropMessage;
 import snorri.dialog.Message;
 import snorri.dialog.Objective;
 import snorri.dialog.SpellMessage;
+import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.events.SpellEvent.Caster;
 import snorri.inventory.Droppable;
@@ -41,6 +42,8 @@ public class GameWindow extends FocusedWindow<Player> {
 	public GameWindow(Playable universe, Player focus) {
 		super(focus);
 		this.universe = universe;
+		//setCenterObject(getFocus());
+		
 		messageQ = new LinkedList<>();
 		lastTime = getTimestamp();
 		hasDied = false;
@@ -74,7 +77,7 @@ public class GameWindow extends FocusedWindow<Player> {
 			return;
 		}
 				
-		if (!hasDied && focus != null && focus.isDead()) {			
+		if (!hasDied && player != null && player.isDead()) {			
 			TriggerType.TIMELINE.activate("death");
 			hasDied = true;
 			Main.setOverlay(new DeathScreen());
@@ -84,7 +87,12 @@ public class GameWindow extends FocusedWindow<Player> {
 			return;
 		}
 		
-		universe.update(focus, deltaTime);
+		if (getWorld().hasCenter()) {
+			universe.update(getWorld().getCenterObject(), deltaTime);
+		}
+		else {
+			universe.update(getFocus(), deltaTime);
+		}
 		repaint();
 				
 	}
@@ -93,7 +101,7 @@ public class GameWindow extends FocusedWindow<Player> {
 	public void paintComponent(Graphics g){
 			
 		super.paintComponent(g);
-		if (focus == null) {
+		if (player == null) {
 			return;
 		}
 		
@@ -102,8 +110,8 @@ public class GameWindow extends FocusedWindow<Player> {
 		lastRenderTime = time;
 						
 		universe.getCurrentWorld().render(this, g, deltaTime, true);
-		focus.getInventory().render(this, g);
-		focus.renderHealthBar(g);
+		player.getInventory().render(this, g);
+		player.renderHealthBar(g);
 		
 		g.setFont(UIManager.getFont("Label.font"));
 		if (objective != null) {
@@ -168,14 +176,14 @@ public class GameWindow extends FocusedWindow<Player> {
 			pause();
 		}
 		
-		if (focus == null || focus.isDead() || isPaused()) {
+		if (player == null || player.isDead() || isPaused()) {
 			return;
 		}
 		
 	}
 	
 	public void openInventory() {
-		openInventory(focus.getInventory());
+		openInventory(player.getInventory());
 	}
 
 	@Override
@@ -207,5 +215,43 @@ public class GameWindow extends FocusedWindow<Player> {
 	public Caster getFocusAsCaster() {
 		return (Caster) getFocus();
 	}
+	
+	@Override
+	@Deprecated
+	public boolean hasCenter() {
+		return universe.getCurrentWorld().hasCenter();
+	}
+	
+	@Override
+	@Deprecated
+	public void nowHasCenter(boolean b) {
+		universe.getCurrentWorld().nowHasCenter(b);
+	}
+	
+	/*@Override
+	public Entity getCenterObject() {
+		Debug.log("SUP!?!");
+		if (universe.getCurrentWorld() != null) {
+			//Debug.log("getCenterObject() location: " + universe.getCurrentWorld().getCenterObject().getPos());
+			if (universe.getCurrentWorld().getCenterObject() != null) {
+				return universe.getCurrentWorld().getCenterObject();
+			}
+			else {
+				Debug.log("BRO!!!");
+				return getFocus();
+			}
+		}
+		else {
+			return null;
+		}
+	}*/
+	
+	@Override
+	@Deprecated
+	public void setCenterObject(Entity e) {
+		if (universe.getCurrentWorld() != null) {
+			universe.getCurrentWorld().setCenterObject(e);
+		}
+	} //TODO: make center object center by default
 	
 }
