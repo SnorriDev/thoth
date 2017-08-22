@@ -35,6 +35,8 @@ public class World implements Playable, Editable {
 	public static final int UPDATE_RADIUS = 4000;
 	private static final int SPAWN_SEARCH_RADIUS = 12;
 
+	private String path;
+	
 	private Level background;
 	private Level midground;
 	private Level foreground;
@@ -47,6 +49,8 @@ public class World implements Playable, Editable {
 
 	private List<Team> teams;
 	private TriggerMap triggers;
+	
+	private World[] neighbors = new World[4];
 
 	
 	public World() {
@@ -267,7 +271,7 @@ public class World implements Playable, Editable {
 			f.mkdir();
 		}
 
-		String path = f.getPath();
+		String path = (f == null) ? this.path : f.getPath();
 		col.saveEntities(new File(path, "entities.dat"));
 		background.save(new File(path, "background.lvl"), recomputeGraphs);
 		midground.save(new File(path, "midground.lvl"), recomputeGraphs);
@@ -286,6 +290,8 @@ public class World implements Playable, Editable {
 		if (!f.isDirectory()) {
 			throw new IOException("world file " + f.getName() + " is not a directory");
 		}
+		
+		path = f.getName();
 
 		background = new Level(new File(f, "background.lvl"), BackgroundElement.class);
 		midground = new Level(new File(f, "midground.lvl"), MidgroundElement.class);
@@ -529,6 +535,43 @@ public class World implements Playable, Editable {
 	public void nowHasCenter(boolean b) {
 		Debug.log("T/F -- THE WORLD HAS A CENTER ENTITY: " + b);
 		hasCenter = b;
+	}
+	
+	public World getRightNeighbor() {
+		return neighbors[0];
+	}
+	
+	public World getBottomNeighbor() {
+		return neighbors[1];
+	}
+	
+	public World getLeftNeighbor() {
+		return neighbors[2];
+	}
+	
+	public World getTopNeighbor() {
+		return neighbors[3];
+	}
+	
+	public void setRightNeighbor(World world) {
+		neighbors[0] = world;
+	}
+	
+	public void setBottomNeighbor(World world) {
+		neighbors[1] = world;
+	}
+	
+	public void setLeftNeighbor(World world) {
+		neighbors[2] = world;
+	}
+	
+	public void setTopNeighbor(World world) {
+		neighbors[3] = world;
+	}
+	
+	@Override
+	public String getFilePath() {
+		return path;
 	}
 	
 }

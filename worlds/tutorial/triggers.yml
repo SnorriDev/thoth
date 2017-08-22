@@ -230,7 +230,7 @@ prayThoth:
               Wisdom is the only truth in this world - those who believe in destiny are fools.</p>
     - SET_OBJECTIVE:
         objective:
-          !objectivex
+          !objective
             shortDesc: you have beaten the tutorial!
 
 onExit:
