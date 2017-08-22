@@ -25,6 +25,9 @@ public class Level implements Editable {
 	public static final int MIDGROUND = 1;
 	public static final int FOREGROUND = 2;
 	
+	public static final int CUSHION = 4;
+	public static final int SCALE_FACTOR = 2;
+	
 	/**An array of tiles. Note that coordinates are Cartesian, not matrix-based**/
 	private Tile[][] map;
 
@@ -36,7 +39,6 @@ public class Level implements Editable {
 				map[i][j] = new Tile(bg);
 			}
 		}
-				
 	}
 	
 	public Level(Vector v, TileType bg) {
@@ -209,12 +211,26 @@ public class Level implements Editable {
 		
 		//TODO add some shit that checks if layer is empty etc.
 		
-		int cushion = 4;
-		int scaleFactor = 2;
-		int minX = g.getFocus().getPos().getX() / Tile.WIDTH - g.getDimensions().getX() / Tile.WIDTH / scaleFactor - cushion;
-		int maxX = g.getFocus().getPos().getX() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / scaleFactor + cushion;
-		int minY = g.getFocus().getPos().getY() / Tile.WIDTH - g.getDimensions().getY() / Tile.WIDTH / scaleFactor - cushion;
-		int maxY = g.getFocus().getPos().getY() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / scaleFactor + cushion;
+		//Debug.log("RENDERING...");
+		//Debug.log("" + g.getCenterObject());
+		//Debug.log("" + g.getCenterObject().getPos());
+		
+		int minX;
+		int maxX;
+		int minY;
+		int maxY;
+		if (g.getWorld().hasCenter()) {
+			minX = g.getCenterObject().getPos().getX() / Tile.WIDTH - g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR - CUSHION;
+			maxX = g.getCenterObject().getPos().getX() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR + CUSHION;
+			minY = g.getCenterObject().getPos().getY() / Tile.WIDTH - g.getDimensions().getY() / Tile.WIDTH / SCALE_FACTOR - CUSHION;
+			maxY = g.getCenterObject().getPos().getY() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR + CUSHION;
+		}
+		else {
+			minX = g.getFocus().getPos().getX() / Tile.WIDTH - g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR - CUSHION;
+			maxX = g.getFocus().getPos().getX() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR + CUSHION;
+			minY = g.getFocus().getPos().getY() / Tile.WIDTH - g.getDimensions().getY() / Tile.WIDTH / SCALE_FACTOR - CUSHION;
+			maxY = g.getFocus().getPos().getY() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR + CUSHION;
+		}
 				
 		for (int i = minX; i < maxX; i++) {
 			for (int j = minY; j < maxY; j++) {

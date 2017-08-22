@@ -13,6 +13,7 @@ import java.lang.Thread.UncaughtExceptionHandler;
 
 import javax.swing.SwingUtilities;
 
+import snorri.collisions.Collider;
 import snorri.dialog.Dialog;
 import snorri.entities.Entity;
 import snorri.inventory.Inventory;
@@ -33,7 +34,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	private static final int FRAME_DELTA = 15; // 33 -> 30 FPS (20 -> 50 FPS
 
 	protected final KeyStates states = new KeyStates();
-	protected final F focus;
+	protected final F player;
 
 	protected long lastRenderTime;
 	private boolean paused = false, stopped = false;
@@ -43,7 +44,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 		setFocusable(true);
 		addMouseListener(this);
 		addKeyListener(this);
-		this.focus = focus;
+		this.player = focus;
 		lastRenderTime = getTimestamp();
 	}
 
@@ -94,11 +95,11 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	}
 
 	public F getFocus() {
-		return focus;
+		return player;
 	}
 
 	/**
-	 * @return mouse position relative to the player
+	 * @return mouse position relative to the center
 	 */
 	public Vector getMousePosRelative() {
 		Vector origin = new Vector(getLocationOnScreen());
@@ -110,7 +111,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	 * @return absolute mouse position
 	 */
 	public Vector getMousePosAbsolute() {
-		return getMousePosRelative().add(getFocus().getPos());
+		return getMousePosRelative().add(getCenterObject().getPos());
 	}
 
 	@Override
@@ -140,7 +141,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	public Vector getShotDirection() {
 
 		if (states.get(MouseButton.SHOOT)) {
-			return getMousePosRelative().copy().normalize();
+			return getMousePosAbsolute().copy().sub(getFocus().getPos()).normalize();
 		}
 
 		if (states.get(Key.SHOOT_LEFT)) {
@@ -234,5 +235,40 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 			g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		}
 	}
+	
+	@Deprecated
+	public boolean hasCenter() {
+		return getWorld().hasCenter();
+	}
+	
+	@Deprecated
+	public void nowHasCenter(boolean b) {
+		getWorld().nowHasCenter(b);
+	}
+
+	
+	public Entity getCenterObject() {
+		//Debug.log("SUP!?!");
+		if (getWorld() != null) {
+			//Debug.log("getCenterObject() location: " + getWorld().getCenterObject().getPos());
+			if (getWorld().getCenterObject() != null) {
+				return getWorld().getCenterObject();
+			}
+			else {
+				//Debug.log("BRO!!!");
+				return getFocus();
+			}
+		}
+		else {
+			return null;
+		}
+	}
+	
+	@Deprecated
+	public void setCenterObject(Entity e) {
+		if (getWorld() != null) {
+			getWorld().setCenterObject(e);
+		}
+	} //TODO: make center object center by default
 
 }

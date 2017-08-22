@@ -113,6 +113,16 @@ public interface EntityGroup {
 		return result;
 	}
 	
+	@Deprecated
+	default Entity insertAndReturn(Entity e, Pathfinding pathfinding) {
+		if (e.isStaticObject() && !(Main.getWindow() instanceof LevelEditor)) {
+			return pathfinding.addEntityAndReturn(e);
+		}
+		else {
+			return null;
+		}
+	}
+	
 	default boolean delete(Entity e, PathGraph graph) {
 		boolean result = delete(e);
 		if (e.isStaticObject() && !(Main.getWindow() instanceof LevelEditor)) {

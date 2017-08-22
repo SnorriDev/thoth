@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import snorri.entities.Mummy;
 import snorri.entities.Entity;
+import snorri.entities.Center;
 import snorri.entities.Player;
 import snorri.entities.QuadTree;
 import snorri.entities.Spawn;
@@ -40,10 +41,14 @@ public class World implements Playable, Editable {
 
 	private final Pathfinding pathfinding;
 	private EntityGroup col;
+	
+	protected boolean hasCenter;
+	protected Entity centerObject;
 
 	private List<Team> teams;
 	private TriggerMap triggers;
 
+	
 	public World() {
 		this(DEFAULT_LEVEL_SIZE, DEFAULT_LEVEL_SIZE);
 	}
@@ -63,6 +68,18 @@ public class World implements Playable, Editable {
 
 		// temporary
 		add(new Player(DEFAULT_SPAWN.copy()));
+		
+		if (computeFocus() == null) {
+			Debug.warning("world without player detected");
+		}
+		
+		if (centerObject == null) {
+			Debug.log("COMPUTING FOCUS");
+			centerObject = computeFocus();
+		}
+		
+		//Debug.log("CENTER OBJECT LOCATION: " + getCenterObject().getPos());
+		
 		add(new Mummy(new Vector(600, 600), computeFocus()));
 
 	}
@@ -76,6 +93,7 @@ public class World implements Playable, Editable {
 	}
 
 	public World(File file, Player p) throws FileNotFoundException, IOException {
+		//Debug.log("CALLING LOADING WORLD FROM FILE CONTSRTUCTOR");
 
 		load(file);
 		if (p != null) {
@@ -87,7 +105,13 @@ public class World implements Playable, Editable {
 		if (computeFocus() == null) {
 			Debug.warning("world without player detected");
 		}
-
+		
+		if (centerObject == null) {
+			Debug.log("COMPUTING FOCUS");
+			centerObject = computeFocus();
+		}
+		
+		//Debug.log("CENTER OBJECT LOCATION: " + getCenterObject().getPos());
 	}
 		
 	public World(File file) throws FileNotFoundException, IOException {
@@ -95,6 +119,8 @@ public class World implements Playable, Editable {
 	}
 
 	public World(Level l0, Level l1, Level l2) {
+		
+		//Debug.log("LOADING WORLD USiNG 3 LEVELS CONSTRUCTOR");
 
 		background = l0;
 		midground = l1;
@@ -103,6 +129,8 @@ public class World implements Playable, Editable {
 		col = QuadTree.coverLevel(background);
 
 		pathfinding = new Pathfinding(getPathfindingLevels());
+		
+		centerObject = computeFocus();
 
 	}
 
@@ -154,7 +182,7 @@ public class World implements Playable, Editable {
 	public synchronized void render(FocusedWindow<?> g, Graphics gr, double deltaTime, boolean showOutlands) {
 		background.render(g, gr, deltaTime, showOutlands);
 		midground.render(g, gr, deltaTime, false);
-		col.renderAround(g, gr, deltaTime);
+		col.renderAround(g, gr, deltaTime); //XXX
 		foreground.render(g, gr, deltaTime, false);
 	}
 
@@ -162,6 +190,7 @@ public class World implements Playable, Editable {
 		return col;
 	}
 
+	@Deprecated
 	public Level getLevel() {
 		return background;
 	}
@@ -195,9 +224,14 @@ public class World implements Playable, Editable {
 	public Level[] getLevels() {
 		return new Level[] { background, midground, foreground };
 	}
-
+	
 	public boolean add(Entity e) {
 		return col.insert(e, pathfinding);
+	}
+	
+	@Deprecated
+	public Entity addAndReturn(Entity e) {
+		return col.insertAndReturn(e, pathfinding);
 	}
 
 	/**
@@ -258,6 +292,15 @@ public class World implements Playable, Editable {
 		foreground = new Level(new File(f, "foreground.lvl"), ForegroundElement.class);
 		col = QuadTree.coverLevel(background);
 		col.loadEntities(new File(f, "entities.dat"), pathfinding);
+		
+		//deprecated version
+//		for (Entity e : col.getAllEntities()) {
+//			if (e instanceof Center) {
+//				nowHasCenter(true);
+//				centerObject = e;
+//				break;
+//			}
+//		}
 
 		File triggerFile = new File(f, "triggers.yml");
 		if (triggerFile.exists()) {
@@ -267,6 +310,12 @@ public class World implements Playable, Editable {
 		File teamsFile = new File(f, "teams.dat");
 		if (teamsFile.exists()) {
 			teams = Team.load(teamsFile);
+		}
+		
+		setCenterObject(col.getFirst(Center.class));
+		if (getCenterObject() == null) {
+			setCenterObject(computeFocus());
+			nowHasCenter(false);
 		}
 
 	}
@@ -432,7 +481,7 @@ public class World implements Playable, Editable {
 
 	@Override
 	public Vector getDimensions() {
-		return getLevel().getDimensions();
+		return getLevel(BackgroundElement.class).getDimensions();
 	}
 	
 	/**
@@ -450,6 +499,36 @@ public class World implements Playable, Editable {
 		player.setPos(spawn.getPos());
 		add(player);
 		return true;
+	}
+
+	public Entity getCenterObject() {
+		if (!hasCenter() || centerObject != null) {
+			return centerObject;
+		}
+		else {
+			return null;
+		}
+	}
+	
+	public void setCenterObject(Entity newCenterObject) {
+		if (newCenterObject != null) {
+			centerObject = newCenterObject;
+			nowHasCenter(true);
+			Debug.log("NEW CENTER OBJECT SET! @: " + getCenterObject().getPos());
+		}
+		else {
+			Debug.warning("null centerObject detected");
+			nowHasCenter(false);
+		}
+	}
+
+	public boolean hasCenter() {
+		return hasCenter;
+	}
+
+	public void nowHasCenter(boolean b) {
+		Debug.log("T/F -- THE WORLD HAS A CENTER ENTITY: " + b);
+		hasCenter = b;
 	}
 	
 }

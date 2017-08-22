@@ -24,6 +24,7 @@ import snorri.main.Util;
 import snorri.semantics.Nominal;
 import snorri.triggers.Trigger;
 import snorri.triggers.Trigger.TriggerType;
+import snorri.world.BackgroundElement;
 import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -65,6 +66,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		EDIT_SPAWNABLE.add(Ballista.class);
 		EDIT_SPAWNABLE.add(Spawn.class);
 		EDIT_SPAWNABLE.add(Dummy.class);
+		EDIT_SPAWNABLE.add(Center.class);
 		
 		//alphabetize the list for nice view in the editor
 		Collections.sort(EDIT_SPAWNABLE, new Comparator<Class<? extends Entity>>() {
@@ -255,7 +257,14 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			return;
 		}
 		
-		Vector rel = pos.copy().sub(g.getFocus().getPos());
+		Vector rel;
+		if (g.getWorld().hasCenter()) {
+			rel = pos.copy().sub(g.getCenterObject().getPos());
+		}
+		else {
+			rel = pos.copy().sub(g.getFocus().getPos());
+		}
+		//Vector rel = pos.copy().sub(g.getFocus().getPos());
 		gr.drawImage(sprite, rel.getX() + (g.getBounds().width - sprite.getWidth()) / 2, rel.getY() + (g.getBounds().height - sprite.getHeight()) / 2, sprite.getWidth(null), sprite.getHeight(null), null);
 		
 	}
@@ -272,7 +281,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			return pos;
 		}
 		if (attr == AbstractSemantics.TILE) {
-			return e.getWorld().getLevel().getTile(pos);
+			return e.getWorld().getLevel(BackgroundElement.class).getTile(pos);
 		}
 		
 		return Nominal.super.get(attr, e);

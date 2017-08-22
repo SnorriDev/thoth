@@ -24,6 +24,9 @@ public class QuadTree extends Entity implements EntityGroup {
 
 	private static HashMap<Entity, QuadTree> nodeMap;
 	
+	public static final int CUSHION = Level.CUSHION * Tile.WIDTH;
+	public static final int SCALE_FACTOR = Level.SCALE_FACTOR;
+	
 	static {
 		nodeMap = new HashMap<>();
 	}
@@ -251,13 +254,13 @@ public class QuadTree extends Entity implements EntityGroup {
 	}
 
 	@Override
-	public void updateAround(World world, double deltaTime, Entity focus) {
+	public void updateAround(World world, double deltaTime, Entity centerObject) {
 
-		if (focus == null) {
+		if (centerObject == null) {
 			return;
 		}
 
-		Entity updateRange = new Entity(focus.pos, World.UPDATE_RADIUS);
+		Entity updateRange = new Entity(centerObject.pos, World.UPDATE_RADIUS);
 
 		for (Entity e : entities) {
 			if (e.intersects(updateRange)) {
@@ -267,7 +270,7 @@ public class QuadTree extends Entity implements EntityGroup {
 		if (nodes != null) {
 			for (QuadTree node : nodes) {
 				if (!node.isEmpty() && node.intersects(updateRange)) {
-					node.updateAround(world, deltaTime, focus);
+					node.updateAround(world, deltaTime, centerObject);
 				}
 			}
 		}
@@ -280,10 +283,18 @@ public class QuadTree extends Entity implements EntityGroup {
 	@Override
 	public void renderAround(FocusedWindow<?> window, Graphics gr, double deltaTime) {
 		
-		Vector playerPos = window.getFocus().getPos();
+		Vector centerPos;
+		if (!window.getWorld().hasCenter()) {
+			centerPos = window.getFocus().getPos();
+			//Debug.log("FOCUS  POS: " + centerPos);
+		}
+		else {
+			centerPos = window.getCenterObject().getPos();
+			//Debug.log("CENTER POS: " + centerPos);
+		}
 		Vector dim = window.getDimensions();
-		Rectangle view = new Rectangle(playerPos.getX() - dim.getX() / 2, playerPos.getY() - dim.getY() / 2, dim.getX(),
-				dim.getY());
+		Rectangle view = new Rectangle(centerPos.getX() - (dim.getX() / 2) * SCALE_FACTOR - CUSHION, centerPos.getY() - (dim.getY() / 2) * SCALE_FACTOR - CUSHION, dim.getX() * SCALE_FACTOR + 2 * CUSHION,
+				dim.getY() * SCALE_FACTOR + 2 * CUSHION);
 		
 		PriorityQueue<Entity> renderQueue = getRenderQueue(view);
 		
