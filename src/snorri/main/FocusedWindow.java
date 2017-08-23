@@ -13,7 +13,6 @@ import java.lang.Thread.UncaughtExceptionHandler;
 
 import javax.swing.SwingUtilities;
 
-import snorri.collisions.Collider;
 import snorri.dialog.Dialog;
 import snorri.entities.Entity;
 import snorri.inventory.Inventory;
