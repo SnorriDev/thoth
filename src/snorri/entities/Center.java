@@ -2,7 +2,6 @@ package snorri.entities;
 
 import snorri.animations.Animation;
 import snorri.collisions.CircleCollider;
-import snorri.collisions.Collider;
 import snorri.world.Vector;
 
 public class Center extends Entity {
