@@ -1600,7 +1600,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 	public void autosaveUndo() {
 		try {
-			env.save(Main.getFile("/saves/.undo1"), false);
+			env.save(Main.getFile("/worlds/.undo1"), false);
 			canUndo = true;
 			canRedo = false;
 		} catch (IOException e) {
@@ -1610,7 +1610,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 	public void autosaveRedo() {
 		try {
-			env.save(Main.getFile("/saves/.redo1"));
+			env.save(Main.getFile("/worlds/.redo1"));
 			canUndo = false;
 			canRedo = true;
 		} catch (IOException e) {

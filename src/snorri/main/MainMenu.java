@@ -25,7 +25,7 @@ public class MainMenu extends GamePanel {
 		outerFrame.add(new JLabel(new ImageIcon(Util.resize(Main.getImage("/textures/titleScreen/title.png"), 0, 310))));
 		
 		JPanel menu = new MenuPanel();
-		menu.add(createButton("TUTORIAL"));
+		menu.add(createButton("PLAY STORY"));
 //		menu.add(createButton("OASIS ADVENTURE"));
 //		menu.add(createButton("DUNGEON ADVENTURE"));
 		menu.add(createButton("LOAD WORLD"));
