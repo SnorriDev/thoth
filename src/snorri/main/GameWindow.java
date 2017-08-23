@@ -1,10 +1,12 @@
 package snorri.main;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -98,12 +100,18 @@ public class GameWindow extends FocusedWindow<Player> {
 	}
 	
 	@Override
-	public void paintComponent(Graphics g){
+	public void paintComponent(Graphics g1){
 			
-		super.paintComponent(g);
+		super.paintComponent(g1);
 		if (player == null) {
 			return;
 		}
+		
+		Graphics2D g = (Graphics2D) g1;
+		//TODO: get window size, divide by default window size which needs to be parametrized, keep ratio even using minimima/maxima
+		double scale = (Math.max(getWidth() / ((double) (Main.DEFAULT_WIDTH)), getHeight() / ((double) Main.DEFAULT_HEIGHT)));
+		//double scaleHeight = (Math.max(getWidth() / ((double) (Main.DEFAULT_WIDTH)), getHeight() / ((double) Main.DEFAULT_HEIGHT)));
+		g.scale(scale, scale);
 		
 		long time = getTimestamp();
 		double deltaTime = (time - lastRenderTime) / 1000000000d;
@@ -131,6 +139,8 @@ public class GameWindow extends FocusedWindow<Player> {
 		if (Debug.LOG_FOCUS) {
 			Debug.log("Focused component: " + KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner());
 		}
+		
+		//super.paintComponent(g);
 		
 		g.dispose();
 		
