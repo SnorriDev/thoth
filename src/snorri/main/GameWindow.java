@@ -88,10 +88,10 @@ public class GameWindow extends FocusedWindow<Player> {
 		}
 		
 		if (getWorld().hasCenter()) {
-			universe.getCurrentWorld().update(getWorld().getCenterObject(), deltaTime);
+			universe.update(getWorld().getCenterObject(), deltaTime);
 		}
 		else {
-			universe.getCurrentWorld().update(getFocus(), deltaTime);
+			universe.update(getFocus(), deltaTime);
 		}
 		repaint();
 				
