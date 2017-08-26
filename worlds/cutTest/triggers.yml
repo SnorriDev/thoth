@@ -1,4 +1,0 @@
-onExit:
-  actions:
-    - SHOW_CUTSCENE:
-        nextPath: /worlds/tutorial
