@@ -11,8 +11,8 @@ import java.util.Map;
 
 import net.sourceforge.yamlbeans.YamlException;
 import snorri.entities.Mummy;
-import snorri.entities.Entity;
 import snorri.entities.Center;
+import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.entities.QuadTree;
 import snorri.entities.Spawn;
@@ -37,7 +37,7 @@ public class World implements Playable, Editable {
 	private static final int RANDOM_SPAWN_ATTEMPTS = 100;
 	public static final int UPDATE_RADIUS = 4000;
 	private static final int SPAWN_SEARCH_RADIUS = 12;
-	private static final int EDGE_TP_THRESHOLD = 10;
+	private static final int EDGE_TP_THRESHOLD = 100;
 
 	private String path;
 	
@@ -47,9 +47,6 @@ public class World implements Playable, Editable {
 
 	private final Pathfinding pathfinding;
 	private EntityGroup col;
-	
-	protected boolean hasCenter;
-	protected Entity centerObject;
 
 	private List<Team> teams;
 	private TriggerMap triggers;
@@ -75,21 +72,13 @@ public class World implements Playable, Editable {
 		this(new Level(width, height, Level.BACKGROUND), new Level(width, height, Level.MIDGROUND),
 				new Level(width, height, Level.FOREGROUND));
 
-		// temporary
-		add(new Player(DEFAULT_SPAWN.copy()));
 		
-		if (computeFocus() == null) {
-			Debug.warning("world without player detected");
-		}
-		
-		if (centerObject == null) {
-			Debug.log("COMPUTING FOCUS");
-			centerObject = computeFocus();
-		}
+		Player focus = new Player(DEFAULT_SPAWN.copy());
+		add(focus);
 		
 		//Debug.log("CENTER OBJECT LOCATION: " + getCenterObject().getPos());
 		
-		add(new Mummy(new Vector(600, 600), computeFocus()));
+		add(new Mummy(new Vector(600, 600), focus));
 
 	}
 
@@ -105,20 +94,13 @@ public class World implements Playable, Editable {
 		//Debug.log("CALLING LOADING WORLD FROM FILE CONTSRTUCTOR");
 
 		load(file);
+		
+		Debug.log("non-null player" + p);
 		if (p != null) {
 			spawnPlayer(p);
 		}
 
 		pathfinding = new Pathfinding(getPathfindingLevels());
-		
-		if (computeFocus() == null) {
-			Debug.warning("world without player detected");
-		}
-		
-		if (centerObject == null) {
-			Debug.log("COMPUTING FOCUS");
-			centerObject = computeFocus();
-		}
 		
 		//Debug.log("CENTER OBJECT LOCATION: " + getCenterObject().getPos());
 	}
@@ -139,8 +121,6 @@ public class World implements Playable, Editable {
 
 		pathfinding = new Pathfinding(getPathfindingLevels());
 		
-		centerObject = computeFocus();
-
 	}
 
 	/**
@@ -184,16 +164,16 @@ public class World implements Playable, Editable {
 
 		col.updateAround(this, d, focus);
 		
-		if (touchingRight(focus)) {
-			universe.crossInto(getRightNeighbor(), EDGE_TP_THRESHOLD, focus.getPos().getY());
-		} else if (touchingBottom(focus)) {
-			universe.crossInto(getBottomNeighbor(), focus.getPos().getX(), EDGE_TP_THRESHOLD);
-		} else if (touchingLeft(focus)) {
-			World left = getLeftNeighbor();
-			universe.crossInto(left, left.getWidth() - EDGE_TP_THRESHOLD, focus.getPos().getY());
-		} else if (touchingTop(focus)) {
-			World top = getTopNeighbor();
-			universe.crossInto(top, focus.getPos().getX(), top.getHeight() - EDGE_TP_THRESHOLD);
+		World neighbor;
+		if (getRightNeighbor() != null && touchingRight(focus)) {
+			universe.crossInto(getRightNeighbor(), EDGE_TP_THRESHOLD, universe.getPlayer().getPos().getY());
+		} else if (getBottomNeighbor() != null && touchingBottom(focus)) {
+			universe.crossInto(getBottomNeighbor(), universe.getPlayer().getPos().getX(), EDGE_TP_THRESHOLD);
+		} else if ((neighbor = getLeftNeighbor()) != null && touchingLeft(focus)) {
+			Debug.raw(universe.getPlayer());
+			universe.crossInto(neighbor, neighbor.getWidth() - EDGE_TP_THRESHOLD, universe.getPlayer().getPos().getY());
+		} else if ((neighbor = getTopNeighbor()) != null && touchingTop(focus)) {
+			universe.crossInto(neighbor, universe.getPlayer().getPos().getX(), neighbor.getHeight() - EDGE_TP_THRESHOLD);
 		}
 
 	}
@@ -334,12 +314,6 @@ public class World implements Playable, Editable {
 		File teamsFile = new File(f, "teams.dat");
 		if (teamsFile.exists()) {
 			teams = Team.load(teamsFile);
-		}
-		
-		setCenterObject(col.getFirst(Center.class));
-		if (getCenterObject() == null) {
-			setCenterObject(computeFocus());
-			nowHasCenter(false);
 		}
 
 	}
@@ -524,36 +498,6 @@ public class World implements Playable, Editable {
 		add(player);
 		return true;
 	}
-
-	public Entity getCenterObject() {
-		if (!hasCenter() || centerObject != null) {
-			return centerObject;
-		}
-		else {
-			return null;
-		}
-	}
-	
-	public void setCenterObject(Entity newCenterObject) {
-		if (newCenterObject != null) {
-			centerObject = newCenterObject;
-			nowHasCenter(true);
-			Debug.log("NEW CENTER OBJECT SET! @: " + getCenterObject().getPos());
-		}
-		else {
-			Debug.warning("null centerObject detected");
-			nowHasCenter(false);
-		}
-	}
-
-	public boolean hasCenter() {
-		return hasCenter;
-	}
-
-	public void nowHasCenter(boolean b) {
-		Debug.log("T/F -- THE WORLD HAS A CENTER ENTITY: " + b);
-		hasCenter = b;
-	}
 	
 	//TODO just need to implement the cross-world panning mechanic
 	
@@ -624,6 +568,11 @@ public class World implements Playable, Editable {
 	@Override
 	public String getFilePath() {
 		return path;
+	}
+	
+	@Override
+	public Center findCenter() {
+		return getEntityTree().getFirst(Center.class);
 	}
 	
 }

@@ -1,4 +1,4 @@
 type: graph
-root: tutorial
+root: temple
 edges:
   - {left: tutorial, right: temple}

@@ -219,18 +219,11 @@ public class Level implements Editable {
 		int maxX;
 		int minY;
 		int maxY;
-		if (g.getWorld().hasCenter()) {
-			minX = g.getCenterObject().getPos().getX() / Tile.WIDTH - g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR - CUSHION;
-			maxX = g.getCenterObject().getPos().getX() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR + CUSHION;
-			minY = g.getCenterObject().getPos().getY() / Tile.WIDTH - g.getDimensions().getY() / Tile.WIDTH / SCALE_FACTOR - CUSHION;
-			maxY = g.getCenterObject().getPos().getY() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR + CUSHION;
-		}
-		else {
-			minX = g.getFocus().getPos().getX() / Tile.WIDTH - g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR - CUSHION;
-			maxX = g.getFocus().getPos().getX() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR + CUSHION;
-			minY = g.getFocus().getPos().getY() / Tile.WIDTH - g.getDimensions().getY() / Tile.WIDTH / SCALE_FACTOR - CUSHION;
-			maxY = g.getFocus().getPos().getY() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR + CUSHION;
-		}
+		
+		minX = g.getCenterObject().getPos().getX() / Tile.WIDTH - g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR - CUSHION;
+		maxX = g.getCenterObject().getPos().getX() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR + CUSHION;
+		minY = g.getCenterObject().getPos().getY() / Tile.WIDTH - g.getDimensions().getY() / Tile.WIDTH / SCALE_FACTOR - CUSHION;
+		maxY = g.getCenterObject().getPos().getY() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR + CUSHION;
 				
 		for (int i = minX; i < maxX; i++) {
 			for (int j = minY; j < maxY; j++) {

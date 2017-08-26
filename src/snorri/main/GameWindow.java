@@ -15,7 +15,6 @@ import snorri.dialog.DropMessage;
 import snorri.dialog.Message;
 import snorri.dialog.Objective;
 import snorri.dialog.SpellMessage;
-import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.events.SpellEvent.Caster;
 import snorri.inventory.Droppable;
@@ -42,7 +41,7 @@ public class GameWindow extends FocusedWindow<Player> {
 	public GameWindow(Playable universe, Player focus) {
 		super(focus);
 		this.universe = universe;
-		//setCenterObject(getFocus());
+		setCustomCenter(universe.findCenter());
 		
 		messageQ = new LinkedList<>();
 		lastTime = getTimestamp();
@@ -64,7 +63,7 @@ public class GameWindow extends FocusedWindow<Player> {
 	
 	@Override
 	protected void onFrame() {
-				
+		
 		long time = getTimestamp();
 		double deltaTime = (time - lastTime) / 1000000000d;
 		lastTime = time;
@@ -87,12 +86,7 @@ public class GameWindow extends FocusedWindow<Player> {
 			return;
 		}
 		
-		if (getWorld().hasCenter()) {
-			universe.update(getWorld().getCenterObject(), deltaTime);
-		}
-		else {
-			universe.update(getFocus(), deltaTime);
-		}
+		universe.update(getCenterObject(), deltaTime);
 		repaint();
 				
 	}
@@ -216,18 +210,6 @@ public class GameWindow extends FocusedWindow<Player> {
 		return (Caster) getFocus();
 	}
 	
-	@Override
-	@Deprecated
-	public boolean hasCenter() {
-		return universe.getCurrentWorld().hasCenter();
-	}
-	
-	@Override
-	@Deprecated
-	public void nowHasCenter(boolean b) {
-		universe.getCurrentWorld().nowHasCenter(b);
-	}
-	
 	/*@Override
 	public Entity getCenterObject() {
 		Debug.log("SUP!?!");
@@ -245,13 +227,5 @@ public class GameWindow extends FocusedWindow<Player> {
 			return null;
 		}
 	}*/
-	
-	@Override
-	@Deprecated
-	public void setCenterObject(Entity e) {
-		if (universe.getCurrentWorld() != null) {
-			universe.getCurrentWorld().setCenterObject(e);
-		}
-	} //TODO: make center object center by default
 	
 }

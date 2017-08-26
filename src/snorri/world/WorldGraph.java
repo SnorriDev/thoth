@@ -8,9 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 import net.sourceforge.yamlbeans.YamlException;
+import snorri.entities.Center;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.main.Debug;
+import snorri.main.FocusedWindow;
+import snorri.main.Main;
 
 /**
  * Class that holds multiple worlds.
@@ -50,7 +53,7 @@ public class WorldGraph implements Playable {
 		for (File file : files) {
 			worlds.put(file.getName(), new World(file));
 		}
-		current = worlds.get(yaml.get("root"));
+		setCurrentWorld(worlds.get(yaml.get("root")));
 		current.spawnPlayer(player);
 				
 		List<Map<String, String>> edges = (List<Map<String, String>>) yaml.get("edges");
@@ -75,6 +78,13 @@ public class WorldGraph implements Playable {
 		}
 	}
 
+	private void setCurrentWorld(World world) {
+		current = world;
+		if (Main.getWindow() instanceof FocusedWindow) {
+			((FocusedWindow<?>) Main.getWindow()).setCustomCenter(findCenter());
+		}
+	}
+	
 	@Override
 	public World getCurrentWorld() {
 		return current;
@@ -96,12 +106,21 @@ public class WorldGraph implements Playable {
 	}
 	
 	public void crossInto(World world, Vector pos) {
-		current = world;
+		setCurrentWorld(world);
 		player.setPos(pos);
 	}
 	
 	public void crossInto(World world, int x, int y) {
 		crossInto(world, new Vector(x, y));
+	}
+	
+	public Player getPlayer() {
+		return player;
+	}
+	
+	@Override
+	public Center findCenter() {
+		return getCurrentWorld().findCenter();
 	}
 
 }

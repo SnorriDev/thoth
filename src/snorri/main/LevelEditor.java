@@ -134,7 +134,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 	public LevelEditor() {
 		super(new Entity(new Vector(20, 20)));
 		
-		setCenterObject(getFocus());
+		setCustomCenter(getFocus());
 
 		previousTile = new Tile(BackgroundElement.class, 0, 0);
 		selectedTile = new Tile(BackgroundElement.class, 0, 0);
@@ -1508,10 +1508,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			}
 		}
 		else if (selectedEntityClass.equals(Center.class)) {
-			if (world.hasCenter()) {
-				world.delete(world.getCenterObject()); // don't need to check null
-			}
-			world.nowHasCenter(true);
+			world.delete(world.getEntityTree().getFirst(Center.class));
 		}
 
 		// TODO auto-detect options for constructor; have method that gives
@@ -1554,10 +1551,6 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 				}
 				String animation = inputs.getText("Path");
 				world.add(new Dummy(spawnPos, animation));
-			} else if (selectedEntityClass.equals(Center.class)) {
-				Entity e = selectedEntityClass.getConstructor(Vector.class).newInstance(spawnPos);
-				world.add(e);
-				world.setCenterObject(e);
 			}
 
 			else {
@@ -1582,11 +1575,6 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 		//Entity deletableEntity = world.getEntityTree().getFirstCollision(checker, hitAll, class1)n
 		Entity deletableEntity = world.getEntityTree().getFirstCollision(new Entity(getMousePosAbsolute()), true);
-
-		if (deletableEntity instanceof Center) {
-			world.setCenterObject(world.computeFocus());
-			world.nowHasCenter(false);
-		}
 		
 		autosaveUndo();
 		world.delete(deletableEntity);
@@ -1763,10 +1751,4 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		}
 	}
 	
-	@Override
-	public void setCenterObject(Entity e) {
-		if (getWorld() != null) {
-			getWorld().setCenterObject(e);
-		}
-	}
 }

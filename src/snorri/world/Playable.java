@@ -8,6 +8,7 @@ import java.util.Map;
 
 import net.sourceforge.yamlbeans.YamlException;
 import net.sourceforge.yamlbeans.YamlReader;
+import snorri.entities.Center;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.main.Debug;
@@ -106,5 +107,7 @@ public interface Playable extends Savable {
 		}
 		
 	}
+
+	public Center findCenter();
 	
 }

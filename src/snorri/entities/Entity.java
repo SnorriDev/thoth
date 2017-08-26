@@ -257,14 +257,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			return;
 		}
 		
-		Vector rel;
-		if (g.getWorld().hasCenter()) {
-			rel = pos.copy().sub(g.getCenterObject().getPos());
-		}
-		else {
-			rel = pos.copy().sub(g.getFocus().getPos());
-		}
-		//Vector rel = pos.copy().sub(g.getFocus().getPos());
+		Vector rel = pos.copy().sub(g.getCenterObject().getPos());
 		gr.drawImage(sprite, rel.getX() + (g.getBounds().width - sprite.getWidth()) / 2, rel.getY() + (g.getBounds().height - sprite.getHeight()) / 2, sprite.getWidth(null), sprite.getHeight(null), null);
 		
 	}

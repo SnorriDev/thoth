@@ -269,7 +269,7 @@ public class Main {
 	}
 	
 	public static void launchGame(File path) {
-		launchGame(path, null);
+		launchGame(path, new Player(Vector.ZERO));
 	}
 	
 	public static void launchGame(File path, Player p) {
