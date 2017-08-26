@@ -37,7 +37,7 @@ public class World implements Playable, Editable {
 	private static final int RANDOM_SPAWN_ATTEMPTS = 100;
 	public static final int UPDATE_RADIUS = 4000;
 	private static final int SPAWN_SEARCH_RADIUS = 12;
-	private static final int EDGE_TP_THRESHOLD = 100;
+	private static final int EDGE_TP_THRESHOLD = 30;
 
 	private String path;
 	
@@ -166,14 +166,13 @@ public class World implements Playable, Editable {
 		
 		World neighbor;
 		if (getRightNeighbor() != null && touchingRight(focus)) {
-			universe.crossInto(getRightNeighbor(), EDGE_TP_THRESHOLD, universe.getPlayer().getPos().getY());
+			universe.crossInto(getRightNeighbor(), EDGE_TP_THRESHOLD, focus.getPos().getY());
 		} else if (getBottomNeighbor() != null && touchingBottom(focus)) {
-			universe.crossInto(getBottomNeighbor(), universe.getPlayer().getPos().getX(), EDGE_TP_THRESHOLD);
+			universe.crossInto(getBottomNeighbor(), focus.getPos().getX(), EDGE_TP_THRESHOLD);
 		} else if ((neighbor = getLeftNeighbor()) != null && touchingLeft(focus)) {
-			Debug.raw(universe.getPlayer());
-			universe.crossInto(neighbor, neighbor.getWidth() - EDGE_TP_THRESHOLD, universe.getPlayer().getPos().getY());
+			universe.crossInto(neighbor, neighbor.getWidth() - EDGE_TP_THRESHOLD, focus.getPos().getY());
 		} else if ((neighbor = getTopNeighbor()) != null && touchingTop(focus)) {
-			universe.crossInto(neighbor, universe.getPlayer().getPos().getX(), neighbor.getHeight() - EDGE_TP_THRESHOLD);
+			universe.crossInto(neighbor, focus.getPos().getX(), neighbor.getHeight() - EDGE_TP_THRESHOLD);
 		}
 
 	}

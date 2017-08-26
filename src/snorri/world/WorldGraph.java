@@ -35,8 +35,8 @@ public class WorldGraph implements Playable {
 	private Player player;
 	
 	public WorldGraph(File folder, Player p) throws FileNotFoundException, IOException, YamlException {
-		load(folder);
 		player = p;
+		load(folder);
 	}
 	
 	@Override @SuppressWarnings("unchecked")
@@ -47,14 +47,15 @@ public class WorldGraph implements Playable {
 		if (yaml == null) { // if config.yml hasn't already been parsed, parse it
 			yaml = Playable.getConfig(folder, "graph");
 		}
-		
+				
 		File[] files = folder.listFiles(File::isDirectory);
 		worlds = new HashMap<String, World>();
 		for (File file : files) {
-			worlds.put(file.getName(), new World(file));
+			World world = new World(file, player);
+			world.setUniverse(this);
+			worlds.put(file.getName(), world);
 		}
 		setCurrentWorld(worlds.get(yaml.get("root")));
-		current.spawnPlayer(player);
 				
 		List<Map<String, String>> edges = (List<Map<String, String>>) yaml.get("edges");
 		Debug.log("loading " + edges.size() + " edges");
@@ -106,8 +107,10 @@ public class WorldGraph implements Playable {
 	}
 	
 	public void crossInto(World world, Vector pos) {
+		getCurrentWorld().delete(player);
 		setCurrentWorld(world);
 		player.setPos(pos);
+		getCurrentWorld().add(player);
 	}
 	
 	public void crossInto(World world, int x, int y) {
