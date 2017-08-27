@@ -100,7 +100,7 @@ public class GameWindow extends FocusedWindow<Player> {
 	}
 	
 	@Override
-	public void paintComponent(Graphics g1){
+	public void paintComponent(Graphics g1) {
 			
 		super.paintComponent(g1);
 		if (player == null) {
@@ -108,16 +108,21 @@ public class GameWindow extends FocusedWindow<Player> {
 		}
 		
 		Graphics2D g = (Graphics2D) g1;
-		//TODO: get window size, divide by default window size which needs to be parametrized, keep ratio even using minimima/maxima
-		double scale = (Math.max(getWidth() / ((double) (Main.DEFAULT_WIDTH)), getHeight() / ((double) Main.DEFAULT_HEIGHT)));
-		//double scaleHeight = (Math.max(getWidth() / ((double) (Main.DEFAULT_WIDTH)), getHeight() / ((double) Main.DEFAULT_HEIGHT)));
-		g.scale(scale, scale);
+
+		//Scales up the size of the size of the rendered levels
+		g.scale(getScale(), getScale());
+		g.translate((int) (getWidth() / 2.0 / getScale() - getWidth() / 2.0), (int) (getHeight() / 2.0 / getScale() - getHeight() / 2.0));
 		
 		long time = getTimestamp();
 		double deltaTime = (time - lastRenderTime) / 1000000000d;
 		lastRenderTime = time;
 						
 		universe.getCurrentWorld().render(this, g, deltaTime, true);
+		
+		//Keeps the Overlay Elements unscaled
+		g.scale(1.0 / getScale(), 1.0 / getScale());
+		g.translate((int) (getWidth() / 2.0 * getScale() - getWidth() / 2.0), (int) (getHeight() / 2.0 * getScale() - getHeight() / 2.0));
+		
 		player.getInventory().render(this, g);
 		player.renderHealthBar(g);
 		
@@ -140,12 +145,20 @@ public class GameWindow extends FocusedWindow<Player> {
 			Debug.log("Focused component: " + KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner());
 		}
 		
-		//super.paintComponent(g);
 		
 		g.dispose();
+		g1.dispose();
 		
 	}
 	
+	public double getDefaultWidth() {
+		return Main.DEFAULT_WIDTH;
+	}
+	
+	public double getDefaultHeight() {
+		return Main.DEFAULT_HEIGHT;
+	}
+
 	public void showMessage(String msg) {
 		showMessage(new SpellMessage(msg, true));
 	}
@@ -224,6 +237,10 @@ public class GameWindow extends FocusedWindow<Player> {
 
 	public Caster getFocusAsCaster() {
 		return (Caster) getFocus();
+	}
+	
+	public double getScale() {
+		return (Math.max(getWidth() / ((double) (Main.DEFAULT_WIDTH)), getHeight() / ((double) Main.DEFAULT_HEIGHT)));
 	}
 	
 	@Override
