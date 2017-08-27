@@ -11,7 +11,7 @@ import snorri.main.Main;
 public interface Savable {
 
 	public void load(File folder) throws FileNotFoundException, IOException;
-
+	
 	default void save(File f) throws IOException {
 		save(f, false);
 	}

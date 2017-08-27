@@ -71,13 +71,13 @@ public class Vector implements Nominal, Comparable<Vector> {
 	}
 	
 	public Vector getRelPos(FocusedWindow<?> g) {
-		Vector focusPos;
-		if (g.getWorld().hasCenter()) {
-			focusPos = g.getCenterObject().getPos();
-		}
-		else {
-			focusPos = g.getFocus().getPos();
-		}
+		Vector focusPos = g.getCenterObject().getPos(); //returns whatever is being used to draw the center
+//		if (g.getWorld().hasCenter()) {
+//			focusPos = g.getCenterObject().getPos();
+//		}
+//		else {
+//			focusPos = g.getFocus().getPos();
+//		}
 		return copy().sub(focusPos).add(g.getDimensions().divide(2));
 	}
 	

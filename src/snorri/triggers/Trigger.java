@@ -1,7 +1,5 @@
 package snorri.triggers;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,8 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
 
-import net.sourceforge.yamlbeans.YamlException;
-import net.sourceforge.yamlbeans.YamlReader;
 import snorri.entities.Entity;
 import snorri.main.Debug;
 import snorri.main.GameWindow;
@@ -108,31 +104,22 @@ public class Trigger {
 	
 
 	@SuppressWarnings("unchecked")
-	public static TriggerMap load(File triggerFile, World world) {
+	public static TriggerMap load(Map<String, Object> rawTriggers, World world) {
 		
 		TriggerMap triggers = new TriggerMap();
 		
-		try {
-			YamlReader reader = Main.getYamlReader(triggerFile);
-			Map<String, Object> rawTriggers = (Map<String, Object>) reader.read();
-			if (rawTriggers == null) {
-				return triggers;
-			}
-			for (Entry<String, Object> rawTrigger : rawTriggers.entrySet()) {
-				String name = rawTrigger.getKey();
-				Map<String, List<Map<String, Map<String, Object>>>> data = (Map<String, List<Map<String, Map<String, Object>>>>) rawTrigger.getValue();
-				new Trigger(world, name, data, triggers);
-			}
-			
-			Debug.log(rawTriggers.size() + " triggers loaded");
-			
-		} catch (FileNotFoundException e) {
-			Debug.error(e);
-		} catch (YamlException e) {
-			Debug.error(e);
-		} finally {
-			triggers.setLoaded();
+		if (rawTriggers == null) {
+			return triggers;
 		}
+		for (Entry<String, Object> rawTrigger : rawTriggers.entrySet()) {
+			String name = rawTrigger.getKey();
+			Map<String, List<Map<String, Map<String, Object>>>> data = (Map<String, List<Map<String, Map<String, Object>>>>) rawTrigger.getValue();
+			new Trigger(world, name, data, triggers);
+		}
+		
+		Debug.log(rawTriggers.size() + " triggers loaded");
+			
+		triggers.setLoaded();
 		
 		return triggers;
 				

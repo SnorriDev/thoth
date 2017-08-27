@@ -1,0 +1,6 @@
+type: world
+triggers:
+  onExit:
+    actions:
+      - SHOW_CUTSCENE:
+          nextPath: /worlds/tutorial

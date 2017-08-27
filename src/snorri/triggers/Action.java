@@ -9,6 +9,7 @@ import snorri.entities.Drop;
 import snorri.entities.Entity;
 import snorri.entities.NPC;
 import snorri.inventory.Droppable;
+import snorri.main.CutScene;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.GamePanel;
@@ -207,6 +208,25 @@ public abstract class Action {
 							Main.launchGame(path, ((GameWindow) window).getFocus());
 						} else {
 							throw new RuntimeException("trying to enter other world in non-GameWindow");
+						}
+					}
+				};
+			}
+		}),
+		
+		SHOW_CUTSCENE(new Action() {
+			@Override
+			public Runnable build(World world, Map<String, Object> args) {
+				return new Runnable() {
+					final String nextWorld = (String) args.get("nextPath");
+					@Override
+					public void run() {
+						GamePanel window = Main.getWindow();
+						if (window instanceof GameWindow) {
+							((GameWindow) window).stopBackgroundThread();
+							Main.setWindow(new CutScene(nextWorld, ((GameWindow) window).getFocus()));
+						} else {
+							throw new RuntimeException("trying to show cutscene in non-GameWindow");
 						}
 					}
 				};

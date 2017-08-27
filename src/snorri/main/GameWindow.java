@@ -17,7 +17,6 @@ import snorri.dialog.DropMessage;
 import snorri.dialog.Message;
 import snorri.dialog.Objective;
 import snorri.dialog.SpellMessage;
-import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.events.SpellEvent.Caster;
 import snorri.inventory.Droppable;
@@ -44,7 +43,7 @@ public class GameWindow extends FocusedWindow<Player> {
 	public GameWindow(Playable universe, Player focus) {
 		super(focus);
 		this.universe = universe;
-		//setCenterObject(getFocus());
+		setCustomCenter(universe.findCenter());
 		
 		messageQ = new LinkedList<>();
 		lastTime = getTimestamp();
@@ -66,7 +65,7 @@ public class GameWindow extends FocusedWindow<Player> {
 	
 	@Override
 	protected void onFrame() {
-				
+		
 		long time = getTimestamp();
 		double deltaTime = (time - lastTime) / 1000000000d;
 		lastTime = time;
@@ -89,12 +88,7 @@ public class GameWindow extends FocusedWindow<Player> {
 			return;
 		}
 		
-		if (getWorld().hasCenter()) {
-			universe.getCurrentWorld().update(getWorld().getCenterObject(), deltaTime);
-		}
-		else {
-			universe.getCurrentWorld().update(getFocus(), deltaTime);
-		}
+		universe.update(getFocus(), deltaTime);
 		repaint();
 				
 	}
@@ -239,20 +233,9 @@ public class GameWindow extends FocusedWindow<Player> {
 		return (Caster) getFocus();
 	}
 	
+
 	public double getScale() {
 		return (Math.max(getWidth() / ((double) (Main.DEFAULT_WIDTH)), getHeight() / ((double) Main.DEFAULT_HEIGHT)));
-	}
-	
-	@Override
-	@Deprecated
-	public boolean hasCenter() {
-		return universe.getCurrentWorld().hasCenter();
-	}
-	
-	@Override
-	@Deprecated
-	public void nowHasCenter(boolean b) {
-		universe.getCurrentWorld().nowHasCenter(b);
 	}
 	
 	/*@Override
@@ -272,13 +255,5 @@ public class GameWindow extends FocusedWindow<Player> {
 			return null;
 		}
 	}*/
-	
-	@Override
-	@Deprecated
-	public void setCenterObject(Entity e) {
-		if (universe.getCurrentWorld() != null) {
-			universe.getCurrentWorld().setCenterObject(e);
-		}
-	} //TODO: make center object center by default
 	
 }

@@ -1,0 +1,70 @@
+type: world
+triggers:
+  onUrnDestroy:
+    events:
+      - DESTROY:
+          object: keyUrn
+    actions:
+      - DROP_TREASURE:
+          pos: !pos {x: 55, y: 97}
+          drop: '!COMMON'
+
+  onTrip:
+    events:
+      - TRIP:
+          object: !pos {x: 71, y: 97}
+    actions:
+      - BREAK_WALL:
+          pos1: !pos {x: 67, y: 92}
+          pos2: !pos {x: 69, y: 92}
+      - BREAK_WALL:
+          pos1: !pos {x: 67, y: 102}
+          pos2: !pos {x: 69, y: 102}
+
+  onKill:
+    events:
+      - KILL:
+          object: croc1
+    actions:
+      - SHOW_DIALOG:
+          dialog:
+            !dialog
+              image: player
+              name: Setna
+              text: |
+                <p>Crocodiles out here in the desert? I must be getting close to the oasis.</p>
+
+  onMummies:
+    actions:
+      - DELETE_ENTITY:
+          entity: topSarcophagus
+      - DELETE_ENTITY:
+          entity: botSarcophagus
+
+  onNearCoffins:
+    actions:
+      - SHOW_DIALOG:
+          dialog:
+            !dialog
+              image: player
+              name: Setna
+              text: |
+                <p>I can probably find some new hieroglyphs if I open these sarcophagi..</p>
+
+  onWarnBallista:
+    actions:
+      - SHOW_DIALOG:
+          dialog:
+            !dialog
+              image: player
+              name: Setna
+              text: |
+                <p> It's a trap! That tripwire must fire the ballista. Maybe I can use a spell like <span class="hiero">bm Dr ..</span> to break the wire before I walk through..</p>
+
+  onBallistaTripwire:
+    events:
+      - TRIP:
+          object: !pos {x: 128, y: 87}
+    actions:
+      - FIRE_BALLISTA:
+          ballista: ballista

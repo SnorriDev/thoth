@@ -287,8 +287,7 @@ public class QuadTree extends Entity implements EntityGroup {
 	@Override
 	public void renderAround(FocusedWindow<?> window, Graphics gr, double deltaTime) {
 
-		Vector centerPos = window.getWorld().hasCenter() ? window.getCenterObject().getPos()
-				: window.getFocus().getPos();
+		Vector centerPos = window.getCenterObject().getPos();
 		Vector dim = window.getDimensions();
 		Entity test = new Entity(centerPos,
 				new RectCollider(dim.copy().multiply(SCALE_FACTOR).add(new Vector(CUSHION, CUSHION).multiply(2))));

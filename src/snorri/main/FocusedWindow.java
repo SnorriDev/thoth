@@ -33,7 +33,9 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	private static final int FRAME_DELTA = 15; // 33 -> 30 FPS (20 -> 50 FPS
 
 	protected final KeyStates states = new KeyStates();
+	
 	protected final F player;
+	protected Entity customCenter;
 
 	protected long lastRenderTime;
 	private boolean paused = false, stopped = false;
@@ -235,39 +237,19 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 		}
 	}
 	
-	@Deprecated
-	public boolean hasCenter() {
-		return getWorld().hasCenter();
+	public void setCustomCenter(Entity centerObject) {
+		this.customCenter = centerObject;
 	}
 	
-	@Deprecated
-	public void nowHasCenter(boolean b) {
-		getWorld().nowHasCenter(b);
+	/**
+	 * @return centerObject, or focus if it is null
+	 */
+	public Entity getCenterObject() {
+		return customCenter == null ? getFocus() : customCenter;
 	}
 
-	
-	public Entity getCenterObject() {
-		//Debug.log("SUP!?!");
-		if (getWorld() != null) {
-			//Debug.log("getCenterObject() location: " + getWorld().getCenterObject().getPos());
-			if (getWorld().getCenterObject() != null) {
-				return getWorld().getCenterObject();
-			}
-			else {
-				//Debug.log("BRO!!!");
-				return getFocus();
-			}
-		}
-		else {
-			return null;
-		}
+	public boolean hasCustomCenter() {
+		return customCenter != null;
 	}
-	
-	@Deprecated
-	public void setCenterObject(Entity e) {
-		if (getWorld() != null) {
-			getWorld().setCenterObject(e);
-		}
-	} //TODO: make center object center by default
 
 }

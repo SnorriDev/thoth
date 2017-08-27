@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.UIManager;
 
+import net.sourceforge.yamlbeans.YamlException;
 import net.sourceforge.yamlbeans.YamlReader;
 import snorri.dialog.Dialog;
 import snorri.dialog.Objective;
@@ -28,8 +29,8 @@ import snorri.hieroglyphs.Hieroglyphs;
 import snorri.inventory.RandomDrop;
 import snorri.parser.Lexicon;
 import snorri.terrain.Structure;
+import snorri.world.Playable;
 import snorri.world.Vector;
-import snorri.world.World;
 
 public class Main {
 	
@@ -273,18 +274,18 @@ public class Main {
 	}
 	
 	public static void launchGame(File path) {
-		launchGame(path, null);
+		launchGame(path, new Player(Vector.ZERO));
 	}
 	
 	public static void launchGame(File path, Player p) {
 		loadInto(new Runnable() {
 			@Override
 			public void run() {
-				World world;
+				Playable world;
 				try {
-					world = new World(path, p);
+					world = Playable.getLoaded(path, p);
 					setWindow(new GameWindow(world));
-				} catch (IOException e) {
+				} catch (IOException | YamlException e) {
 					Debug.error(e);
 				}
 			}
