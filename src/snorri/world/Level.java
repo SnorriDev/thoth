@@ -220,10 +220,10 @@ public class Level implements Editable {
 		int minY;
 		int maxY;
 		
-		minX = g.getCenterObject().getPos().getX() / Tile.WIDTH - g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR - CUSHION;
-		maxX = g.getCenterObject().getPos().getX() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR + CUSHION;
-		minY = g.getCenterObject().getPos().getY() / Tile.WIDTH - g.getDimensions().getY() / Tile.WIDTH / SCALE_FACTOR - CUSHION;
-		maxY = g.getCenterObject().getPos().getY() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR + CUSHION;
+		minX = g.getCenterObject().getPos().getX() / Tile.WIDTH - g.getWidth() / Tile.WIDTH / SCALE_FACTOR - CUSHION;
+		maxX = g.getCenterObject().getPos().getX() / Tile.WIDTH + g.getWidth() / Tile.WIDTH / SCALE_FACTOR + CUSHION;
+		minY = g.getCenterObject().getPos().getY() / Tile.WIDTH - g.getHeight() / Tile.WIDTH / SCALE_FACTOR - CUSHION;
+		maxY = g.getCenterObject().getPos().getY() / Tile.WIDTH + g.getHeight() / Tile.WIDTH / SCALE_FACTOR + CUSHION;
 				
 		for (int i = minX; i < maxX; i++) {
 			for (int j = minY; j < maxY; j++) {
