@@ -43,6 +43,8 @@ public class Main {
 	private static Font customFont;
 	
 	public static final BufferedImage DEFAULT_TEXTURE = getImage("/textures/tiles/default00.png");
+	public static final int DEFAULT_WIDTH = 1280;
+	public static final int DEFAULT_HEIGHT = 720;
 
 	public static class ResizeListener implements ComponentListener {
 
@@ -95,7 +97,7 @@ public class Main {
 		setupFont();
 								
 		frame = new JFrame("The Book of Thoth");
-		frame.setSize(1280, 720);
+		frame.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		
@@ -104,7 +106,10 @@ public class Main {
 		getLayeredPane().addComponentListener(new Main.ResizeListener());
 
 		frame.getContentPane().add(getLayeredPane());
-		// FOR FULL SCREEN: frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		
+		if (!Debug.WINDOWED_MODE) {
+			frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		}
 
 		launchMenu();
 

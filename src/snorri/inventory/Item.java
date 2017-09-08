@@ -356,7 +356,7 @@ public abstract class Item implements Droppable {
 	//TODO: use an ImageViewer to scale things
 	
 	public static Vector getPos(int i, boolean top) {
-		int y = top ? GamePanel.MARGIN : (((GameWindow) Main.getWindow()).getDimensions().getY() - (i == 0 ? Item.getBigSlotWidth() : Item.getSlotWidth()) - GamePanel.MARGIN);
+		int y = top ? GamePanel.MARGIN : (((GameWindow) Main.getWindow()).getHeight() - (i == 0 ? Item.getBigSlotWidth() : Item.getSlotWidth()) - GamePanel.MARGIN);
 		int width = top ? Item.getSlotWidth() : Item.getBigSlotWidth();
 		return new Vector(GamePanel.MARGIN + i * (width + Item.SLOT_SPACE), y);
 	}
