@@ -1,5 +1,6 @@
 package snorri.masking;
 
+import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -7,6 +8,7 @@ import java.util.List;
 
 import snorri.main.Util;
 import snorri.world.Tile;
+import snorri.world.TileType;
 import snorri.world.Vector;
 
 public class Mask implements Comparable<Mask>, Comparator<Mask> {
@@ -37,7 +39,6 @@ public class Mask implements Comparable<Mask>, Comparator<Mask> {
 	
 	private final Tile tile;
 	private boolean corner;
-	private BufferedImage texture;
 	private short bitmask;
 	//private double order; //low order masks go on top of high ones
 	
@@ -47,15 +48,8 @@ public class Mask implements Comparable<Mask>, Comparator<Mask> {
 		this.corner = corner;
 	}
 	
-	private void calculateTexture() {
-		texture = AlphaMask.getMask(bitmask).getMasked(tile.getBaseTexture());
-	}
-	
-	public BufferedImage getTexture() {
-		if (texture == null) {
-			calculateTexture();
-		}
-		return texture;
+	public Area getArea() {
+		return AlphaMask.getMask(bitmask).getArea();
 	}
 	
 	@Override
@@ -98,6 +92,17 @@ public class Mask implements Comparable<Mask>, Comparator<Mask> {
 	
 	public final Tile getTile()  {
 		return tile;
+	}
+	
+	public final TileType getType() {
+		return tile.getType();
+	}
+	
+	/**
+	 * @return the texture that should be drawn in this masked region
+	 */
+	public BufferedImage getBaseTexture() {
+		return getTile().getBaseTexture();
 	}
 	
 	public short getBitVal() {

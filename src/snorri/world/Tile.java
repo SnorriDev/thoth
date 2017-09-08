@@ -2,19 +2,17 @@ package snorri.world;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.PriorityQueue;
 
 import snorri.audio.ClipWrapper;
 import snorri.entities.Entity;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
-import snorri.main.Util;
 import snorri.masking.Mask;
 import snorri.pathfinding.Component;
 import snorri.semantics.Nominal;
@@ -36,7 +34,8 @@ public class Tile implements Comparable<Tile>, Nominal {
 	private boolean reachable, surroundingsPathable = true;
 	private List<Entity> entities;
 	
-	private PriorityQueue<Mask> maskQ;
+//	private PriorityQueue<Mask> maskQ;
+	private List<Mask> masks;
 	private BufferedImage texture;
 	
 	protected static ClipWrapper[] sounds;
@@ -44,7 +43,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 	public Tile(TileType type, int style) {
 		this.type = type;
 		this.style = style;
-		maskQ = new PriorityQueue<>();
+		masks = new ArrayList<>();
 		entities = new ArrayList<>();
 		if (this.type != null) {
 			texture = getBaseTexture(); //by default, should just point to the type texture
@@ -114,10 +113,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 		// TODO some sort of quad-search for rendering
 		if (getTexture() == null) {
 			return;
-		}
-		
-		if (!maskQ.isEmpty()) {
-			calculateTexture();
 		}
 		
 		Vector relPos = v.getRelPosGrid(g);
@@ -221,7 +216,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 	 */
 	@Override
 	public int compareTo(Tile t) {
-		//Debug.log("comparing tiles");
 		
 		if (!type.getClass().equals(t.type.getClass())) {
 			Debug.warning("comparing TileTypes from different layers");
@@ -241,8 +235,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 			}
 		}
 		
-		
-		
 		//int n = TileType.getValues(type.getClass()).length;
 		//return Integer.compare(style * n + type.getId(),  t.style * n + t.type.getId()); //FIXME: the small number multiplication might cause a few bugs
 		/*if (Double.compare(type.getBlendOrder() + 0.0001 * type.getId() + 0.0000001 * style, t.type.getBlendOrder() + 0.0001 * t.type.getId() + 0.0000001 * t.style) != 0) {
@@ -257,25 +249,15 @@ public class Tile implements Comparable<Tile>, Nominal {
 //			return 0;
 	}
 	
-	public void calculateTexture() {
-		texture = Util.deepCopy(getBaseTexture());
-		Graphics2D gr = texture.createGraphics();
-		while (!maskQ.isEmpty()) {
-			gr.drawImage(maskQ.poll().getTexture(), 0, 0, null);
-		}
-		gr.dispose();
-	}
-	
+	/**
+	 * @return where this tile should be drawn in the hierarchy of layers
+	 */
 	private double getOrderValue() {
 		return type.getBlendOrder() + 0.0001 * type.getId() + 0.0000001 * style;
 	}
-
-	public void enqueueBitMasks(Mask[] masks) {
-		for (Mask m : masks) {
-			if (m !=null) {
-				maskQ.add(m);
-			}
-		}
+	
+	public void addMask(Mask mask) {
+		masks.add(mask);
 	}
 	
 	public void addEntity(Entity e) {
@@ -298,6 +280,22 @@ public class Tile implements Comparable<Tile>, Nominal {
 		
 		return new Tile(type.getReplacement(), style);
 		
+	}
+	
+	public List<Mask> getMasks() {
+		return masks;
+	}
+	
+	public static List<Tile> getBlendOrdering(int layer) {
+		List<Tile> tiles = new ArrayList<>();
+		for (TileType type : TileType.getValues(layer)) {
+			for (int i = 0; i < type.getNumberStyles(); i++) {
+				tiles.add(new Tile(type, i));
+			}
+		}
+		Collections.sort(tiles);
+		Collections.reverse(tiles);
+		return tiles;
 	}
 
 	

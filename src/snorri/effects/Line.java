@@ -1,4 +1,4 @@
-package effects;
+package snorri.effects;
 
 import java.awt.Graphics2D;
 
@@ -14,6 +14,7 @@ import snorri.world.Vector;
 public class Line {
 
 	private Vector a, b;
+	@SuppressWarnings("unused")
 	private float thickness;
 	
 	public Line(Vector a, Vector b, float thickness) {
@@ -25,6 +26,7 @@ public class Line {
 	public void render(Graphics2D g) {
 		
 		Vector tangent = b.copy().sub(a);
+		@SuppressWarnings("unused")
 		float rotation = (float) Math.atan2(tangent.getY(), tangent.getX());
 	}
 	

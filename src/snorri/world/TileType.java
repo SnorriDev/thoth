@@ -16,7 +16,14 @@ public interface TileType extends Nominal {
 	public static class Param<T> {
 		
 		protected enum Key {
-			PATHABLE, SWIMMABLE, CHANGABLE, AT_TOP, CAN_SHOOT_OVER, BLEND_ORDER, REPLACEMENT_TYPE, OPEN_TYPE;
+			PATHABLE,
+			SWIMMABLE,
+			CHANGABLE,
+			AT_TOP,
+			CAN_SHOOT_OVER,
+			BLEND_ORDER,
+			REPLACEMENT_TYPE,
+			OPEN_TYPE;
 			//TODO use REPLACEMENT_TYPE == null instead of CHANGABLE
 		}
 		
@@ -122,7 +129,7 @@ public interface TileType extends Nominal {
 	
 	boolean isChangable();
 	
-	int getLayer();
+	public int getLayer();
 	
 	public static TileType lookup(Class<? extends TileType> c, int id) {
 		
@@ -180,6 +187,19 @@ public interface TileType extends Nominal {
 		}
 		
 		return Nominal.super.get(attr, e);
+	}
+	
+	public static TileType[] getValues(int l) {
+		switch (l) {
+		case Level.BACKGROUND:
+			return BackgroundElement.values();
+		case Level.MIDGROUND:
+			return MidgroundElement.values();
+		case Level.FOREGROUND:
+			return ForegroundElement.values();
+		default:
+			return null; //unknown level
+		}
 	}
 	
 	public static TileType[] getValues(Class<? extends TileType> c) {
