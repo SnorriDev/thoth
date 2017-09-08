@@ -1,11 +1,14 @@
 package snorri.world;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.TexturePaint;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
+import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -564,13 +567,22 @@ public class Level implements Editable {
 		
 		//TODO this should be sorted, and can be made a lot more efficient
 		for (Tile tile : Tile.getBlendOrdering(getLayer())) {
+			
 			BufferedImage texture = tile.getBaseTexture();
 			if (!textureMap.containsKey(texture)) {
 				continue;
 			}
+			
 			Rectangle r = new Rectangle(0, 0, texture.getWidth(), texture.getHeight());
 			g.setPaint(new TexturePaint(texture, r));
 			g.fill(textureMap.get(texture));
+			
+//			if (! tile.getType().isAtTop()) {
+			g.setColor(Color.BLACK);
+			Path2D path = new Path2D.Double(textureMap.get(texture));
+			g.draw(path);
+//			}
+			
 		}
 		
 //		Main.log("blurring layer");
