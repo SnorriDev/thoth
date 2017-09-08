@@ -8,7 +8,6 @@ import java.awt.TexturePaint;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
-import java.awt.geom.PathIterator;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,14 +17,17 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 import javax.imageio.ImageIO;
 
 import snorri.entities.Entity;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
+import snorri.main.Main;
 import snorri.masking.Mask;
 import snorri.terrain.DungeonGen;
 import snorri.world.TileType;
@@ -39,20 +41,24 @@ public class Level implements Editable {
 	public static final int FOREGROUND = 2;
 
 	public static final int CUSHION = 4;
-	public static final int SCALE_FACTOR = 2;
 
 	/**
 	 * An array of tiles. Note that coordinates are Cartesian, not matrix-based
 	 **/
 	private Tile[][] map;
 	private Map<BufferedImage, Area> textureMap;
-	private BufferedImage layer;
+	private BufferedImage bitmap;
 	
-	private int level;
+	private int layer;
+	
+	private enum RenderMode {
+		BITMAP,
+		GRID;
+	}
 
 	public Level(int width, int height, TileType bg) {
 		map = new Tile[width][height];
-		level = bg.getLayer();
+		layer = bg.getLayer();
 		
 		// TODO add an int layer here?
 		// change other thing to renderedLayer?
@@ -89,12 +95,12 @@ public class Level implements Editable {
 
 	public Level(File file, Class<? extends TileType> c) throws FileNotFoundException, IOException {
 		load(file, c);
-		enqueueAllBitMasks();
+		updateAllMasksAndBitmap();
 	}
 
 	public Level(File file) throws FileNotFoundException, IOException {
 		load(file);
-		enqueueAllBitMasks();
+		updateAllMasksAndBitmap();
 	}
 
 	/**
@@ -194,7 +200,8 @@ public class Level implements Editable {
 			return;
 		}
 		map[x][y] = t;
-		updateMasksGrid(new Vector(x, y));
+//		Debug.log("setting tile grid");
+		updateMasksAndBitmapAround(new Vector(x, y));
 	}
 
 	public Tile getTile(int x, int y) {
@@ -233,25 +240,22 @@ public class Level implements Editable {
 	@Override
 	public void render(FocusedWindow<?> g, Graphics gr, double deltaTime, boolean renderOutside) {
 
-		// TODO add some shit that checks if layer is empty etc.
-
-		// Debug.log("RENDERING...");
-		// Debug.log("" + g.getCenterObject());
-		// Debug.log("" + g.getCenterObject().getPos());
-
-		int minX;
-		int maxX;
-		int minY;
-		int maxY;
-
-		minX = g.getCenterObject().getPos().getX() / Tile.WIDTH - g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR
-				- CUSHION;
-		maxX = g.getCenterObject().getPos().getX() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR
-				+ CUSHION;
-		minY = g.getCenterObject().getPos().getY() / Tile.WIDTH - g.getDimensions().getY() / Tile.WIDTH / SCALE_FACTOR
-				- CUSHION;
-		maxY = g.getCenterObject().getPos().getY() / Tile.WIDTH + g.getDimensions().getX() / Tile.WIDTH / SCALE_FACTOR
-				+ CUSHION;
+		int minX, maxX, minY, maxY;
+		
+		Vector center = g.getCenterObject().getPos();
+		Vector dim = g.getDimensions();
+		
+		if (getRenderMode() == RenderMode.BITMAP) {
+			// TODO fix alignment between layers
+			BufferedImage image = bitmap.getSubimage(center.getX() - dim.getX() / 2, center.getY() - dim.getY() / 2, dim.getX(), dim.getY());
+			gr.drawImage(image, 0, 0, null);
+			return;
+		}
+		
+		minX = (center.getX() - dim.getX() / 2) / Tile.WIDTH - CUSHION;
+		maxX = (center.getX() + dim.getX() / 2) / Tile.WIDTH + CUSHION;
+		minY = (center.getY() - dim.getY() / 2) / Tile.WIDTH - CUSHION;
+		maxY = (center.getY() + dim.getY() / 2) / Tile.WIDTH + CUSHION;
 
 		for (int i = minX; i < maxX; i++) {
 			for (int j = minY; j < maxY; j++) {
@@ -293,7 +297,7 @@ public class Level implements Editable {
 		}
 
 		is.close();
-		level = map[0][0].getType().getLayer();
+		layer = map[0][0].getType().getLayer();
 
 	}
 
@@ -325,12 +329,9 @@ public class Level implements Editable {
 	}
 
 	/**
-	 * @param x
-	 *            coordinate
-	 * @param y
-	 *            coordinate
-	 * @return whether the tile at <code>(x, y)</code> is pathable and
-	 *         unoccupied
+	 * @param x x coordinate
+	 * @param y y coordinate
+	 * @return whether the tile at <code>(x, y)</code> is pathable and unoccupied
 	 */
 	public boolean isPathable(int x, int y) {
 		return getTileGrid(x, y) != null && getTileGrid(x, y).isPathable();
@@ -399,35 +400,54 @@ public class Level implements Editable {
 		setTile(pos.getX(), pos.getY(), tile);
 	}
 
-	private void updateMasksGrid(Vector pos) {
-		enqueueBitMasks(pos);
+	private boolean updateMasksAndBitmapAround(Vector pos) {
+		Queue<Vector> modified = new LinkedList<>();
+		if (updateMasks(pos)) {
+			modified.add(pos);
+		} else {
+			Debug.log("not updating masks");
+			return false;
+		}
 		for (Vector trans : Mask.NEIGHBORS_AND_CORNERS) {
 			Vector p = pos.copy().add(trans);
-			if (getTileGrid(p) != null) {
-				enqueueBitMasks(p);
+			if (getTileGrid(p) != null && updateMasks(p)) {
+				modified.add(p);
 			}
 		}
+		Graphics2D g = bitmap.createGraphics();
+		Debug.log("updating modified");
+		for (Vector m : modified) {
+//			getTileGrid(m).clearMasks(); do this somewhere
+			this.getTileGrid(m).drawTile((FocusedWindow<?>) Main.getWindow(), g, m);
+//			this.getTileGrid(m).drawTileRel(g, m);
+		}
+		g.dispose();
+		
+		return !modified.isEmpty();
 	}
 
 	@Override
 	public List<Entity> getEntities() {
 		return new ArrayList<Entity>();
 	}
-
+	
 	/**
-	 * Enqueues all bitmasks onto a tile
+	 * Enqueues all bitmasks onto a tile. Uses very small integer fields so as not to run out of memory
+	 * @return true if masks were updated
 	 */
-	public void enqueueBitMasks(int x, int y) {
+	public boolean updateMasks(int x, int y) {
 
+		//TODO this can probably be optimized significantly
+		
 		Tile tile = getTileGrid(x, y);
 		if (tile == null || tile.getType().isAtTop()) {
-			return;
+			return false;
 		}
 
 		Mask[] masks = new Mask[8];
 
-		short bitVal = 1;
-		int j = 0;
+		byte bitVal = 1;
+		byte j = 0;
 		for (Vector v : Mask.NEIGHBORS) {
 			Tile t = getTileGrid(v.copy().add(x, y));
 			if (t != null && !t.getType().isAtTop() && tile.compareTo(t) > 0) {
@@ -438,7 +458,6 @@ public class Level implements Editable {
 					if (masks[j].hasTile(t)) {
 						masks[j].add(bitVal);
 						break;
-
 					}
 				}
 			}
@@ -446,17 +465,15 @@ public class Level implements Editable {
 		}
 
 		bitVal = 1;
-		int k = 0;
-		// int maxK = 0;
 		for (Vector v : Mask.CORNERS) {
 			Tile t = getTileGrid(v.copy().add(x, y));
 			if (t != null && !t.getType().isAtTop() && tile.compareTo(t) > 0) {
-				for (k = 0; k < masks.length; k++) {
-					if (masks[k] == null) {
-						masks[k] = new Mask(t, true);
+				for (j = 0; j < masks.length; j++) {
+					if (masks[j] == null) {
+						masks[j] = new Mask(t, true);
 					}
-					if (masks[k].hasTile(t) && masks[k].isCorner()) {
-						masks[k].add(bitVal);
+					if (masks[j].hasTile(t) && masks[j].isCorner()) {
+						masks[j].add(bitVal);
 						break;
 					}
 				}
@@ -470,31 +487,38 @@ public class Level implements Editable {
 			}
 			tile.addMask(mask);
 		}
+		
+		return masks[0] != null;
 
 	}
 
-	public void enqueueBitMasks(Vector v) {
-		enqueueBitMasks(v.getX(), v.getY());
+	public boolean updateMasks(Vector v) {
+		return updateMasks(v.getX(), v.getY());
 	}
 
-	public void enqueueAllBitMasks() {
+	public void updateAllMasksAndBitmap() {
+		
 		for (int x = 0; x < getWidth(); x++) {
 			for (int y = 0; y < getHeight(); y++) {
-				enqueueBitMasks(x, y);
+				updateMasks(x, y);
 			}
 		}
-		Debug.log("computing texture map");
-		computeTextureMap();
-		Debug.log("rendering layer");
-		renderLayer();
-		try {
-			File fh = new File("/Users/snorri/Desktop/thothLevels/" + (int) (Math.random() * 10000) + ".png");
-			Debug.log(fh.getName());
-			fh.createNewFile();
-			ImageIO.write(layer, "png", fh);
-		} catch (IOException e) {
-			Debug.error(e);
+		
+		if (getRenderMode() == RenderMode.BITMAP) {
+			computeTextureMap();
+			renderBitmap();
+			
+			try {
+				File fh = new File("/Users/snorri/Desktop/thothLevels/" + getLayer() + ".png");
+				Debug.log(fh.getName());
+				fh.createNewFile();
+				ImageIO.write(bitmap, "png", fh);
+			} catch (IOException e) {
+				Debug.error(e);
+			}
+			
 		}
+		
 	}
 
 	public int getWidth() {
@@ -556,14 +580,16 @@ public class Level implements Editable {
 	//TODO general path: https://docs.oracle.com/javase/tutorial/2d/geometry/arbitrary.html
 	
 	//TODO maybe cut the area, draw images directly
-	
 	//confirmed: can draw non-Rectangles onto the other shape
-	
 	//solution: make a path2d through all the border points
 	
-	public void renderLayer() {
-		layer = new BufferedImage(getWidth() * Tile.WIDTH, getHeight() * Tile.WIDTH, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g = layer.createGraphics();
+	/**
+	 * Render the full bitmap of this level. Should only be called if
+	 * <code>this.getRenderMode() == RenderMode.BITMAP</code>
+	 */
+	public void renderBitmap() {
+		bitmap = new BufferedImage(getWidth() * Tile.WIDTH, getHeight() * Tile.WIDTH, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = bitmap.createGraphics();
 		
 		//TODO this should be sorted, and can be made a lot more efficient
 		for (Tile tile : Tile.getBlendOrdering(getLayer())) {
@@ -585,16 +611,19 @@ public class Level implements Editable {
 			
 		}
 		
-//		Main.log("blurring layer");
-//		SmartBlurFilter filter = new SmartBlurFilter();
-//		layer = filter.filter(layer);
-		
 		g.dispose();
 		
 	}
 	
 	public int getLayer() {
-		return level;
+		return layer;
+	}
+	
+	public RenderMode getRenderMode() {
+		if (layer == BACKGROUND) {
+			return RenderMode.BITMAP;
+		}
+		return RenderMode.GRID;
 	}
 
 }

@@ -25,7 +25,7 @@ public class QuadTree extends Entity implements EntityGroup {
 	private static HashMap<Entity, QuadTree> nodeMap;
 
 	public static final int CUSHION = Level.CUSHION * Tile.WIDTH;
-	public static final int SCALE_FACTOR = Level.SCALE_FACTOR;
+	public static final int SCALE_FACTOR = 2;
 
 	static {
 		nodeMap = new HashMap<>();

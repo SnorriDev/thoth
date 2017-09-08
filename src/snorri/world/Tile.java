@@ -108,17 +108,19 @@ public class Tile implements Comparable<Tile>, Nominal {
 		return style;
 	}
 	
+	/**
+	 * Draw a tile given an absolute grid position
+	 * @param g
+	 * @param gr
+	 * @param v
+	 */
+	@SuppressWarnings("unused")
 	public void drawTile(FocusedWindow<?> g, Graphics gr, Vector v) {
 		
-		// TODO some sort of quad-search for rendering
-		if (getTexture() == null) {
-			return;
-		}
-		
 		Vector relPos = v.getRelPosGrid(g);
-		gr.drawImage(texture, relPos.getX(), relPos.getY(), g);
+		drawTileRel(gr, relPos);
 		
-		if (Debug.RENDER_TILE_GRID) {
+		if (getTexture() != null && Debug.RENDER_TILE_GRID) {
 			Component c = g.getWorld().getPathfinding().getDefaultGraph().getComponent(v);
 			if (c != null) {
 				gr.setColor(c.getColor());
@@ -127,6 +129,20 @@ public class Tile implements Comparable<Tile>, Nominal {
 			}
 		}
 		
+	}
+	
+	/**
+	 * Draw a position at a global position relative to the screen center
+	 * @param g 
+	 * @param gr
+	 * @param relPos
+	 */
+	public void drawTileRel(Graphics gr, Vector relPos) {
+		//TODO some sort of quad search for rendering
+		if (getTexture() == null) {
+			return;
+		}
+		gr.drawImage(texture, relPos.getX(), relPos.getY(), null); //TODO add g instead of null?
 	}
 	
 	public BufferedImage getBaseTexture() {
@@ -296,6 +312,10 @@ public class Tile implements Comparable<Tile>, Nominal {
 		Collections.sort(tiles);
 		Collections.reverse(tiles);
 		return tiles;
+	}
+
+	public void clearMasks() {
+		masks = new ArrayList<>();
 	}
 
 	
