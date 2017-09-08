@@ -404,9 +404,6 @@ public class Level implements Editable {
 		Queue<Vector> modified = new LinkedList<>();
 		if (updateMasks(pos)) {
 			modified.add(pos);
-		} else {
-			Debug.log("not updating masks");
-			return false;
 		}
 		for (Vector trans : Mask.NEIGHBORS_AND_CORNERS) {
 			Vector p = pos.copy().add(trans);
@@ -414,14 +411,16 @@ public class Level implements Editable {
 				modified.add(p);
 			}
 		}
-		Graphics2D g = bitmap.createGraphics();
-		Debug.log("updating modified");
-		for (Vector m : modified) {
-//			getTileGrid(m).clearMasks(); do this somewhere
-			this.getTileGrid(m).drawTile((FocusedWindow<?>) Main.getWindow(), g, m);
-//			this.getTileGrid(m).drawTileRel(g, m);
+		if (getRenderMode() == RenderMode.BITMAP) {
+			Graphics2D g = bitmap.createGraphics();
+			Debug.log("updating modified");
+			for (Vector m : modified) {
+	//			getTileGrid(m).clearMasks(); do this somewhere
+				this.getTileGrid(m).drawTile((FocusedWindow<?>) Main.getWindow(), g, m);
+	//			this.getTileGrid(m).drawTileRel(g, m);
+			}
+			g.dispose();
 		}
-		g.dispose();
 		
 		return !modified.isEmpty();
 	}

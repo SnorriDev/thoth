@@ -6,7 +6,6 @@ import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -104,8 +103,10 @@ public class GameWindow extends FocusedWindow<Player> {
 		Graphics2D g = (Graphics2D) g1;
 
 		//Scales up the size of the size of the rendered levels
-		g.scale(getScale(), getScale());
-		g.translate((int) (getWidth() / 2.0 / getScale() - getWidth() / 2.0), (int) (getHeight() / 2.0 / getScale() - getHeight() / 2.0));
+		if (Debug.SCALE) {
+			g.scale(getScale(), getScale());
+			g.translate((int) (getWidth() / 2.0 / getScale() - getWidth() / 2.0), (int) (getHeight() / 2.0 / getScale() - getHeight() / 2.0));
+		}
 		
 		long time = getTimestamp();
 		double deltaTime = (time - lastRenderTime) / 1000000000d;
@@ -114,8 +115,10 @@ public class GameWindow extends FocusedWindow<Player> {
 		universe.getCurrentWorld().render(this, g, deltaTime, true);
 		
 		//Keeps the Overlay Elements unscaled
-		g.scale(1.0 / getScale(), 1.0 / getScale());
-		g.translate((int) (getWidth() / 2.0 * getScale() - getWidth() / 2.0), (int) (getHeight() / 2.0 * getScale() - getHeight() / 2.0));
+		if (Debug.SCALE) {
+			g.scale(1.0 / getScale(), 1.0 / getScale());
+			g.translate((int) (getWidth() / 2.0 * getScale() - getWidth() / 2.0), (int) (getHeight() / 2.0 * getScale() - getHeight() / 2.0));
+		}
 		
 		player.getInventory().render(this, g);
 		player.renderHealthBar(g);
