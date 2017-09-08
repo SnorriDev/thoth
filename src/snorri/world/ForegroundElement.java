@@ -134,7 +134,7 @@ public enum ForegroundElement implements Nominal, TileType {
 	
 	@Override 
 	public int getLayer() {
-		return 2;
+		return Level.FOREGROUND;
 	}
 
 	@Override
