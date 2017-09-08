@@ -13,7 +13,8 @@ public enum BackgroundElement implements TileType {
 		getImage("sand01.png"),
 		getImage("sand02.png"),
 		getImage("sand03.png")}, Param.changable(true), Param.blendOrder(1.5)),
-	BLACK(Param.pathable(false), Param.atTop(true)),
+	BLACK(new BufferedImage[] {
+			getImage("black00.png")}, Param.pathable(false), Param.atTop(true)),
 	FOUNDATION(Param.pathable(false), Param.atTop(true)),
 	HUT(Param.pathable(false), Param.atTop(true)),
 	WATER(false, getImage("water00.png"), Param.changable(true), Param.swimmable(true), Param.blendOrder(101.0)),

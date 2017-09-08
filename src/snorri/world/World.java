@@ -331,7 +331,12 @@ public class World implements Playable, Editable {
 	}
 
 	public void resize(int newWidth, int newHeight) {
-		background = background.getResized(newWidth, newHeight);
+		//Debug.log("RESIZING");
+		Debug.log("Resizing Level from\t((" + background.getWidth() + "," + midground.getWidth() + "," + foreground.getWidth() + ")\tx\t(" + background.getHeight() + "," + midground.getHeight() + "," + foreground.getHeight() + "))\tto\t(" + newWidth + "\tx\t" + newHeight +")\tusing constructor");
+		background = background.getResized(newWidth, newHeight, 0);
+		midground = midground.getResized(newWidth, newHeight, 1);
+		foreground = foreground.getResized(newWidth, newHeight, 2);
+		Debug.log("New Level Size:\t(" + background.getWidth() + "," + midground.getWidth() + "," + foreground.getWidth() + ")\tx\t(" + background.getHeight() + "," + midground.getHeight() + "," + foreground.getHeight() + "))");
 	}
 
 	@Override
