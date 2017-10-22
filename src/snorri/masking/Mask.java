@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.TexturePaint;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
+import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -63,9 +64,17 @@ public class Mask implements Comparable<Mask>, Comparator<Mask> {
 			throw new NegativeBitmaskException("cannot initialize negative bitmask");
 		}
 	}
+	
+	public AlphaMask getAlphaMask() {
+		return AlphaMask.getMask(bitmask);
+	}
 
 	public Area getArea() {
-		return AlphaMask.getMask(bitmask).getArea();
+		return getAlphaMask().getArea();
+	}
+	
+	public Path2D getBorder() {
+		return getAlphaMask().getBorder();
 	}
 
 	@Override
@@ -96,6 +105,7 @@ public class Mask implements Comparable<Mask>, Comparator<Mask> {
 		}
 	}
 
+	// TODO do this the fancy way
 	public static List<Vector> getNeighbors(Vector pos) {
 		List<Vector> out = new ArrayList<>();
 		for (Vector v : NEIGHBORS) {
@@ -138,6 +148,7 @@ public class Mask implements Comparable<Mask>, Comparator<Mask> {
 		BufferedImage tex = getBaseTexture();
 		gr.setPaint(new TexturePaint(tex, new Rectangle(0, 0, tex.getWidth(), tex.getHeight())));
 		gr.fill(area);
+		gr.draw(getBorder());
 		gr.setPaint(null);
 	}
 

@@ -3,7 +3,6 @@ package snorri.parser;
 import java.io.Serializable;
 
 import snorri.events.SpellEvent;
-import snorri.main.Debug;
 
 public interface Node<S> extends Serializable {
 
@@ -36,7 +35,6 @@ public interface Node<S> extends Serializable {
 		if (words.length == 0) {
 			return null;
 		}
-		Debug.raw("getting first word" + words[0]);
 		return words[0];
 	}
 		

@@ -434,7 +434,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	
 	@Override
 	public void focusLost(FocusEvent e) {
-		Debug.raw("focus lost");
 		if (e.getComponent() instanceof JEditorPane) {
 			setGlyphs();
 		}

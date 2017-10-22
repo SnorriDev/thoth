@@ -316,9 +316,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 	}
 
 	public void removeMask(Mask subbed) {
-		Debug.log("REMOVING " + masks.size());
 		masks.remove(subbed);
-		Debug.log("REMOVED " + masks.size());
 	}
 
 	

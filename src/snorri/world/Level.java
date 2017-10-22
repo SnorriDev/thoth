@@ -198,7 +198,6 @@ public class Level implements Editable {
 			return;
 		}
 		Tile old = map[x][y];
-		Debug.raw("old : " + old);
 		map[x][y] = t;
 		computeMasks(x, y);
 		updateMasksAndBitmap(new Vector(x, y), old, t);

@@ -3,6 +3,7 @@ package snorri.masking;
 import java.awt.Rectangle;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Path2D;
 
 import snorri.main.Debug;
 import snorri.world.Tile;
@@ -50,13 +51,19 @@ public class AlphaMask {
 	}
 
 	private final Area mask;
+	private final Path2D border;
 
-	public AlphaMask() {
-		this(new Area());
+	public AlphaMask(Area area, Path2D border) {
+		mask = area;
+		this.border = border;
 	}
 	
 	public AlphaMask(Area area) {
-		mask = area;
+		this(area, new Path2D.Double(area));
+	}
+	
+	public AlphaMask() {
+		this(new Area());
 	}
 
 	public static AlphaMask getMask(int i) {
@@ -68,6 +75,10 @@ public class AlphaMask {
 
 	public Area getArea() {
 		return mask;
+	}
+	
+	public Path2D getBorder() {
+		return border;
 	}
 
 	private static AlphaMask getTileMask() {

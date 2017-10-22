@@ -1,6 +1,7 @@
 package snorri.main;
 
 import java.io.IOException;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,18 +32,14 @@ public class Debug {
 	private static final Logger logger;
 	
 	static {
-		
-		logger = Logger.getGlobal();
-//		logger = Logger.getLogger("Thoth");
-
-//		for (Handler h : logger.getHandlers()) {
-//			logger.removeHandler(h);
-//		}
+				
+		logger = Logger.getLogger("Thoth");
 		logger.setLevel(Level.ALL);
-//		
-//		ConsoleHandler consoleHandler = new ConsoleHandler();
-//		consoleHandler.setLevel(Level.ALL);
-//		logger.addHandler(consoleHandler);
+		logger.setUseParentHandlers(false);
+		
+		ConsoleHandler consoleHandler = new ConsoleHandler();
+		consoleHandler.setLevel(Level.ALL);
+		logger.addHandler(consoleHandler);
 				
 		try {
 			logger.addHandler(new FileHandler("logs/thoth.log"));
@@ -53,15 +50,7 @@ public class Debug {
 			error(e);
 		}
 		
-//		for (Handler h : logger.getHandlers()) {
-//			h.setLevel(Level.ALL);
-//		}
-		
-//		System.setErr(new PrintStream(System.err) {
-//			public void print(final String string) {
-//				error(string);
-//			}
-//		});
+		// TODO add a custom log format
 		
 	}
 
@@ -80,8 +69,8 @@ public class Debug {
 	 * 	the object to print
 	 */
 	public static void raw(Object o) {
-		logger.log(Level.INFO, o.toString()); // FIXME all levels should show up
-//		logger.log(Level.FINE, o == null ? null : o.toString());
+//		logger.log(Level.INFO, o.toString()); // FIXME all levels should show up
+		logger.log(Level.FINE, o == null ? null : o.toString());
 	}
 
 	/**
