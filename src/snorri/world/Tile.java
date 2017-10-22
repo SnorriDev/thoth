@@ -1,7 +1,7 @@
 package snorri.world;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -34,9 +34,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 	private boolean reachable, surroundingsPathable = true;
 	private List<Entity> entities;
 	
-//	private PriorityQueue<Mask> maskQ;
 	private List<Mask> masks;
-	private BufferedImage texture;
 	
 	protected static ClipWrapper[] sounds;
 	
@@ -45,9 +43,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 		this.style = style;
 		masks = new ArrayList<>();
 		entities = new ArrayList<>();
-		if (this.type != null) {
-			texture = getBaseTexture(); //by default, should just point to the type texture
-		}
 	}
 	
 	private Tile() {
@@ -72,7 +67,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 		int layer = Integer.parseInt(l[0]);
 		type = (layer == 0 ? BackgroundElement.byIdStatic(Integer.parseInt(l[1])) : (layer == 1 ? MidgroundElement.byIdStatic(Integer.parseInt(l[1])) : ForegroundElement.byIdStatic(Integer.parseInt(l[1]))));
 		style = Integer.parseInt(l[2]);
-		texture = getBaseTexture();
 	}
 	
 	public Tile(int layer, int id, int style) {
@@ -112,15 +106,15 @@ public class Tile implements Comparable<Tile>, Nominal {
 	 * Draw a tile given an absolute grid position
 	 * @param g
 	 * @param gr
-	 * @param v
+	 * @param v the absolute grid position of the tile to be drawn
 	 */
 	@SuppressWarnings("unused")
-	public void drawTile(FocusedWindow<?> g, Graphics gr, Vector v) {
+	public void drawTile(FocusedWindow<?> g, Graphics2D gr, Vector v) {
 		
 		Vector relPos = v.getRelPosGrid(g);
-		drawTileRel(gr, relPos);
+		drawTileAbs(gr, relPos, false);
 		
-		if (getTexture() != null && Debug.RENDER_TILE_GRID) {
+		if (getBaseTexture() != null && Debug.RENDER_TILE_GRID) {
 			Component c = g.getWorld().getPathfinding().getDefaultGraph().getComponent(v);
 			if (c != null) {
 				gr.setColor(c.getColor());
@@ -137,20 +131,24 @@ public class Tile implements Comparable<Tile>, Nominal {
 	 * @param gr
 	 * @param relPos
 	 */
-	public void drawTileRel(Graphics gr, Vector relPos) {
+	public void drawTileAbs(Graphics2D gr, Vector pos, boolean mask) {
 		//TODO some sort of quad search for rendering
-		if (getTexture() == null) {
+		if (getBaseTexture() == null) {
 			return;
 		}
-		gr.drawImage(texture, relPos.getX(), relPos.getY(), null); //TODO add g instead of null?
+		gr.drawImage(getBaseTexture(), pos.getX(), pos.getY(), null);
+	
+		if (mask) {
+			for (Mask m : masks) {
+				m.drawMask(gr, pos);
+				// TODO save the geometry for updates with each mask
+			}
+		}	
+	
 	}
 	
 	public BufferedImage getBaseTexture() {
 		return type.getTexture(style);
-	}
-	
-	public BufferedImage getTexture() {
-		return texture;
 	}
 	
 	@Override
@@ -227,8 +225,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 
 	/**
 	 * Use this for deciding which tile to override while bitmasking
-	 * TODO This should use a custom ordering for optimal appearance,
-	 * not just the default enumeration
+	 * TODO Confirm that a greater value means draw on top
 	 */
 	@Override
 	public int compareTo(Tile t) {
@@ -316,6 +313,12 @@ public class Tile implements Comparable<Tile>, Nominal {
 
 	public void clearMasks() {
 		masks = new ArrayList<>();
+	}
+
+	public void removeMask(Mask subbed) {
+		Debug.log("REMOVING " + masks.size());
+		masks.remove(subbed);
+		Debug.log("REMOVED " + masks.size());
 	}
 
 	

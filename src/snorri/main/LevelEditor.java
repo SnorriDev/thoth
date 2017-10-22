@@ -1,6 +1,7 @@
 package snorri.main;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -134,8 +135,6 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 	public LevelEditor() {
 		super(new Entity(new Vector(20, 20)));
 		
-		setCustomCenter(getFocus());
-
 		previousTile = new Tile(BackgroundElement.class, 0, 0);
 		selectedTile = new Tile(BackgroundElement.class, 0, 0);
 		selectedEntityClass = Entity.EDIT_SPAWNABLE.get(0);
@@ -221,13 +220,13 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		boolean firstTile = true;
 		for (Tile t : Tile.getAllTypes(BackgroundElement.class)) {
 
-			if (t == null || t.getTexture() == null) {
+			if (t == null || t.getBaseTexture() == null) {
 				continue;
 			}
 
 			subsubmenu = new JMenu(t.toStringShort());
 			for (Tile s : t.getType().getSubTypes()) {
-				rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(s.getTexture()));
+				rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(s.getBaseTexture()));
 				rbMenuItem.setSelected(firstTile);
 				rbMenuItem.setActionCommand("set" + s.toNumericString());
 				rbMenuItem.addActionListener(this);
@@ -241,7 +240,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		}
 		for (Tile t : Tile.getAllTypes(MidgroundElement.class)) {
 
-			if (t == null || t.getTexture() == null) {
+			if (t == null || t.getBaseTexture() == null) {
 				if (t.getType() == MidgroundElement.NONE) {
 					subsubmenu = new JMenu(t.toStringShort());
 					for (Tile s : t.getType().getSubTypes()) {
@@ -259,7 +258,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 			subsubmenu = new JMenu(t.toStringShort());
 			for (Tile s : t.getType().getSubTypes()) {
-				rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(s.getTexture()));
+				rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(s.getBaseTexture()));
 				rbMenuItem.setSelected(firstTile);
 				rbMenuItem.setActionCommand("set" + s.toNumericString());
 				rbMenuItem.addActionListener(this);
@@ -270,7 +269,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		}
 		for (Tile t : Tile.getAllTypes(ForegroundElement.class)) {
 
-			if (t == null || t.getTexture() == null) {
+			if (t == null || t.getBaseTexture() == null) {
 				if (t.getType().ordinal() == 0) {
 					subsubmenu = new JMenu(t.toStringShort());
 					for (Tile s : t.getType().getSubTypes()) {
@@ -288,7 +287,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 			subsubmenu = new JMenu(t.toStringShort());
 			for (Tile s : t.getType().getSubTypes()) {
-				rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(s.getTexture()));
+				rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(s.getBaseTexture()));
 				rbMenuItem.setSelected(firstTile);
 				rbMenuItem.setActionCommand("set" + s.toNumericString());
 				rbMenuItem.addActionListener(this);
@@ -488,7 +487,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		double deltaTime = (time - lastRenderTime) / 1000000000d;
 		lastRenderTime = time;
 		
-		env.render(this, gr, deltaTime, false);
+		env.render(this, (Graphics2D) gr, deltaTime, false);
 		renderMousePos(gr);
 		
 		if (Debug.LOG_FOCUS) {

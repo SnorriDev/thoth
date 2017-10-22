@@ -1,7 +1,7 @@
 package snorri.world;
 
 import java.awt.FileDialog;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -178,7 +178,7 @@ public class World implements Playable, Editable {
 	}
 
 	@Override
-	public synchronized void render(FocusedWindow<?> g, Graphics gr, double deltaTime, boolean showOutlands) {
+	public synchronized void render(FocusedWindow<?> g, Graphics2D gr, double deltaTime, boolean showOutlands) {
 		background.render(g, gr, deltaTime, showOutlands);
 		midground.render(g, gr, deltaTime, false);
 		col.renderAround(g, gr, deltaTime); //XXX

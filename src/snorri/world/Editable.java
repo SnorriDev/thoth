@@ -1,6 +1,6 @@
 package snorri.world;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.List;
 
 import snorri.entities.Entity;
@@ -8,7 +8,7 @@ import snorri.main.FocusedWindow;
 
 public interface Editable extends Savable {
 
-	public void render(FocusedWindow<?> levelEditor, Graphics gr, double deltaTime, boolean b);
+	public void render(FocusedWindow<?> levelEditor, Graphics2D gr, double deltaTime, boolean b);
 
 	public Level getLevel();
 	
