@@ -33,7 +33,7 @@ public class Level implements Editable {
 	public static final int BACKGROUND = 0;
 	public static final int MIDGROUND = 1;
 	public static final int FOREGROUND = 2;
-
+	
 	public static final int CUSHION = 4;
 
 	/**
@@ -101,12 +101,12 @@ public class Level implements Editable {
 	/**
 	 * Constructor used for resizing
 	 */
+	@Deprecated
 	private Level(Level l, int newWidth, int newHeight) {
 		this(l, newWidth, newHeight, 0);
 	}
 
 	private Level(Level l, int newWidth, int newHeight, int layer) {
-
 		map = new Tile[newWidth][newHeight];
 
 		if (layer == 0) {
@@ -175,6 +175,7 @@ public class Level implements Editable {
 				newMap[i][j] = new Tile(BackgroundElement.SAND);
 			}
 		}
+		Debug.log("Resizing Level from\t" + getWidth() + "\tx\t" + getHeight() + "\tto\t" + newDim.getX() + "\tx\t" + newDim.getY() +"\tusing resize function");
 		for (int i = 0; i < newDim.getX() && i < getWidth(); i++) {
 			for (int j = 0; j < newDim.getY() && j < getHeight(); j++) {
 				newMap[i][j] = map[i][j];
@@ -182,7 +183,11 @@ public class Level implements Editable {
 		}
 
 		map = newMap;
-
+		Debug.log("New Level Size:\t" + getWidth() + "\tx\t" + getHeight());		
+	}
+	
+	public Level getResized(int newWidth, int newHeight, int layer) {
+		return new Level(this, newWidth, newHeight, layer);
 	}
 
 	public Level getResized(int newWidth, int newHeight) {
