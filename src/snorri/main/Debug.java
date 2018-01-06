@@ -27,6 +27,7 @@ public class Debug {
 	public static final boolean LOG_PAUSES = false;
 	public static final boolean DISABLE_ANTIALIASING = true;
 	public static final boolean WINDOWED_MODE = true;
+	public static final boolean DISABLE_NEW_RENDERING = true;
 	
 	private static final Logger logger;
 	
