@@ -28,7 +28,8 @@ public interface Playable extends Savable {
 
 	public Player computeFocus();
 	
-	String getFilePath();
+	/** Should return a human-readable name (e.g. filename) **/
+	String toString();
 	
 	public void load(File folder, Map<String, Object> yaml) throws FileNotFoundException, IOException, YamlException;
 	
