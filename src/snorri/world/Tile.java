@@ -61,12 +61,34 @@ public class Tile implements Comparable<Tile>, Nominal {
 		this((TileType) tile.getType(), tile.getStyle());
 	}
 	
+	/**
+	 * Takes string representations of tiles.
+	 * With two arguments, takes formats like "0:0" or "BLACK:0".
+	 * With three arguments, takes the format "0:0:0" where the first argument is the layer.
+	 * @param substring the substring to parse
+	 */
 	public Tile(String substring) {
 		this();
 		String[] l = substring.split(":");
-		int layer = Integer.parseInt(l[0]);
-		type = (layer == 0 ? BackgroundElement.byIdStatic(Integer.parseInt(l[1])) : (layer == 1 ? MidgroundElement.byIdStatic(Integer.parseInt(l[1])) : ForegroundElement.byIdStatic(Integer.parseInt(l[1]))));
-		style = Integer.parseInt(l[2]);
+		
+		switch(l.length) {
+		case 2:
+			// TODO this logic can be baked into a method in TileType
+			type = BackgroundElement.valueOf(l[0]);
+			if (type == null) {
+				type = BackgroundElement.byIdStatic(Integer.parseInt(l[0]));
+			}
+			style = Integer.parseInt(l[1]);
+			break;
+		case 3:
+			int layer = Integer.parseInt(l[0]);
+			type = (layer == 0 ? BackgroundElement.byIdStatic(Integer.parseInt(l[1])) : (layer == 1 ? MidgroundElement.byIdStatic(Integer.parseInt(l[1])) : ForegroundElement.byIdStatic(Integer.parseInt(l[1]))));
+			style = Integer.parseInt(l[2]);
+			break;
+		default:
+			throw new IllegalArgumentException("invalid outsideTile");
+		}
+		
 	}
 	
 	public Tile(int layer, int id, int style) {

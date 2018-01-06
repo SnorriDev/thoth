@@ -284,9 +284,15 @@ public class World implements Playable, Editable {
 		background = new Level(new File(f, "background.lvl"), BackgroundElement.class);
 		midground = new Level(new File(f, "midground.lvl"), MidgroundElement.class);
 		foreground = new Level(new File(f, "foreground.lvl"), ForegroundElement.class);
+		
 		col = QuadTree.coverLevel(background);
 		col.loadEntities(new File(f, "entities.dat"), pathfinding);
 
+		String outside = (String) yaml.get("outsideTile");
+		if (outside != null) {
+			background.setOutsideTile(new Tile(outside));
+		}
+		
 		triggers = Trigger.load((Map<String, Object>) yaml.get("triggers"), this);
 
 		File teamsFile = new File(f, "teams.dat");

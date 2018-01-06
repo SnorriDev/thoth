@@ -44,6 +44,7 @@ public class Level implements Editable {
 	private BufferedImage bitmap;
 
 	private int layer;
+	private Tile outsideTile;
 
 	private enum RenderMode {
 		BITMAP, GRID;
@@ -273,14 +274,10 @@ public class Level implements Editable {
 
 		for (int i = minX; i < maxX; i++) {
 			for (int j = minY; j < maxY; j++) {
-				if (i >= 0 && i < map.length) {
-					if (j >= 0 && j < map[i].length) {
-						map[i][j].drawTile(g, gr, new Vector(i, j));
-					} else if (renderOutside) {
-						map[0][0].drawTile(g, gr, new Vector(i, j));
-					}
+				if (i >= 0 && i < map.length && j >= 0 && j < map[i].length) {
+					map[i][j].drawTile(g, gr, new Vector(i, j));
 				} else if (renderOutside) {
-					map[0][0].drawTile(g, gr, new Vector(i, j));
+					getOutsideTile().drawTile(g, gr, new Vector(i, j));
 				}
 			}
 		}
@@ -659,6 +656,14 @@ public class Level implements Editable {
 			return RenderMode.BITMAP;
 		}
 		return RenderMode.GRID;
+	}
+
+	public Tile getOutsideTile() {
+		return outsideTile != null ? outsideTile : map[0][0];
+	}
+
+	public void setOutsideTile(Tile outsideTile) {
+		this.outsideTile = outsideTile;
 	}
 
 }
