@@ -151,7 +151,7 @@ public class World implements Playable, Editable {
 
 	public synchronized void update(Entity focus, double d) {
 
-		if (Debug.LOG_WORLD) { //TODO make these into methods in Debug
+		if (Debug.worldLogged()) { //TODO make these into methods in Debug
 			Debug.log("world update");
 		}
 

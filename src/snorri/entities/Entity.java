@@ -244,7 +244,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	
 	public void renderAround(FocusedWindow<?> g, Graphics gr, double timeDelta) {
 		
-		if (Debug.SHOW_COLLIDERS || (animation == null && g instanceof LevelEditor)  || inInteractRange(g)) {
+		if (Debug.collidersRendered() || (animation == null && g instanceof LevelEditor)  || inInteractRange(g)) {
 			collider.render(g, gr);
 		}
 		

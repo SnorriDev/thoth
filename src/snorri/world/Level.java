@@ -241,7 +241,6 @@ public class Level implements Editable {
 		return new Vector(getWidth(), getHeight());
 	}
 
-	@SuppressWarnings("unused")
 	@Override
 	public void render(FocusedWindow<?> g, Graphics2D gr, double deltaTime, boolean renderOutside) {
 
@@ -252,7 +251,7 @@ public class Level implements Editable {
 
 		// TODO make this compatible with editor too?
 		// TODO fix alignment between layers
-		if (!Debug.DISABLE_NEW_RENDERING && getRenderMode() == RenderMode.BITMAP) {
+		if (!Debug.newRenderingDisabled() && getRenderMode() == RenderMode.BITMAP) {
 			if (bitmap == null) {
 				return;
 			}

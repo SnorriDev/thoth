@@ -103,7 +103,7 @@ public class GameWindow extends FocusedWindow<Player> {
 		Graphics2D g = (Graphics2D) g1;
 
 		//Scales up the size of the size of the rendered levels
-		if (Debug.SCALE) {
+		if (Debug.scaled()) {
 			g.scale(getScale(), getScale());
 			g.translate((int) (getWidth() / 2.0 / getScale() - getWidth() / 2.0), (int) (getHeight() / 2.0 / getScale() - getHeight() / 2.0));
 		}
@@ -115,7 +115,7 @@ public class GameWindow extends FocusedWindow<Player> {
 		universe.getCurrentWorld().render(this, g, deltaTime, true);
 		
 		//Keeps the Overlay Elements unscaled
-		if (Debug.SCALE) {
+		if (Debug.scaled()) {
 			g.scale(1.0 / getScale(), 1.0 / getScale());
 			g.translate((int) (getWidth() / 2.0 * getScale() - getWidth() / 2.0), (int) (getHeight() / 2.0 * getScale() - getHeight() / 2.0));
 		}
@@ -138,7 +138,7 @@ public class GameWindow extends FocusedWindow<Player> {
 			xTrans += iter.next().render(this, g, xTrans);
 		}
 		
-		if (Debug.LOG_FOCUS) {
+		if (Debug.focusLogged()) {
 			Debug.log("Focused component: " + KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner());
 		}
 		

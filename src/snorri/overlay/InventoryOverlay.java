@@ -398,7 +398,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	
 	private void checkParse(DocumentEvent e) {
 		String text = getTagless();
-		if (Debug.ALL_HIEROGLYPHS_UNLOCKED) {
+		if (Debug.allHieroglyphsUnlocked()) {
 			enchantButton.setEnabled(Grammar.isValidSentence(Grammar.parseString(text)));
 		}
 		else {

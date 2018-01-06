@@ -490,7 +490,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		env.render(this, (Graphics2D) gr, deltaTime, false);
 		renderMousePos(gr);
 		
-		if (Debug.LOG_FOCUS) {
+		if (Debug.focusLogged()) {
 			Debug.log("Focused component: " + KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner());
 		}
 

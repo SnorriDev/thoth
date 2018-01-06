@@ -108,13 +108,12 @@ public class Tile implements Comparable<Tile>, Nominal {
 	 * @param gr
 	 * @param v the absolute grid position of the tile to be drawn
 	 */
-	@SuppressWarnings("unused")
 	public void drawTile(FocusedWindow<?> g, Graphics2D gr, Vector v) {
 		
 		Vector relPos = v.getRelPosGrid(g);
 		drawTileAbs(gr, relPos, false);
 		
-		if (getBaseTexture() != null && Debug.RENDER_TILE_GRID) {
+		if (getBaseTexture() != null && Debug.tileGridRendered()) {
 			Component c = g.getWorld().getPathfinding().getDefaultGraph().getComponent(v);
 			if (c != null) {
 				gr.setColor(c.getColor());

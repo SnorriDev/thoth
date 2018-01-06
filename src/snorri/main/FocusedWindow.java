@@ -175,12 +175,11 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 		Thread thread = new Thread(new Runnable() {
 
 			@Override
-			@SuppressWarnings("unused")
 			public void run() {
 				onStart();
 				try {
 					while (!stopped) {
-						if (Debug.LOG_PAUSES && isPaused()) {
+						if (Debug.pausesLogged() && isPaused()) {
 							Debug.log("paused");
 						}
 						onFrame();
@@ -231,7 +230,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 		Graphics2D g2 = (Graphics2D) g;
 		//anti-aliasing options: nearest neighbor, bilinear, bicubic
 		//TODO can set other keys as graphics options as well
-		if (! Debug.DISABLE_ANTIALIASING) {
+		if (!Debug.antialiasingDisabled()) {
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		}

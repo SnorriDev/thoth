@@ -86,7 +86,7 @@ public abstract class Unit extends Entity implements Walker {
 		
 		if (isDead()) {
 			world.delete(this);
-			if (Debug.LOG_DEATHS) {
+			if (Debug.deathsLogged()) {
 				Debug.log(tag + " died");
 			}
 			TriggerType.KILL.activate(tag);
@@ -152,7 +152,7 @@ public abstract class Unit extends Entity implements Walker {
 	}
 	
 	public void damage(double d) {
-		if (Debug.LOG_DAMAGE_EVENTS) {
+		if (Debug.damageEventsLogged()) {
 			Debug.log(this + "(" + (int) health + "/" + MAX_HEALTH + ") took " + d + " damage");
 		}
 		health -= d;

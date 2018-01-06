@@ -107,7 +107,7 @@ public class Main {
 
 		frame.getContentPane().add(getLayeredPane());
 		
-		if (!Debug.WINDOWED_MODE) {
+		if (!Debug.inWindowedMode()) {
 			frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		}
 
