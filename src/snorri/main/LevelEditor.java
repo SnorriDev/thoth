@@ -161,20 +161,20 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
-		menuItem = new JMenuItem("Generate", KeyEvent.VK_G);
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));
-		menuItem.addActionListener(this);
-		menu.add(menuItem);
+//		menuItem = new JMenuItem("Generate", KeyEvent.VK_G);
+//		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));
+//		menuItem.addActionListener(this);
+//		menu.add(menuItem);
 
 		menuItem = new JMenuItem("Open", KeyEvent.VK_O);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
-		menuItem = new JMenuItem("Open Level", KeyEvent.VK_L);
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
-		menuItem.addActionListener(this);
-		menu.add(menuItem);
+//		menuItem = new JMenuItem("Open Level", KeyEvent.VK_L);
+//		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
+//		menuItem.addActionListener(this);
+//		menu.add(menuItem);
 
 		menuItem = new JMenuItem("Save", KeyEvent.VK_S);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
