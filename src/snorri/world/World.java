@@ -32,7 +32,7 @@ import snorri.world.ForegroundElement;
 
 public class World implements Playable, Editable {
 
-	public static final int DEFAULT_LEVEL_SIZE = 144;
+	public static final Vector DEFAULT_LEVEL_SIZE = new Vector(13, 8);
 	public static final Vector DEFAULT_SPAWN = new Vector(100, 100);
 	private static final int RANDOM_SPAWN_ATTEMPTS = 100;
 	public static final int UPDATE_RADIUS = 4000;
@@ -56,7 +56,7 @@ public class World implements Playable, Editable {
 
 	
 	public World() {
-		this(DEFAULT_LEVEL_SIZE, DEFAULT_LEVEL_SIZE);
+		this(DEFAULT_LEVEL_SIZE.getX(), DEFAULT_LEVEL_SIZE.getY());
 	}
 
 	/**
@@ -75,9 +75,7 @@ public class World implements Playable, Editable {
 		
 		Player focus = new Player(DEFAULT_SPAWN.copy());
 		add(focus);
-		
-		//Debug.log("CENTER OBJECT LOCATION: " + getCenterObject().getPos());
-		
+				
 		add(new Mummy(new Vector(600, 600), focus));
 
 	}
@@ -91,7 +89,6 @@ public class World implements Playable, Editable {
 	}
 
 	public World(File file, Player p) throws FileNotFoundException, IOException {
-		//Debug.log("CALLING LOADING WORLD FROM FILE CONTSRTUCTOR");
 
 		load(file);
 		
@@ -102,7 +99,6 @@ public class World implements Playable, Editable {
 
 		pathfinding = new Pathfinding(getPathfindingLevels());
 		
-		//Debug.log("CENTER OBJECT LOCATION: " + getCenterObject().getPos());
 	}
 		
 	public World(File file) throws FileNotFoundException, IOException {
@@ -111,8 +107,6 @@ public class World implements Playable, Editable {
 
 	public World(Level l0, Level l1, Level l2) {
 		
-		//Debug.log("LOADING WORLD USiNG 3 LEVELS CONSTRUCTOR");
-
 		background = l0;
 		midground = l1;
 		foreground = l2;
@@ -133,7 +127,6 @@ public class World implements Playable, Editable {
 		return p;
 	}
 
-	// TODO input the unit as an arg?
 	public Vector getRandomSpawnPos(int radius) {
 		for (int i = 0; i < RANDOM_SPAWN_ATTEMPTS; i++) {
 			Vector pos = getGoodSpawn(background.getDimensions().random()); // FIXME:
@@ -163,6 +156,13 @@ public class World implements Playable, Editable {
 		}
 
 		col.updateAround(this, d, focus);
+		
+//		Debug.log("right neighbor: " + getRightNeighbor());
+//		Debug.log("left neighbor: " + getLeftNeighbor());
+//		Debug.log("top neighbor: " + getTopNeighbor());
+//		Debug.log("bottom neighbor: " + getBottomNeighbor());
+		
+		// issue: focus different from new character
 		
 		World neighbor;
 		if (getRightNeighbor() != null && touchingRight(focus)) {

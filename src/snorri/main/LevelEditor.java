@@ -330,8 +330,8 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 	private int[] whDialog() {
 		int[] wh = { -1, -1 };
 		DialogMap inputs = new DialogMap();
-		inputs.put("Width", "" + World.DEFAULT_LEVEL_SIZE);
-		inputs.put("Height", "" + World.DEFAULT_LEVEL_SIZE);
+		inputs.put("Width", "" + World.DEFAULT_LEVEL_SIZE.getX());
+		inputs.put("Height", "" + World.DEFAULT_LEVEL_SIZE.getY());
 		if (dialog("World Dimensions", inputs) == null) {
 			return null;
 		}
@@ -470,9 +470,9 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 	}
 	
-	//FIXME why isn't this working? debugging this would be nice
 	public void centerCamera() {
-//		focus.getPos().add(env.getDimensions().copy().divide(2));
+		Vector middle = env.getDimensions().copy().divide(2);
+		getFocus().setPos(middle);
 	}
 
 	@Override
@@ -1255,11 +1255,6 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 				}
 			}
 		}
-	}
-
-	@Override
-	public Entity getFocus() {
-		return player;
 	}
 
 	@Override

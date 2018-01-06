@@ -49,9 +49,7 @@ public class Debug {
 		} catch (IOException e) {
 			error(e);
 		}
-		
-		// TODO add a custom log format
-		
+				
 	}
 
 	public static void castWTFMode(String s, SpellEvent e) {

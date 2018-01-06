@@ -111,6 +111,7 @@ public class WorldGraph implements Playable {
 		setCurrentWorld(world);
 		player.setPos(pos);
 		getCurrentWorld().add(player);
+		// TODO wtf; old position of focus is lingering
 	}
 	
 	public void crossInto(World world, int x, int y) {

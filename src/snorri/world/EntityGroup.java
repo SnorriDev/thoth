@@ -82,6 +82,11 @@ public interface EntityGroup {
 	 * @throws IOException
 	 */
 	default void loadEntities(File file, Pathfinding pathfinding) throws FileNotFoundException, IOException {
+		
+		if (!file.exists()) {
+			return;
+		}
+		
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
 		while (true) {
 			try {
