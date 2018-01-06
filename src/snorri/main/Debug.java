@@ -57,6 +57,8 @@ public class Debug {
 				
 	}
 	
+	// TODO make these all methods with side effects
+	
 	public static boolean allHieroglyphsUnlocked() {
 		return ALL_HIEROGLYPHS_UNLOCKED;
 	}
