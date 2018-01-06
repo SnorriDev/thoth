@@ -151,12 +151,20 @@ public class World implements Playable, Editable {
 
 	public synchronized void update(Entity focus, double d) {
 
-		if (Debug.worldLogged()) { //TODO make these into methods in Debug
+		if (Debug.worldLogged()) {
 			Debug.log("world update");
 		}
 
 		col.updateAround(this, d, focus);
-				
+		
+		// TODO bug! focus is not pointing to right player
+		// is the player copied somewhere?
+//		Debug.raw(focus);
+//		Debug.raw(focus.getPos());
+//		if (touchingRight(focus)) {
+//			Debug.log("touching right!");
+//		}
+		
 		World neighbor;
 		if (getRightNeighbor() != null && touchingRight(focus)) {
 			universe.crossInto(getRightNeighbor(), EDGE_TP_THRESHOLD, focus.getPos().getY());
@@ -219,11 +227,6 @@ public class World implements Playable, Editable {
 	
 	public boolean add(Entity e) {
 		return col.insert(e, pathfinding);
-	}
-	
-	@Deprecated
-	public Entity addAndReturn(Entity e) {
-		return col.insertAndReturn(e, pathfinding);
 	}
 
 	/**
@@ -414,7 +417,6 @@ public class World implements Playable, Editable {
 		wrapGridUpdate(pos.copy().toGridPos(), tile);
 	}
 	
-	//TODO add wrapGridUpdates
 	public synchronized void wrapGridUpdate(Vector posGrid, Tile tile) {
 				
 		Level l = getLevel(tile.getType().getClass());

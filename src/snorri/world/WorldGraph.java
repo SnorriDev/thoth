@@ -34,8 +34,8 @@ public class WorldGraph implements Playable {
 	
 	private Player player;
 	
-	public WorldGraph(File folder, Player p) throws FileNotFoundException, IOException, YamlException {
-		player = p;
+	public WorldGraph(File folder, Player p) throws FileNotFoundException, IOException, YamlException {		
+		player = p; // arbitrary player constructed in case world is playerless
 		load(folder);
 	}
 	
@@ -69,6 +69,10 @@ public class WorldGraph implements Playable {
 				worlds.get(w2).setTopNeighbor(worlds.get(w1));
 			}
 		}
+		
+		// after we have passed in the rando player, set it to the one we are actually using
+		player = computeFocus();
+		Debug.raw("loaded player: " + player);
 		
 	}
 
@@ -111,17 +115,19 @@ public class WorldGraph implements Playable {
 		// first remove any extraneous player in new world
 		world.delete(world.getEntityTree().getFirst(Player.class));
 		
+		// move the player into the new world
 		getCurrentWorld().delete(player);
 		setCurrentWorld(world);
 		player.setPos(pos);
 		getCurrentWorld().add(player);
-		// TODO wtf; old position of focus is lingering
 		
-		Debug.log("New World Properties:");
-		Debug.log("right neighbor: " + world.getRightNeighbor());
-		Debug.log("left neighbor: " + world.getLeftNeighbor());
-		Debug.log("top neighbor: " + world.getTopNeighbor());
-		Debug.log("bottom neighbor: " + world.getBottomNeighbor());
+		// TODO save string names for worlds
+		
+		Debug.log("new world properties:");
+		Debug.log(" * right neighbor: " + world.getRightNeighbor());
+		Debug.log(" * left neighbor: " + world.getLeftNeighbor());
+		Debug.log(" * top neighbor: " + world.getTopNeighbor());
+		Debug.log(" * bottom neighbor: " + world.getBottomNeighbor());
 		
 	}
 	
