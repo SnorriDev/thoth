@@ -61,7 +61,7 @@ public class Projectile extends Detector implements Walker {
 		if (root instanceof Caster && weapon != null) {
 			
 			Object output = weapon.useSpellOn(world, ((Caster) root), this, deltaTime / getLifeSpan());
-			if (Debug.SHOW_WEAPON_OUTPUT) {
+			if (Debug.weaponOutputLogged()) {
 				Debug.log("weapon output: " + output);
 			}
 			
@@ -99,7 +99,7 @@ public class Projectile extends Detector implements Walker {
 	protected void onSafeDelete(World world) {
 		if (root instanceof Caster && orb != null) {
 			Object output = orb.useSpell(world, (Caster) root, this);
-			if (Debug.SHOW_ORB_OUTPUT) {
+			if (Debug.orbOutputLogged()) {
 				Debug.log("orb output: " + output);
 			}
 		}		

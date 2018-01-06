@@ -129,7 +129,7 @@ public class Grammar extends HashMap<Class<? extends NonTerminal<?>>, List<Rule>
 				return new ArrayList<>();
 			}
 			List<Node<?>> parses = topDown(getNodes(input), Sentence.class);
-			if (Debug.LOG_PARSES) {
+			if (Debug.parsesLogged()) {
 				Debug.log("parses for " + input + ": " + parses);
 			}
 			return parses;

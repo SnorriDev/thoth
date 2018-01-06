@@ -12,30 +12,30 @@ import snorri.parser.Node;
 
 public class Debug {
 	
-	public static final boolean ALL_HIEROGLYPHS_UNLOCKED = false;
-	public static final boolean RENDER_TILE_GRID = false;
-	public static final boolean LOG_FOCUS = false;
-	public static final boolean LOG_WORLD = false;
-	public static final boolean LOG_PARSES = false;
-	public static final boolean LOG_RENDER_QUEUE = false;
-	public static final boolean LOG_DAMAGE_EVENTS = false;
-	public static final boolean LOG_DEATHS = false;
-	public static final boolean SHOW_WEAPON_OUTPUT = false;
-	public static final boolean SHOW_ORB_OUTPUT = false;
-	public static final boolean DISABLE_PATHFINDING = false;
-	public static final boolean SHOW_COLLIDERS = false;
-	public static final boolean LOG_PAUSES = false;
-	public static final boolean DISABLE_ANTIALIASING = true;
-	public static final boolean WINDOWED_MODE = true;
-	public static final boolean SCALE = false;
-	public static final boolean DISABLE_NEW_RENDERING = true;
+	private static final boolean ALL_HIEROGLYPHS_UNLOCKED = false;
+	private static final boolean RENDER_TILE_GRID = false;
+	private static final boolean LOG_FOCUS = false;
+	private static final boolean LOG_WORLD = false;
+	private static final boolean LOG_PARSES = false;
+	private static final boolean LOG_RENDER_QUEUE = false;
+	private static final boolean LOG_DAMAGE_EVENTS = false;
+	private static final boolean LOG_DEATHS = false;
+	private static final boolean SHOW_WEAPON_OUTPUT = false;
+	private static final boolean SHOW_ORB_OUTPUT = false;
+	private static final boolean DISABLE_PATHFINDING = false;
+	private static final boolean SHOW_COLLIDERS = false;
+	private static final boolean LOG_PAUSES = false;
+	private static final boolean DISABLE_ANTIALIASING = true;
+	private static final boolean WINDOWED_MODE = true;
+	private static final boolean SCALE = false;
+	private static final boolean DISABLE_NEW_RENDERING = true;
 	
 	private static final Logger logger;
 	
 	static {
 		
 		System.setProperty("java.util.logging.SimpleFormatter.format",
-	              "[%1$tF %1$tT] [%4$-7s] %5$s %n");
+				"[%1$tF %1$tT] [%4$-7s] %5$s %n");
 				
 		logger = Logger.getLogger("Thoth");
 		logger.setLevel(Level.ALL);
@@ -54,6 +54,74 @@ public class Debug {
 			error(e);
 		}
 				
+	}
+	
+	public static boolean allHieroglyphsUnlocked() {
+		return ALL_HIEROGLYPHS_UNLOCKED;
+	}
+	
+	public static boolean tileGridRendered() {
+		return RENDER_TILE_GRID;
+	}
+	
+	public static boolean focusLogged() {
+		return LOG_FOCUS;
+	}
+	
+	public static boolean worldLogged() {
+		return LOG_WORLD;
+	}
+	
+	public static boolean parsesLogged() {
+		return LOG_PARSES;
+	}
+	
+	public static boolean renderQueueLogged() {
+		return LOG_RENDER_QUEUE;
+	}
+	
+	public static boolean damageEventsLogged() {
+		return LOG_DAMAGE_EVENTS;
+	}
+	
+	public static boolean deathsLogged() {
+		return LOG_DEATHS;
+	}
+	
+	public static boolean weaponOutputLogged() {
+		return SHOW_WEAPON_OUTPUT;
+	}
+	
+	public static boolean orbOutputLogged() {
+		return SHOW_ORB_OUTPUT;
+	}
+	
+	public static boolean pathfindingDisabled() {
+		return DISABLE_PATHFINDING;
+	}
+	
+	public static boolean collidersRendered() {
+		return SHOW_COLLIDERS;
+	}
+	
+	public static boolean pausesLogged() {
+		return LOG_PAUSES;
+	}
+	
+	public static boolean antialiasingDisabled() {
+		return DISABLE_ANTIALIASING;
+	}
+	
+	public static boolean inWindowedMode() {
+		return WINDOWED_MODE;
+	}
+	
+	public static boolean scaled() {
+		return SCALE;
+	}
+	
+	public static boolean newRenderingDisabled() {
+		return DISABLE_NEW_RENDERING;
 	}
 
 	public static void castWTFMode(String s, SpellEvent e) {

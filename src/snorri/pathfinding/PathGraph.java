@@ -67,7 +67,7 @@ public class PathGraph {
 	
 	public ArrayDeque<PathNode> findPath(Vector start, Vector goal) {
 		
-		if (Debug.DISABLE_PATHFINDING) {
+		if (Debug.pathfindingDisabled()) {
 			return null;
 		}
 		
