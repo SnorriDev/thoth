@@ -243,6 +243,7 @@ public class Level implements Editable {
 		return new Vector(getWidth(), getHeight());
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public void render(FocusedWindow<?> g, Graphics gr, double deltaTime, boolean renderOutside) {
 
@@ -251,7 +252,7 @@ public class Level implements Editable {
 		Vector center = g.getCenterObject().getPos();
 		Vector dim = g.getDimensions();
 		
-		if (getRenderMode() == RenderMode.BITMAP) {
+		if (!Debug.DISABLE_NEW_RENDERING && getRenderMode() == RenderMode.BITMAP) {
 			// TODO fix alignment between layers
 			BufferedImage image = bitmap.getSubimage(center.getX() - dim.getX() / 2, center.getY() - dim.getY() / 2, dim.getX(), dim.getY());
 			gr.drawImage(image, 0, 0, null);
