@@ -106,7 +106,7 @@ public class WorldGraph implements Playable {
 	}
 	
 	@Override
-	public String getFilePath() {
+	public String toString() {
 		return path;
 	}
 	
@@ -123,11 +123,13 @@ public class WorldGraph implements Playable {
 		
 		// TODO save string names for worlds
 		
-		Debug.log("new world properties:");
-		Debug.log(" * right neighbor: " + world.getRightNeighbor());
-		Debug.log(" * left neighbor: " + world.getLeftNeighbor());
-		Debug.log(" * top neighbor: " + world.getTopNeighbor());
-		Debug.log(" * bottom neighbor: " + world.getBottomNeighbor());
+		if (Debug.changeWorldEventsLogged()) {
+			Debug.log("entered world " + world + ":");
+			Debug.log(" * right neighbor: " + world.getRightNeighbor());
+			Debug.log(" * left neighbor: " + world.getLeftNeighbor());
+			Debug.log(" * top neighbor: " + world.getTopNeighbor());
+			Debug.log(" * bottom neighbor: " + world.getBottomNeighbor());
+		}
 		
 	}
 	

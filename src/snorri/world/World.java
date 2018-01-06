@@ -37,7 +37,7 @@ public class World implements Playable, Editable {
 	private static final int RANDOM_SPAWN_ATTEMPTS = 100;
 	public static final int UPDATE_RADIUS = 4000;
 	private static final int SPAWN_SEARCH_RADIUS = 12;
-	private static final int EDGE_TP_THRESHOLD = 30;
+	private static final Vector EDGE_TP_DELTA = new Vector(Unit.RADIUS_X + 10, Unit.RADIUS_Y + 10);
 
 	private String path;
 	
@@ -157,23 +157,15 @@ public class World implements Playable, Editable {
 
 		col.updateAround(this, d, focus);
 		
-		// TODO bug! focus is not pointing to right player
-		// is the player copied somewhere?
-//		Debug.raw(focus);
-//		Debug.raw(focus.getPos());
-//		if (touchingRight(focus)) {
-//			Debug.log("touching right!");
-//		}
-		
 		World neighbor;
 		if (getRightNeighbor() != null && touchingRight(focus)) {
-			universe.crossInto(getRightNeighbor(), EDGE_TP_THRESHOLD, focus.getPos().getY());
+			universe.crossInto(getRightNeighbor(), EDGE_TP_DELTA.getX(), focus.getPos().getY());
 		} else if (getBottomNeighbor() != null && touchingBottom(focus)) {
-			universe.crossInto(getBottomNeighbor(), focus.getPos().getX(), EDGE_TP_THRESHOLD);
+			universe.crossInto(getBottomNeighbor(), focus.getPos().getX(), EDGE_TP_DELTA.getY());
 		} else if ((neighbor = getLeftNeighbor()) != null && touchingLeft(focus)) {
-			universe.crossInto(neighbor, neighbor.getWidth() - EDGE_TP_THRESHOLD, focus.getPos().getY());
+			universe.crossInto(neighbor, neighbor.getWidth() - EDGE_TP_DELTA.getX(), focus.getPos().getY());
 		} else if ((neighbor = getTopNeighbor()) != null && touchingTop(focus)) {
-			universe.crossInto(neighbor, focus.getPos().getX(), neighbor.getHeight() - EDGE_TP_THRESHOLD);
+			universe.crossInto(neighbor, focus.getPos().getX(), neighbor.getHeight() - EDGE_TP_DELTA.getY());
 		}
 
 	}
@@ -523,19 +515,19 @@ public class World implements Playable, Editable {
 	}
 	
 	public boolean touchingRight(Entity e) {
-		return getWidth() - e.getPos().getX() < EDGE_TP_THRESHOLD;
+		return getWidth() - e.getPos().getX() < EDGE_TP_DELTA.getX();
 	}
 	
 	public boolean touchingBottom(Entity e) {
-		return getHeight() - e.getPos().getY() < EDGE_TP_THRESHOLD;
+		return getHeight() - e.getPos().getY() < EDGE_TP_DELTA.getY();
 	}
 	
 	public boolean touchingLeft(Entity e) {
-		return e.getPos().getX() < EDGE_TP_THRESHOLD;
+		return e.getPos().getX() < EDGE_TP_DELTA.getX();
 	}
 	
 	public boolean touchingTop(Entity e) {
-		return e.getPos().getY() < EDGE_TP_THRESHOLD;
+		return e.getPos().getY() < EDGE_TP_DELTA.getY();
 	}
 	
 	public void setUniverse(WorldGraph universe) {
@@ -555,7 +547,7 @@ public class World implements Playable, Editable {
 	}
 	
 	@Override
-	public String getFilePath() {
+	public String toString() {
 		return path;
 	}
 	
