@@ -156,14 +156,7 @@ public class World implements Playable, Editable {
 		}
 
 		col.updateAround(this, d, focus);
-		
-//		Debug.log("right neighbor: " + getRightNeighbor());
-//		Debug.log("left neighbor: " + getLeftNeighbor());
-//		Debug.log("top neighbor: " + getTopNeighbor());
-//		Debug.log("bottom neighbor: " + getBottomNeighbor());
-		
-		// issue: focus different from new character
-		
+				
 		World neighbor;
 		if (getRightNeighbor() != null && touchingRight(focus)) {
 			universe.crossInto(getRightNeighbor(), EDGE_TP_THRESHOLD, focus.getPos().getY());
@@ -298,15 +291,6 @@ public class World implements Playable, Editable {
 		foreground = new Level(new File(f, "foreground.lvl"), ForegroundElement.class);
 		col = QuadTree.coverLevel(background);
 		col.loadEntities(new File(f, "entities.dat"), pathfinding);
-		
-		//deprecated version
-//		for (Entity e : col.getAllEntities()) {
-//			if (e instanceof Center) {
-//				nowHasCenter(true);
-//				centerObject = e;
-//				break;
-//			}
-//		}
 
 		triggers = Trigger.load((Map<String, Object>) yaml.get("triggers"), this);
 
@@ -331,7 +315,6 @@ public class World implements Playable, Editable {
 	}
 
 	public void resize(int newWidth, int newHeight) {
-		//Debug.log("RESIZING");
 		Debug.log("Resizing Level from\t((" + background.getWidth() + "," + midground.getWidth() + "," + foreground.getWidth() + ")\tx\t(" + background.getHeight() + "," + midground.getHeight() + "," + foreground.getHeight() + "))\tto\t(" + newWidth + "\tx\t" + newHeight +")\tusing constructor");
 		background = background.getResized(newWidth, newHeight, 0);
 		midground = midground.getResized(newWidth, newHeight, 1);

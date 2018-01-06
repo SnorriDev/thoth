@@ -107,11 +107,22 @@ public class WorldGraph implements Playable {
 	}
 	
 	public void crossInto(World world, Vector pos) {
+		
+		// first remove any extraneous player in new world
+		world.delete(world.getEntityTree().getFirst(Player.class));
+		
 		getCurrentWorld().delete(player);
 		setCurrentWorld(world);
 		player.setPos(pos);
 		getCurrentWorld().add(player);
 		// TODO wtf; old position of focus is lingering
+		
+		Debug.log("New World Properties:");
+		Debug.log("right neighbor: " + world.getRightNeighbor());
+		Debug.log("left neighbor: " + world.getLeftNeighbor());
+		Debug.log("top neighbor: " + world.getTopNeighbor());
+		Debug.log("bottom neighbor: " + world.getBottomNeighbor());
+		
 	}
 	
 	public void crossInto(World world, int x, int y) {
