@@ -253,7 +253,7 @@ public class Level implements Editable {
 
 		// TODO make this compatible with editor too?
 		// TODO fix alignment between layers
-		if (!Debug.newRenderingDisabled() && getRenderMode() == RenderMode.BITMAP) {
+		if (!Debug.maskingDisabled() && getRenderMode() == RenderMode.BITMAP) {
 			if (bitmap == null) {
 				return;
 			}

@@ -28,7 +28,7 @@ public class Debug {
 	private static final boolean DISABLE_ANTIALIASING = true;
 	private static final boolean WINDOWED_MODE = true;
 	private static final boolean SCALE = false;
-	private static final boolean DISABLE_NEW_RENDERING = true;
+	private static final boolean DISABLE_MASKING = false;
 	private static final boolean LOG_CHANGE_WORLD_EVENTS = true;
 	
 	private static final Logger logger;
@@ -123,8 +123,8 @@ public class Debug {
 		return SCALE;
 	}
 	
-	public static boolean newRenderingDisabled() {
-		return DISABLE_NEW_RENDERING;
+	public static boolean maskingDisabled() {
+		return DISABLE_MASKING;
 	}
 	
 	public static boolean changeWorldEventsLogged() {
