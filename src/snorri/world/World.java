@@ -182,7 +182,9 @@ public class World implements Playable, Editable {
 		return col;
 	}
 
-	@Deprecated
+	/**
+	 * @return the background level for this world
+	 */
 	public Level getLevel() {
 		return background;
 	}

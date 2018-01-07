@@ -76,6 +76,7 @@ public class Projectile extends Detector implements Walker {
 		if (!world.canShootOver(pos)) {
 			world.delete(this);
 		}
+		// FIXME why isn't this working off grid?
 				
 		super.update(world, deltaTime);
 	}

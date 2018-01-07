@@ -267,5 +267,13 @@ public class Util {
 
 		return titleCase.toString();
 	}
+	
+	/**
+	 * @param p the probability of success
+	 * @return true with probability p
+	 */
+	public static boolean flip(double p) {
+		return Math.random() <= p;
+	}
 
 }
