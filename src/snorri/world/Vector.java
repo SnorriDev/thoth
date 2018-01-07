@@ -54,7 +54,7 @@ public class Vector implements Nominal, Comparable<Vector> {
 		this.y = v.y;
 	}
 	
-	public Vector (Dimension d) {
+	public Vector(Dimension d) {
 		this(d.width, d.height);
 	}
 	
@@ -67,30 +67,13 @@ public class Vector implements Nominal, Comparable<Vector> {
 	 * vectors in grid coordinates
 	 */
 	public Vector getRelPosGrid(FocusedWindow<?> g) {
-		return copy().multiply(Tile.WIDTH).getRelPos(g);
+		return copy().multiply_(Tile.WIDTH).getRelPos(g);
 	}
 	
 	public Vector getRelPos(FocusedWindow<?> g) {
 		Vector focusPos = g.getCenterObject().getPos(); //returns whatever is being used to draw the center
-//		if (g.getWorld().hasCenter()) {
-//			focusPos = g.getCenterObject().getPos();
-//		}
-//		else {
-//			focusPos = g.getFocus().getPos();
-//		}
-		return copy().sub(focusPos).add(g.getDimensions().divide(2));
+		return copy().sub_(focusPos).add_(g.getDimensions().divide_(2));
 	}
-	
-	/*public Vector getRelPosPlayer(FocusedWindow<?> g) {
-		Vector focusPos;
-		if (g.getWorld().hasCenter()) {
-			focusPos = g.getCenterObject().getPos();
-		}
-		else {
-			focusPos = g.getFocus().getPos();
-		}
-		return copy().sub(focusPos).add(g.getDimensions().divide(2));
-	}*/
 
 	public int getX() {
 		return (int) x;
@@ -108,55 +91,58 @@ public class Vector implements Nominal, Comparable<Vector> {
 		return (int) y / Tile.WIDTH;
 	}
 	
-	/*public double getXdouble() {
-		return x;
+	public Vector multiply(double n) {
+		return copy().multiply_(n);
 	}
 	
-	public double getYdouble() {
-		return y;
-	}*/
+	public Vector divide(double n) {
+		return copy().divide_(n);
+	}
 	
-	//all of this stuff could be cleaned up, maybe
-	//these all have side effects and return a pointer to obj
+	public Vector add(Vector pos) {
+		return copy().add_(pos);
+	}
 	
-	public Vector multiply(double n) {
+	public Vector sub(Vector pos) {
+		return copy().sub_(pos);
+	}
+	
+	public Vector multiply_(double n) {
 		x *= n;
 		y *= n;
 		return this;
 	}
 	
-	public Vector divide(double n) {
+	public Vector divide_(double n) {
 		x /= n;
 		y /= n;
 		return this;
 	}
 	
-	public Vector add(Vector pos) {
+	public Vector add_(Vector pos) {
 		x += pos.x;
 		y += pos.y;
 		return this;
 	}
 	
-	public Vector sub(Vector pos) {
+	public Vector sub_(Vector pos) {
 		x -= pos.x;
 		y -= pos.y;
 		return this;
 	}
 	
-	public Vector scale(double magnitude) {
-		
+	public Vector scale_(double magnitude) {
 		if (equals(ZERO)) {
 			return ZERO.copy();
 		}
-		
-		return multiply(magnitude / distance(ZERO));
+		return multiply_(magnitude / distance(ZERO));
 	}
 	
-	public Vector normalize() {
-		return scale(1);
+	public Vector normalize_() {
+		return scale_(1);
 	}
 	
-	public Vector abs() {
+	public Vector abs_() {
 		x = Math.abs(x);
 		y = Math.abs(y);
 		return this;
@@ -206,12 +192,12 @@ public class Vector implements Nominal, Comparable<Vector> {
 		return false;
 	}
 
-	public Vector add(int i, int j) {
-		return add(new Vector(i, j));
+	public Vector add_(int i, int j) {
+		return add_(new Vector(i, j));
 	}
 	
-	public Vector sub(int i, int j) {
-		return sub(new Vector(i, j));
+	public Vector sub_(int i, int j) {
+		return sub_(new Vector(i, j));
 	}
 	
 	public Vector getProjectionX() {
@@ -226,34 +212,46 @@ public class Vector implements Nominal, Comparable<Vector> {
 		return x * v.x + y * v.y;
 	}
 	
-	public double getAngleBetween(Vector v) {
+	public double getAngleTo(Vector v) {
 		return Math.acos(dot(v) / (magnitude() * v.magnitude()));
 	}
 	
 	public Vector getProjection(Vector axis) {
-		return axis.copy().scale(dot(axis) / axis.magnitude());
+		return axis.copy().scale_(dot(axis) / axis.magnitude());
 	}
 	
 	public Vector getPerpendicular() {
 		if (y == 0) {
 			return ZERO.copy();
 		}
-		return new Vector(1, -x/y).normalize();
+		return new Vector(1, -x/y).normalize_();
 	}
 	
-	public Vector toGridPos() {
+	public Vector gridPos() {
+		return copy().gridPos_();
+	}
+	
+	public Vector gridPosRounded() {
+		return copy().gridPosRounded_();
+	}
+	
+	public Vector globalPos() {
+		return copy().globalPos_();
+	}
+	
+	public Vector gridPos_() {
 		x = getX() / Tile.WIDTH;
 		y = getY() / Tile.WIDTH;
 		return this;
 	}
 	
-	public Vector toGridPosRounded() {
+	public Vector gridPosRounded_() {
 		x = Math.round(x / Tile.WIDTH);
 		y = Math.round(y / Tile.WIDTH);
 		return this;
 	}
 	
-	public Vector toGlobalPos() {
+	public Vector globalPos_() {
 		x = getX() * Tile.WIDTH;
 		y = getY() * Tile.WIDTH;
 		return this;
@@ -345,17 +343,17 @@ public class Vector implements Nominal, Comparable<Vector> {
 		
 		//sides
 		for (int i = -r + 1; i < r; i++) {
-			out.add(copy().add(-r, i));
-			out.add(copy().add(r, i));
-			out.add(copy().add(i, -r));
-			out.add(copy().add(i, r));
+			out.add(copy().add_(-r, i));
+			out.add(copy().add_(r, i));
+			out.add(copy().add_(i, -r));
+			out.add(copy().add_(i, r));
 		}
 		
 		//corners
-		out.add(copy().add(r, r));
-		out.add(copy().add(r, -r));
-		out.add(copy().add(-r, -r));
-		out.add(copy().add(-r, r));
+		out.add(copy().add_(r, r));
+		out.add(copy().add_(r, -r));
+		out.add(copy().add_(-r, -r));
+		out.add(copy().add_(-r, r));
 		
 		return out;
 		
@@ -373,7 +371,7 @@ public class Vector implements Nominal, Comparable<Vector> {
 	}
 
 	public double getStandardAngle() {
-		double theta = getAngleBetween(ORIENTATION);
+		double theta = getAngleTo(ORIENTATION);
 		return y > 0 ? theta : 2 * Math.PI - theta;
 	}
 		

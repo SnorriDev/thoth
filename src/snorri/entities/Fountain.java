@@ -25,7 +25,7 @@ public class Fountain extends Entity {
 	@Override
 	public void onExplosion(CollisionEvent e) {
 		
-		Vector gridPos = pos.copy().toGridPos();
+		Vector gridPos = pos.copy().gridPos_();
 		for (int x = gridPos.getX() - RANGE; x <= gridPos.getX() + RANGE; x++) {
 			for (int y = gridPos.getY() - RANGE; y <= gridPos.getY() + RANGE; y++) {
 				if (e.getWorld().getLevel(BackgroundElement.class).getTileGrid(x, y).getType() == BackgroundElement.WATER) {

@@ -138,6 +138,20 @@ public class Util {
 		}
 		throw new AssertionError();
 	}
+	
+	public static int randint(int supremum) {
+		return (int) (Math.random() * supremum);
+	}
+	
+	/**
+	 * This is not actually correct, but it's close enough.
+	 * @param supremum
+	 * 	An upper bound for the random integer
+	 * @return
+	 */
+	public static int randintSigned(int supremum) {
+		return randint(2 * supremum) - supremum;
+	}
 
 	public static int niceMod(int n, int m) {
 		return (((n % m) + m) % m);
@@ -242,7 +256,7 @@ public class Util {
 		Vector p1 = path.getFirst().getGlobalPos();
 		for (PathNode n : path) {
 			Vector p2 = n.getGlobalPos();
-			Vector player = g.getFocus().getPos().copy().sub(g.getCenter().copy().add(Tile.WIDTH / 2, Tile.WIDTH / 2));
+			Vector player = g.getFocus().getPos().copy().sub_(g.getCenter().copy().add_(Tile.WIDTH / 2, Tile.WIDTH / 2));
 			gr.drawLine(p1.getX() - player.getX(), p1.getY() - player.getY(), p2.getX() - player.getX(), p2.getY() - player.getY());
 			p1 = p2;
 		}

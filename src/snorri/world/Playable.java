@@ -73,7 +73,7 @@ public interface Playable extends Savable {
 		Map<String, Object> yamlRoot = (Map<String, Object>) reader.read();
 		
 		if (type != null && !yamlRoot.get("type").equals(type)) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("invalid world type");
 		}
 		
 		return yamlRoot;

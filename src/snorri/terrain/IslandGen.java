@@ -11,6 +11,7 @@ import snorri.world.World;
  * @author lambdaviking
  */
 
+@Deprecated
 public class IslandGen extends TerrainGen {
 
 	protected final double sink;
@@ -36,7 +37,7 @@ public class IslandGen extends TerrainGen {
 	@Override
 	protected double getHeight(int x, int y, Vector randomTrans, double[] frequencies, double smoothness, double elevation) {
 		double orig = super.getHeight(x, y, randomTrans, frequencies, smoothness, elevation);
-		double scaledDist = new Vector(x, y).distanceSquared(dim.copy().divide(2)) / dim.magnitude() / 2;
+		double scaledDist = new Vector(x, y).distanceSquared(dim.copy().divide_(2)) / dim.magnitude() / 2;
 		return orig - sinkFactor * Math.pow(scaledDist, sink);
 	}
 	

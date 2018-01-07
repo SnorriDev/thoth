@@ -28,7 +28,6 @@ import snorri.entities.Player;
 import snorri.hieroglyphs.Hieroglyphs;
 import snorri.inventory.RandomDrop;
 import snorri.parser.Lexicon;
-import snorri.terrain.Structure;
 import snorri.world.Playable;
 import snorri.world.Vector;
 
@@ -177,7 +176,6 @@ public class Main {
 		reader.getConfig().setClassTag("spawn", Vector.class);
 		reader.getConfig().setClassTag("vector", Vector.class);
 		reader.getConfig().setClassTag("pos", Vector.class);
-		reader.getConfig().setClassTag("struct", Structure.class);
 		reader.getConfig().setClassTag("objective", Objective.class);
 		reader.getConfig().setClassTag("dialog", Dialog.class);
 		return reader;

@@ -471,7 +471,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 	}
 	
 	public void centerCamera() {
-		Vector middle = env.getDimensions().copy().divide(2);
+		Vector middle = env.getDimensions().copy().divide_(2);
 		getFocus().setPos(middle);
 	}
 
@@ -497,7 +497,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 	}
 
 	private void renderMousePos(Graphics gr) {
-		String gridPos = getMousePosAbsolute().toGridPos().toIntString();
+		String gridPos = getMousePosAbsolute().gridPos_().toIntString();
 		gr.drawString("grid: " + gridPos, 20, 20);
 	}
 
@@ -527,18 +527,18 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 				}	
 				
 				if (states.getMovementVector().getX() < 0 && !canGoLeft) {
-					player.getPos().sub(states.getMovementVector().getProjectionX().scale(speed));
+					player.getPos().sub_(states.getMovementVector().getProjectionX().scale_(speed));
 				}
 				if (states.getMovementVector().getX() > 0 && !canGoRight) {
-					player.getPos().sub(states.getMovementVector().getProjectionX().scale(speed));
+					player.getPos().sub_(states.getMovementVector().getProjectionX().scale_(speed));
 				}
 				if (states.getMovementVector().getY() < 0 && !canGoUp) {
-					player.getPos().sub(states.getMovementVector().getProjectionY().scale(speed));
+					player.getPos().sub_(states.getMovementVector().getProjectionY().scale_(speed));
 				}
 				if (states.getMovementVector().getY() > 0 && !canGoDown) {
-					player.getPos().sub(states.getMovementVector().getProjectionY().scale(speed));
+					player.getPos().sub_(states.getMovementVector().getProjectionY().scale_(speed));
 				}
-				player.getPos().add(states.getMovementVector().scale(speed));
+				player.getPos().add_(states.getMovementVector().scale_(speed));
 				
 
 				if (isClicking) {

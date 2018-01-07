@@ -12,7 +12,7 @@ public class LeftOf extends PrepDef {
 		Object pos = obj.get(AbstractSemantics.POSITION, e);
 		
 		if (pos instanceof Vector) {
-			Vector v = ((Vector) pos).copy().sub(new Vector(DISPLACE_DISTANCE, 0));
+			Vector v = ((Vector) pos).copy().sub_(new Vector(DISPLACE_DISTANCE, 0));
 			e.setLocative(v); //e is a copy of the SpellEvent, not the real thing
 			e.setDestination(v);
 		}

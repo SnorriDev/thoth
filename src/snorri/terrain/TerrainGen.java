@@ -16,6 +16,7 @@ import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
 
+@Deprecated
 public class TerrainGen {
 
 	protected static final double[] DEFAULT_FREQUENCIES = new double[] {1, 2, 3, 4, 5, 8};
@@ -108,7 +109,7 @@ public class TerrainGen {
 		Vector n = getScaledPos(x + randomTrans.getX(), y + randomTrans.getY());
 		double e = elevation;
 		for (int i = 0; i < frequencies.length; i++) {
-			e += 1 / frequencies[i] * noise(n.copy().multiply(frequencies[i]));
+			e += 1 / frequencies[i] * noise(n.copy().multiply_(frequencies[i]));
 		}
 		if (e > 0) {
 			return Math.pow(e, smoothness);

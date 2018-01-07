@@ -12,7 +12,7 @@ public class RightOf extends PrepDef {
 		Object pos = obj.get(AbstractSemantics.POSITION, e);
 		
 		if (pos instanceof Vector) {
-			Vector v = ((Vector) pos).copy().add(new Vector(DISPLACE_DISTANCE, 0));
+			Vector v = ((Vector) pos).copy().add_(new Vector(DISPLACE_DISTANCE, 0));
 			e.setLocative(v); //e is a copy of the SpellEvent, not the real thing
 			e.setDestination(v);
 		}

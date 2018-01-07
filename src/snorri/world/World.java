@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.sourceforge.yamlbeans.YamlException;
-import snorri.entities.Mummy;
 import snorri.entities.Center;
 import snorri.entities.Entity;
 import snorri.entities.Player;
@@ -68,16 +67,8 @@ public class World implements Playable, Editable {
 	 *            height of the new world
 	 */
 	public World(int width, int height) {
-
 		this(new Level(width, height, Level.BACKGROUND), new Level(width, height, Level.MIDGROUND),
 				new Level(width, height, Level.FOREGROUND));
-
-		
-		Player focus = new Player(DEFAULT_SPAWN.copy());
-		add(focus);
-				
-		add(new Mummy(new Vector(600, 600), focus));
-
 	}
 
 	public World(String folderName) throws FileNotFoundException, IOException {
@@ -341,7 +332,7 @@ public class World implements Playable, Editable {
 		World w = new World(background.getXReflected(), midground.getXReflected(), foreground.getXReflected());
 		col.mapOverEntities(e -> {
 			Entity e2 = e.copy();
-			e2.setPos(e2.getPos().getXReflected(background.getDimensions().copy().toGlobalPos()));
+			e2.setPos(e2.getPos().getXReflected(background.getDimensions().copy().globalPos_()));
 			w.add(e2);
 		});
 		return w;
@@ -400,7 +391,7 @@ public class World implements Playable, Editable {
 					}
 				}
 
-				return v.copy().toGlobalPos();
+				return v.copy().globalPos_();
 
 			}
 		}
@@ -414,7 +405,7 @@ public class World implements Playable, Editable {
 	}
 
 	public void wrapUpdate(Vector pos, Tile tile) {
-		wrapGridUpdate(pos.copy().toGridPos(), tile);
+		wrapGridUpdate(pos.copy().gridPos_(), tile);
 	}
 	
 	public synchronized void wrapGridUpdate(Vector posGrid, Tile tile) {
@@ -449,7 +440,7 @@ public class World implements Playable, Editable {
 	 * @return whether or not bullets can pass over pos
 	 */
 	public boolean canShootOver(Vector pos) {
-		Vector g = pos.copy().toGridPos();
+		Vector g = pos.copy().gridPos_();
 		return background.canShootOver(g) && midground.canShootOver(g) && foreground.canShootOver(g);
 	}
 

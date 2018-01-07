@@ -129,7 +129,7 @@ public class PathGraph {
 	}
 
 	public Component getComponent(Entity e) {
-		return getComponent(e.getPos().copy().toGridPos());
+		return getComponent(e.getPos().copy().gridPos_());
 	}
 
 	public Component getComponent(Vector pos) {

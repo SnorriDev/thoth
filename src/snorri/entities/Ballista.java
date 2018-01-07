@@ -43,7 +43,7 @@ public class Ballista extends Entity {
 		}
 
 		if (target.getPos().distance(pos) < FIRE_DISTANCE //this logic should only apply in auto mode
-				&& dir.getAngleBetween(target.getPos().copy().sub(pos)) < SHOT_MARGIN) {
+				&& dir.getAngleTo(target.getPos().copy().sub_(pos)) < SHOT_MARGIN) {
 			shoot(world);
 		}
 

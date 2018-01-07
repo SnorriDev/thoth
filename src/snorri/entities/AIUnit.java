@@ -74,7 +74,7 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 	}
 	
 	public void attack(World world, Entity e) {
-		inventory.attack(world, this, Vector.ZERO.copy(), e.getPos().copy().sub(pos));
+		inventory.attack(world, this, Vector.ZERO.copy(), e.getPos().copy().sub_(pos));
 	}
 	
 	protected enum Mode {
@@ -169,7 +169,7 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 			return;
 		}
 		
-		world.getPathfinding().setPathAsync(pos.copy().toGridPos(), target.pos.copy().toGridPos(), this);
+		world.getPathfinding().setPathAsync(pos.copy().gridPos_(), target.pos.copy().gridPos_(), this);
 		lastSeenPos = target.pos.copy(); //don't put this in other thing
 		recalculatingPath = true;
 	}

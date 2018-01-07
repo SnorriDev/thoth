@@ -80,7 +80,7 @@ public class PathNode implements Comparable<PathNode>, Serializable {
 	}
 	
 	public Vector getGlobalPos() {
-		return gridPos.copy().toGlobalPos();
+		return gridPos.copy().globalPos_();
 	}
 
 	//TODO: randomize the order of neighbors so we get random paths
@@ -90,7 +90,7 @@ public class PathNode implements Comparable<PathNode>, Serializable {
 		Vector newPos;
 		
 		for (int i = 0; i < NEIGHBORS.length; i++) {
-			newPos = gridPos.copy().add(NEIGHBORS[i]);
+			newPos = gridPos.copy().add_(NEIGHBORS[i]);
 			if (graph.isContextPathable(newPos)) {
 				if (map[newPos.getX()][newPos.getY()] == null) {
 					map[newPos.getX()][newPos.getY()] = new PathNode(newPos);
@@ -106,19 +106,19 @@ public class PathNode implements Comparable<PathNode>, Serializable {
 	public static List<Vector> getNeighbors(Vector pos) {
 		List<Vector> out = new ArrayList<>();
 		for (Vector trans : NEIGHBORS) {
-			out.add(pos.copy().add(trans));
+			out.add(pos.copy().add_(trans));
 		}
 		return out;
 	}
 
 	public double distance(PathNode neighbor) {
-		Vector d = gridPos.copy().sub(neighbor.gridPos).abs();
+		Vector d = gridPos.copy().sub_(neighbor.gridPos).abs_();
 		return d.x + d.y;
 	}
 	
 	//no diagonal movement
 	public double getHeuristic(Vector goal) {
-		Vector d = gridPos.copy().sub(goal).abs();
+		Vector d = gridPos.copy().sub_(goal).abs_();
 		return D * (d.x + d.y) + (D2 - 2 * D) * Double.min(d.x, d.y);
 	}
 	
@@ -128,8 +128,8 @@ public class PathNode implements Comparable<PathNode>, Serializable {
 			return;
 		}
 		
-		Vector p1 = origin.getGridPos().copy().toGlobalPos().sub(window.getFocus().getPos()).add(window.getCenter());
-		Vector p2 = getGridPos().copy().toGlobalPos().sub(window.getFocus().getPos()).add(window.getCenter());
+		Vector p1 = origin.getGridPos().copy().globalPos_().sub_(window.getFocus().getPos()).add_(window.getCenter());
+		Vector p2 = getGridPos().copy().globalPos_().sub_(window.getFocus().getPos()).add_(window.getCenter());
 		gr.drawLine(p1.getX() + Tile.WIDTH / 2, p1.getY() + Tile.WIDTH / 2, p2.getX() + Tile.WIDTH / 2, p2.getY() + Tile.WIDTH / 2);
 		
 	}

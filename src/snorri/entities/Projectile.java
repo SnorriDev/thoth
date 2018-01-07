@@ -25,7 +25,7 @@ public class Projectile extends Detector implements Walker {
 	
 	public Projectile(Entity root, Vector rootVelocity, Vector path, Weapon weapon, Orb orb) {
 		super(root.getPos().copy(), 3); //radius of a projectile is 1
-		velocity = rootVelocity.copy().add(path.copy().scale(PROJECTILE_SPEED));
+		velocity = rootVelocity.copy().add_(path.copy().scale_(PROJECTILE_SPEED));
 		this.animation = orb.getProjectileAnimation();
 		setDirection(path);
 		this.root = root;
@@ -46,7 +46,7 @@ public class Projectile extends Detector implements Walker {
 	}
 	
 	public void applyForce(Vector force, double deltaTime) {
-		velocity.add(force.copy().multiply(deltaTime));
+		velocity.add_(force.copy().multiply_(deltaTime));
 	}
 	
 	@Override
@@ -54,7 +54,7 @@ public class Projectile extends Detector implements Walker {
 		
 		boolean walked = false;
 		if (weapon == null || !weapon.altersMovement()) {
-			walk(world, velocity.copy().multiply(deltaTime));
+			walk(world, velocity.copy().multiply_(deltaTime));
 			walked = true;
 		} 
 		
@@ -67,7 +67,7 @@ public class Projectile extends Detector implements Walker {
 			
 			//we can't unify this with the above if clause because it matters when spells are applied
 			if (!walked && output.equals(false)) {
-				walk(world, velocity.copy().multiply(deltaTime));
+				walk(world, velocity.copy().multiply_(deltaTime));
 			}
 			
 		}
@@ -119,7 +119,7 @@ public class Projectile extends Detector implements Walker {
 
 	@Override
 	public void walk(World world, Vector delta) {
-		pos.add(delta);
+		pos.add_(delta);
 	}
 	
 	@Override

@@ -47,19 +47,19 @@ public class RectCollider extends Collider {
 	}
 	
 	public Vector getTopLeft() {
-		return getPos().copy().sub(dim.copy().divide(2));
+		return getPos().copy().sub_(dim.copy().divide_(2));
 	}
 	
 	public Vector getBottomRight() {
-		return getPos().copy().add(dim.copy().divide(2));
+		return getPos().copy().add_(dim.copy().divide_(2));
 	}
 	
 	public Vector getTopRight() {
-		return getPos().copy().add(-dim.getX() / 2, dim.getY() / 2);
+		return getPos().copy().add_(-dim.getX() / 2, dim.getY() / 2);
 	}
 	
 	public Vector getBottomLeft() {
-		return getPos().copy().add(dim.getX() / 2, -dim.getY() / 2);
+		return getPos().copy().add_(dim.getX() / 2, -dim.getY() / 2);
 	}
 	
 	@Override
@@ -74,7 +74,7 @@ public class RectCollider extends Collider {
 		if (pos == null || g.getFocus().getPos() == null) {
 			return;
 		}
-		Vector rel = pos.copy().sub(g.getFocus().getPos());
+		Vector rel = pos.copy().sub_(g.getFocus().getPos());
 		Rectangle rect = getShape();
 		int x = (int) (rel.getX() + g.getCenter().getX() - rect.getWidth() / 2);
 		int y = (int) (rel.getY() + g.getCenter().getY() - rect.getHeight() / 2);

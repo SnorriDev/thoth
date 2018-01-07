@@ -25,7 +25,7 @@ public class Line {
 	
 	public void render(Graphics2D g) {
 		
-		Vector tangent = b.copy().sub(a);
+		Vector tangent = b.copy().sub_(a);
 		@SuppressWarnings("unused")
 		float rotation = (float) Math.atan2(tangent.getY(), tangent.getX());
 	}

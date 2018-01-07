@@ -257,7 +257,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			return;
 		}
 		
-		Vector rel = pos.copy().sub(g.getCenterObject().getPos());
+		Vector rel = pos.copy().sub_(g.getCenterObject().getPos());
 		gr.drawImage(sprite, rel.getX() + (g.getBounds().width - sprite.getWidth()) / 2, rel.getY() + (g.getBounds().height - sprite.getHeight()) / 2, sprite.getWidth(null), sprite.getHeight(null), null);
 		
 	}
@@ -291,7 +291,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			return true;
 		}
 		
-		return wouldIntersectSomethingAt(world, pos.copy().add(dir));
+		return wouldIntersectSomethingAt(world, pos.copy().add_(dir));
 				
 	}
 	
@@ -353,7 +353,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			
 		}
 		
-		world.getEntityTree().move(this, pos.copy().add(dir));
+		world.getEntityTree().move(this, pos.copy().add_(dir));
 		return true;
 		
 	}
@@ -423,7 +423,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 	
 	public Vector getGridBounds() {
-		return new Vector(collider.getRadiusX(), collider.getRadiusY()).multiply(2).toGridPosRounded();
+		return new Vector(collider.getRadiusX(), collider.getRadiusY()).multiply_(2).gridPosRounded_();
 	}
 	
 	/**
