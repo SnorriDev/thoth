@@ -30,6 +30,7 @@ public class Debug {
 	private static final boolean SCALE = false;
 	private static final boolean DISABLE_MASKING = false;
 	private static final boolean LOG_CHANGE_WORLD_EVENTS = true;
+	private static final boolean LOG_PATHFINDING_COMPONENTS = false;
 	
 	private static final Logger logger;
 	
@@ -129,6 +130,10 @@ public class Debug {
 	
 	public static boolean changeWorldEventsLogged() {
 		return LOG_CHANGE_WORLD_EVENTS;
+	}
+	
+	public static boolean pathfindingComponentsLogged() {
+		return LOG_PATHFINDING_COMPONENTS;
 	}
 
 	public static void castWTFMode(String s, SpellEvent e) {

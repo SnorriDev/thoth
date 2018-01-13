@@ -72,7 +72,6 @@ public class WorldGraph implements Playable {
 		
 		// after we have passed in the rando player, set it to the one we are actually using
 		player = computeFocus();
-		Debug.raw("loaded player: " + player);
 		
 	}
 

@@ -260,6 +260,10 @@ public class World implements Playable, Editable {
 	@Override @SuppressWarnings("unchecked")
 	public void load(File f, Map<String, Object> yaml) throws FileNotFoundException, IOException, YamlException {
 		
+		if (f == null) {
+			throw new NullPointerException("trying to load null world");
+		}
+		
 		if (!f.exists()) {
 			throw new FileNotFoundException("no world called " + f.getName());
 		}

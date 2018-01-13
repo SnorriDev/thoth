@@ -252,7 +252,9 @@ public class PathGraph {
 			}
 		}
 
-		Debug.log("found " + components.size() + " pathfinding components");
+		if (Debug.pathfindingComponentsLogged()) {
+			Debug.log("found " + components.size() + " pathfinding components");
+		}
 
 		computeGraphHash();
 

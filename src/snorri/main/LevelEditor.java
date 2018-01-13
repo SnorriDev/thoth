@@ -38,7 +38,7 @@ import snorri.inventory.Item;
 import snorri.keyboard.Key;
 import snorri.masking.Mask;
 import snorri.pathfinding.Team;
-import snorri.terrain.TerrainGen;
+import snorri.terrain.Generator;
 import snorri.world.Editable;
 import snorri.world.ForegroundElement;
 import snorri.world.MidgroundElement;
@@ -376,9 +376,9 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			break;
 		case "Generate":
 			DialogMap inputs = new DialogMap();
-			inputs.put("Class", "snorri.terrain.TerrainGen");
-			inputs.put("Width", "150");
-			inputs.put("Height", "150");
+			inputs.put("Class", "snorri.terrain.RoomGen");
+			inputs.put("Width", "" + World.DEFAULT_LEVEL_SIZE.getX());
+			inputs.put("Height", "" + World.DEFAULT_LEVEL_SIZE.getY());
 			if (dialog("Generator Options", inputs) == null) {
 				return;
 			}
@@ -386,13 +386,12 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			try {
 				Object g = gen.getConstructor(int.class, int.class).newInstance(inputs.getInteger("Width"),
 						inputs.getInteger("Height"));
-				if (!(g instanceof TerrainGen)) {
-					Debug.warning(gen.getSimpleName() + " is not a terrain generator");
-					return;
+				if (!(g instanceof Generator)) {
+					throw new IllegalArgumentException(gen.getSimpleName() + " is not a world generator");
 				}
 				Debug.log("generating " + gen.getSimpleName() + " world...");
-				env = ((TerrainGen) g).genWorld();
-				Debug.log("world successfully generated");
+				env = ((Generator) g).genWorld();
+				Debug.log(gen.getSimpleName() + " world successfully generated");
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
 				Debug.error(e1);
@@ -471,8 +470,10 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 	}
 	
 	public void centerCamera() {
-		Vector middle = env.getDimensions().copy().divide_(2);
-		getFocus().setPos(middle);
+		if (env != null) {
+			Vector middle = env.getDimensions().copy().divide_(2);
+			getFocus().setPos(middle);
+		}
 	}
 
 	@Override

@@ -54,17 +54,13 @@ public class Level implements Editable {
 		map = new Tile[width][height];
 		layer = bg.getLayer();
 
-		// TODO add an int layer here?
-		// change other thing to renderedLayer?
-
-		for (int i = 0; i < getWidth(); i++) {
-			for (int j = 0; j < getHeight(); j++) {
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
 				map[i][j] = new Tile(bg);
 			}
 		}
 
 		updateAllMasksAndBitmap();
-
 	}
 
 	public Level(Vector v, TileType bg) {
