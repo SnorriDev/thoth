@@ -129,7 +129,7 @@ public class PathGraph {
 	}
 
 	public Component getComponent(Entity e) {
-		return getComponent(e.getPos().copy().toGridPos());
+		return getComponent(e.getPos().copy().gridPos_());
 	}
 
 	public Component getComponent(Vector pos) {
@@ -252,7 +252,9 @@ public class PathGraph {
 			}
 		}
 
-		Debug.log("found " + components.size() + " pathfinding components");
+		if (Debug.pathfindingComponentsLogged()) {
+			Debug.log("found " + components.size() + " pathfinding components");
+		}
 
 		computeGraphHash();
 

@@ -72,13 +72,13 @@ public abstract class LongRangeAIUnit extends AIUnit {
 			return false;
 		}
 		
-		ShootAttempt attempt = new ShootAttempt(pos.copy().toGridPos(), target.pos.copy().toGridPos());
+		ShootAttempt attempt = new ShootAttempt(pos.copy().gridPos_(), target.pos.copy().gridPos_());
 		Boolean b = ShootAttempt.check(attempt);
 		if (b != null) {
 			return b;
 		}
 		
-		Vector step = target.pos.copy().sub(pos).normalize();
+		Vector step = target.pos.copy().sub_(pos).normalize_();
 		Vector tempPos = pos.copy();
 				
 		//I'm checking if pos and target.pos are both okay just in case we're in a wall
@@ -94,8 +94,8 @@ public abstract class LongRangeAIUnit extends AIUnit {
 				return false;
 			}
 			
-			ShootAttempt.save(new ShootAttempt(pos.copy().toGridPos(), tempPos.copy().toGridPos()), true);
-			tempPos.add(step);	
+			ShootAttempt.save(new ShootAttempt(pos.copy().gridPos_(), tempPos.copy().gridPos_()), true);
+			tempPos.add_(step);	
 		}
 
 		ShootAttempt.save(attempt, true); //this line might not be necessary

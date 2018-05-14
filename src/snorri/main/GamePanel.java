@@ -80,7 +80,7 @@ public abstract class GamePanel extends JPanel implements ActionListener, FocusL
 	}
 
 	public Vector getCenter() {
-		return getDimensions().divide(2);
+		return getDimensions().divide_(2);
 	}
 
 	/**

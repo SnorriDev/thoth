@@ -162,7 +162,7 @@ public class Player extends Unit implements Carrier, Caster {
 				g.drawImage(HALF_HEART, pos.getX(), pos.getY(), null);
 			}
 
-			pos.add(HEART.getWidth(null), 0);
+			pos.add_(HEART.getWidth(null), 0);
 		}
 		
 	}

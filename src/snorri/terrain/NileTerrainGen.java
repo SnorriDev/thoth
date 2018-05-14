@@ -2,6 +2,7 @@ package snorri.terrain;
 
 import snorri.world.Vector;
 
+@Deprecated
 public class NileTerrainGen extends TerrainGen {
 
 	private int centerX;
@@ -16,7 +17,7 @@ public class NileTerrainGen extends TerrainGen {
 		Vector n = getScaledPos(x, y);
 		double e = elevation;
 		for (int i = 0; i < frequencies.length; i++) {
-			e += 1 / frequencies[i] * noise(n.copy().multiply(frequencies[i]));
+			e += 1 / frequencies[i] * noise(n.copy().multiply_(frequencies[i]));
 		}
 		if (e > 0) {
 			return Math.pow(e, smoothness);

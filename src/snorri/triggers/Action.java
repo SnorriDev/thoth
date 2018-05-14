@@ -52,7 +52,7 @@ public abstract class Action {
 					@Override
 					public void run() {
 						Entity ent = Trigger.getByTag((String) args.get("unit"));
-						Vector globalPos = ((Vector) args.get("pos")).copy().toGlobalPos();
+						Vector globalPos = ((Vector) args.get("pos")).copy().globalPos_();
 						world.getEntityTree().move(ent, globalPos);
 					}
 				};
@@ -139,7 +139,7 @@ public abstract class Action {
 		DROP_TREASURE(new Action() {
 			@Override
 			public Runnable build(World world, Map<String, Object> args) {
-				final Vector pos = ((Vector) args.get("pos")).toGlobalPos();
+				final Vector pos = ((Vector) args.get("pos")).globalPos_();
 				final Droppable reward = Droppable.fromString((String) args.get("drop"));
 				return new Runnable() {
 					@Override
@@ -155,11 +155,11 @@ public abstract class Action {
 			public Runnable build(World world, Map<String, Object> args) {
 				final Vector pos1 = ((Vector) args.get("pos1"));
 				final Vector pos2 = ((Vector) args.get("pos2"));
-				final Vector unit = pos2.copy().sub(pos1).normalize();
+				final Vector unit = pos2.copy().sub_(pos1).normalize_();
 				return new Runnable() {
 					@Override
 					public void run() {
-						for (Vector pos = pos1.copy(); pos.distance(pos1) <= pos2.distance(pos1); pos.add(unit)) {
+						for (Vector pos = pos1.copy(); pos.distance(pos1) <= pos2.distance(pos1); pos.add_(unit)) {
 							world.wrapGridUpdate(pos, new Tile(MidgroundElement.NONE));
 						}
 					}

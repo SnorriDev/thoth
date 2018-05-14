@@ -104,15 +104,15 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	 */
 	public Vector getMousePosRelative() {
 		Vector origin = new Vector(getLocationOnScreen());
-		origin.add(getDimensions().divide(2));
-		return (new Vector(MouseInfo.getPointerInfo().getLocation())).sub(origin);
+		origin.add_(getDimensions().divide_(2));
+		return (new Vector(MouseInfo.getPointerInfo().getLocation())).sub_(origin);
 	}
 
 	/**
 	 * @return absolute mouse position
 	 */
 	public Vector getMousePosAbsolute() {
-		return getMousePosRelative().add(getCenterObject().getPos());
+		return getMousePosRelative().add_(getCenterObject().getPos());
 	}
 
 	@Override
@@ -142,7 +142,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	public Vector getShotDirection() {
 
 		if (states.get(MouseButton.SHOOT)) {
-			return getMousePosAbsolute().copy().sub(getFocus().getPos()).normalize();
+			return getMousePosAbsolute().copy().sub_(getFocus().getPos()).normalize_();
 		}
 
 		if (states.get(Key.SHOOT_LEFT)) {

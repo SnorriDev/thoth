@@ -23,7 +23,7 @@ import snorri.entities.Entity;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.masking.Mask;
-import snorri.terrain.DungeonGen;
+import snorri.terrain.RoomGen;
 import snorri.world.TileType;
 
 public class Level implements Editable {
@@ -44,6 +44,7 @@ public class Level implements Editable {
 	private BufferedImage bitmap;
 
 	private int layer;
+	private Tile outsideTile;
 
 	private enum RenderMode {
 		BITMAP, GRID;
@@ -53,17 +54,13 @@ public class Level implements Editable {
 		map = new Tile[width][height];
 		layer = bg.getLayer();
 
-		// TODO add an int layer here?
-		// change other thing to renderedLayer?
-
-		for (int i = 0; i < getWidth(); i++) {
-			for (int j = 0; j < getHeight(); j++) {
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
 				map[i][j] = new Tile(bg);
 			}
 		}
 
 		updateAllMasksAndBitmap();
-
 	}
 
 	public Level(Vector v, TileType bg) {
@@ -198,6 +195,7 @@ public class Level implements Editable {
 		setTileGrid(x / Tile.WIDTH, y / Tile.WIDTH, t);
 	}
 
+	// TODO this should copy t??
 	public void setTileGrid(int x, int y, Tile t) {
 		if (x < 0 || x >= map.length || y < 0 || y >= map[x].length) {
 			return;
@@ -251,7 +249,7 @@ public class Level implements Editable {
 
 		// TODO make this compatible with editor too?
 		// TODO fix alignment between layers
-		if (!Debug.newRenderingDisabled() && getRenderMode() == RenderMode.BITMAP) {
+		if (!Debug.maskingDisabled() && getRenderMode() == RenderMode.BITMAP) {
 			if (bitmap == null) {
 				return;
 			}
@@ -273,14 +271,10 @@ public class Level implements Editable {
 
 		for (int i = minX; i < maxX; i++) {
 			for (int j = minY; j < maxY; j++) {
-				if (i >= 0 && i < map.length) {
-					if (j >= 0 && j < map[i].length) {
-						map[i][j].drawTile(g, gr, new Vector(i, j));
-					} else if (renderOutside) {
-						map[0][0].drawTile(g, gr, new Vector(i, j));
-					}
+				if (i >= 0 && i < map.length && j >= 0 && j < map[i].length) {
+					map[i][j].drawTile(g, gr, new Vector(i, j));
 				} else if (renderOutside) {
-					map[0][0].drawTile(g, gr, new Vector(i, j));
+					getOutsideTile().drawTile(g, gr, new Vector(i, j));
 				}
 			}
 		}
@@ -407,8 +401,8 @@ public class Level implements Editable {
 			return;
 		}
 
-		for (int i = -DungeonGen.DOOR_WIDTH / 2; i <= DungeonGen.DOOR_WIDTH / 2; i++) {
-			setTileGrid(dir.copy().multiply(i).add(pos), new Tile(fill));
+		for (int i = -RoomGen.DOOR_WIDTH / 2; i <= RoomGen.DOOR_WIDTH / 2; i++) {
+			setTileGrid(dir.copy().multiply_(i).add_(pos), new Tile(fill));
 		}
 
 	}
@@ -426,7 +420,7 @@ public class Level implements Editable {
 		
 		int i = 0;
 		for (Vector trans : Mask.NEIGHBORS_AND_CORNERS) {
-			Tile tile = getTileGrid(trans.copy().add(pos));
+			Tile tile = getTileGrid(trans.copy().add_(pos));
 			if (tile == null) {
 				i++;
 				continue;
@@ -458,13 +452,13 @@ public class Level implements Editable {
 			}
 			if (g != null) {
 				// FIXME add border
-				tile.drawTileAbs(g, trans.copy().add(pos).toGlobalPos(), true);
+				tile.drawTileAbs(g, trans.copy().add_(pos).globalPos_(), true);
 			}
 			i++;
 
 		}
 		if (g != null) {
-			n.drawTileAbs(g, pos.copy().toGlobalPos(), true);
+			n.drawTileAbs(g, pos.copy().globalPos_(), true);
 			g.dispose();
 		}
 	}
@@ -494,7 +488,7 @@ public class Level implements Editable {
 		byte bitVal = 1;
 		byte j = 0;
 		for (Vector v : Mask.NEIGHBORS) {
-			Tile t = getTileGrid(v.copy().add(x, y));
+			Tile t = getTileGrid(v.copy().add_(x, y));
 			if (t != null && !t.getType().isAtTop() && tile.compareTo(t) > 0) {
 				for (j = 0; j < masks.length; j++) {
 					if (masks[j] == null) {
@@ -511,7 +505,7 @@ public class Level implements Editable {
 
 		bitVal = 1;
 		for (Vector v : Mask.CORNERS) {
-			Tile t = getTileGrid(v.copy().add(x, y));
+			Tile t = getTileGrid(v.copy().add_(x, y));
 			if (t != null && !t.getType().isAtTop() && tile.compareTo(t) > 0) {
 				for (j = 0; j < masks.length; j++) {
 					if (masks[j] == null) {
@@ -665,6 +659,12 @@ public class Level implements Editable {
 	public WorldGraph getWorldGraph() {
 		return null;
 	}
-	
-	
+
+	public Tile getOutsideTile() {
+		return outsideTile != null ? outsideTile : map[0][0];
+	}
+
+	public void setOutsideTile(Tile outsideTile) {
+		this.outsideTile = outsideTile;
+	}
 }

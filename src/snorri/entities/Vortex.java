@@ -18,11 +18,11 @@ public class Vortex extends Detector {
 	}
 	
 	public Vector getForce(Entity e) {
-		if (pos.copy().sub(e.pos).magnitude() <= EVENT_HORIZON) {
+		if (pos.copy().sub_(e.pos).magnitude() <= EVENT_HORIZON) {
 			return Vector.ZERO.copy();
 		}
 		double coeff = FIELD_STRENGTH / (e.pos.distance(pos) * e.pos.distance(pos) * e.pos.distance(pos));
-		return pos.copy().sub(e.pos).multiply(coeff); //attractive force
+		return pos.copy().sub_(e.pos).multiply_(coeff); //attractive force
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class Vortex extends Detector {
 			return;
 		}
 		
-		Vector newPos = getForce(e.getTarget()).multiply(ENTITY_SCALE).add(e.getTarget().pos);
+		Vector newPos = getForce(e.getTarget()).multiply_(ENTITY_SCALE).add_(e.getTarget().pos);
 		e.getWorld().getEntityTree().move(e.getTarget(), newPos);
 		
 	}

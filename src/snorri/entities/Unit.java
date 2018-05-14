@@ -82,7 +82,7 @@ public abstract class Unit extends Entity implements Walker {
 		}
 		
 		//if the unit is standing on a tripwire, cut it
-		Break.cutTripwire(world, pos.copy().toGridPos());
+		Break.cutTripwire(world, pos.copy().gridPos_());
 		
 		if (isDead()) {
 			world.delete(this);
@@ -134,7 +134,7 @@ public abstract class Unit extends Entity implements Walker {
 
 	@Override
 	public void walk(World world, Vector delta) {
-		moveNicely(world, delta.copy().multiply(getSpeed()));
+		moveNicely(world, delta.copy().multiply_(getSpeed()));
 	}
 	
 	@Override
@@ -144,7 +144,7 @@ public abstract class Unit extends Entity implements Walker {
 	}
 	
 	public void walkTo(World world, Vector target, double deltaTime) {
-		walkNormalized(world, target.copy().sub(pos), deltaTime);
+		walkNormalized(world, target.copy().sub_(pos), deltaTime);
 	}
 	
 	public double getHealth() {

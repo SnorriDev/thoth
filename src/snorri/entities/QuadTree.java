@@ -58,13 +58,13 @@ public class QuadTree extends Entity implements EntityGroup {
 	 *            the dimensions to cover, in grid coordinates
 	 */
 	public static QuadTree coverLevel(Level l) {
-		Vector pos = l.getDimensions().copy().toGlobalPos().divide(2);
-		return new QuadTree(pos, new RectCollider(l.getDimensions().copy().toGlobalPos()), null);
+		Vector pos = l.getDimensions().copy().globalPos_().divide_(2);
+		return new QuadTree(pos, new RectCollider(l.getDimensions().copy().globalPos_()), null);
 	}
 
 	private QuadTree getSubQuad(int x, int y) {
-		Vector newDim = getRectCollider().getDimensions().copy().divide(2);
-		Vector newPos = pos.copy().add(x * newDim.getX() / 2, y * newDim.getY() / 2);
+		Vector newDim = getRectCollider().getDimensions().copy().divide_(2);
+		Vector newPos = pos.copy().add_(x * newDim.getX() / 2, y * newDim.getY() / 2);
 		RectCollider newCol = new RectCollider(newDim);
 		return new QuadTree(newPos, newCol, this);
 	}
@@ -290,7 +290,7 @@ public class QuadTree extends Entity implements EntityGroup {
 		Vector centerPos = window.getCenterObject().getPos();
 		Vector dim = window.getDimensions();
 		Entity test = new Entity(centerPos,
-				new RectCollider(dim.copy().multiply(SCALE_FACTOR).add(new Vector(CUSHION, CUSHION).multiply(2))));
+				new RectCollider(dim.copy().multiply_(SCALE_FACTOR).add_(new Vector(CUSHION, CUSHION).multiply_(2))));
 
 		this.mapOverCollisions(test, true, e -> {
 			e.renderAround(window, gr, deltaTime);

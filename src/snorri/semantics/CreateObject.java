@@ -36,7 +36,7 @@ public class CreateObject extends TransVerbDef {
 			
 			//check if there is an entity in the way
 			if (!((Tile) obj).isPathable() && tile.isPathable()) {
-				Vector pos = e.getLocative().copy().toGridPos();
+				Vector pos = e.getLocative().copy().gridPos_();
 				if (e.getWorld().tileHasEntity(pos)) { //could move this out, but want to allow pathable tiles to be placed
 					return false;
 				}

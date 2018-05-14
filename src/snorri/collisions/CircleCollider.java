@@ -52,7 +52,7 @@ public class CircleCollider extends Collider {
 		if (pos == null || g.getFocus().getPos() == null) {
 			return;
 		}
-		Vector rel = pos.copy().sub(g.getFocus().getPos());
+		Vector rel = pos.copy().sub_(g.getFocus().getPos());
 		gr.setColor(BORDER_COLOR);
 		gr.drawOval(rel.getX() - r + g.getBounds().width / 2, rel.getY() - r + g.getBounds().height / 2, 2 * r, 2 * r);
 		gr.setColor(Color.BLACK);

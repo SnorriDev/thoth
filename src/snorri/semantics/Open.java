@@ -50,7 +50,7 @@ public class Open extends TransVerbDef {
 		}
 		
 		if (obj instanceof Entity) {
-			Vector tilePos = ((Entity) obj).getPos().copy().toGridPos();
+			Vector tilePos = ((Entity) obj).getPos().copy().gridPos_();
 			return openDoor(e.getWorld(), tilePos);
 		}
 		return false;
@@ -62,7 +62,7 @@ public class Open extends TransVerbDef {
 	@Override
 	public boolean eval(Object subj, Object obj, SpellEvent e) {
 		if (obj instanceof Entity) {
-			return e.getWorld().getLevel(MidgroundElement.class).isPathable(((Entity) obj).getPos().copy().toGridPos());
+			return e.getWorld().getLevel(MidgroundElement.class).isPathable(((Entity) obj).getPos().copy().gridPos_());
 		}
 		return false;
 	}
@@ -81,7 +81,7 @@ public class Open extends TransVerbDef {
 				TriggerType.DOOR_OPEN.activate(pos);
 				w.wrapGridUpdate(pos, new Tile(replacementTile));
 				for (Vector trans : Mask.NEIGHBORS) {
-					openDoor(w, pos.copy().add(trans));
+					openDoor(w, pos.copy().add_(trans));
 				}
 				return true;
 			}

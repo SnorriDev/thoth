@@ -109,7 +109,7 @@ public class Mask implements Comparable<Mask>, Comparator<Mask> {
 	public static List<Vector> getNeighbors(Vector pos) {
 		List<Vector> out = new ArrayList<>();
 		for (Vector v : NEIGHBORS) {
-			out.add(pos.copy().add(v));
+			out.add(pos.copy().add_(v));
 		}
 		return out;
 	}

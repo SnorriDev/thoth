@@ -12,7 +12,7 @@ public class Above extends PrepDef {
 		Object pos = obj.get(AbstractSemantics.POSITION, e);
 		
 		if (pos instanceof Vector) {
-			Vector v = ((Vector) pos).copy().sub(new Vector(0, DISPLACE_DISTANCE));
+			Vector v = ((Vector) pos).copy().sub_(new Vector(0, DISPLACE_DISTANCE));
 			e.setLocative(v); //e is a copy of the SpellEvent, not the real thing
 			e.setDestination(v);
 		}

@@ -24,7 +24,7 @@ public class Break extends TransVerbDef {
 		Vector[] unitVectors = new Vector[] {new Vector(0, 1), new Vector(1, 0)};
 		for (Vector unitVector : unitVectors) {
 			for (int x = -1; x <= 1; x++) {
-				TRIPWIRE_CONNECTIONS.add(unitVector.copy().multiply(x));
+				TRIPWIRE_CONNECTIONS.add(unitVector.copy().multiply_(x));
 			}
 		}
 		
@@ -66,7 +66,7 @@ public class Break extends TransVerbDef {
 		}
 		
 		//TODO make this open doors that are locked
-		Vector tilePos = ((Entity) obj).getPos().copy().toGridPos();
+		Vector tilePos = ((Entity) obj).getPos().copy().gridPos_();
 		return Break.cutTripwire(e.getWorld(),  tilePos) ||
 				Open.openDoor(e.getWorld(), tilePos);
 		
@@ -94,7 +94,7 @@ public class Break extends TransVerbDef {
 		world.wrapGridUpdate(v, new Tile(ForegroundElement.NONE));
 		TriggerType.TRIP.activate(v);
 		for (Vector trans : TRIPWIRE_CONNECTIONS) {
-			cutTripwire(world, v.copy().add(trans));
+			cutTripwire(world, v.copy().add_(trans));
 		}
 		return true;
 	}

@@ -39,7 +39,7 @@ public class CutScene extends GamePanel implements MouseListener {
 	}
 	
 	public void skip() {
-		Debug.log("skipping");
+		Debug.log("skipping cutscene before " + nextWorld);
 		Main.launchGame(nextWorld, player);
 		Debug.log("game launched");
 	}

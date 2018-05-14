@@ -15,11 +15,11 @@ public class Go extends IntransVerbDef {
 		public void walk(World world, Vector delta);
 			
 		default void walk(World world, Vector dir, double deltaTime) {
-			walk(world, dir.copy().multiply(deltaTime));
+			walk(world, dir.copy().multiply_(deltaTime));
 		}
 		
 		default void walkNormalized(World world, Vector dir, double deltaTime) {
-			walk(world, dir.copy().normalize(), deltaTime);
+			walk(world, dir.copy().normalize_(), deltaTime);
 		}
 		
 	}
@@ -31,7 +31,7 @@ public class Go extends IntransVerbDef {
 	@Override
 	public boolean exec(SpellEvent e) {
 		if (e.getSecondPerson() instanceof Walker && e.getDestination() != null) {
-			Vector trans = e.getDestination().copy().sub(e.getSecondPerson().getPos());
+			Vector trans = e.getDestination().copy().sub_(e.getSecondPerson().getPos());
 			if (trans.magnitude() < DELETE_MARGIN) {
 				e.getWorld().delete(e.getSecondPerson());
 				return false;

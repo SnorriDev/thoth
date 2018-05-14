@@ -50,7 +50,7 @@ public abstract class Message {
 	}
 	
 	protected static Vector getPos(GameWindow window, int width, int xTrans) {
-		return getBasePos(window, width).add(0, xTrans);
+		return getBasePos(window, width).add_(0, xTrans);
 	}
 	
 	public abstract String toString();
