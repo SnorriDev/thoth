@@ -75,6 +75,7 @@ public interface Playable extends Savable {
 		if (type != null && !yamlRoot.get("type").equals(type)) {
 			throw new IllegalArgumentException();
 		}
+		reader.close();
 		
 		return yamlRoot;
 		

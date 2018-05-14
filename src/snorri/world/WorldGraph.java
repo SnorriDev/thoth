@@ -2,11 +2,13 @@ package snorri.world;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sourceforge.yamlbeans.YamlWriter;
 import net.sourceforge.yamlbeans.YamlException;
 import snorri.entities.Center;
 import snorri.entities.Entity;
@@ -75,9 +77,109 @@ public class WorldGraph implements Playable {
 		Debug.raw("loaded player: " + player);
 		
 	}
-
-	@Override @Deprecated
+	
+	public void createLink(String w2, int type) {
+		String w1 = current.toString();
+		createLink(w1, w2, type);
+	}
+	
+	public void createLink(String w1, String w2, int type) {
+		File f = new File(path);
+		createLink(f, w1, w2, type);
+	}
+	
+	/**
+	 * @param type integer defining connection type, 0=l-r, 1=top-bot, 2=r-l 3=bot-top
+	 */
+	public void createLink(File f, String w2, int type) {
+		String w1 = current.toString();
+		createLink(f, w1, w2, type);
+	}
+	
+	/**
+	 * @param type integer defining connection type, 0=l-r, 1=top-bot, 2=r-l 3=bot-top
+	 */
+	public void createLink(File f, String w1, String w2, int type) {
+		Debug.raw(path);
+		Map<String, Object> yaml;
+		List<Map<String, String>> edges;
+		try	{
+			yaml = Playable.getConfig(f);
+			edges = (List<Map<String, String>>) yaml.get("edges");
+			
+			Map<String, String> newEdge = new HashMap<String, String>();		
+			int type_4 = type % 4;
+			switch(type_4) {
+				case 0:
+					worlds.get(w1).setRightNeighbor(worlds.get(w2));
+					worlds.get(w2).setLeftNeighbor(worlds.get(w1));
+					newEdge.put("left", w1);
+					newEdge.put("right", w2);
+					Debug.log("inserting new l-r edge between " + w1 + " & " + w2);
+					break;
+				case 1:
+					worlds.get(w1).setBottomNeighbor(worlds.get(w2));
+					worlds.get(w2).setTopNeighbor(worlds.get(w1));
+					newEdge.put("top", w1);
+					newEdge.put("bottom", w2);
+					Debug.log("inserting new top-bot edge between " + w1 + " & " + w2);
+					break;
+				case 2:
+					worlds.get(w1).setLeftNeighbor(worlds.get(w2));
+					worlds.get(w2).setRightNeighbor(worlds.get(w1));
+					newEdge.put("right", w1);
+					newEdge.put("left", w2);
+					Debug.log("inserting new r-l edge between " + w1 + " & " + w2);
+					break;
+				case 3:
+					worlds.get(w1).setTopNeighbor(worlds.get(w2));
+					worlds.get(w2).setBottomNeighbor(worlds.get(w1));
+					newEdge.put("bottom", w1);
+					newEdge.put("top", w2);
+					Debug.log("inserting new bot-top edge between " + w1 + " & " + w2);
+					break;
+				default:
+					worlds.get(w1).setRightNeighbor(worlds.get(w2));
+					worlds.get(w2).setLeftNeighbor(worlds.get(w1));
+					newEdge.put("left", w1);
+					newEdge.put("right", w2);
+					Debug.log("inserting new l-r edge between " + w1 + " & " + w2 + " (BY DEFAULT)");
+					break;
+			}
+			
+			edges.add(newEdge);
+			yaml.put("edges", edges);
+			
+			Debug.raw(path);
+			YamlWriter writer = new YamlWriter(new FileWriter(path + "/config.yml"));
+	        writer.write(yaml);
+	        writer.close();
+		}
+		catch (YamlException e) {
+			Debug.error("invalid yaml", e);
+		}
+		catch (FileNotFoundException e) {
+			Debug.error("invalid yaml?", e);
+		}
+		catch (IOException e) {
+			Debug.error("invalid yaml??", e);
+		}
+	}
+	
+	@Override @Deprecated //TODO: should save to config.yml
 	public void save(File f, boolean recomputeGraphs) throws IOException {
+		Map<String,Object> yaml;
+		try	{
+			yaml = Playable.getConfig(f);
+			
+			YamlWriter writer = new YamlWriter(new FileWriter(path + "/config.yml"));
+	        writer.write(yaml);
+	        writer.close();
+		}
+		catch (YamlException e) {
+			Debug.error("invalid yaml", e);
+		}
+		
 		for (World world : worlds.values()) {
 			world.save((File) null);
 		}

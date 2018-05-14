@@ -555,5 +555,10 @@ public class World implements Playable, Editable {
 	public Center findCenter() {
 		return getEntityTree().getFirst(Center.class);
 	}
+
+	@Override
+	public WorldGraph getWorldGraph() {
+		return universe;
+	}
 	
 }

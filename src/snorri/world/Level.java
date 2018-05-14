@@ -661,4 +661,10 @@ public class Level implements Editable {
 		return RenderMode.GRID;
 	}
 
+	@Override
+	public WorldGraph getWorldGraph() {
+		return null;
+	}
+	
+	
 }

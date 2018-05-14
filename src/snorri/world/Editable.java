@@ -25,5 +25,7 @@ public interface Editable extends Savable {
 	public List<Entity> getEntities();
 	
 	public Vector getDimensions();
+	
+	public WorldGraph getWorldGraph();
 		
 }

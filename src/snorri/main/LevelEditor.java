@@ -301,6 +301,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		menu.add(submenu1);
 		menu.add(submenu2);
 
+		//ENTITY SELECTION MENU
 		menu = new JMenu("Select Entity");
 		menu.setMnemonic(KeyEvent.VK_E);
 		menuBar.add(menu);
@@ -323,6 +324,28 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			firstEntity = false;
 			i++;
 		}
+		
+		//NEW EDGE MENU
+		menu = new JMenu("Edge");
+		menu.setMnemonic(KeyEvent.VK_G);
+		menuBar.add(menu);
+		
+		menuItem = new JMenuItem("Top");
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Bottom");
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Left");
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Right");
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+		
 
 		Main.getFrame().setJMenuBar(menuBar);
 	}
@@ -340,6 +363,19 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		wh[1] = inputs.getInteger("Height");
 
 		return wh;
+	}
+	
+	private String connectionDialog() {
+		String w2 = "";
+		DialogMap inputs = new DialogMap();
+		inputs.put("Connected World Name", "");
+		if (dialog("Enter Connected World Name", inputs) == null) {
+			return null;
+		}
+
+		w2 = inputs.getText("Connected World Name");
+
+		return w2;
 	}
 
 	@Override
@@ -359,6 +395,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			return;
 		}
 
+		String w2;
 		switch (e.getActionCommand()) {
 		case "New":
 			int[] wh = whDialog();
@@ -464,7 +501,64 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		case "Quit":
 			Main.getFrame().setJMenuBar(null);
 			Main.setWindow(new MainMenu());
+			break;
+		case "Top":
+			if (env == null) {
+				Debug.error("null editable object");
+				return;
+			}
+			w2 = connectionDialog();
+			if (w2 == null || w2 == "") {
+				Debug.error("invalid connecting world");
+				return;
+			}
+			if (env.getWorldGraph() == null) {
+				Debug.error("could not get world graph");
+				return;
+			}
+			env.getWorldGraph().createLink(w2, 3);
+			break;
+		case "Bottom":
+			if (env == null) {
+				return;
+			}
+			w2 = connectionDialog();
+			if (w2 == null || w2 == "") {
+				return;
+			}
+			if (env.getWorldGraph() == null) {
+				return;
+			}
+			env.getWorldGraph().createLink(w2, 1);
+			break;
+		case "Left":
+			if (env == null) {
+				return;
+			}
+			w2 = connectionDialog();
+			if (w2 == null || w2 == "") {
+				return;
+			}
+			if (env.getWorldGraph() == null) {
+				return;
+			}
+			env.getWorldGraph().createLink(w2, 2);
+			break;
+		case "Right":
+			if (env == null) {
+				return;
+			}
+			w2 = connectionDialog();
+			if (w2 == null || w2 == "") {
+				return;
+			}
+			if (env.getWorldGraph() == null) {
+				return;
+			}
+			env.getWorldGraph().createLink(w2, 0);
+			break;
 		}
+					
 
 		repaint();
 
