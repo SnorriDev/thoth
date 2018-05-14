@@ -1,6 +1,8 @@
-saves/.undo1/
-saves/.redo1/
+worlds/.redo1/
+worlds/.undo1/
 logs/thoth.log*
+*.class
+bin
 
 /.buildpath
 /build/
