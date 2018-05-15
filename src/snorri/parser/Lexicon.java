@@ -13,6 +13,7 @@ import snorri.entities.Fountain;
 import snorri.entities.Glyph;
 import snorri.entities.Spike;
 import snorri.entities.Urn;
+import snorri.inventory.Container;
 import snorri.inventory.Droppable;
 import snorri.inventory.RandomDrop.Tier;
 import snorri.inventory.VocabDrop;
@@ -62,7 +63,7 @@ import snorri.semantics.With;
 import snorri.semantics.Write;
 import snorri.world.BackgroundElement;
 
-public class Lexicon extends HashMap<String, Definition<?>> {
+public class Lexicon extends HashMap<String, Definition<?>> implements Container<Droppable> {
 	
 	/**
 	 * Maps strings -> meaning. By design, each word can only have one meaning.
@@ -216,6 +217,40 @@ public class Lexicon extends HashMap<String, Definition<?>> {
 			out.add(new VocabDrop(raw));
 		}
 		return out;
+	}
+
+	@Override
+	public boolean add(Droppable d) {
+		if (d instanceof VocabDrop) {
+			return add(((VocabDrop) d).getOrthography());
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean remove(Droppable d, boolean specific) {
+		if (d instanceof VocabDrop) {
+			return remove(((VocabDrop) d).getOrthography(), specific);
+		}
+		return false;
+	}
+	
+	public boolean add(String word) {
+		put(word, lookup(word));
+		return true;
+	}
+	
+	public boolean remove(String word, boolean specific) {
+		return super.remove(word) != null;
+	}
+		
+	public boolean contains(Collection<String> words) {
+		for (String word : words) {
+			if (!containsKey(word)) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 }

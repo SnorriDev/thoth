@@ -9,23 +9,26 @@ import snorri.animations.Animation;
 import snorri.events.InteractEvent;
 import snorri.events.SpellEvent;
 import snorri.events.SpellEvent.Caster;
-import snorri.inventory.Carrier;
+import snorri.inventory.Droppable;
 import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
 import snorri.keyboard.Key;
 import snorri.inventory.Orb;
 import snorri.inventory.Papyrus;
+import snorri.inventory.Stats;
 import snorri.inventory.Weapon;
 import snorri.main.FocusedWindow;
 import snorri.main.GamePanel;
 import snorri.main.GameWindow;
 import snorri.main.Main;
+import snorri.parser.Lexicon;
 import snorri.semantics.Nominal;
+import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Player extends Unit implements Carrier, Caster {
+public class Player extends Unit implements Caster {
 
 	private static final Animation IDLE = new Animation("/textures/animations/setna/idle");
 	private static final Animation WALKING = new Animation("/textures/animations/setna/walking");
@@ -42,7 +45,10 @@ public class Player extends Unit implements Carrier, Caster {
 	private static final String[] DAMAGE_SOUNDS = {"/sound/arrow.wav"};
 	private static final String[] DEATH_SOUNDS = {"/sound/arrow.wav"};
 	
+	private Stats stats;
+	private Lexicon lexicon;
 	private Inventory inventory;
+	
 	
 	public interface Interactor {
 		
@@ -69,6 +75,9 @@ public class Player extends Unit implements Carrier, Caster {
 		
 		super(pos, IDLE, WALKING);
 		inventory = new Inventory(this);
+		stats = new Stats(this);
+		lexicon = new Lexicon();
+		
 		z = PLAYER_LAYER;
 		
 		speechSounds = SPEECH_SOUNDS;
@@ -134,12 +143,17 @@ public class Player extends Unit implements Carrier, Caster {
 	}
 	
 	@Override
+	public Lexicon getLexicon() {
+		return lexicon;
+	}
+	
+	@Override
 	public Inventory getInventory() {
 		return inventory;
 	}
 	
 	public double getHearts() {
-		return getHealth() / MAX_HEALTH * HEALTH_RES;
+		return getHealth() / stats.getMaxHealth() * HEALTH_RES;
 	}
 	
 	public Vector getHealthBarPos() {
@@ -152,7 +166,7 @@ public class Player extends Unit implements Carrier, Caster {
 		
 		for (int i = 0; i < HEALTH_RES; i++) {
 			
-			//figure out a better way to do this
+			//TODO fix this to reflect absolute magnitude of health
 						
 			if (getHearts() >= i) {
 				g.drawImage(HEART, pos.getX(), pos.getY(), null);
@@ -175,6 +189,18 @@ public class Player extends Unit implements Carrier, Caster {
 	@Override
 	public Vector getAimPosition() {
 		return ((FocusedWindow<?>) Main.getWindow()).getMousePosAbsolute();
+	}
+	
+	@Override
+	public boolean add(Droppable d) {
+		if (Caster.super.add(d)) {
+			TriggerType.ACQUIRE.activate(d.toString());
+			if (Main.getWindow() instanceof GameWindow) {
+				((GameWindow) Main.getWindow()).showMessage(d);
+			}
+			return true;
+		}
+		return false;
 	}
 
 }

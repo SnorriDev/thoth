@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 
 import snorri.dialog.SpellMessage;
 import snorri.dialog.TextMessage;
-import snorri.entities.Entity;
+import snorri.entities.BossAIUnit;
 import snorri.events.SpellEvent.Caster;
 import snorri.hieroglyphs.Hieroglyphs;
 import snorri.main.GameWindow;
@@ -19,20 +19,30 @@ public class Papyrus extends Item {
 
 	private static final long serialVersionUID = 1L;
 	private static final Color PAPYRUS_COOLDOWN_COLOR = new Color(118, 45, 50, 150);
+	private static final double PAPYRUS_COOLDOWN = 1;
 	
 	private boolean ignoreMessages = false;
 	
 	public Papyrus(ItemType t) {
 		super(t);
-		timer = new Timer(0); //no cooldown
+		timer = new Timer(PAPYRUS_COOLDOWN);
 	}
 
-	public boolean tryToActivate(Entity subject) {
-		GameWindow window = (GameWindow) Main.getWindow();
-		return tryToActivate(window.getWorld(), window.getFocusAsCaster(), subject);
+	public void cast(World world, Caster player) {
+		if (!getTimer().isOffCooldown()) {
+			return;
+		}
+		// TODO show dialog and cast spell
 	}
-
-	public boolean tryToActivate(World world, Caster caster, Entity subject) {
+	
+	/**
+	 * This function has been repurposed for casting AI spells
+	 * @param world
+	 * @param caster The BossAIUnit caster
+	 * @param subject
+	 * @return true iff successfully activated
+	 */
+	public boolean castPrewritten(World world, BossAIUnit caster) {
 
 		String orthography; //TODO calculate firstWord here?
 		if (spell == null || "".equals(orthography = spell.getOrthography())) {
@@ -49,7 +59,7 @@ public class Papyrus extends Item {
 		}
 		
 		if (timer.activate()) {
-			Object o = useSpell(world, caster, subject);
+			Object o = useSpell(world, caster, null);
 			if (Main.getWindow() instanceof GameWindow) {
 				((GameWindow) Main.getWindow()).showMessage(new SpellMessage(orthography, o, spellIsStatement()));
 			}

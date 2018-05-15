@@ -26,7 +26,7 @@ public class Thoth extends BossAIUnit {
 		super.updateEntityStats();
 		Item papyrus = Item.newItem(ItemType.PAPYRUS);
 		papyrus.setSpell(SPELL);
-		inventory.add(papyrus);
+		inventory.getPapyrus().setSpell(SPELL);
 	}
 	
 }

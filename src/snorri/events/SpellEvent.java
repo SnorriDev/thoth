@@ -4,7 +4,12 @@ import snorri.collisions.Collider;
 import snorri.collisions.RectCollider;
 import snorri.entities.Entity;
 import snorri.inventory.Carrier;
+import snorri.inventory.Droppable;
+import snorri.inventory.Item;
+import snorri.inventory.VocabDrop;
 import snorri.main.Main;
+import snorri.parser.Grammar;
+import snorri.parser.Lexicon;
 import snorri.semantics.Chaos;
 import snorri.semantics.Nominal;
 import snorri.semantics.Order;
@@ -34,6 +39,46 @@ public class SpellEvent {
 	public interface Caster extends Carrier {
 		
 		public Vector getAimPosition();
+		
+		public Lexicon getLexicon();
+		
+		@Override
+		default boolean add(Droppable d) {
+			
+			if (d instanceof Item && ((Item) d).getSpell() != null) {
+				boolean result = false;
+				for (String word : Grammar.getWords(((Item) d).getSpell().getOrthography())) {
+					result |= add(new VocabDrop(word));
+				}
+				return result;
+			}
+						
+			else if (getInventory().add(d) || getLexicon().add(d)) {
+				return true;
+			}
+			
+			return false;
+			
+		}
+
+		@Override
+		default boolean remove(Droppable d, boolean specific) {
+			
+			if (d instanceof Item && ((Item) d).getSpell() != null) {
+				boolean result = false;
+				for (String word : Grammar.getWords(((Item) d).getSpell().getOrthography())) {
+					result |= remove(new VocabDrop(word), specific);
+				}
+				return result;
+			}
+			
+			else if (getInventory().remove(d, specific) || getLexicon().remove(d, specific)) {
+				return true;
+			}
+			
+			return false;
+			
+		}
 		
 	}
 	

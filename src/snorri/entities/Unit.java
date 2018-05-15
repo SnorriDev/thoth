@@ -9,6 +9,7 @@ import snorri.collisions.Collider;
 import snorri.collisions.RectCollider;
 import snorri.events.CollisionEvent;
 import snorri.events.SpellEvent;
+import snorri.inventory.Stats;
 import snorri.main.Debug;
 import snorri.modifiers.Modifier;
 import snorri.pathfinding.Team;
@@ -26,13 +27,13 @@ public abstract class Unit extends Entity implements Walker {
 	private static final int BASE_SPEED = 120;
 	/**Dimensions for humanoid units*/
 	public static final int RADIUS = 46, RADIUS_X = 21, RADIUS_Y = 40;
-	protected static final double MAX_HEALTH = 100;
 	
 	protected List<Modifier<Unit>> modifiers = new ArrayList<>();
 	
 	protected int speed;
 	private Team team;
-	private double health;
+	protected Stats stats;
+	protected double health;
 	
 	protected Animation walkingAnimation;
 	protected Animation idleAnimation;
@@ -60,7 +61,8 @@ public abstract class Unit extends Entity implements Walker {
 	 */
 	protected Unit(Vector pos, Collider c) {
 		super(pos, c);
-		health = MAX_HEALTH;
+		stats = new Stats(this);
+		health = stats.getMaxHealth();
 		z = UNIT_LAYER;
 	}
 
@@ -153,7 +155,7 @@ public abstract class Unit extends Entity implements Walker {
 	
 	public void damage(double d) {
 		if (Debug.damageEventsLogged()) {
-			Debug.log(this + "(" + (int) health + "/" + MAX_HEALTH + ") took " + d + " damage");
+			Debug.log(this + "(" + (int) health + "/" + stats.getMaxHealth() + ") took " + d + " damage");
 		}
 		health -= d;
 	}
@@ -163,10 +165,7 @@ public abstract class Unit extends Entity implements Walker {
 	}
 	
 	public void heal(double d) {
-		health += d;
-		if (health > MAX_HEALTH) {
-			health = MAX_HEALTH;
-		}
+		health = Math.max(health + d, stats.getMaxHealth());
 	}
 	
 	public void heal(double d, SpellEvent e) {

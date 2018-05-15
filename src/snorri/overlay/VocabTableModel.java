@@ -1,11 +1,14 @@
 package snorri.overlay;
 
+import java.util.Map.Entry;
+
 import javax.swing.ImageIcon;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import snorri.hieroglyphs.Hieroglyphs;
-import snorri.inventory.VocabDrop;
+import snorri.parser.Lexicon;
+import snorri.semantics.Definition;
 
 public class VocabTableModel implements TableModel {
 
@@ -34,10 +37,10 @@ public class VocabTableModel implements TableModel {
 		
 	}
 	
-	private VocabDrop[] data;
+	private Entry<String, Definition<?>>[] data;
 	
-	public VocabTableModel(VocabDrop[] c) {
-		data = c;
+	public VocabTableModel(Lexicon lexicon) {
+		refresh(lexicon);
 	}
 	
 	@Override
@@ -70,16 +73,16 @@ public class VocabTableModel implements TableModel {
 //		if (rowIndex == 0) {
 //			return Columns.values()[columnIndex].getName();
 //		}
-		VocabDrop word = data[rowIndex];
+		Entry<String, Definition<?>> word = data[rowIndex];
 		switch (Columns.values()[columnIndex]) {
 		case HIEROGLYPH:
-			return Hieroglyphs.getSmallIcon(word.getOrthography());
+			return Hieroglyphs.getSmallIcon(word.getKey());
 		case TYPED_SPELLING:
-			return word.getOrthography();
+			return word.getKey();
 		case PART_OF_SPEECH:
-			return word.getMeaning().getPOS().getSimpleName();
+			return word.getValue().getPOS().getSimpleName();
 		case MEANING:
-			return word.getMeaning().toString();
+			return word.getValue().toString();
 		}
 		
 		return null;
@@ -101,8 +104,14 @@ public class VocabTableModel implements TableModel {
 		// TODO Auto-generated method stub	
 	}
 	
-	public void refresh(VocabDrop[] data) {
-		this.data = data;
+	@SuppressWarnings("unchecked")
+	public void refresh(Lexicon lexicon) {
+		data = (Entry<String, Definition<?>>[]) new Entry[lexicon.size()];
+		int i = 0;
+		for (Entry<String, Definition<?>> entry : lexicon.entrySet()) {
+			data[i] = entry;
+			i++;
+		}
 	}
 
 }

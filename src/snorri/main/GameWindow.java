@@ -201,10 +201,6 @@ public class GameWindow extends FocusedWindow<Player> {
 		}
 		
 	}
-	
-	public void openInventory() {
-		openInventory(player.getInventory());
-	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {

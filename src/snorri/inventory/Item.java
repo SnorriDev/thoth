@@ -77,8 +77,7 @@ public abstract class Item implements Droppable {
 		//TODO convert these to Animations instead of BufferedImages?
 		
 		EMPTY,
-		PAPYRUS(5, Papyrus.class, Main.getImage("/textures/items/papyrus.png")),
-		HELMET(Armor.class, Main.getImage("/textures/items/helmet.png"), 2d),
+		PAPYRUS(Papyrus.class, Main.getImage("/textures/items/papyrus.png")),
 		SLING(Weapon.class, Main.getImage("/textures/items/sling.png"), 34d, 0.45, "/sound/arrow.wav"),
 		PELLET(5, Orb.class, Main.getImage("/textures/items/pellet.png"), new Animation("/textures/objects/pellet.png")),
 		SLOW_SLING(Weapon.class, Main.getImage("/textures/items/sling.png"), 34d, 2d, "/sound/arrow.wav"),

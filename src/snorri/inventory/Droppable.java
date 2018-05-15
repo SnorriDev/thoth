@@ -15,7 +15,7 @@ public interface Droppable extends Comparable<Droppable>, Nominal {
 	static class CompareWrapper {
 		
 		/**
-		 * Need to put the inventory for droppable comparison
+		 * Need to put the inventory for Droppable comparison
 		 * in a static class 
 		 */
 		

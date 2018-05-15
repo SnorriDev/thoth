@@ -15,7 +15,7 @@ import javax.swing.SwingUtilities;
 
 import snorri.dialog.Dialog;
 import snorri.entities.Entity;
-import snorri.inventory.Inventory;
+import snorri.events.SpellEvent.Caster;
 import snorri.keyboard.Key;
 import snorri.keyboard.KeyStates;
 import snorri.keyboard.MouseButton;
@@ -70,27 +70,37 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 			}
 		});
 	}
-
-	public synchronized void openInventory(Inventory inv) {
+	
+	public synchronized void openInventory() {
+		
+		F focus = getFocus();
+		if (!(focus instanceof Caster)) {
+			Debug.warning("tried to open inventory on non-Caster");
+			return;
+		}
+		
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				Main.setOverlay(new InventoryOverlay(FocusedWindow.this, inv));
+				Main.setOverlay(new InventoryOverlay(FocusedWindow.this, (Caster) focus, false));
 				paused = true;
 			}
 		});
+		
 	}
-
-	public synchronized void editInventory(Inventory inv) {
+	
+	public synchronized void editInventory(Caster caster) {
+		
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				Main.setOverlay(new InventoryOverlay(FocusedWindow.this, inv, true));
+				Main.setOverlay(new InventoryOverlay(FocusedWindow.this, caster, true));
 				paused = true;
 			}
 		});
+		
 	}
-
+	
 	public boolean isPaused() {
 		return paused;
 	}

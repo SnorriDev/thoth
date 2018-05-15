@@ -98,6 +98,7 @@ public class WorldGraph implements Playable {
 	/**
 	 * @param type integer defining connection type, 0=l-r, 1=top-bot, 2=r-l 3=bot-top
 	 */
+	@SuppressWarnings("unchecked")
 	public void createLink(File f, String w1, String w2, int type) {
 		Debug.raw(path);
 		Map<String, Object> yaml;
