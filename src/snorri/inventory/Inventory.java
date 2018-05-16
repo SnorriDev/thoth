@@ -3,6 +3,9 @@ package snorri.inventory;
 import java.awt.Graphics;
 import java.io.Serializable;
 
+import javax.swing.DefaultListModel;
+import javax.swing.ListModel;
+
 import snorri.entities.Unit;
 import snorri.events.SpellEvent.Caster;
 import snorri.inventory.Item.ItemType;
@@ -97,12 +100,9 @@ public class Inventory implements Serializable, Container<Droppable> {
 	
 	public void render(GameWindow window, Graphics g) {
 		
-		// Papyrus Slot
-		drawItemContainer(g, 0, true, papyrusSlot, Papyrus.class);
-		
 		// Sling and Orb
 		drawItemContainer(g, 0, false, weaponSlot, Weapon.class);
-		drawItemContainer(g, 1, false, orbSlot, Orb.class);
+		drawItemContainer(g, 1, false, papyrusSlot, Papyrus.class);
 		
 	}
 	
@@ -161,25 +161,6 @@ public class Inventory implements Serializable, Container<Droppable> {
 				
 	}
 	
-	private int getIndex(Weapon weapon) {
-		return weaponSlot == weapon ? 0 : Integer.MAX_VALUE;
-	}
-	
-	private int getIndex(Orb orb) {
-		return orbSlot == orb ? 0 : Integer.MAX_VALUE;
-	}
-	
-	/** @return <code>Integer.MAX_VALUE</code> iff the item does not appear */
-	public int getIndex(Item item) {
-		if (item instanceof Weapon) {
-			return getIndex((Weapon) item);
-		}
-		if (item instanceof Orb) {
-			return getIndex((Orb) item);
-		}
-		return Integer.MAX_VALUE;
-	}
-	
 	public void checkKeys() {
 		
 		FocusedWindow<?> window = (FocusedWindow<?>) Main.getWindow();
@@ -200,6 +181,13 @@ public class Inventory implements Serializable, Container<Droppable> {
 			return;
 		}
 		weaponSlot.attack(world, player, movement, dir, orbSlot);
+	}
+
+	public ListModel<Item> getItemModel() {
+		DefaultListModel<Item> model = new DefaultListModel<>();
+		model.addElement(weaponSlot);
+		model.addElement(papyrusSlot);
+		return model;
 	}
 	
 }

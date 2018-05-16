@@ -49,6 +49,7 @@ public class Player extends Unit implements Caster {
 	private Lexicon lexicon;
 	private Inventory inventory;
 	
+	protected double mana;
 	
 	public interface Interactor {
 		
@@ -78,6 +79,7 @@ public class Player extends Unit implements Caster {
 		stats = new Stats(this);
 		lexicon = new Lexicon();
 		
+		mana = stats.getMaxMana();
 		z = PLAYER_LAYER;
 		
 		speechSounds = SPEECH_SOUNDS;
@@ -107,10 +109,13 @@ public class Player extends Unit implements Caster {
 	@Override
 	public void update(World world, double deltaTime) {
 		
-		FocusedWindow<?> window = (FocusedWindow<?>) Main.getWindow();
+		
 		super.update(world, deltaTime);
 		inventory.update(deltaTime);
-				
+		
+		mana = Math.min(mana + stats.getManaRegen() * deltaTime, stats.getMaxMana());
+		
+		FocusedWindow<?> window = (FocusedWindow<?>) Main.getWindow();
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
@@ -150,6 +155,11 @@ public class Player extends Unit implements Caster {
 	@Override
 	public Inventory getInventory() {
 		return inventory;
+	}
+	
+	@Override
+	public double getMana() {
+		return mana;
 	}
 	
 	public double getHearts() {

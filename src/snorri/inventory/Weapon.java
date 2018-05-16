@@ -40,11 +40,6 @@ public class Weapon extends Item {
 		return spell.altersMovement();
 	}
 	
-	@Override
-	public int getInvPos() {
-		return 0;
-	}
-	
 	public boolean attack(World world, Entity focus, Vector movement, Vector dir, Orb orb) {
 		if (timer.activate()) {
 			Audio.playClip(clip);

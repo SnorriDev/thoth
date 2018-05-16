@@ -6,7 +6,7 @@ import snorri.hieroglyphs.Hieroglyphs;
 import snorri.parser.Lexicon;
 import snorri.semantics.Definition;
 
-public class VocabDrop implements Droppable {
+public class VocabDrop implements Droppable, Comparable<VocabDrop> {
 
 	private static final long serialVersionUID = 1L;
 	private String orthography;
@@ -47,22 +47,13 @@ public class VocabDrop implements Droppable {
 	}
 
 	@Override
-	public int compareIn(Droppable other, Inventory inv) {
-		if (other instanceof VocabDrop) {
-			return toUniqueString().compareTo(((VocabDrop) other).toUniqueString());
-		}
-		return Droppable.super.compareIn(other, inv);
+	public int compareTo(VocabDrop other) {
+		return toUniqueString().compareTo(((VocabDrop) other).toUniqueString());
 	}
 
 	@Override
 	public Image getTexture() {
 		return Hieroglyphs.getImage(orthography);
-	}
-
-	@Override
-	public int compareTo(Droppable o) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override

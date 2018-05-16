@@ -1,6 +1,7 @@
 package snorri.overlay;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -17,12 +18,18 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -33,6 +40,7 @@ import snorri.events.SpellEvent.Caster;
 import snorri.hieroglyphs.Hieroglyphs;
 import snorri.inventory.Container;
 import snorri.inventory.Droppable;
+import snorri.inventory.Item;
 import snorri.inventory.Weapon;
 import snorri.main.Debug;
 import snorri.main.DialogMap;
@@ -55,9 +63,8 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private static final double LEFT_PANEL_WIDTH_MULTIPLIER = 0.2352;
 	private static final int PADDING = 16;
 	private static final int LEFT_PANEL_WIDTH = (int) (INVENTORY_WIDTH * LEFT_PANEL_WIDTH_MULTIPLIER); // 178
-//	private static final int LEFT_PANEL_HEIGHT = INVENTORY_HEIGHT;
-//	private static final int LEFT_PANEL_LABEL_WIDTH = PADDING - 2 * LEFT_PANEL_WIDTH;
-//	private static final int LEFT_PANEL_ITEM_HEIGHT = 30;
+	private static final int LEFT_PANEL_LABEL_WIDTH = PADDING - 2 * LEFT_PANEL_WIDTH;
+	private static final int LEFT_PANEL_ITEM_HEIGHT = 30;
 	private static final double CRAFTING_SPACE_HEIGHT_MULTIPLIER = 0.3676;
 	private static final int CRAFTING_SPACE_WIDTH = INVENTORY_WIDTH - LEFT_PANEL_WIDTH; // 579
 	private static final int CRAFTING_SPACE_HEIGHT = (int) (INVENTORY_HEIGHT * CRAFTING_SPACE_HEIGHT_MULTIPLIER); // 172
@@ -72,15 +79,53 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private final JTable vocabBox;
 	private final JButton enchantButton;
 	private final JEditorPane field;
+	
+	private final JList<Item> list;
+	private final ListModel<Item> model;
 		
 	private boolean editMode;
 	private List<String> spellsEnchanted;
 	
-	public InventoryOverlay(FocusedWindow<?> focusedWindow, Caster caster) {
-		this(focusedWindow, caster, false);
+	private class ItemCellRenderer implements ListCellRenderer<Item> {
+		@Override
+		public Component getListCellRendererComponent(JList<? extends Item> list, Item item, int index, boolean isSelected, boolean cellHasFocus) {
+			String text = item.toString();
+			JLabel label = new JLabel(text, item.getIcon(), JLabel.LEFT);
+			label.setPreferredSize(new Dimension(LEFT_PANEL_LABEL_WIDTH, LEFT_PANEL_ITEM_HEIGHT));
+			label.setFont(label.getFont());
+			if (isSelected) {
+				label.setBorder(getThinBorder());
+			}
+			label.setBackground(SELECTED_BG);
+			label.setOpaque(isSelected);
+			return label;
+		}
 	}
 	
-	public InventoryOverlay(FocusedWindow<?> focusedWindow, Caster caster, boolean editMode) {
+	private class ItemSelectionModel extends DefaultListSelectionModel {
+
+		private static final long serialVersionUID = 1L;
+
+		private final int i;
+		
+		public ItemSelectionModel(int i) {
+			super.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			super.setSelectionInterval(i, i);
+			this.i = i;
+		}
+		
+		@Override
+	    public boolean isSelectedIndex(int j) {
+			if (editMode) {
+				return super.isSelectedIndex(j);
+				
+			}
+			return i == j;
+	    }
+				
+	}
+	
+	public InventoryOverlay(FocusedWindow<?> focusedWindow, Caster caster, boolean editMode, int initialSelection) {
 		
 		super(focusedWindow);
 		this.caster = caster;
@@ -102,6 +147,31 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		setOpaque(false);
 		
 		spellsEnchanted = new ArrayList<>();
+		
+		// filter item panel
+		model = caster.getInventory().getItemModel();
+		list = new JList<Item>(model);
+		list.setSelectionModel(new ItemSelectionModel(initialSelection));
+		list.setCellRenderer(new ItemCellRenderer());
+		list.setLayoutOrientation(JList.VERTICAL);
+		list.setVisibleRowCount(-1);
+		list.addListSelectionListener(this);
+		list.addKeyListener(this);
+		list.setOpaque(false);
+				
+		// scroll on item panel
+		JScrollPane scrollPane = new JScrollPane(list);
+		scrollPane.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, INVENTORY_HEIGHT));
+		scrollPane.setOpaque(false);
+		scrollPane.getViewport().setOpaque(false);
+		scrollPane.setBorder(emptyBorder());
+		
+		c.fill = GridBagConstraints.NORTHWEST;
+		c.weightx = 0.25;
+		c.gridheight = 2;
+		c.gridx = 0;
+		c.gridy = 0;
+		panel.add(scrollPane, c);
 		
 		// crafting space
 		craftingSpace = new JPanel();
@@ -163,7 +233,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			vocabInfo.add(buttons);
 		}
 		
-		JScrollPane scrollPane = new JScrollPane(vocabInfo);
+		scrollPane = new JScrollPane(vocabInfo);
 		scrollPane.setPreferredSize(new Dimension(CRAFTING_SPACE_WIDTH, 250)); // originally 750,414
 		scrollPane.setOpaque(false);
 		scrollPane.getViewport().setOpaque(false);

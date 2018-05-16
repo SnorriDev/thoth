@@ -165,7 +165,7 @@ public abstract class Unit extends Entity implements Walker {
 	}
 	
 	public void heal(double d) {
-		health = Math.max(health + d, stats.getMaxHealth());
+		health = Math.min(health + d, stats.getMaxHealth());
 	}
 	
 	public void heal(double d, SpellEvent e) {

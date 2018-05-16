@@ -88,11 +88,6 @@ public class Papyrus extends Item {
 	public Color getArcColor() {
 		return PAPYRUS_COOLDOWN_COLOR;
 	}
-
-	@Override
-	public int getInvPos() {
-		return 2;
-	}
 	
 	@Override
 	protected void computeTexture() {

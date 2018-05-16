@@ -66,4 +66,9 @@ public abstract class BossAIUnit extends AIUnit implements Caster {
 		return lexicon;
 	}
 	
+	@Override
+	public double getMana() {
+		return 100; // no actual mana currently
+	}
+	
 }

@@ -415,19 +415,6 @@ public abstract class Item implements Droppable {
 		return ACTIVE_BORDERS_BOTTOM[0].getWidth(null);
 	}
 	
-	@Override
-	public int compareIn(Droppable o, Inventory inv) {
-		int cmp = Droppable.super.compareIn(o, inv);
-		if (o instanceof Item && cmp == 0) {
-			int cmp2 = Integer.compare(inv.getIndex(this), inv.getIndex((Item) o));
-			if (cmp2 == 0) { //same-named items can
-				return toUniqueString().compareTo(o.toUniqueString());
-			}
-			return cmp2;
-		}
-		return cmp;
-	}
-	
 	public void resetTimer() {
 		if (timer != null) {
 			timer.activate();

@@ -71,7 +71,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 		});
 	}
 	
-	public synchronized void openInventory() {
+	public synchronized void openInventory(int i) {
 		
 		F focus = getFocus();
 		if (!(focus instanceof Caster)) {
@@ -82,7 +82,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				Main.setOverlay(new InventoryOverlay(FocusedWindow.this, (Caster) focus, false));
+				Main.setOverlay(new InventoryOverlay(FocusedWindow.this, (Caster) focus, false, i));
 				paused = true;
 			}
 		});
@@ -94,7 +94,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				Main.setOverlay(new InventoryOverlay(FocusedWindow.this, caster, true));
+				Main.setOverlay(new InventoryOverlay(FocusedWindow.this, caster, true, 0));
 				paused = true;
 			}
 		});

@@ -8,7 +8,7 @@ import snorri.parser.Grammar;
 import snorri.parser.Lexicon;
 import snorri.semantics.Nominal;
 
-public interface Droppable extends Comparable<Droppable>, Nominal {
+public interface Droppable extends Nominal {
 	
 	public static final Animation SPARKLE = new Animation("/textures/animations/sparkle");
 	
@@ -18,9 +18,7 @@ public interface Droppable extends Comparable<Droppable>, Nominal {
 		 * Need to put the inventory for Droppable comparison
 		 * in a static class 
 		 */
-		
-		private static Inventory inv;
-		
+				
 	}
 	
 	public static Droppable fromString(String raw) {
@@ -54,30 +52,6 @@ public interface Droppable extends Comparable<Droppable>, Nominal {
 
 	default Animation getAnimation() {
 		return new Animation(SPARKLE);
-	}
-	
-	/**
-	 * For sorting the full inventory in HUD
-	 */
-	default int getInvPos() {
-		return 10;
-	}
-	
-	/**
-	 * This MUST be overriden to resolve cases where the
-	 * inventory positions are equal.
-	 */
-	default int compareIn(Droppable other, Inventory inv) {
-		return Integer.compare(getInvPos(), other.getInvPos());
-	}
-	
-	@Override
-	default int compareTo(Droppable other) {
-		return compareIn(other, CompareWrapper.inv);
-	}
-	
-	public static void setInventoryForComparison(Inventory inv) {
-		CompareWrapper.inv = inv;
 	}
 	
 	default String toUniqueString() {

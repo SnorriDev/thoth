@@ -70,12 +70,6 @@ public class RandomDrop implements Droppable {
 		this(Tier.valueOf(name.toUpperCase()));
 		this.name = name.toUpperCase();
 	}
-	
-	@Override
-	public int compareTo(Droppable o) {
-		Debug.warning("tried to compare Droppable to RandomDrop");
-		return 0;
-	}
 
 	@Override
 	public int getMaxQuantity() {

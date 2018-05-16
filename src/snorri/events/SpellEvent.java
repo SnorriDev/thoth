@@ -42,6 +42,8 @@ public class SpellEvent {
 		
 		public Lexicon getLexicon();
 		
+		public double getMana();
+		
 		@Override
 		default boolean add(Droppable d) {
 			

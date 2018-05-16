@@ -71,5 +71,13 @@ public class Stats implements Serializable {
 	public double getMaxHealth() {
 		return 100 + 10 * defense;
 	}
+	
+	public double getMaxMana() {
+		return 100 + 10 * intelligence;
+	}
+	
+	public double getManaRegen() {
+		return attention;
+	}
 
 }
