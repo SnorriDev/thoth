@@ -10,10 +10,8 @@ import snorri.semantics.Category;
 
 public abstract class NonTerminal<S> implements Node<S> {
 
-	private static final long serialVersionUID = 1L;
-
 	protected List<Node<?>> children;
-	private Object category;
+	protected Object category;
 	
 	//TODO backwards compatible implementation with a list and an arraylist
 	

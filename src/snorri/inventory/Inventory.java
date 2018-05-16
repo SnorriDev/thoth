@@ -16,7 +16,7 @@ import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Inventory implements Serializable, Container<Droppable> {
+public class Inventory implements Serializable, DropContainer<Droppable> {
 	
 	/** Holds the inventory of a player */
 	private static final long serialVersionUID = 1L;
@@ -46,6 +46,7 @@ public class Inventory implements Serializable, Container<Droppable> {
 			orbSlot.updateCooldown(deltaTime);
 		}
 		
+		papyrusSlot.castQueuedSpell();
 		papyrusSlot.updateCooldown(deltaTime);
 		
 	}
@@ -54,8 +55,8 @@ public class Inventory implements Serializable, Container<Droppable> {
 		orbSlot = newOrb;
 	}
 	
-	public void addPapyrus() {
-		numPapyri++;
+	public void removePapyrus() {
+		numPapyri--;
 	}
 	
 	public boolean addWeapon(Weapon newWeapon) {
@@ -136,6 +137,9 @@ public class Inventory implements Serializable, Container<Droppable> {
 			addWeapon((Weapon) d);
 			return true;
 		}
+		if (d instanceof PapyrusDrop) {
+			numPapyri += ((PapyrusDrop) d).getQuantity();
+		}
 		
 		return false;
 		
@@ -157,6 +161,12 @@ public class Inventory implements Serializable, Container<Droppable> {
 			
 		}
 		
+		if (d instanceof PapyrusDrop) {
+			int oldNumPapyri = numPapyri;
+			numPapyri = Math.max(numPapyri - ((PapyrusDrop) d).getQuantity(), 0);
+			return numPapyri != oldNumPapyri;
+		}
+		
 		return false;
 				
 	}
@@ -168,8 +178,8 @@ public class Inventory implements Serializable, Container<Droppable> {
 		Vector dir = window.getShotDirection();
 		World world = window.getWorld();
 			
-		if (PAPYRUS_KEY.isPressed() && player instanceof Caster) {
-			papyrusSlot.cast(world, (Caster) player);
+		if (PAPYRUS_KEY.isPressed() && player instanceof Caster && getNumPapyri() > 0) {
+			papyrusSlot.queueSpell(world, (Caster) player);
 		}
 		
 		attack(world, movement, dir);

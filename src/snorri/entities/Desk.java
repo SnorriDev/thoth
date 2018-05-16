@@ -27,7 +27,6 @@ public class Desk extends Entity implements Interactor {
 	public void onInteract(InteractEvent e) {
 		if (Main.getWindow() instanceof GameWindow) {
 			((GameWindow) Main.getWindow()).openInventory(0);
-			// TODO parametrize this number?
 		}
 	}
 

@@ -3,34 +3,26 @@ package snorri.inventory;
 import java.awt.Image;
 
 import snorri.animations.Animation;
-import snorri.inventory.Item.ItemType;
 import snorri.parser.Grammar;
-import snorri.parser.Lexicon;
 import snorri.semantics.Nominal;
 
 public interface Droppable extends Nominal {
 	
 	public static final Animation SPARKLE = new Animation("/textures/animations/sparkle");
 	
-	static class CompareWrapper {
-		
-		/**
-		 * Need to put the inventory for Droppable comparison
-		 * in a static class 
-		 */
-				
-	}
-	
 	public static Droppable fromString(String raw) {
-		if (raw.startsWith("!")) {
-			return new RandomDrop(raw.substring(1));
+		Droppable result;
+		if ((result = RandomDrop.fromString(raw)) != null) {
+			return result;
 		}
-		ItemType type = ItemType.fromString(raw);
-		if (type != null) {
-			return type.getNew();
+		if ((result = PapyrusDrop.fromString(raw)) != null) {
+			return result;
 		}
-		if (Lexicon.lookup(raw) != null) {
-			return new VocabDrop(raw);
+		if ((result = Item.fromString(raw)) != null) {
+			return result;
+		}
+		if ((result = VocabDrop.fromString(raw)) != null) {
+			return result;
 		}
 		return null;
 	}

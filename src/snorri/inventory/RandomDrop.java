@@ -99,8 +99,16 @@ public class RandomDrop implements Droppable {
 		Debug.log(Tier.values().length + " drop tiers loaded");
 	}
 	
+	@Override
 	public String toString() {
 		return "!" + name;
+	}
+
+	public static Droppable fromString(String raw) {
+		if (raw.startsWith("!")) {
+			return new RandomDrop(raw.substring(1));
+		}
+		return null;
 	}
 
 }

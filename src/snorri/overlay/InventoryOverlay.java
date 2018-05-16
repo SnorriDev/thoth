@@ -38,10 +38,9 @@ import javax.swing.event.ListSelectionListener;
 
 import snorri.events.SpellEvent.Caster;
 import snorri.hieroglyphs.Hieroglyphs;
-import snorri.inventory.Container;
+import snorri.inventory.DropContainer;
 import snorri.inventory.Droppable;
 import snorri.inventory.Item;
-import snorri.inventory.Weapon;
 import snorri.main.Debug;
 import snorri.main.DialogMap;
 import snorri.main.FocusedWindow;
@@ -49,7 +48,7 @@ import snorri.main.Main;
 import snorri.parser.Grammar;
 import snorri.triggers.Trigger.TriggerType;
 
-public class InventoryOverlay extends Overlay implements MouseListener, ListSelectionListener, DocumentListener, FocusListener, Container<Droppable> {
+public class InventoryOverlay extends Overlay implements MouseListener, ListSelectionListener, DocumentListener, FocusListener, DropContainer<Droppable> {
 	
 	/** the GUI interface for editing inventory and spells */
 	
@@ -228,8 +227,14 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		if (editMode) {
 			JComponent buttons = new JPanel();
 			buttons.setOpaque(false);
-			buttons.add(createButton("ADD"));
-			buttons.add(createButton("DELETE"));
+			JComponent button = createButton("ADD");
+			button.addKeyListener(this);
+			button.setFocusable(false);
+			buttons.add(button);
+			button = createButton("DELETE");
+			button.addKeyListener(this);
+			button.setFocusable(false);
+			buttons.add(button);
 			vocabInfo.add(buttons);
 		}
 		
@@ -265,18 +270,12 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	
 	@Override
 	public boolean add(Droppable d) {
-		
-		if (d == null) {
-			Debug.warning("adding null item to inventory");
-		}
-		
 		if (caster.add(d)) {
 			((VocabTableModel) vocabBox.getModel()).refresh(caster.getLexicon());	
 			// TODO update items as well
 			return true;
 		}
 		return false;
-		
 	}
 	
 	@Override
@@ -289,18 +288,21 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		return false;
 	}
 	
-	private Weapon getWeapon() {
-		return caster.getInventory().getWeapon();
+	private Item getItem() {
+		return list.getSelectedValue();
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		if (e.getActionCommand().equals("ENCHANT") && getWeapon() != null) {
+		if (e.getActionCommand().equals("ENCHANT") && getItem() != null) {
 			String rawSpell = getTagless();
-			getWeapon().setSpell(Grammar.parseSentence(rawSpell));
+			getItem().setSpell(Grammar.parseSentence(rawSpell));
 			spellsEnchanted.add(rawSpell);
 			setGlyphs();
+			if (!editMode) {
+				window.unpause();
+			}
 		} else if (e.getActionCommand().equals("ADD")) {	
 			DialogMap inputs = new DialogMap();
 			inputs.put("Droppable", "Enter word or item here");
@@ -316,10 +318,10 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	}
 	
 	private void setGlyphs() {
-		if (getWeapon() == null || getWeapon().getSpell() == null) {
+		if (getItem() == null || getItem().getSpell() == null) {
 			return;
 		}
-		field.setText(Hieroglyphs.transliterate(getWeapon().getSpell().getOrthography()));
+		field.setText(Hieroglyphs.transliterate(getItem().getSpell().getOrthography()));
 	}
 	
 	private void checkParse(DocumentEvent e) {
@@ -339,12 +341,12 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	
 	@Override
 	public void focusGained(FocusEvent e) {
-		if (getWeapon() == null || getWeapon().getSpell() == null) {
+		if (getItem() == null || getItem().getSpell() == null) {
 			field.setText("");
 			return;
 		}
 		if (e.getComponent() instanceof JEditorPane) {
-			field.setText(getWeapon().getSpell().getOrthography());
+			field.setText(getItem().getSpell().getOrthography());
 		}
 	}
 	

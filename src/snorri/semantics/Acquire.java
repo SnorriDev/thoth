@@ -15,7 +15,7 @@ public class Acquire extends TransVerbDef {
 			return false;
 		}
 		
-		return ((Caster) subject).getLexicon().containsKey(object);
+		return ((Caster) subject).getLexicon().contains(object);
 		
 	}
 

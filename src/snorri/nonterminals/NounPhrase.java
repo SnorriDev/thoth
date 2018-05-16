@@ -6,8 +6,6 @@ import snorri.semantics.Nominal.AbstractSemantics;
 
 public class NounPhrase extends NonTerminal<Nominal> {
 
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public Nominal getMeaning(SpellEvent e) {
 		

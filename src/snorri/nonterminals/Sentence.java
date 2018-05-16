@@ -5,8 +5,6 @@ import snorri.parser.Node;
 import snorri.semantics.Lambda;
 
 public class Sentence extends NonTerminal<Boolean> {
-
-	private static final long serialVersionUID = 1L;
 	
 	@Override @SuppressWarnings("unchecked")
 	public Boolean getMeaning(SpellEvent e) {
@@ -28,6 +26,12 @@ public class Sentence extends NonTerminal<Boolean> {
 		
 		return (boolean) children.get(0).getMeaning((SpellEvent) children.get(1).getMeaning(e));
 		
+	}
+	
+	// believe this casting is fine, but untested
+	@Override
+	public Sentence copy() {
+		return (Sentence) super.copy();
 	}
 	
 	/**

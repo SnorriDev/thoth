@@ -1,6 +1,6 @@
 package snorri.inventory;
 
-public interface Carrier extends Container<Droppable> {
+public interface Carrier extends DropContainer<Droppable> {
 
 	public Inventory getInventory();
 	

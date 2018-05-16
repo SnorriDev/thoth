@@ -23,16 +23,44 @@ public class Papyrus extends Item {
 	
 	private boolean ignoreMessages = false;
 	
+	// For queueing spells
+	private World queuedWorld;
+	private Caster queuedCaster;
+	
 	public Papyrus(ItemType t) {
 		super(t);
 		timer = new Timer(PAPYRUS_COOLDOWN);
 	}
 
-	public void cast(World world, Caster player) {
+	public void queueSpell(World world, Caster player) {
+		
 		if (!getTimer().isOffCooldown()) {
 			return;
 		}
-		// TODO show dialog and cast spell
+		
+		if (Main.getWindow() instanceof GameWindow) {
+			setSpell(null);
+			((GameWindow) Main.getWindow()).openInventory(1);
+			// TODO do this on spell change
+			player.getInventory().removePapyrus();
+			queuedWorld = world;
+			queuedCaster = player;
+		}
+
+	}
+	
+	public boolean castQueuedSpell() {
+		if (queuedCaster != null) {
+			Object o = useSpell(queuedWorld, queuedCaster, null);
+			if (Main.getWindow() instanceof GameWindow) {
+				String orthography = getSpell().getOrthography();
+				((GameWindow) Main.getWindow()).showMessage(new SpellMessage(orthography, o, spellIsStatement()));
+			}
+			queuedWorld = null;
+			queuedCaster = null;
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -63,7 +91,6 @@ public class Papyrus extends Item {
 			if (Main.getWindow() instanceof GameWindow) {
 				((GameWindow) Main.getWindow()).showMessage(new SpellMessage(orthography, o, spellIsStatement()));
 			}
-			caster.getInventory().remove(this, true);
 			return true;
 		}
 

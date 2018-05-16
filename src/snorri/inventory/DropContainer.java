@@ -1,6 +1,6 @@
 package snorri.inventory;
 
-public interface Container<D> {
+public interface DropContainer<D extends Droppable> {
 
 	boolean add(D d);
 	

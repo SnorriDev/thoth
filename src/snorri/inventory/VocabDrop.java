@@ -61,4 +61,11 @@ public class VocabDrop implements Droppable, Comparable<VocabDrop> {
 		return new VocabDrop(orthography);
 	}
 	
+	public static VocabDrop fromString(String raw) {
+		if (Lexicon.lookup(raw) != null) {
+			return new VocabDrop(raw);
+		}
+		return null;
+	}
+	
 }
