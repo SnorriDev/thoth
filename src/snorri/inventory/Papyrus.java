@@ -69,10 +69,10 @@ public class Papyrus extends Item {
 		if (queuedCaster == null || getSpell() == null) {
 			return false;
 		}
-		Object o = useSpellOn(queuedWorld, queuedCaster, null);
+		Object spellResult = useSpellOn(queuedWorld, queuedCaster, null);
 		if (Main.getWindow() instanceof GameWindow) {
 			String orthography = getSpell().getOrthography();
-			((GameWindow) Main.getWindow()).showMessage(new SpellMessage(orthography, o, spellIsStatement()));
+			((GameWindow) Main.getWindow()).showMessage(new SpellMessage(orthography, spellResult, spellIsStatement()));
 		}
 		queuedWorld = null;
 		queuedCaster = null;

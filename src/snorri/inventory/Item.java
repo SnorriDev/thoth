@@ -269,16 +269,14 @@ public abstract class Item implements Droppable {
 	}
 	
 	/**
-	 * changes the spell on the item iff it's enchantable
-	 * @param newSpell
-	 * 	The spell to enchant this item with.
+	 * Changes the spell on the item iff it's enchantable.
+	 * @param newSpell The spell to enchant this item with.
+	 * @return True if and only if the operation was successful.
 	 */
 	public boolean setSpell(Sentence newSpell) {
-		
 		if (! type.isEnchantable()) {
 			return false;
 		}
-		
 		spell = newSpell;
 		computeTexture();
 		resetTimer();
@@ -300,8 +298,14 @@ public abstract class Item implements Droppable {
 		if (spell == null) {
 			return null;
 		}
-		SpellEvent e = new SpellEvent(world, caster, subject, modifier);
-		return spell.getMeaning(e);
+		SpellEvent spellEvent = new SpellEvent(world, caster, subject, modifier);
+		try {
+			return spell.getMeaning(spellEvent);
+		} catch (Exception e) {
+			// Prevent unintended behavior of spells from crashing the game.
+			Debug.error(e);
+			return null;
+		}
 	}
 	
 	public Object useSpellOn(World world, Caster caster, Entity subject) {
@@ -312,12 +316,12 @@ public abstract class Item implements Droppable {
 		return null;
 	}
 
-	// create a new item by type
+	/** Create a new item by type. */
 	public static Item newItem(ItemType type) {
 		return type.getNew();
 	}
 
-	// creates an item with the id: "itemId"
+	/** Create an item with the id itemId. */
 	public static Item newItem(int itemId) {
 		return newItem(ItemType.byId(itemId));
 	}
