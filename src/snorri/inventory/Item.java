@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
 
 import javax.swing.ImageIcon;
 
@@ -150,15 +151,14 @@ public abstract class Item implements Droppable {
 		}
 
 		public Item getNew() {
-
-			if (c == null) { // the empty item
+			if (c == null) { // Create the empty item.
 				return null;
 			}
 
 			try {
 				return c.getConstructor(ItemType.class).newInstance(this);
 			} catch (Exception e) {
-				Debug.error(e);
+				Debug.logger.log(Level.SEVERE, "Could not create new Item", e);
 				return null;
 			}
 		}
@@ -173,7 +173,7 @@ public abstract class Item implements Droppable {
 			} catch (IllegalArgumentException e) {
 				return null;
 			} catch (IndexOutOfBoundsException e) {
-				Debug.log("invalid item number " + raw + " specified");
+				Debug.logger.info("Invalid item number " + raw + " specified");
 				return null;
 			}
 		}
@@ -303,7 +303,7 @@ public abstract class Item implements Droppable {
 			return spell.getMeaning(spellEvent);
 		} catch (Exception e) {
 			// Prevent unintended behavior of spells from crashing the game.
-			Debug.error(e);
+			Debug.logger.log(Level.SEVERE, "Unexpected error during spell execution.", e);
 			return null;
 		}
 	}
@@ -432,7 +432,7 @@ public abstract class Item implements Droppable {
 			return copy;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
-			Debug.error(e);
+			Debug.logger.log(Level.SEVERE, "Could not copy item.", e);
 			return null;
 		}
 	}

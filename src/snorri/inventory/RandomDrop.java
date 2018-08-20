@@ -96,7 +96,7 @@ public class RandomDrop implements Droppable {
 	}
 
 	public static void load() {
-		Debug.log(Tier.values().length + " drop tiers loaded");
+		Debug.logger.info(Tier.values().length + " drop tiers loaded.");
 	}
 	
 	@Override

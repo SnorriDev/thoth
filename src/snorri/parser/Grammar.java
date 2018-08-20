@@ -76,7 +76,7 @@ public class Grammar extends HashMap<Class<? extends NonTerminal<?>>, List<Rule>
 		grammar.add(new Rule(new Object[] {Sentence.class, AdverbPhrase.class}, Sentence.class));
 		
 		List<Rule> allRules = grammar.get();
-		Debug.log("CFG with " + allRules.size() + " high-level rules loaded");
+		Debug.logger.info("CFG with " + allRules.size() + " high-level rules loaded.");
 		maxLength = 0;
 		for (Rule rule : allRules) {
 			maxLength = Integer.max(maxLength, rule.getLength());
@@ -130,7 +130,7 @@ public class Grammar extends HashMap<Class<? extends NonTerminal<?>>, List<Rule>
 			}
 			List<Node<?>> parses = topDown(getNodes(input), Sentence.class);
 			if (Debug.parsesLogged()) {
-				Debug.log("parses for " + input + ": " + parses);
+				Debug.logger.info("Parses for " + input + ": " + parses + ".");
 			}
 			return parses;
 		} catch (InstantiationException | IllegalAccessException e) {
@@ -184,7 +184,7 @@ public class Grammar extends HashMap<Class<? extends NonTerminal<?>>, List<Rule>
 				for (List<Node<?>> nodes : Util.computeCombinations(allPoss)) {
 					Class<? extends NonTerminal<?>> c = rewrite.fits(nodes);
 					if (c == null) {
-						Debug.warning("very weird parsing issue");
+						Debug.logger.warning("Very unexpected parsing issue.");
 						return null;
 					}
 					NonTerminal<?> node = c.newInstance();

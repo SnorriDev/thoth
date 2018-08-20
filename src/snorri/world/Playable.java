@@ -38,7 +38,7 @@ public interface Playable extends Savable {
 		try {
 			load(folder, null);
 		} catch (YamlException e) {
-			Debug.error("couldn't parse config.yml", e);
+			Debug.logger.log(java.util.logging.Level.SEVERE, "couldn't parse config.yml", e);
 		}
 	}
 	

@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import snorri.entities.Unit;
 import snorri.main.Debug;
@@ -31,13 +32,13 @@ public class Team extends ArrayList<Unit> {
 			ObjectInputStream stream = new ObjectInputStream(new FileInputStream(teamsFile));
 			List<Team> teams = (List<Team>) stream.readObject();
 			if (teams == null) {
-				Debug.log("loaded null list of teams");
+				Debug.logger.info("Loaded null list of teams.");
 			} else {
-				Debug.log("loaded " + teams.size() + " teams");
+				Debug.logger.info("Loaded " + teams.size() + " teams.");
 			}
 			return teams;
 		} catch (ClassNotFoundException e) {
-			Debug.error("corrupted team data", e);
+			Debug.logger.log(Level.SEVERE, "Team data is corrupted.", e);
 			return null;
 		}
 	}
@@ -47,7 +48,7 @@ public class Team extends ArrayList<Unit> {
 		ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(teamsFile));
 		stream.writeObject(teams);
 		if (teams != null) {
-			Debug.log("saved " + teams.size() + " teams");
+			Debug.logger.info("Saved " + teams.size() + " teams.");
 		}
 	}
 	

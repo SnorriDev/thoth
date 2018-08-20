@@ -114,7 +114,7 @@ public interface TileType extends Nominal {
 		if (x < Tile.sounds.length)
 			return Tile.sounds[x];
 		else {
-			Debug.warning("audio clip index out of bounds");
+			Debug.logger.warning("Audio clip index out of bounds.");
 			return null;
 		}
 	}

@@ -172,7 +172,7 @@ public class Level implements Editable {
 				newMap[i][j] = new Tile(BackgroundElement.SAND);
 			}
 		}
-		Debug.log("Resizing Level from\t" + getWidth() + "\tx\t" + getHeight() + "\tto\t" + newDim.getX() + "\tx\t" + newDim.getY() +"\tusing resize function");
+		Debug.logger.info("Resizing Level from\t" + getWidth() + "\tx\t" + getHeight() + "\tto\t" + newDim.getX() + "\tx\t" + newDim.getY() +"\tusing resize function.");
 		for (int i = 0; i < newDim.getX() && i < getWidth(); i++) {
 			for (int j = 0; j < newDim.getY() && j < getHeight(); j++) {
 				newMap[i][j] = map[i][j];
@@ -180,7 +180,7 @@ public class Level implements Editable {
 		}
 
 		map = newMap;
-		Debug.log("New Level Size:\t" + getWidth() + "\tx\t" + getHeight());		
+		Debug.logger.info("New Level Size:\t" + getWidth() + "\tx\t" + getHeight() + ".");		
 	}
 	
 	public Level getResized(int newWidth, int newHeight, int layer) {
@@ -282,8 +282,7 @@ public class Level implements Editable {
 	}
 
 	public void load(File file, Class<? extends TileType> c) throws FileNotFoundException, IOException {
-
-		Debug.log("loading " + file + "...");
+		Debug.logger.info("Loading " + file + "...");
 
 		byte[] b = new byte[4];
 
@@ -314,8 +313,7 @@ public class Level implements Editable {
 	}
 
 	public void save(File file, boolean saveGraphs) throws IOException {
-
-		Debug.log("saving " + file.getName() + "...");
+		Debug.logger.info("Saving " + file.getName() + "...");
 
 		FileOutputStream os = new FileOutputStream(file);
 		ByteBuffer b1 = ByteBuffer.allocate(4);
