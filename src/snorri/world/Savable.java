@@ -37,7 +37,9 @@ public interface Savable {
 		try {
 			save(f, true);
 		} catch (IOException er) {
+			// TODO can this be caught somewhere else?
 			Debug.error("are all object serializable?", er);
+			er.printStackTrace();
 		}
 	}
 	

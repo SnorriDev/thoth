@@ -98,8 +98,8 @@ public class WorldGraph implements Playable {
 	/**
 	 * @param type integer defining connection type, 0=l-r, 1=top-bot, 2=r-l 3=bot-top
 	 */
+	@SuppressWarnings("unchecked")
 	public void createLink(File f, String w1, String w2, int type) {
-		Debug.raw(path);
 		Map<String, Object> yaml;
 		List<Map<String, String>> edges;
 		try	{
@@ -149,7 +149,6 @@ public class WorldGraph implements Playable {
 			edges.add(newEdge);
 			yaml.put("edges", edges);
 			
-			Debug.raw(path);
 			YamlWriter writer = new YamlWriter(new FileWriter(path + "/config.yml"));
 	        writer.write(yaml);
 	        writer.close();

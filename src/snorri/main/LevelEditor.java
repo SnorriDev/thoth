@@ -32,13 +32,12 @@ import snorri.entities.Entity;
 import snorri.entities.Listener;
 import snorri.entities.Player;
 import snorri.entities.Unit;
-import snorri.inventory.Carrier;
+import snorri.events.SpellEvent.Caster;
 import snorri.inventory.Droppable;
 import snorri.inventory.Item;
 import snorri.keyboard.Key;
 import snorri.masking.Mask;
 import snorri.pathfinding.Team;
-import snorri.terrain.Generator;
 import snorri.world.Editable;
 import snorri.world.ForegroundElement;
 import snorri.world.MidgroundElement;
@@ -161,20 +160,10 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
-//		menuItem = new JMenuItem("Generate", KeyEvent.VK_G);
-//		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));
-//		menuItem.addActionListener(this);
-//		menu.add(menuItem);
-
 		menuItem = new JMenuItem("Open", KeyEvent.VK_O);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
-
-//		menuItem = new JMenuItem("Open Level", KeyEvent.VK_L);
-//		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
-//		menuItem.addActionListener(this);
-//		menu.add(menuItem);
 
 		menuItem = new JMenuItem("Save", KeyEvent.VK_S);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
@@ -411,30 +400,6 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			}
 			centerCamera();
 			break;
-		case "Generate":
-			DialogMap inputs = new DialogMap();
-			inputs.put("Class", "snorri.terrain.RoomGen");
-			inputs.put("Width", "" + World.DEFAULT_LEVEL_SIZE.getX());
-			inputs.put("Height", "" + World.DEFAULT_LEVEL_SIZE.getY());
-			if (dialog("Generator Options", inputs) == null) {
-				return;
-			}
-			Class<?> gen = inputs.getClass("Class");
-			try {
-				Object g = gen.getConstructor(int.class, int.class).newInstance(inputs.getInteger("Width"),
-						inputs.getInteger("Height"));
-				if (!(g instanceof Generator)) {
-					throw new IllegalArgumentException(gen.getSimpleName() + " is not a world generator");
-				}
-				Debug.log("generating " + gen.getSimpleName() + " world...");
-				env = ((Generator) g).genWorld();
-				Debug.log(gen.getSimpleName() + " world successfully generated");
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
-				Debug.error(e1);
-			}
-			centerCamera();
-			break;
 		case "Open":
 			World w1;
 			try {
@@ -503,16 +468,16 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			break;
 		case "Top":
 			if (env == null) {
-				Debug.error("null editable object");
+				Debug.warning("null editable object");
 				return;
 			}
 			w2 = connectionDialog();
 			if (w2 == null || w2 == "") {
-				Debug.error("invalid connecting world");
+				Debug.warning("invalid connecting world");
 				return;
 			}
 			if (env.getWorldGraph() == null) {
-				Debug.error("could not get world graph");
+				Debug.warning("could not get world graph");
 				return;
 			}
 			env.getWorldGraph().createLink(w2, 3);
@@ -621,19 +586,19 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 					canGoDown = false;
 				}	
 				
-				if (states.getMovementVector().getX() < 0 && !canGoLeft) {
-					player.getPos().sub_(states.getMovementVector().getProjectionX().scale_(speed));
+				if (states.getMomentumVector().getX() < 0 && !canGoLeft) {
+					player.getPos().sub_(states.getMomentumVector().getProjectionX().scale_(speed));
 				}
-				if (states.getMovementVector().getX() > 0 && !canGoRight) {
-					player.getPos().sub_(states.getMovementVector().getProjectionX().scale_(speed));
+				if (states.getMomentumVector().getX() > 0 && !canGoRight) {
+					player.getPos().sub_(states.getMomentumVector().getProjectionX().scale_(speed));
 				}
-				if (states.getMovementVector().getY() < 0 && !canGoUp) {
-					player.getPos().sub_(states.getMovementVector().getProjectionY().scale_(speed));
+				if (states.getMomentumVector().getY() < 0 && !canGoUp) {
+					player.getPos().sub_(states.getMomentumVector().getProjectionY().scale_(speed));
 				}
-				if (states.getMovementVector().getY() > 0 && !canGoDown) {
-					player.getPos().sub_(states.getMovementVector().getProjectionY().scale_(speed));
+				if (states.getMomentumVector().getY() > 0 && !canGoDown) {
+					player.getPos().sub_(states.getMomentumVector().getProjectionY().scale_(speed));
 				}
-				player.getPos().add_(states.getMovementVector().scale_(speed));
+				player.getPos().add_(states.getMomentumVector().scale_(speed));
 				
 
 				if (isClicking) {
@@ -1536,8 +1501,9 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		World world = (World) env;
 		Entity ent = world.getEntityTree().getFirstCollision(new Entity(getMousePosAbsolute()), true);
 
-		if (ent instanceof Carrier) {
-			editInventory(((Carrier) ent).getInventory());
+		
+		if (ent instanceof Caster) {
+			editInventory((Caster) ent);
 		}
 
 	}

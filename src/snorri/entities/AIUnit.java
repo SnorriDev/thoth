@@ -74,7 +74,7 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 	}
 	
 	public void attack(World world, Entity e) {
-		inventory.attack(world, this, Vector.ZERO.copy(), e.getPos().copy().sub_(pos));
+		inventory.attack(world, Vector.ZERO.copy(), e.getPos().copy().sub_(pos));
 	}
 	
 	protected enum Mode {

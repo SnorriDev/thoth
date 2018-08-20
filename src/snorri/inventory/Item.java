@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.ImageIcon;
@@ -20,6 +21,7 @@ import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.main.Util;
 import snorri.nonterminals.Sentence;
+import snorri.parser.Grammar;
 import snorri.parser.Node;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -28,10 +30,10 @@ public abstract class Item implements Droppable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	protected Node<Boolean> spell; // spell/enchantment associated with the item
+	protected transient Sentence spell; // spell/enchantment associated with the item
 	protected String nickname; //name which the player gives the item so they know what it does
 	protected ItemType type; // what type of item it is; you can get ID, maxQuantity, enchantable from this
-	protected transient BufferedImage texture;
+	protected transient BufferedImage texture; // don't save this!
 	
 	private static final int ARC_SIZE = 32;
 	private static final int ENTITY_SIZE = 44;
@@ -42,11 +44,11 @@ public abstract class Item implements Droppable {
 	
 	private static final Color DEFAULT_COOLDOWN_COLOR = new Color(116, 100, 50, 200);
 	
-	protected static final BufferedImage[] ACTIVE_BORDERS_TOP;
-	protected static final BufferedImage[] INACTIVE_BORDERS_TOP;
+	protected static transient final BufferedImage[] ACTIVE_BORDERS_TOP;
+	protected static transient final BufferedImage[] INACTIVE_BORDERS_TOP;
 	
-	protected static final BufferedImage[] ACTIVE_BORDERS_BOTTOM;
-	protected static final BufferedImage[] INACTIVE_BORDERS_BOTTOM;
+	protected static transient final BufferedImage[] ACTIVE_BORDERS_BOTTOM;
+	protected static transient final BufferedImage[] INACTIVE_BORDERS_BOTTOM;
 	
 	static {
 		
@@ -77,8 +79,7 @@ public abstract class Item implements Droppable {
 		//TODO convert these to Animations instead of BufferedImages?
 		
 		EMPTY,
-		PAPYRUS(5, Papyrus.class, Main.getImage("/textures/items/papyrus.png")),
-		HELMET(Armor.class, Main.getImage("/textures/items/helmet.png"), 2d),
+		PAPYRUS(Papyrus.class, Main.getImage("/textures/items/papyrus.png")),
 		SLING(Weapon.class, Main.getImage("/textures/items/sling.png"), 34d, 0.45, "/sound/arrow.wav"),
 		PELLET(5, Orb.class, Main.getImage("/textures/items/pellet.png"), new Animation("/textures/objects/pellet.png")),
 		SLOW_SLING(Weapon.class, Main.getImage("/textures/items/sling.png"), 34d, 2d, "/sound/arrow.wav"),
@@ -290,25 +291,20 @@ public abstract class Item implements Droppable {
 	}
 	
 	/**
-	 * Use this item's spell on <code>subject</code> from <code>caster</code>'s perspective
-	 * @param caster
-	 * 	The caster of the spell
-	 * @param subject
-	 * 	The target of the spell
-	 * @return
+	 * Use this item's spell on <code>subject</code> from <code>caster</code>'s perspective.
+	 * @param caster The caster of the spell.
+	 * @param subject The target of the spell.
+	 * @return The result of the spell.
 	 */
 	public Object useSpellOn(World world, Caster caster, Entity subject, double modifier) {
-				
 		if (spell == null) {
 			return null;
 		}
-						
 		SpellEvent e = new SpellEvent(world, caster, subject, modifier);
 		return spell.getMeaning(e);
-		
 	}
 	
-	public Object useSpell(World world, Caster caster, Entity subject) {
+	public Object useSpellOn(World world, Caster caster, Entity subject) {
 		return useSpellOn(world, caster, subject, 1);	
 	}
 
@@ -375,8 +371,8 @@ public abstract class Item implements Droppable {
 		BufferedImage icon = getTexture();
 		
 		Vector pos = getPos(i, top);
-		Vector iconPos = pos.copy().add_(new Vector(border.getWidth(null) - icon.getWidth(null), border.getHeight(null) - icon.getHeight(null)).divide_(2));
-		Vector arcPos = pos.copy().add_(new Vector(border.getWidth(null) - ARC_SIZE, border.getHeight(null) - ARC_SIZE).divide_(2));
+		Vector iconPos = pos.add(new Vector(border.getWidth(null) - icon.getWidth(null), border.getHeight(null) - icon.getHeight(null)).divide_(2));
+		Vector arcPos = pos.add(new Vector(border.getWidth(null) - ARC_SIZE, border.getHeight(null) - ARC_SIZE).divide_(2));
 		
 		if (selected) {
 			g.drawImage(border, pos.getX(), pos.getY(), null);
@@ -416,19 +412,6 @@ public abstract class Item implements Droppable {
 		return ACTIVE_BORDERS_BOTTOM[0].getWidth(null);
 	}
 	
-	@Override
-	public int compareIn(Droppable o, Inventory inv) {
-		int cmp = Droppable.super.compareIn(o, inv);
-		if (o instanceof Item && cmp == 0) {
-			int cmp2 = Integer.compare(inv.getIndex(this), inv.getIndex((Item) o));
-			if (cmp2 == 0) { //same-named items can
-				return toUniqueString().compareTo(o.toUniqueString());
-			}
-			return cmp2;
-		}
-		return cmp;
-	}
-	
 	public void resetTimer() {
 		if (timer != null) {
 			timer.activate();
@@ -449,18 +432,41 @@ public abstract class Item implements Droppable {
 			return null;
 		}
 	}
-	
-	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		in.defaultReadObject();
-	}
-	
-//	public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
-//		return true;
-//	}
 
 	public ImageIcon getIcon() {
 		BufferedImage texture = getTexture();
 		return new ImageIcon(texture.getScaledInstance(SMALL_ICON_SIZE, (int) (((double) texture.getHeight(null)) / texture.getWidth(null) * SMALL_ICON_SIZE), BufferedImage.SCALE_SMOOTH));
+	}
+
+	public static Droppable fromString(String raw) {
+		ItemType type = ItemType.fromString(raw);
+		if (type != null) {
+			return type.getNew();
+		}
+		return null;
+	}
+	
+	/**
+	 * When saving an Item, write out its spell as a string.
+	 * @param oos Stream to which to write file.
+	 * @throws IOException Should not happen.
+	 */
+	private void writeObject(ObjectOutputStream oos) throws IOException {
+		oos.defaultWriteObject();
+		oos.writeObject(spell != null ? spell.getOrthography(): null);
+	}
+
+	/**
+	 * When reading an Item, read its spell as a string.
+	 * @param oos Stream from which to read file.
+	 * @throws IOException Should not happen.
+	 */
+	private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+		ois.defaultReadObject();
+		String orthography = (String) ois.readObject();
+		if (orthography != null) {
+			setSpell(Grammar.parseSentence(orthography));
+		}
 	}
 
 }

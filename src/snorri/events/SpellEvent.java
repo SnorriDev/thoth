@@ -4,7 +4,12 @@ import snorri.collisions.Collider;
 import snorri.collisions.RectCollider;
 import snorri.entities.Entity;
 import snorri.inventory.Carrier;
+import snorri.inventory.Droppable;
+import snorri.inventory.Item;
+import snorri.inventory.VocabDrop;
 import snorri.main.Main;
+import snorri.parser.Grammar;
+import snorri.parser.Lexicon;
 import snorri.semantics.Chaos;
 import snorri.semantics.Nominal;
 import snorri.semantics.Order;
@@ -35,14 +40,55 @@ public class SpellEvent {
 		
 		public Vector getAimPosition();
 		
+		public Lexicon getLexicon();
+		
+		public double getMana();
+		
+		@Override
+		default boolean add(Droppable d) {
+			
+			if (d instanceof Item && ((Item) d).getSpell() != null) {
+				boolean result = false;
+				for (String word : Grammar.getWords(((Item) d).getSpell().getOrthography())) {
+					result |= add(new VocabDrop(word));
+				}
+				return result;
+			}
+						
+			else if (getInventory().add(d) || getLexicon().add(d)) {
+				return true;
+			}
+			
+			return false;
+			
+		}
+
+		@Override
+		default boolean remove(Droppable d, boolean specific) {
+			
+			if (d instanceof Item && ((Item) d).getSpell() != null) {
+				boolean result = false;
+				for (String word : Grammar.getWords(((Item) d).getSpell().getOrthography())) {
+					result |= remove(new VocabDrop(word), specific);
+				}
+				return result;
+			}
+			
+			else if (getInventory().remove(d, specific) || getLexicon().remove(d, specific)) {
+				return true;
+			}
+			
+			return false;
+			
+		}
+		
 	}
 	
 	public SpellEvent(World world, Caster firstPerson, Entity secondPerson) {
 		this.firstPerson = firstPerson;
 		this.secondPerson = secondPerson;
 		this.world = world;
-		loc = getSecondPerson().getPos().copy();
-//		dest = getThirdPerson().getPos().copy();
+		loc = null;
 		dest = null;
 	}
 	
@@ -52,13 +98,12 @@ public class SpellEvent {
 	}
 	
 	public SpellEvent(SpellEvent e) {
-		
 		world = e.world;
 		firstPerson = e.firstPerson;
 		secondPerson = e.secondPerson;
 		
-		loc = e.loc.copy();
-		dest = (dest == null) ? null : e.dest.copy();
+		loc = Vector.nullsafeCopy(e.loc);
+		dest = Vector.nullsafeCopy(e.dest);
 		
 		instrument = e.instrument;
 		
@@ -70,12 +115,9 @@ public class SpellEvent {
 		sizeModifier = e.sizeModifier;
 		speedModifier = e.speedModifier;
 		healthInteractModifier = e.healthInteractModifier;
-		
 	}
 	
-	/**
-	 * create a copy of this spell event with a different degree for adverb modification
-	 */
+	/** Create a copy of this spell event with a different adverbial degree. */
 	public SpellEvent(SpellEvent e, int degree) {
 		this(e);
 		this.degree = degree;
@@ -107,6 +149,12 @@ public class SpellEvent {
 	}
 	
 	public Vector getLocative() {
+		Vector loc = null;
+		if (this.loc != null) {
+			loc = this.loc;
+		} else if (getSecondPerson().getPos() != null) {
+			loc = getSecondPerson().getPos().copy();
+		}
 		return loc;
 	}
 	

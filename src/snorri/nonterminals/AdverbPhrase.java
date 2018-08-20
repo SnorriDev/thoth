@@ -5,8 +5,6 @@ import snorri.parser.Node;
 
 public class AdverbPhrase extends NonTerminal<SpellEvent> {
 
-	private static final long serialVersionUID = 1L;
-
 	@Override @SuppressWarnings("unchecked")
 	public SpellEvent getMeaning(SpellEvent e) {
 				

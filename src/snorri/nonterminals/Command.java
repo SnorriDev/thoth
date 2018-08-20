@@ -6,8 +6,6 @@ import snorri.semantics.Lambda;
 
 public class Command extends NonTerminal<Boolean> {
 
-	private static final long serialVersionUID = 1L;
-
 	@Override @SuppressWarnings("unchecked")
 	public Boolean getMeaning(SpellEvent e) {
 		

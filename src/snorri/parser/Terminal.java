@@ -4,7 +4,6 @@ import snorri.events.SpellEvent;
 
 public class Terminal<S> implements Node<S> {
 
-	private static final long serialVersionUID = 1L;
 	private String orthography;
 	private Object category;
 	

@@ -60,7 +60,7 @@ public class Ballista extends Entity {
 
 		shooting = true;
 		setAnimation(SHOOT);
-		bow.attack(world, this, Vector.ZERO, dir, bolt);
+		bow.attackIfPossible(world, this, Vector.ZERO, dir, bolt);
 		return true;
 
 	}

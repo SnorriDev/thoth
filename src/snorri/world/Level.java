@@ -23,7 +23,6 @@ import snorri.entities.Entity;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.masking.Mask;
-import snorri.terrain.RoomGen;
 import snorri.world.TileType;
 
 public class Level implements Editable {
@@ -35,6 +34,7 @@ public class Level implements Editable {
 	public static final int FOREGROUND = 2;
 	
 	public static final int CUSHION = 4;
+	public static final int DOOR_WIDTH = 3;
 
 	/**
 	 * An array of tiles. Note that coordinates are Cartesian, not matrix-based
@@ -401,7 +401,7 @@ public class Level implements Editable {
 			return;
 		}
 
-		for (int i = -RoomGen.DOOR_WIDTH / 2; i <= RoomGen.DOOR_WIDTH / 2; i++) {
+		for (int i = -DOOR_WIDTH / 2; i <= DOOR_WIDTH / 2; i++) {
 			setTileGrid(dir.copy().multiply_(i).add_(pos), new Tile(fill));
 		}
 
