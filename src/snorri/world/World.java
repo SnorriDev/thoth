@@ -19,6 +19,7 @@ import snorri.entities.Unit;
 import snorri.entities.LongRangeAIUnit.ShootAttempt;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
+import snorri.world.Layer;
 import snorri.main.Main;
 import snorri.pathfinding.Pathfinding;
 import snorri.pathfinding.Team;
@@ -40,9 +41,11 @@ public class World implements Playable, Editable {
 
 	private String path;
 	
-	private Level background;
-	private Level midground;
-	private Level foreground;
+	private Layer backgroundImage;
+	private Layer background;
+	private Layer midground;
+	private Layer entityLayer;
+	private Layer foreground;
 
 	private final Pathfinding pathfinding;
 	private EntityGroup col;
@@ -80,29 +83,25 @@ public class World implements Playable, Editable {
 	}
 
 	public World(File file, Player p) throws FileNotFoundException, IOException {
-
 		load(file);
-		
-		Debug.log("non-null player" + p);
 		if (p != null) {
 			spawnPlayer(p);
 		}
-
 		pathfinding = new Pathfinding(getPathfindingLevels());
-		
 	}
 		
 	public World(File file) throws FileNotFoundException, IOException {
 		this(file, null);
 	}
 
-	public World(Level l0, Level l1, Level l2) {
+	@Deprecated
+	public World(Layer l0, Layer l1, Layer l2) {
 		
 		background = l0;
 		midground = l1;
 		foreground = l2;
 
-		col = QuadTree.coverLevel(background);
+		col = QuadTree.coverLevel((Level) background);
 
 		pathfinding = new Pathfinding(getPathfindingLevels());
 		
@@ -111,23 +110,23 @@ public class World implements Playable, Editable {
 	/**
 	 * @return a list of levels that will be taken into account for pathfinding
 	 */
+	@Deprecated
 	private List<Level> getPathfindingLevels() {
 		List<Level> p = new ArrayList<>();
-		p.add(background);
-		p.add(midground);
+		p.add((Level) background);
+		p.add((Level) midground);
 		return p;
 	}
 
+	@Deprecated
 	public Vector getRandomSpawnPos(int radius) {
 		for (int i = 0; i < RANDOM_SPAWN_ATTEMPTS; i++) {
-			Vector pos = getGoodSpawn(background.getDimensions().random()); // FIXME:
-																						// good
-																						// spawn?
+			Vector pos = getGoodSpawn(background.getDimensions().random());
 			if (pos != null && col.getFirstCollision(new Entity(pos, radius)) == null) {
 				return pos;
 			}
 		}
-		Debug.warning("could not find suitable spawn");
+		Debug.logger.warning("Could not find suitable spawn.");
 		return null;
 	}
 
@@ -143,7 +142,7 @@ public class World implements Playable, Editable {
 	public synchronized void update(Entity focus, double d) {
 
 		if (Debug.worldLogged()) {
-			Debug.log("world update");
+			Debug.logger.info("World updated.");
 		}
 
 		col.updateAround(this, d, focus);
@@ -176,38 +175,43 @@ public class World implements Playable, Editable {
 	/**
 	 * @return the background level for this world
 	 */
+	@Deprecated
 	public Level getLevel() {
-		return background;
+		return (Level) background;
 	}
 
 	/**
 	 * @see <code>getLevel(Class<? extends TileType> c)</code>
 	 */
 	@Deprecated
-	public Level getLevel(int layer) {	
-		switch(layer) {
+	public Level getLevel(int layerIdx) {	
+		switch(layerIdx) {
 		case Level.BACKGROUND:
-			return background;
+			return (Level) background;
 		case Level.MIDGROUND:
-			return midground;
+			return (Level) midground;
 		case Level.FOREGROUND:
-			return foreground;
+			return (Level) foreground;
 		}	
 		return null;	
 	}
 
+	@Deprecated
 	public Level getLevel(Class<? extends TileType> c) {
 		if (c == BackgroundElement.class) {
-			return background;
-		} else if (c == MidgroundElement.class) {
-			return midground;
-		} else {
-			return foreground;
+			return (Level) background;
+		}
+		else if (c == MidgroundElement.class) {
+			return  (Level) midground;
+		}
+		else {
+			return (Level) foreground;
 		}
 	}
 
+	@Deprecated
 	public Level[] getLevels() {
-		return new Level[] { background, midground, foreground };
+		return new Level[] {(Level) background, (Level) midground, (Level) foreground };
 	}
 	
 	public boolean add(Entity e) {
@@ -243,7 +247,7 @@ public class World implements Playable, Editable {
 		}
 
 		if (!f.exists()) {
-			Debug.log("creating new world directory...");
+			Debug.logger.info("Creating new world directory...");
 			f.mkdir();
 		}
 		
@@ -278,16 +282,16 @@ public class World implements Playable, Editable {
 			yaml = Playable.getConfig(f, "world");
 		}
 
-		background = new Level(new File(f, "background.lvl"), BackgroundElement.class);
-		midground = new Level(new File(f, "midground.lvl"), MidgroundElement.class);
-		foreground = new Level(new File(f, "foreground.lvl"), ForegroundElement.class);
+		Level backgroundTileLayer = new Level(new File(f, "background.lvl"), BackgroundElement.class);
+		Level midgroundTileLayer = new Level(new File(f, "midground.lvl"), MidgroundElement.class);
+		Level foregroundTileLayer = new Level(new File(f, "foreground.lvl"), ForegroundElement.class);
 		
-		col = QuadTree.coverLevel(background);
+		col = QuadTree.coverLevel(backgroundTileLayer);
 		col.loadEntities(new File(f, "entities.dat"), pathfinding);
 
 		String outside = (String) yaml.get("outsideTile");
 		if (outside != null) {
-			background.setOutsideTile(new Tile(outside));
+			backgroundTileLayer.setOutsideTile(new Tile(outside));
 		}
 		
 		triggers = Trigger.load((Map<String, Object>) yaml.get("triggers"), this);
@@ -297,6 +301,9 @@ public class World implements Playable, Editable {
 			teams = Team.load(teamsFile);
 		}
 
+		background = backgroundTileLayer;
+		midground = midgroundTileLayer;
+		foreground = foregroundTileLayer;
 	}
 
 	/**
@@ -313,11 +320,11 @@ public class World implements Playable, Editable {
 	}
 
 	public void resize(int newWidth, int newHeight) {
-		Debug.log("Resizing Level from\t((" + background.getWidth() + "," + midground.getWidth() + "," + foreground.getWidth() + ")\tx\t(" + background.getHeight() + "," + midground.getHeight() + "," + foreground.getHeight() + "))\tto\t(" + newWidth + "\tx\t" + newHeight +")\tusing constructor");
+		Debug.logger.info("Resizing Level from\t((" + background.getWidth() + "," + midground.getWidth() + "," + foreground.getWidth() + ")\tx\t(" + background.getHeight() + "," + midground.getHeight() + "," + foreground.getHeight() + "))\tto\t(" + newWidth + "\tx\t" + newHeight +")\tusing constructor.");
 		background = background.getResized(newWidth, newHeight, 0);
 		midground = midground.getResized(newWidth, newHeight, 1);
 		foreground = foreground.getResized(newWidth, newHeight, 2);
-		Debug.log("New Level Size:\t(" + background.getWidth() + "," + midground.getWidth() + "," + foreground.getWidth() + ")\tx\t(" + background.getHeight() + "," + midground.getHeight() + "," + foreground.getHeight() + "))");
+		Debug.logger.info("New Level Size:\t(" + background.getWidth() + "," + midground.getWidth() + "," + foreground.getWidth() + ")\tx\t(" + background.getHeight() + "," + midground.getHeight() + "," + foreground.getHeight() + ")).");
 	}
 
 	@Override
