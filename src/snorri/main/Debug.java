@@ -14,7 +14,6 @@ public class Debug {
 	
 	private static final boolean ALL_HIEROGLYPHS_UNLOCKED = false;
 	private static final boolean RENDER_TILE_GRID = false;
-	private static final boolean LOG_FOCUS = false;
 	private static final boolean LOG_WORLD = false;
 	private static final boolean LOG_PARSES = false;
 	private static final boolean LOG_RENDER_QUEUE = false;
@@ -32,12 +31,11 @@ public class Debug {
 	private static final boolean LOG_CHANGE_WORLD_EVENTS = true;
 	private static final boolean LOG_PATHFINDING_COMPONENTS = false;
 	
-	private static final Logger logger;
+	public static final Logger logger;
 	
 	static {
-		
 		System.setProperty("java.util.logging.SimpleFormatter.format",
-				"[%1$tF %1$tT] [%4$-7s] %5$s %n");
+				"%1$tF %1$tT [%4$-7s] [%2$s] %5$s %6$s%n");
 				
 		logger = Logger.getLogger("Thoth");
 		logger.setLevel(Level.ALL);
@@ -54,8 +52,7 @@ public class Debug {
 			e.printStackTrace();
 		} catch (IOException e) {
 			error(e);
-		}
-				
+		}	
 	}
 	
 	// TODO make these all methods with side effects
@@ -66,10 +63,6 @@ public class Debug {
 	
 	public static boolean tileGridRendered() {
 		return RENDER_TILE_GRID;
-	}
-	
-	public static boolean focusLogged() {
-		return LOG_FOCUS;
 	}
 	
 	public static boolean worldLogged() {
@@ -150,8 +143,8 @@ public class Debug {
 	 * @param o
 	 * 	the object to print
 	 */
+	@Deprecated
 	public static void raw(Object o) {
-//		logger.log(Level.INFO, o.toString()); // FIXME all levels should show up
 		logger.log(Level.FINE, o == null ? null : o.toString());
 	}
 
@@ -160,33 +153,30 @@ public class Debug {
 	 * @param s
 	 * 	the string to print
 	 */
+	@Deprecated
 	public static void log(String s) {
 		logger.log(Level.INFO, s);
 	}
 
 	/**
 	 * Use this to print error messages to the game log.
-	 * @param s
-	 * 	the error string to print
+	 * @param s The error string to print.
 	 */
+	@Deprecated
 	public static void error(Throwable e) {
 		error(e.getMessage(), e);
 	}
 	
+	@Deprecated
 	public static void error(String msg, Throwable e) {
 		logger.log(Level.SEVERE, msg, e);
 	}
 	
-	@Deprecated
-	public static void error(String msg) {
-		logger.log(Level.SEVERE, msg);
-	}
-	
 	/**
 	 * Use this to print warning messages to the game log.
-	 * @param s
-	 * the warning string to print
+	 * @param s The warning string to print.
 	 */
+	@Deprecated
 	public static void warning(String s) {
 		logger.log(Level.WARNING, s);
 	}

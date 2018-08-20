@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
 
 import snorri.animations.Animation;
 import snorri.collisions.CircleCollider;
@@ -105,7 +106,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public Entity(Vector pos, Collider collider) {
 		this.pos = (pos == null) ? null : pos.copy();
 		if (collider == null) {
-			Debug.warning("spawning entity with null collider: " + this);
+			Debug.logger.warning("Entity " + this + " has null collider.");
 		} else {
 			this.collider = collider.cloneOnto(this);
 		}
@@ -218,7 +219,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		for (int i = 0; i < depth; i++) {
 			indent += "  ";
 		}
-		Debug.log(indent + toString());
+		Debug.logger.info(indent + toString());
 	}
 	
 	public void traverse() {
@@ -397,7 +398,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			newEnt.animation = new Animation(animation);
 			return newEnt;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
-			Debug.error(e);
+			Debug.logger.log(Level.SEVERE, "Could not copy Entity.", e);
 			return null;
 		}
 	}

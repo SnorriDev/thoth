@@ -98,7 +98,7 @@ public abstract class Action {
 						if (window instanceof GameWindow) {
 							((GameWindow) window).setObjective((Objective) args.get("objective"));
 						} else {
-							Debug.warning("setting objective in non-GameWindow");
+							Debug.logger.warning("Tried to set objective in non-GameWindow.");
 						}
 					}
 				};
@@ -113,7 +113,7 @@ public abstract class Action {
 					public void run() {
 						final Class<? extends Entity> type = Entity.getSpawnableByName((String) args.get("type"));
 						if (type == null) {
-							Debug.warning("tried to spawn null entity type in trigger action");
+							Debug.logger.warning("Tried to spawn null entity type in trigger action.");
 							return;
 						}
 						Entity e = Entity.spawnNew(world, (Vector) args.get("pos"), type);

@@ -18,11 +18,6 @@ public class Orb extends Item {
 	public Color getArcColor() {
 		return ORB_COOLDOWN_COLOR;
 	}
-	
-	@Override
-	public int getInvPos() {
-		return 3;
-	}
 
 	public Animation getProjectileAnimation() {
 		return (Animation) type.getProperty(0);

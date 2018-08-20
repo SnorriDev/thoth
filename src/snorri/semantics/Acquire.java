@@ -2,7 +2,7 @@ package snorri.semantics;
 
 import snorri.entities.Drop;
 import snorri.events.SpellEvent;
-import snorri.inventory.Carrier;
+import snorri.events.SpellEvent.Caster;
 import snorri.inventory.Droppable;
 import snorri.parser.Node;
 
@@ -11,11 +11,11 @@ public class Acquire extends TransVerbDef {
 	@Override
 	public boolean eval(Object subject, Object object, SpellEvent e) {
 		
-		if (!(subject instanceof Carrier)) {
+		if (!(subject instanceof Caster)) {
 			return false;
 		}
 		
-		return ((Carrier) subject).getFullInventory().contains(object);
+		return ((Caster) subject).getLexicon().contains(object);
 		
 	}
 

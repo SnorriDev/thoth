@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import snorri.entities.Entity;
 
@@ -21,7 +22,7 @@ public class ClassFinder {
 		try {
 			return new File(URLDecoder.decode(scannedDir, "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
-			Debug.error(e);
+			Debug.logger.log(Level.SEVERE, "Could not access resource", e);
 			return null;
 		}
 	}
@@ -30,7 +31,7 @@ public class ClassFinder {
 		File dir = getPackageFolder(scannedPackage); // allows directories with spaces
 		List<Class<? extends Entity>> classes = new ArrayList<Class<? extends Entity>>();
 		if (!dir.isDirectory()) {
-			Debug.warning("could not find class " + scannedPackage);
+			Debug.logger.warning("could not find class " + scannedPackage);
 			return null;
 		}
 		for (File file : dir.listFiles()) {

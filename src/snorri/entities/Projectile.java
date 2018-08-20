@@ -62,7 +62,7 @@ public class Projectile extends Detector implements Walker {
 			
 			Object output = weapon.useSpellOn(world, ((Caster) root), this, deltaTime / getLifeSpan());
 			if (Debug.weaponOutputLogged()) {
-				Debug.log("weapon output: " + output);
+				Debug.logger.info("Weapon output: " + output + ".");
 			}
 			
 			//we can't unify this with the above if clause because it matters when spells are applied
@@ -99,9 +99,9 @@ public class Projectile extends Detector implements Walker {
 	@Override
 	protected void onSafeDelete(World world) {
 		if (root instanceof Caster && orb != null) {
-			Object output = orb.useSpell(world, (Caster) root, this);
+			Object output = orb.useSpellOn(world, (Caster) root, this);
 			if (Debug.orbOutputLogged()) {
-				Debug.log("orb output: " + output);
+				Debug.logger.info("Orb output: " + output + ".");
 			}
 		}		
 	}

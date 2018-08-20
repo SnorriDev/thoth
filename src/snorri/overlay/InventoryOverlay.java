@@ -3,7 +3,6 @@ package snorri.overlay;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -12,7 +11,6 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -20,6 +18,7 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
@@ -29,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListCellRenderer;
+import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
@@ -36,17 +36,11 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import snorri.events.SpellEvent.Caster;
 import snorri.hieroglyphs.Hieroglyphs;
-import snorri.inventory.Armor;
+import snorri.inventory.DropContainer;
 import snorri.inventory.Droppable;
-import snorri.inventory.FullInventory;
-import snorri.inventory.Inventory;
 import snorri.inventory.Item;
-import snorri.inventory.Orb;
-import snorri.inventory.Papyrus;
-import snorri.inventory.VocabDrop;
-import snorri.inventory.Weapon;
-import snorri.keyboard.Key;
 import snorri.main.Debug;
 import snorri.main.DialogMap;
 import snorri.main.FocusedWindow;
@@ -54,7 +48,7 @@ import snorri.main.Main;
 import snorri.parser.Grammar;
 import snorri.triggers.Trigger.TriggerType;
 
-public class InventoryOverlay extends Overlay implements MouseListener, ListSelectionListener, DocumentListener, FocusListener {
+public class InventoryOverlay extends Overlay implements MouseListener, ListSelectionListener, DocumentListener, FocusListener, DropContainer<Droppable> {
 	
 	/** the GUI interface for editing inventory and spells */
 	
@@ -68,7 +62,6 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private static final double LEFT_PANEL_WIDTH_MULTIPLIER = 0.2352;
 	private static final int PADDING = 16;
 	private static final int LEFT_PANEL_WIDTH = (int) (INVENTORY_WIDTH * LEFT_PANEL_WIDTH_MULTIPLIER); // 178
-	private static final int LEFT_PANEL_HEIGHT = INVENTORY_HEIGHT;
 	private static final int LEFT_PANEL_LABEL_WIDTH = PADDING - 2 * LEFT_PANEL_WIDTH;
 	private static final int LEFT_PANEL_ITEM_HEIGHT = 30;
 	private static final double CRAFTING_SPACE_HEIGHT_MULTIPLIER = 0.3676;
@@ -78,30 +71,27 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private static final int TEXT_BOX_WIDTH = CRAFTING_SPACE_WIDTH - 2 * PADDING; // 547
 	private static final int TEXT_BOX_HEIGHT = (int) (CRAFTING_SPACE_HEIGHT * TEXT_BOX_HEIGHT_MULTIPLIER);// 94
 	
-	private final Inventory inv;
-	private final FullInventory fullInv;
+	private final Caster caster;
 	
-	private final JList<Item> list;
 	private final JPanel craftingSpace;
 	private final JPanel inputPanel;
-	private final JLabel nullInputText;
 	private final JTable vocabBox;
 	private final JButton enchantButton;
 	private final JEditorPane field;
 	
-	private final SortedListModel<Item> model;
-	
+	private final JList<Item> list;
+	private final ListModel<Item> model;
+		
 	private boolean editMode;
 	private List<String> spellsEnchanted;
 	
 	private class ItemCellRenderer implements ListCellRenderer<Item> {
 		@Override
 		public Component getListCellRendererComponent(JList<? extends Item> list, Item item, int index, boolean isSelected, boolean cellHasFocus) {
-			Key k = inv.getKey(item);
-			String text = item.toString() + (k == null ? "" : (" (" + k.getChar() + ")"));
+			String text = item.toString();
 			JLabel label = new JLabel(text, item.getIcon(), JLabel.LEFT);
 			label.setPreferredSize(new Dimension(LEFT_PANEL_LABEL_WIDTH, LEFT_PANEL_ITEM_HEIGHT));
-			label.setFont(label.getFont().deriveFont(inv.getIndex(item) == Integer.MAX_VALUE ? Font.PLAIN : Font.BOLD));
+			label.setFont(label.getFont());
 			if (isSelected) {
 				label.setBorder(getThinBorder());
 			}
@@ -111,18 +101,34 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		}
 	}
 	
-	public InventoryOverlay(FocusedWindow<?> focusedWindow, Inventory inventory) {
-		this(focusedWindow, inventory, false);
+	private class ItemSelectionModel extends DefaultListSelectionModel {
+
+		private static final long serialVersionUID = 1L;
+
+		private final int i;
+		
+		public ItemSelectionModel(int i) {
+			super.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			super.setSelectionInterval(i, i);
+			this.i = i;
+		}
+		
+		@Override
+	    public boolean isSelectedIndex(int j) {
+			if (editMode) {
+				return super.isSelectedIndex(j);
+				
+			}
+			return i == j;
+	    }
+				
 	}
 	
-	public InventoryOverlay(FocusedWindow<?> focusedWindow, Inventory inventory, boolean editMode) {
+	public InventoryOverlay(FocusedWindow<?> focusedWindow, Caster caster, boolean editMode, int initialSelection) {
 		
 		super(focusedWindow);
-		inv = inventory;
-		fullInv = inventory.getFullInventory();
-		
+		this.caster = caster;
 		this.editMode = editMode;
-		Droppable.setInventoryForComparison(inv);
 		
 		JPanel panel = new JPanel(new GridBagLayout()) {
 			private static final long serialVersionUID = 1L;
@@ -142,18 +148,19 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		spellsEnchanted = new ArrayList<>();
 		
 		// filter item panel
-		model = fullInv.getItemModel();
+		model = caster.getInventory().getItemModel();
 		list = new JList<Item>(model);
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list.setSelectionModel(new ItemSelectionModel(initialSelection));
+		list.setCellRenderer(new ItemCellRenderer());
 		list.setLayoutOrientation(JList.VERTICAL);
 		list.setVisibleRowCount(-1);
 		list.addListSelectionListener(this);
 		list.addKeyListener(this);
 		list.setOpaque(false);
-		list.setCellRenderer(new ItemCellRenderer());
-		
+				
+		// scroll on item panel
 		JScrollPane scrollPane = new JScrollPane(list);
-		scrollPane.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, LEFT_PANEL_HEIGHT)); //Left Panel Size
+		scrollPane.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, INVENTORY_HEIGHT));
 		scrollPane.setOpaque(false);
 		scrollPane.getViewport().setOpaque(false);
 		scrollPane.setBorder(emptyBorder());
@@ -176,15 +183,10 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		// the panel to show/hide
 		inputPanel = new JPanel();
 		inputPanel.setOpaque(false);
-		inputPanel.setVisible(false);
-		inputPanel.setFocusable(false);
+//		inputPanel.setVisible(false);
+//		inputPanel.setFocusable(false);
 		inputPanel.addKeyListener(this);
 		craftingSpace.add(inputPanel);
-		
-		// the text which appears when nothing is selected
-		nullInputText = new JLabel("Select an item to edit its spell...");
-		nullInputText.setOpaque(false);
-		craftingSpace.add(nullInputText);
 		
 		field = new JEditorPane();
 		field.setEditorKit(getHTMLEditorKit());
@@ -214,7 +216,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		vocabInfo.setOpaque(false);
 		vocabInfo.setLayout(new GridLayout(0, 1));
 		
-		vocabBox = new JTable(new VocabTableModel(fullInv.getVocab()));
+		vocabBox = new JTable(new VocabTableModel(caster.getLexicon()));
 		vocabBox.setOpaque(false);
 		vocabBox.setRowHeight(30);
 		vocabBox.setBackground(SELECTED_BG);
@@ -225,8 +227,14 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		if (editMode) {
 			JComponent buttons = new JPanel();
 			buttons.setOpaque(false);
-			buttons.add(createButton("ADD"));
-			buttons.add(createButton("DELETE"));
+			JComponent button = createButton("ADD");
+			button.addKeyListener(this);
+			button.setFocusable(false);
+			buttons.add(button);
+			button = createButton("DELETE");
+			button.addKeyListener(this);
+			button.setFocusable(false);
+			buttons.add(button);
 			vocabInfo.add(buttons);
 		}
 		
@@ -244,10 +252,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		
 		add(panel);
 		
-		if (model.getSize() > 0) {
-			list.setSelectedIndex(0);
-			setGlyphs();
-		}
+		setGlyphs();
 		
 	}
 	
@@ -263,146 +268,69 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		return String.join(" ", Grammar.getWords(field.getText()));
 	}
 	
-	private boolean add(Droppable d) {
-		
-		if (d == null) {
-			Debug.warning("adding null item to inventory");
+	@Override
+	public boolean add(Droppable d) {
+		if (caster.add(d)) {
+			((VocabTableModel) vocabBox.getModel()).refresh(caster.getLexicon());	
+			// TODO update items as well
+			return true;
 		}
-		
-		if (!inv.add(d)) {
-			return false;
-		}
-		
-		if (d instanceof Item) {
-			model.addElement((Item) d);
-		}
-		if (d instanceof VocabDrop) {
-			vocabBox.setModel(new VocabTableModel(fullInv.getVocab()));
-		}
-		
-		return true;
-		
+		return false;
 	}
 	
-	private boolean delete(Droppable d, boolean specific) {
-		
-		if (!inv.remove(d, specific)) {
-			return false;
+	@Override
+	public boolean remove(Droppable d, boolean specific) {
+		if (caster.remove(d, specific)) {
+			((VocabTableModel) vocabBox.getModel()).refresh(caster.getLexicon());
+			// TODO update items as well
+			return true;
 		}
-		
-		if (d instanceof Item) {
-			model.removeElement((Item) d);
-		}
-		if (d instanceof VocabDrop) {
-			vocabBox.setModel(new VocabTableModel(fullInv.getVocab()));
-		}
-		
-		return true;
-		
+		return false;
+	}
+	
+	private Item getItem() {
+		return list.getSelectedValue();
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		if (e.getActionCommand().equals("ENCHANT") && list.getSelectedValue() != null) {
+		if (e.getActionCommand().equals("ENCHANT") && getItem() != null) {
 			String rawSpell = getTagless();
-			list.getSelectedValue().setSpell(Grammar.parseSentence(rawSpell));
+			getItem().setSpell(Grammar.parseSentence(rawSpell));
 			spellsEnchanted.add(rawSpell);
 			setGlyphs();
-		} else if (e.getActionCommand().equals("ADD")) {
-			
+			if (!editMode) {
+				window.unpause();
+			}
+		} else if (e.getActionCommand().equals("ADD")) {	
 			DialogMap inputs = new DialogMap();
 			inputs.put("Droppable", "Enter word or item here");
-			dialog("Enter droppable to add to inventory", inputs);
-			
+			dialog("Enter droppable to add to inventory", inputs);			
 			add(Droppable.fromString(inputs.getText("Droppable")));
 		} else if (e.getActionCommand().equals("DELETE")) {
-			
 			DialogMap inputs = new DialogMap();
 			inputs.put("Word", "Enter here...");
-			dialog("Enter word to remove from inventory", inputs);
-			
-			delete(Droppable.fromString(inputs.getText("Word")), false);
+			dialog("Enter word to remove from inventory", inputs);			
+			remove(Droppable.fromString(inputs.getText("Word")), false);
 		}
-		
-		list.requestFocus();
-		
-	}
-	
-	@Override
-	public void keyPressed(KeyEvent e) {
-		
-		super.keyPressed(e);
-		
-		if (list.getSelectedValue() instanceof Papyrus) {
-			for (int i = 0; i < Inventory.PAPYRUS_KEYS.length; i++) {
-				if (Inventory.PAPYRUS_KEYS[i].isPressed(e)) {
-					inv.setPapyrus(i, (Papyrus) list.getSelectedValue());
-					model.redraw();
-				}
-			}
-		}
-		
-		if (Key.SPACE.isPressed(e)) {
-			
-			if (list.getSelectedValue() instanceof Weapon) {
-				inv.setWeapon((Weapon) list.getSelectedValue());
-				model.redraw();
-			}
-			
-			if (list.getSelectedValue() instanceof Armor) {
-				inv.setArmor((Armor) list.getSelectedValue());
-				model.redraw();
-			}
-			
-			if (list.getSelectedValue() instanceof Orb) {
-				inv.setOrb((Orb) list.getSelectedValue());
-				model.redraw();
-			}
-			
-		}
-		
-		if (e.getSource() == field || list.getSelectedValue() == null || !editMode) {
-			return;
-		}
-		
-		if (Key.DELETE.isPressed(e)) {
-			delete(list.getSelectedValue(), true);
-			model.redraw();
-		}
-		
-	}
-	
-	/** This method is called when someone selects an item */
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		nullInputText.setVisible(false);
-		inputPanel.setVisible(true);
-		setGlyphs();
-		craftingSpace.revalidate();
+				
 	}
 	
 	private void setGlyphs() {
-		
-		if (list.getSelectedValue() == null) {
+		if (getItem() == null || getItem().getSpell() == null) {
 			return;
 		}
-		
-		if (list.getSelectedValue().getSpell() == null) {
-			field.setText("<p>enter spell here...</p>");
-		}
-		else {
-			field.setText(Hieroglyphs.transliterate(list.getSelectedValue().getSpell().getOrthography()));
-		}
+		field.setText(Hieroglyphs.transliterate(getItem().getSpell().getOrthography()));
 	}
 	
 	private void checkParse(DocumentEvent e) {
 		String text = getTagless();
-		if (Debug.allHieroglyphsUnlocked()) {
+		if (Debug.allHieroglyphsUnlocked() || editMode) {
 			enchantButton.setEnabled(Grammar.isValidSentence(Grammar.parseString(text)));
 		}
 		else {
-			enchantButton.setEnabled(fullInv.knowsWords(Grammar.getWords(text)) && Grammar.isValidSentence(Grammar.parseString(text)));
+			enchantButton.setEnabled(caster.getLexicon().contains(Grammar.getWords(text)) && Grammar.isValidSentence(Grammar.parseString(text)));
 		}
 	}
 	
@@ -413,12 +341,12 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	
 	@Override
 	public void focusGained(FocusEvent e) {
-		if (list.getSelectedValue() == null || list.getSelectedValue().getSpell() == null) {
+		if (getItem() == null || getItem().getSpell() == null) {
 			field.setText("");
 			return;
 		}
 		if (e.getComponent() instanceof JEditorPane) {
-			field.setText(list.getSelectedValue().getSpell().getOrthography());
+			field.setText(getItem().getSpell().getOrthography());
 		}
 	}
 	
@@ -469,6 +397,12 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	
 	private Border getThinBorder() {
 		return BorderFactory.createLineBorder(BORDER);
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

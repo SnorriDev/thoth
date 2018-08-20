@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 
 import javax.swing.ImageIcon;
 
@@ -39,17 +40,17 @@ public class Hieroglyphs {
 				glyphIcons.put(name, loadImage(name));
 			}
 		} else {
-			Debug.warning("could not find HTML glyph directory");
+			Debug.logger.severe("Could not find HTML glyph directory.");
 		}
 			
 	}
 	
-	public static                                                                              Set<String> getGlyphs() {
+	public static Set<String> getGlyphs() {
 		return glyphIcons.keySet();
 	}
 	
 	public static void load() {
-		Debug.log(glyphIcons.size() + " HTML glyphs loaded");
+		Debug.logger.info(glyphIcons.size() + " HTML glyphs loaded.");
 	}
 		
 	public static String transliterate(String raw) {
@@ -78,7 +79,7 @@ public class Hieroglyphs {
 		try {
 			return "<img class='hiero' src=\'" + f.toURI().toURL() + "'/>";
 		} catch (MalformedURLException e) {
-			Debug.error(e);
+			Debug.logger.log(Level.SEVERE, "Bad URL for HTML glyph.", e);
 			return null;
 		}
 	}

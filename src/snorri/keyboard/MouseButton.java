@@ -2,7 +2,8 @@ package snorri.keyboard;
 
 public enum MouseButton implements Binding {
 
-	SHOOT(1);
+	SHOOT(1), // Left mouse button.
+	CAST(3); // Right mouse button.
 		
 	private int num;
 	

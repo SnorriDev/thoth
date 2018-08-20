@@ -10,6 +10,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 
@@ -93,12 +94,12 @@ public class Animation implements Serializable {
 			try {
 				tempFrames.add(ImageIO.read(frames[i]));
 			} catch (IOException e) {
-				Debug.error("animation frame " + frames[i].getName() + " could not be loaded", e);
+				Debug.logger.log(Level.SEVERE, "Animation frame " + frames[i].getName() + " could not be loaded.", e);
 			}
 		}
 
 		if (tempFrames.size() == 0) {
-			Debug.warning("animation " + folder.getName() + " has zero frames");
+			Debug.logger.warning("Animation " + folder.getName() + " has zero frames.");
 		}
 		
 		this.frames = new BufferedImage[tempFrames.size()];
@@ -138,12 +139,12 @@ public class Animation implements Serializable {
 				
 		String read = (String) in.readObject();
 		
-		if (read.equals("...")) { //signifies "nowhere"
+		if (read.equals("...")) { // Signifies nowhere.
 			BufferedImage im = ImageIO.read(in);
 			if (im != null) {
 				set(new Animation(im));
 			} else {
-				Debug.warning("could not load custom frame in animation");
+				Debug.logger.warning("Could not load custom frame in animation.");
 			}
 			return;
 		}

@@ -9,7 +9,6 @@ import java.util.PriorityQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import snorri.collisions.RectCollider;
-import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.world.EntityGroup;
 import snorri.world.Executable;
@@ -356,7 +355,7 @@ public class QuadTree extends Entity implements EntityGroup {
 
 	@Override
 	public void traverse() {
-		Debug.log("traverse not yet implemented for QuadTree");
+		throw new UnsupportedOperationException("Traverse not yet implemented for QuadTree.");
 	}
 
 	@Override

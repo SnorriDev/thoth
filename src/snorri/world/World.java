@@ -83,16 +83,11 @@ public class World implements Playable, Editable {
 	}
 
 	public World(File file, Player p) throws FileNotFoundException, IOException {
-
 		load(file);
-		
-		Debug.log("non-null player" + p);
 		if (p != null) {
 			spawnPlayer(p);
 		}
-
 		pathfinding = new Pathfinding(getPathfindingLevels());
-		
 	}
 		
 	public World(File file) throws FileNotFoundException, IOException {
@@ -123,14 +118,15 @@ public class World implements Playable, Editable {
 		return p;
 	}
 
+	@Deprecated
 	public Vector getRandomSpawnPos(int radius) {
 		for (int i = 0; i < RANDOM_SPAWN_ATTEMPTS; i++) {
-			Vector pos = getGoodSpawn(background.getDimensions().random()); // FIXME: good spawn?
+			Vector pos = getGoodSpawn(background.getDimensions().random());
 			if (pos != null && col.getFirstCollision(new Entity(pos, radius)) == null) {
 				return pos;
 			}
 		}
-		Debug.warning("could not find suitable spawn");
+		Debug.logger.warning("Could not find suitable spawn.");
 		return null;
 	}
 
@@ -146,7 +142,7 @@ public class World implements Playable, Editable {
 	public synchronized void update(Entity focus, double d) {
 
 		if (Debug.worldLogged()) {
-			Debug.log("world update");
+			Debug.logger.info("World updated.");
 		}
 
 		col.updateAround(this, d, focus);
@@ -251,7 +247,7 @@ public class World implements Playable, Editable {
 		}
 
 		if (!f.exists()) {
-			Debug.log("creating new world directory...");
+			Debug.logger.info("Creating new world directory...");
 			f.mkdir();
 		}
 		
@@ -324,11 +320,11 @@ public class World implements Playable, Editable {
 	}
 
 	public void resize(int newWidth, int newHeight) {
-		Debug.log("Resizing Level from\t((" + background.getWidth() + "," + midground.getWidth() + "," + foreground.getWidth() + ")\tx\t(" + background.getHeight() + "," + midground.getHeight() + "," + foreground.getHeight() + "))\tto\t(" + newWidth + "\tx\t" + newHeight +")\tusing constructor");
+		Debug.logger.info("Resizing Level from\t((" + background.getWidth() + "," + midground.getWidth() + "," + foreground.getWidth() + ")\tx\t(" + background.getHeight() + "," + midground.getHeight() + "," + foreground.getHeight() + "))\tto\t(" + newWidth + "\tx\t" + newHeight +")\tusing constructor.");
 		background = background.getResized(newWidth, newHeight, 0);
 		midground = midground.getResized(newWidth, newHeight, 1);
 		foreground = foreground.getResized(newWidth, newHeight, 2);
-		Debug.log("New Level Size:\t(" + background.getWidth() + "," + midground.getWidth() + "," + foreground.getWidth() + ")\tx\t(" + background.getHeight() + "," + midground.getHeight() + "," + foreground.getHeight() + "))");
+		Debug.logger.info("New Level Size:\t(" + background.getWidth() + "," + midground.getWidth() + "," + foreground.getWidth() + ")\tx\t(" + background.getHeight() + "," + midground.getHeight() + "," + foreground.getHeight() + ")).");
 	}
 
 	@Override

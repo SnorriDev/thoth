@@ -9,6 +9,4 @@ public class Name extends SemiTerminal<NameConstant> {
 	 * to be unlocked to be used.
 	 */
 	
-	private static final long serialVersionUID = 1L;
-
 }

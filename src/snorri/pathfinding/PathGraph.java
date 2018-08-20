@@ -236,7 +236,6 @@ public class PathGraph {
 	}
 	
 	private void computeComponents() {
-
 		components = new HashSet<>();
 		boolean[][] visited = new boolean[getWidth()][getHeight()];
 		
@@ -253,11 +252,10 @@ public class PathGraph {
 		}
 
 		if (Debug.pathfindingComponentsLogged()) {
-			Debug.log("found " + components.size() + " pathfinding components");
+			Debug.logger.info("Found " + components.size() + " pathfinding components.");
 		}
 
 		computeGraphHash();
-
 	}
 
 	@Deprecated
@@ -274,7 +272,7 @@ public class PathGraph {
 	public void loadComponents(File f) throws FileNotFoundException, IOException {
 
 		if (!f.exists()) {
-			Debug.log("graph data not found in world; computing it from scratch");
+			Debug.logger.info("Graph data not found in world; computing it from scratch.");
 			computePathfinding();
 			return;
 		}
@@ -284,8 +282,7 @@ public class PathGraph {
 			components = (Set<Component>) in.readObject();
 			computeGraphHash();
 		} catch (ClassNotFoundException e) {
-			Debug.error(e);
-			Debug.log("recalculating corrupted pathfinding data");
+			Debug.logger.log(java.util.logging.Level.WARNING, "Recalculating corrupted pathfinding data.", e);
 			computeComponents();
 		}
 		in.close();
