@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.logging.Level;
 
 import javax.swing.SwingUtilities;
 
@@ -74,7 +75,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	public synchronized void openInventory(int i) {
 		F focus = getFocus();
 		if (!(focus instanceof Caster)) {
-			Debug.warning("tried to open inventory on non-Caster");
+			Debug.logger.warning("tried to open inventory on non-Caster");
 			return;
 		}
 		SwingUtilities.invokeLater(new Runnable() {
@@ -192,13 +193,13 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 				try {
 					while (!stopped) {
 						if (Debug.pausesLogged() && isPaused()) {
-							Debug.log("paused");
+							Debug.logger.info("Game paused.");
 						}
 						onFrame();
 						Thread.sleep(FRAME_DELTA);
 					}
 				} catch (InterruptedException e) {
-					Debug.error(e);
+					Debug.logger.log(Level.SEVERE, "Game thread interrupted.", e);
 				}
 			}
 		});
@@ -206,7 +207,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 		thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
 			@Override
 			public void uncaughtException(Thread t, Throwable e) {
-				Debug.error(e);
+				Debug.logger.log(Level.SEVERE, "Uncaught exception.", e);
 			}
 		});
 		thread.start();

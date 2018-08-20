@@ -47,7 +47,7 @@ public class AlphaMask {
 		
 		assert MASKS.length == 16;
 		assert CORNER_MASKS.length == 16;
-		Debug.log("alpha masks initialized");
+		Debug.logger.info("Alpha masks initialized.");
 	}
 
 	private final Area mask;

@@ -14,7 +14,6 @@ public class Debug {
 	
 	private static final boolean ALL_HIEROGLYPHS_UNLOCKED = false;
 	private static final boolean RENDER_TILE_GRID = false;
-	private static final boolean LOG_FOCUS = false;
 	private static final boolean LOG_WORLD = false;
 	private static final boolean LOG_PARSES = false;
 	private static final boolean LOG_RENDER_QUEUE = false;
@@ -32,13 +31,11 @@ public class Debug {
 	private static final boolean LOG_CHANGE_WORLD_EVENTS = true;
 	private static final boolean LOG_PATHFINDING_COMPONENTS = false;
 	
-	private static final Logger logger;
+	public static final Logger logger;
 	
 	static {
-		// TODO(lambdaviking): Call logger methods directly and replace format with:
-		// "%1$tF %1$tT [%4$-7s][%2$s] %5$s %6$s%n".
 		System.setProperty("java.util.logging.SimpleFormatter.format",
-				"%1$tF %1$tT [%4$-7s] %5$s %6$s%n");
+				"%1$tF %1$tT [%4$-7s] [%2$s] %5$s %6$s%n");
 				
 		logger = Logger.getLogger("Thoth");
 		logger.setLevel(Level.ALL);
@@ -66,10 +63,6 @@ public class Debug {
 	
 	public static boolean tileGridRendered() {
 		return RENDER_TILE_GRID;
-	}
-	
-	public static boolean focusLogged() {
-		return LOG_FOCUS;
 	}
 	
 	public static boolean worldLogged() {
@@ -150,6 +143,7 @@ public class Debug {
 	 * @param o
 	 * 	the object to print
 	 */
+	@Deprecated
 	public static void raw(Object o) {
 		logger.log(Level.FINE, o == null ? null : o.toString());
 	}
@@ -159,6 +153,7 @@ public class Debug {
 	 * @param s
 	 * 	the string to print
 	 */
+	@Deprecated
 	public static void log(String s) {
 		logger.log(Level.INFO, s);
 	}
@@ -167,10 +162,12 @@ public class Debug {
 	 * Use this to print error messages to the game log.
 	 * @param s The error string to print.
 	 */
+	@Deprecated
 	public static void error(Throwable e) {
 		error(e.getMessage(), e);
 	}
 	
+	@Deprecated
 	public static void error(String msg, Throwable e) {
 		logger.log(Level.SEVERE, msg, e);
 	}
@@ -179,6 +176,7 @@ public class Debug {
 	 * Use this to print warning messages to the game log.
 	 * @param s The warning string to print.
 	 */
+	@Deprecated
 	public static void warning(String s) {
 		logger.log(Level.WARNING, s);
 	}

@@ -36,7 +36,7 @@ public class Pathfinding {
 	
 	public PathGraph getGraph(Pathfinder p) {
 		if (getGraph(p.getGridBounds()) == null) {
-			Debug.warning("missing pathfinding graph for " + p);
+			Debug.logger.warning("Missing pathfinding graph for " + p + ".");
 			return getDefaultGraph();
 		}
 		return getGraph(p.getGridBounds());

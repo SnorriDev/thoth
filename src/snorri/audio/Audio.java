@@ -2,6 +2,7 @@ package snorri.audio;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.util.logging.Level;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -40,7 +41,7 @@ public class Audio {
 			clip.open(AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(Main.getFile(path)))));
 			return clip;
 		} catch (Exception e) {
-			Debug.error(e);
+			Debug.logger.log(Level.SEVERE, "Exception creating audio clip.", e);
 			return null;
 		}
 		
@@ -59,7 +60,6 @@ public class Audio {
 			@Override
 			public void run() {
 				try {
-					
 					AudioListener listener = new AudioListener();
 					clip.setFramePosition(0);
 					clip.start();
@@ -68,7 +68,7 @@ public class Audio {
 					clip.stop();
 					clip.setFramePosition(0);
 				} catch (Exception e) {
-					Debug.error(e);
+					Debug.logger.log(Level.SEVERE, "Failed to play audio clip.", e);
 				}
 			}
 		}).start();

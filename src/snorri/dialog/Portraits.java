@@ -21,7 +21,7 @@ public class Portraits {
 	}
 	
 	public static void load() {
-		Debug.log(portraits.entrySet().size() + " portraits loaded");
+		Debug.logger.info(portraits.entrySet().size() + " portraits loaded.");
 	}
 	
 	public static Image get(String name) {

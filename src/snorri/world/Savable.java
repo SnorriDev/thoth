@@ -27,18 +27,14 @@ public interface Savable {
 	}
 	
 	default void wrapSave() {
-		
 		File f = Main.getFileDialog("Select save destination", FileDialog.SAVE, this instanceof Level);
-		
 		if (f == null) {
 			return;
 		}
-		
 		try {
 			save(f, true);
 		} catch (IOException er) {
-			// TODO can this be caught somewhere else?
-			Debug.error("are all object serializable?", er);
+			Debug.logger.log(java.util.logging.Level.SEVERE, "Are all object serializable?", er);
 			er.printStackTrace();
 		}
 	}

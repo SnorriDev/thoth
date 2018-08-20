@@ -2,7 +2,6 @@ package snorri.main;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -409,7 +408,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 				}
 				centerCamera();
 			} catch (IOException e1) {
-				Debug.error(e1);
+				Debug.logger.warning("Failed to open World.");
 			}
 			break;
 		case "Open Level":
@@ -421,7 +420,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 				}
 				centerCamera();
 			} catch (IOException e1) {
-				Debug.error(e1);
+				Debug.logger.warning("Failed to open Level.");
 			}
 			break;
 		case "Save":
@@ -450,14 +449,14 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			break;
 		case "Undo":
 			if (env == null || !canUndo) {
-				Debug.warning("unable to undo");
+				Debug.logger.warning("Unable to undo.");
 				return;
 			}
 			undo();
 			break;
 		case "Redo":
 			if (env == null || !canRedo) {
-				Debug.warning("unable to redo");
+				Debug.logger.warning("Unable to redo.");
 				return;
 			}
 			redo();
@@ -468,16 +467,16 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			break;
 		case "Top":
 			if (env == null) {
-				Debug.warning("null editable object");
+				Debug.logger.warning("Null editable object.");
 				return;
 			}
 			w2 = connectionDialog();
 			if (w2 == null || w2 == "") {
-				Debug.warning("invalid connecting world");
+				Debug.logger.warning("Invalid connecting world.");
 				return;
 			}
 			if (env.getWorldGraph() == null) {
-				Debug.warning("could not get world graph");
+				Debug.logger.warning("Could not get world graph.");
 				return;
 			}
 			env.getWorldGraph().createLink(w2, 3);
@@ -537,7 +536,6 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 	@Override
 	public void paintComponent(Graphics gr) {
-
 		super.paintComponent(gr);
 		if (env == null) {
 			return;
@@ -549,11 +547,6 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		
 		env.render(this, (Graphics2D) gr, deltaTime, false);
 		renderMousePos(gr);
-		
-		if (Debug.focusLogged()) {
-			Debug.log("Focused component: " + KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner());
-		}
-
 	}
 
 	private void renderMousePos(Graphics gr) {
@@ -639,7 +632,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 									}
 								}
 							
-								Debug.log("Added Tile (" + xGrid + ", " + yGrid + ") to wall");
+								Debug.logger.info("Added Tile (" + xGrid + ", " + yGrid + ") to wall.");
 								wallPoints.add(new Vector(xGrid,yGrid));
 								
 								if (wallPoints.firstElement().equals(wallPoints.lastElement())) {
@@ -648,12 +641,12 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 								}
 							}
 							else {
-								Debug.warning("Cannot add Tile (" + xGrid + ", " + yGrid + ") to wall, in wall mode, tiles must be properly spaced and normal to each other");
+								Debug.logger.warning("Cannot add Tile (" + xGrid + ", " + yGrid + ") to wall, in wall mode, tiles must be properly spaced and normal to each other.");
 							}
 						}
 						else {
 							env.getLevel(selectedTile.getType().getLayer()).setTileGrid(xGrid, yGrid, new Tile(selectedTile));
-							Debug.log("Added Tile (" + xGrid + ", " + yGrid + ") to wall");
+							Debug.logger.info("Added Tile (" + xGrid + ", " + yGrid + ") to wall.");
 							wallPoints.add(new Vector(xGrid,yGrid));
 						}
 					}
@@ -1550,7 +1543,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 	private void spawnEntity() {
 
 		if (!(env instanceof World)) {
-			Debug.warning("tried to spawn entity in non-world");
+			Debug.logger.warning("Tried to spawn entity in non-world.");
 			return;
 		}
 		World world = (World) env;
@@ -1616,14 +1609,14 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 				| SecurityException e) {
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
-			Debug.warning("cannot spawn entity type " + selectedEntityClass.getSimpleName());
+			Debug.logger.warning("Cannot spawn entity type " + selectedEntityClass.getSimpleName() + ".");
 		}
 	}
 
 	private void deleteEntity() {
 
 		if (!(env instanceof World)) {
-			Debug.warning("tried to delete entity in non-world");
+			Debug.logger.warning("Tried to delete entity in non-world.");
 			return;
 		}
 		World world = (World) env;
@@ -1647,7 +1640,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			canUndo = true;
 			canRedo = false;
 		} catch (IOException e) {
-			Debug.error(e);
+			Debug.logger.warning("Failed to undo.");
 		}
 	}
 
@@ -1657,8 +1650,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			canUndo = false;
 			canRedo = true;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			Debug.error(e);
+			Debug.logger.warning("Failed to redo.");
 			canRedo = false;
 		}
 	}
@@ -1670,13 +1662,12 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 				env.load(Main.getFile("/saves/.undo1"));
 				canUndo = false;
 				canRedo = true;
-				Debug.log("undone!");
+				Debug.logger.info("Undone!");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				Debug.error(e);
+				Debug.logger.warning("Failed to undo.");
 			}
 		} else {
-			Debug.warning("cannot undo right now");
+			Debug.logger.info("Cannot undo right now.");
 		}
 	}
 
@@ -1684,14 +1675,14 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		if (canRedo) {
 			try {
 				env.load(Main.getFile("/saves/.redo1"));
-				Debug.log("redo!");
+				Debug.logger.info("Redone!");
 				canUndo = true;
 				canRedo = false;
 			} catch (IOException e) {
-				Debug.error(e);
+				Debug.logger.warning("Failed to redo.");
 			}
 		} else {
-			Debug.warning("cannot redo right now");
+			Debug.logger.info("Cannot redo right now.");
 		}
 	}
 

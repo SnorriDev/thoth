@@ -2,6 +2,7 @@ package snorri.nonterminals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import snorri.events.SpellEvent;
 import snorri.main.Debug;
@@ -87,7 +88,7 @@ public abstract class NonTerminal<S> implements Node<S> {
 			copy.setChildren(newChildren);
 			return copy;
 		} catch (InstantiationException | IllegalAccessException e) {
-			Debug.error(e);
+			Debug.logger.log(Level.SEVERE, "Failed to copy NonTerminal.", e);
 			return null;
 		}
 

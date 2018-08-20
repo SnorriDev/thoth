@@ -1,6 +1,7 @@
 package snorri.main;
 
 import java.util.HashMap;
+import java.util.logging.Level;
 
 import javax.swing.JTextField;
 
@@ -46,7 +47,7 @@ public class DialogMap extends HashMap<String, JTextField> {
 		try {
 			return Class.forName(getText(key));
 		} catch (ClassNotFoundException e) {
-			Debug.error(e);
+			Debug.logger.log(Level.SEVERE, key + " is not a class", e);
 			return null;
 		}
 	}

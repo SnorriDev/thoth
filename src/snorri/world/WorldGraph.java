@@ -60,7 +60,7 @@ public class WorldGraph implements Playable {
 		setCurrentWorld(worlds.get(yaml.get("root")));
 				
 		List<Map<String, String>> edges = (List<Map<String, String>>) yaml.get("edges");
-		Debug.log("loading " + edges.size() + " edges");
+		Debug.logger.info("Loading " + edges.size() + " edges.");
 		for (Map<String, String> edge : edges) {
 			String w1, w2;
 			if ((w1 = edge.get("left")) != null && (w2 = edge.get("right")) != null) {
@@ -114,35 +114,35 @@ public class WorldGraph implements Playable {
 					worlds.get(w2).setLeftNeighbor(worlds.get(w1));
 					newEdge.put("left", w1);
 					newEdge.put("right", w2);
-					Debug.log("inserting new l-r edge between " + w1 + " & " + w2);
+					Debug.logger.info("Inserting new l-r edge between " + w1 + " & " + w2 + ".");
 					break;
 				case 1:
 					worlds.get(w1).setBottomNeighbor(worlds.get(w2));
 					worlds.get(w2).setTopNeighbor(worlds.get(w1));
 					newEdge.put("top", w1);
 					newEdge.put("bottom", w2);
-					Debug.log("inserting new top-bot edge between " + w1 + " & " + w2);
+					Debug.logger.info("Inserting new top-bot edge between " + w1 + " & " + w2 + ".");
 					break;
 				case 2:
 					worlds.get(w1).setLeftNeighbor(worlds.get(w2));
 					worlds.get(w2).setRightNeighbor(worlds.get(w1));
 					newEdge.put("right", w1);
 					newEdge.put("left", w2);
-					Debug.log("inserting new r-l edge between " + w1 + " & " + w2);
+					Debug.logger.info("Inserting new r-l edge between " + w1 + " & " + w2 + ".");
 					break;
 				case 3:
 					worlds.get(w1).setTopNeighbor(worlds.get(w2));
 					worlds.get(w2).setBottomNeighbor(worlds.get(w1));
 					newEdge.put("bottom", w1);
 					newEdge.put("top", w2);
-					Debug.log("inserting new bot-top edge between " + w1 + " & " + w2);
+					Debug.logger.info("Inserting new bot-top edge between " + w1 + " & " + w2 + ".");
 					break;
 				default:
 					worlds.get(w1).setRightNeighbor(worlds.get(w2));
 					worlds.get(w2).setLeftNeighbor(worlds.get(w1));
 					newEdge.put("left", w1);
 					newEdge.put("right", w2);
-					Debug.log("inserting new l-r edge between " + w1 + " & " + w2 + " (BY DEFAULT)");
+					Debug.logger.info("Inserting new l-r edge between " + w1 + " & " + w2 + " (BY DEFAULT).");
 					break;
 			}
 			
@@ -153,14 +153,8 @@ public class WorldGraph implements Playable {
 	        writer.write(yaml);
 	        writer.close();
 		}
-		catch (YamlException e) {
-			Debug.error("invalid yaml", e);
-		}
-		catch (FileNotFoundException e) {
-			Debug.error("invalid yaml?", e);
-		}
-		catch (IOException e) {
-			Debug.error("invalid yaml??", e);
+		catch (YamlException | IOException e) {
+			Debug.logger.log(java.util.logging.Level.SEVERE, "Unable to load YAML.", e);
 		}
 	}
 	
@@ -211,11 +205,10 @@ public class WorldGraph implements Playable {
 	}
 	
 	public void crossInto(World world, Vector pos) {
-		
-		// first remove any extraneous player in new world
+		// first remove any extraneous player in new world.
 		world.delete(world.getEntityTree().getFirst(Player.class));
 		
-		// move the player into the new world
+		// move the player into the new world.
 		getCurrentWorld().delete(player);
 		setCurrentWorld(world);
 		player.setPos(pos);
@@ -224,13 +217,12 @@ public class WorldGraph implements Playable {
 		// TODO save string names for worlds
 		
 		if (Debug.changeWorldEventsLogged()) {
-			Debug.log("entered world " + world + ":");
-			Debug.log(" * right neighbor: " + world.getRightNeighbor());
-			Debug.log(" * left neighbor: " + world.getLeftNeighbor());
-			Debug.log(" * top neighbor: " + world.getTopNeighbor());
-			Debug.log(" * bottom neighbor: " + world.getBottomNeighbor());
+			Debug.logger.info("Entered world " + world + ":");
+			Debug.logger.info("\t* Right neighbor: " + world.getRightNeighbor() + ".");
+			Debug.logger.info("\t* Left neighbor: " + world.getLeftNeighbor() + ".");
+			Debug.logger.info("\t* Top neighbor: " + world.getTopNeighbor() + ".");
+			Debug.logger.info("\t* Bottom neighbor: " + world.getBottomNeighbor() + ".");
 		}
-		
 	}
 	
 	public void crossInto(World world, int x, int y) {
