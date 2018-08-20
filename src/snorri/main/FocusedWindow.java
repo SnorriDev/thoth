@@ -10,12 +10,13 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.logging.Level;
 
 import javax.swing.SwingUtilities;
 
 import snorri.dialog.Dialog;
 import snorri.entities.Entity;
-import snorri.inventory.Inventory;
+import snorri.events.SpellEvent.Caster;
 import snorri.keyboard.Key;
 import snorri.keyboard.KeyStates;
 import snorri.keyboard.MouseButton;
@@ -70,27 +71,32 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 			}
 		});
 	}
-
-	public synchronized void openInventory(Inventory inv) {
+	
+	public synchronized void openInventory(int i) {
+		F focus = getFocus();
+		if (!(focus instanceof Caster)) {
+			Debug.logger.warning("tried to open inventory on non-Caster");
+			return;
+		}
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				Main.setOverlay(new InventoryOverlay(FocusedWindow.this, inv));
+				Main.setOverlay(new InventoryOverlay(FocusedWindow.this, (Caster) focus, false, i));
+				paused = true;
+			}
+		});	
+	}
+	
+	public synchronized void editInventory(Caster caster) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				Main.setOverlay(new InventoryOverlay(FocusedWindow.this, caster, true, 0));
 				paused = true;
 			}
 		});
 	}
-
-	public synchronized void editInventory(Inventory inv) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				Main.setOverlay(new InventoryOverlay(FocusedWindow.this, inv, true));
-				paused = true;
-			}
-		});
-	}
-
+	
 	public boolean isPaused() {
 		return paused;
 	}
@@ -135,14 +141,14 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 		states.setMouseButton(e.getButton(), false);
 	}
 
-	public Vector getMovementVector() {
-		return states.getMovementVector();
+	public Vector getMomentumVector() {
+		return states.getMomentumVector();
 	}
 
 	public Vector getShotDirection() {
 
 		if (states.get(MouseButton.SHOOT)) {
-			return getMousePosAbsolute().copy().sub_(getFocus().getPos()).normalize_();
+			return getMousePosAbsolute().sub(getFocus().getPos()).normalize_();
 		}
 
 		if (states.get(Key.SHOOT_LEFT)) {
@@ -164,6 +170,13 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 		return null;
 
 	}
+	
+	public Vector getCastPosition() {
+		if (states.get(MouseButton.CAST)) {
+			return getMousePosAbsolute();
+		}
+		return null;
+	}
 
 	public static double getBaseDelta() {
 		return FRAME_DELTA / 1000d;
@@ -180,13 +193,13 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 				try {
 					while (!stopped) {
 						if (Debug.pausesLogged() && isPaused()) {
-							Debug.log("paused");
+							Debug.logger.info("Game paused.");
 						}
 						onFrame();
 						Thread.sleep(FRAME_DELTA);
 					}
 				} catch (InterruptedException e) {
-					Debug.error(e);
+					Debug.logger.log(Level.SEVERE, "Game thread interrupted.", e);
 				}
 			}
 		});
@@ -194,7 +207,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 		thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
 			@Override
 			public void uncaughtException(Thread t, Throwable e) {
-				Debug.error(e);
+				Debug.logger.log(Level.SEVERE, "Uncaught exception.", e);
 			}
 		});
 		thread.start();

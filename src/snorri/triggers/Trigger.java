@@ -87,7 +87,7 @@ public class Trigger {
 				Entry<String, Map<String, Object>> e = getFirstEntry(event);
 				TriggerType type = TriggerType.valueOf(e.getKey());
 				if (type == null) {
-					Debug.warning("unknown event type " + e.getKey());
+					Debug.logger.warning("Unknown event type " + e.getKey() + ".");
 					return;
 				}
 				if (type == TriggerType.BROADCAST) {
@@ -117,7 +117,7 @@ public class Trigger {
 			new Trigger(world, name, data, triggers);
 		}
 		
-		Debug.log(rawTriggers.size() + " triggers loaded");
+		Debug.logger.info(rawTriggers.size() + " triggers loaded.");
 			
 		triggers.setLoaded();
 		
@@ -149,7 +149,7 @@ public class Trigger {
 	 * Execute the action queue
 	 */
 	public void exec() {
-		Debug.log("firing trigger " + name + "...");
+		Debug.logger.info("Firing trigger " + name + "...");
 		while (!runnableActions.isEmpty()) { //TODO are there still bugs with runnables?
 			new Thread(runnableActions.poll()).start();
 		}

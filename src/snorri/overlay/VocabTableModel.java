@@ -5,7 +5,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import snorri.hieroglyphs.Hieroglyphs;
-import snorri.inventory.VocabDrop;
+import snorri.parser.Lexicon;
 
 public class VocabTableModel implements TableModel {
 
@@ -34,10 +34,10 @@ public class VocabTableModel implements TableModel {
 		
 	}
 	
-	private VocabDrop[] data;
+	private String[] data;
 	
-	public VocabTableModel(VocabDrop[] c) {
-		data = c;
+	public VocabTableModel(Lexicon lexicon) {
+		refresh(lexicon);
 	}
 	
 	@Override
@@ -70,16 +70,16 @@ public class VocabTableModel implements TableModel {
 //		if (rowIndex == 0) {
 //			return Columns.values()[columnIndex].getName();
 //		}
-		VocabDrop word = data[rowIndex];
+		String word = data[rowIndex];
 		switch (Columns.values()[columnIndex]) {
 		case HIEROGLYPH:
-			return Hieroglyphs.getSmallIcon(word.getOrthography());
+			return Hieroglyphs.getSmallIcon(word);
 		case TYPED_SPELLING:
-			return word.getOrthography();
+			return word;
 		case PART_OF_SPEECH:
-			return word.getMeaning().getPOS().getSimpleName();
+			return Lexicon.lookup(word).getPOS().getSimpleName();
 		case MEANING:
-			return word.getMeaning().toString();
+			return Lexicon.lookup(word).toString();
 		}
 		
 		return null;
@@ -101,8 +101,13 @@ public class VocabTableModel implements TableModel {
 		// TODO Auto-generated method stub	
 	}
 	
-	public void refresh(VocabDrop[] data) {
-		this.data = data;
+	public void refresh(Lexicon lexicon) {
+		data = new String[lexicon.size()];
+		int i = 0;
+		for (String word : lexicon) {
+			data[i] = word;
+			i++;
+		}
 	}
 
 }

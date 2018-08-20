@@ -26,7 +26,7 @@ public class Desk extends Entity implements Interactor {
 	@Override
 	public void onInteract(InteractEvent e) {
 		if (Main.getWindow() instanceof GameWindow) {
-			((GameWindow) Main.getWindow()).openInventory();
+			((GameWindow) Main.getWindow()).openInventory(0);
 		}
 	}
 

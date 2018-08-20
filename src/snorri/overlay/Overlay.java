@@ -13,6 +13,7 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Level;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -223,7 +224,7 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 			s.importStyleSheet(Main.getFile("/info/style.css").toURI().toURL());
 			kit.setStyleSheet(s);
 		} catch (MalformedURLException e) {
-			Debug.log("could not load stylesheet");
+			Debug.logger.log(Level.SEVERE, "Could not load stylesheet.", e);
 		}
 		return kit;
 	}

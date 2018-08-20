@@ -252,12 +252,12 @@ public class Tile implements Comparable<Tile>, Nominal {
 	public int compareTo(Tile t) {
 		
 		if (!type.getClass().equals(t.type.getClass())) {
-			Debug.warning("comparing TileTypes from different layers");
+			Debug.logger.warning("Comparing TileTypes from different layers.");
 			return 0;
 		}
 		
 		if (type == null || t.type == null) {
-			Debug.warning("one or more tiles are null");
+			Debug.logger.warning("One or more tiles are null.");
 			if (type == null && t.type == null) {
 				return 0;
 			}

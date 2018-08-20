@@ -1,6 +1,7 @@
 package snorri.semantics;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
 
 import snorri.entities.Entity;
 import snorri.entities.Plant;
@@ -16,8 +17,7 @@ public class Grow extends TransVerbDef {
 	}
 
 	@Override @SuppressWarnings("unchecked")
-	public boolean exec(Node<Object> object, SpellEvent e) {
-		
+	public boolean exec(Node<Object> object, SpellEvent e) {	
 		Object meaning = object.getMeaning(e);
 		if (!(meaning instanceof ClassWrapper)) {
 			return false;
@@ -31,12 +31,11 @@ public class Grow extends TransVerbDef {
 				return true;
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 					| NoSuchMethodException | SecurityException e2) {
-				Debug.error(e2);
+				Debug.logger.log(Level.WARNING, "Unexpected failure in Grow.", e2);
 			}
 		}
 		
 		return false;
-		
 	}
 
 	@Override

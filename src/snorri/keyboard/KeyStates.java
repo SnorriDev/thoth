@@ -45,7 +45,7 @@ public class KeyStates {
 		return get(key) ? 1 : 0;
 	}
 	
-	public Vector getMovementVector() {
+	public Vector getMomentumVector() {
 		return new Vector(getInt(Key.D) - getInt(Key.A), getInt(Key.S) - getInt(Key.W));
 	}
 	

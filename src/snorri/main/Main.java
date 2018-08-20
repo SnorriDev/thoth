@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -33,6 +34,11 @@ import snorri.world.Vector;
 
 public class Main {
 	
+	public static final BufferedImage DEFAULT_TEXTURE = getImage("/textures/tiles/default00.png");
+	public static final String FONT_NAME = "/fonts/avenir.otf";
+	public static final int DEFAULT_WIDTH = 1280;
+	public static final int DEFAULT_HEIGHT = 720;
+	
 	private static GamePanel window;
 	private static GamePanel outerOverlay;
 
@@ -40,10 +46,6 @@ public class Main {
 	private static JLayeredPane pane;
 
 	private static Font customFont;
-	
-	public static final BufferedImage DEFAULT_TEXTURE = getImage("/textures/tiles/default00.png");
-	public static final int DEFAULT_WIDTH = 1280;
-	public static final int DEFAULT_HEIGHT = 720;
 
 	public static class ResizeListener implements ComponentListener {
 
@@ -131,10 +133,11 @@ public class Main {
 	}
 
 	public static void setupFont() {
-		customFont = loadFont("/fonts/avenir.otf");		
+		// TODO(lambdaviking): Could put this in static initializer.
+		customFont = loadFont(FONT_NAME);		
 		UIManager.put("Button.font", getCustomFont(20));
 		UIManager.put("Label.font", getCustomFont(13));
-		Debug.log("default font loaded");
+		Debug.logger.info("Default font " + FONT_NAME + " loaded.");
 	}
 
 	public static Font getCustomFont(float size) {
@@ -149,7 +152,7 @@ public class Main {
 			ge.registerFont(f);
 			return f;
 		} catch (IOException | FontFormatException e) {
-			Debug.error(e);
+			Debug.logger.log(Level.SEVERE, "Could not find font " + path + ".", e);
 			return null;
 		}
 	}
@@ -157,11 +160,8 @@ public class Main {
 	public static BufferedImage getImage(File file) {
 		try {
 			return ImageIO.read(file);
-		} catch (IllegalArgumentException e) {
-			Debug.error(e);
-			return null;
-		} catch (IOException e) {
-			Debug.error(e);
+		} catch (IllegalArgumentException | IOException e) {
+			Debug.logger.log(Level.SEVERE, "Failed to load image " + file.getPath() + ".", e);
 			return null;
 		}
 	}
@@ -284,7 +284,7 @@ public class Main {
 					world = Playable.getLoaded(path, p);
 					setWindow(new GameWindow(world));
 				} catch (IOException | YamlException e) {
-					Debug.error(e);
+					Debug.logger.log(Level.SEVERE, "Failed to launch world at " + path.getPath() + ".", e);
 				}
 			}
 		});
