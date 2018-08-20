@@ -19,7 +19,6 @@ import snorri.entities.Unit;
 import snorri.entities.LongRangeAIUnit.ShootAttempt;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
-import snorri.world.Layer;
 import snorri.main.Main;
 import snorri.pathfinding.Pathfinding;
 import snorri.pathfinding.Team;
