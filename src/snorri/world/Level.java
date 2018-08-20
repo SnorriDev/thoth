@@ -22,10 +22,11 @@ import java.util.Map;
 import snorri.entities.Entity;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
+import snorri.main.Layer;
 import snorri.masking.Mask;
 import snorri.world.TileType;
 
-public class Level implements Editable {
+public class Level implements Layer {
 
 	public static final int MAX_SIZE = 1024;
 
