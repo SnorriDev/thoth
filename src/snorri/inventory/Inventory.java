@@ -9,54 +9,45 @@ import javax.swing.ListModel;
 import snorri.entities.Unit;
 import snorri.events.SpellEvent.Caster;
 import snorri.inventory.Item.ItemType;
-import snorri.keyboard.Key;
 import snorri.main.FocusedWindow;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 
+/**
+ * Holds the inventory of a unit.
+ * @author snorri
+ * 
+ */
 public class Inventory implements Serializable, DropContainer<Droppable> {
 	
-	/** Holds the inventory of a player */
 	private static final long serialVersionUID = 1L;
-	
-	Key PAPYRUS_KEY = Key.Q;
-	
+		
 	private Unit player;
 	
 	private Weapon weaponSlot;
 	private Orb orbSlot;
-	private Papyrus papyrusSlot; // can enchant this papyrus to hardcode AI spell behavior
-	private int numPapyri;
+	private Papyrus papyrusSlot;
 		
 	public Inventory(Unit player) {
 		this.player = player;
 		papyrusSlot = (Papyrus) Item.newItem(ItemType.PAPYRUS);
-		numPapyri = 0;
 	}
 	
 	public void update(double deltaTime) {
-		
 		if (weaponSlot != null) {
 			weaponSlot.updateCooldown(deltaTime);
 		}
-		
 		if (orbSlot != null) {
 			orbSlot.updateCooldown(deltaTime);
 		}
-		
 		papyrusSlot.castQueuedSpell();
 		papyrusSlot.updateCooldown(deltaTime);
-		
 	}
 	
 	public void setOrb(Orb newOrb) {
 		orbSlot = newOrb;
-	}
-	
-	public void removePapyrus() {
-		numPapyri--;
 	}
 	
 	public boolean addWeapon(Weapon newWeapon) {
@@ -91,20 +82,13 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 		return papyrusSlot;
 	}
 	
-	public int getNumPapyri() {
-		return numPapyri;
-	}
-	
 	public Orb getOrb() {
 		return orbSlot;
 	}
 	
 	public void render(GameWindow window, Graphics g) {
-		
-		// Sling and Orb
 		drawItemContainer(g, 0, false, weaponSlot, Weapon.class);
 		drawItemContainer(g, 1, false, papyrusSlot, Papyrus.class);
-		
 	}
 	
 	private void drawItemContainer(Graphics g, int i, boolean top, Item item, Class<? extends Item> slotType) {
@@ -112,14 +96,12 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 	}
 	
 	private void drawItemContainer(Graphics g, int i, boolean top, Item item, Class<? extends Item> slotType, boolean flag) {
-		
 		if (item == null) {
 			Item.drawEmpty(g, i, top);
 		}
 		else {
 			item.drawThumbnail(g, i, top, flag);
 		}
-		
 	}
 	
 	private boolean compare(Droppable d1, Droppable d2, boolean specific) {
@@ -128,7 +110,6 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 	
 	@Override
 	public boolean add(Droppable d) {
-		
 		if (d instanceof Orb) {
 			addOrb((Orb) d);
 			return true;
@@ -138,18 +119,14 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 			return true;
 		}
 		if (d instanceof PapyrusDrop) {
-			numPapyri += ((PapyrusDrop) d).getQuantity();
+			papyrusSlot.addPapyri(((PapyrusDrop) d).getQuantity());
 		}
-		
 		return false;
-		
 	}
 	
 	@Override
 	public boolean remove(Droppable d, boolean specific) {
-		
 		if (d instanceof Item) {
-			
 			if (compare(d, weaponSlot, specific)) {
 				weaponSlot = null;
 				return true;
@@ -158,39 +135,34 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 				orbSlot = null;
 				return true;
 			}
-			
 		}
 		
 		if (d instanceof PapyrusDrop) {
-			int oldNumPapyri = numPapyri;
-			numPapyri = Math.max(numPapyri - ((PapyrusDrop) d).getQuantity(), 0);
-			return numPapyri != oldNumPapyri;
+			return papyrusSlot.removePapyri(((PapyrusDrop) d).getQuantity());
 		}
 		
-		return false;
-				
+		return false;	
 	}
 	
 	public void checkKeys() {
-		
 		FocusedWindow<?> window = (FocusedWindow<?>) Main.getWindow();
-		Vector movement = window.getMovementVector();
-		Vector dir = window.getShotDirection();
 		World world = window.getWorld();
-			
-		if (PAPYRUS_KEY.isPressed() && player instanceof Caster && getNumPapyri() > 0) {
-			papyrusSlot.queueSpell(world, (Caster) player);
-		}
-		
-		attack(world, movement, dir);
-				
+		attack(world, window.getMomentumVector(), window.getShotDirection());
+		cast(world, window.getCastPosition());	
 	}
 	
-	public void attack(World world, Vector movement, Vector dir) {
+	public void attack(World world, Vector momentum, Vector dir) {
 		if (weaponSlot == null || orbSlot == null || dir == null || dir.equals(Vector.ZERO) || dir.notInPlane()) {
 			return;
 		}
-		weaponSlot.attack(world, player, movement, dir, orbSlot);
+		weaponSlot.attackIfPossible(world, player, momentum, dir, orbSlot);
+	}
+	
+	private void cast(World world, Vector pos) {
+		if (pos != null && player instanceof Caster) {
+			papyrusSlot.queueSpellIfPossible(world, (Caster) player);
+			// TODO(lambdaviking): Need to resume?
+		}
 	}
 
 	public ListModel<Item> getItemModel() {

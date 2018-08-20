@@ -72,25 +72,21 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	}
 	
 	public synchronized void openInventory(int i) {
-		
 		F focus = getFocus();
 		if (!(focus instanceof Caster)) {
 			Debug.warning("tried to open inventory on non-Caster");
 			return;
 		}
-		
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				Main.setOverlay(new InventoryOverlay(FocusedWindow.this, (Caster) focus, false, i));
 				paused = true;
 			}
-		});
-		
+		});	
 	}
 	
 	public synchronized void editInventory(Caster caster) {
-		
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -98,7 +94,6 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 				paused = true;
 			}
 		});
-		
 	}
 	
 	public boolean isPaused() {
@@ -145,14 +140,14 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 		states.setMouseButton(e.getButton(), false);
 	}
 
-	public Vector getMovementVector() {
-		return states.getMovementVector();
+	public Vector getMomentumVector() {
+		return states.getMomentumVector();
 	}
 
 	public Vector getShotDirection() {
 
 		if (states.get(MouseButton.SHOOT)) {
-			return getMousePosAbsolute().copy().sub_(getFocus().getPos()).normalize_();
+			return getMousePosAbsolute().sub(getFocus().getPos()).normalize_();
 		}
 
 		if (states.get(Key.SHOOT_LEFT)) {
@@ -173,6 +168,13 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 
 		return null;
 
+	}
+	
+	public Vector getCastPosition() {
+		if (states.get(MouseButton.CAST)) {
+			return getMousePosAbsolute();
+		}
+		return null;
 	}
 
 	public static double getBaseDelta() {

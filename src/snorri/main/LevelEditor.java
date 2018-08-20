@@ -586,19 +586,19 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 					canGoDown = false;
 				}	
 				
-				if (states.getMovementVector().getX() < 0 && !canGoLeft) {
-					player.getPos().sub_(states.getMovementVector().getProjectionX().scale_(speed));
+				if (states.getMomentumVector().getX() < 0 && !canGoLeft) {
+					player.getPos().sub_(states.getMomentumVector().getProjectionX().scale_(speed));
 				}
-				if (states.getMovementVector().getX() > 0 && !canGoRight) {
-					player.getPos().sub_(states.getMovementVector().getProjectionX().scale_(speed));
+				if (states.getMomentumVector().getX() > 0 && !canGoRight) {
+					player.getPos().sub_(states.getMomentumVector().getProjectionX().scale_(speed));
 				}
-				if (states.getMovementVector().getY() < 0 && !canGoUp) {
-					player.getPos().sub_(states.getMovementVector().getProjectionY().scale_(speed));
+				if (states.getMomentumVector().getY() < 0 && !canGoUp) {
+					player.getPos().sub_(states.getMomentumVector().getProjectionY().scale_(speed));
 				}
-				if (states.getMovementVector().getY() > 0 && !canGoDown) {
-					player.getPos().sub_(states.getMovementVector().getProjectionY().scale_(speed));
+				if (states.getMomentumVector().getY() > 0 && !canGoDown) {
+					player.getPos().sub_(states.getMomentumVector().getProjectionY().scale_(speed));
 				}
-				player.getPos().add_(states.getMovementVector().scale_(speed));
+				player.getPos().add_(states.getMomentumVector().scale_(speed));
 				
 
 				if (isClicking) {

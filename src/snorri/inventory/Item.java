@@ -376,8 +376,8 @@ public abstract class Item implements Droppable {
 		BufferedImage icon = getTexture();
 		
 		Vector pos = getPos(i, top);
-		Vector iconPos = pos.copy().add_(new Vector(border.getWidth(null) - icon.getWidth(null), border.getHeight(null) - icon.getHeight(null)).divide_(2));
-		Vector arcPos = pos.copy().add_(new Vector(border.getWidth(null) - ARC_SIZE, border.getHeight(null) - ARC_SIZE).divide_(2));
+		Vector iconPos = pos.add(new Vector(border.getWidth(null) - icon.getWidth(null), border.getHeight(null) - icon.getHeight(null)).divide_(2));
+		Vector arcPos = pos.add(new Vector(border.getWidth(null) - ARC_SIZE, border.getHeight(null) - ARC_SIZE).divide_(2));
 		
 		if (selected) {
 			g.drawImage(border, pos.getX(), pos.getY(), null);

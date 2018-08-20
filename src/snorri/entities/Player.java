@@ -120,7 +120,7 @@ public class Player extends Unit implements Caster {
 
 			@Override
 			public void run() {
-				walkNormalized(world, window.getMovementVector(), deltaTime);
+				walkNormalized(world, window.getMomentumVector(), deltaTime);
 			}
 			
 		});

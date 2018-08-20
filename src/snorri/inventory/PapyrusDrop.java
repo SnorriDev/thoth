@@ -4,6 +4,12 @@ import java.awt.Image;
 
 import snorri.inventory.Item.ItemType;
 
+/**
+ * A class that can be used to add papyri to an inventory.
+ * @author snorri
+ *
+ * In admin mode, PapyrusDrops with quantity x can be created via "papyrus:x".
+ */
 public class PapyrusDrop implements Droppable {
 
 	private static final long serialVersionUID = 1L;
