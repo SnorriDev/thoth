@@ -1,5 +1,6 @@
 package snorri.semantics;
 
+import snorri.entities.Entity;
 import snorri.entities.Explosion;
 import snorri.events.SpellEvent;
 
@@ -10,13 +11,15 @@ public class Boom extends IntransVerbDef {
 	public Boom() {
 		super();
 	}
-
-	//TODO make explosions bigger
 	
 	@Override
 	public boolean exec(SpellEvent e) {
-		e.getWorld().delete(e.getSecondPerson());
-		e.getWorld().add(new Explosion(e.getSecondPerson().getPos(), DAMAGE));
+		Entity secondPerson = e.getSecondPerson();
+		if (secondPerson == null) {
+			return false;
+		}
+		e.getWorld().delete(secondPerson);
+		e.getWorld().add(new Explosion(secondPerson.getPos(), DAMAGE));
 		return true;
 	}
 

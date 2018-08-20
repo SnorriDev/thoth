@@ -35,9 +35,10 @@ public class Debug {
 	private static final Logger logger;
 	
 	static {
-		
+		// TODO(lambdaviking): Call logger methods directly and replace format with:
+		// "%1$tF %1$tT [%4$-7s][%2$s] %5$s %6$s%n".
 		System.setProperty("java.util.logging.SimpleFormatter.format",
-				"[%1$tF %1$tT] [%4$-7s] %5$s %n");
+				"%1$tF %1$tT [%4$-7s] %5$s %6$s%n");
 				
 		logger = Logger.getLogger("Thoth");
 		logger.setLevel(Level.ALL);
@@ -54,8 +55,7 @@ public class Debug {
 			e.printStackTrace();
 		} catch (IOException e) {
 			error(e);
-		}
-				
+		}	
 	}
 	
 	// TODO make these all methods with side effects
