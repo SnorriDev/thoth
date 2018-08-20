@@ -88,8 +88,7 @@ public class SpellEvent {
 		this.firstPerson = firstPerson;
 		this.secondPerson = secondPerson;
 		this.world = world;
-		loc = getSecondPerson().getPos().copy();
-//		dest = getThirdPerson().getPos().copy();
+		loc = null;
 		dest = null;
 	}
 	
@@ -99,13 +98,12 @@ public class SpellEvent {
 	}
 	
 	public SpellEvent(SpellEvent e) {
-		
 		world = e.world;
 		firstPerson = e.firstPerson;
 		secondPerson = e.secondPerson;
 		
-		loc = e.loc.copy();
-		dest = (dest == null) ? null : e.dest.copy();
+		loc = Vector.nullsafeCopy(e.loc);
+		dest = Vector.nullsafeCopy(e.dest);
 		
 		instrument = e.instrument;
 		
@@ -117,12 +115,9 @@ public class SpellEvent {
 		sizeModifier = e.sizeModifier;
 		speedModifier = e.speedModifier;
 		healthInteractModifier = e.healthInteractModifier;
-		
 	}
 	
-	/**
-	 * create a copy of this spell event with a different degree for adverb modification
-	 */
+	/** Create a copy of this spell event with a different adverbial degree. */
 	public SpellEvent(SpellEvent e, int degree) {
 		this(e);
 		this.degree = degree;
@@ -154,6 +149,12 @@ public class SpellEvent {
 	}
 	
 	public Vector getLocative() {
+		Vector loc = null;
+		if (this.loc != null) {
+			loc = this.loc;
+		} else if (getSecondPerson().getPos() != null) {
+			loc = getSecondPerson().getPos().copy();
+		}
 		return loc;
 	}
 	

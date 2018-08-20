@@ -62,6 +62,11 @@ public class Vector implements Nominal, Comparable<Vector> {
 		this(panel.getSize());
 	}
 	
+	/** Copy a non-null vector, and return null otherwise. */
+	public static Vector nullsafeCopy(Vector vector) {
+		return vector == null ? null : vector.copy();
+	}
+	
 	/**
 	 * Note: this method is intended for
 	 * vectors in grid coordinates

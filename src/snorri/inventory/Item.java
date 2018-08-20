@@ -291,25 +291,20 @@ public abstract class Item implements Droppable {
 	}
 	
 	/**
-	 * Use this item's spell on <code>subject</code> from <code>caster</code>'s perspective
-	 * @param caster
-	 * 	The caster of the spell
-	 * @param subject
-	 * 	The target of the spell
-	 * @return
+	 * Use this item's spell on <code>subject</code> from <code>caster</code>'s perspective.
+	 * @param caster The caster of the spell.
+	 * @param subject The target of the spell.
+	 * @return The result of the spell.
 	 */
 	public Object useSpellOn(World world, Caster caster, Entity subject, double modifier) {
-				
 		if (spell == null) {
 			return null;
 		}
-						
 		SpellEvent e = new SpellEvent(world, caster, subject, modifier);
 		return spell.getMeaning(e);
-		
 	}
 	
-	public Object useSpell(World world, Caster caster, Entity subject) {
+	public Object useSpellOn(World world, Caster caster, Entity subject) {
 		return useSpellOn(world, caster, subject, 1);	
 	}
 

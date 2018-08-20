@@ -7,7 +7,6 @@ import snorri.dialog.SpellMessage;
 import snorri.dialog.TextMessage;
 import snorri.entities.BossAIUnit;
 import snorri.events.SpellEvent.Caster;
-import snorri.main.Debug;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.nonterminals.Sentence;
@@ -70,15 +69,11 @@ public class Papyrus extends Item {
 		if (queuedCaster == null || getSpell() == null) {
 			return false;
 		}
-		Debug.raw("Non null spell");
-		// FIXME(lambdaviking): Something is crashing in this useSpell call.
-		Object o = useSpell(queuedWorld, queuedCaster, null);
-		Debug.raw("Spell used.");
+		Object o = useSpellOn(queuedWorld, queuedCaster, null);
 		if (Main.getWindow() instanceof GameWindow) {
 			String orthography = getSpell().getOrthography();
 			((GameWindow) Main.getWindow()).showMessage(new SpellMessage(orthography, o, spellIsStatement()));
 		}
-		Debug.raw("After if.");
 		queuedWorld = null;
 		queuedCaster = null;
 		return true;
@@ -108,7 +103,7 @@ public class Papyrus extends Item {
 		}
 		
 		if (timer.activate()) {
-			Object o = useSpell(world, caster, null);
+			Object o = useSpellOn(world, caster, null);
 			if (Main.getWindow() instanceof GameWindow) {
 				((GameWindow) Main.getWindow()).showMessage(new SpellMessage(orthography, o, spellIsStatement()));
 			}

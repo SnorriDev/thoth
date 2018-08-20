@@ -151,7 +151,6 @@ public class Debug {
 	 * 	the object to print
 	 */
 	public static void raw(Object o) {
-//		logger.log(Level.INFO, o.toString()); // FIXME all levels should show up
 		logger.log(Level.FINE, o == null ? null : o.toString());
 	}
 
@@ -166,8 +165,7 @@ public class Debug {
 
 	/**
 	 * Use this to print error messages to the game log.
-	 * @param s
-	 * 	the error string to print
+	 * @param s The error string to print.
 	 */
 	public static void error(Throwable e) {
 		error(e.getMessage(), e);
@@ -177,15 +175,9 @@ public class Debug {
 		logger.log(Level.SEVERE, msg, e);
 	}
 	
-	@Deprecated
-	public static void error(String msg) {
-		logger.log(Level.SEVERE, msg);
-	}
-	
 	/**
 	 * Use this to print warning messages to the game log.
-	 * @param s
-	 * the warning string to print
+	 * @param s The warning string to print.
 	 */
 	public static void warning(String s) {
 		logger.log(Level.WARNING, s);
