@@ -1631,7 +1631,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 	public void resize(int newWidth, int newHeight) {
 		autosaveUndo();
-		env.resize(newWidth, newHeight);
+		env = env.getResized(newWidth, newHeight);
 	}
 
 	public void autosaveUndo() {

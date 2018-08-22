@@ -20,7 +20,7 @@ import snorri.main.Main;
  *
  */
 
-public interface Playable extends Savable {
+public interface Playable extends Loadable, Savable {
 	
 	World getCurrentWorld();
 	
@@ -34,7 +34,7 @@ public interface Playable extends Savable {
 	public void load(File folder, Map<String, Object> yaml) throws FileNotFoundException, IOException, YamlException;
 	
 	@Override
-	default void load(File folder) throws FileNotFoundException, IOException {
+	default void load(File folder) throws IOException {
 		try {
 			load(folder, null);
 		} catch (YamlException e) {

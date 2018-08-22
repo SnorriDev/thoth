@@ -14,19 +14,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import snorri.entities.Entity;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
-import snorri.main.Layer;
 import snorri.masking.Mask;
 import snorri.world.TileType;
 
-public class Level implements Layer {
+public class Level implements Editable, SavableLayer {
 
 	public static final int MAX_SIZE = 1024;
 
@@ -86,19 +82,22 @@ public class Level implements Layer {
 				: ((layer == 1) ? MidgroundElement.NONE : ForegroundElement.NONE)));
 	}
 
-	public Level(File file, Class<? extends TileType> c) throws FileNotFoundException, IOException {
+	public Level(File file, Class<? extends TileType> c) throws IOException {
 		load(file, c);
 		updateAllMasksAndBitmap();
 	}
 
-	public Level(File file) throws FileNotFoundException, IOException {
+	public Level(File file) throws IOException {
 		load(file);
 		updateAllMasksAndBitmap();
 	}
+	
+	public static Level fromYAML(Map<String, Object> params) throws IOException {
+		File file = new File((String) params.get("path"));
+		return new Level(file);
+	}
 
-	/**
-	 * Constructor used for resizing
-	 */
+	/** Constructor used for resizing. */
 	@Deprecated
 	private Level(Level l, int newWidth, int newHeight) {
 		this(l, newWidth, newHeight, 0);
@@ -162,8 +161,7 @@ public class Level implements Layer {
 		return f;
 	}
 
-	@Override
-	public void resize(int newWidth, int newHeight) {
+	private void resize(int newWidth, int newHeight) {
 
 		Tile[][] newMap = new Tile[newWidth][newHeight];
 		Vector newDim = new Vector(newWidth, newHeight);
@@ -183,13 +181,11 @@ public class Level implements Layer {
 		map = newMap;
 		Debug.logger.info("New Level Size:\t" + getWidth() + "\tx\t" + getHeight() + ".");		
 	}
-	
-	public Level getResized(int newWidth, int newHeight, int layer) {
-		return new Level(this, newWidth, newHeight, layer);
-	}
 
 	public Level getResized(int newWidth, int newHeight) {
-		return new Level(this, newWidth, newHeight);
+		Level level = new Level(this, newWidth, newHeight);
+		level.resize(newWidth, newHeight);
+		return level;
 	}
 
 	public void setTile(int x, int y, Tile t) {
@@ -356,17 +352,7 @@ public class Level implements Layer {
 	}
 
 	@Override
-	public Level getLevel() {
-		return this;
-	}
-
-	@Override
-	public Level getLevel(int layer) {
-		return this;
-	}
-
-	@Override
-	public Level getLevel(Class<? extends TileType> c) {
+	public Level getTileLayer() {
 		return this;
 	}
 
@@ -460,11 +446,6 @@ public class Level implements Layer {
 			n.drawTileAbs(g, pos.copy().globalPos_(), true);
 			g.dispose();
 		}
-	}
-
-	@Override
-	public List<Entity> getEntities() {
-		return new ArrayList<Entity>();
 	}
 
 	/**
@@ -666,4 +647,10 @@ public class Level implements Layer {
 	public void setOutsideTile(Tile outsideTile) {
 		this.outsideTile = outsideTile;
 	}
+
+	@Override
+	public String getFilename() {
+		return "tile.level";
+	}
+
 }

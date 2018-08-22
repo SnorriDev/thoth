@@ -2,24 +2,22 @@ package snorri.world;
 
 import java.awt.FileDialog;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import snorri.main.Debug;
 import snorri.main.Main;
 
+/**
+ * An interface for objects (including layers) that can be saved.
+ * @author snorri
+ *
+ */
 public interface Savable {
-
-	public void load(File folder) throws FileNotFoundException, IOException;
-	
-	default void save(File f) throws IOException {
-		save(f, false);
-	}
 	
 	public void save(File f, boolean recomputeGraphs) throws IOException;
 	
-	default void load(String folderName) throws FileNotFoundException, IOException {
-		load(new File(folderName));
+	default void save(File f) throws IOException {
+		save(f, false);
 	}
 
 	default void save(String folderName) throws IOException {

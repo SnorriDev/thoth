@@ -314,13 +314,6 @@ public class Vector implements Nominal, Comparable<Vector> {
 		}
 		return this;
 	}
-
-	public Vector invert() {
-		double temp = y;
-		y = x;
-		x = temp;
-		return this;
-	}
 	
 	/**
 	 * Unlike other vector operations, <code>getInverted()</code> does not have any side effect.

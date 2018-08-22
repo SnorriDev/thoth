@@ -23,15 +23,9 @@ public class CreateObject extends TransVerbDef {
 				
 		if (obj instanceof Tile) {
 			
-			Class<? extends TileType> layer = ((Tile) obj).getType().getClass();			
-			Tile tile = e.getWorld().getLevel(layer).getTile(e.getLocative());
+			Tile tile = e.getWorld().getTileLayer().getTile(e.getLocative());
 			if (tile == null || !tile.getType().isChangable()) {
 				return false;
-			}
-			
-			Level midground = e.getWorld().getLevel(MidgroundElement.class);
-			if (midground.getTile(e.getLocative()).getType() == MidgroundElement.BROKEN_DEBRIS) {
-				e.getWorld().wrapUpdate(e.getLocative(), new Tile(MidgroundElement.NONE));
 			}
 			
 			//check if there is an entity in the way

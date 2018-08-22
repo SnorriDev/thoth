@@ -87,7 +87,7 @@ public class Break extends TransVerbDef {
 	 * @param v The grid position at which to cut.
 	 */
 	public static boolean cutTripwire(World world, Vector v) {
-		Level foreground = world.getLevel(ForegroundElement.class);
+		Level foreground = world.getTileLayer();
 		if (!isTripwire(foreground.getTileGrid(v))) {
 			return false;
 		}
