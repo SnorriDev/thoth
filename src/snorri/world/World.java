@@ -31,7 +31,8 @@ public class World implements Playable, Editable {
 	public static final int UPDATE_RADIUS = 4000;
 	private static final Vector EDGE_TP_DELTA = new Vector(Unit.RADIUS_X + 10, Unit.RADIUS_Y + 10);
 
-	private String path;
+	private File directory;
+	private String name;
 	private int width;
 	private int height;
 	
@@ -61,6 +62,7 @@ public class World implements Playable, Editable {
 	protected World(int width, int height) {
 		this.width = width;
 		this.height = height;
+		layers = new ArrayList<>();
 	}
 
 	public World(String folderName) throws FileNotFoundException, IOException {
@@ -96,11 +98,11 @@ public class World implements Playable, Editable {
 	 * 
 	 * This factory function should be used to create blank worlds externally.
 	 * 
-	 * @param dims Dimensions of the world to be created.
+	 * @param dims Dimensions of the world to be created (in grid coordinates).
 	 */
 	public static World createDefaultWorld(Vector dims) {
 		World world = new World(dims.getX(), dims.getY());
-		world.addLayer(new Level(dims.gridPos()));
+		world.addLayer(new Level(dims));
 		world.addLayer(new EntityLayer(world));
 		return world;
 	}
@@ -180,9 +182,12 @@ public class World implements Playable, Editable {
 
 	@Override
 	public void save(File f, boolean recomputeGraphs) throws IOException {
-
+		if (f == null) {
+			throw new IllegalArgumentException("Save path for World must be non-null.");
+		}
+		
 		if (f.exists() && !f.isDirectory()) {
-			throw new IOException("tried to save world to non-directory");
+			throw new IOException("Tried to save world to non-directory.");
 		}
 
 		if (!f.exists()) {
@@ -192,12 +197,13 @@ public class World implements Playable, Editable {
 		
 		Playable.tryCreatingDefaultConfig(f, "world");
 		
-		String path = (f == null) ? this.path : f.getPath();
+		String path = f.getPath();
 		layers.forEach(layer -> {
 			if (layer instanceof SavableLayer) {
 				SavableLayer savableLayer = (SavableLayer) layer;
 				File saveFile = new File(path, savableLayer.getFilename());
 				try {
+					Debug.logger.info("Saving " + saveFile.getName() + "...");
 					savableLayer.save(saveFile, recomputeGraphs);
 				} catch (Exception e) {
 					Debug.logger.log(java.util.logging.Level.SEVERE, "Could not load " + saveFile.getAbsolutePath() + ".", e);
@@ -209,33 +215,32 @@ public class World implements Playable, Editable {
 
 	@Override @SuppressWarnings("unchecked")
 	public void load(File f, Map<String, Object> yaml) throws IOException, YamlException {
-		
 		if (f == null) {
-			throw new NullPointerException("trying to load null world");
+			throw new IllegalArgumentException("Trying to load World from null file.");
 		}
-		
 		if (!f.exists()) {
-			throw new FileNotFoundException("no world called " + f.getName());
+			throw new FileNotFoundException("No world called " + f.getName() + ".");
 		}
-
 		if (!f.isDirectory()) {
-			throw new IOException("world file " + f.getName() + " is not a directory");
+			throw new IOException("World file " + f.getName() + " is not a directory");
 		}
 		
-		path = f.getName();
+		directory = f;
+		name = f.getName();
 		
 		if (yaml == null) {
 			yaml = Playable.getConfig(f, "world");
 		}
 		
-		Map<String, Map<String, Object>> layers = (Map<String, Map<String, Object>>) yaml.get("layers");
+		this.layers = new ArrayList<>();
+		List<Map<String, Object>> layers = (List<Map<String, Object>>) yaml.get("layers");
 		if (layers == null) {
 			File configFile = new File(f, "config.yml");
 			throw new IllegalArgumentException("No layers specified in " + configFile.getAbsolutePath() + ".");
 		}
-		layers.forEach((type, params) -> {
+		layers.forEach(params -> {
 			try {
-				Layer layer = Layer.fromYAML(this, type, params);
+				Layer layer = Layer.fromYAML(this, params);
 				addLayer(layer);
 			} catch (Exception e) {
 				// FIXME(lambdaviking): Does getting rid of forEach allow us not to use this clause?
@@ -448,7 +453,7 @@ public class World implements Playable, Editable {
 	
 	@Override
 	public String toString() {
-		return path;
+		return name;
 	}
 	
 	@Deprecated
@@ -484,6 +489,11 @@ public class World implements Playable, Editable {
 	@Override
 	public WorldGraph getWorldGraph() {
 		return universe;
+	}
+	
+	/** Get the directory from which this World was loaded. */
+	public File getDirectory() {
+		return directory;
 	}
 	
 }

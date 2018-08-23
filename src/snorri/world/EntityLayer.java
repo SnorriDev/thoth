@@ -7,6 +7,7 @@ import java.util.Map;
 
 import snorri.entities.Entity;
 import snorri.entities.QuadTree;
+import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 
 public class EntityLayer implements SavableLayer {
@@ -25,7 +26,8 @@ public class EntityLayer implements SavableLayer {
 	
 	public static EntityLayer fromYAML(World world, Map<String, Object> params) throws IOException {
 		EntityLayer entityLayer = new EntityLayer(world);
-		File file = new File((String) params.get("path"));
+		File file = new File(world.getDirectory(), (String) params.get("path"));
+		Debug.logger.info("Loading " + file + "...");
 		entityLayer.entityTree.loadEntities(file);
 		return entityLayer;
 	}

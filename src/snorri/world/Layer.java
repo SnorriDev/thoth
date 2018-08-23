@@ -12,12 +12,14 @@ public interface Layer extends Renderable {
 
 	public boolean canShootOver(Vector position);	
 	
-	static Layer fromYAML(World world, String type, Map<String, Object> params) throws IOException {
+	// TODO(lambdaviking): Save this stuff.
+	static Layer fromYAML(World world, Map<String, Object> params) throws IOException {
+		String type = (String) params.get("type");
 		switch (type) {
 		case "background":
-			return BackgroundLayer.fromYAML(params);
+			return BackgroundLayer.fromYAML(world, params);
 		case "tile":
-			return Level.fromYAML(params);
+			return Level.fromYAML(world, params);
 		case "entity":
 			return EntityLayer.fromYAML(world, params);
 		default:

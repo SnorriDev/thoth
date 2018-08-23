@@ -339,7 +339,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			}
 			Vector dims = new Vector(wh[0], wh[1]);
 			if (wh[0] > 0 && wh[1] > 0 && wh[0] <= Level.MAX_SIZE && wh[1] <= Level.MAX_SIZE) {
-				env = World.createDefaultWorld(dims);
+				setEditableEnvironment(World.createDefaultWorld(dims));
 				centerCamera();
 			} else {
 				throw new IllegalArgumentException("Invalid dimensions for World: " + dims + ".");
@@ -351,8 +351,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 				if (worldFile == null) {
 					break;
 				}
-				env = new World(worldFile);
-				setSelectedTileLayer(env.getTileLayer());
+				setEditableEnvironment(new World(worldFile));
 				centerCamera();
 			} catch (IOException e1) {
 				Debug.logger.warning("Failed to open World.");
@@ -818,7 +817,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 	public void resize(int newWidth, int newHeight) {
 		autosaveUndo();
-		env = env.getResized(newWidth, newHeight);
+		setEditableEnvironment(env.getResized(newWidth, newHeight));
 	}
 
 	public void autosaveUndo() {
@@ -905,6 +904,11 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		else {
 			return null;
 		}
+	}
+	
+	private void setEditableEnvironment(Editable env) {
+		this.env = env;
+		setSelectedTileLayer(env.getTileLayer());
 	}
 	
 	private Level getSelectedTileLayer() {

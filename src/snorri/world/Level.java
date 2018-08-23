@@ -48,6 +48,8 @@ public class Level implements Editable, SavableLayer {
 	}
 
 	public Level(int width, int height, TileType bg) {
+		Debug.logger.fine("Width: " + width);
+		Debug.logger.fine("Height: " + height);
 		map = new Tile[width][height];
 		layer = bg.getLayer();
 
@@ -92,8 +94,8 @@ public class Level implements Editable, SavableLayer {
 		updateAllMasksAndBitmap();
 	}
 	
-	public static Level fromYAML(Map<String, Object> params) throws IOException {
-		File file = new File((String) params.get("path"));
+	public static Level fromYAML(World world, Map<String, Object> params) throws IOException {
+		File file = new File(world.getDirectory(), (String) params.get("path"));
 		return new Level(file);
 	}
 
@@ -280,9 +282,7 @@ public class Level implements Editable, SavableLayer {
 
 	public void load(File file, Class<? extends TileType> c) throws FileNotFoundException, IOException {
 		Debug.logger.info("Loading " + file + "...");
-
 		byte[] b = new byte[4];
-
 		FileInputStream is = new FileInputStream(file);
 
 		is.read(b);
@@ -310,8 +310,6 @@ public class Level implements Editable, SavableLayer {
 	}
 
 	public void save(File file, boolean saveGraphs) throws IOException {
-		Debug.logger.info("Saving " + file.getName() + "...");
-
 		FileOutputStream os = new FileOutputStream(file);
 		ByteBuffer b1 = ByteBuffer.allocate(4);
 		ByteBuffer b2 = ByteBuffer.allocate(4);

@@ -2,8 +2,10 @@ package snorri.world;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.Map;
 
+import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 
@@ -24,9 +26,11 @@ public class BackgroundLayer implements Layer {
 		this.dimensions = new Vector(bitmap.getWidth(), bitmap.getHeight());
 	}
 	
-	public static Layer fromYAML(Map<String, Object> params) {
+	public static Layer fromYAML(World world, Map<String, Object> params) {
 		String path = (String) params.get("path");
-		BufferedImage bitmap = Main.getImage(path);
+		File file = new File(world.getDirectory(), path);
+		Debug.logger.info("Loading " + file + "...");
+		BufferedImage bitmap = Main.getImage(file);
 		return new BackgroundLayer(bitmap);
 	}
 	
