@@ -25,7 +25,7 @@ public interface Savable {
 	}
 	
 	default void wrapSave() {
-		File f = Main.getFileDialog("Select save destination", FileDialog.SAVE, this instanceof Level);
+		File f = Main.getFileDialog("Select save destination", FileDialog.SAVE, this instanceof TileLayer);
 		if (f == null) {
 			return;
 		}

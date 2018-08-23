@@ -37,7 +37,7 @@ public class World implements Playable, Editable {
 	private int height;
 	
 	private List<Layer> layers;
-	private Level tileLayer;
+	private TileLayer tileLayer;
 	private EntityLayer entityLayer;
 
 	private List<Team> teams;
@@ -102,7 +102,7 @@ public class World implements Playable, Editable {
 	 */
 	public static World createDefaultWorld(Vector dims) {
 		World world = new World(dims.getX(), dims.getY());
-		world.addLayer(new Level(dims));
+		world.addLayer(new TileLayer(dims));
 		world.addLayer(new EntityLayer(world));
 		return world;
 	}
@@ -115,9 +115,9 @@ public class World implements Playable, Editable {
 			} else {
 				throw new WorldLayerException("Cannot have two EntityLayers in the same Level.");
 			}
-		} else if (layer instanceof Level) {
+		} else if (layer instanceof TileLayer) {
 			if (tileLayer == null) {
-				tileLayer = (Level) layer;
+				tileLayer = (TileLayer) layer;
 			} else {
 				throw new WorldLayerException("Cannot have two TileLayers in the same Level.");
 			}
@@ -334,7 +334,7 @@ public class World implements Playable, Editable {
 	}
 	
 	public synchronized void wrapGridUpdate(Vector posGrid, Tile tile) {
-		Level l = getTileLayer();
+		TileLayer l = getTileLayer();
 		Tile oldTile = l.getTileGrid(posGrid);
 
 		if (oldTile == null) {
@@ -465,7 +465,7 @@ public class World implements Playable, Editable {
 		return entityLayer;
 	}
 	
-	public Level getTileLayer() {
+	public TileLayer getTileLayer() {
 		return tileLayer;
 	}
 		

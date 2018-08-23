@@ -19,7 +19,7 @@ public interface Layer extends Renderable {
 		case "background":
 			return BackgroundLayer.fromYAML(world, params);
 		case "tile":
-			return Level.fromYAML(world, params);
+			return TileLayer.fromYAML(world, params);
 		case "entity":
 			return EntityLayer.fromYAML(world, params);
 		default:

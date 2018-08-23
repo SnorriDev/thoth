@@ -23,7 +23,7 @@ public interface Editable extends Loadable, Savable, Renderable {
 	public void render(FocusedWindow<?> levelEditor, Graphics2D gr, double deltaTime, boolean b);
 	
 	/** Return the main tile layer in which intersections are checked. */
-	public Level getTileLayer();
+	public TileLayer getTileLayer();
 		
 	public WorldGraph getWorldGraph();
 	

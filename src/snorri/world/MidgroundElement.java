@@ -146,7 +146,7 @@ public enum MidgroundElement implements TileType {
 	
 	@Override 
 	public int getLayer() {
-		return Level.MIDGROUND;
+		return TileLayer.MIDGROUND;
 	}
 
 	@Override

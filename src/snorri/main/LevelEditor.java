@@ -41,7 +41,7 @@ import snorri.pathfinding.Team;
 import snorri.world.Editable;
 import snorri.world.ForegroundElement;
 import snorri.world.MidgroundElement;
-import snorri.world.Level;
+import snorri.world.TileLayer;
 import snorri.world.Playable;
 import snorri.world.Tile;
 import snorri.world.Vector;
@@ -64,7 +64,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 	private boolean isClicking = false;
 	
 	// TODO(lambdaviking): Be able to modify this in interface.
-	private Level selectedTileLayer; // The selected layer to modify.
+	private TileLayer selectedTileLayer; // The selected layer to modify.
 
 	private boolean canGoLeft;
 	private boolean canGoRight;
@@ -338,7 +338,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 				return;
 			}
 			Vector dims = new Vector(wh[0], wh[1]);
-			if (wh[0] > 0 && wh[1] > 0 && wh[0] <= Level.MAX_SIZE && wh[1] <= Level.MAX_SIZE) {
+			if (wh[0] > 0 && wh[1] > 0 && wh[0] <= TileLayer.MAX_SIZE && wh[1] <= TileLayer.MAX_SIZE) {
 				setEditableEnvironment(World.createDefaultWorld(dims));
 				centerCamera();
 			} else {
@@ -911,11 +911,11 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		setSelectedTileLayer(env.getTileLayer());
 	}
 	
-	private Level getSelectedTileLayer() {
+	private TileLayer getSelectedTileLayer() {
 		return selectedTileLayer;
 	}
 	
-	private void setSelectedTileLayer(Level selectedTileLayer) {
+	private void setSelectedTileLayer(TileLayer selectedTileLayer) {
 		this.selectedTileLayer = selectedTileLayer;
 	}
 	

@@ -191,11 +191,11 @@ public interface TileType extends Nominal {
 	
 	public static TileType[] getValues(int l) {
 		switch (l) {
-		case Level.BACKGROUND:
+		case TileLayer.BACKGROUND:
 			return BackgroundElement.values();
-		case Level.MIDGROUND:
+		case TileLayer.MIDGROUND:
 			return MidgroundElement.values();
-		case Level.FOREGROUND:
+		case TileLayer.FOREGROUND:
 			return ForegroundElement.values();
 		default:
 			return null; //unknown level

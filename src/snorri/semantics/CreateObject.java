@@ -4,7 +4,7 @@ import snorri.entities.Entity;
 import snorri.entities.Spike;
 import snorri.events.SpellEvent;
 import snorri.parser.Node;
-import snorri.world.Level;
+import snorri.world.TileLayer;
 import snorri.world.MidgroundElement;
 import snorri.world.Tile;
 import snorri.world.TileType;
