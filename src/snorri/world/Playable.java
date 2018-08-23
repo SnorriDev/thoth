@@ -44,11 +44,21 @@ public interface Playable extends Loadable, Savable {
 	
 	static void tryCreatingDefaultConfig(File folder, String type) throws FileNotFoundException {
 		File config = new File(folder, "config.yml");
-		if (type != null && !config.exists()) { //if the config file doesn't exist, create a default one
-			PrintWriter pw = new PrintWriter(config);
-			pw.write("type: " + type);
-			pw.close();
+		if (type == null || config.exists()) {
+			return;
 		}
+		
+		// If the config file doesn't exist, create a default one.
+		PrintWriter pw = new PrintWriter(config);
+		pw.write("type: " + type);
+		if (type == "world") {
+			pw.write("layers:");
+			pw.write("  - type: tile");
+			pw.write("    path: tile.level");
+			pw.write("  - type: entity");
+			pw.write("    path: entity.level");
+		}
+		pw.close();
 	}
 	
 	/**
