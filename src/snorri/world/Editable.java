@@ -26,5 +26,12 @@ public interface Editable extends Loadable, Savable, Renderable {
 	public Level getTileLayer();
 		
 	public WorldGraph getWorldGraph();
+	
+	@Override
+	public Editable getTransposed();
+	@Override
+	public Editable getXReflected();
+	@Override
+	public Editable getResized(int newWidth, int newHeight);
 		
 }

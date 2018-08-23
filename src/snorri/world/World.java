@@ -500,6 +500,18 @@ public class World implements Playable, Editable {
 	public Level getTileLayer() {
 		return tileLayer;
 	}
+		
+	/** Get a TileLayer by index.
+	 * 
+	 * The generic type T can be used to ensure that the returned layer is of a certain type.
+	 * @param index Index of the layer in the layers array.
+	 * @return The layer whose index in layers is <code>index</code>.
+	 */
+	// TODO(lambdaviking): Figure this out.
+	@SuppressWarnings("unchecked")
+	public <T extends Layer> T getLayer(int index) {
+		return (T) layers.get(index);
+	}
 	
 	@Override
 	public Center findCenter() {
