@@ -20,7 +20,6 @@ import snorri.entities.LongRangeAIUnit.ShootAttempt;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
-import snorri.pathfinding.Pathfinding;
 import snorri.pathfinding.Team;
 import snorri.triggers.Trigger;
 import snorri.triggers.TriggerMap;
@@ -30,7 +29,6 @@ public class World implements Playable, Editable {
 	public static final Vector DEFAULT_LEVEL_SIZE = new Vector(13, 8);
 	public static final Vector DEFAULT_SPAWN = new Vector(100, 100);
 	public static final int UPDATE_RADIUS = 4000;
-	private static final int SPAWN_SEARCH_RADIUS = 12;
 	private static final Vector EDGE_TP_DELTA = new Vector(Unit.RADIUS_X + 10, Unit.RADIUS_Y + 10);
 
 	private String path;
@@ -40,8 +38,6 @@ public class World implements Playable, Editable {
 	private List<Layer> layers;
 	private Level tileLayer;
 	private EntityLayer entityLayer;
-
-	private final Pathfinding pathfinding;
 
 	private List<Team> teams;
 	private TriggerMap triggers;
@@ -55,17 +51,16 @@ public class World implements Playable, Editable {
 	}
 
 	/**
-	 * constructor to create a blank world in the level editor
+	 * Constructor which creates a blank world with no layers.
 	 * 
-	 * @param width
-	 *            width of the new world
-	 * @param height
-	 *            height of the new world
+	 * The static factory methods should be called externally to create a more interesting world.
+	 * 
+	 * @param width Width of the new world.
+	 * @param height Height of the new world.
 	 */
-	public World(int width, int height) {
+	protected World(int width, int height) {
 		this.width = width;
 		this.height = height;
-		pathfinding = createPathfinding();
 	}
 
 	public World(String folderName) throws FileNotFoundException, IOException {
@@ -81,7 +76,6 @@ public class World implements Playable, Editable {
 		if (p != null) {
 			spawnPlayer(p);
 		}
-		pathfinding = createPathfinding();
 	}
 		
 	public World(File file) throws FileNotFoundException, IOException {
@@ -95,6 +89,20 @@ public class World implements Playable, Editable {
 			super(msg);
 		}
 
+	}
+	
+	/**
+	 * Creates a starting world with a TileLayer and EntityLayer.
+	 * 
+	 * This factory function should be used to create blank worlds externally.
+	 * 
+	 * @param dims Dimensions of the world to be created.
+	 */
+	public static World createDefaultWorld(Vector dims) {
+		World world = new World(dims.getX(), dims.getY());
+		world.addLayer(new Level(dims.gridPos()));
+		world.addLayer(new EntityLayer(world));
+		return world;
 	}
 	
 	private void addLayer(Layer layer) {
@@ -112,12 +120,6 @@ public class World implements Playable, Editable {
 				throw new WorldLayerException("Cannot have two TileLayers in the same Level.");
 			}
 		}
-	}
-	
-	private Pathfinding createPathfinding() {
-		List<Level> pathfindingLayers = new ArrayList<>();
-		pathfindingLayers.add(tileLayer);
-		return new Pathfinding(pathfindingLayers);
 	}
 
 	public static File wrapLoad() {
@@ -154,7 +156,7 @@ public class World implements Playable, Editable {
 	}
 	
 	public boolean add(Entity e) {
-		return entityLayer.add(e, pathfinding);
+		return entityLayer.add(e);
 	}
 
 	/** Add a bunch of things to the world. */
@@ -227,6 +229,10 @@ public class World implements Playable, Editable {
 		}
 		
 		Map<String, Map<String, Object>> layers = (Map<String, Map<String, Object>>) yaml.get("layers");
+		if (layers == null) {
+			File configFile = new File(f, "config.yml");
+			throw new IllegalArgumentException("No layers specified in " + configFile.getAbsolutePath() + ".");
+		}
 		layers.forEach((type, params) -> {
 			try {
 				Layer layer = Layer.fromYAML(this, type, params);
@@ -317,41 +323,6 @@ public class World implements Playable, Editable {
 		}
 		teams.add(team);
 	}
-	
-	public Vector getGoodSpawn(Vector start) {
-		return getGoodSpawn(start, new Vector(1, 2));
-	}
-
-	public Vector getGoodSpawn(Vector start, Vector gridSize) {
-
-		for (int r = 0; r < SPAWN_SEARCH_RADIUS; r++) {
-			changeStart: for (Vector v : start.getSquareAround(r)) {
-
-				int x = v.getX();
-				int y = v.getY();
-
-				for (int x1 = (x * Tile.WIDTH - 2 * Unit.RADIUS_X)
-						/ Tile.WIDTH; x1 <= (x * Tile.WIDTH + 2 * Unit.RADIUS_X) / Tile.WIDTH; x1++) {
-					for (int y1 = (y * Tile.WIDTH - 2 * Unit.RADIUS_Y)
-							/ Tile.WIDTH; y1 <= (y * Tile.WIDTH + 2 * Unit.RADIUS_Y) / Tile.WIDTH; y1++) {
-						if (!pathfinding.getGraph(gridSize).isContextPathable(x1, y1)) {
-							continue changeStart;
-						}
-					}
-				}
-
-				return v.copy().globalPos_();
-
-			}
-		}
-
-		return null;
-
-	}
-
-	public Vector getGoodSpawn(int x, int y) {
-		return getGoodSpawn(new Vector(x, y));
-	}
 
 	public void wrapUpdate(Vector pos, Tile tile) {
 		wrapGridUpdate(pos.copy().gridPos_(), tile);
@@ -361,17 +332,12 @@ public class World implements Playable, Editable {
 		Level l = getTileLayer();
 		Tile oldTile = l.getTileGrid(posGrid);
 
-		if (oldTile == null || pathfinding.isOccupied(posGrid)) {
+		if (oldTile == null) {
 			return;
 		}
 
 		l.setTileGrid(posGrid, tile);
-		pathfinding.wrapPathingUpdate(posGrid, oldTile, tile);
 		ShootAttempt.reset();
-	}
-
-	public Pathfinding getPathfinding() {
-		return pathfinding;
 	}
 	
 	/**
@@ -387,13 +353,10 @@ public class World implements Playable, Editable {
 		return getTileLayer().canShootOver(pos.gridPos());
 	}
 
-	/**
-	 * @param x grid coordinate
-	 * @param y grid coordinate
-	 * @return whether the tile at x, y is pathable
-	 */
+	/** Whether the tile at global position (x, y) can be traversed. */
 	public boolean isPathable(int x, int y) {
-		return pathfinding.isPathable(x, y);
+		Vector gridPos = new Vector(x, y).gridPos_();
+		return getTileLayer().isPathable(gridPos);
 	}
 
 	public void wrapGridUpdate(int x, int y, Tile tile) {

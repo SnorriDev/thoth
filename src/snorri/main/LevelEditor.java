@@ -126,11 +126,6 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
-		menuItem = new JMenuItem("Compute Pathing", KeyEvent.VK_P);
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
-		menuItem.addActionListener(this);
-		menu.add(menuItem);
-
 		menuItem = new JMenuItem("Undo", KeyEvent.VK_Z);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
@@ -339,17 +334,16 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		switch (e.getActionCommand()) {
 		case "New":
 			int[] wh = whDialog();
-
 			if (wh == null) {
 				return;
 			}
-
-			if (wh != null && wh[0] > 0 && wh[1] > 0 && wh[0] <= Level.MAX_SIZE && wh[1] <= Level.MAX_SIZE) {
-				env = new World(wh[0], wh[1]);
+			Vector dims = new Vector(wh[0], wh[1]);
+			if (wh[0] > 0 && wh[1] > 0 && wh[0] <= Level.MAX_SIZE && wh[1] <= Level.MAX_SIZE) {
+				env = World.createDefaultWorld(dims);
+				centerCamera();
 			} else {
-				env = new World();
+				throw new IllegalArgumentException("Invalid dimensions for World: " + dims + ".");
 			}
-			centerCamera();
 			break;
 		case "Open":
 			try {
@@ -382,11 +376,6 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			}
 
 			resize(whNew[0], whNew[1]);
-			break;
-		case "Compute Pathing":
-			if (env instanceof World) {
-				((World) env).getPathfinding().compute();
-			}
 			break;
 		case "Undo":
 			if (env == null || !canUndo) {

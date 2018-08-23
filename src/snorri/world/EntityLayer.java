@@ -8,7 +8,6 @@ import java.util.Map;
 import snorri.entities.Entity;
 import snorri.entities.QuadTree;
 import snorri.main.FocusedWindow;
-import snorri.pathfinding.Pathfinding;
 
 public class EntityLayer implements SavableLayer {
 	
@@ -27,7 +26,7 @@ public class EntityLayer implements SavableLayer {
 	public static EntityLayer fromYAML(World world, Map<String, Object> params) throws IOException {
 		EntityLayer entityLayer = new EntityLayer(world);
 		File file = new File((String) params.get("path"));
-		entityLayer.entityTree.loadEntities(file, world.getPathfinding());
+		entityLayer.entityTree.loadEntities(file);
 		return entityLayer;
 	}
 	
@@ -39,8 +38,8 @@ public class EntityLayer implements SavableLayer {
 		return entityLayer;
 	}
 	
-	public boolean add(Entity entity, Pathfinding pathfinding) {
-		return entityTree.insert(entity, pathfinding);
+	public boolean add(Entity entity) {
+		return entityTree.insert(entity);
 	}
 	
 	public boolean remove(Entity entity) {

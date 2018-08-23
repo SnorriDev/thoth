@@ -111,8 +111,9 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 				return;
 			}
 			
-			Component graph = world.getPathfinding().getGraph(this).getComponent(this);
-			Component targetGraph = world.getPathfinding().getGraph(this).getComponent(target);
+			// FIXME(lambdaviking): Remove Component logic here.
+			Component graph = null;
+			Component targetGraph = null;
 						
 			if (path != null) {
 				
@@ -169,9 +170,9 @@ public abstract class AIUnit extends Unit implements Pathfinder, Carrier, Target
 			return;
 		}
 		
-		world.getPathfinding().setPathAsync(pos.copy().gridPos_(), target.pos.copy().gridPos_(), this);
-		lastSeenPos = target.pos.copy(); //don't put this in other thing
-		recalculatingPath = true;
+//		world.getPathfinding().setPathAsync(pos.copy().gridPos_(), target.pos.copy().gridPos_(), this);
+//		lastSeenPos = target.pos.copy(); //don't put this in other thing
+//		recalculatingPath = true;
 	}
 	
 	public void stopPath() {

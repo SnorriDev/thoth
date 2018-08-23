@@ -81,7 +81,7 @@ public interface EntityGroup {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	default void loadEntities(File file, Pathfinding pathfinding) throws FileNotFoundException, IOException {
+	default void loadEntities(File file) throws FileNotFoundException, IOException {
 		
 		if (!file.exists()) {
 			return;
@@ -91,7 +91,7 @@ public interface EntityGroup {
 		while (true) {
 			try {
 				Entity e = (Entity) in.readObject();
-				insert(e, pathfinding);
+				insert(e);
 			} catch (EOFException | ClassNotFoundException e) {
 				break;
 			}
