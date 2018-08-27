@@ -239,7 +239,7 @@ public enum BackgroundElement implements TileType {
 	
 	@Override 
 	public int getLayer() {
-		return Level.BACKGROUND;
+		return TileLayer.BACKGROUND;
 	}
 
 	@Override

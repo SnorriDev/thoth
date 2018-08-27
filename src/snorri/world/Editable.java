@@ -1,31 +1,38 @@
 package snorri.world;
 
 import java.awt.Graphics2D;
-import java.util.List;
 
-import snorri.entities.Entity;
 import snorri.main.FocusedWindow;
 
-public interface Editable extends Savable {
-
+/**
+ * A class that can be viewed and edited in the level editor.
+ * @author snorri
+ * 
+ * This interface intersects (but is separate from) Layer. For example, World is an Editable but not a Layer.
+ * 
+ * It describes objects that can be:
+ * 	* Loaded in the level editor.
+ *  * Saved in the level editor.
+ *  * Displayed in the level editor.
+ * 	* Edited via various transforms (resizing, reflection, transposition).
+ *
+ */
+public interface Editable extends Loadable, Savable, Renderable {
+	
+	/** This method is declared in Renderable but written here to be explicit. */
+	@Override
 	public void render(FocusedWindow<?> levelEditor, Graphics2D gr, double deltaTime, boolean b);
-
-	public Level getLevel();
 	
-	public Level getLevel(int layer);
-	
-	public Level getLevel(Class<? extends TileType> c);
-
-	public void resize(int newWidth, int newHeight);
-	
-	public Editable getTransposed();
-	
-	public Editable getXReflected();
-
-	public List<Entity> getEntities();
-	
-	public Vector getDimensions();
-	
+	/** Return the main tile layer in which intersections are checked. */
+	public TileLayer getTileLayer();
+		
 	public WorldGraph getWorldGraph();
+	
+	@Override
+	public Editable getTransposed();
+	@Override
+	public Editable getXReflected();
+	@Override
+	public Editable getResized(int newWidth, int newHeight);
 		
 }

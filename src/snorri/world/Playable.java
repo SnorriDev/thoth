@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import net.sourceforge.yamlbeans.YamlException;
@@ -20,7 +22,32 @@ import snorri.main.Main;
  *
  */
 
-public interface Playable extends Savable {
+public interface Playable extends Loadable, Savable {
+	
+	public enum PlayableType {
+		WORLD(World.class),
+		WORLD_GRAPH(WorldGraph.class);
+		
+		private Class<? extends Playable> playableClass;
+		
+		PlayableType(Class<? extends Playable> playableClass) {
+			this.playableClass = playableClass;
+		}
+		
+		public Playable newInstance(File file, Player player) {
+			Constructor<? extends Playable> constructor;
+			try {
+				constructor = playableClass.getConstructor(File.class, Player.class);
+				return constructor.newInstance(file, player);
+			} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
+					| InvocationTargetException e) {
+				Debug.logger.log(java.util.logging.Level.SEVERE, "Playable of type " + this + " could not be created.",
+						e);
+				return null;
+			}
+		}
+		
+	}
 	
 	World getCurrentWorld();
 	
@@ -34,21 +61,31 @@ public interface Playable extends Savable {
 	public void load(File folder, Map<String, Object> yaml) throws FileNotFoundException, IOException, YamlException;
 	
 	@Override
-	default void load(File folder) throws FileNotFoundException, IOException {
+	default void load(File folder) throws IOException {
 		try {
 			load(folder, null);
 		} catch (YamlException e) {
-			Debug.logger.log(java.util.logging.Level.SEVERE, "couldn't parse config.yml", e);
+			Debug.logger.log(java.util.logging.Level.SEVERE, "Couldn't parse config.yml.", e);
 		}
 	}
 	
-	static void tryCreatingDefaultConfig(File folder, String type) throws FileNotFoundException {
+	static void tryCreatingDefaultConfig(File folder, PlayableType type) throws FileNotFoundException {
 		File config = new File(folder, "config.yml");
-		if (type != null && !config.exists()) { //if the config file doesn't exist, create a default one
-			PrintWriter pw = new PrintWriter(config);
-			pw.write("type: " + type);
-			pw.close();
+		if (type == null || config.exists()) {
+			return;
 		}
+		
+		// If the config file doesn't exist, create a default one.
+		PrintWriter pw = new PrintWriter(config);
+		pw.write("type: " + type.toString() + "\n");
+		if (type == PlayableType.WORLD) {
+			pw.write("layers:\n");
+			pw.write("  - type: TILE\n");
+			pw.write("    path: tile.layer\n");
+			pw.write("  - type: ENTITY\n");
+			pw.write("    path: entity.layer\n");
+		}
+		pw.close();
 	}
 	
 	/**
@@ -64,7 +101,7 @@ public interface Playable extends Savable {
 	 * @throws YamlException
 	 */
 	@SuppressWarnings("unchecked")
-	static Map<String, Object> getConfig(File folder, String type) throws FileNotFoundException, IOException, YamlException {
+	static Map<String, Object> getConfig(File folder, PlayableType type) throws FileNotFoundException, IOException, YamlException {
 		
 		File config = new File(folder, "config.yml");
 		tryCreatingDefaultConfig(folder, type);
@@ -72,7 +109,8 @@ public interface Playable extends Savable {
 		YamlReader reader = Main.getYamlReader(config);
 		Map<String, Object> yamlRoot = (Map<String, Object>) reader.read();
 		
-		if (type != null && !yamlRoot.get("type").equals(type)) {
+		PlayableType yamlType = PlayableType.valueOf((String) yamlRoot.get("type"));
+		if (type != null && !yamlType.equals(type)) {
 			throw new IllegalArgumentException("invalid world type");
 		}
 		reader.close();
@@ -87,27 +125,14 @@ public interface Playable extends Savable {
 	
 	/**
 	 * Factory function to load any Playable (world or graph) from a folder.
-	 * @param file
-	 * @return
+	 * @param file File to load from.
+	 * @return A newly created Playable instance.
 	 * @throws IOException
 	 */
 	static Playable getLoaded(File file, Player p) throws FileNotFoundException, IOException, YamlException {
-		
-		//TODO require players to select config.yml in order to load worlds
-//		if (!file.getName().endsWith(".yml")) {
-//			throw new IOException();
-//		}
-		
 		Map<String, Object> yaml = getConfig(file);
-		switch ((String) yaml.get("type")) {
-		case "world":
-			return new World(file, p);
-		case "graph":
-			return new WorldGraph(file, p);
-		default:
-			return null;
-		}
-		
+		PlayableType type = PlayableType.valueOf((String) yaml.get("type"));
+		return type.newInstance(file, p);		
 	}
 
 	public Center findCenter();

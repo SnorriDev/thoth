@@ -18,12 +18,6 @@ import snorri.world.TileType;
 
 public class Open extends TransVerbDef {
 	
-	@SuppressWarnings("unchecked")
-	private static final Class<? extends TileType>[] CHECK_LEVELS = new Class[] { 
-			MidgroundElement.class,
-			ForegroundElement.class
-	};
-	
 	private static final Set<TileType> DOOR_TYPES = new HashSet<>();
 	
 	static {
@@ -62,31 +56,22 @@ public class Open extends TransVerbDef {
 	@Override
 	public boolean eval(Object subj, Object obj, SpellEvent e) {
 		if (obj instanceof Entity) {
-			return e.getWorld().getLevel(MidgroundElement.class).isPathable(((Entity) obj).getPos().copy().gridPos_());
+			return e.getWorld().getTileLayer().isPathable(((Entity) obj).getPos().copy().gridPos_());
 		}
 		return false;
 	}
 		
 	public static boolean openDoor(World w, Vector pos) {
-				
-		for (Class<? extends TileType> levelType : CHECK_LEVELS) {
-			
-			Tile tile = w.getLevel(levelType).getTileGrid(pos);
-			if (!isDoor(tile)) {
-				continue;
+		Tile tile = w.getTileLayer().getTileGrid(pos);
+		Tile replacementTile = tile.getReplacementTile();
+		if (replacementTile != null) {
+			TriggerType.DOOR_OPEN.activate(pos);
+			w.wrapGridUpdate(pos, new Tile(replacementTile));
+			for (Vector trans : Mask.NEIGHBORS) {
+				openDoor(w, pos.copy().add_(trans));
 			}
-			
-			Tile replacementTile = tile.getReplacementTile();
-			if (replacementTile != null) {
-				TriggerType.DOOR_OPEN.activate(pos);
-				w.wrapGridUpdate(pos, new Tile(replacementTile));
-				for (Vector trans : Mask.NEIGHBORS) {
-					openDoor(w, pos.copy().add_(trans));
-				}
-				return true;
-			}
+			return true;
 		}
-		
 		return false;
 	}
 	

@@ -5,7 +5,7 @@ import java.util.List;
 
 import snorri.entities.Entity;
 import snorri.main.Debug;
-import snorri.world.Level;
+import snorri.world.TileLayer;
 import snorri.world.Tile;
 import snorri.world.Vector;
 
@@ -20,7 +20,7 @@ public class Pathfinding {
 	
 	private PathGraph[][] graphs = new PathGraph[MAX_WIDTH][MAX_HEIGHT];
 	
-	public Pathfinding(List<Level> pathfindingLevels) {
+	public Pathfinding(List<TileLayer> pathfindingLevels) {
 		for (Vector size : SIZES) {
 			graphs[size.getX()][size.getY()] = new PathGraph(pathfindingLevels, size.getX(), size.getY());
 		}

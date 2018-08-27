@@ -3,7 +3,7 @@ package snorri.semantics;
 import snorri.entities.Entity;
 import snorri.events.SpellEvent;
 import snorri.parser.Node;
-import snorri.world.Level;
+import snorri.world.TileLayer;
 import snorri.world.Tile;
 import snorri.world.TileType;
 
@@ -32,12 +32,10 @@ public class Cross extends TransVerbDef {
 		}
 		
 		if (obj instanceof TileType) {
-							
-			for (Level level : e.getWorld().getLevels()) {
-				Tile tile = level.getTile(ent.getPos());
-				if (tile != null && obj == tile.getType()) {
-					return true;
-				}
+			TileLayer level = e.getWorld().getTileLayer();
+			Tile tile = level.getTile(ent.getPos());
+			if (tile != null && obj == tile.getType()) {
+				return true;
 			}
 			return false;
 			

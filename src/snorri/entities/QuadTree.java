@@ -12,7 +12,7 @@ import snorri.collisions.RectCollider;
 import snorri.main.FocusedWindow;
 import snorri.world.EntityGroup;
 import snorri.world.Executable;
-import snorri.world.Level;
+import snorri.world.TileLayer;
 import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -23,7 +23,7 @@ public class QuadTree extends Entity implements EntityGroup {
 
 	private static HashMap<Entity, QuadTree> nodeMap;
 
-	public static final int CUSHION = Level.CUSHION * Tile.WIDTH;
+	public static final int CUSHION = TileLayer.CUSHION * Tile.WIDTH;
 	public static final int SCALE_FACTOR = 2;
 
 	static {
@@ -56,7 +56,7 @@ public class QuadTree extends Entity implements EntityGroup {
 	 * @param dim
 	 *            the dimensions to cover, in grid coordinates
 	 */
-	public static QuadTree coverLevel(Level l) {
+	public static QuadTree coverLevel(TileLayer l) {
 		Vector pos = l.getDimensions().copy().globalPos_().divide_(2);
 		return new QuadTree(pos, new RectCollider(l.getDimensions().copy().globalPos_()), null);
 	}

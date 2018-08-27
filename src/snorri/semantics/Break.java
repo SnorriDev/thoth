@@ -9,7 +9,7 @@ import snorri.events.SpellEvent;
 import snorri.parser.Node;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.ForegroundElement;
-import snorri.world.Level;
+import snorri.world.TileLayer;
 import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -87,7 +87,7 @@ public class Break extends TransVerbDef {
 	 * @param v The grid position at which to cut.
 	 */
 	public static boolean cutTripwire(World world, Vector v) {
-		Level foreground = world.getLevel(ForegroundElement.class);
+		TileLayer foreground = world.getTileLayer();
 		if (!isTripwire(foreground.getTileGrid(v))) {
 			return false;
 		}

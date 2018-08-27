@@ -1,6 +1,5 @@
 package snorri.world;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -14,7 +13,6 @@ import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.masking.Mask;
-import snorri.pathfinding.Component;
 import snorri.semantics.Nominal;
 import snorri.world.TileType;
 
@@ -131,19 +129,8 @@ public class Tile implements Comparable<Tile>, Nominal {
 	 * @param v the absolute grid position of the tile to be drawn
 	 */
 	public void drawTile(FocusedWindow<?> g, Graphics2D gr, Vector v) {
-		
 		Vector relPos = v.getRelPosGrid(g);
 		drawTileAbs(gr, relPos, false);
-		
-		if (getBaseTexture() != null && Debug.tileGridRendered()) {
-			Component c = g.getWorld().getPathfinding().getDefaultGraph().getComponent(v);
-			if (c != null) {
-				gr.setColor(c.getColor());
-				gr.drawRect(relPos.getX(), relPos.getY(), Tile.WIDTH, Tile.WIDTH);
-				gr.setColor(Color.BLACK);
-			}
-		}
-		
 	}
 	
 	/**

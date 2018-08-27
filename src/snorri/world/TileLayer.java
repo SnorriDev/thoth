@@ -14,19 +14,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import snorri.entities.Entity;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
-import snorri.main.Layer;
 import snorri.masking.Mask;
 import snorri.world.TileType;
 
-public class Level implements Layer {
+public class TileLayer implements Editable, SavableLayer {
 
 	public static final int MAX_SIZE = 1024;
 
@@ -51,7 +47,9 @@ public class Level implements Layer {
 		BITMAP, GRID;
 	}
 
-	public Level(int width, int height, TileType bg) {
+	public TileLayer(int width, int height, TileType bg) {
+		Debug.logger.fine("Width: " + width);
+		Debug.logger.fine("Height: " + height);
 		map = new Tile[width][height];
 		layer = bg.getLayer();
 
@@ -64,47 +62,64 @@ public class Level implements Layer {
 		updateAllMasksAndBitmap();
 	}
 
-	public Level(Vector v, TileType bg) {
+	public TileLayer(Vector v, TileType bg) {
 		this(v.getX(), v.getY(), bg);
 	}
 
-	public Level(int width, int height) {
+	public TileLayer(int width, int height) {
 		this(width, height, 0);
 	}
 
-	public Level(int width, int height, int layer) {
+	public TileLayer(int width, int height, int layer) {
 		this(width, height, ((layer == 0) ? BackgroundElement.SAND
 				: ((layer == 1) ? MidgroundElement.NONE : ForegroundElement.NONE)));
 	}
 
-	public Level(Vector v) {
+	public TileLayer(Vector v) {
 		this(v, 0);
 	}
 
-	public Level(Vector v, int layer) {
+	public TileLayer(Vector v, int layer) {
 		this(v, ((layer == 0) ? BackgroundElement.SAND
 				: ((layer == 1) ? MidgroundElement.NONE : ForegroundElement.NONE)));
 	}
 
-	public Level(File file, Class<? extends TileType> c) throws FileNotFoundException, IOException {
+	public TileLayer(File file, Class<? extends TileType> c) throws IOException {
 		load(file, c);
 		updateAllMasksAndBitmap();
 	}
 
-	public Level(File file) throws FileNotFoundException, IOException {
+	public TileLayer(File file) throws IOException {
 		load(file);
 		updateAllMasksAndBitmap();
 	}
-
-	/**
-	 * Constructor used for resizing
+	
+	public static TileLayer fromYAML(World world, Map<String, Object> params) throws IOException {
+		File file = new File(world.getDirectory(), (String) params.get("path"));
+		return new TileLayer(file);
+	}
+	
+	/** The same as fromYAML, but wrapped to catch exceptions.
+	 * 
+	 * This is useful for passing the function into an enum in Layer.LayerType.
+	 * 
 	 */
+	public static TileLayer wrappedFromYAML(World world, Map<String, Object> params) {
+		try {
+			return fromYAML(world, params);
+		} catch (IOException e) {
+			Debug.logger.log(java.util.logging.Level.SEVERE, "Could not load load TileLayer from YAML.", e);
+			return null;
+		}
+	}
+
+	/** Constructor used for resizing. */
 	@Deprecated
-	private Level(Level l, int newWidth, int newHeight) {
+	private TileLayer(TileLayer l, int newWidth, int newHeight) {
 		this(l, newWidth, newHeight, 0);
 	}
 
-	private Level(Level l, int newWidth, int newHeight, int layer) {
+	private TileLayer(TileLayer l, int newWidth, int newHeight, int layer) {
 		map = new Tile[newWidth][newHeight];
 
 		if (layer == 0) {
@@ -137,8 +152,8 @@ public class Level implements Layer {
 
 	}
 
-	public Level getTransposed() {
-		Level t = new Level(getDimensions().getInverted());
+	public TileLayer getTransposed() {
+		TileLayer t = new TileLayer(getDimensions().getInverted());
 		for (int x = 0; x < getWidth(); x++) {
 			for (int y = 0; y < getHeight(); y++) {
 				t.setTileGrid(y, x, getNewTileGrid(x, y));
@@ -152,8 +167,8 @@ public class Level implements Layer {
 	 * <code>getTransposed()</code>, one can produce levels with a door facing
 	 * out from all four sides if a door exists.
 	 */
-	public Level getXReflected() {
-		Level f = new Level(getDimensions());
+	public TileLayer getXReflected() {
+		TileLayer f = new TileLayer(getDimensions());
 		for (int x = 0; x < getWidth(); x++) {
 			for (int y = 0; y < getHeight(); y++) {
 				f.setTileGrid(getWidth() - 1 - x, y, getNewTileGrid(x, y));
@@ -162,8 +177,7 @@ public class Level implements Layer {
 		return f;
 	}
 
-	@Override
-	public void resize(int newWidth, int newHeight) {
+	private void resize(int newWidth, int newHeight) {
 
 		Tile[][] newMap = new Tile[newWidth][newHeight];
 		Vector newDim = new Vector(newWidth, newHeight);
@@ -183,13 +197,11 @@ public class Level implements Layer {
 		map = newMap;
 		Debug.logger.info("New Level Size:\t" + getWidth() + "\tx\t" + getHeight() + ".");		
 	}
-	
-	public Level getResized(int newWidth, int newHeight, int layer) {
-		return new Level(this, newWidth, newHeight, layer);
-	}
 
-	public Level getResized(int newWidth, int newHeight) {
-		return new Level(this, newWidth, newHeight);
+	public TileLayer getResized(int newWidth, int newHeight) {
+		TileLayer level = new TileLayer(this, newWidth, newHeight);
+		level.resize(newWidth, newHeight);
+		return level;
 	}
 
 	public void setTile(int x, int y, Tile t) {
@@ -284,9 +296,7 @@ public class Level implements Layer {
 
 	public void load(File file, Class<? extends TileType> c) throws FileNotFoundException, IOException {
 		Debug.logger.info("Loading " + file + "...");
-
 		byte[] b = new byte[4];
-
 		FileInputStream is = new FileInputStream(file);
 
 		is.read(b);
@@ -314,8 +324,6 @@ public class Level implements Layer {
 	}
 
 	public void save(File file, boolean saveGraphs) throws IOException {
-		Debug.logger.info("Saving " + file.getName() + "...");
-
 		FileOutputStream os = new FileOutputStream(file);
 		ByteBuffer b1 = ByteBuffer.allocate(4);
 		ByteBuffer b2 = ByteBuffer.allocate(4);
@@ -356,17 +364,7 @@ public class Level implements Layer {
 	}
 
 	@Override
-	public Level getLevel() {
-		return this;
-	}
-
-	@Override
-	public Level getLevel(int layer) {
-		return this;
-	}
-
-	@Override
-	public Level getLevel(Class<? extends TileType> c) {
+	public TileLayer getTileLayer() {
 		return this;
 	}
 
@@ -460,11 +458,6 @@ public class Level implements Layer {
 			n.drawTileAbs(g, pos.copy().globalPos_(), true);
 			g.dispose();
 		}
-	}
-
-	@Override
-	public List<Entity> getEntities() {
-		return new ArrayList<Entity>();
 	}
 
 	/**
@@ -666,4 +659,10 @@ public class Level implements Layer {
 	public void setOutsideTile(Tile outsideTile) {
 		this.outsideTile = outsideTile;
 	}
+
+	@Override
+	public String getFilename() {
+		return "tile.layer";
+	}
+
 }

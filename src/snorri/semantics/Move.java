@@ -15,8 +15,7 @@ public class Move extends TransVerbDef {
 		
 		Object obj = object.getMeaning(e);
 		
-		//TODO use the graph associated with secondPerson
-		if (e.getDestination() != null && !e.getWorld().getPathfinding().getDefaultGraph().isContextPathable(e.getDestination())) {
+		if (e.getDestination() != null && !e.getWorld().isPathable(e.getDestination())) {
 			return false;
 		}
 		

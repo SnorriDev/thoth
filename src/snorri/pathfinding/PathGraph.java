@@ -19,7 +19,7 @@ import java.util.Set;
 import snorri.entities.Entity;
 import snorri.main.Debug;
 import snorri.collisions.Collider;
-import snorri.world.Level;
+import snorri.world.TileLayer;
 import snorri.world.Tile;
 import snorri.world.Vector;
 
@@ -27,7 +27,7 @@ public class PathGraph {
 
 	private boolean[][] contextPathable;
 	private Set<Entity>[][] entities;
-	private final List<Level> levels;
+	private final List<TileLayer> levels;
 
 	/** A list of the graph's components */
 	private Set<Component> components;
@@ -37,7 +37,7 @@ public class PathGraph {
 	private final int width, height;
 
 	@SuppressWarnings("unchecked")
-	public PathGraph(List<Level> levels, int width, int height) {
+	public PathGraph(List<TileLayer> levels, int width, int height) {
 
 		this.width = width;
 		this.height = height;
@@ -60,7 +60,7 @@ public class PathGraph {
 
 	}
 	
-	public PathGraph(List<Level> levels, Vector v) {
+	public PathGraph(List<TileLayer> levels, Vector v) {
 		this(levels, v.getX(), v.getY());
 	}
 	
@@ -171,7 +171,7 @@ public class PathGraph {
 			return false;
 		}
 		
-		for (Level l : levels) {
+		for (TileLayer l : levels) {
 			if (!l.isPathable(x, y)) {
 				return false;
 			}

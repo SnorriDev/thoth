@@ -271,7 +271,7 @@ public class Vector implements Nominal, Comparable<Vector> {
 	
 	//use Level.getTileGrid(v) != null
 	@Deprecated
-	public boolean isInBounds(Level level) {
+	public boolean isInBounds(TileLayer level) {
 		Vector dim = level.getDimensions();
 		return getX() >= 0 && getX() < dim.getX() && getY() >= 0 && getY() < dim.getY();
 	}
@@ -312,13 +312,6 @@ public class Vector implements Nominal, Comparable<Vector> {
 		if (y != 0) {
 			y += 1;
 		}
-		return this;
-	}
-
-	public Vector invert() {
-		double temp = y;
-		y = x;
-		x = temp;
 		return this;
 	}
 	

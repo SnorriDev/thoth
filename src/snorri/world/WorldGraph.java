@@ -42,12 +42,12 @@ public class WorldGraph implements Playable {
 	}
 	
 	@Override @SuppressWarnings("unchecked")
-	public void load(File folder, Map<String, Object> yaml) throws FileNotFoundException, IOException, YamlException {
+	public void load(File folder, Map<String, Object> yaml) throws IOException, YamlException {
 		
 		path = folder.getName();
 				
 		if (yaml == null) { // if config.yml hasn't already been parsed, parse it
-			yaml = Playable.getConfig(folder, "graph");
+			yaml = Playable.getConfig(folder, PlayableType.WORLD_GRAPH);
 		}
 				
 		File[] files = folder.listFiles(File::isDirectory);
