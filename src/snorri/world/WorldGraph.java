@@ -47,7 +47,7 @@ public class WorldGraph implements Playable {
 		path = folder.getName();
 				
 		if (yaml == null) { // if config.yml hasn't already been parsed, parse it
-			yaml = Playable.getConfig(folder, "graph");
+			yaml = Playable.getConfig(folder, PlayableType.WORLD_GRAPH);
 		}
 				
 		File[] files = folder.listFiles(File::isDirectory);

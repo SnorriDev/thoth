@@ -32,6 +32,20 @@ public class EntityLayer implements SavableLayer {
 		return entityLayer;
 	}
 	
+	/** The same as fromYAML, but wrapped to catch exceptions.
+	 * 
+	 * This is useful for passing the function into an enum in Layer.LayerType.
+	 * 
+	 */
+	public static EntityLayer wrappedFromYAML(World world, Map<String, Object> params) {
+		try {
+			return fromYAML(world, params);
+		} catch (IOException e) {
+			Debug.logger.log(java.util.logging.Level.SEVERE, "Could not load load EntityLayer from YAML.", e);
+			return null;
+		}
+	}
+	
 	public EntityLayer copy() {
 		EntityLayer entityLayer = new EntityLayer(this.entityTree, this.dimensions);
 		entityTree.mapOverEntities(entity -> {
@@ -80,7 +94,7 @@ public class EntityLayer implements SavableLayer {
 
 	@Override
 	public String getFilename() {
-		return "entity.level";
+		return "entity.layer";
 	}
 
 	@Override

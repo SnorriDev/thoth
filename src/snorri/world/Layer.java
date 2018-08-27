@@ -1,7 +1,7 @@
 package snorri.world;
 
-import java.io.IOException;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 /**
  * Interface for layers that can be added to a Level.
@@ -10,21 +10,29 @@ import java.util.Map;
  */
 public interface Layer extends Renderable {
 
+	public enum LayerType {
+		
+		BACKGROUND(BackgroundLayer::fromYAML),
+		TILE(TileLayer::wrappedFromYAML),
+		ENTITY(EntityLayer::wrappedFromYAML);
+		
+		private BiFunction<World, Map<String, Object>, Layer> fromYAML;
+		
+		LayerType(BiFunction<World, Map<String, Object>, Layer> fromYAML) {
+			this.fromYAML = fromYAML;
+		}
+		
+		public Layer fromYAML(World world, Map<String, Object> params) {
+			return fromYAML.apply(world, params);
+		}
+		
+	}
+	
 	public boolean canShootOver(Vector position);	
 	
-	// TODO(lambdaviking): Save this stuff.
-	static Layer fromYAML(World world, Map<String, Object> params) throws IOException {
+	static Layer fromYAML(World world, Map<String, Object> params) {
 		String type = (String) params.get("type");
-		switch (type) {
-		case "background":
-			return BackgroundLayer.fromYAML(world, params);
-		case "tile":
-			return TileLayer.fromYAML(world, params);
-		case "entity":
-			return EntityLayer.fromYAML(world, params);
-		default:
-			throw new IllegalArgumentException("Unknown Layer type " + type + ".");
-		}
+		return LayerType.valueOf(type).fromYAML(world, params);
 	}
 	
 }

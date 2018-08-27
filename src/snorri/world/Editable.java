@@ -19,7 +19,8 @@ import snorri.main.FocusedWindow;
  */
 public interface Editable extends Loadable, Savable, Renderable {
 	
-	/** Rendering has the same signature as the one in Layer. */
+	/** This method is declared in Renderable but written here to be explicit. */
+	@Override
 	public void render(FocusedWindow<?> levelEditor, Graphics2D gr, double deltaTime, boolean b);
 	
 	/** Return the main tile layer in which intersections are checked. */

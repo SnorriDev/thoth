@@ -195,7 +195,7 @@ public class World implements Playable, Editable {
 			f.mkdir();
 		}
 		
-		Playable.tryCreatingDefaultConfig(f, "world");
+		Playable.tryCreatingDefaultConfig(f, PlayableType.WORLD);
 		
 		String path = f.getPath();
 		layers.forEach(layer -> {
@@ -229,7 +229,7 @@ public class World implements Playable, Editable {
 		name = f.getName();
 		
 		if (yaml == null) {
-			yaml = Playable.getConfig(f, "world");
+			yaml = Playable.getConfig(f, PlayableType.WORLD);
 		}
 		
 		this.layers = new ArrayList<>();
@@ -243,7 +243,8 @@ public class World implements Playable, Editable {
 				Layer layer = Layer.fromYAML(this, params);
 				addLayer(layer);
 			} catch (Exception e) {
-				// FIXME(lambdaviking): Does getting rid of forEach allow us not to use this clause?
+				// Having a lambda here seems to force the exception to be caught. This is not
+				// the end of the world, but might be something to consider if we refactor it.
 				Debug.logger.log(java.util.logging.Level.SEVERE, "Could not read layers in World.", e);
 			}
 		});
@@ -467,18 +468,6 @@ public class World implements Playable, Editable {
 	
 	public TileLayer getTileLayer() {
 		return tileLayer;
-	}
-		
-	/** Get a TileLayer by index.
-	 * 
-	 * The generic type T can be used to ensure that the returned layer is of a certain type.
-	 * @param index Index of the layer in the layers array.
-	 * @return The layer whose index in layers is <code>index</code>.
-	 */
-	// TODO(lambdaviking): Figure this out.
-	@SuppressWarnings("unchecked")
-	public <T extends Layer> T getLayer(int index) {
-		return (T) layers.get(index);
 	}
 	
 	@Override

@@ -98,6 +98,20 @@ public class TileLayer implements Editable, SavableLayer {
 		File file = new File(world.getDirectory(), (String) params.get("path"));
 		return new TileLayer(file);
 	}
+	
+	/** The same as fromYAML, but wrapped to catch exceptions.
+	 * 
+	 * This is useful for passing the function into an enum in Layer.LayerType.
+	 * 
+	 */
+	public static TileLayer wrappedFromYAML(World world, Map<String, Object> params) {
+		try {
+			return fromYAML(world, params);
+		} catch (IOException e) {
+			Debug.logger.log(java.util.logging.Level.SEVERE, "Could not load load TileLayer from YAML.", e);
+			return null;
+		}
+	}
 
 	/** Constructor used for resizing. */
 	@Deprecated
@@ -648,7 +662,7 @@ public class TileLayer implements Editable, SavableLayer {
 
 	@Override
 	public String getFilename() {
-		return "tile.level";
+		return "tile.layer";
 	}
 
 }
