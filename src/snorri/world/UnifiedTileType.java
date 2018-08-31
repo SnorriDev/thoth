@@ -24,8 +24,10 @@ public enum UnifiedTileType implements TileType {
 	}, Param.swimmable(true)),
 	TRIPWIRE(TileType.getTwoRotations(Main.getImage("/textures/tiles/foreground/tripwire00.png")), Param.pathable(true)),
 	TRIPWIRE_END(TileType.getReflections(Main.getImage("/textures/tiles/foreground/tripwireend00.png")), Param.pathable(true)),
-	OPEN_DOOR(TileType.getRotations(Main.getImage("/textures/tiles/midground/default00.png")), Param.pathable(true)),
-	DOOR(TileType.getRotations(Main.getImage("/textures/tiles/midground/door00.png")), Param.replacementType(OPEN_DOOR));
+	DOOR(new BufferedImage[] {
+			Main.getImage("/textures/tiles/door00.png"),
+			Main.getImage("/textures/tiles/door01.png"),
+	}, Param.replacementType(EMPTY));
 	
 	private final BufferedImage[] textures;
 	
