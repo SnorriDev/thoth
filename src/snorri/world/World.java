@@ -86,11 +86,9 @@ public class World implements Playable, Editable {
 	
 	public final class WorldLayerException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
-		
 		public WorldLayerException(String msg) {
 			super(msg);
 		}
-
 	}
 	
 	/**

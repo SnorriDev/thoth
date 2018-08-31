@@ -144,9 +144,9 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		ButtonGroup groupTiles = new ButtonGroup();
 		boolean firstTile = true;
 		for (Tile t : Tile.getAllTypes()) {
-			if (t == null || t.getBaseTexture() == null) {
-				continue;
-			}
+//			if (t == null || t.getBaseTexture() == null) {
+//				continue;
+//			}
 			subsubmenu = new JMenu(t.toStringShort());
 			for (Tile s : t.getType().getAllStyles()) {
 				BufferedImage baseTexture = s.getBaseTexture();

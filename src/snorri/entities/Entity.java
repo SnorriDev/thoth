@@ -187,21 +187,16 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 	
 	public boolean intersectsWall(World world) {
-
 		for (int i = (pos.getX() - collider.getMaxRadius()) / Tile.WIDTH - 1; i <= (pos.getX() + collider.getMaxRadius()) / Tile.WIDTH; i++) {
 			for (int j = (pos.getY() - collider.getMaxRadius()) / Tile.WIDTH - 1; j <= (pos.getY() + collider.getMaxRadius()) / Tile.WIDTH; j++) {
-				
 				if (! intersects(Tile.getRectangle(i, j))) {
 					continue;
 				}
-				
 				if (!world.isPathable(i, j)) {
 					return true;
 				}
-
 			}
 		}
-		
 		return false;
 		
 	}
@@ -284,9 +279,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	 * if dir is zero, then this function will always return false
 	 * @return whether moving in direction dir would bring entity into wall
 	 */
-	private boolean wouldIntersectSomething(World world, Vector dir) {
-		//TODO: also check if we would intersect an enemy
-		
+	private boolean wouldIntersectSomething(World world, Vector dir) {		
 		if (dir.equals(Vector.ZERO)) {
 			return true;
 		}
@@ -324,7 +317,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	 * 	whether or not we were able to move
 	 */
 	public boolean moveNicely(World world, Vector dir) {
-				
 		if (dir.equals(Vector.ZERO)) {
 			return false;
 		}
