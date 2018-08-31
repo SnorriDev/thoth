@@ -8,7 +8,7 @@ import snorri.main.Main;
 
 public enum UnifiedTileType implements TileType {
 	
-	EMPTY((BufferedImage) null),
+	EMPTY((BufferedImage) null, Param.pathable(true)),
 	SAND(new BufferedImage[] {
 			Main.getImage("/textures/tiles/background/sand00.png"),
 			Main.getImage("/textures/tiles/background/sand01.png"),

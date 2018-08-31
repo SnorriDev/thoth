@@ -39,15 +39,12 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public static final List<Class<? extends Entity>> EDIT_SPAWNABLE;
 	
 	static {
-		
 		SPAWNABLE = new ArrayList<>();
-		
 		SPAWNABLE.add(Urn.class);
 		SPAWNABLE.add(Spike.class);
 		SPAWNABLE.add(Vortex.class);
 		
 		EDIT_SPAWNABLE = new ArrayList<>(SPAWNABLE);
-		
 		EDIT_SPAWNABLE.add(Desk.class);
 		EDIT_SPAWNABLE.add(Drop.class);
 		EDIT_SPAWNABLE.add(Mummy.class);
@@ -68,14 +65,13 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		EDIT_SPAWNABLE.add(Dummy.class);
 		EDIT_SPAWNABLE.add(Center.class);
 		
-		//alphabetize the list for nice view in the editor
+		// Alphabetize the list for nice view in the editor.
 		Collections.sort(EDIT_SPAWNABLE, new Comparator<Class<? extends Entity>>() {
 			@Override
 			public int compare(Class<? extends Entity> o1, Class<? extends Entity> o2) {
 				return o1.getSimpleName().compareTo(o2.getSimpleName());
 			}
 		});
-		
 	}
 	
 	/** A layer above the player for particle effects */
@@ -96,7 +92,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	protected String tag;
 	protected Vector dir;
 		
-	private boolean flying = false, deleted = false;
+	private boolean deleted = false;
 	private boolean hasCycled = false;
 
 	/**
@@ -187,23 +183,17 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 	
 	public boolean intersectsWall(World world) {
-
 		for (int i = (pos.getX() - collider.getMaxRadius()) / Tile.WIDTH - 1; i <= (pos.getX() + collider.getMaxRadius()) / Tile.WIDTH; i++) {
 			for (int j = (pos.getY() - collider.getMaxRadius()) / Tile.WIDTH - 1; j <= (pos.getY() + collider.getMaxRadius()) / Tile.WIDTH; j++) {
-				
-				if (! intersects(Tile.getRectangle(i, j))) {
+				if (!intersects(Tile.getRectangle(i, j))) {
 					continue;
 				}
-				
 				if (!world.isPathable(i, j)) {
 					return true;
 				}
-
 			}
 		}
-		
-		return false;
-		
+		return false;	
 	}
 	
 	public boolean contains(Entity e) {
@@ -284,32 +274,13 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	 * if dir is zero, then this function will always return false
 	 * @return whether moving in direction dir would bring entity into wall
 	 */
-	private boolean wouldIntersectSomething(World world, Vector dir) {
-		//TODO: also check if we would intersect an enemy
-		
-		if (dir.equals(Vector.ZERO)) {
-			return true;
-		}
-		
-		return wouldIntersectSomethingAt(world, pos.copy().add_(dir));
-				
+	private boolean wouldIntersectSomething(World world, Vector dir) {				
+		return wouldIntersectSomethingAt(world, pos.add(dir));	
 	}
 	
 	public boolean wouldIntersectSomethingAt(World world, Vector pos) {
 		Entity newEnt = new Entity(pos, collider);
 		return newEnt.intersectsWall(world) || world.getEntityTree().getFirstCollisionOtherThan(newEnt, this) != null;
-	}
-	
-	public void startFlying() {
-		flying = true;
-	}
-	
-	public void stopFlying() {
-		flying = false;
-	}
-	
-	public boolean isFlying() {
-		return flying;
 	}
 	
 	/**
@@ -324,38 +295,11 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	 * 	whether or not we were able to move
 	 */
 	public boolean moveNicely(World world, Vector dir) {
-				
-		if (dir.equals(Vector.ZERO)) {
+		if (dir.equals(Vector.ZERO) || wouldIntersectSomething(world, dir)) {
 			return false;
 		}
-				
-		if (!flying && wouldIntersectSomething(world, dir)) {
-			
-			//see if we're hitting only one wall
-			if (! wouldIntersectSomething(world, dir.getProjectionX())) {
-				dir = dir.getProjectionX();
-			}
-			else if (! wouldIntersectSomething(world, dir.getProjectionY())) {
-				dir = dir.getProjectionY();
-			}
-			
-			//see if we're hitting a corner
-			else if (! wouldIntersectSomething(world, dir.getProjection(Vector.DOWN_LEFT))) {
-				dir = dir.getProjection(Vector.DOWN_LEFT);
-			}
-			else if (! wouldIntersectSomething(world, dir.getProjection(Vector.DOWN_RIGHT))) {
-				dir = dir.getProjection(Vector.DOWN_RIGHT);
-			}
-			
-			else {
-				return false;
-			}
-			
-		}
-		
-		world.getEntityTree().move(this, pos.copy().add_(dir));
+		world.getEntityTree().move(this, pos.add(dir));
 		return true;
-		
 	}
 		
 	public boolean shouldIgnoreCollisions() {

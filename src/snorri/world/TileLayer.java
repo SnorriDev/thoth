@@ -297,12 +297,10 @@ public class TileLayer implements Editable, SavableLayer {
 	}
 
 	/**
-	 * @param x
-	 *            x coordinate
-	 * @param y
-	 *            y coordinate
-	 * @return whether the tile at <code>(x, y)</code> is pathable and
-	 *         unoccupied
+	 * Check if a position is pathable.
+	 * @param x The x coordinate of the position.
+	 * @param y The y coordinate of the position.
+	 * @return Whether the tile at <code>(x, y)</code> is pathable.
 	 */
 	public boolean isPathable(int x, int y) {
 		return getTileGrid(x, y) != null && getTileGrid(x, y).isPathable();

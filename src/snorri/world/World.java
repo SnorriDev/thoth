@@ -86,11 +86,9 @@ public class World implements Playable, Editable {
 	
 	public final class WorldLayerException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
-		
 		public WorldLayerException(String msg) {
 			super(msg);
 		}
-
 	}
 	
 	/**
@@ -131,12 +129,7 @@ public class World implements Playable, Editable {
 	}
 
 	public synchronized void update(Entity focus, double d) {
-
-		if (Debug.worldLogged()) {
-			Debug.logger.info("World updated.");
-		}
-
-		entityLayer.updateAround(this, d, focus);
+		getEntityLayer().updateAround(this, d, focus);
 		
 		World neighbor;
 		if (getRightNeighbor() != null && touchingRight(focus)) {
@@ -360,9 +353,9 @@ public class World implements Playable, Editable {
 		return getTileLayer().canShootOver(pos.gridPos());
 	}
 
-	/** Whether the tile at global position (x, y) can be traversed. */
+	/** Whether the tile at grid position (x, y) can be traversed. */
 	public boolean isPathable(int x, int y) {
-		Vector gridPos = new Vector(x, y).gridPos_();
+		Vector gridPos = new Vector(x, y);
 		return getTileLayer().isPathable(gridPos);
 	}
 
