@@ -33,65 +33,49 @@ public class TileLayer implements Editable, SavableLayer {
 	public static final int CUSHION = 4;
 	public static final int DOOR_WIDTH = 3;
 
-	/**
-	 * An array of tiles. Note that coordinates are Cartesian, not matrix-based
-	 **/
+	/** An array of tiles. Note that coordinates are Cartesian, not matrix-based. */
 	private Tile[][] map;
-	private Map<BufferedImage, Area> textureMap;
-	private BufferedImage bitmap;
-
-	private int layer;
 	private Tile outsideTile;
+	private RenderMode renderMode;
+	
+	private transient Map<BufferedImage, Area> textureMap;
+	private transient BufferedImage bitmap;
 
 	private enum RenderMode {
 		BITMAP, GRID;
 	}
 
-	public TileLayer(int width, int height, TileType bg) {
-		Debug.logger.fine("Width: " + width);
-		Debug.logger.fine("Height: " + height);
+	/** Create an incompletely initialized Layer.
+	 *  
+	 *  This method will leave null squares in the grid.
+	 *  
+	 *  @param width The width of the new World.
+	 *  @param height. The height of the new World.
+	 */
+	private TileLayer(int width, int height) {
 		map = new Tile[width][height];
-		layer = bg.getLayer();
-
+		setRenderMode(RenderMode.GRID);
+	}
+	
+	/** Initializes a new layer with background bg. */
+	public TileLayer(int width, int height, TileType bg) {
+		this(width, height);
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				map[i][j] = new Tile(bg);
 			}
 		}
-
-		updateAllMasksAndBitmap();
+//		updateAllMasksAndBitmap();
 	}
 
 	public TileLayer(Vector v, TileType bg) {
 		this(v.getX(), v.getY(), bg);
 	}
 
-	public TileLayer(int width, int height) {
-		this(width, height, 0);
-	}
-
-	public TileLayer(int width, int height, int layer) {
-		this(width, height, ((layer == 0) ? BackgroundElement.SAND
-				: ((layer == 1) ? MidgroundElement.NONE : ForegroundElement.NONE)));
-	}
-
-	public TileLayer(Vector v) {
-		this(v, 0);
-	}
-
-	public TileLayer(Vector v, int layer) {
-		this(v, ((layer == 0) ? BackgroundElement.SAND
-				: ((layer == 1) ? MidgroundElement.NONE : ForegroundElement.NONE)));
-	}
-
-	public TileLayer(File file, Class<? extends TileType> c) throws IOException {
-		load(file, c);
-		updateAllMasksAndBitmap();
-	}
-
 	public TileLayer(File file) throws IOException {
 		load(file);
-		updateAllMasksAndBitmap();
+		setRenderMode(RenderMode.GRID);
+//		updateAllMasksAndBitmap();
 	}
 	
 	public static TileLayer fromYAML(World world, Map<String, Object> params) throws IOException {
@@ -112,48 +96,23 @@ public class TileLayer implements Editable, SavableLayer {
 			return null;
 		}
 	}
-
-	/** Constructor used for resizing. */
-	@Deprecated
-	private TileLayer(TileLayer l, int newWidth, int newHeight) {
-		this(l, newWidth, newHeight, 0);
-	}
-
-	private TileLayer(TileLayer l, int newWidth, int newHeight, int layer) {
-		map = new Tile[newWidth][newHeight];
-
-		if (layer == 0) {
-			for (int i = 0; i < getWidth(); i++) {
-				for (int j = 0; j < getHeight(); j++) {
-					map[i][j] = new Tile(BackgroundElement.SAND);
-				}
-			}
-		} else if (layer == 1) {
-			for (int i = 0; i < getWidth(); i++) {
-				for (int j = 0; j < getHeight(); j++) {
-					map[i][j] = new Tile(MidgroundElement.NONE);
-				}
-			}
-		} else {
-			for (int i = 0; i < getWidth(); i++) {
-				for (int j = 0; j < getHeight(); j++) {
-					map[i][j] = new Tile(ForegroundElement.NONE);
-				}
+	
+	/** Copy a TileLayer. */
+	public TileLayer copy() {
+		Vector dims = getDimensions();
+		TileLayer layer = new TileLayer(dims.getX(), dims.getY());
+		for (int x = 0; x < dims.getX(); x++) {
+			for (int y = 0; y < dims.getY(); y++) {
+				layer.map[x][y] = map[x][y];
 			}
 		}
-
-		for (int i = 0; i < getWidth() && i < l.getWidth(); i++) {
-			for (int j = 0; j < getHeight() && j < l.getHeight(); j++) {
-				map[i][j] = l.map[i][j];
-			}
-		}
-
-		updateAllMasksAndBitmap();
-
+		layer.outsideTile = outsideTile;
+		layer.renderMode = renderMode;
+		return layer;
 	}
 
 	public TileLayer getTransposed() {
-		TileLayer t = new TileLayer(getDimensions().getInverted());
+		TileLayer t = new TileLayer(getDimensions(), outsideTile.getType());
 		for (int x = 0; x < getWidth(); x++) {
 			for (int y = 0; y < getHeight(); y++) {
 				t.setTileGrid(y, x, getNewTileGrid(x, y));
@@ -168,7 +127,7 @@ public class TileLayer implements Editable, SavableLayer {
 	 * out from all four sides if a door exists.
 	 */
 	public TileLayer getXReflected() {
-		TileLayer f = new TileLayer(getDimensions());
+		TileLayer f = new TileLayer(getDimensions(), outsideTile.getType());
 		for (int x = 0; x < getWidth(); x++) {
 			for (int y = 0; y < getHeight(); y++) {
 				f.setTileGrid(getWidth() - 1 - x, y, getNewTileGrid(x, y));
@@ -184,7 +143,7 @@ public class TileLayer implements Editable, SavableLayer {
 
 		for (int i = 0; i < newDim.getX(); i++) {
 			for (int j = 0; j < newDim.getY(); j++) {
-				newMap[i][j] = new Tile(BackgroundElement.SAND);
+				newMap[i][j] = new Tile(UnifiedTileType.SAND);
 			}
 		}
 		Debug.logger.info("Resizing Level from\t" + getWidth() + "\tx\t" + getHeight() + "\tto\t" + newDim.getX() + "\tx\t" + newDim.getY() +"\tusing resize function.");
@@ -199,7 +158,7 @@ public class TileLayer implements Editable, SavableLayer {
 	}
 
 	public TileLayer getResized(int newWidth, int newHeight) {
-		TileLayer level = new TileLayer(this, newWidth, newHeight);
+		TileLayer level = copy();
 		level.resize(newWidth, newHeight);
 		return level;
 	}
@@ -254,14 +213,10 @@ public class TileLayer implements Editable, SavableLayer {
 
 	@Override
 	public void render(FocusedWindow<?> g, Graphics2D gr, double deltaTime, boolean renderOutside) {
-
 		int minX, maxX, minY, maxY;
-
 		Vector center = g.getCenterObject().getPos();
 		Vector dim = g.getDimensions();
 
-		// TODO make this compatible with editor too?
-		// TODO fix alignment between layers
 		if (!Debug.maskingDisabled() && getRenderMode() == RenderMode.BITMAP) {
 			if (bitmap == null) {
 				return;
@@ -287,14 +242,13 @@ public class TileLayer implements Editable, SavableLayer {
 				if (i >= 0 && i < map.length && j >= 0 && j < map[i].length) {
 					map[i][j].drawTile(g, gr, new Vector(i, j));
 				} else if (renderOutside) {
-					getOutsideTile().drawTile(g, gr, new Vector(i, j));
+					getOutsideTile().drawTile(g,  gr, new Vector(i, j));
 				}
 			}
 		}
-
 	}
 
-	public void load(File file, Class<? extends TileType> c) throws FileNotFoundException, IOException {
+	public void load(File file) throws FileNotFoundException, IOException {
 		Debug.logger.info("Loading " + file + "...");
 		byte[] b = new byte[4];
 		FileInputStream is = new FileInputStream(file);
@@ -305,18 +259,17 @@ public class TileLayer implements Editable, SavableLayer {
 		int height = ByteBuffer.wrap(b).getInt();
 
 		map = new Tile[width][height];
-
 		byte[] b2 = new byte[2];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				is.read(b2);
-				map[i][j] = new Tile(c, ((Byte) b2[0]).intValue(), ((Byte) b2[1]).intValue());
+				int id = ((Byte) b2[0]).intValue();
+				TileType type = UnifiedTileType.values()[id];
+				int style = ((Byte) b2[1]).intValue();
+				map[i][j] = new Tile(type, style);
 			}
 		}
-
 		is.close();
-		layer = map[0][0].getType().getLayer();
-
 	}
 
 	public void save(File file) throws IOException {
@@ -554,11 +507,6 @@ public class TileLayer implements Editable, SavableLayer {
 		return map[0].length;
 	}
 
-	@Override
-	public void load(File folder) throws FileNotFoundException, IOException {
-		load(folder, BackgroundElement.class);
-	}
-
 	public boolean canShootOver(Vector pos) {
 		Tile t = getTileGrid(pos);
 		return t != null && t.canShootOver();
@@ -617,7 +565,7 @@ public class TileLayer implements Editable, SavableLayer {
 	public void renderBitmap() {
 		bitmap = new BufferedImage(getWidth() * Tile.WIDTH, getHeight() * Tile.WIDTH, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = bitmap.createGraphics();
-		for (Tile tile : Tile.getBlendOrdering(getLayer())) {
+		for (Tile tile : Tile.getBlendOrdering()) {
 
 			BufferedImage texture = tile.getBaseTexture();
 			if (!textureMap.containsKey(texture)) {
@@ -635,16 +583,14 @@ public class TileLayer implements Editable, SavableLayer {
 		}
 		g.dispose();
 	}
-
-	public int getLayer() {
-		return layer;
+	
+	public void setRenderMode(RenderMode renderMode) {
+		// TODO(lambdaviking): Set the RenderMode correctly for the layer type.
+		this.renderMode = renderMode;
 	}
 
 	public RenderMode getRenderMode() {
-		if (layer == BACKGROUND) {
-			return RenderMode.BITMAP;
-		}
-		return RenderMode.GRID;
+		return renderMode;
 	}
 
 	@Override

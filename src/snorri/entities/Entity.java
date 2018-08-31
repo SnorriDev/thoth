@@ -25,7 +25,6 @@ import snorri.main.Util;
 import snorri.semantics.Nominal;
 import snorri.triggers.Trigger;
 import snorri.triggers.Trigger.TriggerType;
-import snorri.world.BackgroundElement;
 import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;

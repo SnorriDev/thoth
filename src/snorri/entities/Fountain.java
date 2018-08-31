@@ -2,8 +2,8 @@ package snorri.entities;
 
 import snorri.animations.Animation;
 import snorri.events.CollisionEvent;
-import snorri.world.BackgroundElement;
 import snorri.world.Tile;
+import snorri.world.UnifiedTileType;
 import snorri.world.Vector;
 
 public class Fountain extends Entity {
@@ -28,8 +28,8 @@ public class Fountain extends Entity {
 		Vector gridPos = pos.copy().gridPos_();
 		for (int x = gridPos.getX() - RANGE; x <= gridPos.getX() + RANGE; x++) {
 			for (int y = gridPos.getY() - RANGE; y <= gridPos.getY() + RANGE; y++) {
-				if (e.getWorld().getTileLayer().getTileGrid(x, y).getType() == BackgroundElement.WATER) {
-					e.getWorld().wrapGridUpdate(x, y, new Tile(BackgroundElement.SAND));
+				if (e.getWorld().getTileLayer().getTileGrid(x, y).getType() == UnifiedTileType.WATER) {
+					e.getWorld().wrapGridUpdate(x, y, new Tile(UnifiedTileType.SAND));
 				}
 			}
 		}

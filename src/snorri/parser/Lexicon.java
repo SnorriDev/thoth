@@ -65,7 +65,6 @@ import snorri.semantics.Under;
 import snorri.semantics.Go;
 import snorri.semantics.With;
 import snorri.semantics.Write;
-import snorri.world.BackgroundElement;
 
 public class Lexicon extends HashSet<String> implements DropContainer<Droppable>, Serializable {
 	
@@ -98,16 +97,16 @@ public class Lexicon extends HashSet<String> implements DropContainer<Droppable>
 		//Nouns
 		//lexicon.put("nht", new StaticDef(Noun.class, BackgroundElement.TREE)); //tree
 		lexicon.put("Hrrt", new StaticDef(Noun.class, new ClassWrapper(Flower.class))); //flower, gotta make this an entity
-		lexicon.put("mw", new StaticDef(Noun.class, BackgroundElement.WATER));
-		lexicon.put("Say", new StaticDef(Noun.class, BackgroundElement.SAND));
-		lexicon.put("nsr", new StaticDef(Noun.class, BackgroundElement.LAVA)); //technically this is fire
+//		lexicon.put("mw", new StaticDef(Noun.class, BackgroundElement.WATER));
+//		lexicon.put("Say", new StaticDef(Noun.class, BackgroundElement.SAND));
+//		lexicon.put("nsr", new StaticDef(Noun.class, BackgroundElement.LAVA)); //technically this is fire
 		lexicon.put("snbt", new StaticDef(Noun.class, new ClassWrapper(Urn.class)));
 //		lexicon.put("bit", new StaticDef(Noun.class, null)); //bee
 		lexicon.put("txn", new StaticDef(Noun.class, new ClassWrapper(Spike.class)));
 		lexicon.put("anx", new StaticDef(Noun.class, new ClassWrapper(Glyph.class)));
 		lexicon.put("z", new StaticDef(Noun.class, new ClassWrapper(Entity.class)));
 		lexicon.put("saH", new StaticDef(Noun.class, new ClassWrapper(Mummy.class)));
-		lexicon.put("rwDt", new StaticDef(Noun.class, BackgroundElement.SANDSTONE));
+//		lexicon.put("rwDt", new StaticDef(Noun.class, BackgroundElement.SANDSTONE));
 		lexicon.put("mAAt", new StaticDef(Noun.class, new Order()));
 		lexicon.put("FOUNTAIN", new StaticDef(Noun.class, new ClassWrapper(Fountain.class)));
 		

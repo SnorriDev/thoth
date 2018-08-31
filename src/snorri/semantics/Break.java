@@ -8,7 +8,8 @@ import snorri.entities.Entity;
 import snorri.events.SpellEvent;
 import snorri.parser.Node;
 import snorri.triggers.Trigger.TriggerType;
-import snorri.world.ForegroundElement;
+import snorri.world.TileType;
+import snorri.world.UnifiedTileType;
 import snorri.world.TileLayer;
 import snorri.world.Tile;
 import snorri.world.Vector;
@@ -17,7 +18,7 @@ import snorri.world.World;
 public class Break extends TransVerbDef {
 	
 	private static final List<Vector> TRIPWIRE_CONNECTIONS = new ArrayList<>();
-	private static final HashSet<ForegroundElement> TRIPWIRES = new HashSet<>();
+	private static final HashSet<TileType> TRIPWIRES = new HashSet<>();
 	
 	static {
 		
@@ -28,8 +29,8 @@ public class Break extends TransVerbDef {
 			}
 		}
 		
-		TRIPWIRES.add(ForegroundElement.TRIPWIRE);
-		TRIPWIRES.add(ForegroundElement.TRIPWIRE_END);
+		TRIPWIRES.add(UnifiedTileType.TRIPWIRE);
+		TRIPWIRES.add(UnifiedTileType.TRIPWIRE_END);
 		
 	}
 	
@@ -91,7 +92,7 @@ public class Break extends TransVerbDef {
 		if (!isTripwire(foreground.getTileGrid(v))) {
 			return false;
 		}
-		world.wrapGridUpdate(v, new Tile(ForegroundElement.NONE));
+		world.wrapGridUpdate(v, new Tile(UnifiedTileType.EMPTY));
 		TriggerType.TRIP.activate(v);
 		for (Vector trans : TRIPWIRE_CONNECTIONS) {
 			cutTripwire(world, v.copy().add_(trans));
