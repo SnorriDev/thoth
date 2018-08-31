@@ -352,9 +352,9 @@ public class World implements Playable, Editable {
 		return getTileLayer().canShootOver(pos.gridPos());
 	}
 
-	/** Whether the tile at global position (x, y) can be traversed. */
+	/** Whether the tile at grid position (x, y) can be traversed. */
 	public boolean isPathable(int x, int y) {
-		Vector gridPos = new Vector(x, y).gridPos_();
+		Vector gridPos = new Vector(x, y);
 		return getTileLayer().isPathable(gridPos);
 	}
 

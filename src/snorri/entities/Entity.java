@@ -193,8 +193,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 				}
 			}
 		}
-		return false;
-		
+		return false;	
 	}
 	
 	public boolean contains(Entity e) {
