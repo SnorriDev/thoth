@@ -65,6 +65,7 @@ import snorri.semantics.Under;
 import snorri.semantics.Go;
 import snorri.semantics.With;
 import snorri.semantics.Write;
+import snorri.world.UnifiedTileType;
 
 public class Lexicon extends HashSet<String> implements DropContainer<Droppable>, Serializable {
 	
@@ -97,8 +98,8 @@ public class Lexicon extends HashSet<String> implements DropContainer<Droppable>
 		//Nouns
 		//lexicon.put("nht", new StaticDef(Noun.class, BackgroundElement.TREE)); //tree
 		lexicon.put("Hrrt", new StaticDef(Noun.class, new ClassWrapper(Flower.class))); //flower, gotta make this an entity
-//		lexicon.put("mw", new StaticDef(Noun.class, BackgroundElement.WATER));
-//		lexicon.put("Say", new StaticDef(Noun.class, BackgroundElement.SAND));
+		lexicon.put("mw", new StaticDef(Noun.class, UnifiedTileType.WATER));
+		lexicon.put("Say", new StaticDef(Noun.class, UnifiedTileType.SAND));
 //		lexicon.put("nsr", new StaticDef(Noun.class, BackgroundElement.LAVA)); //technically this is fire
 		lexicon.put("snbt", new StaticDef(Noun.class, new ClassWrapper(Urn.class)));
 //		lexicon.put("bit", new StaticDef(Noun.class, null)); //bee
