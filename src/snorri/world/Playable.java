@@ -80,6 +80,8 @@ public interface Playable extends Loadable, Savable {
 		pw.write("type: " + type.toString() + "\n");
 		if (type == PlayableType.WORLD) {
 			pw.write("layers:\n");
+			pw.write("  - type: BACKGROUND\n");
+			pw.write("    path: /textures/backgrounds/splash.png\n");
 			pw.write("  - type: TILE\n");
 			pw.write("    path: tile.layer\n");
 			pw.write("  - type: ENTITY\n");
