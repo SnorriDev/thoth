@@ -14,7 +14,6 @@ public class Debug {
 	
 	private static final boolean ALL_HIEROGLYPHS_UNLOCKED = false;
 	private static final boolean RENDER_TILE_GRID = false;
-	private static final boolean LOG_WORLD = false;
 	private static final boolean LOG_PARSES = false;
 	private static final boolean LOG_RENDER_QUEUE = false;
 	private static final boolean LOG_DAMAGE_EVENTS = false;
@@ -63,10 +62,6 @@ public class Debug {
 	
 	public static boolean tileGridRendered() {
 		return RENDER_TILE_GRID;
-	}
-	
-	public static boolean worldLogged() {
-		return LOG_WORLD;
 	}
 	
 	public static boolean parsesLogged() {

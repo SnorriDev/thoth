@@ -205,7 +205,9 @@ public class WorldGraph implements Playable {
 	}
 	
 	public void crossInto(World world, Vector pos) {
-		// first remove any extraneous player in new world.
+		Debug.logger.info("Crossing into " + world + "...");
+		
+		// First remove any extraneous player in new world.
 		world.delete(world.getEntityTree().getFirst(Player.class));
 		
 		// move the player into the new world.

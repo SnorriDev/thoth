@@ -128,12 +128,7 @@ public class World implements Playable, Editable {
 	}
 
 	public synchronized void update(Entity focus, double d) {
-
-		if (Debug.worldLogged()) {
-			Debug.logger.info("World updated.");
-		}
-
-		entityLayer.updateAround(this, d, focus);
+		getEntityLayer().updateAround(this, d, focus);
 		
 		World neighbor;
 		if (getRightNeighbor() != null && touchingRight(focus)) {
