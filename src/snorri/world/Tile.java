@@ -22,7 +22,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 	
 	public static final int	WIDTH = 64;
 	public static final BufferedImage DEFAULT_TEXTURE = Main.DEFAULT_TEXTURE;
-	public static final BufferedImage DEFAULT_BACKGROUND_TEXTURE = getImage("/textures/tiles/default_background00.png");
 	public static final BufferedImage DEFAULT_MIDGROUND_TEXTURE = getImage("/textures/tiles/default_midground00.png");
 	public static final BufferedImage DEFAULT_FOREGROUND_TEXTURE = getImage("/textures/tiles/default_foreground00.png");
 	public static final BufferedImage BLANK_TEXTURE = getImage("/textures/tiles/blank00.png");
@@ -161,29 +160,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 		else {
 			//Main.error("No texture found, returning default texture");
 			return DEFAULT_TEXTURE;
-		}
-	}
-	
-	public static BufferedImage getImage(String path, int layer) {
-		if (Main.getImage(path) != null)
-			return Main.getImage(path);
-		else {
-			if (layer == 0) {
-				//Main.error("No texture found, returning default background texture");
-				return DEFAULT_BACKGROUND_TEXTURE;
-			}
-			else if (layer == 1) {
-				//Main.error("No texture found, returning default midground texture");
-				return DEFAULT_MIDGROUND_TEXTURE;
-			}
-			else if (layer == 2) {
-				//Main.error("No texture found, returning default foreground texture");
-				return DEFAULT_FOREGROUND_TEXTURE;
-			}
-			else {
-				//Main.error("No texture found, returning default texture");
-				return DEFAULT_TEXTURE;
-			}
 		}
 	}
 

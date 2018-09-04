@@ -11,10 +11,12 @@ import snorri.main.Main;
 
 public class BackgroundLayer implements Layer {
 	
+	// TODO(lambdaviking): Probably want to make this a SavableLayer.
+	
 	protected BufferedImage bitmap;
 	protected Vector dimensions;
 	
-	public static final BufferedImage DEFAULT_BACKGROUND = Main.getImage("/textures/tiles/default_background00.png");
+	public static final BufferedImage DEFAULT_BACKGROUND = Main.getImage("/textures/backgrounds/splash.png");
 	public static final int CUSHION = 0;
 	
 	public BackgroundLayer() {
@@ -28,9 +30,16 @@ public class BackgroundLayer implements Layer {
 	
 	public static Layer fromYAML(World world, Map<String, Object> params) {
 		String path = (String) params.get("path");
-		File file = new File(world.getDirectory(), path);
-		Debug.logger.info("Loading " + file + "...");
-		BufferedImage bitmap = Main.getImage(file);
+		Debug.logger.info("Loading " + path + "...");
+		BufferedImage bitmap;
+		if (path.startsWith("/")) {
+			// If the path is absolute, look in the game directory.
+			bitmap = Main.getImage(path);
+		} else {
+			// If the path is not absolute, look in the world directory.
+			File file = new File(world.getDirectory(), path);
+			bitmap = Main.getImage(file);
+		}
 		return new BackgroundLayer(bitmap);
 	}
 	
@@ -50,7 +59,7 @@ public class BackgroundLayer implements Layer {
 		int adjMinX = Math.max(0, minX), adjMinY = Math.max(0, minY);
 		BufferedImage image = bitmap.getSubimage(adjMinX, adjMinY, Math.min(bitmap.getWidth() - adjMinX, dim.getX()), Math.min(bitmap.getHeight() - adjMinY, dim.getY()));
 		
-		gr.drawImage(image, Math.max(0, -minX), Math.max(0, -minY), null);		
+		gr.drawImage(image, Math.max(0, -minX), Math.max(0, -minY), null);
 	}
 
 	public int getWidth() {
