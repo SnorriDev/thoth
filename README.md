@@ -6,10 +6,10 @@ The central mechanic in *the Book of Thoth* is the ability to create customizabl
 
 For more info:
 
-* Join our [Discord](https://discord.gg/GpV988e)
+* Join our [Discord](https://discord.gg/GpV988e).
 
-* Browse the [website](http://snorridev.github.io/thoth/)
+* Browse the [website](http://snorridev.github.io/thoth/).
 
-* Watch our [pitch video](https://www.youtube.com/watch?v=_d_kD07SPlc&feature=youtu.be)
+* Watch our [pitch video](https://www.youtube.com/watch?v=_d_kD07SPlc&feature=youtu.be).
 
-* Download the [latest release](https://github.com/viking-sudo-rm/SpokenWord/releases)
+* Download the [latest release](https://github.com/viking-sudo-rm/SpokenWord/releases).
