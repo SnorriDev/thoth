@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -39,14 +40,12 @@ import snorri.keyboard.Key;
 import snorri.masking.Mask;
 import snorri.pathfinding.Team;
 import snorri.world.Editable;
-import snorri.world.ForegroundElement;
-import snorri.world.MidgroundElement;
 import snorri.world.TileLayer;
+import snorri.world.UnifiedTileType;
 import snorri.world.Playable;
 import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
-import snorri.world.BackgroundElement;
 
 public class LevelEditor extends FocusedWindow<Entity> implements ActionListener {
 
@@ -77,23 +76,19 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 	private boolean extraSpeed = false;
 	
 	JMenuBar menuBar;
-	JMenu menu, submenu0, submenu1, submenu2, subsubmenu;
+	JMenu menu, subsubmenu;
 	JMenuItem menuItem;
 	JRadioButtonMenuItem rbMenuItem;
 	JCheckBoxMenuItem cbMenuItem;
 
 	public LevelEditor() {
 		super(new Entity(new Vector(20, 20)));
-		
-		previousTile = new Tile(BackgroundElement.class, 0, 0);
-		selectedTile = new Tile(BackgroundElement.class, 0, 0);
+		previousTile = new Tile(UnifiedTileType.EMPTY);
+		selectedTile = new Tile(UnifiedTileType.SAND, 0);
 		selectedEntityClass = Entity.EDIT_SPAWNABLE.get(0);
 		createMenu();
-
 		repaint();
-
 		lastRenderTime = getTimestamp();
-		
 		canUndo = false;
 		canRedo = false;
 	}
@@ -141,102 +136,30 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
-		// Tile Selection Menu
+		// Menu to select tiles.
 		menu = new JMenu("Select Tile");
 		menu.setMnemonic(KeyEvent.VK_T);
 		menuBar.add(menu);
 
 		ButtonGroup groupTiles = new ButtonGroup();
-		
-		submenu0 = new JMenu("Backgrounds");
-		submenu1 = new JMenu("Midgrounds");
-		submenu2 = new JMenu("Foregrounds");
-
 		boolean firstTile = true;
-		for (Tile t : Tile.getAllTypes(BackgroundElement.class)) {
-
-			if (t == null || t.getBaseTexture() == null) {
-				continue;
-			}
-
+		for (Tile t : Tile.getAllTypes()) {
 			subsubmenu = new JMenu(t.toStringShort());
-			for (Tile s : t.getType().getSubTypes()) {
-				rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(s.getBaseTexture()));
+			for (Tile s : t.getType().getAllStyles()) {
+				BufferedImage baseTexture = s.getBaseTexture();
+				ImageIcon icon = (baseTexture == null) ? null : new ImageIcon(baseTexture);
+				rbMenuItem = new JRadioButtonMenuItem(s.toString(), icon);
 				rbMenuItem.setSelected(firstTile);
 				rbMenuItem.setActionCommand("set" + s.toNumericString());
 				rbMenuItem.addActionListener(this);
 				subsubmenu.add(rbMenuItem);
 				groupTiles.add(rbMenuItem);
 			}
-			submenu0.add(subsubmenu);
-
+			menu.add(subsubmenu);
 			firstTile = false;
-
 		}
-		for (Tile t : Tile.getAllTypes(MidgroundElement.class)) {
 
-			if (t == null || t.getBaseTexture() == null) {
-				if (t.getType() == MidgroundElement.NONE) {
-					subsubmenu = new JMenu(t.toStringShort());
-					for (Tile s : t.getType().getSubTypes()) {
-						rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(Tile.BLANK_TEXTURE));
-						rbMenuItem.setSelected(firstTile);
-						rbMenuItem.setActionCommand("set" + s.toNumericString());
-						rbMenuItem.addActionListener(this);
-						subsubmenu.add(rbMenuItem);
-						groupTiles.add(rbMenuItem);
-					}
-					submenu1.add(subsubmenu);
-				}
-				continue;
-			}
-
-			subsubmenu = new JMenu(t.toStringShort());
-			for (Tile s : t.getType().getSubTypes()) {
-				rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(s.getBaseTexture()));
-				rbMenuItem.setSelected(firstTile);
-				rbMenuItem.setActionCommand("set" + s.toNumericString());
-				rbMenuItem.addActionListener(this);
-				subsubmenu.add(rbMenuItem);
-				groupTiles.add(rbMenuItem);
-			}
-			submenu1.add(subsubmenu);
-		}
-		for (Tile t : Tile.getAllTypes(ForegroundElement.class)) {
-
-			if (t == null || t.getBaseTexture() == null) {
-				if (t.getType().ordinal() == 0) {
-					subsubmenu = new JMenu(t.toStringShort());
-					for (Tile s : t.getType().getSubTypes()) {
-						rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(Tile.BLANK_TEXTURE));
-						rbMenuItem.setSelected(firstTile);
-						rbMenuItem.setActionCommand("set" + s.toNumericString());
-						rbMenuItem.addActionListener(this);
-						subsubmenu.add(rbMenuItem);
-						groupTiles.add(rbMenuItem);
-					}
-					submenu2.add(subsubmenu);
-				}
-				continue;
-			}
-
-			subsubmenu = new JMenu(t.toStringShort());
-			for (Tile s : t.getType().getSubTypes()) {
-				rbMenuItem = new JRadioButtonMenuItem(s.toString(), new ImageIcon(s.getBaseTexture()));
-				rbMenuItem.setSelected(firstTile);
-				rbMenuItem.setActionCommand("set" + s.toNumericString());
-				rbMenuItem.addActionListener(this);
-				subsubmenu.add(rbMenuItem);
-				groupTiles.add(rbMenuItem);
-			}
-			submenu2.add(subsubmenu);
-		}
-		
-		menu.add(submenu0);
-		menu.add(submenu1);
-		menu.add(submenu2);
-
-		//ENTITY SELECTION MENU
+		// Menu to select entities.
 		menu = new JMenu("Select Entity");
 		menu.setMnemonic(KeyEvent.VK_E);
 		menuBar.add(menu);
@@ -592,27 +515,6 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		if (Key.Q.isPressed(e)) {
 			changeSpeed();
 		}
-		if (Key.ONE.isPressed(e)) {
-			if (!selectedTile.equals(new Tile(BackgroundElement.class, 0, 0))) {
-				previousTile = selectedTile;
-				selectedTile = new Tile(BackgroundElement.class, 0, 0);
-			}
-		}
-		if (Key.TWO.isPressed(e)) {
-			if (!selectedTile.equals(new Tile(MidgroundElement.class, 0, 0))) {
-				previousTile = selectedTile;
-				selectedTile = new Tile(MidgroundElement.class, 0, 0);
-			}
-		}
-		if (Key.THREE.isPressed(e)) {
-			if (!selectedTile.equals(new Tile(ForegroundElement.class, 0, 0))) {
-				previousTile = selectedTile;
-				selectedTile = new Tile(ForegroundElement.class, 0, 0);
-			}
-		}
-		
-		//TODO add a key to register a team, and function to look up by name?
-
 	}
 
 	private void changeSpeed() {
@@ -696,13 +598,11 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 	}
 
 	private void editEntityInfo() {
-
 		if (!(env instanceof World)) {
 			return;
 		}
 		World world = (World) env;
 		Entity ent = world.getEntityTree().getFirstCollision(new Entity(getMousePosAbsolute()), true);
-
 		if (ent == null) {
 			return;
 		}

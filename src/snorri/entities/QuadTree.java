@@ -9,6 +9,7 @@ import java.util.PriorityQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import snorri.collisions.RectCollider;
+import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.world.EntityGroup;
 import snorri.world.Executable;
@@ -258,13 +259,11 @@ public class QuadTree extends Entity implements EntityGroup {
 
 	@Override
 	public void updateAround(World world, double deltaTime, Entity centerObject) {
-
 		if (centerObject == null) {
 			return;
 		}
 
 		Entity updateRange = new Entity(centerObject.pos, World.UPDATE_RADIUS);
-
 		for (Entity e : entities) {
 			if (e.intersects(updateRange)) {
 				e.update(world, deltaTime);
@@ -277,7 +276,6 @@ public class QuadTree extends Entity implements EntityGroup {
 				}
 			}
 		}
-
 	}
 
 	/**

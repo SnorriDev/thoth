@@ -11,19 +11,16 @@ import snorri.parser.Node;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
-import snorri.world.ForegroundElement;
-import snorri.world.MidgroundElement;
 import snorri.world.Tile;
 import snorri.world.TileType;
+import snorri.world.UnifiedTileType;
 
 public class Open extends TransVerbDef {
 	
 	private static final Set<TileType> DOOR_TYPES = new HashSet<>();
 	
 	static {
-		DOOR_TYPES.add(MidgroundElement.DOOR);
-		DOOR_TYPES.add(ForegroundElement.GATE_LEFT);
-		DOOR_TYPES.add(ForegroundElement.GATE_RIGHT);
+		DOOR_TYPES.add(UnifiedTileType.DOOR);
 	}
 	
 	public Open() {

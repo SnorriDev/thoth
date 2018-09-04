@@ -52,7 +52,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 	}
 	
 	public Tile(Class<? extends TileType> c, int id, int style) {
-		this(TileType.lookup(c, id), style);
+		this(UnifiedTileType.values()[id], style);
 	}
 	
 	public Tile(Tile tile) {
@@ -68,48 +68,28 @@ public class Tile implements Comparable<Tile>, Nominal {
 	public Tile(String substring) {
 		this();
 		String[] l = substring.split(":");
-		
-		switch(l.length) {
-		case 2:
-			// TODO this logic can be baked into a method in TileType
-			type = BackgroundElement.valueOf(l[0]);
-			if (type == null) {
-				type = BackgroundElement.byIdStatic(Integer.parseInt(l[0]));
-			}
-			style = Integer.parseInt(l[1]);
-			break;
-		case 3:
-			int layer = Integer.parseInt(l[0]);
-			type = (layer == 0 ? BackgroundElement.byIdStatic(Integer.parseInt(l[1])) : (layer == 1 ? MidgroundElement.byIdStatic(Integer.parseInt(l[1])) : ForegroundElement.byIdStatic(Integer.parseInt(l[1]))));
-			style = Integer.parseInt(l[2]);
-			break;
-		default:
-			throw new IllegalArgumentException("invalid outsideTile");
+		if (l.length != 2) {
+			throw new IllegalArgumentException("Invalid string for creating tile.");
 		}
-		
+		try {
+			// Interpret the string as a TileType name.
+			type = UnifiedTileType.valueOf(l[0]);
+		} catch (IllegalArgumentException e) {
+			// Interpret the string as a TileType id.
+			type = UnifiedTileType.values()[Integer.parseInt(l[0])];
+		}
+		style = Integer.parseInt(l[1]);
+		// TODO(lambdaviking): Refactor as static factory function.
 	}
 	
 	public Tile(int layer, int id, int style) {
-		this(TileType.lookup(layer, id), style);
-		//this.style = style;
+		this(UnifiedTileType.values()[id], style);
 	}
 
-	public static ArrayList<Tile> getAllTypes(Class<? extends TileType> c) {
+	public static ArrayList<Tile> getAllTypes() {
 		ArrayList<Tile> list = new ArrayList<Tile>();
-		if (c == BackgroundElement.class) {
-			for(int i = 0; i < BackgroundElement.values().length; i++) {
-				list.add(new Tile(c, i, 0));
-			}
-		}
-		else if (c == MidgroundElement.class) {
-			for(int i = 0; i < MidgroundElement.values().length; i++) {
-				list.add(new Tile(c, i, 0));
-			}
-		}
-		else if (c == ForegroundElement.class) {
-			for(int i = 0; i < ForegroundElement.values().length; i++) {
-				list.add(new Tile(c, i, 0));
-			}
+		for (TileType type : UnifiedTileType.values()) {
+			list.add(new Tile(type, 0));
 		}
 		return list;
 	}
@@ -208,7 +188,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 	}
 
 	public String toNumericString() {
-		return getType().getLayer() + ":" + getType().getId() + ":" + getStyle();
+		return getType().getId() + ":" + getStyle();
 	}
 
 	public boolean isPathable() {
@@ -307,9 +287,9 @@ public class Tile implements Comparable<Tile>, Nominal {
 		return masks;
 	}
 	
-	public static List<Tile> getBlendOrdering(int layer) {
+	public static List<Tile> getBlendOrdering() {
 		List<Tile> tiles = new ArrayList<>();
-		for (TileType type : TileType.getValues(layer)) {
+		for (TileType type : UnifiedTileType.values()) {
 			for (int i = 0; i < type.getNumberStyles(); i++) {
 				tiles.add(new Tile(type, i));
 			}

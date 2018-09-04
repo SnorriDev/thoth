@@ -73,7 +73,6 @@ public class Player extends Unit implements Caster {
 	}
 	
 	public Player(Vector pos) {
-		
 		super(pos, IDLE, WALKING);
 		inventory = new Inventory(this);
 		stats = new Stats(this);
@@ -86,7 +85,9 @@ public class Player extends Unit implements Caster {
 		damageSounds = DAMAGE_SOUNDS;
 		deathSounds = DEATH_SOUNDS;
 		
-		//default weapons
+		// TODO(lambdaviking): This should become a static factory.
+		
+		// Add the default weapons.
 		Weapon sling = (Weapon) Item.newItem(ItemType.SLING);
 		Orb o1 = (Orb) Item.newItem(ItemType.PELLET);
 		Orb o2 = (Orb) Item.newItem(ItemType.PELLET);
@@ -94,7 +95,7 @@ public class Player extends Unit implements Caster {
 		Papyrus p2 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
 		Papyrus p3 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
 		
-		//equip items in inventory
+		// Equip items in inventory.
 		inventory.add(sling);
 		inventory.add(o1);
 		inventory.add(o2);
@@ -103,13 +104,10 @@ public class Player extends Unit implements Caster {
 		inventory.add(p3);
 		
 		tag = "player";
-		
 	}
 
 	@Override
 	public void update(World world, double deltaTime) {
-		
-		
 		super.update(world, deltaTime);
 		inventory.update(deltaTime);
 		
@@ -117,23 +115,21 @@ public class Player extends Unit implements Caster {
 		
 		FocusedWindow<?> window = (FocusedWindow<?>) Main.getWindow();
 		SwingUtilities.invokeLater(new Runnable() {
-
 			@Override
 			public void run() {
 				walkNormalized(world, window.getMomentumVector(), deltaTime);
 			}
-			
 		});
 				
 		inventory.checkKeys();
 		
-		//TODO move some input checking to a new broadcastBinding event
-		Entity checker = new Entity(pos, Interactor.INTERACT_RANGE); //construct this new entity because positions can be assigned/pointers fucked up
+		//TODO Move some input checking to a new broadcastBinding event.
+		// We construct a new entity because positions can be assigned/pointers fucked up.
+		Entity checker = new Entity(pos, Interactor.INTERACT_RANGE);
 		Interactor selected = world.getEntityTree().getFirstCollision(checker, Interactor.class);
 		if (selected != null && Key.SPACE.isPressed()) {
 			((Interactor) selected).onInteract(new InteractEvent(world, this));
 		}
-				
 	}
 	
 	@Override

@@ -80,9 +80,7 @@ public interface TileType extends Nominal {
 	public void setParam(Param<?> param);
 	
 	//BufferedImage getImage(String string);
-	
-	TileType byId(int id);
-	
+		
 	int getId();
 	
 	BufferedImage[] getTextures();
@@ -94,7 +92,7 @@ public interface TileType extends Nominal {
 	@Override
 	String toString();
 	
-	ArrayList<Tile> getSubTypes();
+	ArrayList<Tile> getAllStyles();
 	
 	//TODO what are these methods? should be moved
 	
@@ -129,45 +127,7 @@ public interface TileType extends Nominal {
 	
 	boolean isChangable();
 	
-	public int getLayer();
-	
-	public static TileType lookup(Class<? extends TileType> c, int id) {
-		
-		if (c.equals(BackgroundElement.class)) {
-			return BackgroundElement.byIdStatic(id);
-		}
-		
-		if (c.equals(MidgroundElement.class)) {
-			return MidgroundElement.byIdStatic(id);
-		}
-		
-		if (c.equals(ForegroundElement.class)) {
-			return ForegroundElement.byIdStatic(id);
-		}
-		
-		return null;
-		
-	}
-	
-	public static TileType lookup(int layer, int id) {
-		
-		if (layer == 0) {
-			return BackgroundElement.byIdStatic(id);
-		}
-		
-		if (layer == 1) {
-			return MidgroundElement.byIdStatic(id);
-		}
-		
-		if (layer == 2) {
-			return ForegroundElement.byIdStatic(id);
-		}
-		
-		return null;
-		
-	}
-	
-	public boolean isLiquid();
+	public boolean isSwimmable();
 	
 	public int ordinal();
 	
@@ -178,46 +138,15 @@ public interface TileType extends Nominal {
 	
 	@Override
 	public default Nominal get(AbstractSemantics attr, SpellEvent e) {
-		if (attr == AbstractSemantics.FLOOD && isLiquid()) {
+		if (attr == AbstractSemantics.FLOOD && isSwimmable()) {
 			return new Tile(this);
 		}
 		
-		if (attr == AbstractSemantics.STORM && this == BackgroundElement.SAND) {
+		if (attr == AbstractSemantics.STORM && this == UnifiedTileType.SAND) {
 			return new Tile(this, 1);
 		}
 		
 		return Nominal.super.get(attr, e);
-	}
-	
-	public static TileType[] getValues(int l) {
-		switch (l) {
-		case TileLayer.BACKGROUND:
-			return BackgroundElement.values();
-		case TileLayer.MIDGROUND:
-			return MidgroundElement.values();
-		case TileLayer.FOREGROUND:
-			return ForegroundElement.values();
-		default:
-			return null; //unknown level
-		}
-	}
-	
-	public static TileType[] getValues(Class<? extends TileType> c) {
-		
-		if (BackgroundElement.class.isAssignableFrom(c)) {
-			return BackgroundElement.values();
-		}
-		
-		if (MidgroundElement.class.isAssignableFrom(c)) {
-			return MidgroundElement.values();
-		}
-		
-		if (ForegroundElement.class.isAssignableFrom(c)) {
-			return ForegroundElement.values();
-		}
-		
-		return null;
-		
 	}
 	
 	static BufferedImage[] getReflections(BufferedImage image) {
