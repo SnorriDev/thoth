@@ -33,7 +33,7 @@ public class BackgroundLayer implements Layer {
 		Debug.logger.info("Loading " + path + "...");
 		BufferedImage bitmap;
 		if (path.startsWith("/")) {
-			// If the path is absolute, look from the game directory.
+			// If the path is absolute, look in the game directory.
 			bitmap = Main.getImage(path);
 		} else {
 			// If the path is not absolute, look in the world directory.
@@ -59,7 +59,7 @@ public class BackgroundLayer implements Layer {
 		int adjMinX = Math.max(0, minX), adjMinY = Math.max(0, minY);
 		BufferedImage image = bitmap.getSubimage(adjMinX, adjMinY, Math.min(bitmap.getWidth() - adjMinX, dim.getX()), Math.min(bitmap.getHeight() - adjMinY, dim.getY()));
 		
-		gr.drawImage(image, Math.max(0, -minX), Math.max(0, -minY), null);		
+		gr.drawImage(image, Math.max(0, -minX), Math.max(0, -minY), null);
 	}
 
 	public int getWidth() {
