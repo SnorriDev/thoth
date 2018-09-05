@@ -32,13 +32,11 @@ import snorri.entities.Dummy;
 import snorri.entities.Entity;
 import snorri.entities.Listener;
 import snorri.entities.Player;
-import snorri.entities.Unit;
 import snorri.events.SpellEvent.Caster;
 import snorri.inventory.Droppable;
 import snorri.inventory.Item;
 import snorri.keyboard.Key;
 import snorri.masking.Mask;
-import snorri.pathfinding.Team;
 import snorri.world.Editable;
 import snorri.world.TileLayer;
 import snorri.world.UnifiedTileType;
@@ -609,9 +607,6 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 		DialogMap inputs = new DialogMap();
 		inputs.put("Tag", ent.getTag());
-		if (ent instanceof Unit) {
-			inputs.put("Team", ((Unit) ent).getTeam().toString());
-		}
 		if (ent instanceof Drop) {
 			inputs.put("Prize", ((Drop) ent).getPrizeString());
 			Droppable prize = ((Drop) ent).getPrize();
@@ -623,15 +618,10 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		
 		String tag = inputs.getText("Tag");
 		ent.setTag(tag.isEmpty() ? null : tag);
-		if (ent instanceof Unit) {
-			Team team = inputs.getTeam("Team");
-			((Unit) ent).setTeam(team);
-		}
 		if (ent instanceof Drop) {
 			world.delete(ent);
 			world.add(new Drop(ent.getPos().copy(), inputs.getText("Prize"), inputs.getText("Spell")));
 		}
-
 	}
 
 	private void spawnEntity() {

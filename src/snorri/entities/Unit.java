@@ -14,7 +14,6 @@ import snorri.inventory.Inventory;
 import snorri.inventory.Stats;
 import snorri.main.Debug;
 import snorri.modifiers.Modifier;
-import snorri.pathfinding.Team;
 import snorri.semantics.Break;
 import snorri.semantics.Go.Walker;
 import snorri.semantics.Nominal;
@@ -33,7 +32,6 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 	protected List<Modifier<Unit>> modifiers = new ArrayList<>();
 	
 	protected int speed;
-	private Team team;
 	private Inventory inventory;
 	protected Stats stats;
 	protected double health;
@@ -229,19 +227,6 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 	
 	public void removeModifier(Modifier<Unit> m){
 		modifiers.remove(m);
-	}
-	
-	public void setTeam(Team team) {
-		this.team = team;
-	}
-	
-	public Team getTeam() {
-		if (team == null) {
-			Team out = new Team();
-			out.add(this);
-			return out;
-		}
-		return team;
 	}
 	
 	public void kill(World world) {
