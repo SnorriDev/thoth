@@ -16,7 +16,10 @@ import snorri.world.Tile;
 import snorri.world.TileType;
 import snorri.world.Vector;
 
+@Deprecated
 public class Mask implements Comparable<Mask>, Comparator<Mask> {
+	
+	// TODO(#49): Remove all of this masking logic.
 
 	public static final Vector[] NEIGHBORS;
 	public static final Vector[] CORNERS;
@@ -91,7 +94,7 @@ public class Mask implements Comparable<Mask>, Comparator<Mask> {
 	}
 
 	public boolean isCorner() {
-		return corner; // TODO get rid of this variable?
+		return corner;
 	}
 
 	public void add(byte value) {
@@ -105,8 +108,8 @@ public class Mask implements Comparable<Mask>, Comparator<Mask> {
 		}
 	}
 
-	// TODO do this the fancy way
 	public static List<Vector> getNeighbors(Vector pos) {
+		// TODO(lambdaviking): If we do don't delete Mask, this should be converted to an iterator over neighbors.
 		List<Vector> out = new ArrayList<>();
 		for (Vector v : NEIGHBORS) {
 			out.add(pos.copy().add_(v));

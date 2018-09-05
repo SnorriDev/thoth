@@ -37,9 +37,7 @@ public abstract class Message {
 			icon = Util.resize(image, -1, ICON_SIZE);
 		}
 	}
-	
-	//TODO this class needs to be cleaned up quite a bit
-	
+		
 	public boolean update(double deltaTime) {
 		timer.update(deltaTime);
 		return timer.isOffCooldown();

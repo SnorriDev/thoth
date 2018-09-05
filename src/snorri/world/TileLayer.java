@@ -167,7 +167,6 @@ public class TileLayer implements Editable, SavableLayer {
 		setTileGrid(x / Tile.WIDTH, y / Tile.WIDTH, t);
 	}
 
-	// TODO this should copy t??
 	public void setTileGrid(int x, int y, Tile t) {
 		if (x < 0 || x >= map.length || y < 0 || y >= map[x].length) {
 			return;
@@ -419,7 +418,7 @@ public class TileLayer implements Editable, SavableLayer {
 	 */
 	public boolean computeMasks(int x, int y) {
 
-		// TODO this can probably be optimized significantly
+		// TODO(#49): Is this stuff worth keeping?
 
 		Tile tile = getTileGrid(x, y);
 		if (tile == null || tile.getType().isAtTop()) {
@@ -473,9 +472,7 @@ public class TileLayer implements Editable, SavableLayer {
 			}
 			tile.addMask(mask);
 		}
-
 		return masks[0] != null;
-
 	}
 
 	public boolean computeMasks(Vector v) {

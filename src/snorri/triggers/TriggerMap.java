@@ -2,13 +2,13 @@ package snorri.triggers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import snorri.triggers.Trigger.TriggerType;
 
-public class TriggerMap extends HashMap<Trigger.TriggerType, ArrayList<Trigger>> {
+public class TriggerMap extends HashMap<Trigger.TriggerType, List<Trigger>> {
 
 	private static final long serialVersionUID = 1L;
-	//TODO map objects within the map to lists of triggers
 	
 	private boolean loaded = false;
 

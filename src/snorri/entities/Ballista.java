@@ -49,20 +49,16 @@ public class Ballista extends Entity {
 
 	}
 
-	// TODO pass spell event, use shooter interface
+	// TODO(#42): Refactor to use TURRET AILogic.
 	public boolean shoot(World world) {
-
 		if (shooting || !bow.canUse()) {
 			return false;
 		}
-
-		// TODO Entities subclasses of each other?
 
 		shooting = true;
 		setAnimation(SHOOT);
 		bow.attackIfPossible(world, this, Vector.ZERO, dir, bolt);
 		return true;
-
 	}
 
 	@Override

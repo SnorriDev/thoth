@@ -65,6 +65,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 	 * @param substring the substring to parse
 	 */
 	public Tile(String substring) {
+		// TODO(#52): Refactor this constructor as a static factory function.
 		this();
 		String[] l = substring.split(":");
 		if (l.length != 2) {
@@ -78,7 +79,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 			type = UnifiedTileType.values()[Integer.parseInt(l[0])];
 		}
 		style = Integer.parseInt(l[1]);
-		// TODO(lambdaviking): Refactor as static factory function.
 	}
 	
 	public Tile(int layer, int id, int style) {

@@ -158,7 +158,8 @@ public class WorldGraph implements Playable {
 		}
 	}
 	
-	@Override @Deprecated //TODO: should save to config.yml
+	@Override
+	@Deprecated
 	public void save(File f, boolean recomputeGraphs) throws IOException {
 		Map<String,Object> yaml;
 		try	{
@@ -215,9 +216,7 @@ public class WorldGraph implements Playable {
 		setCurrentWorld(world);
 		player.setPos(pos);
 		getCurrentWorld().add(player);
-		
-		// TODO save string names for worlds
-		
+				
 		if (Debug.changeWorldEventsLogged()) {
 			Debug.logger.info("Entered world " + world + ":");
 			Debug.logger.info("\t* Right neighbor: " + world.getRightNeighbor() + ".");

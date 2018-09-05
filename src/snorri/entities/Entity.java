@@ -333,7 +333,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		}
 	}
 	
-	//TODO override this in methods that need it
 	public Entity copy() {
 		try {
 			Entity newEnt = getClass().getConstructor(Vector.class).newInstance(pos.copy());

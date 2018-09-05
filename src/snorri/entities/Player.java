@@ -85,7 +85,7 @@ public class Player extends Unit implements Caster {
 		damageSounds = DAMAGE_SOUNDS;
 		deathSounds = DEATH_SOUNDS;
 		
-		// TODO(lambdaviking): This should become a static factory.
+		// TODO(#43): Stuff below here should become a static factory.
 		
 		// Add the default weapons.
 		Weapon sling = (Weapon) Item.newItem(ItemType.SLING);
@@ -167,13 +167,9 @@ public class Player extends Unit implements Caster {
 	}
 	
 	public void renderHealthBar(Graphics g) {
-		
 		Vector pos = getHealthBarPos();
-		
 		for (int i = 0; i < HEALTH_RES; i++) {
-			
-			//TODO fix this to reflect absolute magnitude of health
-						
+			//TODO(#44): Show total health, not percent health.
 			if (getHearts() >= i) {
 				g.drawImage(HEART, pos.getX(), pos.getY(), null);
 			} else if (getHearts() < i - 1 || getHearts() - (int) getHearts() < 0.5d) {
@@ -181,10 +177,8 @@ public class Player extends Unit implements Caster {
 			} else {
 				g.drawImage(HALF_HEART, pos.getX(), pos.getY(), null);
 			}
-
 			pos.add_(HEART.getWidth(null), 0);
 		}
-		
 	}
 	
 	@Override

@@ -77,8 +77,7 @@ public abstract class Item implements Droppable {
 	
 	public enum ItemType {
 
-		//TODO convert these to Animations instead of BufferedImages?
-		
+		//TODO(#46): Allow these to be Animations in addition to BufferedImages.
 		EMPTY,
 		PAPYRUS(Papyrus.class, Main.getImage("/textures/items/papyrus.png")),
 		SLING(Weapon.class, Main.getImage("/textures/items/sling.png"), 34d, 0.45, "/sound/arrow.wav"),
@@ -194,7 +193,6 @@ public abstract class Item implements Droppable {
 		return type;
 	}
 	
-	//TODO require this method in Droppable?
 	/**
 	 * Compute the texture for this item.
 	 * @return The BufferedImage representing the texture.
@@ -353,8 +351,6 @@ public abstract class Item implements Droppable {
 		return DEFAULT_COOLDOWN_COLOR;
 	}
 	
-	//TODO: use an ImageViewer to scale things
-	
 	public static Vector getPos(int i, boolean top) {
 		int y = top ? GamePanel.MARGIN : (((GameWindow) Main.getWindow()).getHeight() - (i == 0 ? Item.getBigSlotWidth() : Item.getSlotWidth()) - GamePanel.MARGIN);
 		int width = top ? Item.getSlotWidth() : Item.getBigSlotWidth();
@@ -424,7 +420,6 @@ public abstract class Item implements Droppable {
 	
 	@Override
 	public Item copy() {
-		//TODO copy spell/name?
 		try {
 			Item copy = getClass().getConstructor(ItemType.class).newInstance(type);
 			copy.nickname = nickname;

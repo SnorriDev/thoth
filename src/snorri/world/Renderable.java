@@ -13,6 +13,7 @@ import snorri.main.FocusedWindow;
 public interface Renderable {
 	
 	/** The core logic that Renderable implements. */
+	//TODO(#47): Should we use an ImageViewer to scale things?
 	public void render(FocusedWindow<?> levelEditor, Graphics2D gr, double deltaTime, boolean b);
 
 	public int getWidth();
