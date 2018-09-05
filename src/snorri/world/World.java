@@ -100,7 +100,7 @@ public class World implements Playable, Editable {
 	 */
 	public static World createDefaultWorld(Vector dims) {
 		World world = new World(dims.getX(), dims.getY());
-		world.addLayer(new BackgroundLayer());
+		world.addLayer(new BackgroundLayer(world, BackgroundLayer.DEFAULT_BACKGROUND));
 		world.addLayer(new TileLayer(dims.getX(), dims.getY(), UnifiedTileType.EMPTY));
 		world.addLayer(new EntityLayer(world));
 		return world;

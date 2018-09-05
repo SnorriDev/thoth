@@ -13,19 +13,15 @@ public class BackgroundLayer implements Layer {
 	
 	// TODO(lambdaviking): Probably want to make this a SavableLayer.
 	
+	protected World world;
 	protected BufferedImage bitmap;
-	protected Vector dimensions;
 	
 	public static final BufferedImage DEFAULT_BACKGROUND = Main.getImage("/textures/backgrounds/splash.png");
 	public static final int CUSHION = 0;
 	
-	public BackgroundLayer() {
-		this(DEFAULT_BACKGROUND);
-	}
-	
-	public BackgroundLayer(BufferedImage bitmap) {
+	public BackgroundLayer(World world, BufferedImage bitmap) {
 		this.bitmap = bitmap;
-		this.dimensions = new Vector(bitmap.getWidth(), bitmap.getHeight());
+		this.world = world;
 	}
 	
 	public static Layer fromYAML(World world, Map<String, Object> params) {
@@ -40,34 +36,31 @@ public class BackgroundLayer implements Layer {
 			File file = new File(world.getDirectory(), path);
 			bitmap = Main.getImage(file);
 		}
-		return new BackgroundLayer(bitmap);
+		return new BackgroundLayer(world, bitmap);
 	}
 	
 	@Override
-	public void render(FocusedWindow<?> g, Graphics2D gr, double deltaTime, boolean renderOutside) {
-		int minX, minY;
+	public void render(FocusedWindow<?> window, Graphics2D gr, double deltaTime, boolean renderOutside) {
+		Vector center = window.getCenterObject().getPos();
+		Vector windowDimensions = window.getDimensions();
+		Vector origin = windowDimensions.divide(2).sub(center);
 		
-		Vector center = g.getCenterObject().getPos();
-		Vector dim = g.getDimensions();
+		BufferedImage clipped = bitmap.getSubimage(0, 0, bitmap.getWidth(), world.getHeight());
 		
-		if (bitmap == null) {
-			return;
+		for (int x = 0; x < world.getWidth(); x += bitmap.getWidth()) {
+			if (x + bitmap.getWidth() >= world.getWidth()) {
+				clipped = clipped.getSubimage(0, 0, world.getWidth() - x, clipped.getHeight());
+			}
+			gr.drawImage(clipped, origin.getX() + x, origin.getY(), null);
 		}
-
-		minX = center.getX() - dim.getX() / 2;
-		minY = center.getY() - dim.getY() / 2;
-		int adjMinX = Math.max(0, minX), adjMinY = Math.max(0, minY);
-		BufferedImage image = bitmap.getSubimage(adjMinX, adjMinY, Math.min(bitmap.getWidth() - adjMinX, dim.getX()), Math.min(bitmap.getHeight() - adjMinY, dim.getY()));
-		
-		gr.drawImage(image, Math.max(0, -minX), Math.max(0, -minY), null);
 	}
 
 	public int getWidth() {
-		return dimensions.getX();
+		return world.getWidth();
 	}
 	
 	public int getHeight() {
-		return dimensions.getY();
+		return world.getHeight();
 	}
 
 	@Override
@@ -78,19 +71,19 @@ public class BackgroundLayer implements Layer {
 	/** Background layers are not modified by transforms. */
 	@Override
 	public BackgroundLayer getTransposed() {
-		return new BackgroundLayer(this.bitmap);
+		return new BackgroundLayer(this.world, this.bitmap);
 	}
 
 	/** Background layers are not modified by transforms. */
 	@Override
 	public BackgroundLayer getXReflected() {
-		return new BackgroundLayer(this.bitmap);
+		return new BackgroundLayer(this.world, this.bitmap);
 	}
 
 	/** Background layers are not modified by transforms. */
 	@Override
 	public BackgroundLayer getResized(int newWidth, int newHeight) {
-		return new BackgroundLayer(this.bitmap);
+		return new BackgroundLayer(this.world, this.bitmap);
 	}
 
 }
