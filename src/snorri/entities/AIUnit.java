@@ -4,7 +4,6 @@ import snorri.ai.AIAgent;
 import snorri.ai.AIMode;
 import snorri.animations.Animation;
 import snorri.collisions.Collider;
-import snorri.main.Debug;
 import snorri.world.Vector;
 import snorri.world.World;
 

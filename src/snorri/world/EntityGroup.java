@@ -14,10 +14,6 @@ import java.util.List;
 
 import snorri.entities.Entity;
 import snorri.main.FocusedWindow;
-import snorri.main.LevelEditor;
-import snorri.main.Main;
-import snorri.pathfinding.PathGraph;
-import snorri.pathfinding.Pathfinding;
 import snorri.triggers.Trigger;
 
 public interface EntityGroup {
@@ -109,32 +105,6 @@ public interface EntityGroup {
 	public Entity getFirstCollisionOtherThan(Entity e, Entity other);
 
 	public Entity getFirstCollision(Rectangle rectangle, boolean hitAll);
-	
-	default boolean insert(Entity e, Pathfinding pathfinding) {
-		boolean result = insert(e);
-		if (e.isStaticObject() && !(Main.getWindow() instanceof LevelEditor)) {
-			pathfinding.addEntity(e);
-		}
-		return result;
-	}
-	
-	@Deprecated
-	default Entity insertAndReturn(Entity e, Pathfinding pathfinding) {
-		if (e.isStaticObject() && !(Main.getWindow() instanceof LevelEditor)) {
-			return pathfinding.addEntityAndReturn(e);
-		}
-		else {
-			return null;
-		}
-	}
-	
-	default boolean delete(Entity e, PathGraph graph) {
-		boolean result = delete(e);
-		if (e.isStaticObject() && !(Main.getWindow() instanceof LevelEditor)) {
-			graph.removeEntity(e);
-		}
-		return result;
-	}
 
 	default Entity getFirstCollision(Vector mousePos) {
 		return getFirstCollision(new Entity(mousePos));

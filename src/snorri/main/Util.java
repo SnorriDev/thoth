@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.lang.reflect.Array;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -18,8 +17,6 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
-import snorri.pathfinding.PathNode;
-import snorri.world.Tile;
 import snorri.world.Vector;
 
 public class Util {
@@ -245,21 +242,6 @@ public class Util {
 		bGr.dispose();
 
 		return bimage;
-	}
-	
-	/** Render a path through the pathfinding graph in the game window. Does not modify <code>path</code>
-	 * @param g game window
-	 * @param gr graphics object
-	 * @param path the stack of path nodes to draw
-	 */
-	public static void drawPath(GameWindow g, Graphics gr, ArrayDeque<PathNode> path) {
-		Vector p1 = path.getFirst().getGlobalPos();
-		for (PathNode n : path) {
-			Vector p2 = n.getGlobalPos();
-			Vector player = g.getFocus().getPos().copy().sub_(g.getCenter().copy().add_(Tile.WIDTH / 2, Tile.WIDTH / 2));
-			gr.drawLine(p1.getX() - player.getX(), p1.getY() - player.getY(), p2.getX() - player.getX(), p2.getY() - player.getY());
-			p1 = p2;
-		}
 	}
 
 	public static String toTitleCase(String input) {

@@ -6,8 +6,6 @@ import java.util.logging.Level;
 import javax.swing.JTextField;
 
 import snorri.inventory.Droppable;
-import snorri.pathfinding.Team;
-import snorri.world.World;
 
 public class DialogMap extends HashMap<String, JTextField> {
 
@@ -50,11 +48,6 @@ public class DialogMap extends HashMap<String, JTextField> {
 			Debug.logger.log(Level.SEVERE, key + " is not a class", e);
 			return null;
 		}
-	}
-
-	public Team getTeam(String key) {
-		World world = ((FocusedWindow<?>) Main.getWindow()).getWorld();
-		return Team.getByName(key, world);
 	}
 
 	public Droppable getDroppable(String key) {

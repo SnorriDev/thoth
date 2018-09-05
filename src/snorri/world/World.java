@@ -19,7 +19,6 @@ import snorri.entities.Unit;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
-import snorri.pathfinding.Team;
 import snorri.triggers.Trigger;
 import snorri.triggers.TriggerMap;
 
@@ -39,7 +38,6 @@ public class World implements Playable, Editable {
 	private TileLayer tileLayer;
 	private EntityLayer entityLayer;
 
-	private List<Team> teams;
 	private TriggerMap triggers;
 	
 	private WorldGraph universe;
@@ -202,7 +200,6 @@ public class World implements Playable, Editable {
 				}
 			}
 		});
-		Team.save(new File(path, "teams.dat"), teams);
 	}
 
 	@Override @SuppressWarnings("unchecked")
@@ -247,11 +244,6 @@ public class World implements Playable, Editable {
 		}
 		
 		triggers = Trigger.load((Map<String, Object>) yaml.get("triggers"), this);
-
-		File teamsFile = new File(f, "teams.dat");
-		if (teamsFile.exists()) {
-			teams = Team.load(teamsFile);
-		}
 	}
 
 	/**
@@ -309,17 +301,6 @@ public class World implements Playable, Editable {
 
 	public TriggerMap getTriggerMap() {
 		return triggers;
-	}
-
-	public List<Team> getTeams() {
-		return teams;
-	}
-
-	public void addTeam(Team team) {
-		if (teams == null) {
-			teams = new ArrayList<>();
-		}
-		teams.add(team);
 	}
 
 	public void wrapUpdate(Vector pos, Tile tile) {
