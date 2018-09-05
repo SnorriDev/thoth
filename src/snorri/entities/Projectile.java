@@ -123,8 +123,8 @@ public class Projectile extends Detector implements Walker {
 	}
 	
 	@Override
-	public void updateEntityStats() {
-		super.updateEntityStats();
+	public void refreshStats() {
+		super.refreshStats();
 		setDespawnable(true);
 	}
 

@@ -49,8 +49,8 @@ public class Vortex extends Detector {
 	}
 	
 	@Override
-	public void updateEntityStats() {
-		super.updateEntityStats();
+	public void refreshStats() {
+		super.refreshStats();
 		animation = new Animation(VORTEX_ANIMATION);
 		this.ignoreCollisions = true;
 		this.hitAll = true;

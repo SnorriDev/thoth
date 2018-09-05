@@ -5,7 +5,7 @@ import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
 import snorri.world.Vector;
 
-public class Mummy extends LongRangeAIUnit {
+public class Mummy extends AIUnit {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -18,13 +18,13 @@ public class Mummy extends LongRangeAIUnit {
 	
 	public Mummy(Vector pos, Entity target) {
 		super(pos, target, IDLE, WALKING);
+		add(Item.newItem(ItemType.PELLET));
+		add(Item.newItem(ItemType.SLOW_SLING));
 	}
-	
+
 	@Override
-	public void updateEntityStats() {
-		super.updateEntityStats();
-		getInventory().add(Item.newItem(ItemType.PELLET));
-		getInventory().add(Item.newItem(ItemType.SLOW_SLING));
+	protected int getAttackRange() {
+		return 900;
 	}
 
 }

@@ -1,5 +1,6 @@
 package snorri.entities;
 
+import snorri.ai.AIMode;
 import snorri.animations.Animation;
 import snorri.dialog.Dialog;
 import snorri.entities.Player.Interactor;
@@ -54,18 +55,18 @@ public class NPC extends AIUnit implements Interactor {
 	}
 	
 	@Override
-	public Mode getDefaultMode() {
-		return Mode.SEEK;
+	public AIMode getDefaultMode() {
+		// TODO(#34): Should have AIMode.BUDDY for following the player.
+		return AIMode.IDLE;
 	}
 	
 	@Override
 	public int getBaseSpeed() {
 		return Player.PLAYER_BASE_SPEED;
 	}
-	
+
 	@Override
-	public void updateEntityStats() {
-		super.updateEntityStats();
-		stopRange = 200;
+	protected int getAttackRange() {
+		return 500;
 	}
 }

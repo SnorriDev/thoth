@@ -13,7 +13,7 @@ public abstract class BossAIUnit extends AIUnit implements Caster {
 	private static final long serialVersionUID = 1L;
 	
 	protected Lexicon lexicon;
-
+	
 	public BossAIUnit(Vector pos) {
 		this(pos, null, null, null);
 	}
@@ -30,35 +30,31 @@ public abstract class BossAIUnit extends AIUnit implements Caster {
 		}
 	}
 	
-	// should override these methods for more complex behavior
-	
 	@Override
 	public boolean canAttack(Entity target, World world) {
-		if (inventory == null || inventory.getPapyrus() == null) {
+		if (getInventory() == null || getInventory().getPapyrus() == null) {
 			return false;
 		}
-		return target.pos.distanceSquared(pos) < attackRange * attackRange && inventory.getPapyrus().canUse();
+		return getTarget().getPos().distanceSquared(pos) < getAttackRange() * getAttackRange() && getInventory().getPapyrus().canUse();
 	}
 	
 	@Override
-	public void attack(World world, Entity e) {
-		// knows to aim for target in getAimPosition
-		inventory.getPapyrus().castPrewritten(world, this);
+	public void attack(Entity target, World world) {
+		getInventory().getPapyrus().castPrewritten(world, this);
 	}
-	
+		
 	@Override
-	public void updateEntityStats() {
-		super.updateEntityStats();
+	public void refreshStats() {
+		super.refreshStats();
 		lexicon = new Lexicon();
-		attackRange = 900;
 	}
 	
 	@Override
 	public Vector getAimPosition() {
-		if (target == null) {
+		if (getTarget() == null) {
 			return pos.copy();
 		}
-		return target.pos.copy();
+		return getTarget().getPos().copy();
 	}
 	
 	@Override
@@ -68,7 +64,7 @@ public abstract class BossAIUnit extends AIUnit implements Caster {
 	
 	@Override
 	public double getMana() {
-		return 100; // no actual mana currently
+		return 100; // No actual mana currently.
 	}
 	
 }

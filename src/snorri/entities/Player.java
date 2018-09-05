@@ -123,7 +123,7 @@ public class Player extends Unit implements Caster {
 				
 		inventory.checkKeys();
 		
-		//TODO Move some input checking to a new broadcastBinding event.
+		//TODO(#36): Move this to an Event.
 		// We construct a new entity because positions can be assigned/pointers fucked up.
 		Entity checker = new Entity(pos, Interactor.INTERACT_RANGE);
 		Interactor selected = world.getEntityTree().getFirstCollision(checker, Interactor.class);

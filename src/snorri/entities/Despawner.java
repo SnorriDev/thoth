@@ -61,7 +61,7 @@ public abstract class Despawner extends Entity {
 	}
 	
 	@Override
-	public void updateEntityStats() {
+	public void refreshStats() {
 		setDespawnable(false);
 	}
 	
