@@ -9,6 +9,8 @@ import snorri.collisions.Collider;
 import snorri.collisions.RectCollider;
 import snorri.events.CollisionEvent;
 import snorri.events.SpellEvent;
+import snorri.inventory.Carrier;
+import snorri.inventory.Inventory;
 import snorri.inventory.Stats;
 import snorri.main.Debug;
 import snorri.modifiers.Modifier;
@@ -21,7 +23,7 @@ import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public abstract class Unit extends Entity implements Walker {
+public abstract class Unit extends Entity implements Carrier, Walker {
 
 	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 120;
@@ -32,6 +34,7 @@ public abstract class Unit extends Entity implements Walker {
 	
 	protected int speed;
 	private Team team;
+	private Inventory inventory;
 	protected Stats stats;
 	protected double health;
 	
@@ -43,15 +46,6 @@ public abstract class Unit extends Entity implements Walker {
 	protected String[] damageSounds;
 	protected String[] deathSounds;
 
-	protected Unit(Vector pos, Collider collider, Animation idle, Animation walking) {
-		this(pos, collider);
-		initializeAnimations(idle, walking, idle); //TODO attack animations
-	}
-	
-	protected Unit(Vector pos, Animation idle, Animation walking) {
-		this(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)), idle, walking);
-	}
-		
 	/**
 	 * Use this constructor to build non-humanoid units
 	 * @param pos
@@ -61,9 +55,19 @@ public abstract class Unit extends Entity implements Walker {
 	 */
 	protected Unit(Vector pos, Collider c) {
 		super(pos, c);
+		inventory = new Inventory(this);
 		stats = new Stats(this);
 		health = stats.getMaxHealth();
 		z = UNIT_LAYER;
+	}
+	
+	protected Unit(Vector pos, Collider collider, Animation idle, Animation walking) {
+		this(pos, collider);
+		initializeAnimations(idle, walking, idle); //TODO attack animations
+	}
+	
+	protected Unit(Vector pos, Animation idle, Animation walking) {
+		this(pos, new RectCollider(new Vector(2 * RADIUS_X, 2 * RADIUS_Y)), idle, walking);
 	}
 
 	@Override
@@ -176,7 +180,7 @@ public abstract class Unit extends Entity implements Walker {
 		return health <= 0;
 	}
 	
-	//override this for faster entities
+	// Override this for faster entities.
 	protected final int getSpeed() {
 		return speed;
 	}
@@ -195,13 +199,10 @@ public abstract class Unit extends Entity implements Walker {
 	
 	@Override
 	public Nominal get(AbstractSemantics attr, SpellEvent e) {
-		
 		if (attr == AbstractSemantics.HEALTH) {
 			return new Wrapper<Integer>((int) health);
 		}
-		
 		return super.get(attr, e);
-		
 	}
 	
 	public List<Modifier<Unit>> getModifiers() {
@@ -342,6 +343,11 @@ public abstract class Unit extends Entity implements Walker {
 	@Override
 	public void onExplosion(CollisionEvent e) {
 		damage(100);
+	}
+	
+	@Override
+	public Inventory getInventory() {
+		return inventory;
 	}
 	
 }

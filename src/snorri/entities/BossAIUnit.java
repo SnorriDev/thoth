@@ -1,7 +1,9 @@
 package snorri.entities;
 
+import snorri.ai.AIAgent;
 import snorri.animations.Animation;
 import snorri.events.SpellEvent.Caster;
+import snorri.inventory.Carrier;
 import snorri.nonterminals.Sentence;
 import snorri.parser.Grammar;
 import snorri.parser.Lexicon;
@@ -13,13 +15,16 @@ public abstract class BossAIUnit extends AIUnit implements Caster {
 	private static final long serialVersionUID = 1L;
 	
 	protected Lexicon lexicon;
+	
+	private int attackRange;
 
 	public BossAIUnit(Vector pos) {
 		this(pos, null, null, null);
 	}
 	
 	protected BossAIUnit(Vector pos, Entity target, Animation idle, Animation walking) {
-		super(pos, target, idle, walking);
+		super(pos, idle, walking);
+		setTarget(target);
 	}
 	
 	protected void setSpell(String spell) {
@@ -34,31 +39,30 @@ public abstract class BossAIUnit extends AIUnit implements Caster {
 	
 	@Override
 	public boolean canAttack(Entity target, World world) {
-		if (inventory == null || inventory.getPapyrus() == null) {
+		if (getInventory() == null || getInventory().getPapyrus() == null) {
 			return false;
 		}
-		return target.pos.distanceSquared(pos) < attackRange * attackRange && inventory.getPapyrus().canUse();
+		return getTarget().getPos().distanceSquared(pos) < attackRange * attackRange && getInventory().getPapyrus().canUse();
 	}
 	
 	@Override
-	public void attack(World world, Entity e) {
-		// knows to aim for target in getAimPosition
-		inventory.getPapyrus().castPrewritten(world, this);
+	public void attack(Entity target, World world) {
+		getInventory().getPapyrus().castPrewritten(world, this);
 	}
 	
 	@Override
 	public void updateEntityStats() {
 		super.updateEntityStats();
 		lexicon = new Lexicon();
-		attackRange = 900;
+		setAttackRange(900);
 	}
 	
 	@Override
 	public Vector getAimPosition() {
-		if (target == null) {
+		if (getTarget() == null) {
 			return pos.copy();
 		}
-		return target.pos.copy();
+		return getTarget().getPos().copy();
 	}
 	
 	@Override
@@ -69,6 +73,10 @@ public abstract class BossAIUnit extends AIUnit implements Caster {
 	@Override
 	public double getMana() {
 		return 100; // no actual mana currently
+	}
+	
+	public void setAttackRange(int attackRange) {
+		this.attackRange = attackRange;
 	}
 	
 }

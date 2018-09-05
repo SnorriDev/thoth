@@ -1,6 +1,8 @@
 package snorri.entities;
 
 import snorri.animations.Animation;
+import snorri.inventory.Droppable;
+import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
 import snorri.world.Vector;

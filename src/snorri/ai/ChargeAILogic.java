@@ -6,9 +6,8 @@ import snorri.world.World;
 public class ChargeAILogic implements AILogic {
 
 	@Override
-	public void update(World world, double deltaTime) {
-		// TODO Auto-generated method stub
-
+	public void update(AIAgent agent, World world, double deltaTime) {
+		// TODO(lambdaviking): Implement this.
 	}
 
 }

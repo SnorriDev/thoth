@@ -1,5 +1,6 @@
 package snorri.entities;
 
+import snorri.ai.AIAgent;
 import snorri.animations.Animation;
 import snorri.dialog.Dialog;
 import snorri.entities.Player.Interactor;
@@ -9,7 +10,7 @@ import snorri.main.GamePanel;
 import snorri.main.Main;
 import snorri.world.Vector;
 
-public class NPC extends AIUnit implements Interactor {
+public class NPC extends Unit implements AIAgent, Interactor {
 	
 	private static final long serialVersionUID = 1L;
 	private static final Dialog DEFAULT_DIALOG = new Dialog();

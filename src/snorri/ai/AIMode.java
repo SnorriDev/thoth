@@ -1,22 +1,48 @@
 package snorri.ai;
 
+import snorri.entities.Entity;
 import snorri.world.World;
 
 public enum AIMode {
 	
-	IDLE(IdleAILogic.class),
-	TURRET(TurretAILogic.class),
-	CHARGE(ChargeAILogic.class);
+	IDLE((agent, world, deltaTime) -> {
+		// Do nothing.
+	}),
 	
-	Class<? extends AILogic> logic;
+	TURRET((agent, world, deltaTime) -> {
+		// If the target is in range, attack them.
+		Entity target = agent.getTarget();
+		if (target != null && agent.canAttack(target, world)) {
+			agent.attack(target, world);
+		}
+	}),
 	
-	AIMode(Class<? extends AILogic> logic) {
+	CHARGE(new ChargeAILogic());
+	
+	private final AILogic logic;
+	
+	AIMode(AILogic logic) {
 		this.logic = logic;
 	}
 	
+	/** Public method for AI updates. The logic instance itself is never exposed. */
+	public void update(AIAgent agent, World world, double deltaTime) {
+		logic.update(agent, world, deltaTime);
+	}
+
+	/**
+	 * Interface for AI behavior.
+	 * @author lambdaviking
+	 * 
+	 * Classes implementing this interface should have no state. Instead, they should read state from the provided AIAgent.
+	 * 
+	 * Similarly, AILogic instances should not be serialized. Instead, an enum string should be saved.
+	 * 
+	 * Can treat this as a functional interface, but it's probably better practice to create subclasses.
+	 */
 	interface AILogic {
 		
-		void update(World world, double deltaTime);
+		void update(AIAgent agent, World world, double deltaTime);
 		
 	}
 
