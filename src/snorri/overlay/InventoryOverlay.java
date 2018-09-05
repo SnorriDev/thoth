@@ -48,10 +48,12 @@ import snorri.main.Main;
 import snorri.parser.Grammar;
 import snorri.triggers.Trigger.TriggerType;
 
+/** The GUI interface for editing inventory and spells.
+ * 
+ * @author lambdaviking
+ */
 public class InventoryOverlay extends Overlay implements MouseListener, ListSelectionListener, DocumentListener, FocusListener, DropContainer<Droppable> {
-	
-	/** the GUI interface for editing inventory and spells */
-	
+		
 	private static final long serialVersionUID = 1L;
 	private static final Image BACKGROUND = Main.getImage("/textures/hud/inventory.png");
 	protected static final Color SELECTED_BG = new Color(120, 96, 115);
@@ -272,7 +274,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	public boolean add(Droppable d) {
 		if (caster.add(d)) {
 			((VocabTableModel) vocabBox.getModel()).refresh(caster.getLexicon());	
-			// TODO update items as well
+			// TODO(#51): Update items as well.
 			return true;
 		}
 		return false;
@@ -282,7 +284,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	public boolean remove(Droppable d, boolean specific) {
 		if (caster.remove(d, specific)) {
 			((VocabTableModel) vocabBox.getModel()).refresh(caster.getLexicon());
-			// TODO update items as well
+			// TODO(#51): Update items as well.
 			return true;
 		}
 		return false;
@@ -400,9 +402,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	}
 
 	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		// TODO Auto-generated method stub
-		
+	public void valueChanged(ListSelectionEvent e) {		
 	}
 	
 }

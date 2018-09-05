@@ -16,7 +16,7 @@ public class SpellMessage extends Message {
 	public SpellMessage(String header, Object output, boolean isStatement) {
 		super(ICON);
 		this.output = output;
-		//TODO change this format more based on the spell type
+		//TODO(#20): It might be useful to have an enum return value here.
 		this.header = header + (isStatement ? " output" : " result");
 		success = output != null && !new Boolean(false).equals(output);
 	}

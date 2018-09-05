@@ -60,7 +60,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 	private Class<? extends Entity> selectedEntityClass;
 	private boolean isClicking = false;
 	
-	// TODO(lambdaviking): Be able to modify this in interface.
+	// TODO(#48): Be able to modify this in interface.
 	private TileLayer selectedTileLayer; // The selected layer to modify.
 
 	private boolean canGoLeft;
@@ -168,8 +168,6 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		boolean firstEntity = true;
 		int i = 0;
 		for (Class<? extends Entity> c : entityClassList) {
-
-			// TODO: give entities image icons
 			rbMenuItem = new JRadioButtonMenuItem(c.getSimpleName());
 			rbMenuItem.setSelected(firstEntity);
 			rbMenuItem.setActionCommand("spawn" + i);
@@ -181,7 +179,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			i++;
 		}
 		
-		//NEW EDGE MENU
+		// Menu to create a new edge.
 		menu = new JMenu("Edge");
 		menu.setMnemonic(KeyEvent.VK_G);
 		menuBar.add(menu);

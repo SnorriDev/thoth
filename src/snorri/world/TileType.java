@@ -24,7 +24,6 @@ public interface TileType extends Nominal {
 			BLEND_ORDER,
 			REPLACEMENT_TYPE,
 			OPEN_TYPE;
-			//TODO use REPLACEMENT_TYPE == null instead of CHANGABLE
 		}
 		
 		protected final Key key;
@@ -93,9 +92,7 @@ public interface TileType extends Nominal {
 	String toString();
 	
 	ArrayList<Tile> getAllStyles();
-	
-	//TODO what are these methods? should be moved
-	
+		
 	default boolean hasSounds() {
 		return Tile.sounds.length >= 1;
 	}

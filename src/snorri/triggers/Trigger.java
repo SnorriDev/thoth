@@ -145,12 +145,10 @@ public class Trigger {
 		return tags.get(tag);
 	}
 	
-	/**
-	 * Execute the action queue
-	 */
+	/** Execute the action queue. */
 	public void exec() {
 		Debug.logger.info("Firing trigger " + name + "...");
-		while (!runnableActions.isEmpty()) { //TODO are there still bugs with runnables?
+		while (!runnableActions.isEmpty()) {
 			new Thread(runnableActions.poll()).start();
 		}
 	}

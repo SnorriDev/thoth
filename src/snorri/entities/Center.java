@@ -15,7 +15,6 @@ public class Center extends Entity {
 		ignoreCollisions = true;
 		staticObject = true;
 		animation = new Animation(ANIMATION);
-		// TODO Auto-generated constructor stub
 	}
 	
 }

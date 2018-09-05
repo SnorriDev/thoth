@@ -27,26 +27,19 @@ public class Vector implements Nominal, Comparable<Vector> {
 	
 	public double x, y;
 	
-	/**
-	 * no argument constructor used for reading
-	 * door positions from YAML
-	 */
-	public Vector() {
-	}
-	
 	public Vector(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
 	
-	public Vector(Point location) {
-		this.x = location.getX();
-		this.y = location.getY();
+	public Vector(Point point) {
+		this.x = point.getX();
+		this.y = point.getY();
 	}
 	
-	public Vector(Rectangle r) {
-		this.x = r.getWidth();
-		this.y = r.getHeight();
+	public Vector(Rectangle rect) {
+		this.x = rect.getWidth();
+		this.y = rect.getHeight();
 	}
 	
 	public Vector(Vector v) {
@@ -67,10 +60,7 @@ public class Vector implements Nominal, Comparable<Vector> {
 		return vector == null ? null : vector.copy();
 	}
 	
-	/**
-	 * Note: this method is intended for
-	 * vectors in grid coordinates
-	 */
+	/** Assuming the vector represents a position in absolute grid coordinates, return a translated vector in relative grid coordinates. */
 	public Vector getRelPosGrid(FocusedWindow<?> g) {
 		return copy().multiply_(Tile.WIDTH).getRelPos(g);
 	}
@@ -86,14 +76,6 @@ public class Vector implements Nominal, Comparable<Vector> {
 	
 	public int getY() {
 		return (int) y;
-	}
-	
-	public int getXGrid() {
-		return (int) x / Tile.WIDTH;
-	}
-	
-	public int getYGrid() {
-		return (int) y / Tile.WIDTH;
 	}
 	
 	public Vector multiply(double n) {
@@ -262,22 +244,14 @@ public class Vector implements Nominal, Comparable<Vector> {
 		return this;
 	}
 	
-	/**
-	 * @return a random vector chosen uniformly from [0, x) x [0, y)
-	 */
+	/** Returns a random vector chosen uniformly from <code>[0, x) x [0, y)</code>. */
 	public Vector random() {
 		return new Vector(Math.random() * x, Math.random() * y);
 	}
-	
-	//use Level.getTileGrid(v) != null
-	@Deprecated
-	public boolean isInBounds(TileLayer level) {
-		Vector dim = level.getDimensions();
-		return getX() >= 0 && getX() < dim.getX() && getY() >= 0 && getY() < dim.getY();
-	}
 
-	/**
-	 * use this to sort by magnitude
+	/** Comparator for sorting vectors by magnitude. 
+	 * 
+	 * Note that there is no complete ordering over the plane.
 	 */
 	@Override
 	public int compareTo(Vector o) {
@@ -286,86 +260,34 @@ public class Vector implements Nominal, Comparable<Vector> {
 	
 	/**
 	 * Hash function taken from {@link http://stackoverflow.com/questions/5928725/hashing-2d-3d-and-nd-vectors}.
-	 * 100030001 and 100050001 are arbitrary primes. For more palindromic primes, see {@link https://www.rsok.com/~jrm/9_digit_palindromic_primes.html}.
-	 * @return Hash code
+	 * 100030001 and 100050001 are arbitrary palindromic primes. For more palindromic primes, see {@link https://www.rsok.com/~jrm/9_digit_palindromic_primes.html}.
+	 * @return A hash code for this vector.
 	 */
 	@Override
 	public int hashCode() {
 		return getX() * 100030001 ^ getY() * 100050001;
-//		return Level.MAX_SIZE * getY() + getX();
 	}
 	
-	public static int hashVectorPair(Vector v1, Vector v2) {
+	/** Returns a hash code for a pair of vectors. */
+	public static int hashCodeForPair(Vector v1, Vector v2) {
 		return v1.getX() * 100030001 ^ v1.getY() * 100050001 ^ v2.getX() * 100060001 ^ v2.getY() * 100111001;
 	}
-	
-	//TODO maybe should have just used these instead of vectors lol
-	
+		
 	public Point2D getPoint() {
 		return new Point(getX(), getY());
 	}
 	
-	public Vector incr() {
-		if (x != 0) {
-			x += 1;
-		}
-		if (y != 0) {
-			y += 1;
-		}
-		return this;
-	}
-	
 	/**
-	 * Unlike other vector operations, <code>getInverted()</code> does not have any side effect.
-	 * @see <code>Vector.invert()</code>
+	 * This method does not mutate the underlying object.
+	 * @see <code>Vector.invert()</code> for the mutating version.
 	 */
 	public Vector getInverted() {
 		return new Vector(y, x);
 	}
 	
-	/**
-	 * @see <code>getInverted()</code>
-	 */
+	/** @see <code>getInverted()</code>. */
 	public Vector getXReflected(Vector dim) {
 		return new Vector(dim.getX() - 1 - x, y);
-	}
-	
-	public ArrayList<Vector> getSquareAround(int r) {
-		
-		ArrayList<Vector> out = new ArrayList<>();
-		
-		if (r == 0) {
-			out.add(copy());
-			return out;
-		}
-		
-		//sides
-		for (int i = -r + 1; i < r; i++) {
-			out.add(copy().add_(-r, i));
-			out.add(copy().add_(r, i));
-			out.add(copy().add_(i, -r));
-			out.add(copy().add_(i, r));
-		}
-		
-		//corners
-		out.add(copy().add_(r, r));
-		out.add(copy().add_(r, -r));
-		out.add(copy().add_(-r, -r));
-		out.add(copy().add_(-r, r));
-		
-		return out;
-		
-	}
-
-	public boolean isToCloseTo(int x2, int y2) {
-		//if (Math.abs(getX() - x2) < 3 && Math.abs(getY() - y2) < 3) {
-		//	return true;
-		//}
-		return false;
-	}
-
-	public boolean isNormalTo(int x2, int y2) {
-		return (getX() == x2 || getY() == y2);
 	}
 
 	public double getStandardAngle() {

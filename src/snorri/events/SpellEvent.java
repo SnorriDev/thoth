@@ -251,7 +251,7 @@ public class SpellEvent {
 		return deltaTime;
 	}
 	
-	//TODO scale entropy level by how good a player is or something?
+	//TODO(#45): Fully integrate entropy.
 	public int getEntropyLevel() {
 		if (instrument instanceof Order) {
 			return -1;
@@ -263,7 +263,7 @@ public class SpellEvent {
 	}
 	
 	public <E extends Entity> E resolveEntity(Class<E> c) {
-		//TODO narrow the search range
+		//TODO(snorri): Might be able to narrow the search range some here.
 		Collider collider = new RectCollider(new Vector(Main.getWindow()));
 		Entity sweeper = new Entity(getSecondPerson().getPos(), collider);
 		return world.getEntityTree().getFirstCollision(sweeper, c);

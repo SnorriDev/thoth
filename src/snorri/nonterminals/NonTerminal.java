@@ -14,10 +14,7 @@ public abstract class NonTerminal<S> implements Node<S> {
 	protected List<Node<?>> children;
 	protected Object category;
 	
-	//TODO backwards compatible implementation with a list and an arraylist
-	
-	//TODO replace trinary rules with binary branching structure?
-	//choose exec/eval based on something in SpellEvent
+	//TODO(#50): Can refactor the structure of these semantic trees.
 	public void setChildren(List<Node<?>> nodes) {
 		children = nodes;
 		category = Category.combine(nodes);

@@ -10,7 +10,7 @@ import snorri.entities.Player;
 
 public class CutScene extends GamePanel implements MouseListener {
 
-	//TODO add media path arg.
+	// TODO(snorri): Add media path arg.
 	
 	private static final long serialVersionUID = 1L;
 
