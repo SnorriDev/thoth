@@ -135,7 +135,7 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 		}
 	}
 
-	/** Translate the position by delta. */
+	/** Translate the position by delta scaled by speed. */
 	@Override
 	public void walk(World world, Vector delta) {
 		moveNicely(world, delta.copy().multiply_(getSpeed()));
