@@ -106,7 +106,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			this.collider = collider.cloneOnto(this);
 		}
 		z = DEFAULT_LAYER;
-		updateEntityStats();
+		refreshStats();
 	}
 	
 	public Entity(Entity e) {
@@ -360,10 +360,14 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 	
 	/**
-	 * This method can be called manually to update the stats and other parameters of old entitites in a world.
+	 * Refresh the core attributes of an object that has possibly been saved from old versions to be up to date.
+	 * 
+	 * Inventory and other dynamic fields must not be modified here. This will actually lead to critical failures.
+	 * 
+	 * This method is not fully supported; use at your own risk. However, in some cases it can prove to be useful
+	 * for making old maps forward-compatible.
 	 */
-	//TODO implement this on all entities to avoid a lot of compatibility issues
-	public void updateEntityStats() {
+	public void refreshStats() {
 	}
 	
 	public Vector getGridBounds() {

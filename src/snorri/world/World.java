@@ -16,7 +16,6 @@ import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.entities.Spawn;
 import snorri.entities.Unit;
-import snorri.entities.LongRangeAIUnit.ShootAttempt;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
@@ -336,7 +335,6 @@ public class World implements Playable, Editable {
 		}
 
 		l.setTileGrid(posGrid, tile);
-		ShootAttempt.reset();
 	}
 	
 	/**

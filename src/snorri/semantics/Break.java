@@ -68,7 +68,7 @@ public class Break extends TransVerbDef {
 		
 		//TODO make this open doors that are locked
 		Vector tilePos = ((Entity) obj).getPos().copy().gridPos_();
-		return Break.cutTripwire(e.getWorld(),  tilePos) ||
+		return Break.tryToCutTripWire(e.getWorld(),  tilePos) ||
 				Open.openDoor(e.getWorld(), tilePos);
 		
 	}
@@ -87,7 +87,7 @@ public class Break extends TransVerbDef {
 	 * Recursively cut the tripwire at this grid position.
 	 * @param v The grid position at which to cut.
 	 */
-	public static boolean cutTripwire(World world, Vector v) {
+	public static boolean tryToCutTripWire(World world, Vector v) {
 		TileLayer foreground = world.getTileLayer();
 		if (!isTripwire(foreground.getTileGrid(v))) {
 			return false;
@@ -95,7 +95,7 @@ public class Break extends TransVerbDef {
 		world.wrapGridUpdate(v, new Tile(UnifiedTileType.EMPTY));
 		TriggerType.TRIP.activate(v);
 		for (Vector trans : TRIPWIRE_CONNECTIONS) {
-			cutTripwire(world, v.copy().add_(trans));
+			tryToCutTripWire(world, v.copy().add_(trans));
 		}
 		return true;
 	}

@@ -1,10 +1,6 @@
 package snorri.entities;
 
 import snorri.animations.Animation;
-import snorri.inventory.Droppable;
-import snorri.inventory.Inventory;
-import snorri.inventory.Item;
-import snorri.inventory.Item.ItemType;
 import snorri.nonterminals.Sentence;
 import snorri.parser.Grammar;
 import snorri.world.Vector;
@@ -17,10 +13,12 @@ public class Thoth extends BossAIUnit {
 	
 	public Thoth(Vector pos, Entity target) {
 		super(pos, target, new Animation(THOTH), new Animation(THOTH));
+		getInventory().getPapyrus().setSpell(SPELL);
 	}
-	
-	public Thoth(Vector pos) {
-		this(pos, null);
+
+	@Override
+	protected int getAttackRange() {
+		return 900;
 	}
 	
 }

@@ -1,9 +1,7 @@
 package snorri.entities;
 
-import snorri.ai.AIAgent;
 import snorri.animations.Animation;
 import snorri.events.SpellEvent.Caster;
-import snorri.inventory.Carrier;
 import snorri.nonterminals.Sentence;
 import snorri.parser.Grammar;
 import snorri.parser.Lexicon;
@@ -16,15 +14,12 @@ public abstract class BossAIUnit extends AIUnit implements Caster {
 	
 	protected Lexicon lexicon;
 	
-	private int attackRange;
-
 	public BossAIUnit(Vector pos) {
 		this(pos, null, null, null);
 	}
 	
 	protected BossAIUnit(Vector pos, Entity target, Animation idle, Animation walking) {
-		super(pos, idle, walking);
-		setTarget(target);
+		super(pos, target, idle, walking);
 	}
 	
 	protected void setSpell(String spell) {
@@ -35,26 +30,23 @@ public abstract class BossAIUnit extends AIUnit implements Caster {
 		}
 	}
 	
-	// should override these methods for more complex behavior
-	
 	@Override
 	public boolean canAttack(Entity target, World world) {
 		if (getInventory() == null || getInventory().getPapyrus() == null) {
 			return false;
 		}
-		return getTarget().getPos().distanceSquared(pos) < attackRange * attackRange && getInventory().getPapyrus().canUse();
+		return getTarget().getPos().distanceSquared(pos) < getAttackRange() * getAttackRange() && getInventory().getPapyrus().canUse();
 	}
 	
 	@Override
 	public void attack(Entity target, World world) {
 		getInventory().getPapyrus().castPrewritten(world, this);
 	}
-	
+		
 	@Override
-	public void updateEntityStats() {
-		super.updateEntityStats();
+	public void refreshStats() {
+		super.refreshStats();
 		lexicon = new Lexicon();
-		setAttackRange(900);
 	}
 	
 	@Override
@@ -72,11 +64,7 @@ public abstract class BossAIUnit extends AIUnit implements Caster {
 	
 	@Override
 	public double getMana() {
-		return 100; // no actual mana currently
-	}
-	
-	public void setAttackRange(int attackRange) {
-		this.attackRange = attackRange;
+		return 100; // No actual mana currently.
 	}
 	
 }

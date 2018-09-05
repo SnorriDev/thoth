@@ -23,7 +23,10 @@ public interface AIAgent {
 	/** Return true if the agent can currently attack target and false otherwise. */
 	boolean canAttack(Entity target, World world);
 	
-	/** Execute an attack target. */
+	/** Execute an attack on target. */
 	void attack(Entity target, World world);
+	
+	/** Moves the agent towards target. */
+	void walkTowards(Entity target, World world, double deltaTime);
 
 }

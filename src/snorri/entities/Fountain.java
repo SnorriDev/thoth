@@ -17,8 +17,8 @@ public class Fountain extends Entity {
 	}
 	
 	@Override
-	public void updateEntityStats() {
-		super.updateEntityStats();
+	public void refreshStats() {
+		super.refreshStats();
 		this.animation = new Animation(SPRINKLER);
 	}
 	

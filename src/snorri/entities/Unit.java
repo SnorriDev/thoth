@@ -72,13 +72,12 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 
 	@Override
 	public void update(World world, double deltaTime) {
+		inventory.update(deltaTime);
 		
 		speed = getBaseSpeed();
-		
 		if (modifiers == null) {
 			modifiers = new ArrayList<>();
 		}
-		
 		for (Object o : modifiers.toArray()) {
 			@SuppressWarnings("unchecked")
 			Modifier<Unit> m = (Modifier<Unit>) o;
@@ -87,8 +86,8 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 			}
 		}
 		
-		//if the unit is standing on a tripwire, cut it
-		Break.cutTripwire(world, pos.copy().gridPos_());
+		// If the unit is standing on a trip wire, cut it.
+		Break.tryToCutTripWire(world, pos.gridPos());
 		
 		if (isDead()) {
 			world.delete(this);
@@ -97,9 +96,7 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 			}
 			TriggerType.KILL.activate(tag);
 		}
-		
 		super.update(world, deltaTime);
-		
 	}
 	
 	/**
@@ -138,19 +135,27 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 		}
 	}
 
+	/** Translate the position by delta. */
 	@Override
 	public void walk(World world, Vector delta) {
 		moveNicely(world, delta.copy().multiply_(getSpeed()));
 	}
 	
+	/** Walk in the direction dir with magnitude controlled by deltaTime. */
 	@Override
 	public void walkNormalized(World world, Vector dir, double deltaTime) {
 		setAnimation(dir);
 		Walker.super.walkNormalized(world, dir, deltaTime);
 	}
 	
-	public void walkTo(World world, Vector target, double deltaTime) {
+	/** Walk towards a target position. */
+	public void walkTowards(World world, Vector target, double deltaTime) {
 		walkNormalized(world, target.copy().sub_(pos), deltaTime);
+	}
+	
+	// The order of target and world are reversed here to be consistent with the newer AIAgent API.
+	public void walkTowards(Entity target, World world, double deltaTime) {
+		walkTowards(world, target.getPos(), deltaTime);
 	}
 	
 	public double getHealth() {

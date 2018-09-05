@@ -17,7 +17,17 @@ public enum AIMode {
 		}
 	}),
 	
-	CHARGE(new ChargeAILogic());
+	CHARGE((agent, world, deltaTime) -> {
+		// If the target is in range, attack them. Otherwise, charge them!
+		Entity target = agent.getTarget();
+		if (target == null) {
+			return;
+		}
+		if (agent.canAttack(target, world)) {
+			agent.attack(target, world);
+		}
+		agent.walkTowards(target, world, deltaTime);
+	});
 	
 	private final AILogic logic;
 	
