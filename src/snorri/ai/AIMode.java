@@ -1,6 +1,7 @@
 package snorri.ai;
 
 import snorri.entities.Entity;
+import snorri.main.Debug;
 import snorri.world.World;
 
 public enum AIMode {
@@ -27,6 +28,14 @@ public enum AIMode {
 			agent.attack(target, world);
 		}
 		agent.walkTowards(target, world, deltaTime);
+	}),
+	
+	BUDDY((agent, world, deltaTime) -> {
+		// Walk towards the target if we are out of "attack" range.
+		Entity target = agent.getTarget();
+		if (target != null && !agent.canAttack(target, world)) {
+			agent.walkTowards(target, world, deltaTime);
+		}
 	});
 	
 	private final AILogic logic;
