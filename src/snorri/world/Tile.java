@@ -225,7 +225,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 	}
 
 	public boolean isPathable() {
-		return type.isPathable();
+		return type.isNotSurface();
 	}
 	
 	public boolean isContextPathable() {

@@ -14,9 +14,9 @@ public enum BackgroundElement implements TileType {
 		getImage("sand02.png"),
 		getImage("sand03.png")}, Param.changable(true), Param.blendOrder(1.5)),
 	BLACK(new BufferedImage[] {
-			getImage("black00.png")}, Param.pathable(false), Param.atTop(true)),
-	STAIRS(TileType.addAll(TileType.getRotations(getImage("stairs00.png")),TileType.getRotations(getImage("stairs01.png"))), Param.pathable(true), Param.atTop(true)),
-	HUT(Param.pathable(false), Param.atTop(true)),
+			getImage("black00.png")}, Param.isNotSurface(false), Param.atTop(true)),
+	STAIRS(TileType.addAll(TileType.getRotations(getImage("stairs00.png")),TileType.getRotations(getImage("stairs01.png"))), Param.isNotSurface(true), Param.atTop(true)),
+	HUT(Param.isNotSurface(false), Param.atTop(true)),
 	WATER(false, getImage("water00.png"), Param.changable(true), Param.swimmable(true), Param.blendOrder(101.0)),
 	LAVA(false, new BufferedImage[] {
 		getImage("lava00.png")}, Param.swimmable(true), Param.blendOrder(99.0)),
@@ -24,8 +24,8 @@ public enum BackgroundElement implements TileType {
 		getImage("grass00.png"),
 		getImage("grass01.png")}, Param.changable(true), Param.blendOrder(1.8)),
 	VOID(false, getImage("void00.png"), Param.atTop(true), Param.canShootOver(false), Param.blendOrder(-1.0)),
-	COLUMN(Param.pathable(false), Param.atTop(true)),
-	DOOR(Param.pathable(false), Param.atTop(true), Param.canShootOver(false)),
+	COLUMN(Param.isNotSurface(false), Param.atTop(true)),
+	DOOR(Param.isNotSurface(false), Param.atTop(true), Param.canShootOver(false)),
 	SANDSTONE(false, new BufferedImage[] {
 		getImage("sandstone00.png"),
 		getImage("sandstone01.png"),
@@ -187,7 +187,7 @@ public enum BackgroundElement implements TileType {
 		return ordinal();
 	}
 	
-	public boolean isPathable() {
+	public boolean isNotSurface() {
 		return pathable;
 	}
 	
@@ -255,7 +255,7 @@ public enum BackgroundElement implements TileType {
 	@Override
 	public void setParam(Param<?> param) {
 		switch (param.getKey()) {
-			case PATHABLE:
+			case IS_NOT_SURFACE:
 				pathable = (Boolean) param.getValue();
 				break;
 			case SWIMMABLE:

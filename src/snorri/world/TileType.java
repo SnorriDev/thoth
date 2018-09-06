@@ -16,7 +16,7 @@ public interface TileType extends Nominal {
 	public static class Param<T> {
 		
 		protected enum Key {
-			PATHABLE,
+			IS_NOT_SURFACE, //TODO, we need to change this so it's not a double negative
 			SWIMMABLE,
 			CHANGABLE,
 			AT_TOP,
@@ -43,8 +43,8 @@ public interface TileType extends Nominal {
 			return value;
 		}
 		
-		public static Param<Boolean> pathable(Boolean value) {
-			return new Param<>(Key.PATHABLE, value);
+		public static Param<Boolean> isNotSurface(Boolean value) {
+			return new Param<>(Key.IS_NOT_SURFACE, value);
 		}
 		
 		public static Param<Boolean> swimmable(Boolean value) {
@@ -121,7 +121,7 @@ public interface TileType extends Nominal {
 	
 	String name();
 	
-	boolean isPathable();
+	boolean isNotSurface();
 	
 	boolean canShootOver();
 	

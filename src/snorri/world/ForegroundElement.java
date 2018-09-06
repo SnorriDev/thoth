@@ -108,7 +108,7 @@ public enum ForegroundElement implements Nominal, TileType {
 	}
 
 	@Override
-	public boolean isPathable() {
+	public boolean isNotSurface() {
 		return true; //everything in this layer is pathable
 	}
 

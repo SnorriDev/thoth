@@ -32,7 +32,7 @@ public enum MidgroundElement implements TileType {
 	protected double blendOrder;
 	
 	MidgroundElement() {
-		this(new BufferedImage[] {null}, Param.pathable(true));
+		this(new BufferedImage[] {null}, Param.isNotSurface(true));
 	}
 	
 	MidgroundElement(BufferedImage texture) {
@@ -120,7 +120,7 @@ public enum MidgroundElement implements TileType {
 	}
 
 	@Override
-	public boolean isPathable() {
+	public boolean isNotSurface() {
 		return pathable;
 	}
 
@@ -167,7 +167,7 @@ public enum MidgroundElement implements TileType {
 	@Override
 	public void setParam(Param<?> param) {
 		switch (param.getKey()) {
-			case PATHABLE:
+			case IS_NOT_SURFACE:
 				pathable = (Boolean) param.getValue();
 				break;
 			case REPLACEMENT_TYPE:

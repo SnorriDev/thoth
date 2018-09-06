@@ -14,14 +14,14 @@ import snorri.main.Debug;
 import snorri.modifiers.Modifier;
 import snorri.pathfinding.Team;
 import snorri.semantics.Break;
-import snorri.semantics.Go.Walker;
+import snorri.semantics.Go.Movable;
 import snorri.semantics.Nominal;
 import snorri.semantics.Wrapper;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public abstract class Unit extends Entity implements Walker {
+public abstract class Unit extends Entity implements Movable {
 
 	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 120;
@@ -30,7 +30,7 @@ public abstract class Unit extends Entity implements Walker {
 	
 	protected List<Modifier<Unit>> modifiers = new ArrayList<>();
 	
-	protected int speed;
+	protected int maxSpeed;
 	private Team team;
 	protected Stats stats;
 	protected double health;
@@ -69,7 +69,7 @@ public abstract class Unit extends Entity implements Walker {
 	@Override
 	public void update(World world, double deltaTime) {
 		
-		speed = getBaseSpeed();
+		maxSpeed = getBaseSpeed();
 		
 		if (modifiers == null) {
 			modifiers = new ArrayList<>();
@@ -92,6 +92,11 @@ public abstract class Unit extends Entity implements Walker {
 				Debug.logger.info(tag + " died.");
 			}
 			TriggerType.KILL.activate(tag);
+		}
+		
+		// Potential Hazard: you can slow down your falling by moving left or right
+		if(this.isFlying() == false && this.isFalling() == true && this.getVelocity().magnitude() < Unit.getTerminalVelocity()) {
+			this.addVelocity(new Vector(0, -627.0 * deltaTime));
 		}
 		
 		super.update(world, deltaTime);
@@ -135,18 +140,23 @@ public abstract class Unit extends Entity implements Walker {
 	}
 
 	@Override
-	public void walk(World world, Vector delta) {
+	public void translate(World world, Vector delta) {
 		moveNicely(world, delta.copy().multiply_(getSpeed()));
 	}
 	
 	@Override
-	public void walkNormalized(World world, Vector dir, double deltaTime) {
+	public void translateNormalized(World world, Vector dir, double deltaTime) {
 		setAnimation(dir);
-		Walker.super.walkNormalized(world, dir, deltaTime);
+		Movable.super.translateNormalized(world, dir, deltaTime);
+	}
+	
+	@Override
+	public boolean isFalling() {
+		return !isFlying(); // TODO: combine this with determining whether the Unit is standing on a floor
 	}
 	
 	public void walkTo(World world, Vector target, double deltaTime) {
-		walkNormalized(world, target.copy().sub_(pos), deltaTime);
+		translateNormalized(world, target.copy().sub_(pos), deltaTime);
 	}
 	
 	public double getHealth() {
@@ -178,19 +188,15 @@ public abstract class Unit extends Entity implements Walker {
 	
 	//override this for faster entities
 	protected final int getSpeed() {
-		return speed;
+		return maxSpeed;
 	}
 	
 	public int getBaseSpeed() {
 		return BASE_SPEED;
 	}
 	
-	public void setSpeed(int spd) {
-		speed = spd;
-	}
-	
-	public void modifySpeed(double factor) {
-		speed = (int) (speed * factor);
+	public void modifyMaxSpeed(double factor) {
+		maxSpeed = (int) (maxSpeed * factor);
 	}
 	
 	@Override

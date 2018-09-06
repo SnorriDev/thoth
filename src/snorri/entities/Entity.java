@@ -39,6 +39,8 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	/** a list of entities which can be spawned in the level editor */
 	public static final List<Class<? extends Entity>> EDIT_SPAWNABLE;
 	
+	private static final int TERMINAL_VELOCITY = 1280;
+	
 	static {
 		
 		SPAWNABLE = new ArrayList<>();
@@ -95,8 +97,10 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	/** used to determine which entities should be rendered over others **/
 	protected int z;
 	protected String tag;
+	/** direction the entity is facing **/
 	protected Vector dir;
-		
+	protected Vector velocity = new Vector(0,0);
+
 	private boolean flying = false, deleted = false;
 	private boolean hasCycled = false;
 
@@ -236,7 +240,12 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		return toString() + "{pos: " + pos + ", col: " + collider + "}";
 	}
 	
-	public void update(World world, double d) {
+	/**
+	 * 
+	 * @param world
+	 * @param deltaTime
+	 */
+	public void update(World world, double deltaTime) {
 		if (!hasCycled && (animation == null || animation.hasCycled())) {
 			onCycleComplete(world);
 			hasCycled = true;
@@ -447,6 +456,10 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public void onExplosion(CollisionEvent e) {
 	}
 	
+	/**
+	 * this method is used to set the direction of an entity for animation purposes
+	 * @param dir direction the entity is facing
+	 */
 	public void setDirection(Vector dir) {
 		this.dir = dir.copy();
 		if (animation != null) {
@@ -477,5 +490,33 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	 */
 	protected void onCycleComplete(World world) {
 	}
+	
+	/**
+	 * @return the velocity
+	 */
+	public Vector getVelocity() {
+		return velocity;
+	}
 
+	/**
+	 * @param velocity the velocity to set
+	 */
+	public void setVelocity(Vector velocity) {
+		this.velocity = velocity;
+	}
+	
+	/**
+	 * adds the new velocity vector to the current velocity
+	 * @param velocity the velocity vector to be added to the current velocity
+	 */
+	public void addVelocity(Vector velocity) {
+		this.velocity.add(velocity);
+	}
+
+	/**
+	 * @return the terminalVelocity
+	 */
+	public static final int getTerminalVelocity() {
+		return TERMINAL_VELOCITY;
+	}
 }

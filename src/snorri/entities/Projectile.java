@@ -6,12 +6,12 @@ import snorri.events.SpellEvent.Caster;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.main.Debug;
-import snorri.semantics.Go.Walker;
+import snorri.semantics.Go.Movable;
 import snorri.semantics.Nominal;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Projectile extends Detector implements Walker {
+public class Projectile extends Detector implements Movable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -54,7 +54,7 @@ public class Projectile extends Detector implements Walker {
 		
 		boolean walked = false;
 		if (weapon == null || !weapon.altersMovement()) {
-			walk(world, velocity.copy().multiply_(deltaTime));
+			translate(world, velocity.copy().multiply_(deltaTime));
 			walked = true;
 		} 
 		
@@ -67,7 +67,7 @@ public class Projectile extends Detector implements Walker {
 			
 			//we can't unify this with the above if clause because it matters when spells are applied
 			if (!walked && output.equals(false)) {
-				walk(world, velocity.copy().multiply_(deltaTime));
+				translate(world, velocity.copy().multiply_(deltaTime));
 			}
 			
 		}
@@ -77,6 +77,11 @@ public class Projectile extends Detector implements Walker {
 			world.delete(this);
 		}
 		// FIXME why isn't this working off grid?
+		
+		// Potential Hazard: you can slow down your falling by moving left or right
+		if(this.isFlying() == false && this.isFalling() == true && this.getVelocity().magnitude() < Projectile.getTerminalVelocity()) {
+			this.addVelocity(new Vector(0, -512.0 * deltaTime));
+		}
 				
 		super.update(world, deltaTime);
 	}
@@ -118,8 +123,13 @@ public class Projectile extends Detector implements Walker {
 	}
 
 	@Override
-	public void walk(World world, Vector delta) {
+	public void translate(World world, Vector delta) {
 		pos.add_(delta);
+	}
+	
+	@Override
+	public boolean isFalling() {
+		return true;
 	}
 	
 	@Override
