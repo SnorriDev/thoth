@@ -29,15 +29,15 @@ public class Animation implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final int FRAMERATE = 8;
-	private static final double SEC_PER_FRAME = 1d / FRAMERATE;
+	private static final double FRAME_RATE = 8;
 
 	protected BufferedImage[] frames;
 	protected BufferedImage[] flippedFrames;
-	private double currentTime = 0;
-	private boolean hasCycled = false;
-	/** Play the animation once, and then remain in the last frame **/
 	private String path;
+	
+	private double currentTime = 0;
+	private double frameRate = FRAME_RATE;
+	private boolean hasCycled = false;
 	private boolean flipped = false;
 	
 	/**
@@ -63,8 +63,7 @@ public class Animation implements Serializable {
 
 	/**
 	 * Shallow copy of the specified animation.
-	 * @param other
-	 * 	The animation to copy.
+	 * @param other The animation to copy.
 	 */
 	public Animation(Animation other) {
 		set(other);
@@ -167,6 +166,7 @@ public class Animation implements Serializable {
 		flippedFrames = animation.flippedFrames;
 		hasCycled = animation.hasCycled;
 		currentTime = animation.currentTime;
+		setFrameRate(animation.getFrameRate());
 	}
 
 	public String getPath() {
@@ -179,13 +179,13 @@ public class Animation implements Serializable {
 	 * @return the current image
 	 */
 	public synchronized BufferedImage getSprite(double timeDelta) {
-		hasCycled |= (currentTime + timeDelta) >= (frames.length * SEC_PER_FRAME);
-		currentTime = (currentTime + timeDelta) % (frames.length * SEC_PER_FRAME);		
+		hasCycled |= (currentTime + timeDelta) >= (frames.length / getFrameRate());
+		currentTime = (currentTime + timeDelta) % (frames.length / getFrameRate());		
 		return (flipped ? flippedFrames : frames)[getFrameIndex()];
 	}
 	
 	public int getFrameIndex() {
-		return (int) (currentTime / SEC_PER_FRAME);
+		return (int) (currentTime * getFrameRate());
 	}
 
 	/**
@@ -239,6 +239,14 @@ public class Animation implements Serializable {
 	
 	public int getHeight() {
 		return frames[0].getHeight();
+	}
+	
+	protected final void setFrameRate(double frameRate) {
+		this.frameRate = frameRate;
+	}
+	
+	protected final double getFrameRate() {
+		return frameRate;
 	}
 
 }
