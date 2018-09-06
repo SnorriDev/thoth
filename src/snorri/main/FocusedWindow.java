@@ -31,7 +31,13 @@ import snorri.world.World;
 public abstract class FocusedWindow<F extends Entity> extends GamePanel implements MouseListener, KeyListener {
 
 	private static final long serialVersionUID = 1L;
-	private static final int FRAME_DELTA = 15; // 33 -> 30 FPS (20 -> 50 FPS
+	/** Milliseconds per frame.
+	 * 
+	 * 15 => ~60 FPS.
+	 * 20 => ~50 FPS.
+	 * 33 => ~30 FPS.
+	 */
+	private static final int FRAME_DELTA = 15;
 
 	protected final KeyStates states = new KeyStates();
 	
