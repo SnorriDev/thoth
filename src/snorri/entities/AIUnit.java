@@ -41,13 +41,21 @@ public abstract class AIUnit extends Unit implements AIAgent {
 		mode.update(this, world, deltaTime);
 	}
 	
+	/** Return whether the AIUnit can currently attack.
+	 * 
+	 * If the AIUnit has no weapon, this method returns true if it is in attack range.
+	 * If the AIUnit does have a weapon, it also considers whether the weapon is on cooldown.
+	 */
 	@Override
 	public boolean canAttack(Entity target, World world) {
-		if (getInventory() == null || getInventory().getWeapon() == null) {
-			return false;
+		// Note that this defaults to true if there is no weapon (=> can attack without a weapon).
+		boolean canUseWeapon = true;
+		// If there is a weapon, make sure it is off cooldown.
+		if (getInventory() != null && getInventory().getWeapon() != null) {
+			canUseWeapon = getInventory().getWeapon().canUse();
 		}
 		int attackRange = getAttackRange();
-		return target.getPos().distanceSquared(getPos()) < attackRange * attackRange && getInventory().getWeapon().canUse();
+		return canUseWeapon && target.getPos().distanceSquared(getPos()) < attackRange * attackRange;
 	}
 	
 	@Override

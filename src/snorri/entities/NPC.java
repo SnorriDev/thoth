@@ -56,8 +56,7 @@ public class NPC extends AIUnit implements Interactor {
 	
 	@Override
 	public AIMode getDefaultMode() {
-		// TODO(#34): Should have AIMode.BUDDY for following the player.
-		return AIMode.IDLE;
+		return AIMode.BUDDY;
 	}
 	
 	@Override
@@ -65,8 +64,9 @@ public class NPC extends AIUnit implements Interactor {
 		return Player.PLAYER_BASE_SPEED;
 	}
 
+	/** Returns the range outside of which the NPC will chase the player. */
 	@Override
 	protected int getAttackRange() {
-		return 500;
+		return 100;
 	}
 }
