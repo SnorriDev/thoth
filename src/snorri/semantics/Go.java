@@ -10,16 +10,37 @@ public class Go extends IntransVerbDef {
 	private static final double SPEED = 350;
 	private static final double DELETE_MARGIN = 5;
 	
-	public interface Walker {
+	public interface Movable {		
+		/**
+		 * translates (moves) the movable object through the world along the delta vector
+		 * @param world word to move object through
+		 * @param delta change in position (velocity*time)
+		 */
+		public void translate(World world, Vector delta);
 		
-		public void walk(World world, Vector delta);
-			
-		default void walk(World world, Vector dir, double deltaTime) {
-			walk(world, dir.copy().multiply_(deltaTime));
+		/**
+		 * @return whether the object should be falling
+		 */
+		public boolean isFalling();
+		
+		/**
+		 * translates (moves) the movable object through the world along the dir vector
+		 * @param world word to move object through
+		 * @param dir change in position (velocity)
+		 * @param deltaTime change in time since last frame
+		 */
+		default void translate(World world, Vector dir, double deltaTime) {
+			translate(world, dir.copy().multiply_(deltaTime));
 		}
 		
-		default void walkNormalized(World world, Vector dir, double deltaTime) {
-			walk(world, dir.copy().normalize_(), deltaTime);
+		/**
+		 * translates (moves) the movable object through the world along the dir vector at a normalized speed
+		 * @param world word to move object through
+		 * @param dir change in position (velocity vector)
+		 * @param deltaTime change in time since last frame
+		 */
+		default void translateNormalized(World world, Vector dir, double deltaTime) {
+			translate(world, dir.copy().normalize_(), deltaTime);
 		}
 		
 	}
@@ -27,16 +48,16 @@ public class Go extends IntransVerbDef {
 	public Go() {
 		super();
 	}
-
+	
 	@Override
 	public boolean exec(SpellEvent e) {
-		if (e.getSecondPerson() instanceof Walker && e.getDestination() != null) {
+		if (e.getSecondPerson() instanceof Movable && e.getDestination() != null) {
 			Vector trans = e.getDestination().copy().sub_(e.getSecondPerson().getPos());
 			if (trans.magnitude() < DELETE_MARGIN) {
 				e.getWorld().delete(e.getSecondPerson());
 				return false;
 			}
-			((Walker) e.getSecondPerson()).walkNormalized(e.getWorld(), trans, SPEED * e.getDeltaTime());
+			((Movable) e.getSecondPerson()).translateNormalized(e.getWorld(), trans, SPEED * e.getDeltaTime());
 			return true;
 		}
 		return false;
@@ -55,10 +76,10 @@ public class Go extends IntransVerbDef {
 	public boolean altersMovement() {
 		return true;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "go";
 	}
-
+	
 }

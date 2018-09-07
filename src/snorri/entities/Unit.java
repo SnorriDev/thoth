@@ -15,14 +15,14 @@ import snorri.inventory.Stats;
 import snorri.main.Debug;
 import snorri.modifiers.Modifier;
 import snorri.semantics.Break;
-import snorri.semantics.Go.Walker;
+import snorri.semantics.Go.Movable;
 import snorri.semantics.Nominal;
 import snorri.semantics.Wrapper;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public abstract class Unit extends Entity implements Carrier, Walker {
+public abstract class Unit extends Entity implements Carrier, Movable {
 
 	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 120;
@@ -31,7 +31,7 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 	
 	protected List<Modifier<Unit>> modifiers = new ArrayList<>();
 	
-	protected int speed;
+	protected int maxSpeed;
 	private Inventory inventory;
 	protected Stats stats;
 	protected double health;
@@ -72,7 +72,8 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 	public void update(World world, double deltaTime) {
 		inventory.update(deltaTime);
 		
-		speed = getBaseSpeed();
+		maxSpeed = getBaseSpeed();
+		
 		if (modifiers == null) {
 			modifiers = new ArrayList<>();
 		}
@@ -94,6 +95,12 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 			}
 			TriggerType.KILL.activate(tag);
 		}
+		
+		// Potential Hazard: you can slow down your falling by moving left or right
+		if(isFalling()) {
+			this.addVelocity(new Vector(0, -627.0 * deltaTime));
+		}
+
 		super.update(world, deltaTime);
 	}
 	
@@ -135,20 +142,25 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 
 	/** Translate the position by delta scaled by speed. */
 	@Override
-	public void walk(World world, Vector delta) {
-		moveNicely(world, delta.copy().multiply_(getSpeed()));
+	public void translate(World world, Vector delta) {
+		moveNicely(world, delta.copy());
 	}
 	
 	/** Walk in the direction dir with magnitude controlled by deltaTime. */
 	@Override
-	public void walkNormalized(World world, Vector dir, double deltaTime) {
+	public void translateNormalized(World world, Vector dir, double deltaTime) {
 		setAnimation(dir);
-		Walker.super.walkNormalized(world, dir, deltaTime);
+		Movable.super.translateNormalized(world, dir, deltaTime);
+	}
+	
+	@Override
+	public boolean isFalling() {
+		return this.getVelocity().magnitude() < Unit.getTerminalVelocity(); // TODO: combine this with determining whether the Unit is standing on a floor
 	}
 	
 	/** Walk towards a target position. */
 	public void walkTowards(World world, Vector target, double deltaTime) {
-		walkNormalized(world, target.copy().sub_(pos), deltaTime);
+		translateNormalized(world, target.copy().sub_(pos), deltaTime);
 	}
 	
 	// The order of target and world are reversed here to be consistent with the newer AIAgent API.
@@ -185,19 +197,15 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 	
 	// Override this for faster entities.
 	protected final int getSpeed() {
-		return speed;
+		return maxSpeed;
 	}
 	
 	public int getBaseSpeed() {
 		return BASE_SPEED;
 	}
 	
-	public void setSpeed(int spd) {
-		speed = spd;
-	}
-	
-	public void modifySpeed(double factor) {
-		speed = (int) (speed * factor);
+	public void modifyMaxSpeed(double factor) {
+		maxSpeed = (int) (maxSpeed * factor);
 	}
 	
 	@Override

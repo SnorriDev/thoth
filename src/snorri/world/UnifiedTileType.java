@@ -8,7 +8,7 @@ import snorri.main.Main;
 
 public enum UnifiedTileType implements TileType {
 	
-	EMPTY((BufferedImage) null, Param.pathable(true)),
+	EMPTY((BufferedImage) null, Param.isNotSurface(true)),
 	SAND(new BufferedImage[] {
 			Main.getImage("/textures/tiles/background/sand00.png"),
 			Main.getImage("/textures/tiles/background/sand01.png"),
@@ -22,8 +22,8 @@ public enum UnifiedTileType implements TileType {
 			Main.getImage("/textures/tiles/background/water00.png"),
 			Main.getImage("/textures/tiles/background/water01.png"),
 	}, Param.swimmable(true)),
-	TRIPWIRE(TileType.getTwoRotations(Main.getImage("/textures/tiles/foreground/tripwire00.png")), Param.pathable(true)),
-	TRIPWIRE_END(TileType.getReflections(Main.getImage("/textures/tiles/foreground/tripwireend00.png")), Param.pathable(true)),
+	TRIPWIRE(TileType.getTwoRotations(Main.getImage("/textures/tiles/foreground/tripwire00.png")), Param.isNotSurface(true)),
+	TRIPWIRE_END(TileType.getReflections(Main.getImage("/textures/tiles/foreground/tripwireend00.png")), Param.isNotSurface(true)),
 	DOOR(new BufferedImage[] {
 			Main.getImage("/textures/tiles/door00.png"),
 			Main.getImage("/textures/tiles/door01.png"),
@@ -32,7 +32,7 @@ public enum UnifiedTileType implements TileType {
 	private final BufferedImage[] textures;
 	
 	// Default values for these fields can be used by passing Param.
-	private boolean pathable = false;
+	private boolean isNotSurface = false;
 	private boolean swimmable = false;
 	private boolean changable = false;
 	private boolean atTop = true;
@@ -64,8 +64,8 @@ public enum UnifiedTileType implements TileType {
 			break;
 		case OPEN_TYPE:
 			break;
-		case PATHABLE:
-			pathable = (boolean) param.getValue();
+		case IS_NOT_SURFACE:
+			isNotSurface = (boolean) param.getValue();
 			break;
 		case REPLACEMENT_TYPE:
 			replacementType = (UnifiedTileType) param.getValue();
@@ -111,13 +111,13 @@ public enum UnifiedTileType implements TileType {
 	}
 
 	@Override
-	public boolean isPathable() {
-		return pathable;
+	public boolean isNotSurface() {
+		return isNotSurface;
 	}
 
 	@Override
 	public boolean canShootOver() {
-		return pathable || swimmable;
+		return isNotSurface || swimmable;
 	}
 
 	@Override

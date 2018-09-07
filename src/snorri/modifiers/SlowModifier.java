@@ -26,7 +26,7 @@ public class SlowModifier extends Modifier<Unit> {
 
 	@Override
 	public boolean modify(Unit u, double deltaTime) {
-		u.modifySpeed(magnitude);
+		u.modifyMaxSpeed(magnitude);
 		return super.modify(u, deltaTime);
 	}
 

@@ -117,7 +117,7 @@ public class Player extends Unit implements Caster {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				walkNormalized(world, window.getMomentumVector(), deltaTime);
+				translateNormalized(world, window.getMomentumVector(), deltaTime);
 			}
 		});
 				
