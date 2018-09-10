@@ -16,7 +16,7 @@ import snorri.semantics.Order;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class SpellEvent {
+public class CastEvent {
 	
 	private World world; //used to retrieve first, third, and world
 	private Caster firstPerson; //the spell's caster
@@ -46,7 +46,6 @@ public class SpellEvent {
 		
 		@Override
 		default boolean add(Droppable d) {
-			
 			if (d instanceof Item && ((Item) d).getSpell() != null) {
 				boolean result = false;
 				for (String word : Grammar.getWords(((Item) d).getSpell().getOrthography())) {
@@ -60,7 +59,6 @@ public class SpellEvent {
 			}
 			
 			return false;
-			
 		}
 
 		@Override
@@ -84,7 +82,7 @@ public class SpellEvent {
 		
 	}
 	
-	public SpellEvent(World world, Caster firstPerson, Entity secondPerson) {
+	public CastEvent(World world, Caster firstPerson, Entity secondPerson) {
 		this.firstPerson = firstPerson;
 		this.secondPerson = secondPerson;
 		this.world = world;
@@ -92,12 +90,12 @@ public class SpellEvent {
 		dest = null;
 	}
 	
-	public SpellEvent(World world, Caster firstPerson, Entity secondPerson, double deltaTime) {
+	public CastEvent(World world, Caster firstPerson, Entity secondPerson, double deltaTime) {
 		this(world, firstPerson, secondPerson);
 		this.deltaTime = deltaTime;
 	}
 	
-	public SpellEvent(SpellEvent e) {
+	public CastEvent(CastEvent e) {
 		world = e.world;
 		firstPerson = e.firstPerson;
 		secondPerson = e.secondPerson;
@@ -118,7 +116,7 @@ public class SpellEvent {
 	}
 	
 	/** Create a copy of this spell event with a different adverbial degree. */
-	public SpellEvent(SpellEvent e, int degree) {
+	public CastEvent(CastEvent e, int degree) {
 		this(e);
 		this.degree = degree;
 	}
@@ -206,18 +204,18 @@ public class SpellEvent {
 		return amount * sizeModifier * deltaTime;
 	}
 	
-	public SpellEvent scaleHealthInteractionModifier(double scale) {
+	public CastEvent scaleHealthInteractionModifier(double scale) {
 		healthInteractModifier *= scale;
 		return this;
 	}
 	
-	public SpellEvent scaleSpeedModifier(double scale) {
+	public CastEvent scaleSpeedModifier(double scale) {
 		speedModifier *= scale;
 		return this;
 	}
 
-	public SpellEvent getNegated() {
-		SpellEvent copy = new SpellEvent(this);
+	public CastEvent getNegated() {
+		CastEvent copy = new CastEvent(this);
 		copy.negated = ! negated;
 		return copy;
 	}

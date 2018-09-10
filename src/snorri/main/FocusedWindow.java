@@ -16,7 +16,7 @@ import javax.swing.SwingUtilities;
 
 import snorri.dialog.Dialog;
 import snorri.entities.Entity;
-import snorri.events.SpellEvent.Caster;
+import snorri.events.CastEvent.Caster;
 import snorri.keyboard.Key;
 import snorri.keyboard.KeyStates;
 import snorri.keyboard.MouseButton;

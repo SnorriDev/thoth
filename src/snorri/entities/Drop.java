@@ -34,14 +34,14 @@ public class Drop extends Detector {
 	@Override
 	public void onCollision(CollisionEvent e) {
 		if (e.getTarget() instanceof Player) {
-			((Player) e.getTarget()).getInventory().add(getPrize());
+			((Player) e.getTarget()).add(getPrize());
 			e.getWorld().delete(this);
 		}
 	}
 
 	public String getPrizeString() {
 		if (prize == null) {
-			return "null fucking prize";
+			return "[null]";
 		}
 		return prize.toString();
 	}

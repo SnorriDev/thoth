@@ -309,14 +309,12 @@ public class World implements Playable, Editable {
 	}
 	
 	public synchronized void wrapGridUpdate(Vector posGrid, Tile tile) {
-		TileLayer l = getTileLayer();
-		Tile oldTile = l.getTileGrid(posGrid);
-
+		TileLayer tileLayer = getTileLayer();
+		Tile oldTile = tileLayer.getTileGrid(posGrid);
 		if (oldTile == null) {
 			return;
 		}
-
-		l.setTileGrid(posGrid, tile);
+		tileLayer.setTileGrid(posGrid, tile);
 	}
 	
 	/**

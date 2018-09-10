@@ -1,6 +1,6 @@
 package snorri.semantics;
 
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.nonterminals.SemiTerminal;
 
 public abstract class Definition<S> {
@@ -30,7 +30,7 @@ public abstract class Definition<S> {
 		return c.equals(partOfSpeech);
 	}
 	
-	public abstract S getMeaning(SpellEvent e);
+	public abstract S getMeaning(CastEvent e);
 
 	/**
 	 * @return a short one or two-word description of this word

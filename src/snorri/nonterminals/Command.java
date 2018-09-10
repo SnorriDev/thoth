@@ -1,13 +1,13 @@
 package snorri.nonterminals;
 
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.parser.Node;
 import snorri.semantics.Lambda;
 
 public class Command extends NonTerminal<Boolean> {
 
 	@Override @SuppressWarnings("unchecked")
-	public Boolean getMeaning(SpellEvent e) {
+	public Boolean getMeaning(CastEvent e) {
 		
 		if (e.isNegated()) {
 			return false;

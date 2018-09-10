@@ -1,6 +1,6 @@
 package snorri.semantics;
 
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.nonterminals.TransVerb;
 import snorri.parser.Node;
 
@@ -15,7 +15,7 @@ public abstract class TransVerbDef extends VerbDef<Lambda<Object, Lambda>> {
 	}
 	
 	@Override
-	public Lambda<Object, Lambda> getMeaning(SpellEvent e) {
+	public Lambda<Object, Lambda> getMeaning(CastEvent e) {
 		
 		return new Lambda<Object, Lambda>(OUTER_CAT) {
 			
@@ -43,8 +43,8 @@ public abstract class TransVerbDef extends VerbDef<Lambda<Object, Lambda>> {
 
 	}
 	
-	public abstract boolean eval(Object subject, Object object, SpellEvent e);
+	public abstract boolean eval(Object subject, Object object, CastEvent e);
 	
-	public abstract boolean exec(Node<Object> object, SpellEvent e);
+	public abstract boolean exec(Node<Object> object, CastEvent e);
 
 }

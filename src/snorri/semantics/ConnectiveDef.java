@@ -1,6 +1,6 @@
 package snorri.semantics;
 
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.nonterminals.Connective;
 import snorri.parser.Node;
 
@@ -15,7 +15,7 @@ public abstract class ConnectiveDef extends Definition<Lambda<Boolean, Lambda>> 
 	}
 	
 	@Override
-	public Lambda<Boolean, Lambda> getMeaning(SpellEvent e) {
+	public Lambda<Boolean, Lambda> getMeaning(CastEvent e) {
 				
 		return new Lambda<Boolean, Lambda>(OUTER_CAT) {
 			
@@ -48,7 +48,7 @@ public abstract class ConnectiveDef extends Definition<Lambda<Boolean, Lambda>> 
 	 * @param arg2 The second argument to the connective
 	 * @return Whether or not anything executed correctly
 	 */
-	public abstract boolean exec(Node<Boolean> arg1, Node<Boolean> arg2, SpellEvent e);
+	public abstract boolean exec(Node<Boolean> arg1, Node<Boolean> arg2, CastEvent e);
 
 	/**
 	 * Evaluate the truth value with two truth valued arguments
@@ -56,6 +56,6 @@ public abstract class ConnectiveDef extends Definition<Lambda<Boolean, Lambda>> 
 	 * @param arg2 the second argument to the connective
 	 * @return A truth value
 	 */
-	public abstract boolean eval(boolean arg1, boolean arg2, SpellEvent e);
+	public abstract boolean eval(boolean arg1, boolean arg2, CastEvent e);
 
 }

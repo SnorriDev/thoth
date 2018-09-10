@@ -1,7 +1,7 @@
 package snorri.semantics;
 
 import snorri.entities.Entity;
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.nonterminals.Noun;
 
 public class ThirdObjectPronoun extends Definition<Entity> {
@@ -11,7 +11,7 @@ public class ThirdObjectPronoun extends Definition<Entity> {
 	}
 
 	@Override
-	public Entity getMeaning(SpellEvent e) {
+	public Entity getMeaning(CastEvent e) {
 		return e.getThirdPerson();
 	}
 
