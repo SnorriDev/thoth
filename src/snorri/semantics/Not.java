@@ -1,11 +1,11 @@
 package snorri.semantics;
 
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 
 public class Not extends AdverbDef {
 
 	@Override
-	public SpellEvent getMeaning(SpellEvent e) {
+	public CastEvent getMeaning(CastEvent e) {
 		return e.getNegated();
 	}
 

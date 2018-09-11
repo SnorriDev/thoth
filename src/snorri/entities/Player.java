@@ -7,10 +7,9 @@ import javax.swing.SwingUtilities;
 
 import snorri.animations.Animation;
 import snorri.events.InteractEvent;
-import snorri.events.SpellEvent;
-import snorri.events.SpellEvent.Caster;
+import snorri.events.CastEvent;
+import snorri.events.CastEvent.Caster;
 import snorri.inventory.Droppable;
-import snorri.inventory.Inventory;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
 import snorri.keyboard.Key;
@@ -47,7 +46,6 @@ public class Player extends Unit implements Caster {
 	
 	private Stats stats;
 	private Lexicon lexicon;
-	private Inventory inventory;
 	
 	protected double mana;
 	
@@ -74,7 +72,6 @@ public class Player extends Unit implements Caster {
 	
 	public Player(Vector pos) {
 		super(pos, IDLE, WALKING);
-		inventory = new Inventory(this);
 		stats = new Stats(this);
 		lexicon = new Lexicon();
 		
@@ -96,12 +93,12 @@ public class Player extends Unit implements Caster {
 		Papyrus p3 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
 		
 		// Equip items in inventory.
-		inventory.add(sling);
-		inventory.add(o1);
-		inventory.add(o2);
-		inventory.add(p1);
-		inventory.add(p2);
-		inventory.add(p3);
+		getInventory().add(sling);
+		getInventory().add(o1);
+		getInventory().add(o2);
+		getInventory().add(p1);
+		getInventory().add(p2);
+		getInventory().add(p3);
 		
 		tag = "player";
 	}
@@ -109,7 +106,6 @@ public class Player extends Unit implements Caster {
 	@Override
 	public void update(World world, double deltaTime) {
 		super.update(world, deltaTime);
-		inventory.update(deltaTime);
 		
 		mana = Math.min(mana + stats.getManaRegen() * deltaTime, stats.getMaxMana());
 		
@@ -120,8 +116,9 @@ public class Player extends Unit implements Caster {
 				walkNormalized(world, window.getMomentumVector(), deltaTime);
 			}
 		});
-				
-		inventory.checkKeys();
+		
+		// Only the player's inventory responds to keyboard input.
+		getInventory().checkKeys();
 		
 		//TODO(#36): Move this to an Event.
 		// We construct a new entity because positions can be assigned/pointers fucked up.
@@ -133,10 +130,10 @@ public class Player extends Unit implements Caster {
 	}
 	
 	@Override
-	public Nominal get(AbstractSemantics attr, SpellEvent e) {
+	public Nominal get(AbstractSemantics attr, CastEvent e) {
 
 		if (attr == AbstractSemantics.WEAPON) {
-			return inventory.getWeapon();
+			return getInventory().getWeapon();
 		}
 		
 		return super.get(attr, e);
@@ -146,11 +143,6 @@ public class Player extends Unit implements Caster {
 	@Override
 	public Lexicon getLexicon() {
 		return lexicon;
-	}
-	
-	@Override
-	public Inventory getInventory() {
-		return inventory;
 	}
 	
 	@Override
@@ -193,7 +185,7 @@ public class Player extends Unit implements Caster {
 	
 	@Override
 	public boolean add(Droppable d) {
-		if (Caster.super.add(d)) {
+		if (Caster.super.add(d) || lexicon.add(d)) {
 			TriggerType.ACQUIRE.activate(d.toString());
 			if (Main.getWindow() instanceof GameWindow) {
 				((GameWindow) Main.getWindow()).showMessage(d);

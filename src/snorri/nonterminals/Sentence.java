@@ -1,13 +1,13 @@
 package snorri.nonterminals;
 
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.parser.Node;
 import snorri.semantics.Lambda;
 
 public class Sentence extends NonTerminal<Boolean> {
 	
 	@Override @SuppressWarnings("unchecked")
-	public Boolean getMeaning(SpellEvent e) {
+	public Boolean getMeaning(CastEvent e) {
 		
 		if (children.size() == 1) {
 			return (boolean) children.get(0).getMeaning(e);
@@ -21,10 +21,10 @@ public class Sentence extends NonTerminal<Boolean> {
 		}
 		
 		if (children.get(0) instanceof AdverbPhrase) {
-			return (boolean) children.get(1).getMeaning((SpellEvent) children.get(0).getMeaning(e));
+			return (boolean) children.get(1).getMeaning((CastEvent) children.get(0).getMeaning(e));
 		}
 		
-		return (boolean) children.get(0).getMeaning((SpellEvent) children.get(1).getMeaning(e));
+		return (boolean) children.get(0).getMeaning((CastEvent) children.get(1).getMeaning(e));
 		
 	}
 	

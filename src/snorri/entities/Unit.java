@@ -8,7 +8,7 @@ import snorri.audio.ClipWrapper;
 import snorri.collisions.Collider;
 import snorri.collisions.RectCollider;
 import snorri.events.CollisionEvent;
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
 import snorri.inventory.Stats;
@@ -167,7 +167,7 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 		health -= d;
 	}
 	
-	public void damage(double d, SpellEvent e) {
+	public void damage(double d, CastEvent e) {
 		damage(e.modifyHealthInteraction(d));
 	}
 	
@@ -175,7 +175,7 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 		health = Math.min(health + d, stats.getMaxHealth());
 	}
 	
-	public void heal(double d, SpellEvent e) {
+	public void heal(double d, CastEvent e) {
 		heal(e.modifyHealthInteraction(d));
 	}
 	
@@ -201,7 +201,7 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 	}
 	
 	@Override
-	public Nominal get(AbstractSemantics attr, SpellEvent e) {
+	public Nominal get(AbstractSemantics attr, CastEvent e) {
 		if (attr == AbstractSemantics.HEALTH) {
 			return new Wrapper<Integer>((int) health);
 		}

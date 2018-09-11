@@ -1,15 +1,15 @@
 package snorri.semantics;
 
 import snorri.entities.Drop;
-import snorri.events.SpellEvent;
-import snorri.events.SpellEvent.Caster;
+import snorri.events.CastEvent;
+import snorri.events.CastEvent.Caster;
 import snorri.inventory.Droppable;
 import snorri.parser.Node;
 
 public class Acquire extends TransVerbDef {
 
 	@Override
-	public boolean eval(Object subject, Object object, SpellEvent e) {
+	public boolean eval(Object subject, Object object, CastEvent e) {
 		
 		if (!(subject instanceof Caster)) {
 			return false;
@@ -20,7 +20,7 @@ public class Acquire extends TransVerbDef {
 	}
 
 	@Override
-	public boolean exec(Node<Object> object, SpellEvent e) {
+	public boolean exec(Node<Object> object, CastEvent e) {
 		
 		if (object instanceof Droppable) {
 			e.getFirstPerson().getInventory().add((Droppable) object);

@@ -13,9 +13,7 @@ import javax.swing.ImageIcon;
 
 import snorri.animations.Animation;
 import snorri.collisions.CircleCollider;
-import snorri.entities.Entity;
-import snorri.events.SpellEvent;
-import snorri.events.SpellEvent.Caster;
+import snorri.events.CastEvent;
 import snorri.main.Debug;
 import snorri.main.GamePanel;
 import snorri.main.GameWindow;
@@ -25,7 +23,6 @@ import snorri.nonterminals.Sentence;
 import snorri.parser.Grammar;
 import snorri.parser.Node;
 import snorri.world.Vector;
-import snorri.world.World;
 
 public abstract class Item implements Droppable {
 	
@@ -286,17 +283,11 @@ public abstract class Item implements Droppable {
 		return spell;
 	}
 	
-	/**
-	 * Use this item's spell on <code>subject</code> from <code>caster</code>'s perspective.
-	 * @param caster The caster of the spell.
-	 * @param subject The target of the spell.
-	 * @return The result of the spell.
-	 */
-	public Object useSpellOn(World world, Caster caster, Entity subject, double modifier) {
+	/** Cast this item's spell in the context specified by spellEvent. */
+	public Object onCast(CastEvent spellEvent) {
 		if (spell == null) {
 			return null;
 		}
-		SpellEvent spellEvent = new SpellEvent(world, caster, subject, modifier);
 		try {
 			return spell.getMeaning(spellEvent);
 		} catch (Exception e) {
@@ -304,10 +295,6 @@ public abstract class Item implements Droppable {
 			Debug.logger.log(Level.SEVERE, "Unexpected error during spell execution.", e);
 			return null;
 		}
-	}
-	
-	public Object useSpellOn(World world, Caster caster, Entity subject) {
-		return useSpellOn(world, caster, subject, 1);	
 	}
 
 	public static Item newItem() {

@@ -1,7 +1,7 @@
 package snorri.semantics;
 
 import snorri.entities.Unit;
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.modifiers.SlowModifier;
 import snorri.parser.Node;
 
@@ -12,7 +12,7 @@ public class Slow extends TransVerbDef {
 	}
 
 	@Override
-	public boolean exec(Node<Object> object, SpellEvent e) {
+	public boolean exec(Node<Object> object, CastEvent e) {
 		Object obj = object.getMeaning(e);
 		if (obj instanceof Unit) {
 			((Unit) obj).addModifier(new SlowModifier());
@@ -21,7 +21,7 @@ public class Slow extends TransVerbDef {
 	}
 
 	@Override
-	public boolean eval(Object subj, Object obj, SpellEvent e) {
+	public boolean eval(Object subj, Object obj, CastEvent e) {
 		return obj instanceof Unit && ((Unit) obj).hasModifier(SlowModifier.class);
 	}
 

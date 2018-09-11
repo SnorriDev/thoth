@@ -1,6 +1,6 @@
 package snorri.semantics;
 
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.nonterminals.DegreeModifier;
 
 public class DegreeModifierDef extends Definition<Integer> {
@@ -13,7 +13,7 @@ public class DegreeModifierDef extends Definition<Integer> {
 	}
 
 	@Override
-	public Integer getMeaning(SpellEvent e) {
+	public Integer getMeaning(CastEvent e) {
 		return degree;
 	}
 
