@@ -27,7 +27,7 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 120;
 	/**Dimensions for humanoid units*/
-	public static final int RADIUS = 46, RADIUS_X = 21, RADIUS_Y = 40;
+	public static final int RADIUS = 46, RADIUS_X = 21, RADIUS_Y = 45;
 	
 	protected List<Modifier<Unit>> modifiers = new ArrayList<>();
 	

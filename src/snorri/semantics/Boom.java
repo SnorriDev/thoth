@@ -1,7 +1,6 @@
 package snorri.semantics;
 
 import snorri.entities.Entity;
-import snorri.entities.Explosion;
 import snorri.events.CastEvent;
 
 public class Boom extends IntransVerbDef {
@@ -18,8 +17,7 @@ public class Boom extends IntransVerbDef {
 		if (secondPerson == null) {
 			return false;
 		}
-		e.getWorld().delete(secondPerson);
-		e.getWorld().add(new Explosion(secondPerson.getPos(), DAMAGE));
+		secondPerson.explode(e.getWorld(), DAMAGE);
 		return true;
 	}
 

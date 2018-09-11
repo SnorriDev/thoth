@@ -6,7 +6,6 @@ import java.util.Set;
 import snorri.entities.Entity;
 import snorri.entities.Sarcophagus;
 import snorri.events.CastEvent;
-import snorri.main.Debug;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;

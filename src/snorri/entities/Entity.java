@@ -43,6 +43,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		SPAWNABLE.add(Urn.class);
 		SPAWNABLE.add(Spike.class);
 		SPAWNABLE.add(Vortex.class);
+		SPAWNABLE.add(Bomb.class);
 		
 		EDIT_SPAWNABLE = new ArrayList<>(SPAWNABLE);
 		EDIT_SPAWNABLE.add(Desk.class);
@@ -422,6 +423,16 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	 * The world in which the cycle was completed.
 	 */
 	protected void onCycleComplete(World world) {
+	}
+	
+	/** Destruct this entity and create an explosion.
+	 * 
+	 * @param world The world to explode in.
+	 * @param damage The damage the explosion should yield.
+	 */
+	public void explode(World world, double damage) {
+		world.delete(this);
+		world.add(new Explosion(getPos(), damage));
 	}
 
 }
