@@ -36,7 +36,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import snorri.events.SpellEvent.Caster;
+import snorri.events.CastEvent.Caster;
 import snorri.hieroglyphs.Hieroglyphs;
 import snorri.inventory.DropContainer;
 import snorri.inventory.Droppable;

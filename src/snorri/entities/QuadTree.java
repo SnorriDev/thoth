@@ -2,6 +2,14 @@ package snorri.entities;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,14 +19,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import snorri.collisions.RectCollider;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
-import snorri.world.EntityGroup;
+import snorri.triggers.Trigger;
 import snorri.world.Executable;
 import snorri.world.TileLayer;
 import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class QuadTree extends Entity implements EntityGroup {
+public class QuadTree extends Entity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -84,14 +92,15 @@ public class QuadTree extends Entity implements EntityGroup {
 	 * @return <code>true</code> iff insertion is successful in this node or in
 	 *         a child node
 	 */
-	@Override
 	public boolean insert(Entity e) {
 
 		if (!contains(e)) {
 			return false;
 		}
 
-		EntityGroup.super.insert(e); // update tags
+		if (e.getTag() != null) { // update tags
+			Trigger.setTag(e.getTag(), e);
+		}
 
 		boolean inChild = false;
 		if (nodes != null) {
@@ -146,7 +155,6 @@ public class QuadTree extends Entity implements EntityGroup {
 	}
 
 	@Deprecated
-	@Override
 	public List<Entity> getAllCollisions(Entity e, boolean hitAll) {
 		List<Entity> out = new ArrayList<>();
 		for (Entity each : entities) {
@@ -183,6 +191,10 @@ public class QuadTree extends Entity implements EntityGroup {
 		return out;
 	}
 
+	public Entity getFirstCollision(Entity e) {
+		return getFirstCollision(e, false);
+	}
+	
 	public Entity getFirstCollision(Entity e, boolean hitAll) {
 		if (nodes != null) {
 			for (QuadTree node : nodes) {
@@ -257,7 +269,6 @@ public class QuadTree extends Entity implements EntityGroup {
 
 	}
 
-	@Override
 	public void updateAround(World world, double deltaTime, Entity centerObject) {
 		if (centerObject == null) {
 			return;
@@ -281,7 +292,6 @@ public class QuadTree extends Entity implements EntityGroup {
 	/**
 	 * Render all entities in the tree, and add in the passed list
 	 */
-	@Override
 	public void renderAround(FocusedWindow<?> window, Graphics gr, double deltaTime) {
 
 		Vector centerPos = window.getCenterObject().getPos();
@@ -294,8 +304,50 @@ public class QuadTree extends Entity implements EntityGroup {
 		});
 
 	}
+	
+	/**
+	 * This method does not just search immediate children, but all entities which are transitively children of the root EntityGroup
+	 * @return a randomly selected entity with all entities having equal probability
+	 */
+	public Entity getRandomEntity() {
+		List<Entity> all = getAllEntities();
+		return all.get((int) (Math.random() * all.size()));
+	}
+	
+	public void saveEntities(File file) throws IOException {
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
+		for (Entity e : getAllEntities()) {
+			out.writeObject(e);
+		}
+		out.close();
+	}
 
-	@Override
+	/**
+	 * Add all entities stored in a file to this EntityGroup.
+	 * @param file
+	 * file to read
+	 * @param level 
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public void loadEntities(File file) throws FileNotFoundException, IOException {
+		
+		if (!file.exists()) {
+			return;
+		}
+		
+		ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
+		while (true) {
+			try {
+				Entity e = (Entity) in.readObject();
+				insert(e);
+			} catch (EOFException | ClassNotFoundException e) {
+				break;
+			}
+		}
+		in.close();
+	}
+	
 	@Deprecated
 	public List<Entity> getAllEntities() {
 		List<Entity> result = new ArrayList<>();
@@ -313,7 +365,6 @@ public class QuadTree extends Entity implements EntityGroup {
 	/**
 	 * Efficient method for mapping an executable over all
 	 */
-	@Override
 	public void mapOverEntities(Executable<Entity> exec) {
 		for (Entity e : entities) {
 			exec.exec(e);
@@ -335,7 +386,6 @@ public class QuadTree extends Entity implements EntityGroup {
 	 * @param exec
 	 *            The executable to run.
 	 */
-	@Override
 	public void mapOverCollisions(Entity e, boolean hitAll, Executable<Entity> exec) {
 		for (Entity each : entities) {
 			if ((hitAll || !each.shouldIgnoreCollisions()) && each.intersects(e) && !each.equals(e)) {
@@ -350,13 +400,15 @@ public class QuadTree extends Entity implements EntityGroup {
 			}
 		}
 	}
+	
+	public void mapOverCollisions(Entity e, Executable<Entity> exec) {
+		mapOverCollisions(e, false, exec);
+	}
 
-	@Override
 	public void traverse() {
 		throw new UnsupportedOperationException("Traverse not yet implemented for QuadTree.");
 	}
-
-	@Override
+	
 	public Entity getFirstCollisionOtherThan(Entity e, Entity other) {
 		if (nodes != null) {
 			for (QuadTree node : nodes) {
@@ -376,7 +428,10 @@ public class QuadTree extends Entity implements EntityGroup {
 		return null;
 	}
 
-	@Override
+	public <P> P getFirstCollision(Entity checker, Class<P> class1) {
+		return getFirstCollision(checker, false, class1);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public <P> P getFirstCollision(Entity checker, boolean hitAll, Class<P> class1) {
 		if (nodes != null) {
@@ -398,7 +453,6 @@ public class QuadTree extends Entity implements EntityGroup {
 		return null;
 	}
 
-	@Override
 	@SuppressWarnings("unchecked")
 	public <P> P getFirst(Class<P> class1) {
 		if (nodes != null) {

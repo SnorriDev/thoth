@@ -12,10 +12,10 @@ import snorri.main.FocusedWindow;
 
 public class EntityLayer implements SavableLayer {
 	
-	private EntityGroup entityTree;
+	private QuadTree entityTree;
 	private Vector dimensions;
 	
-	public EntityLayer(EntityGroup entityTree, Vector dimensions) {
+	public EntityLayer(QuadTree entityTree, Vector dimensions) {
 		this.entityTree = entityTree;
 		this.dimensions = dimensions;
 	}
@@ -68,7 +68,7 @@ public class EntityLayer implements SavableLayer {
 	
 	/** Should try to use the public API wherever possible. */
 	@Deprecated
-	public EntityGroup getEntityTree() {
+	public QuadTree getEntityTree() {
 		return entityTree;
 	}
 

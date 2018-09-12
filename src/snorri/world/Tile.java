@@ -12,7 +12,6 @@ import snorri.entities.Entity;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
-import snorri.masking.Mask;
 import snorri.semantics.Nominal;
 import snorri.world.TileType;
 
@@ -30,15 +29,12 @@ public class Tile implements Comparable<Tile>, Nominal {
 	private int style;
 	private boolean reachable, surroundingsPathable = true;
 	private List<Entity> entities;
-	
-	private List<Mask> masks;
-	
+		
 	protected static ClipWrapper[] sounds;
 	
 	public Tile(TileType type, int style) {
 		this.type = type;
 		this.style = style;
-		masks = new ArrayList<>();
 		entities = new ArrayList<>();
 	}
 	
@@ -124,14 +120,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 			return;
 		}
 		gr.drawImage(getBaseTexture(), pos.getX(), pos.getY(), null);
-	
-		if (mask) {
-			for (Mask m : masks) {
-				m.drawMask(gr, pos);
-				// TODO save the geometry for updates with each mask
-			}
-		}	
-	
 	}
 	
 	public BufferedImage getBaseTexture() {
@@ -233,10 +221,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 		return type.getBlendOrder() + 0.0001 * type.getId() + 0.0000001 * style;
 	}
 	
-	public void addMask(Mask mask) {
-		masks.add(mask);
-	}
-	
 	public void addEntity(Entity e) {
 		entities.add(e);
 	}
@@ -247,20 +231,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 	
 	public static Rectangle getRectangle(int i, int j) {
 		return new Rectangle(i * Tile.WIDTH, j * Tile.WIDTH, Tile.WIDTH, Tile.WIDTH);
-	}
-
-	public Tile getReplacementTile() {
-		
-		if (type.getReplacement() == null) {
-			return null;
-		}
-		
-		return new Tile(type.getReplacement(), style);
-		
-	}
-	
-	public List<Mask> getMasks() {
-		return masks;
 	}
 	
 	public static List<Tile> getBlendOrdering() {
@@ -274,13 +244,9 @@ public class Tile implements Comparable<Tile>, Nominal {
 		Collections.reverse(tiles);
 		return tiles;
 	}
-
-	public void clearMasks() {
-		masks = new ArrayList<>();
-	}
-
-	public void removeMask(Mask subbed) {
-		masks.remove(subbed);
+	
+	public Tile newReplacementTile() {
+		return getType().newReplacementTile(this);
 	}
 
 	

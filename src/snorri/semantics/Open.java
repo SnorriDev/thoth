@@ -5,9 +5,7 @@ import java.util.Set;
 
 import snorri.entities.Entity;
 import snorri.entities.Sarcophagus;
-import snorri.events.SpellEvent;
-import snorri.masking.Mask;
-import snorri.parser.Node;
+import snorri.events.CastEvent;
 import snorri.triggers.Trigger.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -15,7 +13,7 @@ import snorri.world.Tile;
 import snorri.world.TileType;
 import snorri.world.UnifiedTileType;
 
-public class Open extends TransVerbDef {
+public class Open extends IntransVerbDef {
 	
 	private static final Set<TileType> DOOR_TYPES = new HashSet<>();
 	
@@ -27,49 +25,44 @@ public class Open extends TransVerbDef {
 		super();
 	}
 
-	/**
-	 * Opens the tile under the object.
-	 */
+	/** Opens the tile under the object. */
 	@Override
-	public boolean exec(Node<Object> object, SpellEvent e) {
-		
-		Object obj = object.getMeaning(e);
-		
-		if (obj instanceof Sarcophagus) {
-			e.getWorld().delete((Entity) obj);
+	public boolean exec(CastEvent e) {		
+		Entity checker = e.getSecondPerson();
+		if (checker instanceof Sarcophagus) {
+			e.getWorld().delete(checker);
 			return true;
 		}
-		
-		if (obj instanceof Entity) {
-			Vector tilePos = ((Entity) obj).getPos().copy().gridPos_();
-			return openDoor(e.getWorld(), tilePos);
-		}
-		return false;
+		Vector tilePos = checker.getPos().gridPos();
+		return openDoor(e.getWorld(), tilePos);
 	}
 
-	/**
-	 * @return whether the terrain under the object is pathable
-	 */
+	/** Returns whether the tile is pathable. */
 	@Override
-	public boolean eval(Object subj, Object obj, SpellEvent e) {
-		if (obj instanceof Entity) {
-			return e.getWorld().getTileLayer().isPathable(((Entity) obj).getPos().copy().gridPos_());
-		}
-		return false;
+	public boolean eval(Object subj, CastEvent e) {
+		Entity checker = e.getSecondPerson();
+		return e.getWorld().getTileLayer().isPathable(checker.getPos().gridPos());
 	}
 		
 	public static boolean openDoor(World w, Vector pos) {
 		Tile tile = w.getTileLayer().getTileGrid(pos);
-		Tile replacementTile = tile.getReplacementTile();
-		if (replacementTile != null) {
-			TriggerType.DOOR_OPEN.activate(pos);
-			w.wrapGridUpdate(pos, new Tile(replacementTile));
-			for (Vector trans : Mask.NEIGHBORS) {
-				openDoor(w, pos.copy().add_(trans));
-			}
-			return true;
+		if (!isDoor(tile)) {
+			return false;
 		}
-		return false;
+		
+		// Do the door replacement at this tile.
+		Tile replacementTile = tile.getType().newReplacementTile(tile);
+		if (replacementTile == null) {
+			throw new IllegalArgumentException("The replacement type for a door must be defined.");
+		}
+		w.wrapGridUpdate(pos, new Tile(replacementTile));
+		TriggerType.DOOR_OPEN.activate(pos);
+		
+		// Recurse on neighbors of this tile.
+		w.getTileLayer().forEachNeighborOf(pos, neighborPos -> {
+			openDoor(w, neighborPos);
+		});
+		return true;
 	}
 	
 	public static boolean isDoor(Tile tile) {

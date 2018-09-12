@@ -5,7 +5,7 @@ import java.util.logging.Level;
 
 import snorri.entities.Entity;
 import snorri.entities.Plant;
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.main.Debug;
 import snorri.parser.Node;
 import snorri.world.Vector;
@@ -17,7 +17,7 @@ public class Grow extends TransVerbDef {
 	}
 
 	@Override @SuppressWarnings("unchecked")
-	public boolean exec(Node<Object> object, SpellEvent e) {	
+	public boolean exec(Node<Object> object, CastEvent e) {	
 		Object meaning = object.getMeaning(e);
 		if (!(meaning instanceof ClassWrapper)) {
 			return false;
@@ -39,7 +39,7 @@ public class Grow extends TransVerbDef {
 	}
 
 	@Override
-	public boolean eval(Object subj, Object obj, SpellEvent e) {
+	public boolean eval(Object subj, Object obj, CastEvent e) {
 		return false;
 	}
 

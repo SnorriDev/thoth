@@ -1,8 +1,8 @@
 package snorri.entities;
 
 import snorri.events.CollisionEvent;
-import snorri.events.SpellEvent;
-import snorri.events.SpellEvent.Caster;
+import snorri.events.CastEvent;
+import snorri.events.CastEvent.Caster;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.main.Debug;
@@ -50,7 +50,6 @@ public class Projectile extends Detector implements Movable {
 	
 	@Override
 	public void update(World world, double deltaTime) {
-		
 		boolean walked = false;
 		if (weapon == null || !weapon.altersMovement()) {
 			translate(world, velocity.copy().multiply_(deltaTime));
@@ -58,15 +57,15 @@ public class Projectile extends Detector implements Movable {
 		} 
 		
 		if (root instanceof Caster && weapon != null) {
-			
-			Object output = weapon.useSpellOn(world, ((Caster) root), this, deltaTime / getLifeSpan());
+			CastEvent spellEvent = new CastEvent(world, (Caster) root, this, deltaTime / getLifeSpan());
+			Object spellOutput = weapon.onCast(spellEvent);
 			if (Debug.weaponOutputLogged()) {
-				Debug.logger.info("Weapon output: " + output + ".");
+				Debug.logger.info("Weapon output: " + spellOutput + ".");
 			}
 			
 			//we can't unify this with the above if clause because it matters when spells are applied
-			if (!walked && output.equals(false)) {
-				translate(world, velocity.copy().multiply_(deltaTime));
+			if (!walked && spellOutput.equals(false)) {
+				translate(world, velocity.copy().multiply(deltaTime));
 			}
 			
 		}
@@ -75,12 +74,10 @@ public class Projectile extends Detector implements Movable {
 		if (!world.canShootOver(pos)) {
 			world.delete(this);
 		}
-		// FIXME why isn't this working off grid?
 		
 		if(isFalling()) {
 			this.addVelocity(GRAVITY.copy().multiply(deltaTime));
 		}
-				
 		super.update(world, deltaTime);
 	}
 
@@ -102,7 +99,8 @@ public class Projectile extends Detector implements Movable {
 	@Override
 	protected void onSafeDelete(World world) {
 		if (root instanceof Caster && orb != null) {
-			Object output = orb.useSpellOn(world, (Caster) root, this);
+			CastEvent castEvent = new CastEvent(world, (Caster) root, this);
+			Object output = orb.onCast(castEvent);
 			if (Debug.orbOutputLogged()) {
 				Debug.logger.info("Orb output: " + output + ".");
 			}
@@ -110,14 +108,11 @@ public class Projectile extends Detector implements Movable {
 	}
 	
 	@Override
-	public Nominal get(AbstractSemantics attr, SpellEvent e) {
-		
+	public Nominal get(AbstractSemantics attr, CastEvent e) {
 		if (attr == AbstractSemantics.SOURCE) {
 			return root;
 		}
-		
 		return super.get(attr, e);
-		
 	}
 
 	@Override
@@ -133,6 +128,8 @@ public class Projectile extends Detector implements Movable {
 	@Override
 	public void refreshStats() {
 		super.refreshStats();
+		ignoreCollisions = true;
+		setDespawnable(true);
 	}
 
 }
