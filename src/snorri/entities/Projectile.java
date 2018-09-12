@@ -77,9 +77,8 @@ public class Projectile extends Detector implements Movable {
 		}
 		// FIXME why isn't this working off grid?
 		
-		// Potential Hazard: you can slow down your falling by moving left or right
 		if(isFalling()) {
-			this.addVelocity(new Vector(0, -512.0 * deltaTime));
+			this.addVelocity(GRAVITY.copy().multiply(deltaTime));
 		}
 				
 		super.update(world, deltaTime);

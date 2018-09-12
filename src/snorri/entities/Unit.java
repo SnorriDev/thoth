@@ -19,6 +19,7 @@ import snorri.semantics.Go.Movable;
 import snorri.semantics.Nominal;
 import snorri.semantics.Wrapper;
 import snorri.triggers.Trigger.TriggerType;
+import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -26,15 +27,17 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 
 	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 120;
+	protected static final Vector JUMP = new Vector(0, -200);
 	/**Dimensions for humanoid units*/
 	public static final int RADIUS = 46, RADIUS_X = 21, RADIUS_Y = 40;
 	
 	protected List<Modifier<Unit>> modifiers = new ArrayList<>();
 	
-	protected int maxSpeed;
+	protected int speed;
 	private Inventory inventory;
 	protected Stats stats;
 	protected double health;
+	protected boolean onSurface = false;
 	
 	protected Animation walkingAnimation;
 	protected Animation idleAnimation;
@@ -70,9 +73,14 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 
 	@Override
 	public void update(World world, double deltaTime) {
+		if (world.getTileLayer().getTile(pos) == null) {
+			kill(world);
+			return;
+		}
+		
 		inventory.update(deltaTime);
 		
-		maxSpeed = getBaseSpeed();
+		speed = getBaseSpeed();
 		
 		if (modifiers == null) {
 			modifiers = new ArrayList<>();
@@ -96,14 +104,25 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 			TriggerType.KILL.activate(tag);
 		}
 		
-		// Potential Hazard: you can slow down your falling by moving left or right
 		if(isFalling()) {
-			this.addVelocity(new Vector(0, -627.0 * deltaTime));
+			addVelocity(GRAVITY.copy().multiply(deltaTime));
+			if (willHitSurface(world, velocity, deltaTime)) {
+				onSurface = true;
+				setPos(getFallAdjustedHeight(pos));
+				setVelocity(new Vector(velocity.getX(), 0));
+			}
+		}
+		else if (!willHitSurface(world, velocity.copy().add(GRAVITY.copy()), deltaTime)) {
+			onSurface = false;
 		}
 
 		super.update(world, deltaTime);
 	}
 	
+	private Vector getFallAdjustedHeight(Vector pos) {
+		return new Vector((double) pos.getX(), Tile.WIDTH - 1 + pos.getY() - ((pos.getY() + collider.getRadiusY()) % Tile.WIDTH));
+	}
+
 	/**
 	 * Set the animations for this unit to copies of the supplied ones
 	 * @param idle
@@ -143,7 +162,7 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 	/** Translate the position by delta scaled by speed. */
 	@Override
 	public void translate(World world, Vector delta) {
-		moveNicely(world, delta.copy());
+		moveNicely(world, delta.copy().multiply(getSpeed()));
 	}
 	
 	/** Walk in the direction dir with magnitude controlled by deltaTime. */
@@ -155,7 +174,7 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 	
 	@Override
 	public boolean isFalling() {
-		return this.getVelocity().magnitude() < Unit.getTerminalVelocity(); // TODO: combine this with determining whether the Unit is standing on a floor
+		return !onSurface && this.getVelocity().getY() < Unit.getTerminalVelocity(); // TODO: combine this with determining whether the Unit is standing on a floor
 	}
 	
 	/** Walk towards a target position. */
@@ -197,15 +216,15 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 	
 	// Override this for faster entities.
 	protected final int getSpeed() {
-		return maxSpeed;
+		return speed;
 	}
 	
 	public int getBaseSpeed() {
 		return BASE_SPEED;
 	}
 	
-	public void modifyMaxSpeed(double factor) {
-		maxSpeed = (int) (maxSpeed * factor);
+	public void modifySpeed(double factor) {
+		speed = (int) (speed * factor);
 	}
 	
 	@Override
@@ -348,4 +367,34 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 		return inventory;
 	}
 	
+	/**
+	 * determines whether the unit will collide with a surface
+	 * @param velo velocity
+	 * @param deltaTime time change
+	 * @return a boolean as to whether they will hit a surface
+	 */
+	public boolean willHitSurface(World world, Vector velo, double deltaTime) {
+		Vector deltaPos = velo.multiply(deltaTime);
+		Vector newPos = pos.copy().add(deltaPos);
+		try {
+			if (willIntersectSurfaceY(world, newPos)) {
+				return true;
+			}
+			return false;
+		}
+		catch (NullPointerException e) {
+			kill(world);
+			return true;
+		}
+	}
+	
+	protected void jump() {
+		if (canJump()) {
+			velocity = velocity.add(JUMP);
+		}
+	}
+
+	private boolean canJump() {
+		return onSurface;
+	}
 }

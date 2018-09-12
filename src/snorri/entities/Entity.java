@@ -188,14 +188,25 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 	
 	public boolean intersectsWall(World world) {
-		for (int i = (pos.getX() - collider.getMaxRadius()) / Tile.WIDTH - 1; i <= (pos.getX() + collider.getMaxRadius()) / Tile.WIDTH; i++) {
-			for (int j = (pos.getY() - collider.getMaxRadius()) / Tile.WIDTH - 1; j <= (pos.getY() + collider.getMaxRadius()) / Tile.WIDTH; j++) {
+		for (int i = (pos.getX() - collider.getRadiusX()) / Tile.WIDTH - 1; i <= (pos.getX() + collider.getRadiusX()) / Tile.WIDTH; i++) {
+			for (int j = (pos.getY() - collider.getRadiusY()) / Tile.WIDTH - 1; j <= (pos.getY() + collider.getRadiusY()) / Tile.WIDTH; j++) {
 				if (!intersects(Tile.getRectangle(i, j))) {
 					continue;
 				}
 				if (!world.isPathable(i, j)) {
 					return true;
 				}
+			}
+		}
+		return false;	
+	}
+	
+	public boolean willIntersectSurfaceY(World world, Vector newPos) {
+		Vector testPos = newPos.copy().add(new Vector(0, collider.getRadiusY()));
+		for (int i = (testPos.getX() - collider.getRadiusX() + 1) / Tile.WIDTH; i <= (testPos.getX() + collider.getRadiusX() - 1) / Tile.WIDTH; i++) {
+			int j = testPos.getY() / Tile.WIDTH;
+			if (!(world.isPathable(i, j)) && world.getTileLayer().getTileGrid(i, j) != null) {
+				return true;
 			}
 		}
 		return false;	
@@ -240,6 +251,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			onCycleComplete(world);
 			hasCycled = true;
 		}
+		setPos(pos.add(velocity.multiply(deltaTime))); // XXX this has the potential to cause some bugs
 	}
 	
 	public void renderAround(FocusedWindow<?> g, Graphics gr, double timeDelta) {
@@ -457,7 +469,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	 * @param velocity the velocity vector to be added to the current velocity
 	 */
 	public void addVelocity(Vector velocity) {
-		this.velocity.add(velocity);
+		this.setVelocity(this.velocity.copy().add(velocity));
 	}
 
 	/**

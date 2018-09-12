@@ -150,6 +150,10 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	public Vector getMomentumVector() {
 		return states.getMomentumVector();
 	}
+	
+	public boolean isJumping() {
+		return states.isJumping();
+	}
 
 	public Vector getShotDirection() {
 
@@ -269,5 +273,4 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	public boolean hasCustomCenter() {
 		return customCenter != null;
 	}
-
 }

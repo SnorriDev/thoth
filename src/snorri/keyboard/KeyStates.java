@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import snorri.world.Vector;
+import sun.security.action.GetBooleanAction;
 
 public class KeyStates {
 	
@@ -46,7 +47,11 @@ public class KeyStates {
 	}
 	
 	public Vector getMomentumVector() {
-		return new Vector(getInt(Key.D) - getInt(Key.A), getInt(Key.S) - getInt(Key.W));
+		return new Vector(getInt(Key.D) - getInt(Key.A), 0);
+	}
+	
+	public boolean isJumping() {
+		return (getInt(Key.W) == 1 ? true : false);
 	}
 	
 	public void purge() {

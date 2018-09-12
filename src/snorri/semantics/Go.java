@@ -10,7 +10,11 @@ public class Go extends IntransVerbDef {
 	private static final double SPEED = 350;
 	private static final double DELETE_MARGIN = 5;
 	
-	public interface Movable {		
+	public interface Movable {
+		
+		/** default gravity vector **/
+		final static Vector GRAVITY = new Vector(0.0, 512.0);
+		
 		/**
 		 * translates (moves) the movable object through the world along the delta vector
 		 * @param world word to move object through
