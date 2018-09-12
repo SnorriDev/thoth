@@ -13,6 +13,7 @@ public class Explosion extends Detector {
 	public Explosion(Vector pos, int r) {
 		super(pos, r);
 		animation = new Animation(ANIMATION);
+		ignoreCollisions = true;
 		hitAll = true;
 		z = 0;
 	}
