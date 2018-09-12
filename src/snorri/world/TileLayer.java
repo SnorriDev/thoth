@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.TexturePaint;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
@@ -16,10 +15,10 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
-import snorri.masking.Mask;
 import snorri.world.TileType;
 
 public class TileLayer implements Editable, SavableLayer {
@@ -32,6 +31,13 @@ public class TileLayer implements Editable, SavableLayer {
 	
 	public static final int CUSHION = 4;
 	public static final int DOOR_WIDTH = 3;
+	
+	private static final Vector[] NEIGHBOR_TRANSLATIONS = new Vector[] {
+			new Vector(-1, 0),
+			new Vector(0, 1),
+			new Vector(1, 0),
+			new Vector(0, -1),
+	};
 
 	/** An array of tiles. Note that coordinates are Cartesian, not matrix-based. */
 	private Tile[][] map;
@@ -171,10 +177,7 @@ public class TileLayer implements Editable, SavableLayer {
 		if (x < 0 || x >= map.length || y < 0 || y >= map[x].length) {
 			return;
 		}
-		Tile old = map[x][y];
 		map[x][y] = t;
-		computeMasks(x, y);
-		updateMasksAndBitmap(new Vector(x, y), old, t);
 	}
 
 	public Tile getTile(int x, int y) {
@@ -358,142 +361,6 @@ public class TileLayer implements Editable, SavableLayer {
 		setTile(pos.getX(), pos.getY(), tile);
 	}
 
-	private void updateMasksAndBitmap(Vector pos, Tile o, Tile n) {
-		
-		Graphics2D g = (getRenderMode() == RenderMode.BITMAP) ? bitmap.createGraphics() : null;
-		if (o.equals(n)) {
-			return;
-		}
-		
-		int i = 0;
-		for (Vector trans : Mask.NEIGHBORS_AND_CORNERS) {
-			Tile tile = getTileGrid(trans.copy().add_(pos));
-			if (tile == null) {
-				i++;
-				continue;
-			}
-			boolean isCorner = i >= 4;
-			byte b = Mask.getNeighborValue(Mask.getComplement(i));
-			Mask added = null, subbed = null;
-			for (Mask mask : tile.getMasks()) {
-				
-				if (mask.isCorner() != isCorner) {
-					continue;
-				}
-				
-				if (mask.getTile().equals(o)) { // if this starts bugging: mask.getBitVal() >= b
-					mask.sub(b);
-					subbed = mask;
-				} else if (mask.getTile().equals(n) && n.compareTo(tile) < 0) {
-					mask.add(b);
-					added = mask;
-				}
-			}
-			if (added == null && n.compareTo(tile) < 0) {
-				added = new Mask(n, false);
-				added.add(b);
-				tile.addMask(added);
-			}
-			if (subbed != null && subbed.getBitVal() == 0) {
-				tile.removeMask(subbed);
-			}
-			if (g != null) {
-				// FIXME add border
-				tile.drawTileAbs(g, trans.copy().add_(pos).globalPos_(), true);
-			}
-			i++;
-
-		}
-		if (g != null) {
-			n.drawTileAbs(g, pos.copy().globalPos_(), true);
-			g.dispose();
-		}
-	}
-
-	/**
-	 * Enqueues all bitmasks onto a tile. Uses very small integer fields so as
-	 * not to run out of memory
-	 * 
-	 * @return true if masks were updated
-	 */
-	public boolean computeMasks(int x, int y) {
-
-		// TODO(#49): Is this stuff worth keeping?
-
-		Tile tile = getTileGrid(x, y);
-		if (tile == null || tile.getType().isAtTop()) {
-			return false;
-		}
-		
-		Mask[] masks = new Mask[8];
-
-		byte bitVal = 1;
-		byte j = 0;
-		for (Vector v : Mask.NEIGHBORS) {
-			Tile t = getTileGrid(v.copy().add_(x, y));
-			if (t != null && !t.getType().isAtTop() && tile.compareTo(t) > 0) {
-				for (j = 0; j < masks.length; j++) {
-					if (masks[j] == null) {
-						masks[j] = new Mask(t, false);
-					}
-					if (masks[j].hasTile(t)) {
-						masks[j].add(bitVal);
-						break;
-					}
-				}
-			}
-			bitVal <<= 1;
-		}
-
-		bitVal = 1;
-		for (Vector v : Mask.CORNERS) {
-			Tile t = getTileGrid(v.copy().add_(x, y));
-			if (t != null && !t.getType().isAtTop() && tile.compareTo(t) > 0) {
-				for (j = 0; j < masks.length; j++) {
-					if (masks[j] == null) {
-						masks[j] = new Mask(t, true);
-					}
-					if (masks[j].hasTile(t) && masks[j].isCorner()) {
-						masks[j].add(bitVal);
-						break;
-					}
-				}
-			}
-			bitVal *= 2;
-		}
-		
-		// TODO make this more efficient in general
-		// TODO just bitshift existing masks when a neighbor is modified
-
-		tile.clearMasks();
-		for (Mask mask : masks) {
-			if (mask == null) {
-				break;
-			}
-			tile.addMask(mask);
-		}
-		return masks[0] != null;
-	}
-
-	public boolean computeMasks(Vector v) {
-		return computeMasks(v.getX(), v.getY());
-	}
-
-	public void updateAllMasksAndBitmap() {
-
-		for (int x = 0; x < getWidth(); x++) {
-			for (int y = 0; y < getHeight(); y++) {
-				computeMasks(x, y);
-			}
-		}
-
-		if (getRenderMode() == RenderMode.BITMAP) {
-			computeTextureMap();
-			renderBitmap();
-		}
-
-	}
-
 	public int getWidth() {
 		return map.length;
 	}
@@ -517,7 +384,6 @@ public class TileLayer implements Editable, SavableLayer {
 		textureMap = new HashMap<>();
 		for (int x = 0; x < getWidth(); x++) {
 			for (int y = 0; y < getHeight(); y++) {
-
 				if (map[x][y].getBaseTexture() != null) {
 					if (!textureMap.containsKey(map[x][y].getBaseTexture())) {
 						textureMap.put(map[x][y].getBaseTexture(), new Area());
@@ -525,17 +391,7 @@ public class TileLayer implements Editable, SavableLayer {
 					textureMap.get(map[x][y].getBaseTexture())
 							.add(new Area(new Rectangle(x * Tile.WIDTH, y * Tile.WIDTH, Tile.WIDTH, Tile.WIDTH)));
 				}
-
-				AffineTransform transform = AffineTransform.getTranslateInstance(x * Tile.WIDTH, y * Tile.WIDTH);
-				for (Mask m : map[x][y].getMasks()) {
-					BufferedImage texture = m.getBaseTexture();
-					if (!textureMap.containsKey(texture)) {
-						textureMap.put(texture, new Area());
-					}
-					Area area = m.getArea().createTransformedArea(transform);
-					textureMap.get(texture).add(area);
-				}
-
+				// A lot of old logic for masking was removed from here.
 			}
 		}
 	}
@@ -604,6 +460,24 @@ public class TileLayer implements Editable, SavableLayer {
 	@Override
 	public String getFilename() {
 		return "tile.layer";
+	}
+	
+	/** Map a function over neighboring positions of a tile.
+	 * 
+	 * The function is not actually applied at position pos. Additionally, it is not applied at any off-map positions.
+	 * 
+	 * Calling this method is more efficient than building a list and more readable than writing out a for loop.
+	 * 
+	 * @param pos The position in grid coordinates around which to apply mapFunction.
+	 * @param mapFunction The function to apply.
+	 */
+	public void forEachNeighborOf(Vector pos, Consumer<Vector> mapFunction) {
+		for (Vector translation : NEIGHBOR_TRANSLATIONS) {
+			Vector newPos = pos.add(translation);
+			if (getTileGrid(newPos) != null) {
+				mapFunction.accept(newPos);
+			}
+		}
 	}
 
 }

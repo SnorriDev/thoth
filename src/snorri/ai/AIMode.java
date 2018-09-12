@@ -1,7 +1,6 @@
 package snorri.ai;
 
 import snorri.entities.Entity;
-import snorri.main.Debug;
 import snorri.world.World;
 
 public enum AIMode {

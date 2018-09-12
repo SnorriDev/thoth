@@ -32,7 +32,7 @@ import snorri.entities.Dummy;
 import snorri.entities.Entity;
 import snorri.entities.Listener;
 import snorri.entities.Player;
-import snorri.events.SpellEvent.Caster;
+import snorri.events.CastEvent.Caster;
 import snorri.inventory.Droppable;
 import snorri.inventory.Item;
 import snorri.keyboard.Key;

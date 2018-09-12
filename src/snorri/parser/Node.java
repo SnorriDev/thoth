@@ -1,6 +1,6 @@
 package snorri.parser;
 
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 
 public interface Node<S> {
 	
@@ -11,7 +11,7 @@ public interface Node<S> {
 	 * 	the meaning of the linguistic expression represented by this node with respect to <code>e</code>
 	 * S is the semantic type of this node.
 	 */
-	public S getMeaning(SpellEvent e);
+	public S getMeaning(CastEvent e);
 
 	public boolean altersMovement();
 	

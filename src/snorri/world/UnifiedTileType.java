@@ -27,7 +27,7 @@ public enum UnifiedTileType implements TileType {
 	DOOR(new BufferedImage[] {
 			Main.getImage("/textures/tiles/door00.png"),
 			Main.getImage("/textures/tiles/door01.png"),
-	}, Param.replacementType(EMPTY));
+	}, Param.replacementTile(new Tile(EMPTY)));
 	
 	private final BufferedImage[] textures;
 	
@@ -37,7 +37,8 @@ public enum UnifiedTileType implements TileType {
 	private boolean changable = false;
 	private boolean atTop = true;
 	private double blendOrder = 2.0;
-	private UnifiedTileType replacementType;
+	private Tile replacementTile = null;
+	private UnifiedTileType replacementType = null;
 	
 	UnifiedTileType(BufferedImage[] textures, Param<?>...params) {
 		this.textures = textures;
@@ -62,13 +63,14 @@ public enum UnifiedTileType implements TileType {
 		case CHANGABLE:
 			changable = (boolean) param.getValue();
 			break;
-		case OPEN_TYPE:
-			break;
 		case IS_NOT_SURFACE:
 			isNotSurface = (boolean) param.getValue();
 			break;
 		case REPLACEMENT_TYPE:
 			replacementType = (UnifiedTileType) param.getValue();
+			break;
+		case REPLACEMENT_TILE:
+			replacementTile = (Tile) param.getValue();
 			break;
 		case SWIMMABLE:
 			swimmable = (boolean) param.getValue();
@@ -135,9 +137,21 @@ public enum UnifiedTileType implements TileType {
 		return swimmable;
 	}
 
+	/** Get a new replacement tile for this type.
+	 * 
+	 * The exact method for creating this tile differs based on what parameters have been set:
+	 * 1. If a replacementTile is set, a copy of that is returned.
+	 * 2. If a replacementType is set, a tile of that type with the same style is returned.
+	 * 3. Otherwise, the null Tile is returned.
+	 */
 	@Override
-	public UnifiedTileType getReplacement() {
-		return replacementType;
+	public Tile newReplacementTile(Tile oldTile) {
+		if (replacementTile != null) {
+			return new Tile(replacementTile);
+		} else if (replacementType != null) {
+			return new Tile(replacementType, oldTile.getStyle());
+		}
+		return null;
 	}
 
 	@Override

@@ -1,12 +1,12 @@
 package snorri.nonterminals;
 
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.semantics.Lambda;
 
 public class Statement extends NonTerminal<Boolean> {
 
 	@Override @SuppressWarnings("unchecked")
-	public Boolean getMeaning(SpellEvent e) {
+	public Boolean getMeaning(CastEvent e) {
 		
 		boolean meaning = false;
 		switch (children.size()) {

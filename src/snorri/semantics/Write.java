@@ -1,6 +1,6 @@
 package snorri.semantics;
 
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.parser.Node;
@@ -15,7 +15,7 @@ public class Write extends TransVerbDef {
 	}
 	
 	@Override
-	public boolean exec(Node<Object> object, SpellEvent e) {
+	public boolean exec(Node<Object> object, CastEvent e) {
 		Object obj = object.getMeaning(e);
 		if (Main.getWindow() instanceof GameWindow && obj != null) {
 			String objString = obj.toString();
@@ -28,7 +28,7 @@ public class Write extends TransVerbDef {
 	}
 
 	@Override
-	public boolean eval(Object subj, Object obj, SpellEvent e) {
+	public boolean eval(Object subj, Object obj, CastEvent e) {
 		return false;
 	}
 

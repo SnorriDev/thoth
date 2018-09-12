@@ -1,6 +1,6 @@
 package snorri.parser;
 
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 
 public class Terminal<S> implements Node<S> {
 
@@ -24,7 +24,7 @@ public class Terminal<S> implements Node<S> {
 	}
 	
 	@Override @SuppressWarnings("unchecked")
-	public S getMeaning(SpellEvent e) {
+	public S getMeaning(CastEvent e) {
 		if (Lexicon.lookup(orthography) != null)
 			return (S) Lexicon.lookup(orthography).getMeaning(e);
 		return null;

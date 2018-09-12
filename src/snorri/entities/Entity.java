@@ -16,7 +16,7 @@ import snorri.collisions.CircleCollider;
 import snorri.collisions.Collider;
 import snorri.entities.Player.Interactor;
 import snorri.events.CollisionEvent;
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.GameWindow;
@@ -45,6 +45,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		SPAWNABLE.add(Urn.class);
 		SPAWNABLE.add(Spike.class);
 		SPAWNABLE.add(Vortex.class);
+		SPAWNABLE.add(Bomb.class);
 		
 		EDIT_SPAWNABLE = new ArrayList<>(SPAWNABLE);
 		EDIT_SPAWNABLE.add(Desk.class);
@@ -268,7 +269,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 
 	@Override
-	public Nominal get(AbstractSemantics attr, SpellEvent e) {
+	public Nominal get(AbstractSemantics attr, CastEvent e) {
 		
 		if (attr == AbstractSemantics.POSITION) {
 			return pos;
@@ -443,6 +444,15 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	 */
 	public Vector getVelocity() {
 		return velocity;
+	}
+	/** Destruct this entity and create an explosion.
+	 * 
+	 * @param world The world to explode in.
+	 * @param damage The damage the explosion should yield.
+	 */
+	public void explode(World world, double damage) {
+		world.delete(this);
+		world.add(new Explosion(getPos(), damage));
 	}
 
 	/**

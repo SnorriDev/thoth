@@ -1,7 +1,7 @@
 package snorri.semantics;
 
 import snorri.entities.Entity;
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.parser.Node;
 
 public class Move extends TransVerbDef {
@@ -11,7 +11,7 @@ public class Move extends TransVerbDef {
 	}
 
 	@Override
-	public boolean exec(Node<Object> object, SpellEvent e) {
+	public boolean exec(Node<Object> object, CastEvent e) {
 		
 		Object obj = object.getMeaning(e);
 		
@@ -27,7 +27,7 @@ public class Move extends TransVerbDef {
 	}
 
 	@Override
-	public boolean eval(Object subj, Object obj, SpellEvent e) {
+	public boolean eval(Object subj, Object obj, CastEvent e) {
 		return false;
 	}
 	

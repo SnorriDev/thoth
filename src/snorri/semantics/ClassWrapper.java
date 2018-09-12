@@ -1,7 +1,7 @@
 package snorri.semantics;
 
 import snorri.entities.Entity;
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.main.Util;
 
 /**
@@ -24,7 +24,7 @@ public class ClassWrapper extends Wrapper<Class<? extends Nominal>> {
 	}
 	
 	@Override
-	public Nominal get(AbstractSemantics attr, SpellEvent e) {
+	public Nominal get(AbstractSemantics attr, CastEvent e) {
 		
 		switch (attr) {
 		case ONE:
@@ -39,7 +39,7 @@ public class ClassWrapper extends Wrapper<Class<? extends Nominal>> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Entity resolve(SpellEvent e) {
+	public Entity resolve(CastEvent e) {
 		if (Entity.class.isAssignableFrom(value)) {
 			return e.resolveEntity((Class<? extends Entity>) value);
 		}

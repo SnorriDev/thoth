@@ -8,7 +8,7 @@ import snorri.audio.ClipWrapper;
 import snorri.collisions.Collider;
 import snorri.collisions.RectCollider;
 import snorri.events.CollisionEvent;
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
 import snorri.inventory.Stats;
@@ -27,7 +27,7 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 120;
 	/**Dimensions for humanoid units*/
-	public static final int RADIUS = 46, RADIUS_X = 21, RADIUS_Y = 40;
+	public static final int RADIUS = 46, RADIUS_X = 21, RADIUS_Y = 45;
 	
 	protected List<Modifier<Unit>> modifiers = new ArrayList<>();
 	
@@ -179,7 +179,7 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 		health -= d;
 	}
 	
-	public void damage(double d, SpellEvent e) {
+	public void damage(double d, CastEvent e) {
 		damage(e.modifyHealthInteraction(d));
 	}
 	
@@ -187,7 +187,7 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 		health = Math.min(health + d, stats.getMaxHealth());
 	}
 	
-	public void heal(double d, SpellEvent e) {
+	public void heal(double d, CastEvent e) {
 		heal(e.modifyHealthInteraction(d));
 	}
 	
@@ -209,7 +209,7 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 	}
 	
 	@Override
-	public Nominal get(AbstractSemantics attr, SpellEvent e) {
+	public Nominal get(AbstractSemantics attr, CastEvent e) {
 		if (attr == AbstractSemantics.HEALTH) {
 			return new Wrapper<Integer>((int) health);
 		}

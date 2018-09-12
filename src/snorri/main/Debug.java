@@ -6,7 +6,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.parser.Grammar;
 import snorri.parser.Node;
 
@@ -124,12 +124,12 @@ public class Debug {
 		return LOG_PATHFINDING_COMPONENTS;
 	}
 
-	public static void castWTFMode(String s, SpellEvent e) {
+	public static void castWTFMode(String s, CastEvent e) {
 		Node<?> spell = Grammar.parseString(s);
 		Debug.log("\"" + s + "\": " + spell.getMeaning(e));
 	}
 
-	public static void castWTFMode(Node<?> spell, SpellEvent e) {
+	public static void castWTFMode(Node<?> spell, CastEvent e) {
 		Debug.log(spell + ": " + spell.getMeaning(e));
 	}
 

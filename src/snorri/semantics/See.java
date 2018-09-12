@@ -3,7 +3,7 @@ package snorri.semantics;
 import java.awt.Rectangle;
 
 import snorri.entities.Entity;
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.main.Main;
 import snorri.parser.Node;
 import snorri.world.Vector;
@@ -15,12 +15,12 @@ public class See extends TransVerbDef {
 	}
 
 	@Override
-	public boolean exec(Node<Object> object, SpellEvent e) {
+	public boolean exec(Node<Object> object, CastEvent e) {
 		return false;
 	}
 
 	@Override
-	public boolean eval(Object subj, Object obj, SpellEvent e) {
+	public boolean eval(Object subj, Object obj, CastEvent e) {
 		if (subj instanceof Entity && obj instanceof Entity) {
 			Vector center = ((Entity) subj).getPos();
 			Vector dim = Main.getWindow().getDimensions();

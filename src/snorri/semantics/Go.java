@@ -1,7 +1,7 @@
 package snorri.semantics;
 
 import snorri.entities.Projectile;
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -50,7 +50,7 @@ public class Go extends IntransVerbDef {
 	}
 	
 	@Override
-	public boolean exec(SpellEvent e) {
+	public boolean exec(CastEvent e) {
 		if (e.getSecondPerson() instanceof Movable && e.getDestination() != null) {
 			Vector trans = e.getDestination().copy().sub_(e.getSecondPerson().getPos());
 			if (trans.magnitude() < DELETE_MARGIN) {
@@ -68,7 +68,7 @@ public class Go extends IntransVerbDef {
 	 * @return whether or not something is a projectile
 	 */
 	@Override
-	public boolean eval(Object subj, SpellEvent e) {
+	public boolean eval(Object subj, CastEvent e) {
 		return subj instanceof Projectile;
 	}
 	

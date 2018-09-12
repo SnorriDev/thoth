@@ -2,7 +2,7 @@ package snorri.semantics;
 
 import java.io.Serializable;
 
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.main.Util;
 
 public interface Nominal extends Serializable {
@@ -34,7 +34,7 @@ public interface Nominal extends Serializable {
 		
 	}
 
-	default Nominal get(AbstractSemantics attr, SpellEvent e) {
+	default Nominal get(AbstractSemantics attr, CastEvent e) {
 		
 		if (attr == AbstractSemantics.NAME) {
 			return new NameConstant(toString());

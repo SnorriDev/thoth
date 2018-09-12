@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.main.Debug;
 import snorri.parser.Node;
 import snorri.semantics.Category;
@@ -28,7 +28,7 @@ public abstract class NonTerminal<S> implements Node<S> {
 	}
 		
 	@Override @SuppressWarnings("unchecked")
-	public S getMeaning(SpellEvent e) {
+	public S getMeaning(CastEvent e) {
 		
 		switch(children.size()) {
 		
