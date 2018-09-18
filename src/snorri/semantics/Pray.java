@@ -1,7 +1,6 @@
 package snorri.semantics;
 
 import snorri.events.CastEvent;
-import snorri.main.Debug;
 import snorri.parser.Node;
 import snorri.triggers.Trigger.TriggerType;
 
