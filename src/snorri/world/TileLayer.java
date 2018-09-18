@@ -298,20 +298,6 @@ public class TileLayer implements Editable, SavableLayer {
 		os.close();
 	}
 
-	/**
-	 * Check if a position is pathable.
-	 * @param x The x coordinate of the position.
-	 * @param y The y coordinate of the position.
-	 * @return Whether the tile at <code>(x, y)</code> is pathable.
-	 */
-	public boolean isPathable(int x, int y) {
-		return getTileGrid(x, y) != null && getTileGrid(x, y).isPathable();
-	}
-
-	public boolean isPathable(Vector pos) {
-		return isPathable(pos.getX(), pos.getY());
-	}
-
 	public void setTileGrid(Vector v, Tile newTile) {
 		setTileGrid(v.getX(), v.getY(), newTile);
 	}
@@ -479,5 +465,21 @@ public class TileLayer implements Editable, SavableLayer {
 			}
 		}
 	}
+	
+	public boolean isSurface(Vector pos) {
+		return getTileGrid(pos.add(new Vector(0, 1))).getType().isOccupied() && !getTileGrid(pos).getType().isOccupied() && !getTileGrid(pos.sub(new Vector(0, 1))).getType().isOccupied();
+	}
 
+	public boolean isOccupied(int x, int y) {
+		try {
+			return getTileGrid(x, y).isOccupied();
+		}
+		catch (NullPointerException e) {
+			return false; //TODO: maybe we want to change this?
+		}
+	}
+
+	public boolean isOccupied(Vector v) {
+		return isOccupied(v.getX(), v.getY());
+	}
 }

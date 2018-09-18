@@ -155,14 +155,6 @@ public class Tile implements Comparable<Tile>, Nominal {
 		return getType().getId() + ":" + getStyle();
 	}
 
-	public boolean isPathable() { //TODO we might want to refactor this
-		return !type.isSurface();
-	}
-	
-	public boolean isContextPathable() {
-		return isPathable() && surroundingsPathable;
-	}
-
 	public void setReachable(boolean b) {
 		reachable = b;
 	}
@@ -247,6 +239,10 @@ public class Tile implements Comparable<Tile>, Nominal {
 	
 	public Tile newReplacementTile() {
 		return getType().newReplacementTile(this);
+	}
+
+	public boolean isOccupied() {
+		return getType().isOccupied();
 	}
 
 	

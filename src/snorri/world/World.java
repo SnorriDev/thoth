@@ -318,25 +318,11 @@ public class World implements Playable, Editable {
 		tileLayer.setTileGrid(posGrid, tile);
 	}
 	
-	/**
-	 * @param v grid coordinates
-	 * @return whether or not the tile at <code>v</code> is pathable
-	 */
-	public boolean isPathable(Vector v) {
-		return isPathable(v.getX(), v.getY());
-	}
-	
 	/** Returns true if bullets can pass over pos. */
 	public boolean canShootOver(Vector pos) {
 		return getTileLayer().canShootOver(pos.gridPos());
 	}
-
-	/** Whether the tile at grid position (x, y) can be traversed. */
-	public boolean isPathable(int x, int y) {
-		Vector gridPos = new Vector(x, y);
-		return getTileLayer().isPathable(gridPos);
-	}
-
+	
 	public void wrapGridUpdate(int x, int y, Tile tile) {
 		wrapGridUpdate(new Vector(x, y), tile);
 	}
@@ -457,4 +443,11 @@ public class World implements Playable, Editable {
 		return directory;
 	}
 	
+	public boolean isOccupied(int x, int y) {
+		return getTileLayer().isOccupied(x, y);
+	}
+	
+	public boolean isOccupied(Vector v) {
+		return isOccupied(v.getX(), v.getY());
+	}
 }

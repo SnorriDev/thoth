@@ -194,7 +194,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 				if (!intersects(Tile.getRectangle(i, j))) {
 					continue;
 				}
-				if (!world.isPathable(i, j)) {
+				if (world.isOccupied(i, j)) {
 					return true;
 				}
 			}
@@ -202,15 +202,26 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		return false;	
 	}
 	
-	public boolean willIntersectSurfaceY(World world, Vector newPos) {
+	public boolean willHitSurfaceTile(World world, Vector newPos) {
 		Vector testPos = newPos.copy().add(new Vector(0, collider.getRadiusY()));
 		for (int i = (testPos.getX() - collider.getRadiusX() + 1) / Tile.WIDTH; i <= (testPos.getX() + collider.getRadiusX() - 1) / Tile.WIDTH; i++) {
 			int j = testPos.getY() / Tile.WIDTH;
-			if (!(world.isPathable(i, j)) && world.getTileLayer().getTileGrid(i, j) != null) {
+			if (world.isOccupied(i, j) && world.getTileLayer().getTileGrid(i, j) != null) {
 				return true;
 			}
 		}
 		return false;	
+	}
+	
+	public boolean willHitUndersideOfTile(World world, Vector newPos) {
+		Vector testPos = newPos.copy().add(new Vector(0, collider.getRadiusY()));
+		for (int i = (testPos.getX() - collider.getRadiusX() + 1) / Tile.WIDTH; i <= (testPos.getX() + collider.getRadiusX() - 1) / Tile.WIDTH; i++) {
+			int j = (pos.getY() - collider.getRadiusY()) / Tile.WIDTH;
+			if (world.isOccupied(i, j) && world.getTileLayer().getTileGrid(i, j) != null) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public boolean contains(Entity e) {

@@ -52,7 +52,7 @@ public class Projectile extends Detector implements Movable {
 	public void update(World world, double deltaTime) {
 		boolean walked = false;
 		if (weapon == null || !weapon.altersMovement()) {
-			translate(world, velocity.copy().multiply_(deltaTime));
+			translate(world, velocity.multiply(deltaTime));
 			walked = true;
 		} 
 		
@@ -65,7 +65,7 @@ public class Projectile extends Detector implements Movable {
 			
 			//we can't unify this with the above if clause because it matters when spells are applied
 			if (!walked && spellOutput.equals(false)) {
-				translate(world, velocity.copy().multiply(deltaTime));
+				translate(world, velocity.multiply(deltaTime));
 			}
 			
 		}
@@ -76,7 +76,7 @@ public class Projectile extends Detector implements Movable {
 		}
 		
 		if(isFalling()) {
-			this.addVelocity(GRAVITY.copy().multiply(deltaTime));
+			this.addVelocity(GRAVITY.multiply(deltaTime));
 		}
 		super.update(world, deltaTime);
 	}

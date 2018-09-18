@@ -27,7 +27,7 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 
 	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 120;
-	protected static final Vector JUMP = new Vector(0, -200);
+	protected static final Vector JUMP_VELOCITY = new Vector(0, -200);
 	/**Dimensions for humanoid units*/
 	public static final int RADIUS = 46, RADIUS_X = 21, RADIUS_Y = 45;
 	
@@ -105,14 +105,17 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 		}
 		
 		if(isFalling()) {
-			addVelocity(GRAVITY.copy().multiply(deltaTime));
+			if (willHitUndersideOfTile(world, pos) && velocity.getY() < 0) {
+				setVelocity(velocity.getProjectionX());
+			}
+			addVelocity(GRAVITY.multiply(deltaTime));
 			if (willHitSurface(world, velocity, deltaTime)) {
 				onSurface = true;
 				setPos(getFallAdjustedHeight(pos));
 				setVelocity(new Vector(velocity.getX(), 0));
 			}
 		}
-		else if (!willHitSurface(world, velocity.copy().add(GRAVITY.copy()), deltaTime)) {
+		else if (!willHitSurface(world, velocity.copy().add(GRAVITY), deltaTime)) {
 			onSurface = false;
 		}
 
@@ -377,7 +380,7 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 		Vector deltaPos = velo.multiply(deltaTime);
 		Vector newPos = pos.copy().add(deltaPos);
 		try {
-			if (willIntersectSurfaceY(world, newPos)) {
+			if (willHitSurfaceTile(world, newPos)) {
 				return true;
 			}
 			return false;
@@ -390,7 +393,7 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 	
 	protected void jump() {
 		if (canJump()) {
-			velocity = velocity.add(JUMP);
+			velocity = velocity.add(JUMP_VELOCITY);
 		}
 	}
 

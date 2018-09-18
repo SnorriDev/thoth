@@ -16,14 +16,7 @@ public interface TileType extends Nominal {
 	public static class Param<T> {
 		
 		protected enum Key {
-			IS_SURFACE,
-			SWIMMABLE,
-			CHANGABLE,
-			AT_TOP,
-			CAN_SHOOT_OVER,
-			BLEND_ORDER,
-			REPLACEMENT_TYPE,
-			REPLACEMENT_TILE;
+			IS_OCCUPIED, SWIMMABLE, CHANGABLE, AT_TOP, CAN_SHOOT_OVER, BLEND_ORDER, REPLACEMENT_TYPE, REPLACEMENT_TILE;
 		}
 		
 		protected final Key key;
@@ -42,8 +35,8 @@ public interface TileType extends Nominal {
 			return value;
 		}
 		
-		public static Param<Boolean> isSurface(Boolean value) {
-			return new Param<>(Key.IS_SURFACE, value);
+		public static Param<Boolean> isOccupied(Boolean value) {
+			return new Param<>(Key.IS_OCCUPIED, value);
 		}
 		
 		public static Param<Boolean> swimmable(Boolean value) {
@@ -77,7 +70,7 @@ public interface TileType extends Nominal {
 	
 	// Use a method like this to set parameters on TileType.
 	public void setParam(Param<?> param);
-			
+	
 	int getId();
 	
 	BufferedImage[] getTextures();
@@ -90,7 +83,7 @@ public interface TileType extends Nominal {
 	String toString();
 	
 	ArrayList<Tile> getAllStyles();
-		
+	
 	default boolean hasSounds() {
 		return Tile.sounds.length >= 1;
 	}
@@ -114,7 +107,7 @@ public interface TileType extends Nominal {
 	
 	String name();
 	
-	boolean isSurface();
+	boolean isOccupied();
 	
 	boolean canShootOver();
 	

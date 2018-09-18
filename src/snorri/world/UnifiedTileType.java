@@ -8,7 +8,7 @@ import snorri.main.Main;
 
 public enum UnifiedTileType implements TileType {
 	
-	EMPTY((BufferedImage) null, Param.isSurface(false)),
+	EMPTY((BufferedImage) null, Param.isOccupied(false)),
 	SAND(new BufferedImage[] {
 			Main.getImage("/textures/tiles/background/sand00.png"),
 			Main.getImage("/textures/tiles/background/sand01.png"),
@@ -22,8 +22,8 @@ public enum UnifiedTileType implements TileType {
 			Main.getImage("/textures/tiles/background/water00.png"),
 			Main.getImage("/textures/tiles/background/water01.png"),
 	}, Param.swimmable(true)),
-	TRIPWIRE(TileType.getTwoRotations(Main.getImage("/textures/tiles/foreground/tripwire00.png")), Param.isSurface(false)),
-	TRIPWIRE_END(TileType.getReflections(Main.getImage("/textures/tiles/foreground/tripwireend00.png")), Param.isSurface(false)),
+	TRIPWIRE(TileType.getTwoRotations(Main.getImage("/textures/tiles/foreground/tripwire00.png")), Param.isOccupied(false)),
+	TRIPWIRE_END(TileType.getReflections(Main.getImage("/textures/tiles/foreground/tripwireend00.png")), Param.isOccupied(false)),
 	DOOR(new BufferedImage[] {
 			Main.getImage("/textures/tiles/door00.png"),
 			Main.getImage("/textures/tiles/door01.png"),
@@ -32,7 +32,7 @@ public enum UnifiedTileType implements TileType {
 	private final BufferedImage[] textures;
 	
 	// Default values for these fields can be used by passing Param.
-	private boolean isSurface = true;
+	private boolean isOccupied = true;
 	private boolean swimmable = false;
 	private boolean changable = false;
 	private boolean atTop = true;
@@ -63,8 +63,8 @@ public enum UnifiedTileType implements TileType {
 		case CHANGABLE:
 			changable = (boolean) param.getValue();
 			break;
-		case IS_SURFACE:
-			isSurface = (boolean) param.getValue();
+		case IS_OCCUPIED:
+			isOccupied = (boolean) param.getValue();
 			break;
 		case REPLACEMENT_TYPE:
 			replacementType = (UnifiedTileType) param.getValue();
@@ -113,13 +113,13 @@ public enum UnifiedTileType implements TileType {
 	}
 
 	@Override
-	public boolean isSurface() {
-		return isSurface;
+	public boolean isOccupied() {
+		return isOccupied;
 	}
 
 	@Override
 	public boolean canShootOver() {
-		return isSurface || swimmable;
+		return isOccupied || swimmable;
 	}
 
 	@Override
@@ -158,5 +158,4 @@ public enum UnifiedTileType implements TileType {
 	public double getBlendOrder() {
 		return blendOrder;
 	}
-
 }
