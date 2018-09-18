@@ -30,6 +30,13 @@ public class Vector implements Nominal, Comparable<Vector> {
 		this.y = y;
 	}
 	
+	/** This public constructor is used by the YAML reader API.
+	 * 
+	 * Do not call it yourself!
+	 */
+	public Vector() {
+	}
+	
 	public Vector(Point point) {
 		this.x = point.getX();
 		this.y = point.getY();

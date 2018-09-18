@@ -6,3 +6,97 @@ layers:
     path: tile.layer
   - type: ENTITY
     path: entity.layer
+triggers:
+
+  onStart:
+    events:
+      - TIMELINE:
+          object: start
+    actions:
+      - SET_OBJECTIVE:
+          objective:
+            !objective
+              shortDesc: Move right with WASD.
+              longDesc: |
+                <p class="instruction">Hit <span class="control">escape</span> to close this dialog.</p>
+                <p class="instruction"> Use the <span class="control">WASD</span> keys to move around.</p>
+                <p class="instruction">To view the full objective at any point while playing, hit <span
+                class="control">escape</span> to open the pause menu.</p>
+      - SHOW_DIALOG:
+          dialog:
+            !dialog
+              image: priest
+              name: Imhotep
+              text: |
+                <p>Welcome, Prince Setna! Now that you are an apprentice scribe, feel free to take a look
+                around.</p>
+              showObjective: true
+
+  onAcquireOpen:
+    events:
+      - ACQUIRE:
+          object: wpi
+    actions:
+      - SET_OBJECTIVE:
+          objective:
+            !objective
+            shortDesc: 'Right click on the door and open it.'
+            longDesc: |
+              <p class="instruction"><span class="control">Right click</span> on the door and write a spell to open it.</p>
+      - SHOW_DIALOG:
+          dialog:
+            !dialog
+              image: priest
+              name: Imhotep
+              text: 
+              showObjective: true
+
+  onDoorOpen:
+    events:
+      - DOOR_OPEN:
+          object: !door {x: 8, y: 3}
+    actions:
+      - SET_OBJECTIVE:
+          objective:
+            !objective
+            shortDesc: Advance to the next puzzle.
+      - SHOW_DIALOG:
+          dialog:
+            !dialog
+              image: priest
+              name: Imhotep
+              text: <p>By Thoth, you're a natural!</p>
+              showObjective: true
+
+  onAcquireUrn:
+    events:
+      - ACQUIRE:
+          object: snbt
+    actions:
+      - SET_OBJECTIVE:
+          objective:
+            !objective
+            shortDesc: 'Summon an urn to activate the bomb.'
+            longDesc: |
+              <p class="instruction">Combine your two new words to summon an urn on top of the bomb.</p>
+              <p class="instruction">This will blow it up and clear the path ahead.</p>
+      - SHOW_DIALOG:
+          dialog:
+            !dialog
+              image: priest
+              name: Imhotep
+              text: <p>That bomb looks dangerous! Better clear it somehow.</p>
+              showObjective: true
+
+  onPrayThoth:
+    events:
+      - PRAY:
+          object: a statue
+    actions:
+      - SHOW_DIALOG:
+          dialog:
+            !dialog
+              image: thoth
+              name: Thoth
+              text: |
+                <p>Thoth hears your prayer!</p>
