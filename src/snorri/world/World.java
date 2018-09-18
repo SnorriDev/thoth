@@ -14,6 +14,7 @@ import net.sourceforge.yamlbeans.YamlException;
 import snorri.entities.Center;
 import snorri.entities.Entity;
 import snorri.entities.Player;
+import snorri.entities.QuadTree;
 import snorri.entities.Spawn;
 import snorri.entities.Unit;
 import snorri.main.Debug;
@@ -429,7 +430,7 @@ public class World implements Playable, Editable {
 	}
 	
 	@Deprecated
-	public EntityGroup getEntityTree() {
+	public QuadTree getEntityTree() {
 		return getEntityLayer().getEntityTree();
 	}
 	

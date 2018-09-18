@@ -120,6 +120,7 @@ public class Projectile extends Detector implements Walker {
 	@Override
 	public void refreshStats() {
 		super.refreshStats();
+		ignoreCollisions = true;
 		setDespawnable(true);
 	}
 
