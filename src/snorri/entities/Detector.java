@@ -9,7 +9,6 @@ import snorri.world.World;
 public abstract class Detector extends Despawner {
 
 	private static final long serialVersionUID = 1L;
-
 	private static final double DETECT_CHANCE = 0.5;
 	
 	/**

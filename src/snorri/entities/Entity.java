@@ -65,6 +65,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		EDIT_SPAWNABLE.add(Spawn.class);
 		EDIT_SPAWNABLE.add(Dummy.class);
 		EDIT_SPAWNABLE.add(Center.class);
+		EDIT_SPAWNABLE.add(Statue.class);
 		
 		// Alphabetize the list for nice view in the editor.
 		Collections.sort(EDIT_SPAWNABLE, new Comparator<Class<? extends Entity>>() {
@@ -218,7 +219,8 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	
 	@Override
 	public String toString() {
-		String name = getTag() == null ? Util.clean(this.getClass().getSimpleName()) : getTag();
+		String tag = getTag();
+		String name = tag == null ? Util.clean(this.getClass().getSimpleName()) : tag;
 		return name.equals("entity") ? null : name;
 	}
 	
@@ -413,7 +415,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			this.animation = new Animation(animation);
 			return;
 		}
-		this.animation = new Animation(animation).getRotated(dir == null ? new Vector(1, 0) : dir);
+		this.animation = new Animation(animation).getRotated(dir);
 	}
 	
 	/**

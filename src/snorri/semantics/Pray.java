@@ -1,6 +1,7 @@
 package snorri.semantics;
 
 import snorri.events.CastEvent;
+import snorri.main.Debug;
 import snorri.parser.Node;
 import snorri.triggers.Trigger.TriggerType;
 
@@ -16,6 +17,7 @@ public class Pray extends TransVerbDef {
 		if (obj == null) {
 			return false;
 		}
+		Debug.logger.fine("Praying to " + obj.toString());
 		TriggerType.PRAY.activate(obj.toString());
 		return true;
 	}
