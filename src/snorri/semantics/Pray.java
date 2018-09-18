@@ -17,7 +17,6 @@ public class Pray extends TransVerbDef {
 		if (obj == null) {
 			return false;
 		}
-		Debug.logger.fine("Praying to " + obj.toString());
 		TriggerType.PRAY.activate(obj.toString());
 		return true;
 	}
