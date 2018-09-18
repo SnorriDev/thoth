@@ -53,14 +53,10 @@ public class Papyrus extends Item {
 		if (numPapyri == 0 || !getTimer().isOffCooldown() || !(Main.getWindow() instanceof GameWindow)) {
 			return;
 		}
-//		Debug.logger.fine("Queueing a spell..");
 		setSpell(null);
-//		Debug.logger.fine("Set the spell..");
 		((GameWindow) Main.getWindow()).openInventory(1);
-//		Debug.logger.fine("Inventory opening..");
 		numPapyri--;
 		queuedCastEvent = new CastEvent(world, player, new Entity(castPos));
-		Debug.logger.fine("Made a queued cast event");
 	}
 	
 	/**
