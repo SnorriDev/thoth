@@ -16,6 +16,7 @@ import snorri.entities.Flower;
 import snorri.entities.Fountain;
 import snorri.entities.Glyph;
 import snorri.entities.Spike;
+import snorri.entities.Statue;
 import snorri.entities.Urn;
 import snorri.inventory.DropContainer;
 import snorri.inventory.Droppable;
@@ -107,6 +108,7 @@ public class Lexicon extends HashSet<String> implements DropContainer<Droppable>
 		lexicon.put("anx", new StaticDef(Noun.class, new ClassWrapper(Glyph.class)));
 		lexicon.put("z", new StaticDef(Noun.class, new ClassWrapper(Entity.class)));
 		lexicon.put("saH", new StaticDef(Noun.class, new ClassWrapper(Mummy.class)));
+		lexicon.put("STATUE", new StaticDef(Noun.class, new ClassWrapper(Statue.class)));
 //		lexicon.put("rwDt", new StaticDef(Noun.class, BackgroundElement.SANDSTONE));
 		lexicon.put("mAAt", new StaticDef(Noun.class, new Order()));
 		lexicon.put("FOUNTAIN", new StaticDef(Noun.class, new ClassWrapper(Fountain.class)));
