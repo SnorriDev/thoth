@@ -54,6 +54,9 @@ public class GameWindow extends FocusedWindow<Player> {
 	
 	@Override
 	protected void onStart() {
+		setCastCallback(() -> {
+			getFocus().getInventory().cast(getWorld(), getMousePosAbsolute());
+		});
 		while (true) {
 			if (TriggerType.TIMELINE.activate("start")) {
 				break;
@@ -63,7 +66,6 @@ public class GameWindow extends FocusedWindow<Player> {
 	
 	@Override
 	protected void onFrame() {
-		
 		long time = getTimestamp();
 		double deltaTime = (time - lastTime) / 1000000000d;
 		lastTime = time;

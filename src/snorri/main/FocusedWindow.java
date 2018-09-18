@@ -40,6 +40,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	private static final int FRAME_DELTA = 15;
 
 	protected final KeyStates states = new KeyStates();
+	private Runnable castCallback;
 	
 	protected final F player;
 	protected Entity customCenter;
@@ -124,7 +125,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	 * @return absolute mouse position
 	 */
 	public Vector getMousePosAbsolute() {
-		return getMousePosRelative().add_(getCenterObject().getPos());
+		return getMousePosRelative().add(getCenterObject().getPos());
 	}
 
 	@Override
@@ -140,6 +141,9 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	@Override
 	public void mousePressed(MouseEvent e) {
 		states.setMouseButton(e.getButton(), true);
+		if (castCallback != null && e.getButton() == MouseButton.CAST.getNum()) {
+			castCallback.run();
+		}
 	}
 
 	@Override
@@ -272,5 +276,13 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 
 	public boolean hasCustomCenter() {
 		return customCenter != null;
+	}
+	
+	protected Runnable getCastCallback() {
+		return castCallback;
+	}
+	
+	protected void setCastCallback(Runnable castCallback) {
+		this.castCallback = castCallback;
 	}
 }

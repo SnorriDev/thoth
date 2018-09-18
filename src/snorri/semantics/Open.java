@@ -41,7 +41,7 @@ public class Open extends IntransVerbDef {
 	@Override
 	public boolean eval(Object subj, CastEvent e) {
 		Entity checker = e.getSecondPerson();
-		return e.getWorld().getTileLayer().isPathable(checker.getPos().gridPos());
+		return !e.getWorld().getTileLayer().isOccupied(checker.getPos().gridPos());
 	}
 		
 	public static boolean openDoor(World w, Vector pos) {

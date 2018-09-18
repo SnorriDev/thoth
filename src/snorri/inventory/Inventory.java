@@ -148,7 +148,6 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 		FocusedWindow<?> window = (FocusedWindow<?>) Main.getWindow();
 		World world = window.getWorld();
 		attack(world, window.getMomentumVector(), window.getShotDirection());
-		cast(world, window.getCastPosition());	
 	}
 	
 	public void attack(World world, Vector momentum, Vector dir) {
@@ -158,7 +157,7 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 		weaponSlot.attackIfPossible(world, player, momentum, dir, orbSlot);
 	}
 	
-	private void cast(World world, Vector castPos) {
+	public void cast(World world, Vector castPos) {
 		if (castPos != null && player instanceof Caster) {
 			papyrusSlot.queueSpellIfPossible(world, (Caster) player, castPos);
 		}

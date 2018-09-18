@@ -4,17 +4,19 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import snorri.world.Vector;
-import sun.security.action.GetBooleanAction;
 
 public class KeyStates {
+	
+	private static final int NUM_KEYS = 256;
+	private static final int NUM_MOUSE_BUTTONS = 50;
 	
 	private final boolean[] states;
 	private final boolean[] mouseStates;
 	private final Queue<Binding> actionQ;
 	
 	public KeyStates() {
-		states = new boolean[256];
-		mouseStates = new boolean[100];
+		states = new boolean[NUM_KEYS];
+		mouseStates = new boolean[NUM_MOUSE_BUTTONS];
 		actionQ = new LinkedList<>();
 	}
 	

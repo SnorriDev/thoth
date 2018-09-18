@@ -15,7 +15,7 @@ public class Move extends TransVerbDef {
 		
 		Object obj = object.getMeaning(e);
 		
-		if (e.getDestination() != null && !e.getWorld().isPathable(e.getDestination())) {
+		if (e.getDestination() == null || e.getWorld().isOccupied(e.getDestination())) {
 			return false;
 		}
 		

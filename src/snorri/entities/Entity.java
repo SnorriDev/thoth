@@ -265,7 +265,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			onCycleComplete(world);
 			hasCycled = true;
 		}
-		setPos(pos.add(velocity.multiply(deltaTime))); // XXX this has the potential to cause some bugs
+		setPos(pos.add(getVelocity().multiply(deltaTime))); // XXX this has the potential to cause some bugs
 	}
 	
 	public void renderAround(FocusedWindow<?> g, Graphics gr, double timeDelta) {

@@ -72,6 +72,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private static final double TEXT_BOX_HEIGHT_MULTIPLIER = 0.55;
 	private static final int TEXT_BOX_WIDTH = CRAFTING_SPACE_WIDTH - 2 * PADDING; // 547
 	private static final int TEXT_BOX_HEIGHT = (int) (CRAFTING_SPACE_HEIGHT * TEXT_BOX_HEIGHT_MULTIPLIER);// 94
+	private static final String ENCHANT_BUTTON_NAME = "CAST";
 	
 	private final Caster caster;
 	
@@ -200,7 +201,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		field.addFocusListener(this);
 		inputPanel.add(field);
 		
-		enchantButton = createButton("ENCHANT");
+		enchantButton = createButton(ENCHANT_BUTTON_NAME, SELECTED_BG);
 		enchantButton.setEnabled(false);
 		enchantButton.addKeyListener(this);
 		enchantButton.setFocusable(false);
@@ -297,7 +298,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		if (e.getActionCommand().equals("ENCHANT") && getItem() != null) {
+		if (e.getActionCommand().equals(ENCHANT_BUTTON_NAME) && getItem() != null) {
 			String rawSpell = getTagless();
 			getItem().setSpell(Grammar.parseSentence(rawSpell));
 			spellsEnchanted.add(rawSpell);
