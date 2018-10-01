@@ -7,8 +7,6 @@ import java.awt.geom.Point2D;
 
 import java.lang.Math;
 
-import java.util.ArrayList;
-
 import snorri.main.FocusedWindow;
 import snorri.main.GamePanel;
 import snorri.semantics.Nominal;
@@ -26,6 +24,10 @@ public class Vector implements Nominal, Comparable<Vector> {
 	public static final Vector DOWN_LEFT = new Vector(-1, 1);
 	
 	public double x, y;
+	
+	/** This constructor is used for reading Vectors from YAML. */
+	public Vector() {
+	}
 	
 	public Vector(double x, double y) {
 		this.x = x;
