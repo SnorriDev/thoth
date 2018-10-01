@@ -1,6 +1,6 @@
 package snorri.semantics;
 
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.nonterminals.SemiTerminal;
 
 public class StaticDef extends Definition<Object> {
@@ -13,7 +13,7 @@ public class StaticDef extends Definition<Object> {
 	}
 	
 	@Override
-	public Object getMeaning(SpellEvent e) {
+	public Object getMeaning(CastEvent e) {
 		return meaning;
 	}
 

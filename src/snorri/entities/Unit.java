@@ -8,26 +8,28 @@ import snorri.audio.ClipWrapper;
 import snorri.collisions.Collider;
 import snorri.collisions.RectCollider;
 import snorri.events.CollisionEvent;
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.inventory.Carrier;
 import snorri.inventory.Inventory;
 import snorri.inventory.Stats;
 import snorri.main.Debug;
 import snorri.modifiers.Modifier;
 import snorri.semantics.Break;
-import snorri.semantics.Go.Walker;
+import snorri.semantics.Go.Movable;
 import snorri.semantics.Nominal;
 import snorri.semantics.Wrapper;
 import snorri.triggers.Trigger.TriggerType;
+import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public abstract class Unit extends Entity implements Carrier, Walker {
+public abstract class Unit extends Entity implements Carrier, Movable {
 
 	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 120;
+	protected static final Vector JUMP_VELOCITY = new Vector(0, -200);
 	/**Dimensions for humanoid units*/
-	public static final int RADIUS = 46, RADIUS_X = 21, RADIUS_Y = 40;
+	public static final int RADIUS = 46, RADIUS_X = 21, RADIUS_Y = 45;
 	
 	protected List<Modifier<Unit>> modifiers = new ArrayList<>();
 	
@@ -35,6 +37,7 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 	private Inventory inventory;
 	protected Stats stats;
 	protected double health;
+	protected boolean onSurface = false;
 	
 	protected Animation walkingAnimation;
 	protected Animation idleAnimation;
@@ -70,9 +73,15 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 
 	@Override
 	public void update(World world, double deltaTime) {
+		if (world.getTileLayer().getTile(pos) == null) {
+			kill(world);
+			return;
+		}
+		
 		inventory.update(deltaTime);
 		
 		speed = getBaseSpeed();
+		
 		if (modifiers == null) {
 			modifiers = new ArrayList<>();
 		}
@@ -94,9 +103,29 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 			}
 			TriggerType.KILL.activate(tag);
 		}
+		
+		if(isFalling()) {
+			if (willHitUndersideOfTile(world, pos) && velocity.getY() < 0) {
+				setVelocity(velocity.getProjectionX());
+			}
+			addVelocity(GRAVITY.multiply(deltaTime));
+			if (willHitSurface(world, velocity, deltaTime)) {
+				onSurface = true;
+				setPos(getFallAdjustedHeight(pos));
+				setVelocity(new Vector(velocity.getX(), 0));
+			}
+		}
+		else if (!willHitSurface(world, velocity.copy().add(GRAVITY), deltaTime)) {
+			onSurface = false;
+		}
+
 		super.update(world, deltaTime);
 	}
 	
+	private Vector getFallAdjustedHeight(Vector pos) {
+		return new Vector((double) pos.getX(), Tile.WIDTH - 1 + pos.getY() - ((pos.getY() + collider.getRadiusY()) % Tile.WIDTH));
+	}
+
 	/**
 	 * Set the animations for this unit to copies of the supplied ones
 	 * @param idle
@@ -135,20 +164,25 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 
 	/** Translate the position by delta scaled by speed. */
 	@Override
-	public void walk(World world, Vector delta) {
-		moveNicely(world, delta.copy().multiply_(getSpeed()));
+	public void translate(World world, Vector delta) {
+		moveNicely(world, delta.copy().multiply(getSpeed()));
 	}
 	
 	/** Walk in the direction dir with magnitude controlled by deltaTime. */
 	@Override
-	public void walkNormalized(World world, Vector dir, double deltaTime) {
+	public void translateNormalized(World world, Vector dir, double deltaTime) {
 		setAnimation(dir);
-		Walker.super.walkNormalized(world, dir, deltaTime);
+		Movable.super.translateNormalized(world, dir, deltaTime);
+	}
+	
+	@Override
+	public boolean isFalling() {
+		return !onSurface && this.getVelocity().getY() < Unit.getTerminalVelocity(); // TODO: combine this with determining whether the Unit is standing on a floor
 	}
 	
 	/** Walk towards a target position. */
 	public void walkTowards(World world, Vector target, double deltaTime) {
-		walkNormalized(world, target.copy().sub_(pos), deltaTime);
+		translateNormalized(world, target.copy().sub_(pos), deltaTime);
 	}
 	
 	// The order of target and world are reversed here to be consistent with the newer AIAgent API.
@@ -167,7 +201,7 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 		health -= d;
 	}
 	
-	public void damage(double d, SpellEvent e) {
+	public void damage(double d, CastEvent e) {
 		damage(e.modifyHealthInteraction(d));
 	}
 	
@@ -175,7 +209,7 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 		health = Math.min(health + d, stats.getMaxHealth());
 	}
 	
-	public void heal(double d, SpellEvent e) {
+	public void heal(double d, CastEvent e) {
 		heal(e.modifyHealthInteraction(d));
 	}
 	
@@ -192,16 +226,12 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 		return BASE_SPEED;
 	}
 	
-	public void setSpeed(int spd) {
-		speed = spd;
-	}
-	
 	public void modifySpeed(double factor) {
 		speed = (int) (speed * factor);
 	}
 	
 	@Override
-	public Nominal get(AbstractSemantics attr, SpellEvent e) {
+	public Nominal get(AbstractSemantics attr, CastEvent e) {
 		if (attr == AbstractSemantics.HEALTH) {
 			return new Wrapper<Integer>((int) health);
 		}
@@ -340,4 +370,34 @@ public abstract class Unit extends Entity implements Carrier, Walker {
 		return inventory;
 	}
 	
+	/**
+	 * determines whether the unit will collide with a surface
+	 * @param velo velocity
+	 * @param deltaTime time change
+	 * @return a boolean as to whether they will hit a surface
+	 */
+	public boolean willHitSurface(World world, Vector velo, double deltaTime) {
+		Vector deltaPos = velo.multiply(deltaTime);
+		Vector newPos = pos.copy().add(deltaPos);
+		try {
+			if (willHitSurfaceTile(world, newPos)) {
+				return true;
+			}
+			return false;
+		}
+		catch (NullPointerException e) {
+			kill(world);
+			return true;
+		}
+	}
+	
+	protected void jump() {
+		if (canJump()) {
+			velocity = velocity.add(JUMP_VELOCITY);
+		}
+	}
+
+	private boolean canJump() {
+		return onSurface;
+	}
 }

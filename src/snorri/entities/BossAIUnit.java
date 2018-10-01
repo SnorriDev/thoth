@@ -1,7 +1,7 @@
 package snorri.entities;
 
 import snorri.animations.Animation;
-import snorri.events.SpellEvent.Caster;
+import snorri.events.CastEvent.Caster;
 import snorri.nonterminals.Sentence;
 import snorri.parser.Grammar;
 import snorri.parser.Lexicon;

@@ -1,11 +1,11 @@
 package snorri.semantics;
 
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 
 public class With extends PrepDef {
 
 	@Override
-	public SpellEvent eval(Nominal obj, SpellEvent e) {
+	public CastEvent eval(Nominal obj, CastEvent e) {
 		
 		e.setInstrument(obj);
 		return e;

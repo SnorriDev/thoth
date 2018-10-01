@@ -16,7 +16,7 @@ import snorri.dialog.Message;
 import snorri.dialog.Objective;
 import snorri.dialog.SpellMessage;
 import snorri.entities.Player;
-import snorri.events.SpellEvent.Caster;
+import snorri.events.CastEvent.Caster;
 import snorri.inventory.Droppable;
 import snorri.keyboard.Key;
 import snorri.overlay.DeathScreen;
@@ -54,6 +54,9 @@ public class GameWindow extends FocusedWindow<Player> {
 	
 	@Override
 	protected void onStart() {
+		setCastCallback(() -> {
+			getFocus().getInventory().cast(getWorld(), getMousePosAbsolute());
+		});
 		while (true) {
 			if (TriggerType.TIMELINE.activate("start")) {
 				break;
@@ -63,13 +66,17 @@ public class GameWindow extends FocusedWindow<Player> {
 	
 	@Override
 	protected void onFrame() {
-		
 		long time = getTimestamp();
 		double deltaTime = (time - lastTime) / 1000000000d;
 		lastTime = time;
 		
 		if (messageQ != null && messageQ.peek() != null && messageQ.peek().update(deltaTime)) {
-			messageQ.poll().onClear(); //why is this sometimes null?
+			Message message = messageQ.poll();
+			if (message != null) {
+				// This might be null because the queue is not thread safe.
+				// TODO(snorri): Use a thread-safe datastructure and remove this redundant null check.
+				message.onClear();
+			}
 		}
 				
 		if (isPaused()) {

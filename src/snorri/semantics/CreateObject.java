@@ -2,7 +2,7 @@ package snorri.semantics;
 
 import snorri.entities.Entity;
 import snorri.entities.Spike;
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.parser.Node;
 import snorri.world.Tile;
 import snorri.world.Vector;
@@ -14,7 +14,7 @@ public class CreateObject extends TransVerbDef {
 	}
 
 	@Override @SuppressWarnings("unchecked")
-	public boolean exec(Node<Object> object, SpellEvent e) {
+	public boolean exec(Node<Object> object, CastEvent e) {
 		
 		Object obj = object.getMeaning(e);
 				
@@ -26,7 +26,7 @@ public class CreateObject extends TransVerbDef {
 			}
 			
 			//check if there is an entity in the way
-			if (!((Tile) obj).isPathable() && tile.isPathable()) {
+			if (((Tile) obj).isOccupied() && !tile.isOccupied()) {
 				Vector pos = e.getLocative().copy().gridPos_();
 				if (e.getWorld().tileHasEntity(pos)) { //could move this out, but want to allow pathable tiles to be placed
 					return false;
@@ -52,7 +52,7 @@ public class CreateObject extends TransVerbDef {
 	}
 
 	@Override
-	public boolean eval(Object subj, Object obj, SpellEvent e) {
+	public boolean eval(Object subj, Object obj, CastEvent e) {
 		return false;
 	}
 

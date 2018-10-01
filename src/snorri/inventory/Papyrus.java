@@ -6,7 +6,10 @@ import java.awt.Graphics;
 import snorri.dialog.SpellMessage;
 import snorri.dialog.TextMessage;
 import snorri.entities.BossAIUnit;
-import snorri.events.SpellEvent.Caster;
+import snorri.entities.Entity;
+import snorri.events.CastEvent;
+import snorri.events.CastEvent.Caster;
+import snorri.main.Debug;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.nonterminals.Sentence;
@@ -22,9 +25,8 @@ public class Papyrus extends Item {
 	private boolean ignoreMessages = false;
 	private int numPapyri;
 	
-	// For queuing spells.
-	private World queuedWorld;
-	private Caster queuedCaster;
+	// This event is used to saved a spell queued in the GUI.
+	private CastEvent queuedCastEvent;
 	
 	public Papyrus(ItemType t) {
 		super(t);
@@ -47,35 +49,30 @@ public class Papyrus extends Item {
 		return timer.isOffCooldown() && numPapyri > 0;
 	}
 
-	public void queueSpellIfPossible(World world, Caster player) {
+	public void queueSpellIfPossible(World world, Caster player, Vector castPos) {
 		if (numPapyri == 0 || !getTimer().isOffCooldown() || !(Main.getWindow() instanceof GameWindow)) {
 			return;
 		}
-		
-		if (Main.getWindow() instanceof GameWindow) {
-			setSpell(null);
-			((GameWindow) Main.getWindow()).openInventory(1);
-			numPapyri--;
-			queuedWorld = world;
-			queuedCaster = player;
-		}
+		setSpell(null);
+		((GameWindow) Main.getWindow()).openInventory(1);
+		numPapyri--;
+		queuedCastEvent = new CastEvent(world, player, new Entity(castPos));
 	}
 	
 	/**
 	 * Cast a spell which has been set in the spellcrafting interface.
 	 * @return False if the set spell is null or another error was encountered; true otherwise.
 	 */
-	public boolean castQueuedSpell() {
-		if (queuedCaster == null || getSpell() == null) {
+	public boolean checkQueuedSpell() {
+		if (!(Main.getWindow() instanceof GameWindow) || queuedCastEvent == null || getSpell() == null) {
 			return false;
 		}
-		Object spellResult = useSpellOn(queuedWorld, queuedCaster, null);
-		if (Main.getWindow() instanceof GameWindow) {
-			String orthography = getSpell().getOrthography();
-			((GameWindow) Main.getWindow()).showMessage(new SpellMessage(orthography, spellResult, spellIsStatement()));
-		}
-		queuedWorld = null;
-		queuedCaster = null;
+		Debug.logger.fine("Checking queued spell..");
+		GameWindow gameWindow = (GameWindow) Main.getWindow();
+		Object spellResult = onCast(queuedCastEvent);
+		String orthography = getSpell().getOrthography();
+		gameWindow.showMessage(new SpellMessage(orthography, spellResult, spellIsStatement()));
+		queuedCastEvent = null;
 		return true;
 	}
 	
@@ -103,7 +100,7 @@ public class Papyrus extends Item {
 		}
 		
 		if (timer.activate()) {
-			Object o = useSpellOn(world, caster, null);
+			Object o = onCast(new CastEvent(world, caster, null));
 			if (Main.getWindow() instanceof GameWindow) {
 				((GameWindow) Main.getWindow()).showMessage(new SpellMessage(orthography, o, spellIsStatement()));
 			}

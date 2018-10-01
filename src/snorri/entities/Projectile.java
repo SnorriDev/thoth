@@ -1,23 +1,22 @@
 package snorri.entities;
 
 import snorri.events.CollisionEvent;
-import snorri.events.SpellEvent;
-import snorri.events.SpellEvent.Caster;
+import snorri.events.CastEvent;
+import snorri.events.CastEvent.Caster;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.main.Debug;
-import snorri.semantics.Go.Walker;
+import snorri.semantics.Go.Movable;
 import snorri.semantics.Nominal;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class Projectile extends Detector implements Walker {
+public class Projectile extends Detector implements Movable {
 
 	private static final long serialVersionUID = 1L;
 
 	private static final int PROJECTILE_SPEED = 450;
-		
-	private Vector velocity;
+
 	private Entity root;
 	
 	private Weapon weapon;
@@ -51,23 +50,22 @@ public class Projectile extends Detector implements Walker {
 	
 	@Override
 	public void update(World world, double deltaTime) {
-		
 		boolean walked = false;
 		if (weapon == null || !weapon.altersMovement()) {
-			walk(world, velocity.copy().multiply_(deltaTime));
+			translate(world, velocity.multiply(deltaTime));
 			walked = true;
 		} 
 		
 		if (root instanceof Caster && weapon != null) {
-			
-			Object output = weapon.useSpellOn(world, ((Caster) root), this, deltaTime / getLifeSpan());
+			CastEvent spellEvent = new CastEvent(world, (Caster) root, this, deltaTime / getLifeSpan());
+			Object spellOutput = weapon.onCast(spellEvent);
 			if (Debug.weaponOutputLogged()) {
-				Debug.logger.info("Weapon output: " + output + ".");
+				Debug.logger.info("Weapon output: " + spellOutput + ".");
 			}
 			
 			//we can't unify this with the above if clause because it matters when spells are applied
-			if (!walked && output.equals(false)) {
-				walk(world, velocity.copy().multiply_(deltaTime));
+			if (!walked && spellOutput.equals(false)) {
+				translate(world, velocity.multiply(deltaTime));
 			}
 			
 		}
@@ -76,8 +74,10 @@ public class Projectile extends Detector implements Walker {
 		if (!world.canShootOver(pos)) {
 			world.delete(this);
 		}
-		// FIXME why isn't this working off grid?
-				
+		
+		if(isFalling()) {
+			this.addVelocity(GRAVITY.multiply(deltaTime));
+		}
 		super.update(world, deltaTime);
 	}
 
@@ -99,7 +99,8 @@ public class Projectile extends Detector implements Walker {
 	@Override
 	protected void onSafeDelete(World world) {
 		if (root instanceof Caster && orb != null) {
-			Object output = orb.useSpellOn(world, (Caster) root, this);
+			CastEvent castEvent = new CastEvent(world, (Caster) root, this);
+			Object output = orb.onCast(castEvent);
 			if (Debug.orbOutputLogged()) {
 				Debug.logger.info("Orb output: " + output + ".");
 			}
@@ -107,24 +108,27 @@ public class Projectile extends Detector implements Walker {
 	}
 	
 	@Override
-	public Nominal get(AbstractSemantics attr, SpellEvent e) {
-		
+	public Nominal get(AbstractSemantics attr, CastEvent e) {
 		if (attr == AbstractSemantics.SOURCE) {
 			return root;
 		}
-		
 		return super.get(attr, e);
-		
 	}
 
 	@Override
-	public void walk(World world, Vector delta) {
+	public void translate(World world, Vector delta) {
 		pos.add_(delta);
+	}
+	
+	@Override
+	public boolean isFalling() {
+		return this.getVelocity().magnitude() < Unit.getTerminalVelocity();
 	}
 	
 	@Override
 	public void refreshStats() {
 		super.refreshStats();
+		ignoreCollisions = true;
 		setDespawnable(true);
 	}
 

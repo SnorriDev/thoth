@@ -8,7 +8,7 @@ import snorri.main.Main;
 
 public enum UnifiedTileType implements TileType {
 	
-	EMPTY((BufferedImage) null, Param.pathable(true)),
+	EMPTY((BufferedImage) null, Param.isOccupied(false)),
 	SAND(new BufferedImage[] {
 			Main.getImage("/textures/tiles/background/sand00.png"),
 			Main.getImage("/textures/tiles/background/sand01.png"),
@@ -22,22 +22,23 @@ public enum UnifiedTileType implements TileType {
 			Main.getImage("/textures/tiles/background/water00.png"),
 			Main.getImage("/textures/tiles/background/water01.png"),
 	}, Param.swimmable(true)),
-	TRIPWIRE(TileType.getTwoRotations(Main.getImage("/textures/tiles/foreground/tripwire00.png")), Param.pathable(true)),
-	TRIPWIRE_END(TileType.getReflections(Main.getImage("/textures/tiles/foreground/tripwireend00.png")), Param.pathable(true)),
+	TRIPWIRE(TileType.getTwoRotations(Main.getImage("/textures/tiles/foreground/tripwire00.png")), Param.isOccupied(false)),
+	TRIPWIRE_END(TileType.getReflections(Main.getImage("/textures/tiles/foreground/tripwireend00.png")), Param.isOccupied(false)),
 	DOOR(new BufferedImage[] {
 			Main.getImage("/textures/tiles/door00.png"),
 			Main.getImage("/textures/tiles/door01.png"),
-	}, Param.replacementType(EMPTY));
+	}, Param.replacementTile(new Tile(EMPTY)));
 	
 	private final BufferedImage[] textures;
 	
 	// Default values for these fields can be used by passing Param.
-	private boolean pathable = false;
+	private boolean isOccupied = true;
 	private boolean swimmable = false;
 	private boolean changable = false;
 	private boolean atTop = true;
 	private double blendOrder = 2.0;
-	private UnifiedTileType replacementType;
+	private Tile replacementTile = null;
+	private UnifiedTileType replacementType = null;
 	
 	UnifiedTileType(BufferedImage[] textures, Param<?>...params) {
 		this.textures = textures;
@@ -62,13 +63,14 @@ public enum UnifiedTileType implements TileType {
 		case CHANGABLE:
 			changable = (boolean) param.getValue();
 			break;
-		case OPEN_TYPE:
-			break;
-		case PATHABLE:
-			pathable = (boolean) param.getValue();
+		case IS_OCCUPIED:
+			isOccupied = (boolean) param.getValue();
 			break;
 		case REPLACEMENT_TYPE:
 			replacementType = (UnifiedTileType) param.getValue();
+			break;
+		case REPLACEMENT_TILE:
+			replacementTile = (Tile) param.getValue();
 			break;
 		case SWIMMABLE:
 			swimmable = (boolean) param.getValue();
@@ -111,13 +113,13 @@ public enum UnifiedTileType implements TileType {
 	}
 
 	@Override
-	public boolean isPathable() {
-		return pathable;
+	public boolean isOccupied() {
+		return isOccupied;
 	}
 
 	@Override
 	public boolean canShootOver() {
-		return pathable || swimmable;
+		return isOccupied || swimmable;
 	}
 
 	@Override
@@ -135,14 +137,25 @@ public enum UnifiedTileType implements TileType {
 		return swimmable;
 	}
 
+	/** Get a new replacement tile for this type.
+	 * 
+	 * The exact method for creating this tile differs based on what parameters have been set:
+	 * 1. If a replacementTile is set, a copy of that is returned.
+	 * 2. If a replacementType is set, a tile of that type with the same style is returned.
+	 * 3. Otherwise, the null Tile is returned.
+	 */
 	@Override
-	public UnifiedTileType getReplacement() {
-		return replacementType;
+	public Tile newReplacementTile(Tile oldTile) {
+		if (replacementTile != null) {
+			return new Tile(replacementTile);
+		} else if (replacementType != null) {
+			return new Tile(replacementType, oldTile.getStyle());
+		}
+		return null;
 	}
 
 	@Override
 	public double getBlendOrder() {
 		return blendOrder;
 	}
-
 }

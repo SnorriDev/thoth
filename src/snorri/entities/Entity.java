@@ -16,7 +16,7 @@ import snorri.collisions.CircleCollider;
 import snorri.collisions.Collider;
 import snorri.entities.Player.Interactor;
 import snorri.events.CollisionEvent;
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.GameWindow;
@@ -38,11 +38,14 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	/** a list of entities which can be spawned in the level editor */
 	public static final List<Class<? extends Entity>> EDIT_SPAWNABLE;
 	
+	private static final int TERMINAL_VELOCITY = 1280;
+	
 	static {
 		SPAWNABLE = new ArrayList<>();
 		SPAWNABLE.add(Urn.class);
 		SPAWNABLE.add(Spike.class);
 		SPAWNABLE.add(Vortex.class);
+		SPAWNABLE.add(Bomb.class);
 		
 		EDIT_SPAWNABLE = new ArrayList<>(SPAWNABLE);
 		EDIT_SPAWNABLE.add(Desk.class);
@@ -64,6 +67,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		EDIT_SPAWNABLE.add(Spawn.class);
 		EDIT_SPAWNABLE.add(Dummy.class);
 		EDIT_SPAWNABLE.add(Center.class);
+		EDIT_SPAWNABLE.add(Statue.class);
 		
 		// Alphabetize the list for nice view in the editor.
 		Collections.sort(EDIT_SPAWNABLE, new Comparator<Class<? extends Entity>>() {
@@ -90,7 +94,10 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	/** used to determine which entities should be rendered over others **/
 	protected int z;
 	protected String tag;
+	/** direction the entity is facing **/
 	protected Vector dir;
+	/** generalizes concept of velocity to all entities */
+	Vector velocity = new Vector(0, 0);
 		
 	private boolean deleted = false;
 	private boolean hasCycled = false;
@@ -183,17 +190,39 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 	
 	public boolean intersectsWall(World world) {
-		for (int i = (pos.getX() - collider.getMaxRadius()) / Tile.WIDTH - 1; i <= (pos.getX() + collider.getMaxRadius()) / Tile.WIDTH; i++) {
-			for (int j = (pos.getY() - collider.getMaxRadius()) / Tile.WIDTH - 1; j <= (pos.getY() + collider.getMaxRadius()) / Tile.WIDTH; j++) {
+		for (int i = (pos.getX() - collider.getRadiusX()) / Tile.WIDTH - 1; i <= (pos.getX() + collider.getRadiusX()) / Tile.WIDTH; i++) {
+			for (int j = (pos.getY() - collider.getRadiusY()) / Tile.WIDTH - 1; j <= (pos.getY() + collider.getRadiusY()) / Tile.WIDTH; j++) {
 				if (!intersects(Tile.getRectangle(i, j))) {
 					continue;
 				}
-				if (!world.isPathable(i, j)) {
+				if (world.isOccupied(i, j)) {
 					return true;
 				}
 			}
 		}
 		return false;	
+	}
+	
+	public boolean willHitSurfaceTile(World world, Vector newPos) {
+		Vector testPos = newPos.copy().add(new Vector(0, collider.getRadiusY()));
+		for (int i = (testPos.getX() - collider.getRadiusX() + 1) / Tile.WIDTH; i <= (testPos.getX() + collider.getRadiusX() - 1) / Tile.WIDTH; i++) {
+			int j = testPos.getY() / Tile.WIDTH;
+			if (world.isOccupied(i, j) && world.getTileLayer().getTileGrid(i, j) != null) {
+				return true;
+			}
+		}
+		return false;	
+	}
+	
+	public boolean willHitUndersideOfTile(World world, Vector newPos) {
+		Vector testPos = newPos.copy().add(new Vector(0, collider.getRadiusY()));
+		for (int i = (testPos.getX() - collider.getRadiusX() + 1) / Tile.WIDTH; i <= (testPos.getX() + collider.getRadiusX() - 1) / Tile.WIDTH; i++) {
+			int j = (pos.getY() - collider.getRadiusY()) / Tile.WIDTH;
+			if (world.isOccupied(i, j) && world.getTileLayer().getTileGrid(i, j) != null) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public boolean contains(Entity e) {
@@ -217,7 +246,8 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	
 	@Override
 	public String toString() {
-		String name = getTag() == null ? Util.clean(this.getClass().getSimpleName()) : getTag();
+		String tag = getTag();
+		String name = tag == null ? Util.clean(this.getClass().getSimpleName()) : tag;
 		return name.equals("entity") ? null : name;
 	}
 	
@@ -225,11 +255,17 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		return toString() + "{pos: " + pos + ", col: " + collider + "}";
 	}
 	
-	public void update(World world, double d) {
+	/**
+	 * 
+	 * @param world
+	 * @param deltaTime
+	 */
+	public void update(World world, double deltaTime) {
 		if (!hasCycled && (animation == null || animation.hasCycled())) {
 			onCycleComplete(world);
 			hasCycled = true;
 		}
+		setPos(pos.add(getVelocity().multiply(deltaTime))); // XXX this has the potential to cause some bugs
 	}
 	
 	public void renderAround(FocusedWindow<?> g, Graphics gr, double timeDelta) {
@@ -258,7 +294,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	}
 
 	@Override
-	public Nominal get(AbstractSemantics attr, SpellEvent e) {
+	public Nominal get(AbstractSemantics attr, CastEvent e) {
 		
 		if (attr == AbstractSemantics.POSITION) {
 			return pos;
@@ -393,6 +429,10 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public void onExplosion(CollisionEvent e) {
 	}
 	
+	/**
+	 * this method is used to set the direction of an entity for animation purposes
+	 * @param dir direction the entity is facing
+	 */
 	public void setDirection(Vector dir) {
 		this.dir = dir.copy();
 		if (animation != null) {
@@ -412,7 +452,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			this.animation = new Animation(animation);
 			return;
 		}
-		this.animation = new Animation(animation).getRotated(dir == null ? new Vector(1, 0) : dir);
+		this.animation = new Animation(animation).getRotated(dir);
 	}
 	
 	/**
@@ -423,5 +463,42 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	 */
 	protected void onCycleComplete(World world) {
 	}
+	
+	/**
+	 * @return the velocity
+	 */
+	public Vector getVelocity() {
+		return velocity;
+	}
+	/** Destruct this entity and create an explosion.
+	 * 
+	 * @param world The world to explode in.
+	 * @param damage The damage the explosion should yield.
+	 */
+	public void explode(World world, double damage) {
+		world.delete(this);
+		world.add(new Explosion(getPos(), damage));
+	}
 
+	/**
+	 * @param velocity the velocity to set
+	 */
+	public void setVelocity(Vector velocity) {
+		this.velocity = velocity;
+	}
+	
+	/**
+	 * adds the new velocity vector to the current velocity
+	 * @param velocity the velocity vector to be added to the current velocity
+	 */
+	public void addVelocity(Vector velocity) {
+		this.setVelocity(this.velocity.copy().add(velocity));
+	}
+
+	/**
+	 * @return the terminalVelocity
+	 */
+	public static final int getTerminalVelocity() {
+		return TERMINAL_VELOCITY;
+	}
 }

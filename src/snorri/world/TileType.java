@@ -6,7 +6,7 @@ import java.util.List;
 import java.lang.reflect.Array;
 
 import snorri.audio.ClipWrapper;
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.main.Debug;
 import snorri.main.Util;
 import snorri.semantics.Nominal;
@@ -16,14 +16,7 @@ public interface TileType extends Nominal {
 	public static class Param<T> {
 		
 		protected enum Key {
-			PATHABLE,
-			SWIMMABLE,
-			CHANGABLE,
-			AT_TOP,
-			CAN_SHOOT_OVER,
-			BLEND_ORDER,
-			REPLACEMENT_TYPE,
-			OPEN_TYPE;
+			IS_OCCUPIED, SWIMMABLE, CHANGABLE, AT_TOP, CAN_SHOOT_OVER, BLEND_ORDER, REPLACEMENT_TYPE, REPLACEMENT_TILE;
 		}
 		
 		protected final Key key;
@@ -42,8 +35,8 @@ public interface TileType extends Nominal {
 			return value;
 		}
 		
-		public static Param<Boolean> pathable(Boolean value) {
-			return new Param<>(Key.PATHABLE, value);
+		public static Param<Boolean> isOccupied(Boolean value) {
+			return new Param<>(Key.IS_OCCUPIED, value);
 		}
 		
 		public static Param<Boolean> swimmable(Boolean value) {
@@ -70,16 +63,14 @@ public interface TileType extends Nominal {
 			return new Param<>(Key.REPLACEMENT_TYPE, value);
 		}
 		
-		public static Param<TileType> openType(TileType value) {
-			return new Param<>(Key.OPEN_TYPE, value);
+		public static Param<Tile> replacementTile(Tile value) {
+			return new Param<>(Key.REPLACEMENT_TILE, value);
 		}
 	}
 	
-	// use a method like this to set parameters on TileType
+	// Use a method like this to set parameters on TileType.
 	public void setParam(Param<?> param);
 	
-	//BufferedImage getImage(String string);
-		
 	int getId();
 	
 	BufferedImage[] getTextures();
@@ -92,7 +83,7 @@ public interface TileType extends Nominal {
 	String toString();
 	
 	ArrayList<Tile> getAllStyles();
-		
+	
 	default boolean hasSounds() {
 		return Tile.sounds.length >= 1;
 	}
@@ -116,7 +107,7 @@ public interface TileType extends Nominal {
 	
 	String name();
 	
-	boolean isPathable();
+	boolean isOccupied();
 	
 	boolean canShootOver();
 	
@@ -134,7 +125,7 @@ public interface TileType extends Nominal {
 	}
 	
 	@Override
-	public default Nominal get(AbstractSemantics attr, SpellEvent e) {
+	public default Nominal get(AbstractSemantics attr, CastEvent e) {
 		if (attr == AbstractSemantics.FLOOD && isSwimmable()) {
 			return new Tile(this);
 		}
@@ -174,18 +165,15 @@ public interface TileType extends Nominal {
 	}
 	
 	public static BufferedImage[] getTwoRotations(BufferedImage image) {
-		
 		List<BufferedImage> out = new ArrayList<>();
-		
 		for (double theta = 0; theta < Math.PI; theta += Math.PI / 2) {
 			out.add(Util.getRotated(image, theta));
 		}
-		
 		return out.toArray(new BufferedImage[0]);
-		
 	}
 	
-	public TileType getReplacement();
+	/** Get a replacement Tile for oldTile. */
+	public Tile newReplacementTile(Tile oldTile);
 	
 	public double getBlendOrder();
 	

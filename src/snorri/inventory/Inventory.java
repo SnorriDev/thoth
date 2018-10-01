@@ -7,7 +7,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
 
 import snorri.entities.Unit;
-import snorri.events.SpellEvent.Caster;
+import snorri.events.CastEvent.Caster;
 import snorri.inventory.Item.ItemType;
 import snorri.main.FocusedWindow;
 import snorri.main.GameWindow;
@@ -42,7 +42,7 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 		if (orbSlot != null) {
 			orbSlot.updateCooldown(deltaTime);
 		}
-		papyrusSlot.castQueuedSpell();
+		papyrusSlot.checkQueuedSpell();
 		papyrusSlot.updateCooldown(deltaTime);
 	}
 	
@@ -148,7 +148,6 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 		FocusedWindow<?> window = (FocusedWindow<?>) Main.getWindow();
 		World world = window.getWorld();
 		attack(world, window.getMomentumVector(), window.getShotDirection());
-		cast(world, window.getCastPosition());	
 	}
 	
 	public void attack(World world, Vector momentum, Vector dir) {
@@ -158,10 +157,9 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 		weaponSlot.attackIfPossible(world, player, momentum, dir, orbSlot);
 	}
 	
-	private void cast(World world, Vector pos) {
-		if (pos != null && player instanceof Caster) {
-			papyrusSlot.queueSpellIfPossible(world, (Caster) player);
-			// TODO(lambdaviking): Need to resume?
+	public void cast(World world, Vector castPos) {
+		if (castPos != null && player instanceof Caster) {
+			papyrusSlot.queueSpellIfPossible(world, (Caster) player, castPos);
 		}
 	}
 

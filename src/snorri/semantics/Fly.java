@@ -1,6 +1,6 @@
 package snorri.semantics;
 
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 
 public class Fly extends IntransVerbDef {
 
@@ -11,13 +11,13 @@ public class Fly extends IntransVerbDef {
 	}
 
 	@Override
-	public boolean exec(SpellEvent e) {
+	public boolean exec(CastEvent e) {
 //		e.getSecondPerson().startFlying();
 		return true;
 	}
 
 	@Override
-	public boolean eval(Object subj, SpellEvent e) {
+	public boolean eval(Object subj, CastEvent e) {
 //		if (subj instanceof Entity) {
 //			return ((Entity) subj).isFlying();
 //		}

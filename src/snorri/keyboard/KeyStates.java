@@ -7,13 +7,16 @@ import snorri.world.Vector;
 
 public class KeyStates {
 	
+	private static final int NUM_KEYS = 256;
+	private static final int NUM_MOUSE_BUTTONS = 50;
+	
 	private final boolean[] states;
 	private final boolean[] mouseStates;
 	private final Queue<Binding> actionQ;
 	
 	public KeyStates() {
-		states = new boolean[256];
-		mouseStates = new boolean[100];
+		states = new boolean[NUM_KEYS];
+		mouseStates = new boolean[NUM_MOUSE_BUTTONS];
 		actionQ = new LinkedList<>();
 	}
 	
@@ -46,7 +49,11 @@ public class KeyStates {
 	}
 	
 	public Vector getMomentumVector() {
-		return new Vector(getInt(Key.D) - getInt(Key.A), getInt(Key.S) - getInt(Key.W));
+		return new Vector(getInt(Key.D) - getInt(Key.A), 0);
+	}
+	
+	public boolean isJumping() {
+		return (getInt(Key.W) == 1 ? true : false);
 	}
 	
 	public void purge() {

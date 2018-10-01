@@ -1,12 +1,12 @@
 package snorri.semantics;
 
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 
 public class Greatly extends AdverbDef {
 	
 	@Override
-	public SpellEvent getMeaning(SpellEvent e) {
-		return new SpellEvent(e).scaleHealthInteractionModifier(1.3 + 0.3 * e.pollDegree());
+	public CastEvent getMeaning(CastEvent e) {
+		return new CastEvent(e).scaleHealthInteractionModifier(1.3 + 0.3 * e.pollDegree());
 	}
 
 	@Override

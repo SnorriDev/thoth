@@ -65,14 +65,18 @@ public abstract class GamePanel extends JPanel implements ActionListener, FocusL
 		return inputs;
 	}
 
-	protected JButton createButton(String text) {
+	protected JButton createButton(String text, Color color) {
 		JButton button = new JButton(text);
 		button.setOpaque(true);
 		button.setFont(button.getFont().deriveFont(Font.BOLD));
-		button.setBackground(BUTTON_COLOR);
+		button.setBackground(color);
 		button.setSelected(false);
 		button.addActionListener(this);
 		return button;
+	}
+	
+	protected JButton createButton(String text) {
+		return createButton(text, BUTTON_COLOR);
 	}
 
 	public Vector getDimensions() {

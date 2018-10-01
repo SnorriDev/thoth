@@ -1,15 +1,15 @@
 package snorri.semantics;
 
-import snorri.events.SpellEvent;
+import snorri.events.CastEvent;
 import snorri.nonterminals.Prep;
 import snorri.world.Tile;
 
-public abstract class PrepDef extends Definition<Lambda<Nominal, SpellEvent>> {
+public abstract class PrepDef extends Definition<Lambda<Nominal, CastEvent>> {
 	
 	protected static final int DISPLACE_DISTANCE = Tile.WIDTH * 3;
-	private static final Category CATEGORY = new Category(Nominal.class, SpellEvent.class);
+	private static final Category CATEGORY = new Category(Nominal.class, CastEvent.class);
 	
-	protected SpellEvent e;
+	protected CastEvent e;
 	
 	public PrepDef() {
 		super(Prep.class, CATEGORY);
@@ -18,11 +18,11 @@ public abstract class PrepDef extends Definition<Lambda<Nominal, SpellEvent>> {
 	//unify these arguments with verb objects
 	
 	@Override
-	public Lambda<Nominal, SpellEvent> getMeaning(final SpellEvent e) {
-		return new Lambda<Nominal, SpellEvent>(CATEGORY) {	
+	public Lambda<Nominal, CastEvent> getMeaning(final CastEvent e) {
+		return new Lambda<Nominal, CastEvent>(CATEGORY) {	
 			@Override
-			public SpellEvent eval(Nominal obj) {
-				return PrepDef.this.eval(obj, new SpellEvent(e));
+			public CastEvent eval(Nominal obj) {
+				return PrepDef.this.eval(obj, new CastEvent(e));
 			}
 		};
 	}
@@ -32,6 +32,6 @@ public abstract class PrepDef extends Definition<Lambda<Nominal, SpellEvent>> {
 	 * @param obj the object of the preposition
 	 * @return the new SpellEvent
 	 */
-	public abstract SpellEvent eval(Nominal obj, SpellEvent e);
+	public abstract CastEvent eval(Nominal obj, CastEvent e);
 
 }

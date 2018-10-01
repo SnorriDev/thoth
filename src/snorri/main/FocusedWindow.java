@@ -16,7 +16,7 @@ import javax.swing.SwingUtilities;
 
 import snorri.dialog.Dialog;
 import snorri.entities.Entity;
-import snorri.events.SpellEvent.Caster;
+import snorri.events.CastEvent.Caster;
 import snorri.keyboard.Key;
 import snorri.keyboard.KeyStates;
 import snorri.keyboard.MouseButton;
@@ -31,9 +31,16 @@ import snorri.world.World;
 public abstract class FocusedWindow<F extends Entity> extends GamePanel implements MouseListener, KeyListener {
 
 	private static final long serialVersionUID = 1L;
-	private static final int FRAME_DELTA = 15; // 33 -> 30 FPS (20 -> 50 FPS
+	/** Milliseconds per frame.
+	 * 
+	 * 15 => ~60 FPS.
+	 * 20 => ~50 FPS.
+	 * 33 => ~30 FPS.
+	 */
+	private static final int FRAME_DELTA = 15;
 
 	protected final KeyStates states = new KeyStates();
+	private Runnable castCallback;
 	
 	protected final F player;
 	protected Entity customCenter;
@@ -118,7 +125,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	 * @return absolute mouse position
 	 */
 	public Vector getMousePosAbsolute() {
-		return getMousePosRelative().add_(getCenterObject().getPos());
+		return getMousePosRelative().add(getCenterObject().getPos());
 	}
 
 	@Override
@@ -134,6 +141,9 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	@Override
 	public void mousePressed(MouseEvent e) {
 		states.setMouseButton(e.getButton(), true);
+		if (castCallback != null && e.getButton() == MouseButton.CAST.getNum()) {
+			castCallback.run();
+		}
 	}
 
 	@Override
@@ -143,6 +153,10 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 
 	public Vector getMomentumVector() {
 		return states.getMomentumVector();
+	}
+	
+	public boolean isJumping() {
+		return states.isJumping();
 	}
 
 	public Vector getShotDirection() {
@@ -263,5 +277,12 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	public boolean hasCustomCenter() {
 		return customCenter != null;
 	}
-
+	
+	protected Runnable getCastCallback() {
+		return castCallback;
+	}
+	
+	protected void setCastCallback(Runnable castCallback) {
+		this.castCallback = castCallback;
+	}
 }
