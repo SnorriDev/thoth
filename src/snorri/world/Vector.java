@@ -25,16 +25,13 @@ public class Vector implements Nominal, Comparable<Vector> {
 	
 	public double x, y;
 	
+	/** This constructor is used for reading Vectors from YAML. Do not call! */
+	public Vector() {
+	}
+	
 	public Vector(double x, double y) {
 		this.x = x;
 		this.y = y;
-	}
-	
-	/** This public constructor is used by the YAML reader API.
-	 * 
-	 * Do not call it yourself!
-	 */
-	public Vector() {
 	}
 	
 	public Vector(Point point) {

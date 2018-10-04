@@ -268,10 +268,9 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		setPos(pos.add(getVelocity().multiply(deltaTime))); // XXX this has the potential to cause some bugs
 	}
 	
-	public void renderAround(FocusedWindow<?> g, Graphics gr, double timeDelta) {
-		
-		if (Debug.collidersRendered() || (animation == null && g instanceof LevelEditor)  || inInteractRange(g)) {
-			collider.render(g, gr);
+	public void renderAround(FocusedWindow<?> window, Graphics gr, double timeDelta) {
+		if (Debug.collidersRendered() || (animation == null && window instanceof LevelEditor)  || inInteractRange(window)) {
+			collider.render(window, gr);
 		}
 		
 		if (animation == null) {
@@ -283,9 +282,8 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			return;
 		}
 		
-		Vector rel = pos.copy().sub_(g.getCenterObject().getPos());
-		gr.drawImage(sprite, rel.getX() + (g.getBounds().width - sprite.getWidth()) / 2, rel.getY() + (g.getBounds().height - sprite.getHeight()) / 2, sprite.getWidth(null), sprite.getHeight(null), null);
-		
+		Vector rel = pos.sub(window.getCenterObject().getPos());
+		gr.drawImage(sprite, rel.getX() + (window.getBounds().width - sprite.getWidth()) / 2, rel.getY() + (window.getBounds().height - sprite.getHeight()) / 2, sprite.getWidth(null), sprite.getHeight(null), null);
 	}
 	
 	private boolean inInteractRange(FocusedWindow<?> g) {

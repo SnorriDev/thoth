@@ -27,9 +27,7 @@ public class Vortex extends Detector {
 
 	@Override
 	public void onCollision(CollisionEvent e) {
-		
-		//issue when trying to place this too close to the edge of the map
-		
+		// Issue when trying to place this too close to the edge of the map.
 		if (e.getTarget().isStaticObject()) {
 			return;
 		}
@@ -45,7 +43,6 @@ public class Vortex extends Detector {
 		
 		Vector newPos = getForce(e.getTarget()).multiply_(ENTITY_SCALE).add_(e.getTarget().pos);
 		e.getWorld().getEntityTree().move(e.getTarget(), newPos);
-		
 	}
 	
 	@Override

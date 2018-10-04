@@ -115,7 +115,7 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 				setVelocity(new Vector(velocity.getX(), 0));
 			}
 		}
-		else if (!willHitSurface(world, velocity.copy().add(GRAVITY), deltaTime)) {
+		else if (!willHitSurface(world, velocity.add(GRAVITY), deltaTime)) {
 			onSurface = false;
 		}
 
@@ -165,7 +165,7 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 	/** Translate the position by delta scaled by speed. */
 	@Override
 	public void translate(World world, Vector delta) {
-		moveNicely(world, delta.copy().multiply(getSpeed()));
+		moveNicely(world, delta.multiply(getSpeed()));
 	}
 	
 	/** Walk in the direction dir with magnitude controlled by deltaTime. */
@@ -182,7 +182,7 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 	
 	/** Walk towards a target position. */
 	public void walkTowards(World world, Vector target, double deltaTime) {
-		translateNormalized(world, target.copy().sub_(pos), deltaTime);
+		translateNormalized(world, target.sub(pos), deltaTime);
 	}
 	
 	// The order of target and world are reversed here to be consistent with the newer AIAgent API.
@@ -378,7 +378,7 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 	 */
 	public boolean willHitSurface(World world, Vector velo, double deltaTime) {
 		Vector deltaPos = velo.multiply(deltaTime);
-		Vector newPos = pos.copy().add(deltaPos);
+		Vector newPos = pos.add(deltaPos);
 		try {
 			if (willHitSurfaceTile(world, newPos)) {
 				return true;
