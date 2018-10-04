@@ -17,7 +17,6 @@ import java.util.PriorityQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import snorri.collisions.RectCollider;
-import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.triggers.Trigger;
 import snorri.world.Executable;
@@ -26,11 +25,11 @@ import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
 
-public class QuadTree extends Entity {
+public class EntityTree extends Entity {
 
 	private static final long serialVersionUID = 1L;
 
-	private static HashMap<Entity, QuadTree> nodeMap;
+	private static HashMap<Entity, EntityTree> nodeMap;
 
 	public static final int CUSHION = TileLayer.CUSHION * Tile.WIDTH;
 	public static final int SCALE_FACTOR = 2;
@@ -41,17 +40,17 @@ public class QuadTree extends Entity {
 
 	/** the entities in this level of the tree */
 	private CopyOnWriteArrayList<Entity> entities; // the entities in this level
-	private QuadTree parent;
-	private QuadTree[] nodes; // if this is a leaf, then nodes == null
+	private EntityTree parent;
+	private EntityTree[] nodes; // if this is a leaf, then nodes == null
 	private boolean isEmpty;
 
-	public QuadTree(Vector pos, RectCollider collider, QuadTree parent) {
+	public EntityTree(Vector pos, RectCollider collider, EntityTree parent) {
 		super(pos, collider);
 		isEmpty = true;
 		entities = new CopyOnWriteArrayList<Entity>();
 		this.parent = parent;
 		if (getRectCollider().getRadiusX() / 2 >= Tile.WIDTH) {
-			nodes = new QuadTree[4];
+			nodes = new EntityTree[4];
 			nodes[0] = getSubQuad(-1, -1);
 			nodes[1] = getSubQuad(1, -1);
 			nodes[2] = getSubQuad(-1, 1);
@@ -65,16 +64,16 @@ public class QuadTree extends Entity {
 	 * @param dim
 	 *            the dimensions to cover, in grid coordinates
 	 */
-	public static QuadTree coverLevel(TileLayer l) {
+	public static EntityTree coverLevel(TileLayer l) {
 		Vector pos = l.getDimensions().copy().globalPos_().divide_(2);
-		return new QuadTree(pos, new RectCollider(l.getDimensions().copy().globalPos_()), null);
+		return new EntityTree(pos, new RectCollider(l.getDimensions().copy().globalPos_()), null);
 	}
 
-	private QuadTree getSubQuad(int x, int y) {
+	private EntityTree getSubQuad(int x, int y) {
 		Vector newDim = getRectCollider().getDimensions().copy().divide_(2);
 		Vector newPos = pos.copy().add_(x * newDim.getX() / 2, y * newDim.getY() / 2);
 		RectCollider newCol = new RectCollider(newDim);
-		return new QuadTree(newPos, newCol, this);
+		return new EntityTree(newPos, newCol, this);
 	}
 
 	private RectCollider getRectCollider() {
@@ -104,7 +103,7 @@ public class QuadTree extends Entity {
 
 		boolean inChild = false;
 		if (nodes != null) {
-			for (QuadTree node : nodes) {
+			for (EntityTree node : nodes) {
 				if (node.insert(e)) {
 					inChild = true;
 					break;
@@ -127,7 +126,7 @@ public class QuadTree extends Entity {
 	 */
 	public boolean delete(Entity e) {
 
-		QuadTree local = nodeMap.get(e);
+		EntityTree local = nodeMap.get(e);
 		if (local == null) {
 			return false;
 		}
@@ -138,7 +137,7 @@ public class QuadTree extends Entity {
 	}
 
 	public void move(Entity e, Vector newPos) {
-		QuadTree node = nodeMap.get(e);
+		EntityTree node = nodeMap.get(e);
 		e.setPos(newPos.copy());
 		if (!node.contains(e)) {
 			delete(e);
@@ -163,7 +162,7 @@ public class QuadTree extends Entity {
 			}
 		}
 		if (nodes != null) {
-			for (QuadTree node : nodes) {
+			for (EntityTree node : nodes) {
 				if (!node.isEmpty() && node.intersects(e)) {
 					out.addAll(node.getAllCollisions(e, hitAll));
 				}
@@ -182,7 +181,7 @@ public class QuadTree extends Entity {
 			}
 		}
 		if (nodes != null) {
-			for (QuadTree node : nodes) {
+			for (EntityTree node : nodes) {
 				if (!node.isEmpty() && node.intersects(r)) {
 					out.addAll(node.getRenderQueue(r));
 				}
@@ -197,7 +196,7 @@ public class QuadTree extends Entity {
 	
 	public Entity getFirstCollision(Entity e, boolean hitAll) {
 		if (nodes != null) {
-			for (QuadTree node : nodes) {
+			for (EntityTree node : nodes) {
 				if (!node.isEmpty() && node.intersects(e)) {
 					Entity col = node.getFirstCollision(e, hitAll);
 					if (col != null) {
@@ -219,7 +218,7 @@ public class QuadTree extends Entity {
 	 */
 	public Entity getFirstCollision(Rectangle rect, boolean hitAll) {
 		if (nodes != null) {
-			for (QuadTree node : nodes) {
+			for (EntityTree node : nodes) {
 				if (!node.isEmpty() && node.intersects(rect)) {
 					Entity col = node.getFirstCollision(rect, hitAll);
 					if (col != null) {
@@ -250,7 +249,7 @@ public class QuadTree extends Entity {
 		}
 	}
 
-	public QuadTree getParent() {
+	public EntityTree getParent() {
 		return parent;
 	}
 
@@ -281,7 +280,7 @@ public class QuadTree extends Entity {
 			}
 		}
 		if (nodes != null) {
-			for (QuadTree node : nodes) {
+			for (EntityTree node : nodes) {
 				if (!node.isEmpty() && node.intersects(updateRange)) {
 					node.updateAround(world, deltaTime, centerObject);
 				}
@@ -353,7 +352,7 @@ public class QuadTree extends Entity {
 		List<Entity> result = new ArrayList<>();
 		result.addAll(entities);
 		if (nodes != null) {
-			for (QuadTree node : nodes) {
+			for (EntityTree node : nodes) {
 				if (!node.isEmpty()) {
 					result.addAll(node.getAllEntities());
 				}
@@ -370,7 +369,7 @@ public class QuadTree extends Entity {
 			exec.exec(e);
 		}
 		if (nodes != null) {
-			for (QuadTree node : nodes) {
+			for (EntityTree node : nodes) {
 				if (!node.isEmpty()) {
 					node.mapOverEntities(exec);
 				}
@@ -393,7 +392,7 @@ public class QuadTree extends Entity {
 			}
 		}
 		if (nodes != null) {
-			for (QuadTree node : nodes) {
+			for (EntityTree node : nodes) {
 				if (!node.isEmpty() && node.intersects(e)) {
 					node.mapOverCollisions(e, hitAll, exec);
 				}
@@ -411,7 +410,7 @@ public class QuadTree extends Entity {
 	
 	public Entity getFirstCollisionOtherThan(Entity e, Entity other) {
 		if (nodes != null) {
-			for (QuadTree node : nodes) {
+			for (EntityTree node : nodes) {
 				if (!node.isEmpty() && node.intersects(e)) {
 					Entity col = node.getFirstCollisionOtherThan(e, other);
 					if (col != null) {
@@ -435,7 +434,7 @@ public class QuadTree extends Entity {
 	@SuppressWarnings("unchecked")
 	public <P> P getFirstCollision(Entity checker, boolean hitAll, Class<P> class1) {
 		if (nodes != null) {
-			for (QuadTree node : nodes) {
+			for (EntityTree node : nodes) {
 				if (!node.isEmpty() && node.intersects(checker)) {
 					P col = node.getFirstCollision(checker, hitAll, class1);
 					if (col != null) {
@@ -456,7 +455,7 @@ public class QuadTree extends Entity {
 	@SuppressWarnings("unchecked")
 	public <P> P getFirst(Class<P> class1) {
 		if (nodes != null) {
-			for (QuadTree node : nodes) {
+			for (EntityTree node : nodes) {
 				if (!node.isEmpty()) {
 					P col = node.getFirst(class1);
 					if (col != null) {
