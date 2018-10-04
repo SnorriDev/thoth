@@ -391,7 +391,7 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 		}
 	}
 	
-	protected void jump() {
+	public void jump() {
 		if (canJump()) {
 			velocity = velocity.add(JUMP_VELOCITY);
 		}

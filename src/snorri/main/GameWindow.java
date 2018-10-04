@@ -57,6 +57,9 @@ public class GameWindow extends FocusedWindow<Player> {
 		setCastCallback(() -> {
 			getFocus().getInventory().cast(getWorld(), getMousePosAbsolute());
 		});
+		setJumpCallback(() -> {
+			getFocus().jump();
+		});
 		while (true) {
 			if (TriggerType.TIMELINE.activate("start")) {
 				break;
