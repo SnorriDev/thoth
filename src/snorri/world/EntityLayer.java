@@ -6,22 +6,22 @@ import java.io.IOException;
 import java.util.Map;
 
 import snorri.entities.Entity;
-import snorri.entities.QuadTree;
+import snorri.entities.EntityTree;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 
 public class EntityLayer implements SavableLayer {
 	
-	private QuadTree entityTree;
+	private EntityTree entityTree;
 	private Vector dimensions;
 	
-	public EntityLayer(QuadTree entityTree, Vector dimensions) {
+	public EntityLayer(EntityTree entityTree, Vector dimensions) {
 		this.entityTree = entityTree;
 		this.dimensions = dimensions;
 	}
 	
 	public EntityLayer(World world) {
-		this(QuadTree.coverLevel(world.getTileLayer()), world.getDimensions());
+		this(EntityTree.coverLevel(world.getTileLayer()), world.getDimensions());
 	} 
 	
 	public static EntityLayer fromYAML(World world, Map<String, Object> params) throws IOException {
@@ -67,7 +67,7 @@ public class EntityLayer implements SavableLayer {
 	}
 	
 	/** Should try to use the public API wherever possible. */
-	public QuadTree getEntityTree() {
+	public EntityTree getEntityTree() {
 		return entityTree;
 	}
 

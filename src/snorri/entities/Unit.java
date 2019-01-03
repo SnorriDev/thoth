@@ -101,25 +101,8 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 			}
 			TriggerType.KILL.activate(tag);
 		}
-		addVelocity(GRAVITY.multiply(deltaTime));
 		
-//		if(isFalling()) {
-////			Debug.logger.fine("Falling.. onSurface = " + onSurface);
-//			if (willHitUndersideOfTile(world, pos) && velocity.getY() < 0) {
-//				setVelocity(velocity.getProjectionX());
-//			}
-//			addVelocity(GRAVITY.multiply(deltaTime));
-//			if (willHitSurfaceTile(world, velocity, deltaTime)) {
-//				Debug.logger.fine("Setting on surface..");
-//				onSurface = true;
-//				setPos(getFallAdjustedHeight(pos));
-//				setVelocity(new Vector(velocity.getX(), 0));
-//			}
-//		}
-//		else if (!willHitSurfaceTile(world, velocity.copy().add(GRAVITY), deltaTime)) {
-//			onSurface = false;
-//		}
-
+		addVelocity(GRAVITY.multiply(deltaTime));
 		super.update(world, deltaTime);
 	}
 	
@@ -166,7 +149,7 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 	/** Translate the position by delta scaled by speed. */
 	@Override
 	public void translate(World world, Vector delta) {
-		moveNicely(world, delta.copy().multiply(getSpeed()));
+		moveNicely(world, delta.multiply(getSpeed()));
 	}
 	
 	/** Walk in the direction dir with magnitude controlled by deltaTime. */
@@ -178,7 +161,7 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 	
 	/** Walk towards a target position. */
 	public void walkTowards(World world, Vector target, double deltaTime) {
-		translateNormalized(world, target.copy().sub_(pos), deltaTime);
+		translateNormalized(world, target.sub(pos), deltaTime);
 	}
 	
 	// The order of target and world are reversed here to be consistent with the newer AIAgent API.

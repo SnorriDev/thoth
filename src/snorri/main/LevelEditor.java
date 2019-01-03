@@ -548,6 +548,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		}
 	}
 
+	@Deprecated
 	private ArrayList<Vector> computeConnectedSubGraph(Vector start, boolean[][] visited) {
 																							
 		final Tile START_TILE = getSelectedTileLayer().getTileGrid(start);
