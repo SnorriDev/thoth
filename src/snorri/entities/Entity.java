@@ -236,10 +236,10 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		return false;	
 	}
 	
-	protected boolean willHitSurfaceTile(World world, Vector newPos) {
-		Vector testPos = newPos.copy().add(new Vector(0, collider.getRadiusY()));
+	private boolean willHitTopOfTile(World world, Vector newPos) {
+		Vector testPos = newPos.add(new Vector(0, collider.getRadiusY()));
+		int j = testPos.getY() / Tile.WIDTH;
 		for (int i = (testPos.getX() - collider.getRadiusX() + 1) / Tile.WIDTH; i <= (testPos.getX() + collider.getRadiusX() - 1) / Tile.WIDTH; i++) {
-			int j = testPos.getY() / Tile.WIDTH;
 			if (world.isOccupied(i, j) && world.getTileLayer().getTileGrid(i, j) != null) {
 				return true;
 			}
@@ -247,10 +247,10 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		return false;	
 	}
 	
-	protected boolean willHitUndersideOfTile(World world, Vector newPos) {
-		Vector testPos = newPos.copy().add(new Vector(0, collider.getRadiusY()));
+	private boolean willHitBottomOfTile(World world, Vector newPos) {
+		Vector testPos = newPos.sub(new Vector(0, collider.getRadiusY()));
+		int j = testPos.getY() / Tile.WIDTH;
 		for (int i = (testPos.getX() - collider.getRadiusX() + 1) / Tile.WIDTH; i <= (testPos.getX() + collider.getRadiusX() - 1) / Tile.WIDTH; i++) {
-			int j = (pos.getY() - collider.getRadiusY()) / Tile.WIDTH;
 			if (world.isOccupied(i, j) && world.getTileLayer().getTileGrid(i, j) != null) {
 				return true;
 			}
@@ -299,11 +299,14 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			onCycleComplete(world);
 			hasCycled = true;
 		}
+		
+		// Update position according to velocity.
 		Vector newPos = pos.add(getVelocity().multiply(deltaTime));
-		if (willHitSurfaceTile(world, newPos)) {
+		if (willHitTopOfTile(world, newPos)) {
 			setVelocity(getSurfaceCollisionMode().getNewVelocity(getVelocity(), true));
-			// TODO: Can snap to tile by adding that method to SurfaceCollisionMode.
-		} else if (willHitUndersideOfTile(world, newPos)) {
+			// TODO(snorri): Can snap to tile by adding that method to SurfaceCollisionMode.
+		} else if (willHitBottomOfTile(world, newPos)) {
+			// This case might actually never get hit?
 			setVelocity(getSurfaceCollisionMode().getNewVelocity(getVelocity(), false));
 		} else {
 			setPos(newPos);
@@ -546,7 +549,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	
 	protected SurfaceCollisionMode getSurfaceCollisionMode() {
 		// Entities with different surface collision behaviors should override this.
-		return SurfaceCollisionMode.STOP_ABOVE_BOUNCE_BELOW;
+		return SurfaceCollisionMode.STOP;
 	}
 	
 	public boolean isFalling() {

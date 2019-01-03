@@ -27,7 +27,11 @@ public enum UnifiedTileType implements TileType {
 	DOOR(new BufferedImage[] {
 			Main.getImage("/textures/tiles/door00.png"),
 			Main.getImage("/textures/tiles/door01.png"),
-	}, Param.replacementTile(new Tile(EMPTY)));
+	}, Param.replacementTile(new Tile(EMPTY))),
+	WALL(new BufferedImage[] {
+			Main.getImage("/textures/tiles/background/wall08.png"),
+			Main.getImage("/textures/tiles/background/wall09.png"),
+	});
 	
 	private final BufferedImage[] textures;
 	

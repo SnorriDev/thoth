@@ -72,9 +72,8 @@ public class Projectile extends Detector implements Movable {
 						
 		// If we hit the edge of the map or a wall, end.
 		if (!world.canShootOver(pos)) {
-			Debug.logger.fine("Deleted this boi.");
 			world.delete(this);
-			// TODO: This can be converted to a SurfaceCollisionMode.
+			// TODO: This logic can be reexpressed as a SurfaceCollisionMode.
 		}
 				
 		this.addVelocity(GRAVITY.multiply(deltaTime));
