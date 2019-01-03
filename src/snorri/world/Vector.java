@@ -96,6 +96,14 @@ public class Vector implements Nominal, Comparable<Vector> {
 		return copy().sub_(pos);
 	}
 	
+	public Vector scale(double norm) {
+		return copy().scale_(norm);
+	}
+	
+	public Vector normalize() {
+		return copy().normalize_();
+	}
+	
 	public Vector multiply_(double n) {
 		x *= n;
 		y *= n;

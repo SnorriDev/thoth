@@ -67,7 +67,6 @@ public class EntityLayer implements SavableLayer {
 	}
 	
 	/** Should try to use the public API wherever possible. */
-	@Deprecated
 	public QuadTree getEntityTree() {
 		return entityTree;
 	}

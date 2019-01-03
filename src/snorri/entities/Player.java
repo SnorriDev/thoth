@@ -114,9 +114,6 @@ public class Player extends Unit implements Caster {
 			@Override
 			public void run() {
 				translateNormalized(world, window.getMomentumVector(), deltaTime);
-				if (window.isJumping()) {
-					jump();
-				}
 			}
 		});
 		

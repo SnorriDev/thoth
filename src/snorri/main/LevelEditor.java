@@ -56,7 +56,6 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 	private Editable env;
 	private Tile selectedTile;
-	private Tile previousTile;
 	private Class<? extends Entity> selectedEntityClass;
 	private boolean isClicking = false;
 	
@@ -81,7 +80,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 	public LevelEditor() {
 		super(new Entity(new Vector(20, 20)));
-		previousTile = new Tile(UnifiedTileType.EMPTY);
+		new Tile(UnifiedTileType.EMPTY);
 		selectedTile = new Tile(UnifiedTileType.SAND, 0);
 		selectedEntityClass = Entity.EDIT_SPAWNABLE.get(0);
 		createMenu();
@@ -238,7 +237,6 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		if (e.getActionCommand().startsWith("set")) {
 			//Main.debug(e.getActionCommand());
 			if (!selectedTile.equals(new Tile(e.getActionCommand().substring(3)))) {
-				previousTile = selectedTile;
 				selectedTile = new Tile(e.getActionCommand().substring(3));
 				return;
 			}
@@ -546,7 +544,6 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 	
 	public void pick() {
 		if (!selectedTile.equals(getSelectedTileLayer().getTileGrid(getMousePosAbsolute().getX() / Tile.WIDTH, getMousePosAbsolute().getY() / Tile.WIDTH))) {
-			previousTile = selectedTile;
 			selectedTile = getSelectedTileLayer().getTileGrid(getMousePosAbsolute().getX() / Tile.WIDTH, getMousePosAbsolute().getY() / Tile.WIDTH);
 		}
 	}

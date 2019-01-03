@@ -119,7 +119,7 @@ public enum UnifiedTileType implements TileType {
 
 	@Override
 	public boolean canShootOver() {
-		return isOccupied || swimmable;
+		return !isOccupied || swimmable;
 	}
 
 	@Override

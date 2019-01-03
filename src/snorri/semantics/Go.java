@@ -12,8 +12,8 @@ public class Go extends IntransVerbDef {
 	
 	public interface Movable {
 		
-		/** default gravity vector **/
-		final static Vector GRAVITY = new Vector(0.0, 512.0);
+		/** Default gravity vector. **/
+		final static Vector GRAVITY = new Vector(0.0, 400.0);
 		
 		/**
 		 * translates (moves) the movable object through the world along the delta vector

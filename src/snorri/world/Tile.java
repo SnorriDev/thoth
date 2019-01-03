@@ -27,7 +27,7 @@ public class Tile implements Comparable<Tile>, Nominal {
 									
 	protected TileType type;
 	private int style;
-	private boolean reachable, surroundingsPathable = true;
+	private boolean reachable;
 	private List<Entity> entities;
 		
 	protected static ClipWrapper[] sounds;

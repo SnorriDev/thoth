@@ -33,9 +33,9 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 
 	private static final long serialVersionUID = 1L;
 	
-	/** a list of entities which can be spawned using the word <code>CreateObject</code> */
+	/** A list of entities which can be spawned using the word <code>CreateObject</code>. */
 	public static final List<Class<? extends Entity>> SPAWNABLE;
-	/** a list of entities which can be spawned in the level editor */
+	/** A list of entities which can be spawned in the level editor. */
 	public static final List<Class<? extends Entity>> EDIT_SPAWNABLE;
 	
 	private static final int TERMINAL_VELOCITY = 1280;
@@ -78,13 +78,13 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		});
 	}
 	
-	/** A layer above the player for particle effects */
+	/** A layer above the player for particle effects. */
 	protected static final int PARTICLE_LAYER = 15;
-	/** The default layer for objects (below the player) */
+	/** The default layer for objects (below the player). */
 	protected static final int DEFAULT_LAYER = 4;
-	/** The default layer for units */
+	/** The default layer for units. */
 	protected static final int UNIT_LAYER = 0;
-	/** The layer for the player */
+	/** The layer for the player. */
 	protected static final int PLAYER_LAYER = 5;
 	
 	protected Collider collider;
@@ -101,7 +101,40 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		
 	private boolean deleted = false;
 	private boolean hasCycled = false;
-
+	
+	protected enum SurfaceCollisionMode {
+		
+		/** Mode for colliding with a wall. */
+		
+		// Always lose all velocity.
+		STOP((oldVelocity, above) -> Vector.ZERO),
+		// Always reverse velocity on y axis.
+		BOUNCE((oldVelocity, above) -> new Vector(oldVelocity.x, -oldVelocity.y)),
+		// Stop on top of a tile and bounce off the bottom.
+		STOP_ABOVE_BOUNCE_BELOW((oldVelocity, above) -> {
+			if (above) {
+				return STOP.getNewVelocity(oldVelocity, above);
+			} else {
+				return BOUNCE.getNewVelocity(oldVelocity, above);
+			}
+		});
+		
+		private SurfaceCollisionLogic logic;
+		
+		SurfaceCollisionMode(SurfaceCollisionLogic logic) {
+			this.logic = logic;
+		}
+		
+		public Vector getNewVelocity(Vector oldVelocity, boolean above) {
+			return logic.getNewVelocity(oldVelocity, above);
+		}
+		
+		private interface SurfaceCollisionLogic {
+			Vector getNewVelocity(Vector oldVelocity, boolean above);
+		}
+		
+	}
+	
 	/**
 	 * This method will automatically set the collider focus to the entity
 	 */
@@ -203,7 +236,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		return false;	
 	}
 	
-	public boolean willHitSurfaceTile(World world, Vector newPos) {
+	protected boolean willHitSurfaceTile(World world, Vector newPos) {
 		Vector testPos = newPos.copy().add(new Vector(0, collider.getRadiusY()));
 		for (int i = (testPos.getX() - collider.getRadiusX() + 1) / Tile.WIDTH; i <= (testPos.getX() + collider.getRadiusX() - 1) / Tile.WIDTH; i++) {
 			int j = testPos.getY() / Tile.WIDTH;
@@ -214,7 +247,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		return false;	
 	}
 	
-	public boolean willHitUndersideOfTile(World world, Vector newPos) {
+	protected boolean willHitUndersideOfTile(World world, Vector newPos) {
 		Vector testPos = newPos.copy().add(new Vector(0, collider.getRadiusY()));
 		for (int i = (testPos.getX() - collider.getRadiusX() + 1) / Tile.WIDTH; i <= (testPos.getX() + collider.getRadiusX() - 1) / Tile.WIDTH; i++) {
 			int j = (pos.getY() - collider.getRadiusY()) / Tile.WIDTH;
@@ -240,6 +273,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		Debug.logger.info(indent + toString());
 	}
 	
+	/** Print out a human-readable representation of an Entity/EntityTree. */
 	public void traverse() {
 		traverse(0);
 	}
@@ -265,7 +299,15 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			onCycleComplete(world);
 			hasCycled = true;
 		}
-		setPos(pos.add(getVelocity().multiply(deltaTime))); // XXX this has the potential to cause some bugs
+		Vector newPos = pos.add(getVelocity().multiply(deltaTime));
+		if (willHitSurfaceTile(world, newPos)) {
+			setVelocity(getSurfaceCollisionMode().getNewVelocity(getVelocity(), true));
+			// TODO: Can snap to tile by adding that method to SurfaceCollisionMode.
+		} else if (willHitUndersideOfTile(world, newPos)) {
+			setVelocity(getSurfaceCollisionMode().getNewVelocity(getVelocity(), false));
+		} else {
+			setPos(newPos);
+		}
 	}
 	
 	public void renderAround(FocusedWindow<?> g, Graphics gr, double timeDelta) {
@@ -501,4 +543,16 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	public static final int getTerminalVelocity() {
 		return TERMINAL_VELOCITY;
 	}
+	
+	protected SurfaceCollisionMode getSurfaceCollisionMode() {
+		// Entities with different surface collision behaviors should override this.
+		return SurfaceCollisionMode.STOP_ABOVE_BOUNCE_BELOW;
+	}
+	
+	public boolean isFalling() {
+		// With p=1, the magnitude will be exactly zero only when it has been reset for being on a surface.
+		// At the top of a trajectory, the velocity may get close to zero, but it is very unlikely to be exactly zero.
+		return getVelocity().magnitude() != 0;
+	}
+	
 }

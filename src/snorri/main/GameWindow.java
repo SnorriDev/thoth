@@ -57,6 +57,8 @@ public class GameWindow extends FocusedWindow<Player> {
 		setCastCallback(() -> {
 			getFocus().getInventory().cast(getWorld(), getMousePosAbsolute());
 		});
+		// TODO(snorri): We may want to convert jumping back to a normal thing using KeyStates.
+		setJumpCallback(getFocus()::jump);
 		while (true) {
 			if (TriggerType.TIMELINE.activate("start")) {
 				break;
@@ -237,23 +239,5 @@ public class GameWindow extends FocusedWindow<Player> {
 	public double getScale() {
 		return (Math.max(getWidth() / ((double) (Main.DEFAULT_WIDTH)), getHeight() / ((double) Main.DEFAULT_HEIGHT)));
 	}
-	
-	/*@Override
-	public Entity getCenterObject() {
-		Debug.log("SUP!?!");
-		if (universe.getCurrentWorld() != null) {
-			//Debug.log("getCenterObject() location: " + universe.getCurrentWorld().getCenterObject().getPos());
-			if (universe.getCurrentWorld().getCenterObject() != null) {
-				return universe.getCurrentWorld().getCenterObject();
-			}
-			else {
-				Debug.log("BRO!!!");
-				return getFocus();
-			}
-		}
-		else {
-			return null;
-		}
-	}*/
 	
 }

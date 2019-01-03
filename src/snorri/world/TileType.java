@@ -119,11 +119,6 @@ public interface TileType extends Nominal {
 	
 	public int ordinal();
 	
-	@Deprecated
-	default int getOrdinal() {
-		return ordinal();
-	}
-	
 	@Override
 	public default Nominal get(AbstractSemantics attr, CastEvent e) {
 		if (attr == AbstractSemantics.FLOOD && isSwimmable()) {

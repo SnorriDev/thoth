@@ -24,7 +24,7 @@ public class Projectile extends Detector implements Movable {
 	
 	public Projectile(Entity root, Vector rootVelocity, Vector path, Weapon weapon, Orb orb) {
 		super(root.getPos().copy(), 3); //radius of a projectile is 1
-		velocity = rootVelocity.copy().add_(path.copy().scale_(PROJECTILE_SPEED));
+		velocity = rootVelocity.add(path.scale(PROJECTILE_SPEED));
 		this.animation = orb.getProjectileAnimation();
 		setDirection(path);
 		this.root = root;
@@ -69,15 +69,15 @@ public class Projectile extends Detector implements Movable {
 			}
 			
 		}
-				
-		//if we hit the edge of the map or a wall, end
+						
+		// If we hit the edge of the map or a wall, end.
 		if (!world.canShootOver(pos)) {
+			Debug.logger.fine("Deleted this boi.");
 			world.delete(this);
+			// TODO: This can be converted to a SurfaceCollisionMode.
 		}
-		
-		if(isFalling()) {
-			this.addVelocity(GRAVITY.multiply(deltaTime));
-		}
+				
+		this.addVelocity(GRAVITY.multiply(deltaTime));
 		super.update(world, deltaTime);
 	}
 

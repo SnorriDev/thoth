@@ -19,7 +19,6 @@ import snorri.semantics.Go.Movable;
 import snorri.semantics.Nominal;
 import snorri.semantics.Wrapper;
 import snorri.triggers.Trigger.TriggerType;
-import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -27,8 +26,8 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 
 	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 120;
-	protected static final Vector JUMP_VELOCITY = new Vector(0, -200);
-	/**Dimensions for humanoid units*/
+	protected static final Vector JUMP_VELOCITY = new Vector(0, -300);
+	/** Dimensions for humanoid units. */
 	public static final int RADIUS = 46, RADIUS_X = 21, RADIUS_Y = 45;
 	
 	protected List<Modifier<Unit>> modifiers = new ArrayList<>();
@@ -37,7 +36,6 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 	private Inventory inventory;
 	protected Stats stats;
 	protected double health;
-	protected boolean onSurface = false;
 	
 	protected Animation walkingAnimation;
 	protected Animation idleAnimation;
@@ -103,28 +101,31 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 			}
 			TriggerType.KILL.activate(tag);
 		}
+		addVelocity(GRAVITY.multiply(deltaTime));
 		
-		if(isFalling()) {
-			if (willHitUndersideOfTile(world, pos) && velocity.getY() < 0) {
-				setVelocity(velocity.getProjectionX());
-			}
-			addVelocity(GRAVITY.multiply(deltaTime));
-			if (willHitSurface(world, velocity, deltaTime)) {
-				onSurface = true;
-				setPos(getFallAdjustedHeight(pos));
-				setVelocity(new Vector(velocity.getX(), 0));
-			}
-		}
-		else if (!willHitSurface(world, velocity.copy().add(GRAVITY), deltaTime)) {
-			onSurface = false;
-		}
+//		if(isFalling()) {
+////			Debug.logger.fine("Falling.. onSurface = " + onSurface);
+//			if (willHitUndersideOfTile(world, pos) && velocity.getY() < 0) {
+//				setVelocity(velocity.getProjectionX());
+//			}
+//			addVelocity(GRAVITY.multiply(deltaTime));
+//			if (willHitSurfaceTile(world, velocity, deltaTime)) {
+//				Debug.logger.fine("Setting on surface..");
+//				onSurface = true;
+//				setPos(getFallAdjustedHeight(pos));
+//				setVelocity(new Vector(velocity.getX(), 0));
+//			}
+//		}
+//		else if (!willHitSurfaceTile(world, velocity.copy().add(GRAVITY), deltaTime)) {
+//			onSurface = false;
+//		}
 
 		super.update(world, deltaTime);
 	}
 	
-	private Vector getFallAdjustedHeight(Vector pos) {
-		return new Vector((double) pos.getX(), Tile.WIDTH - 1 + pos.getY() - ((pos.getY() + collider.getRadiusY()) % Tile.WIDTH));
-	}
+//	private Vector getFallAdjustedHeight(Vector pos) {
+//		return new Vector((double) pos.getX(), Tile.WIDTH - 1 + pos.getY() - ((pos.getY() + collider.getRadiusY()) % Tile.WIDTH));
+//	}
 
 	/**
 	 * Set the animations for this unit to copies of the supplied ones
@@ -173,11 +174,6 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 	public void translateNormalized(World world, Vector dir, double deltaTime) {
 		setAnimation(dir);
 		Movable.super.translateNormalized(world, dir, deltaTime);
-	}
-	
-	@Override
-	public boolean isFalling() {
-		return !onSurface && this.getVelocity().getY() < Unit.getTerminalVelocity(); // TODO: combine this with determining whether the Unit is standing on a floor
 	}
 	
 	/** Walk towards a target position. */
@@ -370,34 +366,13 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 		return inventory;
 	}
 	
-	/**
-	 * determines whether the unit will collide with a surface
-	 * @param velo velocity
-	 * @param deltaTime time change
-	 * @return a boolean as to whether they will hit a surface
-	 */
-	public boolean willHitSurface(World world, Vector velo, double deltaTime) {
-		Vector deltaPos = velo.multiply(deltaTime);
-		Vector newPos = pos.copy().add(deltaPos);
-		try {
-			if (willHitSurfaceTile(world, newPos)) {
-				return true;
-			}
-			return false;
-		}
-		catch (NullPointerException e) {
-			kill(world);
-			return true;
-		}
-	}
-	
-	protected void jump() {
+	public void jump() {
 		if (canJump()) {
 			velocity = velocity.add(JUMP_VELOCITY);
 		}
 	}
 
 	private boolean canJump() {
-		return onSurface;
+		return !isFalling();
 	}
 }

@@ -415,7 +415,6 @@ public class World implements Playable, Editable {
 		return name;
 	}
 	
-	@Deprecated
 	public QuadTree getEntityTree() {
 		return getEntityLayer().getEntityTree();
 	}

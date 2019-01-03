@@ -52,10 +52,6 @@ public class KeyStates {
 		return new Vector(getInt(Key.D) - getInt(Key.A), 0);
 	}
 	
-	public boolean isJumping() {
-		return (getInt(Key.W) == 1 ? true : false);
-	}
-	
 	public void purge() {
 		for (int i = 0; i < states.length; i ++) {
 			states[i] = false;
