@@ -1,8 +1,5 @@
 package snorri.keyboard;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 import snorri.world.Vector;
 
 public class KeyStates {
@@ -12,14 +9,12 @@ public class KeyStates {
 	
 	private final boolean[] states;
 	private final boolean[] mouseStates;
-	private final Queue<Binding> actionQ;
 	/** Horizontal movement input for the player. */
 	private int momentum;
 	
 	public KeyStates() {
 		states = new boolean[NUM_KEYS];
 		mouseStates = new boolean[NUM_MOUSE_BUTTONS];
-		actionQ = new LinkedList<>();
 		momentum = 0;
 	}
 	
@@ -87,14 +82,6 @@ public class KeyStates {
 			mouseStates[i] = false;
 		}
 		momentum = 0;
-	}
-	
-	public void registerAction(Binding b) {
-		actionQ.add(b);
-	}
-	
-	public Binding popAction() {
-		return actionQ.poll();
 	}
 	
 }
