@@ -18,7 +18,7 @@ triggers:
             !objective
               shortDesc: Move right with WASD.
               longDesc: |
-                <p class="instruction">Hit <span class="control">escape</span> to close this dialog.</p>
+                <p class="instruction">Hit <span class="control">escape</span> or <span class="control">space</span> to close this dialog.</p>
                 <p class="instruction"> Use the <span class="control">WASD</span> keys to move around.</p>
                 <p class="instruction">To view the full objective at any point while playing, hit <span
                 class="control">escape</span> to open the pause menu.</p>
