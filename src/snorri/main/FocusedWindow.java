@@ -132,7 +132,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	@Override
 	public void keyPressed(KeyEvent e) {
 		states.set(e.getKeyCode(), true);
-		if (jumpCallback != null && e.getKeyCode() == Key.SPACE.getCode()) {
+		if (jumpCallback != null && e.getKeyCode() == Key.W.getCode()) {
 			jumpCallback.run();
 		}
 	}
