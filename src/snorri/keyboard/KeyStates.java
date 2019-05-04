@@ -13,15 +13,19 @@ public class KeyStates {
 	private final boolean[] states;
 	private final boolean[] mouseStates;
 	private final Queue<Binding> actionQ;
+	/** Horizontal movement input for the player. */
+	private int momentum;
 	
 	public KeyStates() {
 		states = new boolean[NUM_KEYS];
 		mouseStates = new boolean[NUM_MOUSE_BUTTONS];
 		actionQ = new LinkedList<>();
+		momentum = 0;
 	}
 	
 	public void set(int id, boolean state) {
 		states[id] = state;
+		setMomentum(id, state);
 	}
 	
 	public void setMouseButton(int num, boolean state) {
@@ -44,12 +48,35 @@ public class KeyStates {
 		return mouseStates[num];
 	}
 	
-	private int getInt(final Key key) {
-		return get(key) ? 1 : 0;
+	private int getInt(final int keyCode) {
+		return get(keyCode) ? 1 : 0;
+	}
+	
+	/** Slightly complex logic to set the momentum vector.
+	 * 
+	 * Basically, the idea is that pressing D while holding A should reset momentum to D rather than cancelling it out.
+	 * 
+	 * @param keyId Key that has been changed.
+	 * @param keyState Whether this key has been pressed or released.
+	 */
+	private void setMomentum(final int keyId, final boolean keyState) {
+		if (keyId == Key.D.getCode()) {
+			if (keyState) {
+				momentum = 1;
+			} else if (momentum > 0) {
+				momentum = getInt(Key.A.getCode());
+			}
+		} else if (keyId == Key.A.getCode()) {
+			if (keyState) {
+				momentum = -1;
+			} else if (momentum < 0) {
+				momentum = getInt(Key.D.getCode());
+			}
+		}
 	}
 	
 	public Vector getMomentumVector() {
-		return new Vector(getInt(Key.D) - getInt(Key.A), 0);
+		return new Vector(momentum, 0);
 	}
 	
 	public void purge() {
@@ -59,6 +86,7 @@ public class KeyStates {
 		for (int i = 0; i < mouseStates.length; i++) {
 			mouseStates[i] = false;
 		}
+		momentum = 0;
 	}
 	
 	public void registerAction(Binding b) {

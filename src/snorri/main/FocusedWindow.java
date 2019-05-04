@@ -157,29 +157,23 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	}
 
 	public Vector getShotDirection() {
-
 		if (states.get(MouseButton.SHOOT)) {
 			return getMousePosAbsolute().sub(getFocus().getPos()).normalize_();
 		}
-
-		if (states.get(Key.SHOOT_LEFT)) {
+		else if (states.get(Key.SHOOT_LEFT)) {
 			return new Vector(-1, 0);
 		}
-
-		if (states.get(Key.SHOOT_RIGHT)) {
+		else if (states.get(Key.SHOOT_RIGHT)) {
 			return new Vector(1, 0);
 		}
-
-		if (states.get(Key.SHOOT_DOWN)) {
+		else if (states.get(Key.SHOOT_DOWN)) {
 			return new Vector(0, 1);
 		}
-
-		if (states.get(Key.SHOOT_UP)) {
+		else if (states.get(Key.SHOOT_UP)) {
 			return new Vector(0, -1);
+		} else {
+			return null;
 		}
-
-		return null;
-
 	}
 	
 	public Vector getCastPosition() {
