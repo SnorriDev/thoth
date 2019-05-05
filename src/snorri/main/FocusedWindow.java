@@ -72,7 +72,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 			@Override
 			public void run() {
 				Main.setOverlay(new DialogOverlay(FocusedWindow.this, dialog));
-				paused = true;
+				grabFocus();
 			}
 		});
 	}
