@@ -204,7 +204,7 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (Key.ESC.isPressed(e) || Key.SPACE.isPressed(e)) {
+		if (Key.ESC.isPressed(e)) {
 			window.unpause();
 		}
 	}

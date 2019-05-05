@@ -37,6 +37,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	private static final int FRAME_DELTA = (int) (1000 / FPS);
 
 	protected final KeyStates states = new KeyStates();
+	/** A function which gets called when the cast action is made. */
 	private Runnable castCallback;
 	
 	protected final F player;
