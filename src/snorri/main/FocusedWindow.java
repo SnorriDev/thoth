@@ -45,6 +45,7 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 
 	protected long lastRenderTime;
 	private boolean paused = false, stopped = false;
+	private Dialog dialog;
 
 	public FocusedWindow(F focus) {
 		super();
@@ -62,12 +63,18 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 
 	public synchronized void unpause() {
 		Main.setOverlay(null);
+		showDialog();
 		states.purge();
 		lastRenderTime = getTimestamp();
 		paused = false;
 	}
 
-	public synchronized void showDialog(Dialog dialog) {
+	public synchronized void setDialog(final Dialog dialog) {
+		this.dialog = dialog;
+		showDialog();
+	}
+	
+	private synchronized void showDialog() {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {

@@ -13,7 +13,6 @@ import javax.swing.UIManager;
 
 import snorri.dialog.DropMessage;
 import snorri.dialog.Message;
-import snorri.dialog.Objective;
 import snorri.dialog.SpellMessage;
 import snorri.entities.Player;
 import snorri.events.CastEvent.Caster;
@@ -35,9 +34,7 @@ public class GameWindow extends FocusedWindow<Player> {
 	private Queue<Message> messageQ;
 	private boolean hasDied;
 	private long lastTime;
-	
-	private Objective objective;
-		
+			
 	public GameWindow(Playable universe, Player focus) {
 		super(focus);
 		this.universe = universe;
@@ -128,20 +125,13 @@ public class GameWindow extends FocusedWindow<Player> {
 		
 		player.getInventory().render(this, g);
 		player.renderHealthBar(g);
-		
-		g.setFont(UIManager.getFont("Label.font"));
-		if (objective != null) {
-			objective.render(g, this);
-		}
-		
-		//otherwise new ArrayList<>(messageQ) throws an error
-		if (messageQ.isEmpty()) {
-			return;
-		}
-		
-		int xTrans = 0;
-		for (Iterator<Message> iter = ((LinkedList<Message>) messageQ).descendingIterator(); iter.hasNext();) {
-			xTrans += iter.next().render(this, g, xTrans);
+				
+		if (!messageQ.isEmpty()) {
+			g.setFont(UIManager.getFont("Label.font"));
+			int xTrans = 0;
+			for (Iterator<Message> iter = ((LinkedList<Message>) messageQ).descendingIterator(); iter.hasNext();) {
+				xTrans += iter.next().render(this, g, xTrans);
+			}
 		}
 		
 		g.dispose();
@@ -178,14 +168,6 @@ public class GameWindow extends FocusedWindow<Player> {
 	@Override
 	public Playable getUniverse() {
 		return universe;
-	}
-	
-	public void setObjective(Objective objective) {
-		this.objective = objective;
-	}
-	
-	public String getObjectiveInfo() {
-		return objective.longDesc;
 	}
 	
 	@Override

@@ -23,7 +23,6 @@ import javax.swing.UIManager;
 import net.sourceforge.yamlbeans.YamlException;
 import net.sourceforge.yamlbeans.YamlReader;
 import snorri.dialog.Dialog;
-import snorri.dialog.Objective;
 import snorri.dialog.Portraits;
 import snorri.entities.Player;
 import snorri.hieroglyphs.Hieroglyphs;
@@ -176,7 +175,6 @@ public class Main {
 		reader.getConfig().setClassTag("spawn", Vector.class);
 		reader.getConfig().setClassTag("vector", Vector.class);
 		reader.getConfig().setClassTag("pos", Vector.class);
-		reader.getConfig().setClassTag("objective", Objective.class);
 		reader.getConfig().setClassTag("dialog", Dialog.class);
 		return reader;
 	}

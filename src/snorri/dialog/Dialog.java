@@ -5,9 +5,6 @@ import java.io.Serializable;
 
 import javax.swing.ImageIcon;
 
-import snorri.main.GameWindow;
-import snorri.main.Main;
-
 /**
  * Wrapper class to read dialog and other HTML text from YAML file
  */
@@ -39,19 +36,6 @@ public class Dialog implements Serializable {
 
 	public ImageIcon getIcon() {
 		return new ImageIcon(getImage());
-	}
-
-	public Dialog addObjective(boolean flag) {
-		
-		if (!flag || !(Main.getWindow() instanceof GameWindow)) {
-			return this;
-		}
-		
-		Dialog newDialog = new Dialog();
-		newDialog.text = text + "\n" + ((GameWindow) Main.getWindow()).getObjectiveInfo();
-		newDialog.image = image;
-		return newDialog;
-		
 	}
 		
 }

@@ -36,9 +36,6 @@ public class PauseOverlay extends Overlay {
 		if (e.getActionCommand().equals("BACK")) {
 			window.unpause();
 		}
-		if (e.getActionCommand().equals("OBJECTIVE")) {
-			Main.setOverlay(new ObjectiveOverlay(window));
-		}
 		if (e.getActionCommand().equals("HELP")) {
 			Main.setOverlay(new HelpOverlay(window));
 		}
