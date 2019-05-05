@@ -114,6 +114,9 @@ public class Player extends Unit implements Caster {
 			@Override
 			public void run() {
 				translateNormalized(world, window.getMomentumVector(), deltaTime);
+				if (Key.W.isPressed()) {
+					jump();
+				}
 			}
 		});
 		
@@ -127,6 +130,7 @@ public class Player extends Unit implements Caster {
 		if (selected != null && Key.SPACE.isPressed()) {
 			((Interactor) selected).onInteract(new InteractEvent(world, this));
 		}
+		
 	}
 	
 	@Override

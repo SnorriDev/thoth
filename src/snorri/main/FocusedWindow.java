@@ -38,7 +38,6 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 
 	protected final KeyStates states = new KeyStates();
 	private Runnable castCallback;
-	private Runnable jumpCallback;
 	
 	protected final F player;
 	protected Entity customCenter;
@@ -129,9 +128,6 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	@Override
 	public void keyPressed(KeyEvent e) {
 		states.set(e.getKeyCode(), true);
-		if (jumpCallback != null && e.getKeyCode() == Key.W.getCode()) {
-			jumpCallback.run();
-		}
 	}
 
 	@Override
@@ -277,11 +273,4 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 		this.castCallback = castCallback;
 	}
 	
-	protected Runnable getJumpCallback() {
-		return jumpCallback;
-	}
-	
-	protected void setJumpCallback(Runnable jumpCallback) {
-		this.jumpCallback = jumpCallback;
-	}
 }

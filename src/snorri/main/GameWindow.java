@@ -57,8 +57,6 @@ public class GameWindow extends FocusedWindow<Player> {
 		setCastCallback(() -> {
 			getFocus().getInventory().cast(getWorld(), getMousePosAbsolute());
 		});
-		// TODO(snorri): We may want to convert jumping back to a normal thing using KeyStates.
-		setJumpCallback(getFocus()::jump);
 		while (true) {
 			if (TriggerType.TIMELINE.activate("start")) {
 				break;
