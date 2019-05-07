@@ -50,7 +50,7 @@ triggers:
               name: Imhotep
               text: |
                 <p>By Thoth, you're a natural!</p>
-                <p class="instruction">Use <span class="control">space</span> to jump over the bombs.</p>
+                <p class="instruction">Use <span class="control">W</span> to jump over the bombs.</p>
 
   onAcquireUrn:
     events:
