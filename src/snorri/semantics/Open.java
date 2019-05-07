@@ -3,6 +3,8 @@ package snorri.semantics;
 import java.util.HashSet;
 import java.util.Set;
 
+import snorri.audio.Audio;
+import snorri.audio.ClipWrapper;
 import snorri.entities.Entity;
 import snorri.entities.Sarcophagus;
 import snorri.events.CastEvent;
@@ -14,6 +16,8 @@ import snorri.world.TileType;
 import snorri.world.UnifiedTileType;
 
 public class Open extends IntransVerbDef {
+	
+	private static final ClipWrapper OPEN_DOOR_SOUND = new ClipWrapper("sound/door.wav");
 	
 	private static final Set<TileType> DOOR_TYPES = new HashSet<>();
 	
@@ -57,6 +61,7 @@ public class Open extends IntransVerbDef {
 		}
 		w.wrapGridUpdate(pos, new Tile(replacementTile));
 		TriggerType.DOOR_OPEN.activate(pos);
+		Audio.playClip(OPEN_DOOR_SOUND);
 		
 		// Recurse on neighbors of this tile.
 		w.getTileLayer().forEachNeighborOf(pos, neighborPos -> {
