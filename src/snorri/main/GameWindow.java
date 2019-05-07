@@ -161,7 +161,7 @@ public class GameWindow extends FocusedWindow<Player> {
 	}
 	
 	public void showMessage(Message m) {
-		Debug.logger.info("[UI] " + m.toString() + ".");
+		Debug.logger.info(m.toString() + ".");
 		messageQ.add(m);
 	}
 	
