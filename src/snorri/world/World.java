@@ -150,7 +150,11 @@ public class World implements Playable, Editable {
 	}
 	
 	public boolean add(Entity e) {
-		return entityLayer.add(e);
+		if (entityLayer.add(e)) {
+			e.onSpawn(this);
+			return true;
+		}
+		return false;
 	}
 
 	/** Add a bunch of things to the world. */

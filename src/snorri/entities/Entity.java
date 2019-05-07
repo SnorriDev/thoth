@@ -520,6 +520,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	 */
 	public void explode(World world, double damage) {
 		world.delete(this);
+		TriggerType.EXPLODE.activate(tag);
 		world.add(new Explosion(getPos(), damage));
 	}
 
@@ -555,5 +556,8 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		// At the top of a trajectory, the velocity may get close to zero, but it is very unlikely to be exactly zero.
 		return getVelocity().magnitude() != 0;
 	}
+	
+	/** Event hook for when an entity is spawned in the world. */
+	public void onSpawn(World world) {}
 	
 }

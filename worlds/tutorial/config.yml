@@ -67,6 +67,19 @@ triggers:
                 <p class="instruction">Combine your two new words to summon an urn on top of the bomb.</p>
                 <p class="instruction">This will blow it up and clear the path ahead.</p>
 
+  onExplode:
+    events:
+      - EXPLODE:
+          object: bomb
+    actions:
+      - SET_DIALOG:
+          dialog:
+            !dialog
+              image: priest
+              name: Imhotep
+              text: |
+                <p>Well done! There should be a statue around here somewhere...</p>
+
   onPrayThoth:
     events:
       - PRAY:
@@ -79,3 +92,4 @@ triggers:
               name: Thoth
               text: |
                 <p>Thoth hears your prayer!</p>
+ 

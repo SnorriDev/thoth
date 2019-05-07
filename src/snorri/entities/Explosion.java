@@ -1,6 +1,8 @@
 package snorri.entities;
 
 import snorri.animations.Animation;
+import snorri.audio.Audio;
+import snorri.audio.ClipWrapper;
 import snorri.events.CollisionEvent;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -9,6 +11,7 @@ public class Explosion extends Detector {
 
 	private static final long serialVersionUID = 1L;
 	private static final Animation ANIMATION = new Animation("/textures/animations/explosion");
+	private static final ClipWrapper EXPLOSION_SOUND = new ClipWrapper("sound/explosion.wav");
 		
 	public Explosion(Vector pos, int r) {
 		super(pos, r);
@@ -33,6 +36,11 @@ public class Explosion extends Detector {
 	@Override
 	public void update(World world, double deltaTime) {
 		super.update(world, deltaTime);
+	}
+	
+	@Override
+	public void onSpawn(World world) {
+		Audio.playClip(EXPLOSION_SOUND);
 	}
 
 	@Override

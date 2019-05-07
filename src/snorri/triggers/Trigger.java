@@ -34,7 +34,8 @@ public class Trigger {
 		HEAL,
 		WRITE,
 		DESTROY,
-		TRIP;
+		TRIP,
+		EXPLODE;
 		
 		/**
 		 * Wrapper for activating triggers
