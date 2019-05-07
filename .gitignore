@@ -1,8 +1,13 @@
 worlds/.redo1/
 worlds/.undo1/
+logs/*
 logs/thoth.log*
 *.class
 bin
+saves/*
+
+thoth.jar
+
 
 /.buildpath
 /build/

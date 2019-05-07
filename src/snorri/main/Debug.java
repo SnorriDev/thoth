@@ -21,7 +21,7 @@ public class Debug {
 	private static final boolean SHOW_WEAPON_OUTPUT = false;
 	private static final boolean SHOW_ORB_OUTPUT = false;
 	private static final boolean DISABLE_PATHFINDING = false;
-	private static final boolean SHOW_COLLIDERS = false;
+	private static final boolean SHOW_COLLIDERS = true;
 	private static final boolean LOG_PAUSES = false;
 	private static final boolean DISABLE_ANTIALIASING = true;
 	private static final boolean WINDOWED_MODE = true;

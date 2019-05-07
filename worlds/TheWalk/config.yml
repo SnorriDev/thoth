@@ -1,0 +1,8 @@
+type: WORLD
+layers:
+  - type: BACKGROUND
+    path: /textures/backgrounds/splash.png
+  - type: TILE
+    path: tile.layer
+  - type: ENTITY
+    path: entity.layer

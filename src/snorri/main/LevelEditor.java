@@ -423,19 +423,25 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 					canGoDown = false;
 				}	
 				
-				if (states.getMomentumVector().getX() < 0 && !canGoLeft) {
-					player.getPos().sub_(states.getMomentumVector().getProjectionX().scale_(speed));
+				/**
+				 * Note: Used to be states.getMomentumVector(), but when we changed the game to be more like a platformer,
+				 *       it became impossible to go up and down in the level editor.  Rather than refactor everything and abstract
+				 *       the concept of movement, getLevelEditorMomentumVector is the quick and dirty fix to change as little
+				 *       as possible about the mechanics of how the movement works.
+				 */
+				if (states.getLevelEditorMovementVector().getX() < 0 && !canGoLeft) {
+					player.getPos().sub_(states.getLevelEditorMovementVector().getProjectionX().scale_(speed));
 				}
-				if (states.getMomentumVector().getX() > 0 && !canGoRight) {
-					player.getPos().sub_(states.getMomentumVector().getProjectionX().scale_(speed));
+				if (states.getLevelEditorMovementVector().getX() > 0 && !canGoRight) {
+					player.getPos().sub_(states.getLevelEditorMovementVector().getProjectionX().scale_(speed));
 				}
-				if (states.getMomentumVector().getY() < 0 && !canGoUp) {
-					player.getPos().sub_(states.getMomentumVector().getProjectionY().scale_(speed));
+				if (states.getLevelEditorMovementVector().getY() < 0 && !canGoUp) {
+					player.getPos().sub_(states.getLevelEditorMovementVector().getProjectionY().scale_(speed));
 				}
-				if (states.getMomentumVector().getY() > 0 && !canGoDown) {
-					player.getPos().sub_(states.getMomentumVector().getProjectionY().scale_(speed));
+				if (states.getLevelEditorMovementVector().getY() > 0 && !canGoDown) {
+					player.getPos().sub_(states.getLevelEditorMovementVector().getProjectionY().scale_(speed));
 				}
-				player.getPos().add_(states.getMomentumVector().scale_(speed));
+				player.getPos().add_(states.getLevelEditorMovementVector().scale_(speed));
 				
 				if (isClicking) {
 					Vector location = getMousePosAbsolute().copy();
