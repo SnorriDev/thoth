@@ -41,7 +41,7 @@ public class Go extends IntransVerbDef {
 		 * @param deltaTime change in time since last frame
 		 */
 		default void translateNormalized(World world, Vector dir, double deltaTime) {
-			translate(world, dir.copy().normalize_(), deltaTime);
+			translate(world, dir.normalize(), deltaTime);
 		}
 		
 	}

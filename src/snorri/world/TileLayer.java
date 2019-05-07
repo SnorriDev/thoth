@@ -471,12 +471,8 @@ public class TileLayer implements Editable, SavableLayer {
 	}
 
 	public boolean isOccupied(int x, int y) {
-		try {
-			return getTileGrid(x, y).isOccupied();
-		}
-		catch (NullPointerException e) {
-			return false; //TODO: maybe we want to change this?
-		}
+		Tile tile = getTileGrid(x, y);
+		return tile == null || tile.isOccupied();
 	}
 
 	public boolean isOccupied(Vector v) {

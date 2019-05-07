@@ -50,7 +50,7 @@ triggers:
               name: Imhotep
               text: |
                 <p>By Thoth, you're a natural!</p>
-                <p class="instruction">Advance to the next puzzzle.</p>
+                <p class="instruction">Use <span class="control">space</span> to jump over the bombs.</p>
 
   onAcquireUrn:
     events:
@@ -63,14 +63,14 @@ triggers:
               image: priest
               name: Imhotep
               text: |
-                <p>That bomb looks dangerous! Better clear it somehow.</p>
-                <p class="instruction">Combine your two new words to summon an urn on top of the bomb.</p>
-                <p class="instruction">This will blow it up and clear the path ahead.</p>
-
+                <p>You can't jump over this bomb! You'll have to use ~~magic~~ to clear it.</p>
+                <p class="instruction"><span class="control">Right click</span> above the bomb to cast a spell there.</p>
+                <p class="instruction">Combine your two new words to summon an urn that will trigger it.</p>
+ 
   onExplode:
     events:
       - EXPLODE:
-          object: bomb
+          object: bombyBoi
     actions:
       - SET_DIALOG:
           dialog:
@@ -78,18 +78,6 @@ triggers:
               image: priest
               name: Imhotep
               text: |
-                <p>Well done! There should be a statue around here somewhere...</p>
-
-  onPrayThoth:
-    events:
-      - PRAY:
-          object: a statue
-    actions:
-      - SET_DIALOG:
-          dialog:
-            !dialog
-              image: thoth
-              name: Thoth
-              text: |
-                <p>Thoth hears your prayer!</p>
+                <p>Woah, that explosion was sick!</p>
+                <p>This puzzle is done, but there are many more challenges ahead.</p>
  
