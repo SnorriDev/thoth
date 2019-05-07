@@ -1,5 +1,7 @@
 package snorri.keyboard;
 
+import java.awt.event.MouseEvent;
+
 import snorri.world.Vector;
 
 public class KeyStates {
@@ -74,6 +76,15 @@ public class KeyStates {
 		return new Vector(momentum, 0);
 	}
 	
+	/**
+	 * Note: This is essentially the old getMovementVector() from before the game mechanics were changed
+	 *       (https://github.com/SnorriDev/thoth/blob/56f0ec794054f8c32ca8ab091b508003a87bb4be/src/snorri/keyboard/KeyStates.java#L48).
+	 *       This is used exclusively to keep the level editor working as it had been previously.
+	 */
+	public Vector getLevelEditorMovementVector() {
+			return new Vector(getInt(Key.D.getCode()) - getInt(Key.A.getCode()), getInt(Key.S.getCode()) - getInt(Key.W.getCode()));
+	}
+	
 	public void purge() {
 		for (int i = 0; i < states.length; i ++) {
 			states[i] = false;
@@ -82,6 +93,5 @@ public class KeyStates {
 			mouseStates[i] = false;
 		}
 		momentum = 0;
-	}
-	
+	}	
 }
