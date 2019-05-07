@@ -11,6 +11,8 @@ import java.util.Queue;
 
 import javax.swing.UIManager;
 
+import snorri.audio.Audio;
+import snorri.audio.ClipWrapper;
 import snorri.dialog.DropMessage;
 import snorri.dialog.Message;
 import snorri.dialog.SpellMessage;
@@ -30,11 +32,13 @@ public class GameWindow extends FocusedWindow<Player> {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private static final ClipWrapper ACQUIRE_AUDIO_CLIP = new ClipWrapper("sound/acquire.wav");
+	
 	private Playable universe;
 	private Queue<Message> messageQ;
 	private boolean hasDied;
 	private long lastTime;
-			
+	
 	public GameWindow(Playable universe, Player focus) {
 		super(focus);
 		this.universe = universe;
@@ -152,6 +156,7 @@ public class GameWindow extends FocusedWindow<Player> {
 	}
 	
 	public void showMessage(Droppable drop) {
+		Audio.playClip(ACQUIRE_AUDIO_CLIP);
 		showMessage(new DropMessage(drop));
 	}
 	
