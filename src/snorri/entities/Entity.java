@@ -33,6 +33,9 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 
 	private static final long serialVersionUID = 1L;
 	
+	/** Default gravity vector. **/
+	public static final Vector GRAVITY = new Vector(0.0, 400.0);
+	
 	/** A list of entities which can be spawned using the word <code>CreateObject</code>. */
 	public static final List<Class<? extends Entity>> SPAWNABLE;
 	/** A list of entities which can be spawned in the level editor. */
@@ -300,6 +303,16 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			hasCycled = true;
 		}
 		
+		// This is for compatibility with old-style entities that lack velocity.
+		if (velocity == null) {
+			velocity = Vector.ZERO;
+		}
+		
+		// Do gravity if this entity has gravity.
+		if (hasGravity()) {
+			addVelocity(GRAVITY.multiply(deltaTime));
+		}
+		
 		// Update position according to velocity.
 		Vector newPos = pos.add(getVelocity().multiply(deltaTime));
 		if (willHitTopOfTile(world, newPos)) {
@@ -535,8 +548,8 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	 * adds the new velocity vector to the current velocity
 	 * @param velocity the velocity vector to be added to the current velocity
 	 */
-	public void addVelocity(Vector velocity) {
-		this.setVelocity(this.velocity.copy().add(velocity));
+	public void addVelocity(Vector deltaVelocity) {
+		setVelocity(velocity.add(deltaVelocity));
 	}
 
 	/**
@@ -559,5 +572,9 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	
 	/** Event hook for when an entity is spawned in the world. */
 	public void onSpawn(World world) {}
+	
+	protected boolean hasGravity() {
+		return true;
+	}
 	
 }

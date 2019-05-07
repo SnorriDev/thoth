@@ -26,5 +26,10 @@ public class Bomb extends Detector {
 	public void onCollision(CollisionEvent e) {
 		explode(e.getWorld(), DAMAGE);
 	}
+	
+	@Override
+	public boolean hasGravity() {
+		return true;
+	}
 
 }

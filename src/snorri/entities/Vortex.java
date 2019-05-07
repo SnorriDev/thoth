@@ -52,5 +52,10 @@ public class Vortex extends Detector {
 		this.ignoreCollisions = true;
 		this.hitAll = true;
 	}
+	
+	@Override
+	public boolean hasGravity() {
+		return false;
+	}
 
 }

@@ -45,8 +45,7 @@ public abstract class Detector extends Despawner {
 			});
 		}
 		
-		super.update(world, deltaTime);
-		
+		super.update(world, deltaTime);	
 	}
 	
 	/**

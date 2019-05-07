@@ -38,7 +38,13 @@ public class Open extends IntransVerbDef {
 			return true;
 		}
 		Vector tilePos = checker.getPos().gridPos();
-		return openDoor(e.getWorld(), tilePos);
+		
+		if (openDoor(e.getWorld(), tilePos)) {
+			Audio.playClip(OPEN_DOOR_SOUND);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/** Returns whether the tile is pathable. */
@@ -61,7 +67,6 @@ public class Open extends IntransVerbDef {
 		}
 		w.wrapGridUpdate(pos, new Tile(replacementTile));
 		TriggerType.DOOR_OPEN.activate(pos);
-		Audio.playClip(OPEN_DOOR_SOUND);
 		
 		// Recurse on neighbors of this tile.
 		w.getTileLayer().forEachNeighborOf(pos, neighborPos -> {

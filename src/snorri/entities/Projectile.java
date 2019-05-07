@@ -75,9 +75,7 @@ public class Projectile extends Detector implements Movable {
 			// TODO: This logic can be reexpressed as a SurfaceCollisionMode.
 		}
 				
-		this.addVelocity(GRAVITY.multiply(deltaTime));
 		super.update(world, deltaTime);
-				
 	}
 
 	@Override
@@ -129,6 +127,11 @@ public class Projectile extends Detector implements Movable {
 		super.refreshStats();
 		ignoreCollisions = true;
 		setDespawnable(true);
+	}
+	
+	@Override
+	public boolean hasGravity() {
+		return true;
 	}
 
 }

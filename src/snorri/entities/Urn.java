@@ -24,5 +24,10 @@ public class Urn extends Despawner implements Smashable {
 			world.add(new Drop(pos.copy(), new RandomDrop(RandomDrop.Tier.COMMON)));
 		}
 	}
+	
+	@Override
+	public boolean hasGravity() {
+		return true;
+	}
 
 }

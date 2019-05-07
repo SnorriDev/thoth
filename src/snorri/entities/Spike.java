@@ -36,5 +36,10 @@ public class Spike extends Detector {
 	protected void onCycleComplete(World world) {
 		world.delete(this);
 	}
+	
+	@Override
+	public boolean hasGravity() {
+		return false;
+	}
 
 }

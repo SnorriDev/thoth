@@ -102,13 +102,8 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 			TriggerType.KILL.activate(tag);
 		}
 		
-		addVelocity(GRAVITY.multiply(deltaTime));
 		super.update(world, deltaTime);
 	}
-	
-//	private Vector getFallAdjustedHeight(Vector pos) {
-//		return new Vector((double) pos.getX(), Tile.WIDTH - 1 + pos.getY() - ((pos.getY() + collider.getRadiusY()) % Tile.WIDTH));
-//	}
 
 	/**
 	 * Set the animations for this unit to copies of the supplied ones

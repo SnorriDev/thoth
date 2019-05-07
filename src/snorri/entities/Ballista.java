@@ -76,5 +76,10 @@ public class Ballista extends Entity {
 	public void deactivate() {
 		active = false;
 	}
+	
+	@Override
+	public boolean hasGravity() {
+		return false;
+	}
 
 }

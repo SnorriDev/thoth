@@ -50,6 +50,8 @@ public abstract class Despawner extends Entity {
 			return;
 		}
 		
+		// FIXME(#75): Probably want this to be inherited, but currently breaks.
+		super.update(world, deltaTime);
 	}
 	
 	protected boolean shouldDespawn() {
@@ -63,6 +65,11 @@ public abstract class Despawner extends Entity {
 	@Override
 	public void refreshStats() {
 		setDespawnable(false);
+	}
+	
+	@Override
+	public boolean hasGravity() {
+		return false;
 	}
 	
 }

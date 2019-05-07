@@ -17,4 +17,9 @@ public class Center extends Entity {
 		animation = new Animation(ANIMATION);
 	}
 	
+	@Override
+	public boolean hasGravity() {
+		return false;
+	}
+	
 }
