@@ -36,6 +36,5 @@ public class MeleeWeapon extends Weapon {
 		}
 		return false;
 	}
-	//TODO override attack behavior here
 
 }

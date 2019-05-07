@@ -119,10 +119,11 @@ public class Player extends Unit implements Caster {
 				}
 			}
 		});
-		
-		// Only the player's inventory responds to keyboard input.
-		getInventory().checkKeys();
-		
+				
+		// Shooting, etc. is handled in the inventory.
+		Vector direction = window.getShotDirection();
+		getInventory().attack(world, velocity, direction);
+				
 		//TODO(#36): Move this to an Event.
 		// We construct a new entity because positions can be assigned/pointers fucked up.
 		Entity checker = new Entity(pos, Interactor.INTERACT_RANGE);

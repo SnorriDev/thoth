@@ -26,7 +26,7 @@ public class Projectile extends Detector implements Movable {
 		super(root.getPos().copy(), 3); //radius of a projectile is 1
 		velocity = rootVelocity.add(path.scale(PROJECTILE_SPEED));
 		this.animation = orb.getProjectileAnimation();
-		setDirection(path);
+//		setDirection(path);
 		this.root = root;
 		this.weapon = weapon;
 		this.orb = orb;
@@ -45,26 +45,25 @@ public class Projectile extends Detector implements Movable {
 	}
 	
 	public void applyForce(Vector force, double deltaTime) {
-		velocity.add_(force.copy().multiply_(deltaTime));
+		velocity.add_(force.multiply(deltaTime));
 	}
 	
 	@Override
 	public void update(World world, double deltaTime) {
-		boolean walked = false;
+		
 		if (weapon == null || !weapon.altersMovement()) {
 			translate(world, velocity.multiply(deltaTime));
-			walked = true;
-		} 
+		}
 		
-		if (root instanceof Caster && weapon != null) {
+		else if (root instanceof Caster) {
 			CastEvent spellEvent = new CastEvent(world, (Caster) root, this, deltaTime / getLifeSpan());
 			Object spellOutput = weapon.onCast(spellEvent);
 			if (Debug.weaponOutputLogged()) {
 				Debug.logger.info("Weapon output: " + spellOutput + ".");
 			}
 			
-			//we can't unify this with the above if clause because it matters when spells are applied
-			if (!walked && spellOutput.equals(false)) {
+			// If there's no spell, just do this.
+			if (spellOutput.equals(false)) {
 				translate(world, velocity.multiply(deltaTime));
 			}
 			
@@ -78,6 +77,7 @@ public class Projectile extends Detector implements Movable {
 				
 		this.addVelocity(GRAVITY.multiply(deltaTime));
 		super.update(world, deltaTime);
+				
 	}
 
 	@Override

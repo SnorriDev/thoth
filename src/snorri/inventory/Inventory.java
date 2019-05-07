@@ -9,9 +9,7 @@ import javax.swing.ListModel;
 import snorri.entities.Unit;
 import snorri.events.CastEvent.Caster;
 import snorri.inventory.Item.ItemType;
-import snorri.main.FocusedWindow;
 import snorri.main.GameWindow;
-import snorri.main.Main;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -142,12 +140,6 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 		}
 		
 		return false;	
-	}
-	
-	public void checkKeys() {
-		FocusedWindow<?> window = (FocusedWindow<?>) Main.getWindow();
-		World world = window.getWorld();
-		attack(world, window.getMomentumVector(), window.getShotDirection());
 	}
 	
 	public void attack(World world, Vector momentum, Vector dir) {
