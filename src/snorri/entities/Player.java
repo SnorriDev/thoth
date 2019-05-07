@@ -112,25 +112,28 @@ public class Player extends Unit implements Caster {
 		FocusedWindow<?> window = (FocusedWindow<?>) Main.getWindow();
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
+			/** Handle player keyboard input and movement. */
 			public void run() {
+				
+				// Handle movement and jumping.
 				translateNormalized(world, window.getMomentumVector(), deltaTime);
 				if (Key.W.isPressed()) {
 					jump();
 				}
+				
+				// Shooting, etc. is handled in the inventory.
+				Vector direction = window.getShotDirection();
+				getInventory().attack(world, velocity, direction);
+				
+				//TODO(#36): Move this to an Event.
+				// We construct a new entity because positions can be assigned/pointers fucked up.
+				Entity checker = new Entity(pos, Interactor.INTERACT_RANGE);
+				Interactor selected = world.getEntityTree().getFirstCollision(checker, Interactor.class);
+				if (selected != null && Key.SPACE.isPressed()) {
+					((Interactor) selected).onInteract(new InteractEvent(world, Player.this));
+				}
 			}
 		});
-				
-		// Shooting, etc. is handled in the inventory.
-		Vector direction = window.getShotDirection();
-		getInventory().attack(world, velocity, direction);
-				
-		//TODO(#36): Move this to an Event.
-		// We construct a new entity because positions can be assigned/pointers fucked up.
-		Entity checker = new Entity(pos, Interactor.INTERACT_RANGE);
-		Interactor selected = world.getEntityTree().getFirstCollision(checker, Interactor.class);
-		if (selected != null && Key.SPACE.isPressed()) {
-			((Interactor) selected).onInteract(new InteractEvent(world, this));
-		}
 		
 	}
 	
