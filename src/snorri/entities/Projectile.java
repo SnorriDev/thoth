@@ -77,6 +77,31 @@ public class Projectile extends Detector implements Movable {
 				
 		super.update(world, deltaTime);
 	}
+	
+	@Override
+	protected void updatePosition(World world, double deltaTime) {
+		if (!world.canShootOver(pos)) {
+			world.delete(this);
+		}
+		
+		if (weapon != null && weapon.altersMovement() && root instanceof Caster) {
+			CastEvent spellEvent = new CastEvent(world, (Caster) root, this, deltaTime / getLifeSpan());
+			Object spellOutput = weapon.onCast(spellEvent);
+			if (Debug.weaponOutputLogged()) {
+				Debug.logger.info("Weapon output: " + spellOutput + ".");
+			}
+			
+			// If the spell evaluates to false, do default movement.
+			if (spellOutput.equals(false)) {
+				translate(world, velocity.multiply(deltaTime));
+			}
+			
+		} else {
+			// If there's no spell, do default movement.
+			translate(world, velocity.multiply(deltaTime));
+		}
+		
+	}
 
 	@Override
 	public void onCollision(CollisionEvent e) {
@@ -114,7 +139,7 @@ public class Projectile extends Detector implements Movable {
 
 	@Override
 	public void translate(World world, Vector delta) {
-		pos.add_(delta);
+		pos = pos.add(delta);
 	}
 	
 	@Override

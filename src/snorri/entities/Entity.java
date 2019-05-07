@@ -313,6 +313,14 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			addVelocity(GRAVITY.multiply(deltaTime));
 		}
 		
+		updatePosition(world, deltaTime);
+	}
+	
+	/** Default movement logic for entities.
+	 * 
+	 * This should only be overriden in exceptional cases.
+	 */
+	protected void updatePosition(World world, double deltaTime) {
 		// Update position according to velocity.
 		Vector newPos = pos.add(getVelocity().multiply(deltaTime));
 		if (willHitTopOfTile(world, newPos)) {
