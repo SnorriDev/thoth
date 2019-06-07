@@ -11,6 +11,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -41,10 +42,12 @@ import snorri.hieroglyphs.Hieroglyphs;
 import snorri.inventory.DropContainer;
 import snorri.inventory.Droppable;
 import snorri.inventory.Item;
+import snorri.keyboard.Key;
 import snorri.main.Debug;
 import snorri.main.DialogMap;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
+import snorri.nonterminals.Sentence;
 import snorri.parser.Grammar;
 import snorri.triggers.Trigger.TriggerType;
 
@@ -201,6 +204,11 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		field.addFocusListener(this);
 		inputPanel.add(field);
 		
+		// Add KeyListeners for text box to the full field, so you don't have to select it.
+//		for (KeyListener listener : field.getKeyListeners()) {
+//			addKeyListener(listener);
+//		}
+		
 		enchantButton = createButton(ENCHANT_BUTTON_NAME, SELECTED_BG);
 		enchantButton.setEnabled(false);
 		enchantButton.addKeyListener(this);
@@ -295,17 +303,27 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		return list.getSelectedValue();
 	}
 	
+	/** Enchant the selected item with the contents of the spell window. */
+	private void enchantIfWellFormed() {
+		Item item = getItem();
+		String rawSpell = getTagless();
+		Sentence spell = Grammar.parseSentence(rawSpell);
+		if (item == null || spell == null) {
+			return;
+		}
+		getItem().setSpell(spell);
+		spellsEnchanted.add(rawSpell);
+		setGlyphs();
+		if (!editMode) {
+			window.unpause();
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
 		if (e.getActionCommand().equals(ENCHANT_BUTTON_NAME) && getItem() != null) {
-			String rawSpell = getTagless();
-			getItem().setSpell(Grammar.parseSentence(rawSpell));
-			spellsEnchanted.add(rawSpell);
-			setGlyphs();
-			if (!editMode) {
-				window.unpause();
-			}
+			enchantIfWellFormed();
 		} else if (e.getActionCommand().equals("ADD")) {	
 			DialogMap inputs = new DialogMap();
 			inputs.put("Droppable", "Enter word or item here");
@@ -404,6 +422,13 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {		
+	}
+	
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (Key.ENTER.isPressed(e)) {
+			enchantIfWellFormed();
+		}
 	}
 	
 }
