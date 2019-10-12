@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import javax.swing.JTable;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.TransferHandler;
 import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -429,6 +431,11 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		if (Key.ENTER.isPressed(e)) {
 			enchantIfWellFormed();
 		}
+	}
+	
+	@Override
+	public void grabFocus() {
+		field.grabFocus();
 	}
 	
 }
