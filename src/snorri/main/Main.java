@@ -27,7 +27,7 @@ import snorri.dialog.Portraits;
 import snorri.entities.Player;
 import snorri.hieroglyphs.Hieroglyphs;
 import snorri.inventory.RandomDrop;
-import snorri.parser.Lexicon;
+import snorri.parser.DefaultLexicon;
 import snorri.world.Playable;
 import snorri.world.Vector;
 
@@ -90,7 +90,7 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		Lexicon.load();
+		DefaultLexicon.load();
 		Hieroglyphs.load();
 		RandomDrop.load();
 		Portraits.load();

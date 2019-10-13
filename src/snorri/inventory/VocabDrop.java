@@ -3,7 +3,7 @@ package snorri.inventory;
 import java.awt.Image;
 
 import snorri.hieroglyphs.Hieroglyphs;
-import snorri.parser.Lexicon;
+import snorri.parser.DefaultLexicon;
 import snorri.semantics.Definition;
 
 public class VocabDrop implements Droppable, Comparable<VocabDrop> {
@@ -20,7 +20,7 @@ public class VocabDrop implements Droppable, Comparable<VocabDrop> {
 	}
 	
 	public Definition<?> getMeaning() {
-		return Lexicon.lookup(orthography);
+		return DefaultLexicon.lookup(orthography);
 	}
 	
 	@Override
@@ -62,7 +62,7 @@ public class VocabDrop implements Droppable, Comparable<VocabDrop> {
 	}
 	
 	public static VocabDrop fromString(String raw) {
-		if (Lexicon.lookup(raw) != null) {
+		if (DefaultLexicon.lookup(raw) != null) {
 			return new VocabDrop(raw);
 		}
 		return null;

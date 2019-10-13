@@ -5,6 +5,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import snorri.hieroglyphs.Hieroglyphs;
+import snorri.parser.DefaultLexicon;
 import snorri.parser.Lexicon;
 
 public class VocabTableModel implements TableModel {
@@ -77,9 +78,9 @@ public class VocabTableModel implements TableModel {
 		case TYPED_SPELLING:
 			return word;
 		case PART_OF_SPEECH:
-			return Lexicon.lookup(word).getPOS().getSimpleName();
+			return DefaultLexicon.lookup(word).getPOS().getSimpleName();
 		case MEANING:
-			return Lexicon.lookup(word).toString();
+			return DefaultLexicon.lookup(word).toString();
 		}
 		
 		return null;

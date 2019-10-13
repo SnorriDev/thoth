@@ -107,11 +107,11 @@ public class Grammar extends HashMap<Class<? extends NonTerminal<?>>, List<Rule>
 		List<Node<?>> semiTerminals = new ArrayList<>();
 		for (String word : getWords(input)) {
 			
-			if (Lexicon.lookup(word) == null) {
+			if (DefaultLexicon.lookup(word) == null) {
 				return null;
 			}
 			
-			SemiTerminal<?> semi = (SemiTerminal<?>) Lexicon.lookup(word).getPOS().newInstance();
+			SemiTerminal<?> semi = (SemiTerminal<?>) DefaultLexicon.lookup(word).getPOS().newInstance();
 			List<Node<?>> singleton = new ArrayList<>();
 			singleton.add(new Terminal<>(word));
 			semi.setChildren(singleton);

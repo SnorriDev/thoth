@@ -107,7 +107,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
-
+		
 		menuItem = new JMenuItem("Save", KeyEvent.VK_S);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
@@ -125,6 +125,11 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 		menuItem = new JMenuItem("Redo", KeyEvent.VK_Y);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Open Config", KeyEvent.VK_C);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
@@ -307,6 +312,19 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			}
 			redo();
 			break;
+		case "Open Config":
+			if (env == null || env.getDirectory() == null) {
+				return;
+			}
+			// Open the config file in Sublime Text.
+			File config = new File(env.getDirectory(), "config.yml");
+			String command = "subl " + config.getPath();
+			try {
+				Runtime.getRuntime().exec(command);
+			} catch (IOException e1) {
+				Debug.logger.warning("Failed to open " + config.getPath() + " in Sublime Text.");
+				e1.printStackTrace();
+			}
 		case "Quit":
 			Main.getFrame().setJMenuBar(null);
 			Main.setWindow(new MainMenu());

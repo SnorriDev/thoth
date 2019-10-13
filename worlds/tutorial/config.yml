@@ -79,5 +79,20 @@ triggers:
               name: Imhotep
               text: |
                 <p>Woah, that explosion was sick!</p>
-                <p>This puzzle is done, but there are many more challenges ahead.</p>
+                <p>Now, go claim that reward up there.</p>
+ 
+  onAcquireThoth:
+    events:
+      - ACQUIRE:
+          object: DHwty
+    actions:
+      - SET_DIALOG:
+          dialog:
+            !dialog
+              image: thoth
+              name: Thoth
+              text: |
+                <p>You have learned my ancient name, DHwty, and thus, I now know your name too, Setna.</p>
+                <p>Always remember: sticks and stones may break bones, but words can really hurt you!</p>
+
  

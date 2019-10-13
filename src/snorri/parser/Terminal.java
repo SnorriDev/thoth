@@ -25,8 +25,8 @@ public class Terminal<S> implements Node<S> {
 	
 	@Override @SuppressWarnings("unchecked")
 	public S getMeaning(CastEvent e) {
-		if (Lexicon.lookup(orthography) != null)
-			return (S) Lexicon.lookup(orthography).getMeaning(e);
+		if (DefaultLexicon.lookup(orthography) != null)
+			return (S) DefaultLexicon.lookup(orthography).getMeaning(e);
 		return null;
 	}
 	
@@ -37,11 +37,11 @@ public class Terminal<S> implements Node<S> {
 	@Override
 	public boolean altersMovement() {
 		
-		if (Lexicon.lookup(orthography) == null) {
+		if (DefaultLexicon.lookup(orthography) == null) {
 			return false;
 		}
 		
-		return Lexicon.lookup(orthography).altersMovement();
+		return DefaultLexicon.lookup(orthography).altersMovement();
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class Terminal<S> implements Node<S> {
 
 	@Override
 	public void computeCategory() {
-		category = Lexicon.lookup(orthography).getCategory();
+		category = DefaultLexicon.lookup(orthography).getCategory();
 	}
 	
 	@Override
