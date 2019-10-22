@@ -7,7 +7,7 @@ import java.util.List;
 import snorri.entities.Entity;
 import snorri.events.CastEvent;
 import snorri.parser.Node;
-import snorri.triggers.Trigger.TriggerType;
+import snorri.triggers.TriggerType;
 import snorri.world.TileType;
 import snorri.world.UnifiedTileType;
 import snorri.world.TileLayer;

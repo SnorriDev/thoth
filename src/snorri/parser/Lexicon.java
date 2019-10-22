@@ -19,7 +19,7 @@ public class Lexicon extends HashSet<String> implements DropContainer<Droppable>
 		
 	public static Collection<Droppable> getDropsInLang() {
 		List<Droppable> out = new ArrayList<>();
-		for (String raw : DefaultLexicon.getELang()) {
+		for (String raw : DefaultLexicon.getOrthographicForms()) {
 			out.add(new VocabDrop(raw));
 		}
 		return out;

@@ -18,7 +18,6 @@ public class Debug {
 	private static final boolean LOG_RENDER_QUEUE = false;
 	private static final boolean LOG_DAMAGE_EVENTS = false;
 	private static final boolean LOG_DEATHS = false;
-	private static final boolean SHOW_WEAPON_OUTPUT = false;
 	private static final boolean SHOW_ORB_OUTPUT = false;
 	private static final boolean DISABLE_PATHFINDING = false;
 	private static final boolean SHOW_COLLIDERS = false;
@@ -78,10 +77,6 @@ public class Debug {
 	
 	public static boolean deathsLogged() {
 		return LOG_DEATHS;
-	}
-	
-	public static boolean weaponOutputLogged() {
-		return SHOW_WEAPON_OUTPUT;
 	}
 	
 	public static boolean orbOutputLogged() {

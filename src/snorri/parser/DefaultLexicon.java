@@ -1,8 +1,8 @@
 package snorri.parser;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import snorri.entities.Entity;
 import snorri.entities.Flower;
@@ -62,6 +62,7 @@ import snorri.world.UnifiedTileType;
 public class DefaultLexicon {
 	
 	static Map<String, Definition<?>> lexicon;
+	private static String[] orthographicForms;
 	
 	public static void load() {
 		// Don't use a static initializer.
@@ -74,6 +75,9 @@ public class DefaultLexicon {
 		addVerbs();
 		addConnectives();
 		addNames();
+		orthographicForms = lexicon.keySet().toArray(new String[] {});
+		Arrays.sort(orthographicForms);
+		initializeTiers();
 	}
 
 	private static void addNames() {
@@ -93,7 +97,7 @@ public class DefaultLexicon {
 		lexicon.put("Hwi", new Damage());
 		lexicon.put("qmA", new CreateObject());
 		lexicon.put("rd", new Grow());
-		lexicon.put("wpi", new Open()); Tier.COMMON.add("wpi");
+		lexicon.put("wpi", new Open());
 		lexicon.put("sS", new Write());
 		lexicon.put("smAa", new Pray());
 		lexicon.put("sdfA", new Slow());
@@ -166,9 +170,13 @@ public class DefaultLexicon {
 		lexicon.put("Hna", new With()); //with
 		//lexicon.put("mhAw", null); //around
 	}
+	
+	private static void initializeTiers() {
+		Tier.COMMON.add("wpi");
+	}
 
-	public static Set<String> getELang() {
-		return lexicon.keySet();
+	public static String[] getOrthographicForms() {
+		return orthographicForms;
 	}
 
 	public static Definition<?> lookup(String form) {

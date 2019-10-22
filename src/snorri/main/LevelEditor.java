@@ -37,6 +37,7 @@ import snorri.inventory.Droppable;
 import snorri.inventory.Item;
 import snorri.keyboard.Key;
 import snorri.masking.Mask;
+import snorri.parser.DefaultLexicon;
 import snorri.world.Editable;
 import snorri.world.TileLayer;
 import snorri.world.UnifiedTileType;
@@ -639,7 +640,6 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 	}
 
 	private void spawnEntity() {
-
 		if (!(env instanceof World)) {
 			Debug.logger.warning("Tried to spawn entity in non-world.");
 			return;
@@ -663,7 +663,8 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 			if (selectedEntityClass.equals(Drop.class)) {
 				DialogMap inputs = new DialogMap();
-				inputs.put("Prize", "Enter item name/id or vocab word");
+				// TODO: Rather than just showing the Egyptian string, this should be structured and include English gloss.
+				inputs.putSelection("Prize", DefaultLexicon.getOrthographicForms());
 				inputs.put("Spell", "");
 				if (dialog("Drop Reward", inputs) == null) {
 					return;

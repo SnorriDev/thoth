@@ -49,7 +49,7 @@ import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.nonterminals.Sentence;
 import snorri.parser.Grammar;
-import snorri.triggers.Trigger.TriggerType;
+import snorri.triggers.TriggerType;
 
 /** The GUI interface for editing inventory and spells.
  * 
@@ -249,6 +249,8 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			vocabInfo.add(buttons);
 		}
 		
+		vocabBox.add(new JLabel("Press escape to close this overlay."));
+		
 		scrollPane = new JScrollPane(vocabInfo);
 		scrollPane.setPreferredSize(new Dimension(CRAFTING_SPACE_WIDTH, 250)); // originally 750,414
 		scrollPane.setOpaque(false);
@@ -308,20 +310,16 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		Item item = getItem();
 		String rawSpell = getTagless();
 		Sentence spell = Grammar.parseSentence(rawSpell);
-		if (item == null || spell == null) {
+		if (item == null) {
 			return;
 		}
 		getItem().setSpell(spell);
 		spellsEnchanted.add(rawSpell);
 		setGlyphs();
-		if (!editMode) {
-			window.unpause();
-		}
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
 		if (e.getActionCommand().equals(ENCHANT_BUTTON_NAME) && getItem() != null) {
 			enchantIfWellFormed();
 		} else if (e.getActionCommand().equals("ADD")) {	
@@ -345,30 +343,24 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 		field.setText(Hieroglyphs.transliterate(getItem().getSpell().getOrthography()));
 	}
 	
+	private static boolean isGrammatical(final String text) {
+		return Grammar.isValidSentence(Grammar.parseString(text)) || text.equals("");
+	}
+	
 	private void checkParse(DocumentEvent e) {
 		String text = getTagless();
 		if (Debug.allHieroglyphsUnlocked() || editMode) {
-			enchantButton.setEnabled(Grammar.isValidSentence(Grammar.parseString(text)));
+			enchantButton.setEnabled(isGrammatical(text));
 		}
 		else {
-			enchantButton.setEnabled(caster.getLexicon().contains(Grammar.getWords(text)) && Grammar.isValidSentence(Grammar.parseString(text)));
+			enchantButton.setEnabled(caster.getLexicon().contains(Grammar.getWords(text)) && isGrammatical(text));
 		}
 	}
 	
 	@Override
 	public void insertUpdate(DocumentEvent e) {
+		// This is what happens when someone types.
 		checkParse(e);
-	}
-	
-	@Override
-	public void focusGained(FocusEvent e) {
-		if (getItem() == null || getItem().getSpell() == null) {
-			field.setText("");
-			return;
-		}
-		if (e.getComponent() instanceof JEditorPane) {
-			field.setText(getItem().getSpell().getOrthography());
-		}
 	}
 	
 	@Override
@@ -426,8 +418,14 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (Key.ENTER.isPressed(e)) {
+		if (Key.SPACE.isPressed(e)) {
+			setGlyphs();
+		}
+		else if (Key.ENTER.isPressed(e)) {
 			enchantIfWellFormed();
+		}
+		else if (Key.ESC.isPressed(e)) {
+			window.unpause();
 		}
 	}
 	

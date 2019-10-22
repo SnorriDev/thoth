@@ -3,7 +3,7 @@ package snorri.entities;
 import snorri.animations.Animation;
 import snorri.collisions.RectCollider;
 import snorri.events.CollisionEvent;
-import snorri.triggers.Trigger.TriggerType;
+import snorri.triggers.Broadcast;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -50,7 +50,7 @@ public class Glyph extends Detector {
 	public void activate() {
 		animation = new Animation(ACTIVATE);
 		activated = true;
-		TriggerType.BROADCAST.activate(tag);
+		Broadcast.send(tag);
 	}
 	
 	@Override

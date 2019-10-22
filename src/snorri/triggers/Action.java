@@ -38,7 +38,7 @@ public abstract class Action {
 				return new Runnable() {
 					@Override
 					public void run() {
-						Trigger.TriggerType.BROADCAST.activate(args.get("msg"));
+						TriggerType.BROADCAST.activate(args.get("msg"));
 					}
 				};
 			}

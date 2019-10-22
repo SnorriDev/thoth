@@ -51,22 +51,16 @@ public class Projectile extends Detector implements Movable {
 	@Override
 	public void update(World world, double deltaTime) {
 		
-		if (weapon == null || !weapon.altersMovement()) {
+		if (weapon == null || weapon.getSpell() == null) {
+			Debug.logger.fine("Doesn't alter movement.");
 			translate(world, velocity.multiply(deltaTime));
 		}
-		
 		else if (root instanceof Caster) {
 			CastEvent spellEvent = new CastEvent(world, (Caster) root, this, deltaTime / getLifeSpan());
 			Object spellOutput = weapon.onCast(spellEvent);
-			if (Debug.weaponOutputLogged()) {
-				Debug.logger.info("Weapon output: " + spellOutput + ".");
-			}
-			
-			// If there's no spell, just do this.
 			if (spellOutput.equals(false)) {
 				translate(world, velocity.multiply(deltaTime));
 			}
-			
 		}
 						
 		// If we hit the edge of the map or a wall, end.
@@ -83,24 +77,6 @@ public class Projectile extends Detector implements Movable {
 		if (!world.canShootOver(pos)) {
 			world.delete(this);
 		}
-		
-		if (weapon != null && weapon.altersMovement() && root instanceof Caster) {
-			CastEvent spellEvent = new CastEvent(world, (Caster) root, this, deltaTime / getLifeSpan());
-			Object spellOutput = weapon.onCast(spellEvent);
-			if (Debug.weaponOutputLogged()) {
-				Debug.logger.info("Weapon output: " + spellOutput + ".");
-			}
-			
-			// If the spell evaluates to false, do default movement.
-			if (spellOutput.equals(false)) {
-				translate(world, velocity.multiply(deltaTime));
-			}
-			
-		} else {
-			// If there's no spell, do default movement.
-			translate(world, velocity.multiply(deltaTime));
-		}
-		
 	}
 
 	@Override

@@ -3,10 +3,12 @@ package snorri.triggers;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import snorri.triggers.Trigger.TriggerType;
+import snorri.main.Debug;
+import snorri.world.World;
 
-public class TriggerMap extends HashMap<Trigger.TriggerType, List<Trigger>> {
+public class TriggerMap extends HashMap<TriggerType, List<Trigger>> {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -46,6 +48,26 @@ public class TriggerMap extends HashMap<Trigger.TriggerType, List<Trigger>> {
 			}
 		}
 		return false;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static TriggerMap load(Map<String, Object> rawTriggers, World world) {
+		TriggerMap triggers = new TriggerMap();
+		
+		if (rawTriggers == null) {
+			return triggers;
+		}
+		for (Entry<String, Object> rawTrigger : rawTriggers.entrySet()) {
+			String name = rawTrigger.getKey();
+			Map<String, List<Map<String, Map<String, Object>>>> data = (Map<String, List<Map<String, Map<String, Object>>>>) rawTrigger.getValue();
+			new Trigger(world, name, data, triggers);
+		}
+		
+		Debug.logger.info(rawTriggers.size() + " triggers loaded.");
+			
+		triggers.setLoaded();
+		
+		return triggers;
 	}
 	
 }
