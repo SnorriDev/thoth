@@ -21,8 +21,7 @@ triggers:
               image: priest
               name: Imhotep
               text: |
-                <p>Welcome, Prince Setna! Now that you are an apprentice scribe, feel free to take a look
-                around.</p>
+                <p>Welcome, Prince Setna, our newest apprentice sorcerer!</p>
                 <p class="instruction"> Use the <span class="control">WASD</span> keys to move around.</p>
 
   onAcquireOpen:
@@ -79,7 +78,7 @@ triggers:
               name: Imhotep
               text: |
                 <p>Woah, that explosion was sick!</p>
-                <p>Now, go claim that reward up there.</p>
+                <p>Is that a statue.. of Thoth!?</p>
  
   onAcquireThoth:
     events:
@@ -92,7 +91,7 @@ triggers:
               image: thoth
               name: Thoth
               text: |
-                <p>You have learned my ancient name, DHwty, and thus, I now know your name too, Setna.</p>
-                <p>Always remember: sticks and stones may break bones, but words can really hurt you!</p>
+                <p>You found my statue. Now, I dare you to find my Book!</p>
+
 
  

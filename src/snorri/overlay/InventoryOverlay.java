@@ -418,10 +418,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (Key.SPACE.isPressed(e)) {
-			setGlyphs();
-		}
-		else if (Key.ENTER.isPressed(e)) {
+		if (Key.ENTER.isPressed(e)) {
 			enchantIfWellFormed();
 		}
 		else if (Key.ESC.isPressed(e)) {

@@ -52,26 +52,24 @@ public class Grammar extends HashMap<Class<? extends NonTerminal<?>>, List<Rule>
 		grammar.add(new Rule(new Object[] {TransVerb.class, NounPhrase.class}, Command.class));
 		grammar.add(new Rule(new Object[] {IntransVerb.class}, Command.class));
 		
-		grammar.add(new Rule(new Object[] {Noun.class}, NounPhrase.class));
-		grammar.add(new Rule(new Object[] {Name.class}, NounPhrase.class));
 		grammar.add(new Rule(new Object[] {AbstractNoun.class, NounPhrase.class}, NounPhrase.class));
 		grammar.add(new Rule(new Object[] {AbstractNoun.class, SuffixPronoun.class}, NounPhrase.class));
+		grammar.add(new Rule(new Object[] {Noun.class}, NounPhrase.class));
+		grammar.add(new Rule(new Object[] {Name.class}, NounPhrase.class));
 		
 		grammar.add(new Rule(new Object[] {Prep.class, NounPhrase.class}, PrepPhrase.class));
 		grammar.add(new Rule(new Object[] {Prep.class, SuffixPronoun.class}, PrepPhrase.class));
 		
-		grammar.add(new Rule(new Object[] {Adverb.class}, AdverbPhrase.class));
 		grammar.add(new Rule(new Object[] {DegreeModifier.class, Adverb.class}, AdverbPhrase.class));
+		grammar.add(new Rule(new Object[] {Adverb.class}, AdverbPhrase.class));
 		grammar.add(new Rule(new Object[] {PrepPhrase.class}, AdverbPhrase.class));
 		
+		grammar.add(new Rule(new Object[] {Sentence.class, Conjunction.class, Sentence.class}, Sentence.class));
 		grammar.add(new Rule(new Object[] {Statement.class}, Sentence.class));
 		grammar.add(new Rule(new Object[] {Command.class}, Sentence.class));
+		grammar.add(new Rule(new Object[] {Sentence.class, AdverbPhrase.class}, Sentence.class));
 		
 		grammar.add(new Rule(new Object[] {Command.class, Conditional.class, Statement.class}, Command.class));
-		grammar.add(new Rule(new Object[] {Command.class, Conjunction.class, Command.class}, Sentence.class));
-		grammar.add(new Rule(new Object[] {Statement.class, Conjunction.class, Statement.class}, Statement.class));
-		
-		grammar.add(new Rule(new Object[] {Sentence.class, AdverbPhrase.class}, Sentence.class));
 		
 		List<Rule> allRules = grammar.get();
 		Debug.logger.info("CFG with " + allRules.size() + " high-level rules loaded.");
@@ -126,6 +124,7 @@ public class Grammar extends HashMap<Class<? extends NonTerminal<?>>, List<Rule>
 			if (nodes == null) {
 				return new ArrayList<>();
 			}
+			Debug.logger.info("nodes " + nodes);
 			List<Node<?>> parses = topDown(getNodes(input), Sentence.class);
 			if (Debug.parsesLogged()) {
 				Debug.logger.info("Parses for " + input + ": " + parses + ".");

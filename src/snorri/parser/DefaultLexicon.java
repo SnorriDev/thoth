@@ -180,9 +180,11 @@ public class DefaultLexicon {
 	}
 
 	public static Definition<?> lookup(String form) {
-		if (lexicon.containsKey(form))
+		if (lexicon.containsKey(form)) {
 			return lexicon.get(form);
-		return null;
+		} else {
+			return null;
+		}
 	}
 	
 }

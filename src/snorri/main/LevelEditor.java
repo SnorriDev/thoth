@@ -387,9 +387,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			break;
 		}
 					
-
 		repaint();
-
 	}
 	
 	public void centerCamera() {

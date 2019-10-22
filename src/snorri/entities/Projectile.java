@@ -57,16 +57,11 @@ public class Projectile extends Detector implements Movable {
 		}
 		else if (root instanceof Caster) {
 			CastEvent spellEvent = new CastEvent(world, (Caster) root, this, deltaTime / getLifeSpan());
-			Object spellOutput = weapon.onCast(spellEvent);
-			if (spellOutput.equals(false)) {
+			weapon.onCast(spellEvent);
+			if (!weapon.getSpell().altersMovement()) {
 				translate(world, velocity.multiply(deltaTime));
 			}
-		}
-						
-		// If we hit the edge of the map or a wall, end.
-		if (!world.canShootOver(pos)) {
-			world.delete(this);
-			// TODO: This logic can be reexpressed as a SurfaceCollisionMode.
+			// TODO: Maybe we should always apply physics, for interesting interactions?
 		}
 				
 		super.update(world, deltaTime);
@@ -81,7 +76,6 @@ public class Projectile extends Detector implements Movable {
 
 	@Override
 	public void onCollision(CollisionEvent e) {
-		
 		if (root.equals(e.getTarget())) {
 			return;
 		}
@@ -91,7 +85,6 @@ public class Projectile extends Detector implements Movable {
 		}
 		
 		e.getWorld().delete(this);
-		
 	}
 	
 	@Override

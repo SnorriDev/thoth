@@ -121,11 +121,11 @@ public class Debug {
 
 	public static void castWTFMode(String s, CastEvent e) {
 		Node<?> spell = Grammar.parseString(s);
-		Debug.log("\"" + s + "\": " + spell.getMeaning(e));
+		Debug.logger.info("\"" + s + "\": " + spell.getMeaning(e));
 	}
 
 	public static void castWTFMode(Node<?> spell, CastEvent e) {
-		Debug.log(spell + ": " + spell.getMeaning(e));
+		Debug.logger.info(spell + ": " + spell.getMeaning(e));
 	}
 
 	/**
