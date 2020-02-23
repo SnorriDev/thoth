@@ -1,0 +1,6 @@
+-Ability to move debris or debris replacement
+-Instruction Scrolls
+-walking past tripwire, triggers snake spawner that you need to block by moving debris, spawner will stop spawning when there are 7 snakes
+-Pray to statue outside, only to find that statue is cursed, must move statue to top of pyramid to break curse
+  -moving statue to first small pyramid triggers mummy spawner which you must block with debris vertically, text laughs at you for thinking a pile of rocks is a pyramid
+-after placing the mummy at top of pyramid, you are instructed to go back, get urn, and do something with it (undetermined)
