@@ -37,6 +37,7 @@ import snorri.inventory.Droppable;
 import snorri.inventory.Item;
 import snorri.keyboard.Key;
 import snorri.masking.Mask;
+import snorri.parser.DefaultLexicon;
 import snorri.world.Editable;
 import snorri.world.TileLayer;
 import snorri.world.UnifiedTileType;
@@ -107,7 +108,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
-
+		
 		menuItem = new JMenuItem("Save", KeyEvent.VK_S);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
@@ -125,6 +126,11 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 		menuItem = new JMenuItem("Redo", KeyEvent.VK_Y);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Open Config", KeyEvent.VK_C);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
@@ -307,6 +313,19 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			}
 			redo();
 			break;
+		case "Open Config":
+			if (env == null || env.getDirectory() == null) {
+				return;
+			}
+			// Open the config file in Sublime Text.
+			File config = new File(env.getDirectory(), "config.yml");
+			String command = "subl " + config.getPath();
+			try {
+				Runtime.getRuntime().exec(command);
+			} catch (IOException e1) {
+				Debug.logger.warning("Failed to open " + config.getPath() + " in Sublime Text.");
+				e1.printStackTrace();
+			}
 		case "Quit":
 			Main.getFrame().setJMenuBar(null);
 			Main.setWindow(new MainMenu());
@@ -368,9 +387,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			break;
 		}
 					
-
 		repaint();
-
 	}
 	
 	public void centerCamera() {
@@ -627,7 +644,6 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 	}
 
 	private void spawnEntity() {
-
 		if (!(env instanceof World)) {
 			Debug.logger.warning("Tried to spawn entity in non-world.");
 			return;
@@ -651,7 +667,8 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 			if (selectedEntityClass.equals(Drop.class)) {
 				DialogMap inputs = new DialogMap();
-				inputs.put("Prize", "Enter item name/id or vocab word");
+				// TODO: Rather than just showing the Egyptian string, this should be structured and include English gloss.
+				inputs.putSelection("Prize", DefaultLexicon.getOrthographicForms());
 				inputs.put("Spell", "");
 				if (dialog("Drop Reward", inputs) == null) {
 					return;

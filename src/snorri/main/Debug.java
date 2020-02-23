@@ -18,7 +18,6 @@ public class Debug {
 	private static final boolean LOG_RENDER_QUEUE = false;
 	private static final boolean LOG_DAMAGE_EVENTS = false;
 	private static final boolean LOG_DEATHS = false;
-	private static final boolean SHOW_WEAPON_OUTPUT = false;
 	private static final boolean SHOW_ORB_OUTPUT = false;
 	private static final boolean DISABLE_PATHFINDING = false;
 	private static final boolean SHOW_COLLIDERS = true;
@@ -80,10 +79,6 @@ public class Debug {
 		return LOG_DEATHS;
 	}
 	
-	public static boolean weaponOutputLogged() {
-		return SHOW_WEAPON_OUTPUT;
-	}
-	
 	public static boolean orbOutputLogged() {
 		return SHOW_ORB_OUTPUT;
 	}
@@ -126,11 +121,11 @@ public class Debug {
 
 	public static void castWTFMode(String s, CastEvent e) {
 		Node<?> spell = Grammar.parseString(s);
-		Debug.log("\"" + s + "\": " + spell.getMeaning(e));
+		Debug.logger.info("\"" + s + "\": " + spell.getMeaning(e));
 	}
 
 	public static void castWTFMode(Node<?> spell, CastEvent e) {
-		Debug.log(spell + ": " + spell.getMeaning(e));
+		Debug.logger.info(spell + ": " + spell.getMeaning(e));
 	}
 
 	/**

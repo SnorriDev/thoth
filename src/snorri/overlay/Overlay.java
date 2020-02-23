@@ -138,6 +138,7 @@ public abstract class Overlay extends GamePanel implements KeyListener {
 			c.gridy = 0;
 			c.weighty = 1;
 			add(portrait, c);
+
 			
 			JLabel name = new JLabel(dialog.getName());
 			name.setFont(name.getFont().deriveFont(Font.BOLD, 16));

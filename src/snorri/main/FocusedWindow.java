@@ -75,6 +75,10 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 	}
 	
 	private synchronized void showDialog() {
+		if (dialog == null) {
+			return;
+		}
+		
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {

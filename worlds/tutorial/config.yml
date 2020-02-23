@@ -21,8 +21,7 @@ triggers:
               image: priest
               name: Imhotep
               text: |
-                <p>Welcome, Prince Setna! Now that you are an apprentice scribe, feel free to take a look
-                around.</p>
+                <p>Welcome, Prince Setna, our newest apprentice sorcerer!</p>
                 <p class="instruction"> Use the <span class="control">WASD</span> keys to move around.</p>
 
   onAcquireOpen:
@@ -50,7 +49,7 @@ triggers:
               name: Imhotep
               text: |
                 <p>By Thoth, you're a natural!</p>
-                <p class="instruction">Advance to the next puzzzle.</p>
+                <p class="instruction">Use <span class="control">W</span> to jump over the bombs.</p>
 
   onAcquireUrn:
     events:
@@ -63,14 +62,14 @@ triggers:
               image: priest
               name: Imhotep
               text: |
-                <p>That bomb looks dangerous! Better clear it somehow.</p>
-                <p class="instruction">Combine your two new words to summon an urn on top of the bomb.</p>
-                <p class="instruction">This will blow it up and clear the path ahead.</p>
-
+                <p>You can't jump over this bomb! You'll have to use ~~magic~~ to clear it.</p>
+                <p class="instruction"><span class="control">Right click</span> above the bomb to cast a spell there.</p>
+                <p class="instruction">Combine your two new words to summon an urn that will trigger it.</p>
+ 
   onExplode:
     events:
       - EXPLODE:
-          object: bomb
+          object: bombyBoi
     actions:
       - SET_DIALOG:
           dialog:
@@ -78,12 +77,13 @@ triggers:
               image: priest
               name: Imhotep
               text: |
-                <p>Well done! There should be a statue around here somewhere...</p>
-
-  onPrayThoth:
+                <p>Woah, that explosion was sick!</p>
+                <p>Is that a statue.. of Thoth!?</p>
+ 
+  onAcquireThoth:
     events:
-      - PRAY:
-          object: a statue
+      - ACQUIRE:
+          object: DHwty
     actions:
       - SET_DIALOG:
           dialog:
@@ -91,5 +91,7 @@ triggers:
               image: thoth
               name: Thoth
               text: |
-                <p>Thoth hears your prayer!</p>
+                <p>You found my statue. Now, I dare you to find my Book!</p>
+
+
  

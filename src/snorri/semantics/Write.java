@@ -4,7 +4,7 @@ import snorri.events.CastEvent;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.parser.Node;
-import snorri.triggers.Trigger.TriggerType;
+import snorri.triggers.TriggerType;
 
 public class Write extends TransVerbDef {
 

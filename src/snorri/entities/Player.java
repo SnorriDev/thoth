@@ -23,7 +23,7 @@ import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.parser.Lexicon;
 import snorri.semantics.Nominal;
-import snorri.triggers.Trigger.TriggerType;
+import snorri.triggers.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
 

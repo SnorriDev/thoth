@@ -1,6 +1,7 @@
 package snorri.world;
 
 import java.awt.Graphics2D;
+import java.io.File;
 
 import snorri.main.FocusedWindow;
 
@@ -34,5 +35,7 @@ public interface Editable extends Loadable, Savable, Renderable {
 	public Editable getXReflected();
 	@Override
 	public Editable getResized(int newWidth, int newHeight);
+	
+	public File getDirectory();
 		
 }
