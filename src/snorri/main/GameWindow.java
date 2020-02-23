@@ -21,7 +21,7 @@ import snorri.events.CastEvent.Caster;
 import snorri.inventory.Droppable;
 import snorri.keyboard.Key;
 import snorri.overlay.DeathScreen;
-import snorri.triggers.Trigger.TriggerType;
+import snorri.triggers.TriggerType;
 import snorri.world.Playable;
 import snorri.world.World;
 

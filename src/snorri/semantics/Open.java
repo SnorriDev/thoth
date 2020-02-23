@@ -8,7 +8,7 @@ import snorri.audio.ClipWrapper;
 import snorri.entities.Entity;
 import snorri.entities.Sarcophagus;
 import snorri.events.CastEvent;
-import snorri.triggers.Trigger.TriggerType;
+import snorri.triggers.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
 import snorri.world.Tile;

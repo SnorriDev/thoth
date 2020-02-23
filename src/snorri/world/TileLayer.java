@@ -21,7 +21,7 @@ import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.world.TileType;
 
-public class TileLayer implements Editable, SavableLayer {
+public class TileLayer implements SavableLayer {
 
 	public static final int MAX_SIZE = 1024;
 
@@ -302,11 +302,6 @@ public class TileLayer implements Editable, SavableLayer {
 		setTileGrid(v.getX(), v.getY(), newTile);
 	}
 
-	@Override
-	public TileLayer getTileLayer() {
-		return this;
-	}
-
 	/**
 	 * Helper function for fill door which might have broader utility.
 	 */
@@ -430,11 +425,6 @@ public class TileLayer implements Editable, SavableLayer {
 		return renderMode;
 	}
 
-	@Override
-	public WorldGraph getWorldGraph() {
-		return null;
-	}
-
 	public Tile getOutsideTile() {
 		return outsideTile != null ? outsideTile : map[0][0];
 	}
@@ -471,12 +461,8 @@ public class TileLayer implements Editable, SavableLayer {
 	}
 
 	public boolean isOccupied(int x, int y) {
-		try {
-			return getTileGrid(x, y).isOccupied();
-		}
-		catch (NullPointerException e) {
-			return false; //TODO: maybe we want to change this?
-		}
+		Tile tile = getTileGrid(x, y);
+		return tile == null || tile.isOccupied();
 	}
 
 	public boolean isOccupied(Vector v) {

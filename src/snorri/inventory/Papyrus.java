@@ -9,7 +9,6 @@ import snorri.entities.BossAIUnit;
 import snorri.entities.Entity;
 import snorri.events.CastEvent;
 import snorri.events.CastEvent.Caster;
-import snorri.main.Debug;
 import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.nonterminals.Sentence;
@@ -67,7 +66,6 @@ public class Papyrus extends Item {
 		if (!(Main.getWindow() instanceof GameWindow) || queuedCastEvent == null || getSpell() == null) {
 			return false;
 		}
-		Debug.logger.fine("Checking queued spell..");
 		GameWindow gameWindow = (GameWindow) Main.getWindow();
 		Object spellResult = onCast(queuedCastEvent);
 		String orthography = getSpell().getOrthography();

@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import snorri.events.CollisionEvent;
 import snorri.main.FocusedWindow;
 import snorri.main.LevelEditor;
-import snorri.triggers.Trigger;
+import snorri.triggers.TriggerType;
 import snorri.world.Vector;
 
 public class Listener extends Detector {
@@ -33,7 +33,7 @@ public class Listener extends Detector {
 	public void onCollision(CollisionEvent e) {
 
 		if (tag != null && (target == e.getTarget() || (target == null && e.getTarget() instanceof Player))) {
-			Trigger.TriggerType.BROADCAST.activate(tag);
+			TriggerType.BROADCAST.activate(tag);
 		}
 
 	}

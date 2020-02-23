@@ -9,8 +9,6 @@ import java.util.Queue;
 
 import snorri.entities.Entity;
 import snorri.main.Debug;
-import snorri.main.GameWindow;
-import snorri.main.Main;
 import snorri.world.World;
 
 public class Trigger {
@@ -22,42 +20,6 @@ public class Trigger {
 	private final World world;
 	private final HashMap<TriggerType, Object> objects;
 			
-	public enum TriggerType {
-	
-		TIMELINE,
-		BROADCAST,
-		PRAY, //like broadcast, but callable by the player
-		DOOR_OPEN,
-		ACQUIRE,
-		KILL,
-		ENCHANT,
-		HEAL,
-		WRITE,
-		DESTROY,
-		TRIP,
-		EXPLODE;
-		
-		/**
-		 * Wrapper for activating triggers
-		 * @return whether or not the triggers were fully loaded before activation
-		 */
-		public boolean activate(Object object) {
-			
-			if (!(Main.getWindow() instanceof GameWindow)) {
-				return false;
-			}
-			
-			TriggerMap map = ((GameWindow) Main.getWindow()).getWorld().getTriggerMap();
-			if (map == null) {
-				return true; //the world has no triggers
-			}
-			map.activate(this, object);
-			return true;
-
-		}
-		
-	}
-	
 	private Entry<String, Map<String, Object>> getFirstEntry(Map<String, Map<String, Object>> map) {
 		return map.entrySet().iterator().next();
 	}
@@ -92,6 +54,7 @@ public class Trigger {
 					return;
 				}
 				if (type == TriggerType.BROADCAST) {
+					Debug.logger.warning("Ignoring BROADCAST in events list.");
 					continue;
 				}
 				objects.put(type, e.getValue().get("object"));
@@ -100,32 +63,9 @@ public class Trigger {
 		}
 		objects.put(TriggerType.BROADCAST, name);
 		triggers.add(TriggerType.BROADCAST, this);
-
 	}
 	
 
-	@SuppressWarnings("unchecked")
-	public static TriggerMap load(Map<String, Object> rawTriggers, World world) {
-		
-		TriggerMap triggers = new TriggerMap();
-		
-		if (rawTriggers == null) {
-			return triggers;
-		}
-		for (Entry<String, Object> rawTrigger : rawTriggers.entrySet()) {
-			String name = rawTrigger.getKey();
-			Map<String, List<Map<String, Map<String, Object>>>> data = (Map<String, List<Map<String, Map<String, Object>>>>) rawTrigger.getValue();
-			new Trigger(world, name, data, triggers);
-		}
-		
-		Debug.logger.info(rawTriggers.size() + " triggers loaded.");
-			
-		triggers.setLoaded();
-		
-		return triggers;
-				
-	}
-	
 	public Object getObject(TriggerType type) {
 		return objects.get(type);
 	}

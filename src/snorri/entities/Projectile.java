@@ -51,36 +51,31 @@ public class Projectile extends Detector implements Movable {
 	@Override
 	public void update(World world, double deltaTime) {
 		
-		if (weapon == null || !weapon.altersMovement()) {
+		if (weapon == null || weapon.getSpell() == null) {
+			Debug.logger.fine("Doesn't alter movement.");
 			translate(world, velocity.multiply(deltaTime));
 		}
-		
 		else if (root instanceof Caster) {
 			CastEvent spellEvent = new CastEvent(world, (Caster) root, this, deltaTime / getLifeSpan());
-			Object spellOutput = weapon.onCast(spellEvent);
-			if (Debug.weaponOutputLogged()) {
-				Debug.logger.info("Weapon output: " + spellOutput + ".");
-			}
-			
-			// If there's no spell, just do this.
-			if (spellOutput.equals(false)) {
+			weapon.onCast(spellEvent);
+			if (!weapon.getSpell().altersMovement()) {
 				translate(world, velocity.multiply(deltaTime));
 			}
-			
-		}
-						
-		// If we hit the edge of the map or a wall, end.
-		if (!world.canShootOver(pos)) {
-			world.delete(this);
-			// TODO: This logic can be reexpressed as a SurfaceCollisionMode.
+			// TODO: Maybe we should always apply physics, for interesting interactions?
 		}
 				
 		super.update(world, deltaTime);
 	}
+	
+	@Override
+	protected void updatePosition(World world, double deltaTime) {
+		if (!world.canShootOver(pos)) {
+			world.delete(this);
+		}
+	}
 
 	@Override
 	public void onCollision(CollisionEvent e) {
-		
 		if (root.equals(e.getTarget())) {
 			return;
 		}
@@ -90,7 +85,6 @@ public class Projectile extends Detector implements Movable {
 		}
 		
 		e.getWorld().delete(this);
-		
 	}
 	
 	@Override
@@ -114,7 +108,7 @@ public class Projectile extends Detector implements Movable {
 
 	@Override
 	public void translate(World world, Vector delta) {
-		pos.add_(delta);
+		pos = pos.add(delta);
 	}
 	
 	@Override

@@ -18,7 +18,7 @@ import snorri.semantics.Break;
 import snorri.semantics.Go.Movable;
 import snorri.semantics.Nominal;
 import snorri.semantics.Wrapper;
-import snorri.triggers.Trigger.TriggerType;
+import snorri.triggers.TriggerType;
 import snorri.world.Vector;
 import snorri.world.World;
 

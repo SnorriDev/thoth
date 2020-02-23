@@ -20,7 +20,6 @@ import snorri.entities.Unit;
 import snorri.main.Debug;
 import snorri.main.FocusedWindow;
 import snorri.main.Main;
-import snorri.triggers.Trigger;
 import snorri.triggers.TriggerMap;
 
 public class World implements Playable, Editable {
@@ -249,7 +248,7 @@ public class World implements Playable, Editable {
 			getTileLayer().setOutsideTile(new Tile(outside));
 		}
 		
-		triggers = Trigger.load((Map<String, Object>) yaml.get("triggers"), this);
+		triggers = TriggerMap.load((Map<String, Object>) yaml.get("triggers"), this);
 	}
 
 	/**

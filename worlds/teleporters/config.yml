@@ -1,0 +1,28 @@
+type: WORLD
+layers:
+  - type: BACKGROUND
+    path: /textures/backgrounds/splash.png
+  - type: TILE
+    path: tile.layer
+  - type: ENTITY
+    path: entity.layer
+
+triggers:
+  
+  glyph1:
+    actions:
+      - TELEPORT:
+          unit: player
+          pos: !vector {x: 12, y: 4}
+
+  glyph2:
+    actions:
+      - TELEPORT:
+          unit: player
+          pos: !vector {x: 26, y: 4}
+
+  glyph3:
+    actions:
+      - TELEPORT:
+          unit: player
+          pos: !vector {x: 45, y: 4}

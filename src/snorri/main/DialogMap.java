@@ -3,11 +3,13 @@ package snorri.main;
 import java.util.HashMap;
 import java.util.logging.Level;
 
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JTextField;
 
 import snorri.inventory.Droppable;
 
-public class DialogMap extends HashMap<String, JTextField> {
+public class DialogMap extends HashMap<String, JComponent> {
 
 	/**
 	 * used for easily creating custom input windows in the level editor
@@ -25,12 +27,28 @@ public class DialogMap extends HashMap<String, JTextField> {
 		}
 	}
 
-	public void put(String key, String value) {
-		put(key, new JTextField(value));
+	public void put(String key, String defaultValue) {
+		put(key, new JTextField(defaultValue));
 	}
 	
+	public void putSelection(String key, final String[] options) {
+		JComboBox<String> box = new JComboBox<>(options);
+		box.setEditable(true);
+		put(key, box);
+	}
+	
+	@SuppressWarnings("unchecked")
 	public String getText(String key) {
-		return get(key).getText();
+		JComponent component = get(key);
+		if (component instanceof JTextField) {
+			return ((JTextField) component).getText();
+		} else if (component instanceof JComboBox) {
+			JComboBox<String> box = (JComboBox<String>) component;
+			return (String) box.getSelectedItem();
+		} else {
+			Debug.logger.severe("Unknown component type added to DialogMap.");
+			return null;
+		}
 	}
 	
 	public double getDouble(String key) {

@@ -25,6 +25,7 @@ public enum Key implements Binding {
 	
 	SPACE(32, ' '),
 	ESC(27, ' '),
+	ENTER(10, ' '),
 	
 	E(69, 'e'), //spawn entity
 	DELETE(8, ' '), //delete entity

@@ -24,7 +24,7 @@ import snorri.main.LevelEditor;
 import snorri.main.Util;
 import snorri.semantics.Nominal;
 import snorri.triggers.Trigger;
-import snorri.triggers.Trigger.TriggerType;
+import snorri.triggers.TriggerType;
 import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -92,8 +92,9 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	
 	protected Collider collider;
 	protected Vector pos;
-	protected Animation animation;
 	protected boolean ignoreCollisions = false, staticObject = false;
+	protected Animation animation;
+
 	/** used to determine which entities should be rendered over others **/
 	protected int z;
 	protected String tag;
@@ -313,6 +314,14 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 			addVelocity(GRAVITY.multiply(deltaTime));
 		}
 		
+		updatePosition(world, deltaTime);
+	}
+	
+	/** Default movement logic for entities.
+	 * 
+	 * This should only be overriden in exceptional cases.
+	 */
+	protected void updatePosition(World world, double deltaTime) {
 		// Update position according to velocity.
 		Vector newPos = pos.add(getVelocity().multiply(deltaTime));
 		if (willHitTopOfTile(world, newPos)) {

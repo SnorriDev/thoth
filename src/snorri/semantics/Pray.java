@@ -2,7 +2,7 @@ package snorri.semantics;
 
 import snorri.events.CastEvent;
 import snorri.parser.Node;
-import snorri.triggers.Trigger.TriggerType;
+import snorri.triggers.TriggerType;
 
 public class Pray extends TransVerbDef {
 
