@@ -46,6 +46,7 @@ import snorri.keyboard.Key;
 import snorri.main.Debug;
 import snorri.main.Main;
 import snorri.nonterminals.Sentence;
+import snorri.parser.DefaultLexicon;
 import snorri.parser.Grammar;
 import snorri.triggers.TriggerType;
 import snorri.windows.DialogMap;
@@ -324,7 +325,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			enchantIfWellFormed();
 		} else if (e.getActionCommand().equals("ADD")) {	
 			DialogMap inputs = new DialogMap();
-			inputs.put("Droppable", "Enter word or item here");
+			inputs.putSelection("Droppable", DefaultLexicon.getOrthographicForms());
 			dialog("Enter droppable to add to inventory", inputs);			
 			add(Droppable.fromString(inputs.getText("Droppable")));
 		} else if (e.getActionCommand().equals("DELETE")) {

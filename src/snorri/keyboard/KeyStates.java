@@ -1,7 +1,5 @@
 package snorri.keyboard;
 
-import java.awt.event.MouseEvent;
-
 import snorri.world.Vector;
 
 public class KeyStates {

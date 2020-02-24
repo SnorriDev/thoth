@@ -19,7 +19,6 @@ public class Desk extends Entity implements Interactor {
 	
 	public Desk(Vector pos) {
 		super(pos, new RectCollider(12, 27));
-		staticObject = true;
 		animation = new Animation(ANIMATION);
 	}
 	

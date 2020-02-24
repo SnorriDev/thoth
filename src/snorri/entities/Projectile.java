@@ -52,7 +52,6 @@ public class Projectile extends Detector implements Movable {
 	public void update(World world, double deltaTime) {
 		
 		if (weapon == null || weapon.getSpell() == null) {
-			Debug.logger.fine("Doesn't alter movement.");
 			translate(world, velocity.multiply(deltaTime));
 		}
 		else if (root instanceof Caster) {
@@ -61,7 +60,7 @@ public class Projectile extends Detector implements Movable {
 			if (!weapon.getSpell().altersMovement()) {
 				translate(world, velocity.multiply(deltaTime));
 			}
-			// TODO: Maybe we should always apply physics, for interesting interactions?
+			// Maybe we should always apply physics, for interesting interactions?
 		}
 				
 		super.update(world, deltaTime);

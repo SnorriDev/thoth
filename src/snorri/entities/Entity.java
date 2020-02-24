@@ -94,7 +94,7 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	
 	protected Collider collider;
 	protected Vector pos;
-	protected boolean ignoreCollisions = false, staticObject = false;
+	protected boolean ignoreCollisions = false;
 	protected Animation animation;
 
 	/** used to determine which entities should be rendered over others **/

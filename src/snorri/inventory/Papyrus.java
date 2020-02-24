@@ -48,14 +48,18 @@ public class Papyrus extends Item {
 		return timer.isOffCooldown() && numPapyri > 0;
 	}
 
-	public void queueSpellIfPossible(World world, Caster player, Vector castPos) {
-		if (numPapyri == 0 || !getTimer().isOffCooldown() || !(Main.getWindow() instanceof GameWindow)) {
-			return;
-		}
+	public void queueSpell(World world, Caster player, Vector castPos) {
 		setSpell(null);
 		((GameWindow) Main.getWindow()).openInventory(1);
-		numPapyri--;
 		queuedCastEvent = new CastEvent(world, player, new Entity(castPos));
+//		TODO: Should probably refactor this to remove Papyrus from the game completely.
+//		if (numPapyri == 0 || !getTimer().isOffCooldown() || !(Main.getWindow() instanceof GameWindow)) {
+//			return;
+//		}
+//		setSpell(null);
+//		((GameWindow) Main.getWindow()).openInventory(1);
+//		numPapyri--;
+//		queuedCastEvent = new CastEvent(world, player, new Entity(castPos));
 	}
 	
 	/**

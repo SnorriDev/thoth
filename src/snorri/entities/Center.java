@@ -13,13 +13,17 @@ public class Center extends Entity {
 	public Center(Vector pos) {
 		super(pos, new CircleCollider(16));
 		ignoreCollisions = true;
-		staticObject = true;
 		animation = new Animation(ANIMATION);
 	}
 	
 	@Override
 	public boolean hasGravity() {
 		return false;
+	}
+	
+	@Override
+	public boolean isStaticObject() {
+		return true;
 	}
 	
 }

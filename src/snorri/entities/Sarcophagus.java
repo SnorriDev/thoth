@@ -12,7 +12,6 @@ public class Sarcophagus extends Entity {
 	
 	public Sarcophagus(Vector pos) {
 		super(pos, new RectCollider(new Vector(30, 140)));
-		staticObject = true;
 		animation = new Animation(ANIMATION);
 	}
 	

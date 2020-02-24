@@ -151,7 +151,7 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 	
 	public void cast(World world, Vector castPos) {
 		if (castPos != null && player instanceof Caster) {
-			papyrusSlot.queueSpellIfPossible(world, (Caster) player, castPos);
+			papyrusSlot.queueSpell(world, (Caster) player, castPos);
 		}
 	}
 

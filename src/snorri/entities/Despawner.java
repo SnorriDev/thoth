@@ -14,9 +14,12 @@ import snorri.world.World;
 
 public abstract class Despawner extends Entity {
 	
+	private static final long serialVersionUID = 1L;
+	
 	protected static final int DEFAULT_LIFESPAN = 5;
 
 	protected float age; //set age to -1 to make it not despawn
+	private boolean despawnable;
 	
 	protected Despawner(Vector pos, int r) {
 		super(pos, r);
@@ -33,10 +36,13 @@ public abstract class Despawner extends Entity {
 	
 	public void setDespawnable(boolean despawn) {
 		age = despawn ? 0 : -1;
-		staticObject = !despawn;
+		despawnable = despawn;
 	}
-
-	private static final long serialVersionUID = 1L;
+	
+	@Override
+	public boolean isStaticObject() {
+		return !despawnable;
+	}
 
 	@Override
 	public void update(World world, double deltaTime) {
