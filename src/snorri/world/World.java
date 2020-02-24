@@ -18,9 +18,9 @@ import snorri.entities.EntityTree;
 import snorri.entities.Spawn;
 import snorri.entities.Unit;
 import snorri.main.Debug;
-import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.triggers.TriggerMap;
+import snorri.windows.FocusedWindow;
 
 public class World implements Playable, Editable {
 

@@ -2,7 +2,7 @@ package snorri.world;
 
 import java.awt.Graphics2D;
 
-import snorri.main.FocusedWindow;
+import snorri.windows.FocusedWindow;
 
 /** A 2D plane that can be rendered and transformed.
  * @author lambdaviking

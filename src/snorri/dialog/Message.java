@@ -5,9 +5,9 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import snorri.inventory.Timer;
-import snorri.main.GamePanel;
-import snorri.main.GameWindow;
 import snorri.main.Util;
+import snorri.windows.GamePanel;
+import snorri.windows.GameWindow;
 import snorri.world.Vector;
 
 public abstract class Message {

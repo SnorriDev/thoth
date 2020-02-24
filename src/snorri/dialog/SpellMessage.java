@@ -3,8 +3,8 @@ package snorri.dialog;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import snorri.main.GameWindow;
 import snorri.main.Main;
+import snorri.windows.GameWindow;
 
 public class SpellMessage extends Message {
 

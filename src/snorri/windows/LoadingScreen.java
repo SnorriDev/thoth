@@ -1,4 +1,4 @@
-package snorri.main;
+package snorri.windows;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+
+import snorri.main.Main;
 
 public class LoadingScreen extends GamePanel {
 

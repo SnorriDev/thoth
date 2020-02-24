@@ -9,9 +9,9 @@ import snorri.entities.BossAIUnit;
 import snorri.entities.Entity;
 import snorri.events.CastEvent;
 import snorri.events.CastEvent.Caster;
-import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.nonterminals.Sentence;
+import snorri.windows.GameWindow;
 import snorri.world.Vector;
 import snorri.world.World;
 

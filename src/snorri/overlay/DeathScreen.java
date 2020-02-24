@@ -6,8 +6,8 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JPanel;
 
-import snorri.main.GamePanel;
 import snorri.main.Main;
+import snorri.windows.GamePanel;
 
 public class DeathScreen extends GamePanel {
 

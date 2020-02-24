@@ -79,7 +79,7 @@ public class Projectile extends Detector implements Movable {
 		if (root.equals(e.getTarget())) {
 			return;
 		}
-				
+		
 		if (e.getTarget() instanceof Unit) {
 			((Unit) e.getTarget()).damage(weapon.getSharpness());
 		}

@@ -17,13 +17,13 @@ import snorri.inventory.Orb;
 import snorri.inventory.Papyrus;
 import snorri.inventory.Stats;
 import snorri.inventory.Weapon;
-import snorri.main.FocusedWindow;
-import snorri.main.GamePanel;
-import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.parser.Lexicon;
 import snorri.semantics.Nominal;
 import snorri.triggers.TriggerType;
+import snorri.windows.FocusedWindow;
+import snorri.windows.GamePanel;
+import snorri.windows.GameWindow;
 import snorri.world.Vector;
 import snorri.world.World;
 

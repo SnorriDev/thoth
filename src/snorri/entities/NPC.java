@@ -5,9 +5,9 @@ import snorri.animations.Animation;
 import snorri.dialog.Dialog;
 import snorri.entities.Player.Interactor;
 import snorri.events.InteractEvent;
-import snorri.main.FocusedWindow;
-import snorri.main.GamePanel;
 import snorri.main.Main;
+import snorri.windows.FocusedWindow;
+import snorri.windows.GamePanel;
 import snorri.world.Vector;
 
 public class NPC extends AIUnit implements Interactor {

@@ -6,9 +6,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.JComponent;
 
 import snorri.dialog.Dialog;
-import snorri.main.FocusedWindow;
-import snorri.main.GamePanel;
 import snorri.main.Main;
+import snorri.windows.FocusedWindow;
+import snorri.windows.GamePanel;
 
 public class DialogOverlay extends Overlay {
 

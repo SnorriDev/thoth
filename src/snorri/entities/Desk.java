@@ -4,8 +4,8 @@ import snorri.animations.Animation;
 import snorri.collisions.RectCollider;
 import snorri.entities.Player.Interactor;
 import snorri.events.InteractEvent;
-import snorri.main.GameWindow;
 import snorri.main.Main;
+import snorri.windows.GameWindow;
 import snorri.world.Vector;
 
 public class Desk extends Entity implements Interactor {

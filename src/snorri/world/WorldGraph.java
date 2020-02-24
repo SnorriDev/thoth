@@ -14,8 +14,8 @@ import snorri.entities.Center;
 import snorri.entities.Entity;
 import snorri.entities.Player;
 import snorri.main.Debug;
-import snorri.main.FocusedWindow;
 import snorri.main.Main;
+import snorri.windows.FocusedWindow;
 
 /**
  * Class that holds multiple worlds.

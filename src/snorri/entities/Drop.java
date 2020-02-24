@@ -2,8 +2,11 @@ package snorri.entities;
 
 import snorri.events.CollisionEvent;
 import snorri.inventory.Droppable;
+import snorri.inventory.Item;
 import snorri.inventory.RandomDrop;
+import snorri.windows.DialogMap;
 import snorri.world.Vector;
+import snorri.world.World;
 
 public class Drop extends Detector {
 	
@@ -44,6 +47,22 @@ public class Drop extends Detector {
 			return "[null]";
 		}
 		return prize.toString();
+	}
+
+	@Override
+	public DialogMap prepareDialogMap() {
+		DialogMap inputs = super.prepareDialogMap();
+		inputs.put("Prize", getPrizeString());
+		Droppable prize = getPrize();
+		inputs.put("Spell", (prize instanceof Item && ((Item) prize).getSpell() != null) ? ((Item) prize).getSpell().getOrthography() : "");
+		return inputs;
+	}
+	
+	@Override
+	public void processDialogMap(DialogMap inputs, World world) {
+		super.processDialogMap(inputs, world);
+		world.delete(this);
+		world.add(new Drop(getPos().copy(), inputs.getText("Prize"), inputs.getText("Spell")));
 	}
 
 }

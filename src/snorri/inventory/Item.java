@@ -15,13 +15,13 @@ import snorri.animations.Animation;
 import snorri.collisions.CircleCollider;
 import snorri.events.CastEvent;
 import snorri.main.Debug;
-import snorri.main.GamePanel;
-import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.main.Util;
 import snorri.nonterminals.Sentence;
 import snorri.parser.Grammar;
 import snorri.parser.Node;
+import snorri.windows.GamePanel;
+import snorri.windows.GameWindow;
 import snorri.world.Vector;
 
 public abstract class Item implements Droppable {

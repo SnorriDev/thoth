@@ -6,8 +6,8 @@ import java.io.File;
 import java.util.Map;
 
 import snorri.main.Debug;
-import snorri.main.FocusedWindow;
 import snorri.main.Main;
+import snorri.windows.FocusedWindow;
 
 public class BackgroundLayer implements Layer {
 	

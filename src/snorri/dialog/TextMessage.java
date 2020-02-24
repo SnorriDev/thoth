@@ -3,7 +3,7 @@ package snorri.dialog;
 import java.awt.Graphics;
 import java.awt.Image;
 
-import snorri.main.GameWindow;
+import snorri.windows.GameWindow;
 
 public class TextMessage extends Message {
 

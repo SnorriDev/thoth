@@ -9,7 +9,7 @@ import javax.swing.ListModel;
 import snorri.entities.Unit;
 import snorri.events.CastEvent.Caster;
 import snorri.inventory.Item.ItemType;
-import snorri.main.GameWindow;
+import snorri.windows.GameWindow;
 import snorri.world.Vector;
 import snorri.world.World;
 

@@ -1,7 +1,7 @@
 package snorri.triggers;
 
-import snorri.main.GameWindow;
 import snorri.main.Main;
+import snorri.windows.GameWindow;
 
 public enum TriggerType {
 

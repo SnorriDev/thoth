@@ -5,8 +5,8 @@ import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
-import snorri.main.FocusedWindow;
 import snorri.main.Main;
+import snorri.windows.FocusedWindow;
 import snorri.world.Vector;
 import snorri.world.World;
 

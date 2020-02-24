@@ -28,9 +28,9 @@ import javax.swing.text.html.StyleSheet;
 import snorri.dialog.Dialog;
 import snorri.keyboard.Key;
 import snorri.main.Debug;
-import snorri.main.FocusedWindow;
-import snorri.main.GamePanel;
 import snorri.main.Main;
+import snorri.windows.FocusedWindow;
+import snorri.windows.GamePanel;
 
 public abstract class Overlay extends GamePanel implements KeyListener {
 	

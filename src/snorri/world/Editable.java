@@ -3,7 +3,7 @@ package snorri.world;
 import java.awt.Graphics2D;
 import java.io.File;
 
-import snorri.main.FocusedWindow;
+import snorri.windows.FocusedWindow;
 
 /**
  * A class that can be viewed and edited in the level editor.

@@ -1,4 +1,4 @@
-package snorri.main;
+package snorri.windows;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -20,6 +20,8 @@ import snorri.entities.Player;
 import snorri.events.CastEvent.Caster;
 import snorri.inventory.Droppable;
 import snorri.keyboard.Key;
+import snorri.main.Debug;
+import snorri.main.Main;
 import snorri.overlay.DeathScreen;
 import snorri.triggers.TriggerType;
 import snorri.world.Playable;

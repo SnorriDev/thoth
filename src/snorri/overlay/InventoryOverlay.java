@@ -44,12 +44,12 @@ import snorri.inventory.Droppable;
 import snorri.inventory.Item;
 import snorri.keyboard.Key;
 import snorri.main.Debug;
-import snorri.main.DialogMap;
-import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.nonterminals.Sentence;
 import snorri.parser.Grammar;
 import snorri.triggers.TriggerType;
+import snorri.windows.DialogMap;
+import snorri.windows.FocusedWindow;
 
 /** The GUI interface for editing inventory and spells.
  * 

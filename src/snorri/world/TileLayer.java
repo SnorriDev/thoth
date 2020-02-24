@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import snorri.main.Debug;
-import snorri.main.FocusedWindow;
+import snorri.windows.FocusedWindow;
 import snorri.world.TileType;
 
 public class TileLayer implements SavableLayer {

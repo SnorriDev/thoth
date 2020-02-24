@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import snorri.main.Debug;
-import snorri.main.FocusedWindow;
 import snorri.main.Main;
+import snorri.windows.FocusedWindow;
 
 public class HelpOverlay extends Overlay {
 

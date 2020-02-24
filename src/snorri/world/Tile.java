@@ -10,9 +10,9 @@ import java.util.List;
 import snorri.audio.ClipWrapper;
 import snorri.entities.Entity;
 import snorri.main.Debug;
-import snorri.main.FocusedWindow;
 import snorri.main.Main;
 import snorri.semantics.Nominal;
+import snorri.windows.FocusedWindow;
 import snorri.world.TileType;
 
 public class Tile implements Comparable<Tile>, Nominal {

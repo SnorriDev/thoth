@@ -3,7 +3,7 @@ package snorri.dialog;
 import java.awt.Graphics;
 
 import snorri.inventory.Droppable;
-import snorri.main.GameWindow;
+import snorri.windows.GameWindow;
 
 public class DropMessage extends Message {
 	

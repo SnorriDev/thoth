@@ -1,4 +1,4 @@
-package snorri.main;
+package snorri.windows;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -9,6 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import snorri.audio.Music;
+import snorri.main.Main;
+import snorri.main.Util;
 import snorri.world.World;
 
 public class MainMenu extends GamePanel {

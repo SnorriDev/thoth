@@ -1,4 +1,4 @@
-package snorri.main;
+package snorri.windows;
 
 import java.awt.Color;
 import java.awt.Font;

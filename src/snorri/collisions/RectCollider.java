@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 import snorri.entities.Entity;
-import snorri.main.FocusedWindow;
+import snorri.windows.FocusedWindow;
 import snorri.world.Vector;
 
 public class RectCollider extends Collider {

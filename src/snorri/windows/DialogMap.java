@@ -1,4 +1,4 @@
-package snorri.main;
+package snorri.windows;
 
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -8,6 +8,8 @@ import javax.swing.JComponent;
 import javax.swing.JTextField;
 
 import snorri.inventory.Droppable;
+import snorri.main.Debug;
+import snorri.main.Util;
 
 public class DialogMap extends HashMap<String, JComponent> {
 

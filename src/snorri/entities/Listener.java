@@ -3,9 +3,9 @@ package snorri.entities;
 import java.awt.Graphics;
 
 import snorri.events.CollisionEvent;
-import snorri.main.FocusedWindow;
-import snorri.main.LevelEditor;
 import snorri.triggers.TriggerType;
+import snorri.windows.FocusedWindow;
+import snorri.windows.LevelEditor;
 import snorri.world.Vector;
 
 public class Listener extends Detector {

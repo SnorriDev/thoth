@@ -1,4 +1,4 @@
-package snorri.main;
+package snorri.windows;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
@@ -7,6 +7,8 @@ import java.awt.event.MouseListener;
 import javax.swing.JLabel;
 
 import snorri.entities.Player;
+import snorri.main.Debug;
+import snorri.main.Main;
 
 public class CutScene extends GamePanel implements MouseListener {
 

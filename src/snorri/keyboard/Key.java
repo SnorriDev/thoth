@@ -2,8 +2,8 @@ package snorri.keyboard;
 
 import java.awt.event.KeyEvent;
 
-import snorri.main.FocusedWindow;
 import snorri.main.Main;
+import snorri.windows.FocusedWindow;
 
 public enum Key implements Binding {
 	

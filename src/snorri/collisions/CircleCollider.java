@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 import java.awt.geom.Ellipse2D;
 
 import snorri.entities.Entity;
-import snorri.main.FocusedWindow;
+import snorri.windows.FocusedWindow;
 import snorri.world.Vector;
 
 public class CircleCollider extends Collider {

@@ -8,7 +8,7 @@ import java.util.Map;
 import snorri.entities.Entity;
 import snorri.entities.EntityTree;
 import snorri.main.Debug;
-import snorri.main.FocusedWindow;
+import snorri.windows.FocusedWindow;
 
 public class EntityLayer implements SavableLayer {
 	

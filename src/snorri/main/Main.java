@@ -28,6 +28,11 @@ import snorri.entities.Player;
 import snorri.hieroglyphs.Hieroglyphs;
 import snorri.inventory.RandomDrop;
 import snorri.parser.DefaultLexicon;
+import snorri.windows.GamePanel;
+import snorri.windows.GameWindow;
+import snorri.windows.LevelEditor;
+import snorri.windows.LoadingScreen;
+import snorri.windows.MainMenu;
 import snorri.world.Playable;
 import snorri.world.Vector;
 

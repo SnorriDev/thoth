@@ -7,9 +7,9 @@ import java.awt.geom.Point2D;
 
 import java.lang.Math;
 
-import snorri.main.FocusedWindow;
-import snorri.main.GamePanel;
 import snorri.semantics.Nominal;
+import snorri.windows.FocusedWindow;
+import snorri.windows.GamePanel;
 
 public class Vector implements Nominal, Comparable<Vector> {
 	

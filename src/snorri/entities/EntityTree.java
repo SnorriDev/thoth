@@ -17,8 +17,8 @@ import java.util.PriorityQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import snorri.collisions.RectCollider;
-import snorri.main.FocusedWindow;
 import snorri.triggers.Trigger;
+import snorri.windows.FocusedWindow;
 import snorri.world.Executable;
 import snorri.world.TileLayer;
 import snorri.world.Tile;

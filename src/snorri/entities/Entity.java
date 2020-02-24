@@ -18,13 +18,15 @@ import snorri.entities.Player.Interactor;
 import snorri.events.CollisionEvent;
 import snorri.events.CastEvent;
 import snorri.main.Debug;
-import snorri.main.FocusedWindow;
-import snorri.main.GameWindow;
-import snorri.main.LevelEditor;
 import snorri.main.Util;
+import snorri.physics.SurfaceCollisionMode;
 import snorri.semantics.Nominal;
 import snorri.triggers.Trigger;
 import snorri.triggers.TriggerType;
+import snorri.windows.DialogMap;
+import snorri.windows.FocusedWindow;
+import snorri.windows.GameWindow;
+import snorri.windows.LevelEditor;
 import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -105,39 +107,6 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		
 	private boolean deleted = false;
 	private boolean hasCycled = false;
-	
-	protected enum SurfaceCollisionMode {
-		
-		/** Mode for colliding with a wall. */
-		
-		// Always lose all velocity.
-		STOP((oldVelocity, above) -> Vector.ZERO),
-		// Always reverse velocity on y axis.
-		BOUNCE((oldVelocity, above) -> new Vector(oldVelocity.x, -oldVelocity.y)),
-		// Stop on top of a tile and bounce off the bottom.
-		STOP_ABOVE_BOUNCE_BELOW((oldVelocity, above) -> {
-			if (above) {
-				return STOP.getNewVelocity(oldVelocity, above);
-			} else {
-				return BOUNCE.getNewVelocity(oldVelocity, above);
-			}
-		});
-		
-		private SurfaceCollisionLogic logic;
-		
-		SurfaceCollisionMode(SurfaceCollisionLogic logic) {
-			this.logic = logic;
-		}
-		
-		public Vector getNewVelocity(Vector oldVelocity, boolean above) {
-			return logic.getNewVelocity(oldVelocity, above);
-		}
-		
-		private interface SurfaceCollisionLogic {
-			Vector getNewVelocity(Vector oldVelocity, boolean above);
-		}
-		
-	}
 	
 	/**
 	 * This method will automatically set the collider focus to the entity
@@ -584,6 +553,17 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	
 	protected boolean hasGravity() {
 		return true;
+	}
+	
+	public DialogMap prepareDialogMap() {
+		DialogMap inputs = new DialogMap();
+		inputs.put("Tag", getTag());
+		return inputs;
+	}
+	
+	public void processDialogMap(DialogMap inputs, World world) {
+		String tag = inputs.getText("Tag");
+		setTag(tag.isEmpty() ? null : tag);
 	}
 	
 }

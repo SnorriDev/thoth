@@ -8,7 +8,7 @@ import java.awt.geom.Area;
 import java.awt.Shape;
 
 import snorri.entities.Entity;
-import snorri.main.FocusedWindow;
+import snorri.windows.FocusedWindow;
 import snorri.world.Vector;
 
 public abstract class Collider implements Serializable {

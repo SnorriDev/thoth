@@ -6,8 +6,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import snorri.dialog.Dialog;
-import snorri.main.FocusedWindow;
 import snorri.main.Main;
+import snorri.windows.FocusedWindow;
 
 public class TextOverlay extends Overlay {
 

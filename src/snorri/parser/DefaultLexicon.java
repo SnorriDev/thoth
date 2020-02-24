@@ -43,6 +43,7 @@ import snorri.semantics.Not;
 import snorri.semantics.Open;
 import snorri.semantics.Order;
 import snorri.semantics.Pray;
+import snorri.semantics.Push;
 import snorri.semantics.RightOf;
 import snorri.semantics.SecondObjectPronoun;
 import snorri.semantics.SecondSuffixPronoun;
@@ -103,6 +104,7 @@ public class DefaultLexicon {
 		lexicon.put("sdfA", new Slow());
 		lexicon.put("sD", new Break());
 		lexicon.put("dmi", new Cross());
+		lexicon.put("PUSH", new Push());
 		//lexicon.put("sxpr", new CreateUnit()); //conjure
 	}
 

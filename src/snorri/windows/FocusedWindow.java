@@ -1,4 +1,4 @@
-package snorri.main;
+package snorri.windows;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -20,6 +20,8 @@ import snorri.events.CastEvent.Caster;
 import snorri.keyboard.Key;
 import snorri.keyboard.KeyStates;
 import snorri.keyboard.MouseButton;
+import snorri.main.Debug;
+import snorri.main.Main;
 import snorri.main.Main.ResizeListener;
 import snorri.overlay.DialogOverlay;
 import snorri.overlay.InventoryOverlay;

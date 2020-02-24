@@ -1,10 +1,10 @@
 package snorri.semantics;
 
 import snorri.events.CastEvent;
-import snorri.main.GameWindow;
 import snorri.main.Main;
 import snorri.parser.Node;
 import snorri.triggers.TriggerType;
+import snorri.windows.GameWindow;
 
 public class Write extends TransVerbDef {
 

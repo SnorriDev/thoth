@@ -1,4 +1,4 @@
-package snorri.main;
+package snorri.windows;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -33,9 +33,9 @@ import snorri.entities.Entity;
 import snorri.entities.Listener;
 import snorri.entities.Player;
 import snorri.events.CastEvent.Caster;
-import snorri.inventory.Droppable;
-import snorri.inventory.Item;
 import snorri.keyboard.Key;
+import snorri.main.Debug;
+import snorri.main.Main;
 import snorri.masking.Mask;
 import snorri.parser.DefaultLexicon;
 import snorri.world.Editable;
@@ -624,23 +624,12 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			return;
 		}
 
-		DialogMap inputs = new DialogMap();
-		inputs.put("Tag", ent.getTag());
-		if (ent instanceof Drop) {
-			inputs.put("Prize", ((Drop) ent).getPrizeString());
-			Droppable prize = ((Drop) ent).getPrize();
-			inputs.put("Spell", (prize instanceof Item && ((Item) prize).getSpell() != null) ? ((Item) prize).getSpell().getOrthography() : "");
-		}
+		DialogMap inputs = ent.prepareDialogMap();
 		if (dialog("Edit Entity Info", inputs) == null) {
 			return;
 		}
-		
-		String tag = inputs.getText("Tag");
-		ent.setTag(tag.isEmpty() ? null : tag);
-		if (ent instanceof Drop) {
-			world.delete(ent);
-			world.add(new Drop(ent.getPos().copy(), inputs.getText("Prize"), inputs.getText("Spell")));
-		}
+		ent.processDialogMap(inputs, world);
+
 	}
 
 	private void spawnEntity() {

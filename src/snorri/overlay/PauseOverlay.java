@@ -6,9 +6,9 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JPanel;
 
-import snorri.main.FocusedWindow;
 import snorri.main.Main;
-import snorri.main.MenuPanel;
+import snorri.windows.FocusedWindow;
+import snorri.windows.MenuPanel;
 
 public class PauseOverlay extends Overlay {
 
