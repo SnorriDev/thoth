@@ -7,8 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import snorri.events.CastEvent;
-import snorri.parser.Grammar;
-import snorri.parser.Node;
+import snorri.inventory.Spell;
 
 public class Debug {
 	
@@ -120,12 +119,8 @@ public class Debug {
 	}
 
 	public static void castWTFMode(String s, CastEvent e) {
-		Node<?> spell = Grammar.parseString(s);
-		Debug.logger.info("\"" + s + "\": " + spell.getMeaning(e));
-	}
-
-	public static void castWTFMode(Node<?> spell, CastEvent e) {
-		Debug.logger.info(spell + ": " + spell.getMeaning(e));
+		Spell spell = Spell.fromString(s);
+		Debug.logger.info("\"" + s + "\": " + spell.cast(e));
 	}
 
 	/**

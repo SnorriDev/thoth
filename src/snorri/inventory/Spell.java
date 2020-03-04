@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import snorri.events.CastEvent;
 import snorri.grammar.ChartParser;
+import snorri.semantics.CommandStatus;
 import snorri.semantics.commands.Command;
 
 public class Spell implements Serializable {
@@ -23,15 +24,28 @@ public class Spell implements Serializable {
 		return spell;
 	}
 	
+	public Spell copy() {
+		return new Spell(text);
+	}
+	
 	public void compile() {
 		command = ChartParser.parseText(text);
 	}
 	
-	public void cast(CastEvent event) {
+	public String getOrthography() {
+		return text;
+	}
+	
+	public CommandStatus cast(CastEvent event) {
 		if (command == null) {
 			compile();
 		}
-		command.apply(event);
+		return command.apply(event);
+	}
+	
+	public boolean altersMovement() {
+		// FIXME: Get this up and running again.
+		return false;
 	}
 
 }

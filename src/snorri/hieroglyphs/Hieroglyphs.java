@@ -12,10 +12,10 @@ import java.util.logging.Level;
 
 import javax.swing.ImageIcon;
 
+import snorri.grammar.ChartParser;
 import snorri.main.Debug;
 import snorri.main.Main;
 import snorri.main.Util;
-import snorri.parser.Grammar;
 
 public class Hieroglyphs {
 
@@ -55,7 +55,7 @@ public class Hieroglyphs {
 		
 	public static String transliterate(String raw) {
 		List<String> out = new ArrayList<>();
-		nextWord: for (String word : Grammar.getWords(raw)) {
+		nextWord: for (String word : ChartParser.tokenize(raw)) {
 			for (String glyph : getGlyphs()) {
 				if (word.equals(glyph)) {
 					out.add(getHTMLGlyph(glyph));

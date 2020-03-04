@@ -136,7 +136,10 @@ public class GameWindow extends FocusedWindow<Player> {
 			g.setFont(UIManager.getFont("Label.font"));
 			int xTrans = 0;
 			for (Iterator<Message> iter = ((LinkedList<Message>) messageQ).descendingIterator(); iter.hasNext();) {
-				xTrans += iter.next().render(this, g, xTrans);
+				Message next = iter.next();
+				if (next != null) {
+					xTrans += next.render(this, g, xTrans);
+				}
 			}
 		}
 		

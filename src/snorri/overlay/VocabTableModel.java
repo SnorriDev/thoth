@@ -81,7 +81,7 @@ public class VocabTableModel implements TableModel {
 			return DefaultLexicon.lookup(word).stream().map(def -> def.getPartOfSpeech()).collect(Collectors.toList())
 					.toString();
 		case MEANING:
-			return DefaultLexicon.lookup(word).toString();
+			return DefaultLexicon.lookup(word).stream().map(def -> def.getEnglish()).collect(Collectors.toList());
 		}
 
 		return null;

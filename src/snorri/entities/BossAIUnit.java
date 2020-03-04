@@ -2,9 +2,9 @@ package snorri.entities;
 
 import snorri.animations.Animation;
 import snorri.events.CastEvent.Caster;
+import snorri.grammar.ChartParser;
 import snorri.grammar.Lexicon;
-import snorri.nonterminals.Sentence;
-import snorri.parser.Grammar;
+import snorri.inventory.Spell;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -22,10 +22,10 @@ public abstract class BossAIUnit extends AIUnit implements Caster {
 		super(pos, target, idle, walking);
 	}
 	
-	protected void setSpell(String spell) {
-		Sentence sentence = Grammar.parseSentence(spell);
-		getInventory().getPapyrus().setSpell(sentence);
-		for (String word: Grammar.getWords(spell)) {
+	protected void setSpell(String text) {
+		Spell spell = Spell.fromString(text);
+		getInventory().getPapyrus().setSpell(spell);
+		for (String word: ChartParser.tokenize(text)) {
 			getLexicon().add(word);
 		}
 	}

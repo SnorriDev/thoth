@@ -5,8 +5,9 @@ import snorri.semantics.CommandStatus;
 import snorri.semantics.Definition;
 import snorri.semantics.Lambda;
 import snorri.semantics.commands.Command;
+import snorri.semantics.predicates.Predicate;
 
-public class If implements Definition<Lambda<CommandStatus, Lambda<Command, Command>>> {
+public class If implements Definition<Lambda<Predicate, Lambda<Command, Command>>> {
 	
 	@Override
 	public PartOfSpeech getPartOfSpeech() {
@@ -14,13 +15,16 @@ public class If implements Definition<Lambda<CommandStatus, Lambda<Command, Comm
 	}
 
 	@Override
-	public Lambda<CommandStatus, Lambda<Command, Command>> getMeaning() {
-		return predStatus -> {
+	public Lambda<Predicate, Lambda<Command, Command>> getMeaning() {
+		return pred -> {
 			return cmd -> {
-				if (predStatus == CommandStatus.TRUE) {
-					return cmd;
-				}
-				return event -> CommandStatus.IF_FAILED;
+				return event -> {
+					CommandStatus status = pred.apply(event);
+					if (status == CommandStatus.TRUE) {
+						return cmd.apply(event);
+					}
+					return status;
+				};
 			};
 		};
 	}

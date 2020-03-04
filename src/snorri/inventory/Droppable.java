@@ -3,7 +3,6 @@ package snorri.inventory;
 import java.awt.Image;
 
 import snorri.animations.Animation;
-import snorri.parser.Grammar;
 import snorri.semantics.nouns.Nominal;
 
 public interface Droppable extends Nominal {
@@ -30,7 +29,7 @@ public interface Droppable extends Nominal {
 	public static Droppable fromStringWithSpell(String prize, String spell) {
 		Droppable d = Droppable.fromString(prize);
 		if (d instanceof Item) {
-			((Item) d).setSpell(Grammar.parseSentence(spell));
+			((Item) d).setSpell(Spell.fromString(spell));
 		}
 		return d;
 	}

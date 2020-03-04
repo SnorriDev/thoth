@@ -5,10 +5,10 @@ public enum CommandStatus {
 	DONE,
 	FAILED,
 	RAN_OUT_OF_MANA,
-	IF_FAILED,
+	UNKNOWN_ERROR,
 	
 	TRUE,
 	FALSE,
 	UNDEFINED;
-	
+
 }

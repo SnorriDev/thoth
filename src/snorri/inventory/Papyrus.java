@@ -10,7 +10,6 @@ import snorri.entities.Entity;
 import snorri.events.CastEvent;
 import snorri.events.CastEvent.Caster;
 import snorri.main.Main;
-import snorri.nonterminals.Sentence;
 import snorri.windows.GameWindow;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -73,7 +72,7 @@ public class Papyrus extends Item {
 		GameWindow gameWindow = (GameWindow) Main.getWindow();
 		Object spellResult = onCast(queuedCastEvent);
 		String orthography = getSpell().getOrthography();
-		gameWindow.showMessage(new SpellMessage(orthography, spellResult, spellIsStatement()));
+		gameWindow.showMessage(new SpellMessage(orthography, spellResult, false));
 		queuedCastEvent = null;
 		return true;
 	}
@@ -104,7 +103,7 @@ public class Papyrus extends Item {
 		if (timer.activate()) {
 			Object o = onCast(new CastEvent(world, caster, null));
 			if (Main.getWindow() instanceof GameWindow) {
-				((GameWindow) Main.getWindow()).showMessage(new SpellMessage(orthography, o, spellIsStatement()));
+				((GameWindow) Main.getWindow()).showMessage(new SpellMessage(orthography, o, false));
 			}
 			return true;
 		}
@@ -120,10 +119,6 @@ public class Papyrus extends Item {
 		}
 		return false;
 
-	}
-
-	private boolean spellIsStatement() {
-		return spell instanceof Sentence && ((Sentence) spell).isStatement();
 	}
 
 	@Override

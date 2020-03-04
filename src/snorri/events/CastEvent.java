@@ -3,13 +3,13 @@ package snorri.events;
 import snorri.collisions.Collider;
 import snorri.collisions.RectCollider;
 import snorri.entities.Entity;
+import snorri.grammar.ChartParser;
 import snorri.grammar.Lexicon;
 import snorri.inventory.Carrier;
 import snorri.inventory.Droppable;
 import snorri.inventory.Item;
 import snorri.inventory.VocabDrop;
 import snorri.main.Main;
-import snorri.parser.Grammar;
 import snorri.semantics.nouns.Nominal;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -45,7 +45,7 @@ public class CastEvent {
 		default boolean add(Droppable d) {
 			if (d instanceof Item && ((Item) d).getSpell() != null) {
 				boolean result = false;
-				for (String word : Grammar.getWords(((Item) d).getSpell().getOrthography())) {
+				for (String word : ChartParser.tokenize(((Item) d).getSpell().getOrthography())) {
 					result |= add(new VocabDrop(word));
 				}
 				return result;
@@ -63,7 +63,7 @@ public class CastEvent {
 			
 			if (d instanceof Item && ((Item) d).getSpell() != null) {
 				boolean result = false;
-				for (String word : Grammar.getWords(((Item) d).getSpell().getOrthography())) {
+				for (String word : ChartParser.tokenize(((Item) d).getSpell().getOrthography())) {
 					result |= remove(new VocabDrop(word), specific);
 				}
 				return result;

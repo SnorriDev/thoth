@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import javafx.util.Pair;
 import snorri.grammar.categories.Category;
 import snorri.main.Debug;
 import snorri.semantics.Definition;
 import snorri.semantics.Lambda;
 import snorri.semantics.commands.Command;
+import snorri.util.Pair;
 
 public class ChartParser {
 
@@ -46,15 +46,15 @@ public class ChartParser {
 				key = new Pair<>(start, end);
 				chart.put(key, new LinkedList<>());
 				List<Pair<Category, Object>> values = chart.get(key);
-				for (int split = 0; split < tokens.size(); split++) {
+				for (int split = start; split < end; split++) {
 					for (Pair<Category, Object> startPair : chart.get(new Pair<>(start, split))) {
-						for (Pair<Category, Object> endPair : chart.get(new Pair<>(split, end))) {
-							if ((newCategory = startPair.getKey().apply(endPair.getKey())) != null) {
-								newMeaning = ((Lambda) startPair.getValue()).apply(endPair.getValue());
+						for (Pair<Category, Object> endPair : chart.get(new Pair<>(split + 1, end))) {
+							if ((newCategory = startPair.getFirst().apply(endPair.getFirst())) != null) {
+								newMeaning = ((Lambda) startPair.getSecond()).apply(endPair.getSecond());
 								values.add(new Pair<>(newCategory, newMeaning));
 							}
-							else if ((newCategory = endPair.getKey().apply(startPair.getKey())) != null) {
-								newMeaning = ((Lambda) endPair.getValue()).apply(startPair.getValue());
+							else if ((newCategory = endPair.getFirst().apply(startPair.getFirst())) != null) {
+								newMeaning = ((Lambda) endPair.getSecond()).apply(startPair.getSecond());
 								values.add(new Pair<>(newCategory, newMeaning));
 							}
 						}
@@ -76,8 +76,8 @@ public class ChartParser {
 		}
 		
 		Pair<Category, Object> result = results.get(0);
-		if (result.getKey().equals(COMMAND)) {
-			return (Command) result.getValue();
+		if (result.getFirst().equals(COMMAND)) {
+			return (Command) result.getSecond();
 		}
 		return null;
 	}
@@ -91,6 +91,10 @@ public class ChartParser {
 
 	public static List<String> tokenize(String text) {
 		return Arrays.asList(text.replaceAll("\\.", "").split("\\s+|="));
+	}
+	
+	public HashMap<Pair<Integer, Integer>, List<Pair<Category, Object>>> getChart() {
+		return chart;
 	}
 
 }

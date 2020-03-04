@@ -3,9 +3,6 @@ package snorri.inventory;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 
@@ -17,9 +14,7 @@ import snorri.events.CastEvent;
 import snorri.main.Debug;
 import snorri.main.Main;
 import snorri.main.Util;
-import snorri.nonterminals.Sentence;
-import snorri.parser.Grammar;
-import snorri.parser.Node;
+import snorri.semantics.CommandStatus;
 import snorri.windows.GamePanel;
 import snorri.windows.GameWindow;
 import snorri.world.Vector;
@@ -28,7 +23,7 @@ public abstract class Item implements Droppable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	protected transient Sentence spell; // spell/enchantment associated with the item
+	protected transient Spell spell; // spell/enchantment associated with the item
 	protected String nickname; //name which the player gives the item so they know what it does
 	protected ItemType type; // what type of item it is; you can get ID, maxQuantity, enchantable from this
 	protected transient BufferedImage texture; // don't save this!
@@ -268,7 +263,7 @@ public abstract class Item implements Droppable {
 	 * @param newSpell The spell to enchant this item with.
 	 * @return True if and only if the operation was successful.
 	 */
-	public boolean setSpell(Sentence newSpell) {
+	public boolean setSpell(Spell newSpell) {
 		if (! type.isEnchantable()) {
 			return false;
 		}
@@ -278,22 +273,21 @@ public abstract class Item implements Droppable {
 		return true;
 	}
 
-	// returns the spell on the item
-	public Node<Boolean> getSpell() {
+	public Spell getSpell() {
 		return spell;
 	}
 	
 	/** Cast this item's spell in the context specified by spellEvent. */
-	public Object onCast(CastEvent spellEvent) {
+	public CommandStatus onCast(CastEvent spellEvent) {
 		if (spell == null) {
 			return null;
 		}
 		try {
-			return spell.getMeaning(spellEvent);
+			return spell.cast(spellEvent);
 		} catch (Exception e) {
 			// Prevent unintended behavior of spells from crashing the game.
 			Debug.logger.log(Level.SEVERE, "Unexpected error during spell execution.", e);
-			return null;
+			return CommandStatus.UNKNOWN_ERROR;
 		}
 	}
 
@@ -430,29 +424,6 @@ public abstract class Item implements Droppable {
 			return type.getNew();
 		}
 		return null;
-	}
-	
-	/**
-	 * When saving an Item, write out its spell as a string.
-	 * @param oos Stream to which to write file.
-	 * @throws IOException Should not happen.
-	 */
-	private void writeObject(ObjectOutputStream oos) throws IOException {
-		oos.defaultWriteObject();
-		oos.writeObject(spell != null ? spell.getOrthography(): null);
-	}
-
-	/**
-	 * When reading an Item, read its spell as a string.
-	 * @param oos Stream from which to read file.
-	 * @throws IOException Should not happen.
-	 */
-	private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
-		ois.defaultReadObject();
-		String orthography = (String) ois.readObject();
-		if (orthography != null) {
-			setSpell(Grammar.parseSentence(orthography));
-		}
 	}
 
 }

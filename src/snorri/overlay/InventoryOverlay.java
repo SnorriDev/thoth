@@ -44,12 +44,10 @@ import snorri.hieroglyphs.Hieroglyphs;
 import snorri.inventory.DropContainer;
 import snorri.inventory.Droppable;
 import snorri.inventory.Item;
+import snorri.inventory.Spell;
 import snorri.keyboard.Key;
 import snorri.main.Debug;
 import snorri.main.Main;
-import snorri.nonterminals.Sentence;
-import snorri.parser.Grammar;
-import snorri.semantics.commands.Command;
 import snorri.triggers.TriggerType;
 import snorri.windows.DialogMap;
 import snorri.windows.FocusedWindow;
@@ -311,12 +309,11 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	/** Enchant the selected item with the contents of the spell window. */
 	private void enchantIfWellFormed() {
 		Item item = getItem();
-		String rawSpell = getTagless();
-		Command spell = ChartParser.parseText(rawSpell);
 		if (item == null) {
 			return;
 		}
-		getItem().setSpell(spell);
+		String rawSpell = getTagless();
+		getItem().setSpell(Spell.fromString(rawSpell));
 		spellsEnchanted.add(rawSpell);
 		setGlyphs();
 	}
@@ -356,7 +353,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			enchantButton.setEnabled(isGrammatical(text));
 		}
 		else {
-			enchantButton.setEnabled(caster.getLexicon().contains(Grammar.getWords(text)) && isGrammatical(text));
+			enchantButton.setEnabled(caster.getLexicon().contains(ChartParser.tokenize(text)) && isGrammatical(text));
 		}
 	}
 	
