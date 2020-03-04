@@ -3,7 +3,7 @@ package snorri.entities;
 import snorri.animations.Animation;
 import snorri.collisions.RectCollider;
 import snorri.inventory.RandomDrop;
-import snorri.semantics.Break.Smashable;
+import snorri.semantics.commands.trans.Break.Smashable;
 import snorri.world.Vector;
 import snorri.world.World;
 

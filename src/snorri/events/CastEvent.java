@@ -3,16 +3,14 @@ package snorri.events;
 import snorri.collisions.Collider;
 import snorri.collisions.RectCollider;
 import snorri.entities.Entity;
+import snorri.grammar.Lexicon;
 import snorri.inventory.Carrier;
 import snorri.inventory.Droppable;
 import snorri.inventory.Item;
 import snorri.inventory.VocabDrop;
 import snorri.main.Main;
 import snorri.parser.Grammar;
-import snorri.parser.Lexicon;
-import snorri.semantics.Chaos;
-import snorri.semantics.Nominal;
-import snorri.semantics.Order;
+import snorri.semantics.nouns.Nominal;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -27,7 +25,6 @@ public class CastEvent {
 	
 	private Nominal instrument; //assigned by the preposition "with"
 	
-	private boolean negated = false; //used to keep track of negatives
 	private int degree = 0; //only used for modifying adverbs; this is NOT a direct scaling factor on size/damage/etc.
 	
 	private double deltaTime = 1; //used to dilute things on continuous spells
@@ -105,7 +102,6 @@ public class CastEvent {
 		
 		instrument = e.instrument;
 		
-		negated = e.negated;
 		degree = e.degree;
 		
 		deltaTime = e.deltaTime;
@@ -213,16 +209,6 @@ public class CastEvent {
 		speedModifier *= scale;
 		return this;
 	}
-
-	public CastEvent getNegated() {
-		CastEvent copy = new CastEvent(this);
-		copy.negated = ! negated;
-		return copy;
-	}
-	
-	public boolean isNegated() {
-		return negated;
-	}
 	
 	/**
 	 * use pollDegree instead so that degrees are reset to 0 for non-adverbs
@@ -247,17 +233,6 @@ public class CastEvent {
 	
 	public double getDeltaTime() {
 		return deltaTime;
-	}
-	
-	//TODO(#45): Fully integrate entropy.
-	public int getEntropyLevel() {
-		if (instrument instanceof Order) {
-			return -1;
-		}
-		if (instrument instanceof Chaos) {
-			return 1;
-		}
-		return 0;
 	}
 	
 	public <E extends Entity> E resolveEntity(Class<E> c) {

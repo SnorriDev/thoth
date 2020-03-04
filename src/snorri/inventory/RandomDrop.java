@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import snorri.grammar.Lexicon;
 import snorri.main.Debug;
 import snorri.main.Util;
-import snorri.parser.Lexicon;
 
 public class RandomDrop implements Droppable {
 

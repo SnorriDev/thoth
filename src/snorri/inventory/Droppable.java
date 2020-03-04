@@ -4,7 +4,7 @@ import java.awt.Image;
 
 import snorri.animations.Animation;
 import snorri.parser.Grammar;
-import snorri.semantics.Nominal;
+import snorri.semantics.nouns.Nominal;
 
 public interface Droppable extends Nominal {
 	

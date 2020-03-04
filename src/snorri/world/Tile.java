@@ -11,7 +11,7 @@ import snorri.audio.ClipWrapper;
 import snorri.entities.Entity;
 import snorri.main.Debug;
 import snorri.main.Main;
-import snorri.semantics.Nominal;
+import snorri.semantics.nouns.Nominal;
 import snorri.windows.FocusedWindow;
 import snorri.world.TileType;
 

@@ -7,7 +7,7 @@ import java.awt.geom.Point2D;
 
 import java.lang.Math;
 
-import snorri.semantics.Nominal;
+import snorri.semantics.nouns.Nominal;
 import snorri.windows.FocusedWindow;
 import snorri.windows.GamePanel;
 

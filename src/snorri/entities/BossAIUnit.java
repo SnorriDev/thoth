@@ -2,9 +2,9 @@ package snorri.entities;
 
 import snorri.animations.Animation;
 import snorri.events.CastEvent.Caster;
+import snorri.grammar.Lexicon;
 import snorri.nonterminals.Sentence;
 import snorri.parser.Grammar;
-import snorri.parser.Lexicon;
 import snorri.world.Vector;
 import snorri.world.World;
 

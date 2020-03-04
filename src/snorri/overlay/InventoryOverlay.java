@@ -38,6 +38,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import snorri.events.CastEvent.Caster;
+import snorri.grammar.ChartParser;
+import snorri.grammar.DefaultLexicon;
 import snorri.hieroglyphs.Hieroglyphs;
 import snorri.inventory.DropContainer;
 import snorri.inventory.Droppable;
@@ -46,8 +48,8 @@ import snorri.keyboard.Key;
 import snorri.main.Debug;
 import snorri.main.Main;
 import snorri.nonterminals.Sentence;
-import snorri.parser.DefaultLexicon;
 import snorri.parser.Grammar;
+import snorri.semantics.commands.Command;
 import snorri.triggers.TriggerType;
 import snorri.windows.DialogMap;
 import snorri.windows.FocusedWindow;
@@ -275,11 +277,11 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	}
 	
 	public List<String> getWords() {
-		return Grammar.getWords(getTagless());
+		return ChartParser.tokenize(getTagless());
 	}
 	
 	public String extractSpell() {
-		return String.join(" ", Grammar.getWords(field.getText()));
+		return String.join(" ", (field.getText()));
 	}
 	
 	@Override
@@ -310,7 +312,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private void enchantIfWellFormed() {
 		Item item = getItem();
 		String rawSpell = getTagless();
-		Sentence spell = Grammar.parseSentence(rawSpell);
+		Command spell = ChartParser.parseText(rawSpell);
 		if (item == null) {
 			return;
 		}
@@ -345,7 +347,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	}
 	
 	private static boolean isGrammatical(final String text) {
-		return Grammar.isValidSentence(Grammar.parseString(text)) || text.equals("");
+		return  text.equals("") || ChartParser.parseText(text) != null;
 	}
 	
 	private void checkParse(DocumentEvent e) {

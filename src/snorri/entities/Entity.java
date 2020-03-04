@@ -20,7 +20,7 @@ import snorri.events.CastEvent;
 import snorri.main.Debug;
 import snorri.main.Util;
 import snorri.physics.SurfaceCollisionMode;
-import snorri.semantics.Nominal;
+import snorri.semantics.nouns.Nominal;
 import snorri.triggers.Trigger;
 import snorri.triggers.TriggerType;
 import snorri.windows.DialogMap;

@@ -1,50 +1,29 @@
 package snorri.semantics;
 
-import snorri.events.CastEvent;
-import snorri.nonterminals.SemiTerminal;
+import snorri.grammar.categories.Category;
+import snorri.grammar.PartOfSpeech;
 
-public abstract class Definition<S> {
-
-	//maybe we can pass a type parameter here
+public interface Definition<S> {
 	
-	private final Class<? extends SemiTerminal<?>> partOfSpeech;
-	/**
-	 * Semantic category of a value is Class<S>, of a function is Category(A, B)
-	 */
-	private final Object semanticCategory;
+	public PartOfSpeech getPartOfSpeech();
 	
-	protected Definition(Class<? extends SemiTerminal<?>> partOfSpeech, Object semanticCategory) {
-		this.partOfSpeech = partOfSpeech;
-		this.semanticCategory = semanticCategory;
+	default Category getCategory() {
+		return getPartOfSpeech().getCategory();
 	}
 	
-	public Class<? extends SemiTerminal<?>> getPOS() {
-		return partOfSpeech;
-	}
-	
-	public Object getCategory() {
-		return semanticCategory;
-	}
-	
-	public boolean isPOS(Class<? extends SemiTerminal<?>> c) {
-		return c.equals(partOfSpeech);
-	}
-	
-	public abstract S getMeaning(CastEvent e);
+	public abstract S getMeaning();
 
 	/**
 	 * @return a short one or two-word description of this word
 	 */
-	public abstract String toString();
+	public abstract String getEnglish();
 	
 	/**
 	 * @return a longer description of what this word does
 	 */
-	public String getLongDesc() {
-		return null;
-	}
+	public abstract String getDocumentation();
 	
-	public boolean altersMovement() {
+	default boolean altersMovement() {
 		return false;
 	}
 	

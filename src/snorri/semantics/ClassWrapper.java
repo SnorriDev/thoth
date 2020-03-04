@@ -3,6 +3,7 @@ package snorri.semantics;
 import snorri.entities.Entity;
 import snorri.events.CastEvent;
 import snorri.main.Util;
+import snorri.semantics.nouns.Nominal;
 
 /**
  * Use this class to take wrap any raw class types that are being used as concept Nouns.

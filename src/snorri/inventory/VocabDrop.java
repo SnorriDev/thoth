@@ -2,9 +2,8 @@ package snorri.inventory;
 
 import java.awt.Image;
 
+import snorri.grammar.DefaultLexicon;
 import snorri.hieroglyphs.Hieroglyphs;
-import snorri.parser.DefaultLexicon;
-import snorri.semantics.Definition;
 
 public class VocabDrop implements Droppable, Comparable<VocabDrop> {
 
@@ -17,10 +16,6 @@ public class VocabDrop implements Droppable, Comparable<VocabDrop> {
 	
 	public String getOrthography() {
 		return orthography;
-	}
-	
-	public Definition<?> getMeaning() {
-		return DefaultLexicon.lookup(orthography);
 	}
 	
 	@Override

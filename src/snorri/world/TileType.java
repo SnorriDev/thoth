@@ -9,7 +9,7 @@ import snorri.audio.ClipWrapper;
 import snorri.events.CastEvent;
 import snorri.main.Debug;
 import snorri.main.Util;
-import snorri.semantics.Nominal;
+import snorri.semantics.nouns.Nominal;
 
 public interface TileType extends Nominal {
 	

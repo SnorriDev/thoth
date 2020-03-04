@@ -10,7 +10,7 @@ import snorri.entities.NPC;
 import snorri.inventory.Droppable;
 import snorri.main.Debug;
 import snorri.main.Main;
-import snorri.semantics.Open;
+import snorri.semantics.commands.intrans.Open;
 import snorri.windows.CutScene;
 import snorri.windows.FocusedWindow;
 import snorri.windows.GamePanel;

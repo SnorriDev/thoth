@@ -6,8 +6,8 @@ import snorri.events.CastEvent.Caster;
 import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.main.Debug;
-import snorri.semantics.Go.Movable;
-import snorri.semantics.Nominal;
+import snorri.semantics.commands.intrans.Go.Movable;
+import snorri.semantics.nouns.Nominal;
 import snorri.world.Vector;
 import snorri.world.World;
 
