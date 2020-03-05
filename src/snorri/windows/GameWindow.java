@@ -73,11 +73,11 @@ public class GameWindow extends FocusedWindow<Player> {
 		double deltaTime = (time - lastTime) / 1000000000d;
 		lastTime = time;
 		
-		if (messageQ != null && messageQ.peek() != null && messageQ.peek().update(deltaTime)) {
+		Message peak;
+		if (messageQ != null && (peak = messageQ.peek()) != null && peak.update(deltaTime)) {
 			Message message = messageQ.poll();
 			if (message != null) {
-				// This might be null because the queue is not thread safe.
-				// TODO(snorri): Use a thread-safe datastructure and remove this redundant null check.
+				// Lots of weird null checks here could be avoided with thread-safe datastructure.
 				message.onClear();
 			}
 		}

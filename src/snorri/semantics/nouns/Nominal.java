@@ -3,7 +3,7 @@ package snorri.semantics.nouns;
 import java.io.Serializable;
 
 import snorri.events.CastEvent;
-import snorri.main.Util;
+import snorri.util.Util;
 
 public interface Nominal extends Serializable {
 	

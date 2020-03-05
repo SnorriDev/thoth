@@ -313,7 +313,9 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 			return;
 		}
 		String rawSpell = getTagless();
+		// TODO: Create an enchant trigger here.
 		getItem().setSpell(Spell.fromString(rawSpell));
+		Debug.logger.info("Spell enchanted: " +  getItem().getSpell().getOrthography() + ".");
 		spellsEnchanted.add(rawSpell);
 		setGlyphs();
 	}

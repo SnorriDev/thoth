@@ -9,7 +9,7 @@ import javax.swing.JTextField;
 
 import snorri.inventory.Droppable;
 import snorri.main.Debug;
-import snorri.main.Util;
+import snorri.util.Util;
 
 public class DialogMap extends HashMap<String, JComponent> {
 

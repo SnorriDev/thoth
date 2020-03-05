@@ -132,6 +132,10 @@ public class Player extends Unit implements Caster {
 				if (selected != null && Key.SPACE.isPressed()) {
 					((Interactor) selected).onInteract(new InteractEvent(world, Player.this));
 				}
+				
+				else if (Key.SPACE.isPressed()) {
+					((GameWindow) Main.getWindow()).openInventory(1);
+				}
 			}
 		});
 		

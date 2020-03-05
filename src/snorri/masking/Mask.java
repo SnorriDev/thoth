@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import snorri.main.Util;
+import snorri.util.Util;
 import snorri.world.Tile;
 import snorri.world.TileType;
 import snorri.world.Vector;

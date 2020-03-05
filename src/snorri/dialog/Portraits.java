@@ -7,7 +7,7 @@ import java.util.Map;
 
 import snorri.main.Debug;
 import snorri.main.Main;
-import snorri.main.Util;
+import snorri.util.Util;
 
 public class Portraits {
 

@@ -8,8 +8,8 @@ import java.lang.reflect.Array;
 import snorri.audio.ClipWrapper;
 import snorri.events.CastEvent;
 import snorri.main.Debug;
-import snorri.main.Util;
 import snorri.semantics.nouns.Nominal;
+import snorri.util.Util;
 
 public interface TileType extends Nominal {
 	

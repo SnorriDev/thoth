@@ -16,7 +16,7 @@ import javax.imageio.ImageIO;
 
 import snorri.main.Debug;
 import snorri.main.Main;
-import snorri.main.Util;
+import snorri.util.Util;
 import snorri.world.Vector;
 
 /**

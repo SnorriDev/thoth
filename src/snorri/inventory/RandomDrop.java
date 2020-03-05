@@ -7,7 +7,7 @@ import java.util.Collection;
 
 import snorri.grammar.Lexicon;
 import snorri.main.Debug;
-import snorri.main.Util;
+import snorri.util.Util;
 
 public class RandomDrop implements Droppable {
 

@@ -56,7 +56,7 @@ public class Projectile extends Detector implements Movable {
 		}
 		else if (root instanceof Caster) {
 			CastEvent spellEvent = new CastEvent(world, (Caster) root, this, deltaTime / getLifeSpan());
-			weapon.onCast(spellEvent);
+			weapon.wrapCastSpell(spellEvent);
 			if (!weapon.getSpell().altersMovement()) {
 				translate(world, velocity.multiply(deltaTime));
 			}
@@ -90,7 +90,7 @@ public class Projectile extends Detector implements Movable {
 	protected void onSafeDelete(World world) {
 		if (root instanceof Caster && orb != null) {
 			CastEvent castEvent = new CastEvent(world, (Caster) root, this);
-			Object output = orb.onCast(castEvent);
+			Object output = orb.wrapCastSpell(castEvent);
 			if (Debug.orbOutputLogged()) {
 				Debug.logger.info("Orb output: " + output + ".");
 			}

@@ -40,7 +40,6 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 		if (orbSlot != null) {
 			orbSlot.updateCooldown(deltaTime);
 		}
-		papyrusSlot.checkQueuedSpell();
 		papyrusSlot.updateCooldown(deltaTime);
 	}
 	
@@ -86,6 +85,7 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 	
 	public void render(GameWindow window, Graphics g) {
 		drawItemContainer(g, 0, false, weaponSlot, Weapon.class);
+//		TODO: Add back multiple papyrusSlots.
 		drawItemContainer(g, 1, false, papyrusSlot, Papyrus.class);
 	}
 	

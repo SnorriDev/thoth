@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 import snorri.audio.Music;
 import snorri.main.Main;
-import snorri.main.Util;
+import snorri.util.Util;
 import snorri.world.World;
 
 public class MainMenu extends GamePanel {

@@ -23,9 +23,6 @@ public class Papyrus extends Item {
 	private boolean ignoreMessages = false;
 	private int numPapyri;
 	
-	// This event is used to saved a spell queued in the GUI.
-	private CastEvent queuedCastEvent;
-	
 	public Papyrus(ItemType t) {
 		super(t);
 		timer = new Timer(PAPYRUS_COOLDOWN);
@@ -48,35 +45,17 @@ public class Papyrus extends Item {
 	}
 
 	public void queueSpell(World world, Caster player, Vector castPos) {
-		setSpell(null);
-		((GameWindow) Main.getWindow()).openInventory(1);
-		queuedCastEvent = new CastEvent(world, player, new Entity(castPos));
-//		TODO: Should probably refactor this to remove Papyrus from the game completely.
-//		if (numPapyri == 0 || !getTimer().isOffCooldown() || !(Main.getWindow() instanceof GameWindow)) {
-//			return;
-//		}
-//		setSpell(null);
-//		((GameWindow) Main.getWindow()).openInventory(1);
-//		numPapyri--;
-//		queuedCastEvent = new CastEvent(world, player, new Entity(castPos));
-	}
-	
-	/**
-	 * Cast a spell which has been set in the spellcrafting interface.
-	 * @return False if the set spell is null or another error was encountered; true otherwise.
-	 */
-	public boolean checkQueuedSpell() {
-		if (!(Main.getWindow() instanceof GameWindow) || queuedCastEvent == null || getSpell() == null) {
-			return false;
-		}
 		GameWindow gameWindow = (GameWindow) Main.getWindow();
-		Object spellResult = onCast(queuedCastEvent);
-		String orthography = getSpell().getOrthography();
+		CastEvent event = new CastEvent(world, player, new Entity(castPos));
+		if (spell == null || !getTimer().isOffCooldown() || !(Main.getWindow() instanceof GameWindow)) {
+			return;
+		}
+		Object spellResult = spell.cast(event);
+		String orthography = spell.getOrthography();
 		gameWindow.showMessage(new SpellMessage(orthography, spellResult, false));
-		queuedCastEvent = null;
-		return true;
+		getTimer().activate();
 	}
-	
+
 	/**
 	 * This function has been repurposed for casting AI spells
 	 * @param world
@@ -101,7 +80,7 @@ public class Papyrus extends Item {
 		}
 		
 		if (timer.activate()) {
-			Object o = onCast(new CastEvent(world, caster, null));
+			Object o = wrapCastSpell(new CastEvent(world, caster, null));
 			if (Main.getWindow() instanceof GameWindow) {
 				((GameWindow) Main.getWindow()).showMessage(new SpellMessage(orthography, o, false));
 			}

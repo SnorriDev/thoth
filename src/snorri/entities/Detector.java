@@ -2,7 +2,7 @@ package snorri.entities;
 
 import snorri.collisions.Collider;
 import snorri.events.CollisionEvent;
-import snorri.main.Util;
+import snorri.util.Util;
 import snorri.world.Vector;
 import snorri.world.World;
 

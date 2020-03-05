@@ -13,8 +13,8 @@ import snorri.collisions.CircleCollider;
 import snorri.events.CastEvent;
 import snorri.main.Debug;
 import snorri.main.Main;
-import snorri.main.Util;
 import snorri.semantics.CommandStatus;
+import snorri.util.Util;
 import snorri.windows.GamePanel;
 import snorri.windows.GameWindow;
 import snorri.world.Vector;
@@ -278,7 +278,7 @@ public abstract class Item implements Droppable {
 	}
 	
 	/** Cast this item's spell in the context specified by spellEvent. */
-	public CommandStatus onCast(CastEvent spellEvent) {
+	public CommandStatus wrapCastSpell(CastEvent spellEvent) {
 		if (spell == null) {
 			return null;
 		}

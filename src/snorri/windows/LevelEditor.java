@@ -326,6 +326,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 				Debug.logger.warning("Failed to open " + config.getPath() + " in Sublime Text.");
 				e1.printStackTrace();
 			}
+			break;
 		case "Quit":
 			Main.getFrame().setJMenuBar(null);
 			Main.setWindow(new MainMenu());
