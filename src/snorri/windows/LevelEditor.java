@@ -610,7 +610,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 
 		
 		if (ent instanceof Caster) {
-			editInventory((Caster) ent);
+			openInventory((Caster) ent, true);
 		}
 
 	}

@@ -48,6 +48,8 @@ public class Go implements Definition<Command> {
 			translate(world, dir.normalize(), deltaTime);
 		}
 		
+		public void setMovementOverriden(boolean overriden);
+		
 	}
 
 	@Override
@@ -59,10 +61,11 @@ public class Go implements Definition<Command> {
 	public Command getMeaning() {
 		return e -> {
 			if (e.getSecondPerson() instanceof Movable && e.getDestination() != null) {
-				Vector trans = e.getDestination().copy().sub_(e.getSecondPerson().getPos());
+				((Movable) e.getSecondPerson()).setMovementOverriden(true);
+				Vector trans = e.getDestination().sub(e.getSecondPerson().getPos());
 				if (trans.magnitude() < DELETE_MARGIN) {
 					e.getWorld().delete(e.getSecondPerson());
-					return CommandStatus.FAILED;
+					return CommandStatus.DONE;
 				}
 				((Movable) e.getSecondPerson()).translateNormalized(e.getWorld(), trans, SPEED * e.getDeltaTime());
 				return CommandStatus.DONE;

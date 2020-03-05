@@ -2,17 +2,12 @@ package snorri.entities;
 
 import snorri.animations.Animation;
 import snorri.collisions.RectCollider;
-import snorri.entities.Player.Interactor;
-import snorri.events.InteractEvent;
-import snorri.main.Main;
-import snorri.windows.GameWindow;
 import snorri.world.Vector;
 
-public class Desk extends Entity implements Interactor {
+public class Desk extends Entity {
 
 	/**
-	 * Desks are the stations where you can edit inventory and spells
-	 * Press space to interact with them
+	 * Formerly stations for editing inventory, desks are now just scenery.
 	 */
 	private static final long serialVersionUID = 1L;
 	private static final Animation ANIMATION = new Animation("/textures/objects/inkwell.png");
@@ -20,13 +15,6 @@ public class Desk extends Entity implements Interactor {
 	public Desk(Vector pos) {
 		super(pos, new RectCollider(12, 27));
 		animation = new Animation(ANIMATION);
-	}
-	
-	@Override
-	public void onInteract(InteractEvent e) {
-		if (Main.getWindow() instanceof GameWindow) {
-			((GameWindow) Main.getWindow()).openInventory(0);
-		}
 	}
 
 }

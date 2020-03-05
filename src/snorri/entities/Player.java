@@ -134,7 +134,7 @@ public class Player extends Unit implements Caster {
 				}
 				
 				else if (Key.SPACE.isPressed()) {
-					((GameWindow) Main.getWindow()).openInventory(1);
+					((GameWindow) Main.getWindow()).openInventory(Player.this, false);
 				}
 			}
 		});

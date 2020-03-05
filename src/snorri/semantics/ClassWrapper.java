@@ -26,7 +26,6 @@ public class ClassWrapper extends Wrapper<Class<? extends Nominal>> {
 	
 	@Override
 	public Nominal get(AbstractSemantics attr, CastEvent e) {
-		
 		switch (attr) {
 		case ONE:
 			return resolve(e);
@@ -36,7 +35,6 @@ public class ClassWrapper extends Wrapper<Class<? extends Nominal>> {
 		default:
 			return super.get(attr, e);
 		}
-		
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -90,26 +90,12 @@ public abstract class FocusedWindow<F extends Entity> extends GamePanel implemen
 		});
 	}
 	
-	public synchronized void openInventory(int i) {
-		F focus = getFocus();
-		if (!(focus instanceof Caster)) {
-			Debug.logger.warning("tried to open inventory on non-Caster");
-			return;
-		}
+	public synchronized void openInventory(Caster caster, boolean editMode) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				Main.setOverlay(new InventoryOverlay(FocusedWindow.this, (Caster) focus, false, i));
-				paused = true;
-			}
-		});	
-	}
-	
-	public synchronized void editInventory(Caster caster) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				Main.setOverlay(new InventoryOverlay(FocusedWindow.this, caster, true, 0));
+				// We highlight the second item so that something intuitive (a papyrus) is selected by default.
+				Main.setOverlay(new InventoryOverlay(FocusedWindow.this, caster, editMode, 1));
 				paused = true;
 			}
 		});

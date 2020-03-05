@@ -26,8 +26,8 @@ public class Cross implements Definition<Lambda<Noun, Lambda<Noun, Predicate>>> 
 
 	@Override
 	public Lambda<Noun, Lambda<Noun, Predicate>> getMeaning() {
-		return objNoun -> {
-			return subjNoun -> {
+		return subjNoun -> {
+			return objNoun -> {
 				return event -> {
 					Object obj = objNoun.apply(event);
 					Object subj = subjNoun.apply(event);

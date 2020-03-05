@@ -353,4 +353,10 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 	private boolean canJump() {
 		return !isFalling();
 	}
+	
+	@Override
+	public void setMovementOverriden(boolean overriden) {
+		// Don't disable the unit's movements.
+	}
+	
 }

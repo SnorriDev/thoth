@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import snorri.dialog.SpellMessage;
 import snorri.dialog.TextMessage;
 import snorri.entities.BossAIUnit;
-import snorri.entities.Entity;
 import snorri.events.CastEvent;
 import snorri.events.CastEvent.Caster;
 import snorri.main.Main;
@@ -46,7 +45,7 @@ public class Papyrus extends Item {
 
 	public void queueSpell(World world, Caster player, Vector castPos) {
 		GameWindow gameWindow = (GameWindow) Main.getWindow();
-		CastEvent event = new CastEvent(world, player, new Entity(castPos));
+		CastEvent event = new CastEvent(world, player, null);
 		if (spell == null || !getTimer().isOffCooldown() || !(Main.getWindow() instanceof GameWindow)) {
 			return;
 		}

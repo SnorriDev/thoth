@@ -33,6 +33,7 @@ public class GameWindow extends FocusedWindow<Player> {
 	 * Main game window
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final double MESSAGE_DELAY = 1.5d;
 	
 	private static final ClipWrapper ACQUIRE_AUDIO_CLIP = new ClipWrapper("sound/acquire.wav");
 	
@@ -49,7 +50,7 @@ public class GameWindow extends FocusedWindow<Player> {
 		setCustomCenter(universe.findCenter());
 		
 		messageQ = new LinkedBlockingQueue<>();
-		messageTimer = new Timer(3d);
+		messageTimer = new Timer(MESSAGE_DELAY);
 		messageTimer.hardReset();
 		
 		lastTime = getTimestamp();

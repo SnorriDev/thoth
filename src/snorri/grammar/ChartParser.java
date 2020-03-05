@@ -24,12 +24,16 @@ public class ChartParser {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void fillChart() {
+	public boolean fillChart() {
 		chart = new HashMap<>();
 		Pair<Integer, Integer> key;
 		for (int idx = 0; idx < tokens.size(); idx++) {
 			key = new Pair<>(idx, idx);
 			List<Definition<?>> definitions = DefaultLexicon.lookup(tokens.get(idx));
+			if (definitions == null) {
+				Debug.logger.severe("Invalid word: " + tokens.get(idx) + ".");
+				return false;
+			}
 			chart.put(key, new LinkedList<>());
 			List<Pair<Category, Object>> values = chart.get(key);
 			definitions.forEach(def -> {
@@ -63,6 +67,7 @@ public class ChartParser {
 			}
 		}
 		
+		return true;
 	}
 	
 	public Command getCommand() {
@@ -70,11 +75,11 @@ public class ChartParser {
 		if (results.size() == 0) {
 			return null;
 		}
+
 		if (results.size() > 1) {
-			Debug.logger.severe("Got ambiguous parses: " + results);
-			return null;
+			// Ambiguities should be resolved left-to-right.
+			Debug.logger.warning("Ambiguous spell: " + tokens + ". This is probably okay.");
 		}
-		
 		Pair<Category, Object> result = results.get(0);
 		if (result.getFirst().equals(COMMAND)) {
 			return (Command) result.getSecond();
@@ -85,8 +90,11 @@ public class ChartParser {
 	public static Command parseText(String text) {
 		List<String> tokens = tokenize(text);
 		ChartParser parser = new ChartParser(tokens);
-		parser.fillChart();
-		return parser.getCommand();
+		boolean validWords = parser.fillChart();
+		if (validWords) {
+			return parser.getCommand();
+		}
+		return null;
 	}
 
 	public static List<String> tokenize(String text) {

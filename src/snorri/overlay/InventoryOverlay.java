@@ -111,23 +111,11 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private class ItemSelectionModel extends DefaultListSelectionModel {
 
 		private static final long serialVersionUID = 1L;
-
-		private final int i;
 		
 		public ItemSelectionModel(int i) {
 			super.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			super.setSelectionInterval(i, i);
-			this.i = i;
 		}
-		
-		@Override
-	    public boolean isSelectedIndex(int j) {
-			if (editMode) {
-				return super.isSelectedIndex(j);
-				
-			}
-			return i == j;
-	    }
 				
 	}
 	
@@ -415,7 +403,15 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	}
 
 	@Override
-	public void valueChanged(ListSelectionEvent e) {		
+	public void valueChanged(ListSelectionEvent e) {
+		Spell spell = list.getSelectedValue().getSpell();
+		if (spell != null) {
+			field.setText(spell.getOrthography());
+			setGlyphs();
+		}
+		else {
+			field.setText("");
+		}
 	}
 	
 	@Override

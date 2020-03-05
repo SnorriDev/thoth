@@ -8,6 +8,8 @@ import snorri.semantics.commands.Command;
 
 public class Boom implements Definition<Command> {
 
+	// If we expand second person to target other entity types besides projectiles, we should restrict Boom to projectiles.
+	
 	private static final double DAMAGE = 100;
 
 	@Override
@@ -34,7 +36,7 @@ public class Boom implements Definition<Command> {
 
 	@Override
 	public String getDocumentation() {
-		return "Cause an explosion at the 2nd person object.";
+		return "For projectile spells, cause the projectile to explode.";
 	}
 	
 }

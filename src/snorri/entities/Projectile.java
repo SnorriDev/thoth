@@ -21,6 +21,7 @@ public class Projectile extends Detector implements Movable {
 	
 	private Weapon weapon;
 	private Orb orb;
+	private boolean movementOverriden;
 	
 	public Projectile(Entity root, Vector rootVelocity, Vector path, Weapon weapon, Orb orb) {
 		super(root.getPos().copy(), 3); //radius of a projectile is 1
@@ -30,6 +31,7 @@ public class Projectile extends Detector implements Movable {
 		this.root = root;
 		this.weapon = weapon;
 		this.orb = orb;
+		movementOverriden = false;
 	}
 
 	public Entity getRoot() {
@@ -57,7 +59,7 @@ public class Projectile extends Detector implements Movable {
 		else if (root instanceof Caster) {
 			CastEvent spellEvent = new CastEvent(world, (Caster) root, this, deltaTime / getLifeSpan());
 			weapon.wrapCastSpell(spellEvent);
-			if (!weapon.getSpell().altersMovement()) {
+			if (!movementOverriden) {
 				translate(world, velocity.multiply(deltaTime));
 			}
 			// Maybe we should always apply physics, for interesting interactions?
@@ -125,6 +127,10 @@ public class Projectile extends Detector implements Movable {
 	@Override
 	public boolean hasGravity() {
 		return true;
+	}
+
+	public void setMovementOverriden(boolean overriden) {
+		movementOverriden = overriden;
 	}
 
 }

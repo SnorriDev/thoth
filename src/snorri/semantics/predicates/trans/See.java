@@ -22,8 +22,8 @@ public class See implements Definition<Lambda<Noun, Lambda<Noun, Command>>> {
 
 	@Override
 	public Lambda<Noun, Lambda<Noun, Command>> getMeaning() {
-		return objNoun -> {
-			return subjNoun -> {
+		return subjNoun -> {
+			return objNoun -> {
 				return e -> {
 					Nominal subj = subjNoun.apply(e);
 					Nominal obj = objNoun.apply(e);
