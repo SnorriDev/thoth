@@ -9,5 +9,7 @@ public interface Category {
 	abstract public String toString();
 	
 	abstract public ComposeRule getRule();
+	
+	abstract public char getDirection();
 		
 }

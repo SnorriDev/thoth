@@ -26,10 +26,10 @@ public class DerivedCategory implements Category {
 	@Override
 	public Category apply(Category other) {
 		String otherString = other.toString();
-		if (direction == LEFT && left.toString() == otherString) {
+		if (direction == LEFT && left.toString().equals(otherString)) {
 			return right;
 		}
-		if (right.toString() == otherString) {
+		if (direction == RIGHT && right.toString().equals(otherString)) {
 			return left;
 		}
 		return null;
@@ -37,11 +37,16 @@ public class DerivedCategory implements Category {
 
 	@Override
 	public String toString() {
+		String left = this.left.toString();
+		if (this.left instanceof DerivedCategory) {
+			left = "(" + left + ")";
+		}
+		
 		String right = this.right.toString();
 		if (this.right instanceof DerivedCategory) {
 			right = "(" + right + ")";
 		}
-		return left.toString() + " " + direction + " " + right.toString();
+		return left + " " + direction + " " + right;
 	}
 
 	@Override
@@ -52,6 +57,11 @@ public class DerivedCategory implements Category {
 	@Override
 	public ComposeRule getRule() {
 		return rule;
+	}
+	
+	@Override
+	public char getDirection() {
+		return direction;
 	}
 
 }

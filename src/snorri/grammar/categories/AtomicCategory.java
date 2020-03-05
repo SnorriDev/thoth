@@ -30,4 +30,9 @@ public class AtomicCategory implements Category {
 		return null;
 	}
 
+	@Override
+	public char getDirection() {
+		return 0;
+	}
+
 }

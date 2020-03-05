@@ -33,7 +33,9 @@ import snorri.semantics.commands.trans.Push;
 import snorri.semantics.commands.trans.Slow;
 import snorri.semantics.commands.trans.Write;
 import snorri.semantics.conjunctions.And;
+import snorri.semantics.conjunctions.Else;
 import snorri.semantics.conjunctions.If;
+import snorri.semantics.conjunctions.Or;
 import snorri.semantics.nouns.ConstantNounDef;
 import snorri.semantics.nouns.FirstPerson;
 import snorri.semantics.nouns.Nominal.NameConstant;
@@ -102,7 +104,9 @@ public class DefaultLexicon {
 
 	private static void addConnectives() {
 		register("Dr", new If());
+		register("ELSE", new Else());
 		register("AND", new And());
+		register("OR", new Or());
 	}
 
 	private static void addAdverbs() {

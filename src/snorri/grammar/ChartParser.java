@@ -15,7 +15,7 @@ import snorri.util.Pair;
 public class ChartParser {
 
 	private static final Category COMMAND = PartOfSpeech.INTRANS_CMD.getCategory();
-	
+
 	private HashMap<Pair<Integer, Integer>, List<Pair<Category, Object>>> chart;
 	private List<String> tokens;
 
@@ -41,7 +41,7 @@ public class ChartParser {
 			});
 			chart.put(key, values);
 		}
-		
+
 		Category newCategory;
 		Object newMeaning;
 		for (int len = 1; len < tokens.size(); len++) {
@@ -52,12 +52,13 @@ public class ChartParser {
 				List<Pair<Category, Object>> values = chart.get(key);
 				for (int split = start; split < end; split++) {
 					for (Pair<Category, Object> startPair : chart.get(new Pair<>(start, split))) {
-						for (Pair<Category, Object> endPair : chart.get(new Pair<>(split + 1, end))) {
-							if ((newCategory = startPair.getFirst().apply(endPair.getFirst())) != null) {
+						for (Pair<Category, Object> endPair : chart.get(new Pair<>(split + 1, end))) {							
+							if (startPair.getFirst().getDirection() == '/'
+									&& (newCategory = startPair.getFirst().apply(endPair.getFirst())) != null) {
 								newMeaning = ((Lambda) startPair.getSecond()).apply(endPair.getSecond());
 								values.add(new Pair<>(newCategory, newMeaning));
-							}
-							else if ((newCategory = endPair.getFirst().apply(startPair.getFirst())) != null) {
+							} else if (endPair.getFirst().getDirection() == '\\'
+									&& (newCategory = endPair.getFirst().apply(startPair.getFirst())) != null) {
 								newMeaning = ((Lambda) endPair.getSecond()).apply(startPair.getSecond());
 								values.add(new Pair<>(newCategory, newMeaning));
 							}
@@ -66,10 +67,9 @@ public class ChartParser {
 				}
 			}
 		}
-		
 		return true;
 	}
-	
+
 	public Command getCommand() {
 		List<Pair<Category, Object>> results = chart.get(new Pair<>(0, tokens.size() - 1));
 		if (results.size() == 0) {
@@ -77,7 +77,7 @@ public class ChartParser {
 		}
 
 		if (results.size() > 1) {
-			// Ambiguities should be resolved left-to-right.
+			// Ambiguities are resolved left-to-right.
 			Debug.logger.warning("Ambiguous spell: " + tokens + ". This is probably okay.");
 		}
 		Pair<Category, Object> result = results.get(0);
@@ -100,7 +100,7 @@ public class ChartParser {
 	public static List<String> tokenize(String text) {
 		return Arrays.asList(text.replaceAll("\\.", "").split("\\s+|="));
 	}
-	
+
 	public HashMap<Pair<Integer, Integer>, List<Pair<Category, Object>>> getChart() {
 		return chart;
 	}

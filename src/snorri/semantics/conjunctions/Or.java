@@ -6,7 +6,7 @@ import snorri.semantics.Definition;
 import snorri.semantics.Lambda;
 import snorri.semantics.commands.Command;
 
-public class And implements Definition<Lambda<Command, Lambda<Command, Command>>> {
+public class Or implements Definition<Lambda<Command, Lambda<Command, Command>>> {
 
 	@Override
 	public PartOfSpeech getPartOfSpeech() {
@@ -20,9 +20,9 @@ public class And implements Definition<Lambda<Command, Lambda<Command, Command>>
 				return event -> {
 					CommandStatus status = leftCmd.apply(event);
 					if (status == CommandStatus.DONE) {
-						return rightCmd.apply(event);
+						return status;
 					}
-					return status;
+					return rightCmd.apply(event);
 				};
 			};
 		};
@@ -35,7 +35,7 @@ public class And implements Definition<Lambda<Command, Lambda<Command, Command>>
 
 	@Override
 	public String getDocumentation() {
-		return "Execute the first command, then execute the second command if the first one does't fail.";
+		return "Execute the first command, then execute the second one if the first one fails.";
 	}
 
 }
