@@ -5,9 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.UIManager;
 
@@ -19,6 +18,7 @@ import snorri.dialog.SpellMessage;
 import snorri.entities.Player;
 import snorri.events.CastEvent.Caster;
 import snorri.inventory.Droppable;
+import snorri.inventory.Timer;
 import snorri.keyboard.Key;
 import snorri.main.Debug;
 import snorri.main.Main;
@@ -37,16 +37,21 @@ public class GameWindow extends FocusedWindow<Player> {
 	private static final ClipWrapper ACQUIRE_AUDIO_CLIP = new ClipWrapper("sound/acquire.wav");
 	
 	private Playable universe;
-	private Queue<Message> messageQ;
 	private boolean hasDied;
 	private long lastTime;
+	
+	private BlockingQueue<Message> messageQ;
+	private Timer messageTimer;
 	
 	public GameWindow(Playable universe, Player focus) {
 		super(focus);
 		this.universe = universe;
 		setCustomCenter(universe.findCenter());
 		
-		messageQ = new LinkedList<>();
+		messageQ = new LinkedBlockingQueue<>();
+		messageTimer = new Timer(3d);
+		messageTimer.hardReset();
+		
 		lastTime = getTimestamp();
 		hasDied = false;
 	}
@@ -73,15 +78,13 @@ public class GameWindow extends FocusedWindow<Player> {
 		double deltaTime = (time - lastTime) / 1000000000d;
 		lastTime = time;
 		
-		Message peak;
-		if (messageQ != null && (peak = messageQ.peek()) != null && peak.update(deltaTime)) {
-			Message message = messageQ.poll();
-			if (message != null) {
-				// Lots of weird null checks here could be avoided with thread-safe datastructure.
-				message.onClear();
+		if (messageQ.peek() != null) {
+			messageTimer.update(deltaTime);
+			if (messageTimer.activateIfPossible()) {
+				messageQ.poll();
 			}
 		}
-				
+		
 		if (isPaused()) {
 			return;
 		}
@@ -135,11 +138,8 @@ public class GameWindow extends FocusedWindow<Player> {
 		if (!messageQ.isEmpty()) {
 			g.setFont(UIManager.getFont("Label.font"));
 			int xTrans = 0;
-			for (Iterator<Message> iter = ((LinkedList<Message>) messageQ).descendingIterator(); iter.hasNext();) {
-				Message next = iter.next();
-				if (next != null) {
-					xTrans += next.render(this, g, xTrans);
-				}
+			for (Message message : messageQ) {
+				xTrans += message.render(this, g, xTrans);
 			}
 		}
 		

@@ -14,7 +14,7 @@ import snorri.world.Vector;
 public class Push implements Definition<Lambda<Noun, Command>> {
 	
 	private static Vector DELTA = new Vector(0, -10);
-	private static double FORCE = 600d;
+	private static double FORCE = 450d;
 
 	@Override
 	public PartOfSpeech getPartOfSpeech() {

@@ -149,7 +149,7 @@ public class TileLayer implements SavableLayer {
 
 		for (int i = 0; i < newDim.getX(); i++) {
 			for (int j = 0; j < newDim.getY(); j++) {
-				newMap[i][j] = new Tile(UnifiedTileType.SAND);
+				newMap[i][j] = new Tile(UnifiedTileType.EMPTY);
 			}
 		}
 		Debug.logger.info("Resizing Level from\t" + getWidth() + "\tx\t" + getHeight() + "\tto\t" + newDim.getX() + "\tx\t" + newDim.getY() +"\tusing resize function.");

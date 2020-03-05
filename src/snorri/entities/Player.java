@@ -37,7 +37,7 @@ public class Player extends Unit implements Caster {
 	private static final Image GREY_HEART = Main.getImage("/textures/hud/greyHeart.png");
 
 	private static final int HEALTH_RES = 20;
-	protected static final int PLAYER_BASE_SPEED = 190;
+	protected static final int PLAYER_BASE_SPEED = 160;
 	private static final long serialVersionUID = 1L;
 	
 	private static final String[] SPEECH_SOUNDS = {"/sound/arrow.wav"};

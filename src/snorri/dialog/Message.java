@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 
-import snorri.inventory.Timer;
 import snorri.util.Util;
 import snorri.windows.GamePanel;
 import snorri.windows.GameWindow;
@@ -20,28 +19,16 @@ public abstract class Message {
 	
 	protected static final Color BACKGROUND = new Color(222, 196, 169, 230);
 	
-	protected final Timer timer;
 	protected Runnable onClear = null;
 	protected boolean success = true;
 	
 	private Image icon;
-
-	protected Message() {
-		timer = new Timer(LENGTH);
-		timer.hardReset();
-	}
 	
 	protected Message(Image image) {
-		this();
 		if (image != null) {
 			icon = Util.resize(image, -1, ICON_SIZE);
 		}
-	}
-		
-	public boolean update(double deltaTime) {
-		timer.update(deltaTime);
-		return timer.isOffCooldown();
-	}
+	}	
 	
 	protected static Vector getBasePos(GameWindow window, int width) {
 		return new Vector(window.getCenter().getX() - width / 2, GamePanel.MARGIN + HEIGHT);

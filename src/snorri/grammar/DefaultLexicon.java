@@ -42,6 +42,7 @@ import snorri.semantics.nouns.ThirdPerson;
 import snorri.semantics.predicates.trans.Cross;
 import snorri.semantics.predicates.trans.See;
 import snorri.semantics.prepositions.At;
+import snorri.semantics.prepositions.LeftOf;
 import snorri.semantics.prepositions.To;
 import snorri.semantics.prepositions.With;
 import snorri.world.UnifiedTileType;
@@ -157,6 +158,13 @@ public class DefaultLexicon {
 		register("r", new To()); //to
 		register("n", new At()); //in
 		register("Hna", new With()); //with
+
+//		register("Xr", new Under()); //under
+//		register("tp", new Above()); //above
+		register("iAb", new LeftOf()); //behind
+//		register("imnt", new RightOf()); //in front of
+		
+		//lexicon.put("mhAw", null); //around
 	}
 	
 	private static void initializeTiers() {

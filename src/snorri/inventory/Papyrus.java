@@ -53,7 +53,7 @@ public class Papyrus extends Item {
 		Object spellResult = spell.cast(event);
 		String orthography = spell.getOrthography();
 		gameWindow.showMessage(new SpellMessage(orthography, spellResult, false));
-		getTimer().activate();
+		getTimer().activateIfPossible();
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class Papyrus extends Item {
 			return false;
 		}
 		
-		if (timer.activate()) {
+		if (timer.activateIfPossible()) {
 			Object o = wrapCastSpell(new CastEvent(world, caster, null));
 			if (Main.getWindow() instanceof GameWindow) {
 				((GameWindow) Main.getWindow()).showMessage(new SpellMessage(orthography, o, false));

@@ -41,7 +41,7 @@ public class Weapon extends Item {
 	}
 	
 	public boolean attackIfPossible(World world, Entity focus, Vector movement, Vector dir, Orb orb) {
-		if (timer.activate()) {
+		if (timer.activateIfPossible()) {
 			Audio.playClip(clip);
 			world.add(new Projectile(focus, movement, dir, this, orb));
 			return true;

@@ -22,15 +22,12 @@ public class Timer implements Serializable {
 		}
 	}
 	
-	public boolean activate() {
-		
+	public boolean activateIfPossible() {
 		if (! isOffCooldown()) {
 			return false;
 		}
-		
 		hardReset();
 		return true;
-		
 	}
 	
 	public void hardReset() {

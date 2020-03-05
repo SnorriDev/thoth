@@ -7,6 +7,7 @@ import snorri.semantics.Definition;
 import snorri.semantics.Lambda;
 import snorri.semantics.commands.Command;
 import snorri.semantics.nouns.Noun;
+import snorri.world.Vector;
 
 public class Move implements Definition<Lambda<Noun, Command>> {
 
@@ -19,8 +20,9 @@ public class Move implements Definition<Lambda<Noun, Command>> {
 	public Lambda<Noun, Command> getMeaning() {
 		return object -> {
 			return e -> {
-				Object obj = object.apply(e); 
-				if (e.getDestination() == null || e.getWorld().isOccupied(e.getDestination())) {
+				Object obj = object.apply(e);
+				Vector destination = e.getDestination();
+				if (destination == null || e.getWorld().isOccupied(destination.gridPos())) {
 					return CommandStatus.FAILED;
 				}
 				

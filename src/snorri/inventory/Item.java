@@ -395,7 +395,7 @@ public abstract class Item implements Droppable {
 	
 	public void resetTimer() {
 		if (timer != null) {
-			timer.activate();
+			timer.activateIfPossible();
 		}
 	}
 	

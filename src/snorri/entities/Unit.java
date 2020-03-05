@@ -26,7 +26,7 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 
 	private static final long serialVersionUID = 1L;
 	private static final int BASE_SPEED = 120;
-	protected static final Vector JUMP_VELOCITY = new Vector(0, -300);
+	protected static final Vector JUMP_VELOCITY = new Vector(0, -266);
 	/** Dimensions for humanoid units. */
 	public static final int RADIUS = 46, RADIUS_X = 21, RADIUS_Y = 45;
 	
