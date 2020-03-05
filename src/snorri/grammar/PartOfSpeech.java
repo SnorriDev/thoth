@@ -27,9 +27,9 @@ public enum PartOfSpeech {
 
 	CONDITIONAL(new DerivedCategory(ADV.cat, '/', new AtomicCategory("Predicate"))),
 
-	CONJUNCTION(new DerivedCategory(new DerivedCategory(INTRANS_CMD.cat, '\\', INTRANS_CMD.cat), '/', INTRANS_CMD.cat)),
+	ELSE(new DerivedCategory(new DerivedCategory(ADV.cat, '\\', ADV.cat), '/', INTRANS_CMD.cat)),
 
-	ELSE(new DerivedCategory(new DerivedCategory(ADV.cat, '\\', ADV.cat), '/', INTRANS_CMD.cat));
+	CONJUNCTION(new DerivedCategory(new DerivedCategory(INTRANS_CMD.cat, '\\', INTRANS_CMD.cat), '/', INTRANS_CMD.cat));
 
 	private Category cat;
 

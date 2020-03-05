@@ -7,9 +7,7 @@ import snorri.semantics.Lambda;
 import snorri.semantics.commands.Command;
 
 public class Else implements Definition<Lambda<Command, Lambda<Lambda<Command, Command>, Lambda<Command, Command>>>> {
-	
-	// FIXME: Debug this.
-	
+		
 	@Override
 	public PartOfSpeech getPartOfSpeech() {
 		return PartOfSpeech.ELSE;

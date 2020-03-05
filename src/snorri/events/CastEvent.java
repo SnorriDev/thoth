@@ -146,8 +146,8 @@ public class CastEvent {
 		Vector loc = null;
 		if (this.loc != null) {
 			loc = this.loc;
-		} else if (getSecondPerson().getPos() != null) {
-			loc = getSecondPerson().getPos().copy();
+		} else if (getThirdPerson() != null && getThirdPerson().getPos() != null) {
+			loc = getThirdPerson().getPos();
 		}
 		return loc;
 	}

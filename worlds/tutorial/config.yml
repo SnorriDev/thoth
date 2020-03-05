@@ -35,7 +35,9 @@ triggers:
               image: priest
               name: Imhotep
               text: |
-                <p class="instruction"><span class="control">Right click</span> on the door and write a spell to open it.</p>
+                <p class="instruction">Press <span class="control">space</span> to craft a spell that will open the door.</p>
+
+# TODO: Add an event here that will tell the player how to cast the spell.
 
   onDoorOpen:
     events:
@@ -78,7 +80,7 @@ triggers:
               name: Imhotep
               text: |
                 <p>Woah, that explosion was sick!</p>
-                <p>Is that a statue.. of Thoth!?</p>
+                <p>Now keep going, and watch out for mummies..</p>
  
   onAcquireThoth:
     events:

@@ -21,7 +21,7 @@ public enum UnifiedTileType implements TileType {
 	WATER(new BufferedImage[] {
 			Main.getImage("/textures/tiles/background/water00.png"),
 			Main.getImage("/textures/tiles/background/water01.png"),
-	}, Param.swimmable(true)),
+	}, Param.swimmable(true), Param.isOccupied(false)),
 	TRIPWIRE(TileType.getTwoRotations(Main.getImage("/textures/tiles/foreground/tripwire00.png")), Param.isOccupied(false)),
 	TRIPWIRE_END(TileType.getReflections(Main.getImage("/textures/tiles/foreground/tripwireend00.png")), Param.isOccupied(false)),
 	DOOR(new BufferedImage[] {
@@ -31,7 +31,8 @@ public enum UnifiedTileType implements TileType {
 	WALL(new BufferedImage[] {
 			Main.getImage("/textures/tiles/background/wall08.png"),
 			Main.getImage("/textures/tiles/background/wall09.png"),
-	});
+	}),
+	LAVA(Main.getImage("/textures/tiles/default00.png"), Param.damage(10));
 	
 	private final BufferedImage[] textures;
 	
@@ -43,6 +44,7 @@ public enum UnifiedTileType implements TileType {
 	private double blendOrder = 2.0;
 	private Tile replacementTile = null;
 	private UnifiedTileType replacementType = null;
+	private double damage = 0;
 	
 	UnifiedTileType(BufferedImage[] textures, Param<?>...params) {
 		this.textures = textures;
@@ -78,6 +80,9 @@ public enum UnifiedTileType implements TileType {
 			break;
 		case SWIMMABLE:
 			swimmable = (boolean) param.getValue();
+			break;
+		case DAMAGE:
+			damage = (double) param.getValue();
 			break;
 		default:
 			Debug.logger.warning("Param argument " + param.getKey().name() + " had no affect on TileType " + name() + ".");
@@ -161,5 +166,10 @@ public enum UnifiedTileType implements TileType {
 	@Override
 	public double getBlendOrder() {
 		return blendOrder;
+	}
+	
+	@Override
+	public double getDamage() {
+		return damage;
 	}
 }

@@ -125,8 +125,8 @@ public class Projectile extends Detector implements Movable {
 	}
 	
 	@Override
-	public boolean hasGravity() {
-		return true;
+	public Vector getGravity() {
+		return Entity.GRAVITY;
 	}
 
 	public void setMovementOverriden(boolean overriden) {

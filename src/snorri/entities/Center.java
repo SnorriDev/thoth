@@ -17,8 +17,8 @@ public class Center extends Entity {
 	}
 	
 	@Override
-	public boolean hasGravity() {
-		return false;
+	public Vector getGravity() {
+		return null;
 	}
 	
 	@Override

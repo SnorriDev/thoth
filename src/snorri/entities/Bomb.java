@@ -19,7 +19,7 @@ public class Bomb extends Detector {
 	
 	@Override
 	public void refreshStats() {
-		ignoreCollisions = true;
+		ignoreCollisions = false;
 	}
 
 	@Override
@@ -28,8 +28,8 @@ public class Bomb extends Detector {
 	}
 	
 	@Override
-	public boolean hasGravity() {
-		return true;
+	public Vector getGravity() {
+		return null;
 	}
 
 }

@@ -2,6 +2,7 @@ package snorri.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import snorri.animations.Animation;
 import snorri.audio.ClipWrapper;
@@ -19,6 +20,7 @@ import snorri.semantics.commands.trans.Break;
 import snorri.semantics.nouns.Nominal;
 import snorri.semantics.Wrapper;
 import snorri.triggers.TriggerType;
+import snorri.world.Tile;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -29,6 +31,8 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 	protected static final Vector JUMP_VELOCITY = new Vector(0, -266);
 	/** Dimensions for humanoid units. */
 	public static final int RADIUS = 46, RADIUS_X = 21, RADIUS_Y = 45;
+	/** Number of pixels for checking whether we are standing on lava. */
+	private static final int FOOT_HEIGHT = 5;
 	
 	protected List<Modifier<Unit>> modifiers = new ArrayList<>();
 	
@@ -36,6 +40,7 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 	private Inventory inventory;
 	protected Stats stats;
 	protected double health;
+	private Vector customGravity;
 	
 	protected Animation walkingAnimation;
 	protected Animation idleAnimation;
@@ -81,18 +86,23 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 		speed = getBaseSpeed();
 		
 		if (modifiers == null) {
-			modifiers = new ArrayList<>();
+			modifiers = new CopyOnWriteArrayList<>();
 		}
-		for (Object o : modifiers.toArray()) {
-			@SuppressWarnings("unchecked")
-			Modifier<Unit> m = (Modifier<Unit>) o;
-			if (m.modify(this, deltaTime)) {
-				modifiers.remove(m);
+		for (Modifier<Unit> mod : modifiers) {
+			if (mod.modifyAndCheckTimer(this, deltaTime)) {
+				modifiers.remove(mod);
 			}
 		}
 		
 		// If the unit is standing on a trip wire, cut it.
 		Break.tryToCutTripWire(world, pos.gridPos());
+		
+		// Check if we are stepping on a damaging tile type.
+		Vector footPos = pos.add(new Vector(0, RADIUS_Y + FOOT_HEIGHT));
+		Tile floor = world.getTileLayer().getTile(footPos.gridPos());
+		if (floor != null && floor.getType().getDamage() != 0) {
+			damage(floor.getType().getDamage() * deltaTime);
+		}
 		
 		if (isDead()) {
 			world.delete(this);
@@ -169,9 +179,6 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 	}
 	
 	public void damage(double d) {
-		if (Debug.damageEventsLogged()) {
-			Debug.logger.info(this + "(" + (int) health + "/" + stats.getMaxHealth() + ") took " + d + " damage.");
-		}
 		health -= d;
 	}
 	
@@ -357,6 +364,18 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 	@Override
 	public void setMovementOverriden(boolean overriden) {
 		// Don't disable the unit's movements.
+	}
+	
+	public void setCustomGravity(Vector gravity) {
+		this.customGravity = gravity;
+	}
+	
+	@Override
+	public Vector getGravity() {
+		if (customGravity == null) {
+			return super.getGravity();
+		}
+		return customGravity;
 	}
 	
 }

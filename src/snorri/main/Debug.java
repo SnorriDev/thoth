@@ -15,7 +15,6 @@ public class Debug {
 	private static final boolean RENDER_TILE_GRID = false;
 	private static final boolean LOG_PARSES = false;
 	private static final boolean LOG_RENDER_QUEUE = false;
-	private static final boolean LOG_DAMAGE_EVENTS = false;
 	private static final boolean LOG_DEATHS = false;
 	private static final boolean SHOW_ORB_OUTPUT = false;
 	private static final boolean DISABLE_PATHFINDING = false;
@@ -68,10 +67,6 @@ public class Debug {
 	
 	public static boolean renderQueueLogged() {
 		return LOG_RENDER_QUEUE;
-	}
-	
-	public static boolean damageEventsLogged() {
-		return LOG_DAMAGE_EVENTS;
 	}
 	
 	public static boolean deathsLogged() {

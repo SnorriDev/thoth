@@ -19,8 +19,10 @@ import snorri.semantics.ClassWrapper;
 import snorri.semantics.Definition;
 import snorri.semantics.adverbs.Greatly;
 import snorri.semantics.commands.intrans.Boom;
+import snorri.semantics.commands.intrans.Fly;
 import snorri.semantics.commands.intrans.Go;
 import snorri.semantics.commands.intrans.Open;
+import snorri.semantics.commands.trans.Acquire;
 import snorri.semantics.commands.trans.Break;
 import snorri.semantics.commands.trans.Burn;
 import snorri.semantics.commands.trans.CreateObject;
@@ -99,7 +101,9 @@ public class DefaultLexicon {
 		register("sD", new Break());
 		register("dmi", new Cross());
 		register("PUSH", new Push());
-		//register("sxpr", new CreateUnit()); //conjure
+		register("ACQUIRE", new Acquire());
+		register("FLY", new Fly());
+		//register("sxpr", new CreateUnit()); //spawn
 	}
 
 	private static void addConnectives() {

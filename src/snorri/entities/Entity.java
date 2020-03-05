@@ -279,10 +279,9 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 		}
 		
 		// Do gravity if this entity has gravity.
-		if (hasGravity()) {
-			addVelocity(GRAVITY.multiply(deltaTime));
-		}
-		
+		if (getGravity() != null) {
+			addVelocity(getGravity().multiply(deltaTime));
+		}	
 		updatePosition(world, deltaTime);
 	}
 	
@@ -551,8 +550,8 @@ public class Entity implements Nominal, Serializable, Comparable<Entity>, Clonea
 	/** Event hook for when an entity is spawned in the world. */
 	public void onSpawn(World world) {}
 	
-	protected boolean hasGravity() {
-		return true;
+	protected Vector getGravity() {
+		return GRAVITY;
 	}
 	
 	public DialogMap prepareDialogMap() {

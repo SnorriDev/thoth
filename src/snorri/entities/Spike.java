@@ -38,8 +38,8 @@ public class Spike extends Detector {
 	}
 	
 	@Override
-	public boolean hasGravity() {
-		return false;
+	public Vector getGravity() {
+		return null;
 	}
 
 }

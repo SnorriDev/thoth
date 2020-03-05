@@ -4,6 +4,7 @@ import snorri.entities.Unit;
 
 public class SlowModifier extends Modifier<Unit> {
 	
+	protected static final double DEFAULT_TIME = 10d;
 	protected static final double DEFAULT_MAGNITUDE = 0.5;
 	
 	protected double magnitude;
@@ -25,9 +26,9 @@ public class SlowModifier extends Modifier<Unit> {
 	}
 
 	@Override
-	public boolean modify(Unit u, double deltaTime) {
+	public boolean modifyAndCheckTimer(Unit u, double deltaTime) {
 		u.modifySpeed(magnitude);
-		return super.modify(u, deltaTime);
+		return super.modifyAndCheckTimer(u, deltaTime);
 	}
 
 }

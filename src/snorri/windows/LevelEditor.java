@@ -209,11 +209,11 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		Main.getFrame().setJMenuBar(menuBar);
 	}
 
-	private int[] whDialog() {
+	private int[] worldSizeDialog(Vector dimensions) {
 		int[] wh = { -1, -1 };
 		DialogMap inputs = new DialogMap();
-		inputs.put("Width", "" + World.DEFAULT_LEVEL_SIZE.getX());
-		inputs.put("Height", "" + World.DEFAULT_LEVEL_SIZE.getY());
+		inputs.put("Width", "" + dimensions.getX());
+		inputs.put("Height", "" + dimensions.getY());
 		if (dialog("World Dimensions", inputs) == null) {
 			return null;
 		}
@@ -256,7 +256,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		String w2;
 		switch (e.getActionCommand()) {
 		case "New":
-			int[] wh = whDialog();
+			int[] wh = worldSizeDialog(World.DEFAULT_LEVEL_SIZE);
 			if (wh == null) {
 				return;
 			}
@@ -291,7 +291,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 				return;
 			}
 
-			int[] whNew = whDialog();
+			int[] whNew = worldSizeDialog(env.getDimensions().gridPos());
 
 			if (whNew == null) {
 				return;

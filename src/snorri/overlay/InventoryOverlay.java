@@ -76,7 +76,7 @@ public class InventoryOverlay extends Overlay implements MouseListener, ListSele
 	private static final double TEXT_BOX_HEIGHT_MULTIPLIER = 0.55;
 	private static final int TEXT_BOX_WIDTH = CRAFTING_SPACE_WIDTH - 2 * PADDING; // 547
 	private static final int TEXT_BOX_HEIGHT = (int) (CRAFTING_SPACE_HEIGHT * TEXT_BOX_HEIGHT_MULTIPLIER);// 94
-	private static final String ENCHANT_BUTTON_NAME = "CAST";
+	private static final String ENCHANT_BUTTON_NAME = "ENCHANT";
 	
 	private final Caster caster;
 	

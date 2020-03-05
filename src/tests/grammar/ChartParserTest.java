@@ -23,13 +23,13 @@ class ChartParserTest {
 		Command cmd = ChartParser.parseText("qmA snbt");
 		assert cmd != null;
 	}
-	
+
 	@Test
 	void testBmDrDmiTnAnx() {
 		Command cmd = ChartParser.parseText("bm Dr dmi tn anx");
 		assert cmd != null;
 	}
-	
+
 	@Test
 	void testBmDrDmiTnAnxElseSmRSt() {
 		Command cmd = ChartParser.parseText("bm Dr dmi tn anx ELSE Sm r st");

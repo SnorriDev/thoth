@@ -20,7 +20,9 @@ public class Drop extends Detector {
 		this.prize = prize;
 		age = -1;
 		ignoreCollisions = true;
-		animation = prize.getAnimation();
+		if (prize != null) {
+			animation = prize.getAnimation();
+		}
 	}
 	
 	public Drop(Vector pos, String prize, String spell) {

@@ -64,13 +64,17 @@ public class Open implements Definition<Command> {
 	@Override
 	public Command getMeaning() {
 		return e -> {
-			Entity checker = e.getSecondPerson();
+			Entity checker = e.getThirdPerson();
+			if (checker == null) {
+				return CommandStatus.FAILED;
+			}
+			
 			if (checker instanceof Sarcophagus) {
 				e.getWorld().delete(checker);
 				return CommandStatus.DONE;
 			}
+
 			Vector tilePos = checker.getPos().gridPos();
-			
 			if (openDoor(e.getWorld(), tilePos)) {
 				Audio.playClip(OPEN_DOOR_SOUND);
 				return CommandStatus.DONE;

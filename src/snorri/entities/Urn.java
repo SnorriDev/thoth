@@ -16,6 +16,7 @@ public class Urn extends Despawner implements Smashable {
 	public Urn(Vector pos) {
 		super(pos, new RectCollider(new Vector(10, 26)));
 		animation = new Animation(ANIMATION);
+		ignoreCollisions = false;
 	}
 	
 	@Override
@@ -26,8 +27,9 @@ public class Urn extends Despawner implements Smashable {
 	}
 	
 	@Override
-	public boolean hasGravity() {
-		return true;
+	public Vector getGravity() {
+		// Override the Despawner's lack of gravity.
+		return Entity.GRAVITY;
 	}
 
 }
