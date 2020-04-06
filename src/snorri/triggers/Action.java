@@ -2,7 +2,9 @@ package snorri.triggers;
 
 import java.util.Map;
 
+import snorri.ai.AIMode;
 import snorri.dialog.Dialog;
+import snorri.entities.AIUnit;
 import snorri.entities.Ballista;
 import snorri.entities.Drop;
 import snorri.entities.Entity;
@@ -210,6 +212,22 @@ public abstract class Action {
 						} else {
 							throw new RuntimeException("trying to show cutscene in non-GameWindow");
 						}
+					}
+				};
+			}
+		}),
+		
+		SET_AI_MODE(new Action() {
+			@Override
+			public Runnable build(World world, Map<String, Object> args) {
+				return () -> {
+					Entity entity = Trigger.getByTag((String) args.get("entity"));
+					AIMode mode = AIMode.valueOf((String) args.get("mode"));
+					if (entity instanceof AIUnit) {
+						AIUnit agent = (AIUnit) entity;
+						agent.setMode(mode);
+					} else {
+						throw new RuntimeException("Attempting to update AI mode on non AIUnit.");
 					}
 				};
 			}

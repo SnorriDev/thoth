@@ -83,8 +83,8 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 		
 		inventory.update(deltaTime);
 		
+		// Apply active modifiers to the entity.
 		speed = getBaseSpeed();
-		
 		if (modifiers == null) {
 			modifiers = new CopyOnWriteArrayList<>();
 		}

@@ -1,12 +1,13 @@
 package snorri.entities;
 
-import snorri.ai.AIMode;
 import snorri.animations.Animation;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
 import snorri.world.Vector;
 
 public class Cobra extends AIUnit {
+	
+	/** Formerly, cobras were aggressive ("CHARGE" mode) by default. Now, this should be activated by triggers.*/
 
 	private static final long serialVersionUID = 1L;
 	
@@ -31,11 +32,6 @@ public class Cobra extends AIUnit {
 	@Override
 	protected int getAttackRange() {
 		return 100;
-	}
-	
-	@Override
-	public AIMode getDefaultMode() {
-		return AIMode.CHARGE;
 	}
 	
 }

@@ -309,7 +309,7 @@ public class World implements Playable, Editable {
 	}
 
 	public void wrapUpdate(Vector pos, Tile tile) {
-		wrapGridUpdate(pos.copy().gridPos_(), tile);
+		wrapGridUpdate(pos.gridPos(), tile);
 	}
 	
 	public synchronized void wrapGridUpdate(Vector posGrid, Tile tile) {

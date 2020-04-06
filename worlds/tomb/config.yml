@@ -1,0 +1,34 @@
+type: WORLD
+layers:
+  - type: BACKGROUND
+    path: /textures/backgrounds/splash.png
+  - type: TILE
+    path: tile.layer
+  - type: ENTITY
+    path: entity.layer
+
+triggers:
+
+  onBreakSarco1:
+    events:
+        - DESTROY:
+            object: sarcophagus1
+    actions:
+        - SET_AI_MODE:
+            entity: cobra-1,1
+            mode: CHARGE
+
+  onBreakSarco2:
+    events:
+        - DESTROY:
+            object: sarcophagus2
+    actions:
+        - SET_AI_MODE:
+            entity: cobra-2,1
+            mode: CHARGE
+        - SET_AI_MODE:
+            entity: cobra-2,2
+            mode: CHARGE
+        - SET_AI_MODE:
+            entity: cobra-2,3
+            mode: CHARGE

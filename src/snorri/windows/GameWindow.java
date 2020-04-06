@@ -78,7 +78,7 @@ public class GameWindow extends FocusedWindow<Player> {
 		long time = getTimestamp();
 		double deltaTime = (time - lastTime) / 1000000000d;
 		lastTime = time;
-		
+				
 		if (messageQ.peek() != null) {
 			messageTimer.update(deltaTime);
 			if (messageTimer.activateIfPossible()) {
@@ -102,7 +102,6 @@ public class GameWindow extends FocusedWindow<Player> {
 		
 		universe.update(getFocus(), deltaTime);
 		repaint();
-				
 	}
 	
 	@Override
