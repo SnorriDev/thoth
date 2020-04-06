@@ -134,6 +134,11 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
+		menuItem = new JMenuItem("Open README", KeyEvent.VK_R);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+
 		menuItem = new JMenuItem("Quit", KeyEvent.VK_Q);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
@@ -319,11 +324,23 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 			}
 			// Open the config file in Sublime Text.
 			File config = new File(env.getDirectory(), "config.yml");
-			String command = "subl " + config.getPath();
 			try {
-				Runtime.getRuntime().exec(command);
+				Runtime.getRuntime().exec("subl " + config.getPath());
 			} catch (IOException e1) {
 				Debug.logger.warning("Failed to open " + config.getPath() + " in Sublime Text.");
+				e1.printStackTrace();
+			}
+			break;
+		case "Open README":
+			if (env == null || env.getDirectory() == null) {
+				return;
+			}
+			// Open the config file in Sublime Text.
+			File readme = new File(env.getDirectory(), "README.md");
+			try {
+				Runtime.getRuntime().exec("subl " + readme.getPath());
+			} catch (IOException e1) {
+				Debug.logger.warning("Failed to open " + readme.getPath() + " in Sublime Text.");
 				e1.printStackTrace();
 			}
 			break;
