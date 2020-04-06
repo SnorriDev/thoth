@@ -1,0 +1,12 @@
+Water behavior, player sinks and drowning timer kicks in, can jump out same as in air
+
+0. Player finds double jump word on beach
+
+1. NPC says to player "I don't know how I'll get across this river, I forgot my boat at home.  If only I could jump high enough to reach thatplatform up there!"  Player will also have to move debris to jump high enough so this should come after the debris level
+
+2. Player will have to use double jump and underwater mechanics (or lack thereof to complete the level)
+
+3. When player reaches NPC again on island later on, the NPC says, "Right after you left a guy was handing out free teleportation spells!  I fucked up though and now I'm stuck here, I'm sure I'll be fine though!"
+3a. Possible Idea, when player gets to this dialouge, they can go back to get a teleportation spell from some dude.
+
+4. Statue is end of level
