@@ -1,11 +1,12 @@
 package snorri.entities;
 
 import snorri.events.CollisionEvent;
+import snorri.animations.Animation;
 import snorri.events.CastEvent;
 import snorri.events.CastEvent.Caster;
-import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.main.Debug;
+import snorri.main.Main;
 import snorri.semantics.commands.intrans.Go.Movable;
 import snorri.semantics.nouns.Nominal;
 import snorri.world.Vector;
@@ -15,22 +16,23 @@ public class Projectile extends Detector implements Movable {
 
 	private static final long serialVersionUID = 1L;
 
+	// TODO: Move this to be a property of the weapon.
+	private Animation PLACEHOLDER = new Animation(Main.getImage("/textures/objects/pellet.png"));
 	private static final int PROJECTILE_SPEED = 450;
 
 	private Entity root;
 	
 	private Weapon weapon;
-	private Orb orb;
 	private boolean movementOverriden;
 	
-	public Projectile(Entity root, Vector rootVelocity, Vector path, Weapon weapon, Orb orb) {
+	public Projectile(Entity root, Vector rootVelocity, Vector path, Weapon weapon) {
 		super(root.getPos().copy(), 3); //radius of a projectile is 1
 		velocity = rootVelocity.add(path.scale(PROJECTILE_SPEED));
-		this.animation = orb.getProjectileAnimation();
+		// TODO: Should attach this to the weapon type.
+		this.animation = new Animation(PLACEHOLDER);
 //		setDirection(path);
 		this.root = root;
 		this.weapon = weapon;
-		this.orb = orb;
 		movementOverriden = false;
 	}
 
@@ -42,21 +44,16 @@ public class Projectile extends Detector implements Movable {
 		return weapon;
 	}
 	
-	public Orb getOrb() {
-		return orb;
-	}
-	
 	public void applyForce(Vector force, double deltaTime) {
 		velocity.add_(force.multiply(deltaTime));
 	}
 	
 	@Override
-	public void update(World world, double deltaTime) {
-		
-		if (weapon == null || weapon.getSpell() == null) {
+	public void update(World world, double deltaTime) {		
+		if (weapon == null || !(root instanceof Caster) || weapon.getSpell() == null) {
 			translate(world, velocity.multiply(deltaTime));
 		}
-		else if (root instanceof Caster) {
+		else {
 			CastEvent spellEvent = new CastEvent(world, (Caster) root, this, deltaTime / getLifeSpan());
 			weapon.wrapCastSpell(spellEvent);
 			if (!movementOverriden) {
@@ -64,7 +61,6 @@ public class Projectile extends Detector implements Movable {
 			}
 			// Maybe we should always apply physics, for interesting interactions?
 		}
-				
 		super.update(world, deltaTime);
 	}
 	
@@ -80,19 +76,17 @@ public class Projectile extends Detector implements Movable {
 		if (root.equals(e.getTarget())) {
 			return;
 		}
-		
 		if (e.getTarget() instanceof Unit) {
 			((Unit) e.getTarget()).damage(weapon.getSharpness());
 		}
-		
 		e.getWorld().delete(this);
 	}
 	
 	@Override
 	protected void onSafeDelete(World world) {
-		if (root instanceof Caster && orb != null) {
+		if (root instanceof Caster && weapon != null) {
 			CastEvent castEvent = new CastEvent(world, (Caster) root, this);
-			Object output = orb.wrapCastSpell(castEvent);
+			Object output = weapon.wrapCastSpell(castEvent);
 			if (Debug.orbOutputLogged()) {
 				Debug.logger.info("Orb output: " + output + ".");
 			}

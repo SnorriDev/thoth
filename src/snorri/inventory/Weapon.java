@@ -40,10 +40,10 @@ public class Weapon extends Item {
 		return spell.altersMovement();
 	}
 	
-	public boolean attackIfPossible(World world, Entity focus, Vector movement, Vector dir, Orb orb) {
+	public boolean attackIfPossible(World world, Entity focus, Vector movement, Vector dir) {
 		if (timer.activateIfPossible()) {
 			Audio.playClip(clip);
-			world.add(new Projectile(focus, movement, dir, this, orb));
+			world.add(new Projectile(focus, movement, dir, this));
 			return true;
 		}
 		return false;

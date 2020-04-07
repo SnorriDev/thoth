@@ -11,6 +11,7 @@ import snorri.entities.Flower;
 import snorri.entities.Fountain;
 import snorri.entities.Glyph;
 import snorri.entities.Mummy;
+import snorri.entities.Player;
 import snorri.entities.Spike;
 import snorri.entities.Statue;
 import snorri.entities.Urn;
@@ -150,6 +151,7 @@ public class DefaultLexicon {
 		register("STATUE", new ConstantNounDef(new ClassWrapper(Statue.class)));
 //		register("rwDt", new ConstantNounDef(BackgroundElement.SANDSTONE));
 		register("FOUNTAIN", new ConstantNounDef(new ClassWrapper(Fountain.class)));
+		register("PLAYER", new ConstantNounDef(new ClassWrapper(Player.class)));
 		
 //		TODO: Should we add these back??
 //		register("bw", new StaticDef(AbstractNoun.class, AbstractSemantics.POSITION));

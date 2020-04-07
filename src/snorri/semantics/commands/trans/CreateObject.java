@@ -1,6 +1,7 @@
 package snorri.semantics.commands.trans;
 
 import snorri.entities.Entity;
+import snorri.entities.SpawnableRegistry;
 import snorri.entities.Spike;
 import snorri.grammar.PartOfSpeech;
 import snorri.semantics.ClassWrapper;
@@ -47,7 +48,7 @@ public class CreateObject implements Definition<Lambda<Noun, Command>> {
 						
 				if (obj instanceof ClassWrapper) {
 					Class<? extends Entity> c = (Class<? extends Entity>) ((ClassWrapper) obj).getValue();
-					if (!Entity.canSpawn(c)) {
+					if (!SpawnableRegistry.canSpawn(c)) {
 						return CommandStatus.FAILED;
 					}
 					boolean checkCollisions = c != Spike.class;

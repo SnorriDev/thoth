@@ -3,7 +3,6 @@ package snorri.entities;
 import snorri.animations.Animation;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
-import snorri.inventory.Orb;
 import snorri.inventory.Weapon;
 import snorri.main.Main;
 import snorri.windows.FocusedWindow;
@@ -22,7 +21,6 @@ public class Ballista extends Entity {
 	private boolean shooting = false, active = false;
 	private Entity target;
 	private final Weapon bow = (Weapon) Item.newItem(ItemType.BOW);
-	private final Orb bolt = (Orb) Item.newItem(ItemType.BOLT);
 
 	public Ballista(Vector pos, Vector dir) {
 		super(pos, 35);
@@ -57,7 +55,7 @@ public class Ballista extends Entity {
 
 		shooting = true;
 		setAnimation(SHOOT);
-		bow.attackIfPossible(world, this, Vector.ZERO, dir, bolt);
+		bow.attackIfPossible(world, this, Vector.ZERO, dir);
 		return true;
 	}
 

@@ -23,7 +23,7 @@ public abstract class Item implements Droppable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	protected transient Spell spell; // spell/enchantment associated with the item
+	protected Spell spell; // spell/enchantment associated with the item
 	protected String nickname; //name which the player gives the item so they know what it does
 	protected ItemType type; // what type of item it is; you can get ID, maxQuantity, enchantable from this
 	protected transient BufferedImage texture; // don't save this!

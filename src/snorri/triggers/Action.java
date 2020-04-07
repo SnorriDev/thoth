@@ -9,6 +9,7 @@ import snorri.entities.Ballista;
 import snorri.entities.Drop;
 import snorri.entities.Entity;
 import snorri.entities.NPC;
+import snorri.entities.SpawnableRegistry;
 import snorri.inventory.Droppable;
 import snorri.main.Debug;
 import snorri.main.Main;
@@ -95,7 +96,7 @@ public abstract class Action {
 				return new Runnable() {
 					@Override
 					public void run() {
-						final Class<? extends Entity> type = Entity.getSpawnableByName((String) args.get("type"));
+						final Class<? extends Entity> type = SpawnableRegistry.getEditSpawnableByName((String) args.get("type"));
 						if (type == null) {
 							Debug.logger.warning("Tried to spawn null entity type in trigger action.");
 							return;

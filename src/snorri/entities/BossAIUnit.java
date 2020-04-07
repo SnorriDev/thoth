@@ -37,11 +37,6 @@ public abstract class BossAIUnit extends AIUnit implements Caster {
 		}
 		return getTarget().getPos().distanceSquared(pos) < getAttackRange() * getAttackRange() && getInventory().getPapyrus().canUse();
 	}
-	
-	@Override
-	public void attack(Entity target, World world) {
-		getInventory().getPapyrus().castPrewritten(world, this);
-	}
 		
 	@Override
 	public void refreshStats() {

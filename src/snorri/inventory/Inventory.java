@@ -25,7 +25,6 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 	private Unit player;
 	
 	private Weapon weaponSlot;
-	private Orb orbSlot;
 	private Papyrus papyrusSlot;
 		
 	public Inventory(Unit player) {
@@ -37,27 +36,12 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 		if (weaponSlot != null) {
 			weaponSlot.updateCooldown(deltaTime);
 		}
-		if (orbSlot != null) {
-			orbSlot.updateCooldown(deltaTime);
-		}
 		papyrusSlot.updateCooldown(deltaTime);
-	}
-	
-	public void setOrb(Orb newOrb) {
-		orbSlot = newOrb;
 	}
 	
 	public boolean addWeapon(Weapon newWeapon) {
 		if (weaponSlot == null) {
 			weaponSlot = newWeapon;
-			return true;
-		}
-		return false;
-	}
-	
-	public boolean addOrb(Orb newOrb) {
-		if (orbSlot == null) {
-			orbSlot = newOrb;
 			return true;
 		}
 		return false;
@@ -77,10 +61,6 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 	 */
 	public Papyrus getPapyrus() {
 		return papyrusSlot;
-	}
-	
-	public Orb getOrb() {
-		return orbSlot;
 	}
 	
 	public void render(GameWindow window, Graphics g) {
@@ -108,10 +88,6 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 	
 	@Override
 	public boolean add(Droppable d) {
-		if (d instanceof Orb) {
-			addOrb((Orb) d);
-			return true;
-		}
 		if (d instanceof Weapon) {
 			addWeapon((Weapon) d);
 			return true;
@@ -129,10 +105,6 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 				weaponSlot = null;
 				return true;
 			}
-			if (compare(d, orbSlot, specific)) {
-				orbSlot = null;
-				return true;
-			}
 		}
 		
 		if (d instanceof PapyrusDrop) {
@@ -143,10 +115,10 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 	}
 	
 	public void attack(World world, Vector momentum, Vector dir) {
-		if (weaponSlot == null || orbSlot == null || dir == null || dir.equals(Vector.ZERO) || dir.notInPlane()) {
+		if (weaponSlot == null || dir == null || dir.equals(Vector.ZERO) || dir.notInPlane()) {
 			return;
 		}
-		weaponSlot.attackIfPossible(world, player, momentum, dir, orbSlot);
+		weaponSlot.attackIfPossible(world, player, momentum, dir);
 	}
 	
 	public void cast(World world, Vector castPos) {

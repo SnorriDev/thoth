@@ -125,9 +125,9 @@ public abstract class Unit extends Entity implements Carrier, Movable {
 	 * 	the attack animation
 	 */
 	protected void initializeAnimations(Animation idle, Animation walking, Animation attack) {
-		idleAnimation = new Animation(idle);
-		walkingAnimation = new Animation(walking);
-		attackAnimation = new Animation(attack);
+		idleAnimation = idle == null ? null : new Animation(idle);
+		walkingAnimation = walking == null ? null : new Animation(walking);
+		attackAnimation = attack == null ? null : new Animation(attack);
 		animation = idleAnimation;
 	}
 	

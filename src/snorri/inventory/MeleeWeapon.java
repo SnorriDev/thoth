@@ -23,9 +23,9 @@ public class MeleeWeapon extends Weapon {
 	}
 	
 	@Override
-	public boolean attackIfPossible(World world, Entity focus, Vector movement, Vector dir, Orb orb) {
+	public boolean attackIfPossible(World world, Entity focus, Vector movement, Vector dir) {
 		if (timer.activateIfPossible()) {
-			Vector pos = focus.getPos().copy().add_(dir.copy().scale_(getOffsetMagnitude()));
+			Vector pos = focus.getPos().add(dir.scale(getOffsetMagnitude()));
 			Entity checker = new Entity(pos, getCollider());
 			world.getEntityTree().mapOverCollisions(checker, e -> {
 				if (e != focus && e instanceof Unit) {

@@ -32,6 +32,7 @@ import snorri.entities.Dummy;
 import snorri.entities.Entity;
 import snorri.entities.Listener;
 import snorri.entities.Player;
+import snorri.entities.SpawnableRegistry;
 import snorri.events.CastEvent.Caster;
 import snorri.grammar.DefaultLexicon;
 import snorri.keyboard.Key;
@@ -83,7 +84,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		super(new Entity(new Vector(20, 20)));
 		new Tile(UnifiedTileType.EMPTY);
 		selectedTile = new Tile(UnifiedTileType.SAND, 0);
-		selectedEntityClass = Entity.EDIT_SPAWNABLE.get(0);
+		selectedEntityClass = SpawnableRegistry.EDIT_SPAWNABLE.get(0);
 		createMenu();
 		repaint();
 		lastRenderTime = getTimestamp();
@@ -172,7 +173,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		menu.setMnemonic(KeyEvent.VK_E);
 		menuBar.add(menu);
 
-		List<Class<? extends Entity>> entityClassList = Entity.EDIT_SPAWNABLE;
+		List<Class<? extends Entity>> entityClassList = SpawnableRegistry.EDIT_SPAWNABLE;
 		ButtonGroup groupEntities = new ButtonGroup();
 
 		boolean firstEntity = true;
@@ -254,7 +255,7 @@ public class LevelEditor extends FocusedWindow<Entity> implements ActionListener
 		}
 
 		if (e.getActionCommand().startsWith("spawn")) {
-			selectedEntityClass = Entity.EDIT_SPAWNABLE.get(Integer.parseInt(e.getActionCommand().substring(5)));
+			selectedEntityClass = SpawnableRegistry.EDIT_SPAWNABLE.get(Integer.parseInt(e.getActionCommand().substring(5)));
 			return;
 		}
 

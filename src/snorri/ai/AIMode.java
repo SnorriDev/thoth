@@ -1,6 +1,7 @@
 package snorri.ai;
 
 import snorri.entities.Entity;
+import snorri.world.Vector;
 import snorri.world.World;
 
 public enum AIMode {
@@ -35,6 +36,22 @@ public enum AIMode {
 		if (target != null && !agent.canAttack(target, world)) {
 			agent.walkTowards(target, world, deltaTime);
 		}
+	}),
+	
+	FLY((agent, world, deltaTime) -> {
+		// Hover above the enemy and attack from there. Should only use with flying units.
+		Entity target = agent.getTarget();
+		if (target == null) {
+			return;
+		}
+		if (agent.canAttack(target, world)) {
+			agent.attack(target, world);
+			return;
+		}
+		
+		// Fly to the point above the target entity.
+		Vector flyPos = new Vector(target.getPos().getX(), agent.getPos().getY());
+		agent.walkTowards(new Entity(flyPos), world, deltaTime);
 	});
 	
 	private final AILogic logic;

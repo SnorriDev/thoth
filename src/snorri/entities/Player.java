@@ -14,7 +14,6 @@ import snorri.inventory.Droppable;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
 import snorri.keyboard.Key;
-import snorri.inventory.Orb;
 import snorri.inventory.Papyrus;
 import snorri.inventory.Stats;
 import snorri.inventory.Weapon;
@@ -86,16 +85,12 @@ public class Player extends Unit implements Caster {
 		
 		// Add the default weapons.
 		Weapon sling = (Weapon) Item.newItem(ItemType.SLING);
-		Orb o1 = (Orb) Item.newItem(ItemType.PELLET);
-		Orb o2 = (Orb) Item.newItem(ItemType.PELLET);
 		Papyrus p1 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
 		Papyrus p2 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
 		Papyrus p3 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
 		
 		// Equip items in inventory.
 		getInventory().add(sling);
-		getInventory().add(o1);
-		getInventory().add(o2);
 		getInventory().add(p1);
 		getInventory().add(p2);
 		getInventory().add(p3);
