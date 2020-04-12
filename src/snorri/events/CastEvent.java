@@ -78,6 +78,11 @@ public class CastEvent {
 			
 		}
 		
+		default boolean spendMana(final double amount) {
+			/** Return true if mana has been spent, false otherwise. */
+			return getMana() != null && getMana().spendIfHasMana(amount);
+		}
+		
 	}
 	
 	public CastEvent(World world, Caster firstPerson, Entity secondPerson) {

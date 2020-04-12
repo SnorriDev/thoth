@@ -1,6 +1,7 @@
 package snorri.entities;
 
 import snorri.ai.AIMode;
+import snorri.inventory.ManaManager;
 import snorri.world.Vector;
 import snorri.world.World;
 
@@ -17,6 +18,7 @@ public class Ghost extends BossAIUnit {
 	public Ghost(Vector pos, Entity target) {
 		// TODO: Have animations here?
 		super(pos, target, null, null);
+		getInventory().add(new ManaManager());
 	}
 
 	@Override
@@ -37,12 +39,16 @@ public class Ghost extends BossAIUnit {
 	
 	@Override
 	public void attack(Entity target, World world) {
+		// If the ghost has a spell and we can cast, use it.
 		if (getInventory().getPapyrus() != null && getInventory().getPapyrus().canCast()) {
 			getInventory().cast(world, target.getPos());
 		}
 		
-		Vector direction = target.getPos().sub(getPos()).normalize();
-		getInventory().attack(world, Vector.ZERO, direction);
+		// If the ghost has a weapon, attack.
+		if (getInventory().getWeapon() != null) {
+			Vector direction = target.getPos().sub(getPos()).normalize();
+			getInventory().attack(world, Vector.ZERO, direction);	
+		}
 	}
 	
 }

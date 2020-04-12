@@ -78,10 +78,10 @@ public class ManaManager implements Serializable, Droppable {
 	}
 
 	public static Droppable fromString(String raw) {
-		if (raw == "!mana") {
+		if (raw.equals("mana")) {
 			return new ManaManager();
 		}
-		else if (raw.startsWith("!mana")) {
+		else if (raw.startsWith("mana")) {
 			String[] pieces = raw.split(":");
 			int maxMana = Integer.parseInt(pieces[1]);
 			int manaRegen = Integer.parseInt(pieces[2]);

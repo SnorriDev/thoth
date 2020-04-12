@@ -9,6 +9,7 @@ import javax.swing.ListModel;
 import snorri.entities.Unit;
 import snorri.events.CastEvent.Caster;
 import snorri.inventory.Item.ItemType;
+import snorri.main.Debug;
 import snorri.windows.GameWindow;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -91,8 +92,15 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 	public boolean add(Droppable d) {
 		if (d instanceof Weapon) {
 			addWeapon((Weapon) d);
+			Debug.logger.info("Added " + d + " to " + player + ".");
 			return true;
 		}
+		if (d instanceof ManaManager) {
+			mana = (ManaManager) d;
+			Debug.logger.info("Added " + d + " to " + player + ".");
+			return true;
+		}
+		Debug.logger.warning("Failed to add " + d + "to " + player + "'s inventory.");
 		return false;
 	}
 	
@@ -117,7 +125,7 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 	
 	public void cast(World world, Vector castPos) {
 		if (castPos != null && player instanceof Caster) {
-			papyrusSlot.queueSpell(world, (Caster) player, castPos);
+			papyrusSlot.cast(world, (Caster) player, castPos);
 		}
 	}
 

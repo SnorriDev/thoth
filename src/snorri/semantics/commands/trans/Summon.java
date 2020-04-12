@@ -24,7 +24,11 @@ public class Summon implements Definition<Lambda<Noun, Command>> {
 	@Override
 	public Lambda<Noun, Command> getMeaning() {
 		return noun -> {
-			return e -> {
+			return e -> {				
+				if (!e.getFirstPerson().spendMana(100.)) {
+					return CommandStatus.RAN_OUT_OF_MANA;
+				}
+				
 				Object obj = noun.apply(e);
 				if (!(obj instanceof ClassWrapper)) {
 					return CommandStatus.FAILED;

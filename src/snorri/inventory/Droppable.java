@@ -23,6 +23,9 @@ public interface Droppable extends Nominal {
 		if ((result = VocabDrop.fromString(raw)) != null) {
 			return result;
 		}
+		if ((result = ManaManager.fromString(raw)) != null) {
+			return result;
+		}
 		return null;
 	}
 	

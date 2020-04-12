@@ -15,9 +15,7 @@ import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
 import snorri.inventory.ManaManager;
 import snorri.keyboard.Key;
-import snorri.inventory.Papyrus;
 import snorri.inventory.Stats;
-import snorri.inventory.Weapon;
 import snorri.main.Main;
 import snorri.semantics.nouns.Nominal;
 import snorri.triggers.TriggerType;
@@ -79,19 +77,9 @@ public class Player extends Unit implements Caster {
 		damageSounds = DAMAGE_SOUNDS;
 		deathSounds = DEATH_SOUNDS;
 		
-		// TODO(#43): Stuff below here should become a static factory.
 		
-		// Add the default weapons.
-		Weapon sling = (Weapon) Item.newItem(ItemType.SLING);
-		Papyrus p1 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
-		Papyrus p2 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
-		Papyrus p3 = (Papyrus) Item.newItem(ItemType.PAPYRUS);
-		
-		// Equip items in inventory.
-		getInventory().add(sling);
-		getInventory().add(p1);
-		getInventory().add(p2);
-		getInventory().add(p3);
+		getInventory().add(Item.newItem(ItemType.SLING));
+		getInventory().add(new ManaManager());
 		
 		tag = "player";
 	}
