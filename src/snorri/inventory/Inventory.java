@@ -92,9 +92,6 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 			addWeapon((Weapon) d);
 			return true;
 		}
-		if (d instanceof PapyrusDrop) {
-			papyrusSlot.addPapyri(((PapyrusDrop) d).getQuantity());
-		}
 		return false;
 	}
 	
@@ -105,10 +102,6 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 				weaponSlot = null;
 				return true;
 			}
-		}
-		
-		if (d instanceof PapyrusDrop) {
-			return papyrusSlot.removePapyri(((PapyrusDrop) d).getQuantity());
 		}
 		
 		return false;	

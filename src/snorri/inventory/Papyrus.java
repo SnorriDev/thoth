@@ -20,27 +20,12 @@ public class Papyrus extends Item {
 	private static final double PAPYRUS_COOLDOWN = 1;
 	
 	private boolean ignoreMessages = false;
+	/** This variable is unused, but not removed, because it would fuck with djanky serialization scheme. */
 	private int numPapyri;
 	
 	public Papyrus(ItemType t) {
 		super(t);
 		timer = new Timer(PAPYRUS_COOLDOWN);
-		numPapyri = 0;
-	}
-	
-	public void addPapyri(int deltaPapyri) {
-		numPapyri += deltaPapyri;
-	}
-	
-	/** Returns true if papyri are removed. */
-	public boolean removePapyri(int deltaPapyri) {
-		int oldNumPapyri = numPapyri;
-		numPapyri = Math.max(numPapyri - deltaPapyri, 0);
-		return numPapyri != oldNumPapyri;
-	}
-	
-	public boolean canCast() {
-		return timer.isOffCooldown() && numPapyri > 0;
 	}
 
 	public void queueSpell(World world, Caster player, Vector castPos) {
