@@ -215,7 +215,7 @@ public abstract class Item implements Droppable {
 		timer.update(deltaTime);
 	}
 	
-	public boolean canUse() {
+	public boolean canCast() {
 		
 		if (timer == null) {
 			return true;

@@ -70,7 +70,7 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 	}
 	
 	private void drawItemContainer(Graphics g, int i, boolean top, Item item, Class<? extends Item> slotType) {
-		drawItemContainer(g, i, top, item, slotType, item != null && item.canUse());
+		drawItemContainer(g, i, top, item, slotType, item != null && item.canCast());
 	}
 	
 	private void drawItemContainer(Graphics g, int i, boolean top, Item item, Class<? extends Item> slotType, boolean flag) {

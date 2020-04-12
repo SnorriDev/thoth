@@ -37,6 +37,10 @@ public class Ghost extends BossAIUnit {
 	
 	@Override
 	public void attack(Entity target, World world) {
+		if (getInventory().getPapyrus() != null && getInventory().getPapyrus().canCast()) {
+			getInventory().cast(world, target.getPos());
+		}
+		
 		Vector direction = target.getPos().sub(getPos()).normalize();
 		getInventory().attack(world, Vector.ZERO, direction);
 	}

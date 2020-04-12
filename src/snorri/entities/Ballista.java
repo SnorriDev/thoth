@@ -49,7 +49,7 @@ public class Ballista extends Entity {
 
 	// TODO(#42): Refactor to use TURRET AILogic.
 	public boolean shoot(World world) {
-		if (shooting || !bow.canUse()) {
+		if (shooting || !bow.canCast()) {
 			return false;
 		}
 

@@ -26,7 +26,7 @@ import snorri.semantics.commands.intrans.Open;
 import snorri.semantics.commands.trans.Acquire;
 import snorri.semantics.commands.trans.Break;
 import snorri.semantics.commands.trans.Burn;
-import snorri.semantics.commands.trans.CreateObject;
+import snorri.semantics.commands.trans.Create;
 import snorri.semantics.commands.trans.Damage;
 import snorri.semantics.commands.trans.Grow;
 import snorri.semantics.commands.trans.Heal;
@@ -34,6 +34,7 @@ import snorri.semantics.commands.trans.Move;
 import snorri.semantics.commands.trans.Pray;
 import snorri.semantics.commands.trans.Push;
 import snorri.semantics.commands.trans.Slow;
+import snorri.semantics.commands.trans.Summon;
 import snorri.semantics.commands.trans.Write;
 import snorri.semantics.conjunctions.And;
 import snorri.semantics.conjunctions.Else;
@@ -93,7 +94,7 @@ public class DefaultLexicon {
 		register("ssnb", new Heal()); //literally means "protect"
 		register("mAA", new See());
 		register("Hwi", new Damage());
-		register("qmA", new CreateObject());
+		register("qmA", new Create());
 		register("rd", new Grow());
 		register("wpi", new Open());
 		register("sS", new Write());
@@ -104,7 +105,7 @@ public class DefaultLexicon {
 		register("PUSH", new Push());
 		register("ACQUIRE", new Acquire());
 		register("FLY", new Fly());
-		//register("sxpr", new CreateUnit()); //spawn
+		register("sxpr", new Summon());
 	}
 
 	private static void addConnectives() {

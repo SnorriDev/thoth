@@ -13,7 +13,7 @@ import snorri.semantics.nouns.Noun;
 import snorri.world.Tile;
 import snorri.world.Vector;
 
-public class CreateObject implements Definition<Lambda<Noun, Command>> {
+public class Create implements Definition<Lambda<Noun, Command>> {
 
 	@Override
 	public PartOfSpeech getPartOfSpeech() {

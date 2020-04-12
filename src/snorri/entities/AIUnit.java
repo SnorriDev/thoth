@@ -52,7 +52,7 @@ public abstract class AIUnit extends Unit implements AIAgent {
 		boolean canUseWeapon = true;
 		// If there is a weapon, make sure it is off cooldown.
 		if (getInventory() != null && getInventory().getWeapon() != null) {
-			canUseWeapon = getInventory().getWeapon().canUse();
+			canUseWeapon = getInventory().getWeapon().canCast();
 		}
 		int attackRange = getAttackRange();
 		return canUseWeapon && target.getPos().distanceSquared(getPos()) < attackRange * attackRange;

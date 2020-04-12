@@ -3,9 +3,10 @@ package snorri.entities;
 import snorri.animations.Animation;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
+import snorri.semantics.commands.trans.Summon.Summonable;
 import snorri.world.Vector;
 
-public class Mummy extends AIUnit {
+public class Mummy extends AIUnit implements Summonable {
 
 	private static final long serialVersionUID = 1L;
 	

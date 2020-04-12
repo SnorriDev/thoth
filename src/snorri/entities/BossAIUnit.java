@@ -35,7 +35,7 @@ public abstract class BossAIUnit extends AIUnit implements Caster {
 		if (getInventory() == null || getInventory().getPapyrus() == null) {
 			return false;
 		}
-		return getTarget().getPos().distanceSquared(pos) < getAttackRange() * getAttackRange() && getInventory().getPapyrus().canUse();
+		return getTarget().getPos().distanceSquared(pos) < getAttackRange() * getAttackRange() && getInventory().getPapyrus().canCast();
 	}
 		
 	@Override
