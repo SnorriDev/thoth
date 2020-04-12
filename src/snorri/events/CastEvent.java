@@ -8,6 +8,7 @@ import snorri.grammar.Lexicon;
 import snorri.inventory.Carrier;
 import snorri.inventory.Droppable;
 import snorri.inventory.Item;
+import snorri.inventory.ManaManager;
 import snorri.inventory.VocabDrop;
 import snorri.main.Main;
 import snorri.semantics.nouns.Nominal;
@@ -39,7 +40,7 @@ public class CastEvent {
 		
 		public Lexicon getLexicon();
 		
-		public double getMana();
+		public ManaManager getMana();
 		
 		@Override
 		default boolean add(Droppable d) {

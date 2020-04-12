@@ -13,6 +13,7 @@ import snorri.grammar.Lexicon;
 import snorri.inventory.Droppable;
 import snorri.inventory.Item;
 import snorri.inventory.Item.ItemType;
+import snorri.inventory.ManaManager;
 import snorri.keyboard.Key;
 import snorri.inventory.Papyrus;
 import snorri.inventory.Stats;
@@ -45,9 +46,7 @@ public class Player extends Unit implements Caster {
 	
 	private Stats stats;
 	private Lexicon lexicon;
-	
-	protected double mana;
-	
+		
 	public interface Interactor {
 		
 		public static final int INTERACT_RANGE = 100;
@@ -74,7 +73,6 @@ public class Player extends Unit implements Caster {
 		stats = new Stats(this);
 		lexicon = new Lexicon();
 		
-		mana = stats.getMaxMana();
 		z = PLAYER_LAYER;
 		
 		speechSounds = SPEECH_SOUNDS;
@@ -101,9 +99,7 @@ public class Player extends Unit implements Caster {
 	@Override
 	public void update(World world, double deltaTime) {
 		super.update(world, deltaTime);
-		
-		mana = Math.min(mana + stats.getManaRegen() * deltaTime, stats.getMaxMana());
-		
+				
 		FocusedWindow<?> window = (FocusedWindow<?>) Main.getWindow();
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -153,8 +149,11 @@ public class Player extends Unit implements Caster {
 	}
 	
 	@Override
-	public double getMana() {
-		return mana;
+	public ManaManager getMana() {
+		if (getInventory() != null) {
+			return getInventory().getMana();
+		}
+		return null;
 	}
 	
 	public double getHearts() {

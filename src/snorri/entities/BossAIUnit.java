@@ -4,6 +4,7 @@ import snorri.animations.Animation;
 import snorri.events.CastEvent.Caster;
 import snorri.grammar.ChartParser;
 import snorri.grammar.Lexicon;
+import snorri.inventory.ManaManager;
 import snorri.inventory.Spell;
 import snorri.world.Vector;
 import snorri.world.World;
@@ -58,8 +59,11 @@ public abstract class BossAIUnit extends AIUnit implements Caster {
 	}
 	
 	@Override
-	public double getMana() {
-		return 100; // No actual mana currently.
+	public ManaManager getMana() {
+		if (getInventory() != null) {
+			return getInventory().getMana();
+		}
+		return null;
 	}
 	
 }

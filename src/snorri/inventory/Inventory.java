@@ -26,6 +26,7 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 	
 	private Weapon weaponSlot;
 	private Papyrus papyrusSlot;
+	private ManaManager mana;
 		
 	public Inventory(Unit player) {
 		this.player = player;
@@ -125,6 +126,10 @@ public class Inventory implements Serializable, DropContainer<Droppable> {
 		model.addElement(weaponSlot);
 		model.addElement(papyrusSlot);
 		return model;
+	}
+
+	public ManaManager getMana() {
+		return mana;
 	}
 	
 }
